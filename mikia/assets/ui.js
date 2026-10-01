@@ -1,4 +1,5 @@
 (function(){
+  function fxIn(s){var h=s&&s.querySelector('.cs-copy h3'),p=s&&s.querySelector('.cs-copy p:not(.mono)');if(window.__fx&&h){window.__fx.words(h);}if(p){p.classList.remove('cs-typed');void p.offsetWidth;p.classList.add('cs-typed');}}
   var track=document.getElementById('carTrack');if(!track)return;
   var car=track.parentNode,slides=[].slice.call(track.children),N=slides.length,tabs=[].slice.call(document.querySelectorAll('.car-tab')),count=document.getElementById('carCount'),
       next=document.getElementById('carNext'),pp=document.getElementById('carPP'),section=document.getElementById('services'),tabsOl=document.querySelector('.car-tabs'),
@@ -29,7 +30,7 @@
     busy=true;
     if(track.firstElementChild!==curEl)track.insertBefore(curEl,track.firstElementChild);
     track.insertBefore(tgt,curEl.nextSibling);
-    cur=t;setUi(t);setTimeout(function(){tgt.classList.add('is-on');},reduce?0:900);
+    cur=t;setUi(t);setTimeout(function(){tgt.classList.add('is-on');fxIn(tgt);},reduce?0:900);
     var dist=curEl.getBoundingClientRect().width+gap();
     function done(){
       track.style.transition='none';track.style.transform='translateX(0)';

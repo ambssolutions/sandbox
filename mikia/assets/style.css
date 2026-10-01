@@ -1838,3 +1838,22 @@ main h2.fx-in em{background-size:100% 2px}
 .crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;line-height:1.4}
 .crumbs a{padding:0!important;display:inline!important;min-height:0!important}
 @media (max-width:860px){.crumbs a{padding:8px 0!important;display:inline-flex!important}.side .plain a,.side .plain li{display:block;width:100%}}
+
+/* ===== SIX DISCIPLINES: text animation (final). Uses `translate`, which the older !important transform rules do not touch ===== */
+.car-slide.is-on .cs-copy>*{animation:csDrop .95s cubic-bezier(.2,.9,.25,1.1) both!important}
+.car-slide.is-on .cs-copy>*:nth-child(1){animation-delay:.05s!important}
+.car-slide.is-on .cs-copy>*:nth-child(2){animation-delay:.18s!important}
+.car-slide.is-on .cs-copy>*:nth-child(3){animation-delay:.34s!important}
+.car-slide.is-on .cs-copy>*:nth-child(4){animation-delay:.5s!important}
+.car-slide.is-on .cs-copy>*:nth-child(n+5){animation-delay:.9s!important}
+.car-slide.is-on .cs-copy .ticks{animation:none!important}
+.car-slide.is-on .cs-copy .ticks li{animation:csDrop .8s cubic-bezier(.2,.9,.25,1.1) both!important}
+.car-slide.is-on .cs-copy .ticks li:nth-child(1){animation-delay:.55s!important}
+.car-slide.is-on .cs-copy .ticks li:nth-child(2){animation-delay:.7s!important}
+.car-slide.is-on .cs-copy .ticks li:nth-child(3){animation-delay:.85s!important}
+.car-slide.is-on .cs-copy .ticks li:nth-child(4){animation-delay:1s!important}
+@keyframes csDrop{0%{opacity:0;translate:0 -42px}60%{opacity:1}100%{opacity:1;translate:0 0}}
+.cs-copy h3.fx-words .wi{transition-duration:1s}
+.cs-copy p.cs-typed{background:linear-gradient(100deg,currentColor 40%,rgba(239,106,98,1) 50%,currentColor 60%) 150% 0/250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:csSweep 1.6s ease-out .45s both,csDrop .95s cubic-bezier(.2,.9,.25,1.1) .18s both!important}
+@keyframes csSweep{from{background-position:150% 0}to{background-position:-50% 0}}
+@media (prefers-reduced-motion:reduce){.car-slide.is-on .cs-copy>*,.car-slide.is-on .cs-copy .ticks li{animation:none!important;opacity:1}.cs-copy p.cs-typed{animation:none!important;-webkit-text-fill-color:currentColor}}
