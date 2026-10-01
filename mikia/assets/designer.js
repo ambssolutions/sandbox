@@ -55,11 +55,13 @@
     $('dzSend').href='contact.html?design='+encodeURIComponent(summary());
     try{history.replaceState(null,'',location.pathname+location.search+'#design='+encodeURIComponent(encode()));}catch(e){}
     G.forEach(function(g){[].forEach.call(document.querySelectorAll('[data-k="'+g.k+'"]'),function(b){b.setAttribute('aria-checked',String(b.dataset.v)===String(state[g.k])?'true':'false');});});
+    [].forEach.call(document.querySelectorAll('[data-wk]'),function(b){var k=b.dataset.wk;var on=b.dataset.wm?!!state[k]&&String(state[k])!=='false'&&state[k]!=='none':String(b.dataset.wv)===String(state[k]);b.setAttribute('aria-checked',on?'true':'false');});
   }
-  function apply(part){
+  var PROG=[4,9,11.6,13.4,15],wizOn=false,wizStarted=false;
+  function apply(part,keep){
     Object.assign(state,part);sync();clearTimeout(t);
     t=setTimeout(function(){
-      if(!api)return;api.designed=true;api.setDesign(Object.assign({},state));
+      if(!api)return;api.designed=true;api.setDesign(Object.assign({},state),!!keep);
       if(window.__house&&window.__house.onDesigned)window.__house.onDesigned();
     },60);
   }
@@ -103,6 +105,54 @@
       f.appendChild(w);body.appendChild(f);
     });
   }
+  var WQ=[
+    {t:'Which style do you like?',s:'This sets a starting point. You can change everything after.',type:'preset'},
+    {t:'How many storeys?',k:'shape',opts:[['single','Single storey'],['lshape','L-shape'],['twostorey','Two storey']]},
+    {t:'What roof shape?',k:'roof',opts:[['hip','Hip'],['gable','Side gable'],['gablefront','Front gable'],['skillion','Skillion'],['flat','Flat']]},
+    {t:'What are the walls made of?',k:'cladding',opts:[['weatherboard','Weatherboard'],['boardbatten','Board and batten'],['brick','Brick'],['plaster','Plaster'],['metal','Ribbed metal']]},
+    {t:'Pick a wall colour',k:'wall',sw:[['#ece7da','Cloud white'],['#c9c3b3','Stone'],['#d8b98a','Sand'],['#9bb5a1','Sage'],['#8d9a95','Slate grey'],['#2f3a3d','Charcoal'],['#b5543f','Terracotta']]},
+    {t:'Any extras?',s:'Tap to add or remove, then build.',type:'extras',opts:[['veranda','Front veranda',true],['garage','Garage',true],['solar','Solar panels',true],['deck','Covered deck',true]]}
+  ];
+  function buildWizard(){
+    var wiz=document.createElement('div');wiz.className='dz-wiz';
+    wiz.innerHTML='<div class="dz-wtop"><button type="button" class="dz-wback" aria-label="Previous question">&larr; Back</button><span class="dz-wstep"></span><button type="button" class="dz-wfine">Fine-tune</button></div><div class="dz-wdots"></div><h4 class="dz-wq" id="dzWq"></h4><p class="dz-ws"></p><div class="dz-wopts" role="group" aria-labelledby="dzWq"></div><div class="dz-wfoot"></div>';
+    panel.insertBefore(wiz,panel.firstChild);
+    var qEl=wiz.querySelector('.dz-wq'),sEl=wiz.querySelector('.dz-ws'),oEl=wiz.querySelector('.dz-wopts'),fEl=wiz.querySelector('.dz-wfoot'),stepEl=wiz.querySelector('.dz-wstep'),dots=wiz.querySelector('.dz-wdots'),back=wiz.querySelector('.dz-wback');
+    WQ.forEach(function(){dots.appendChild(document.createElement('i'));});
+    var qi=0,adv=null;
+    function stageTo(i){
+      if(!api||panel.classList.contains('fine'))return;
+      var tgt=PROG[Math.min(i,PROG.length-1)];
+      if(!wizStarted){wizStarted=true;api.setProgress(0);setTimeout(function(){if(api)api.setProgress(tgt);},700);}
+      else api.setProgress(tgt);
+      if(window.__house&&window.__house.onDesigned)window.__house.onDesigned();
+    }
+    function render(i,dir){
+      qi=i;var q=WQ[i];clearTimeout(adv);
+      stepEl.textContent='Question '+(i+1)+' of '+WQ.length;back.style.visibility=i?'visible':'hidden';
+      [].forEach.call(dots.children,function(x,k){x.className=k<i?'done':k===i?'on':'';});
+      qEl.textContent=q.t;sEl.textContent=q.s||'';sEl.hidden=!q.s;oEl.textContent='';fEl.textContent='';
+      oEl.className='dz-wopts'+(q.sw?' sw':'');
+      oEl.style.animation='none';void oEl.offsetWidth;oEl.style.animation='';
+      if(q.type==='preset'){
+        PRESETS.forEach(function(p){var b=document.createElement('button');b.type='button';b.className='dz-wopt';b.innerHTML='<b>'+p[0]+'</b><small>'+p[1].split(',')[1]?'':'';b.textContent=p[0];b.title=p[1];b.addEventListener('click',function(){apply(Object.assign({},DEF,p[3],{tod:state.tod}),true);stageTo(0);go(1);});oEl.appendChild(b);});
+        var sc=document.createElement('button');sc.type='button';sc.className='dz-wopt ghost';sc.textContent='Start from scratch';sc.addEventListener('click',function(){apply(Object.assign({},DEF,{tod:state.tod}),true);stageTo(0);go(1);});oEl.appendChild(sc);
+      }else if(q.type==='extras'){
+        q.opts.forEach(function(o){var b=document.createElement('button');b.type='button';b.className='dz-wopt';b.dataset.wk=o[0];b.dataset.wm='1';b.setAttribute('role','checkbox');b.textContent=o[1];
+          b.addEventListener('click',function(){var k=o[0],v=!(state[k]&&state[k]!=='none'&&state[k]!==false);var x={};x[k]=v;apply(x,true);stageTo(4);});oEl.appendChild(b);});
+        var bb=document.createElement('button');bb.type='button';bb.className='btn btn-accent dz-wbuild';bb.textContent='Build my design';bb.addEventListener('click',function(){document.getElementById('dzBuild').click();});fEl.appendChild(bb);
+      }else{
+        q.opts&&q.opts.forEach(function(o){var b=document.createElement('button');b.type='button';b.className='dz-wopt';b.dataset.wk=q.k;b.dataset.wv=o[0];b.setAttribute('role','radio');b.textContent=o[1];b.addEventListener('click',function(){var x={};x[q.k]=o[0];apply(x,true);stageTo(qi);adv=setTimeout(function(){go(1);},380);});oEl.appendChild(b);});
+        q.sw&&q.sw.forEach(function(o){var b=document.createElement('button');b.type='button';b.className='dz-sw';b.dataset.wk=q.k;b.dataset.wv=o[0];b.setAttribute('role','radio');b.setAttribute('aria-label',o[1]);b.title=o[1];b.style.background=o[0];b.addEventListener('click',function(){var x={};x[q.k]=o[0];apply(x,true);stageTo(qi);adv=setTimeout(function(){go(1);},380);});oEl.appendChild(b);});
+      }
+      sync();
+    }
+    function go(n){var t=qi+n;if(t<0)return;if(t>=WQ.length)return;render(t);}
+    back.addEventListener('click',function(){go(-1);});
+    var fine=wiz.querySelector('.dz-wfine');
+    fine.addEventListener('click',function(){var on=panel.classList.toggle('fine');fine.textContent=on?'Back to questions':'Fine-tune';fine.setAttribute('aria-pressed',on?'true':'false');});
+    render(0);
+  }
   function wire(){
     $('dzCopy').addEventListener('click',function(){
       var txt='My Mikia house design: '+summary()+' '+location.href.split('#')[0]+'#design='+encodeURIComponent(encode());
@@ -120,7 +170,7 @@
   [].forEach.call(document.querySelectorAll('#dzIcons [data-ic]'),function(e){ICONS[e.dataset.ic]=e.innerHTML;});
   var h=location.hash.match(/#design=(.+)$/),fromHash=false;
   if(h){try{Object.assign(state,decode(decodeURIComponent(h[1])));fromHash=true;}catch(e){}}
-  build();sync();wire();if(window.__dzShow)window.__dzShow('style');
+  build();buildWizard();sync();wire();if(window.__dzShow)window.__dzShow('style');
   document.addEventListener('house-ready',function(){
     api=window.__house.api;ready=true;
     if(fromHash){api.designed=true;api.setDesign(Object.assign({},state));window.__house.onDesigned();}
