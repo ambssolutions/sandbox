@@ -33,6 +33,8 @@
     ['Bach','Kiwi bach','A small gabled holiday cottage with a veranda and deck in board and batten, the classic beach house.',{shape:'single',roof:'gable',cladding:'boardbatten',wall:'#8d9a95',roofColor:'#4a6b57',joinery:'#f2f2ee',door:'#e0a64b',windows:'standard',veranda:true,bay:false,garage:false,chimney:true,solar:false,deck:true,fence:'none',detail:'none'}],
     ['Lodge','L-shape lodge, today','An L-shaped plan with a gabled roof, charcoal board and batten, a large window, deck and garage, in the modern farmhouse style.',{shape:'lshape',roof:'gable',cladding:'boardbatten',wall:'#5a6a60',roofColor:'#4d5c63',joinery:'#161e1b',door:'timber',windows:'large',veranda:false,bay:false,garage:true,chimney:true,solar:false,deck:true,fence:'none',detail:'none'}]
   ];
+  var CATS=[['style','Styles'],['shape','Shape'],['material','Materials'],['colour','Colours'],['extras','Extras'],['scene','Scene']];
+  var CAT={shape:'shape',roof:'shape',detail:'shape',cladding:'material',windows:'material',bay:'material',veranda:'material',wall:'colour',roofColor:'colour',joinery:'colour',door:'colour',garage:'extras',chimney:'extras',solar:'extras',deck:'extras',fence:'extras',tod:'scene'};
   var ICONS={},state=Object.assign({},DEF),api=null,t=null,ready=false;
   function name(g,v){var l=(g.opts||g.sw).filter(function(o){return o[0]===v;})[0];return l?l[1]:String(v);}
   function G_(k){return G.filter(function(g){return g.k===k;})[0];}
@@ -63,13 +65,17 @@
   }
   function build(){
     panel.textContent='';
-    var pf=document.createElement('fieldset');pf.className='dz-group dz-presets';
+    var tl=document.createElement('div');tl.className='dz-tabs';tl.setAttribute('role','tablist');tl.setAttribute('aria-label','Design categories');
+    var body=document.createElement('div');body.className='dz-body';panel.appendChild(tl);panel.appendChild(body);
+    CATS.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.className='dz-tab';b.setAttribute('role','tab');b.dataset.cat=c[0];b.textContent=c[1];b.setAttribute('aria-selected',i===0?'true':'false');b.addEventListener('click',function(){showCat(c[0]);});tl.appendChild(b);});
+    function showCat(k){[].forEach.call(tl.children,function(t){t.setAttribute('aria-selected',t.dataset.cat===k?'true':'false');});[].forEach.call(body.querySelectorAll('[data-cat]'),function(g){g.hidden=g.dataset.cat!==k;});body.scrollTop=0;}
+    var pf=document.createElement('fieldset');pf.className='dz-group dz-presets';pf.dataset.cat='style';
     var pl=document.createElement('legend');pl.innerHTML=(ICONS.home||'')+'<span>Start from a New Zealand style</span>';pf.appendChild(pl);
     var pw=document.createElement('div');pw.className='dz-opts';
     PRESETS.forEach(function(p){var b=document.createElement('button');b.type='button';b.className='dz-opt dz-preset';b.textContent=p[0];b.title=p[1];b.addEventListener('click',function(){apply(Object.assign({},DEF,p[3],{tod:state.tod}));note.querySelector('b').textContent=p[1];note.querySelector('span').textContent=p[2];note.hidden=false;});pw.appendChild(b);});
-    pf.appendChild(pw);var note=document.createElement('p');note.className='dz-preset-note';note.hidden=true;note.innerHTML='<b></b><span></span>';pf.appendChild(note);panel.appendChild(pf);
+    pf.appendChild(pw);var note=document.createElement('p');note.className='dz-preset-note';note.hidden=true;note.innerHTML='<b></b><span></span>';pf.appendChild(note);body.appendChild(pf);
     G.forEach(function(g){
-      var f=document.createElement('fieldset');f.className='dz-group';
+      var f=document.createElement('fieldset');f.className='dz-group';f.dataset.cat=CAT[g.k]||'extras';f.hidden=true;
       var l=document.createElement('legend');l.innerHTML=(ICONS[g.icon]||'')+'<span></span>';l.lastChild.textContent=g.label;f.appendChild(l);
       var w=document.createElement('div');w.className='dz-opts';w.setAttribute('role','radiogroup');w.setAttribute('aria-label',g.label);
       (g.opts||g.sw).forEach(function(o){
@@ -78,7 +84,7 @@
         b.addEventListener('click',function(){var x={};x[g.k]=o[0];apply(x);});
         w.appendChild(b);
       });
-      f.appendChild(w);panel.appendChild(f);
+      f.appendChild(w);body.appendChild(f);
     });
   }
   function wire(){
