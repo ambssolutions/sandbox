@@ -62,7 +62,7 @@
   .logo { display: block; flex: none; background: var(--white); border-radius: 14px; padding: 6px 14px; box-shadow: 0 10px 30px -12px rgba(20,24,56,.45); transition: box-shadow .3s; }
   .logo img { display: block; height: 62px; width: auto; }
   .header.solid .logo { box-shadow: none; padding-inline: 4px; }
-  .nav { display: flex; align-items: center; gap: 32px; }
+  .nav { display: flex; align-items: center; gap: 24px; }
   .nav a { text-decoration: none; font-weight: 500; font-size: .95rem; opacity: .88; }
   .nav a:hover { opacity: 1; }
   .nav .btn { opacity: 1; padding: 12px 20px; }
@@ -255,6 +255,49 @@
   .g-tall { grid-row: span 2; }
   .contact-logo { height: 84px; width: auto; align-self: flex-start; }
 
+  /* Home planner */
+  .planner { background: var(--sky-tint); }
+  .planner-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 28px; align-items: start; }
+  .stage { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; position: sticky; top: 112px; min-width: 0; }
+  .stage svg { width: 100%; height: auto; display: block; border-radius: 10px; }
+  .stage-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 600; color: var(--navy); }
+  .stage-pct { font: 700 .95rem/1 var(--display); color: var(--blue); font-variant-numeric: tabular-nums; }
+  .stage-bar { height: 6px; background: var(--sky-tint); border-radius: 6px; margin: 12px 0 16px; overflow: hidden; }
+  .stage-bar span { display: block; height: 100%; width: 0; background: var(--amber); border-radius: 6px; transition: width .6s cubic-bezier(.2,.8,.2,1); }
+  .stage-note { font-size: .82rem; color: var(--muted); margin-top: 12px; }
+  .quiz { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 28px; min-width: 0; }
+  .q-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .q-link { background: none; border: 0; color: var(--blue); font: 600 .92rem var(--body); cursor: pointer; padding: 4px 0; }
+  .q-link:hover { text-decoration: underline; }
+  .q-link[disabled] { visibility: hidden; }
+  .quiz h3 { font-size: 1.5rem; color: var(--navy); margin-bottom: 18px; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .opt { text-align: left; border: 1.5px solid var(--line); background: var(--paper); border-radius: 12px; padding: 14px 16px; cursor: pointer; font: 600 1rem/1.3 var(--body); color: var(--navy); display: flex; align-items: center; gap: 12px; transition: border-color .2s, background .2s, transform .15s; min-width: 0; }
+  .opt small { display: block; font-weight: 400; color: var(--muted); font-size: .85rem; margin-top: 3px; }
+  .opt:hover { border-color: var(--blue); background: var(--white); }
+  .opt:active { transform: scale(.98); }
+  .opt[aria-pressed="true"] { border-color: var(--amber); background: #fff7e0; }
+  .opt .sw { width: 30px; height: 30px; border-radius: 8px; flex: none; border: 1px solid rgba(20,24,56,.15); }
+  .opt svg { flex: none; color: var(--navy); }
+  .answers { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; min-height: 30px; }
+  .answers button { border: 0; background: var(--sky-tint); color: var(--navy); border-radius: 100px; padding: 6px 12px; font: 500 .82rem var(--body); cursor: pointer; }
+  .answers button:hover { background: #d6eaf7; }
+  .answers button.now { background: var(--navy); color: var(--white); }
+  .sum { display: grid; grid-template-columns: auto 1fr; gap: 10px 18px; margin: 0 0 6px; }
+  .sum dt { color: var(--muted); font-size: .92rem; }
+  .sum dd { margin: 0; font-weight: 600; color: var(--navy); }
+  .q-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; margin-top: 24px; }
+  /* build animations, one per construction stage */
+  .L { transform-box: fill-box; }
+  .anim-drop { animation: pDrop .8s cubic-bezier(.2,.8,.2,1) both; }
+  .anim-rise { animation: pRise .9s cubic-bezier(.2,.8,.2,1) both; transform-origin: 50% 100%; }
+  .anim-pop { animation: pPop .6s cubic-bezier(.3,1.4,.5,1) both; transform-origin: 50% 50%; }
+  .anim-fade { animation: pFade .8s ease both; }
+  @keyframes pDrop { from { opacity: 0; transform: translateY(-60px); } to { opacity: 1; transform: none; } }
+  @keyframes pRise { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes pPop { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
+  @keyframes pFade { from { opacity: 0; } to { opacity: 1; } }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
     html { scroll-behavior: auto; }
@@ -275,6 +318,8 @@
     .header.menu-open { background: var(--white); color: var(--navy); }
     .intro-grid, .why-grid, .process-grid, .project, .about-grid, .faq-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
     .process-side, .faq-side { position: static; }
+    .stage { top: calc(96px + env(safe-area-inset-top, 0px)); z-index: 5; box-shadow: 0 12px 24px -16px rgba(20,24,56,.35); }
+    .planner-grid { grid-template-columns: 1fr; }
     .stats-grid { grid-template-columns: 1fr 1fr; row-gap: 32px; }
     .assure { grid-template-columns: 1fr; }
     .assure div { padding-top: 14px; }
@@ -292,6 +337,11 @@
     .nav { top: calc(80px + env(safe-area-inset-top, 0px)); }
     .homes, .testi-grid, .principles, .mv { grid-template-columns: 1fr; }
     .g-grid { grid-auto-rows: 140px; gap: 10px; }
+    .opts { grid-template-columns: 1fr; }
+    .quiz { padding: 22px 18px; }
+    .stage { padding: 10px 12px; top: calc(80px + env(safe-area-inset-top, 0px)); }
+    .stage-note { display: none; }
+    .stage-bar { margin: 8px 0 10px; }
     .video-toggle { right: 16px; bottom: auto; top: calc(92px + env(safe-area-inset-top, 0px)); }
     .home { aspect-ratio: 4/3; }
     .support { padding: 28px 20px; }
@@ -320,6 +370,7 @@
     </button>
     <nav class="nav" id="nav">
       <a href="#services">Services</a>
+      <a href="#planner">Plan your home</a>
       <a href="#projects">Projects</a>
       <a href="#gallery">Gallery</a>
       <a href="#process">Process</a>
@@ -436,6 +487,28 @@
             <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14l2.5 2.5L16 12"/></svg></span>
             <h3>Project Management</h3><p>Every aspect of your build coordinated for on-time and on-budget delivery.</p>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Home planner -->
+  <section class="planner" id="planner">
+    <div class="wrap">
+      <div class="head-row">
+        <div class="stack"><span class="label">Plan your home</span><h2>Answer a few questions. Watch it get built.</h2></div>
+        <p class="lede">Pick what you'd like to build and see your home take shape, from bare section to finished build. Then send it to us for a fixed-price quote.</p>
+      </div>
+      <div class="planner-grid">
+        <div class="stage">
+          <div class="stage-top"><span id="pStatus">Your section is surveyed and ready</span><span class="stage-pct" id="pPct">0%</span></div>
+          <div class="stage-bar"><span id="pBar"></span></div>
+          <svg id="pSvg" viewBox="0 0 800 440" role="img" aria-label="An empty section, ready to build"></svg>
+          <p class="stage-note">Illustration only. We draw up your actual design with you.</p>
+        </div>
+        <div class="quiz">
+          <div class="answers" id="pAnswers" aria-label="Your answers"></div>
+          <div id="pCard" aria-live="polite"></div>
         </div>
       </div>
     </div>
@@ -772,6 +845,227 @@
     note.textContent = 'Thanks, ' + f.name.value.trim().split(' ')[0] + '. We’ll be in touch shortly.';
     f.reset();
   });
+
+  // Home planner: each answer adds a construction stage to the drawing
+  (() => {
+    const svg = document.getElementById('pSvg');
+    if (!svg) return;
+    const card = document.getElementById('pCard'), answersEl = document.getElementById('pAnswers');
+    const statusEl = document.getElementById('pStatus'), pctEl = document.getElementById('pPct'), barEl = document.getElementById('pBar');
+    const CLAD = { white: '#f3f2ee', dark: '#30353e', mixed: 'linear-gradient(90deg,#f3f2ee 50%,#30353e 50%)', cedar: '#b98250', brick: '#a65b45' };
+    const roofIcon = {
+      gable: '<svg width="30" height="24" viewBox="0 0 30 24"><path d="M2 12L15 2l13 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><rect x="6" y="12" width="18" height="10" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
+      mono: '<svg width="30" height="24" viewBox="0 0 30 24"><path d="M2 6l26 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M5 6.7V22h20V11.3" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
+      flat: '<svg width="30" height="24" viewBox="0 0 30 24"><path d="M3 8h24" stroke="currentColor" stroke-width="3"/><rect x="5" y="8" width="20" height="14" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
+    };
+    const Q = [
+      { key: 'type', q: 'What are you building?', label: 'Build', status: 'Foundations poured', opts: [['standalone', 'Standalone home', 'One house on its own section'], ['duplex', 'Duplex', 'Two homes sharing a wall'], ['terrace', 'Terrace homes', 'A row of three or more']] },
+      { key: 'storeys', q: 'How many storeys?', label: 'Storeys', status: 'Frame is up', opts: [['1', 'Single storey'], ['2', 'Two storeys']] },
+      { key: 'beds', q: 'How many bedrooms in each home?', label: 'Bedrooms', status: 'Windows going in', opts: [['2', '2 bedrooms'], ['3', '3 bedrooms'], ['4', '4 bedrooms'], ['5', '5 bedrooms']] },
+      { key: 'baths', q: 'How many bathrooms in each home?', label: 'Bathrooms', status: 'Bathrooms roughed in', opts: [['1', '1 bathroom'], ['2', '2 bathrooms'], ['3', '3 bathrooms']] },
+      { key: 'garage', q: 'Do you want a garage?', label: 'Garage', status: 'Garage door fitted', opts: [['none', 'No garage'], ['single', 'Single garage'], ['double', 'Double garage']] },
+      { key: 'clad', q: 'Choose your cladding', label: 'Cladding', status: 'Cladding on', opts: [['white', 'White weatherboard'], ['dark', 'Dark vertical'], ['mixed', 'White and dark'], ['cedar', 'Cedar'], ['brick', 'Brick']] },
+      { key: 'roof', q: 'Pick a roof style', label: 'Roof', status: 'Roof on. Ready for handover', opts: [['gable', 'Gable'], ['mono', 'Mono-pitch'], ['flat', 'Flat with parapet']] },
+    ];
+    const label = (k, v) => { const o = Q.find(x => x.key === k).opts.find(o => o[0] === v); return o ? o[1] : ''; };
+    let s = {}, step = 0, anim = -1, timer;
+
+    const defs = `<defs>
+      <linearGradient id="pSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9eefb"/><stop offset="1" stop-color="#f4fafe"/></linearGradient>
+      <linearGradient id="pGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a9d0ec"/><stop offset="1" stop-color="#e3f1fa"/></linearGradient>
+      <pattern id="pFrame" width="16" height="100" patternUnits="userSpaceOnUse"><rect width="16" height="100" fill="#efdcb5"/><rect width="3" height="100" fill="#cfa66a"/><rect y="48" width="16" height="3" fill="#cfa66a"/></pattern>
+      <pattern id="pWhite" width="10" height="8" patternUnits="userSpaceOnUse"><rect width="10" height="8" fill="#f5f4f0"/><path d="M0 7.5h10" stroke="#d8d5cc"/></pattern>
+      <pattern id="pDark" width="9" height="10" patternUnits="userSpaceOnUse"><rect width="9" height="10" fill="#323740"/><path d="M8.5 0v10" stroke="#262a31"/></pattern>
+      <pattern id="pCedar" width="9" height="10" patternUnits="userSpaceOnUse"><rect width="9" height="10" fill="#bb8452"/><path d="M8.5 0v10" stroke="#9b6a3d"/></pattern>
+      <pattern id="pBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="#a95d46"/><path d="M0 .5h24M0 6.5h24M.5 0v6M12.5 6v6" stroke="#e2cfc4" stroke-width="1"/></pattern>
+    </defs>`;
+
+    function layout() {
+      const n = { standalone: 1, duplex: 2, terrace: 3 }[s.type] || 1;
+      const st = +s.storeys || 2;
+      const uw = st === 1 ? [0, 380, 250, 190][n] : [0, 280, 210, 165][n];
+      const G = 382, sh = 100, total = n * uw, x0 = (800 - total) / 2, top = G - st * sh;
+      return { n, st, uw, G, sh, total, x0, top };
+    }
+
+    // place k windows (b big, m small) evenly in [a, b]
+    function windowRow(a, b, y, bigs, smalls) {
+      const items = [];
+      for (let i = 0, bi = 0, si = 0; i < bigs + smalls; i++) {
+        const wantSmall = si < smalls && (bi >= bigs || (i % 3 === 2));
+        if (wantSmall) { items.push('s'); si++; } else { items.push('b'); bi++; }
+      }
+      const slot = (b - a) / Math.max(items.length, 1);
+      return items.map((t, i) => {
+        const w = t === 'b' ? Math.min(38, slot - 10) : Math.min(20, slot - 8);
+        const h = t === 'b' ? 46 : 24;
+        if (w < 8) return '';
+        const x = a + slot * i + (slot - w) / 2;
+        return { t, svg: win(x, y + (t === 's' ? 2 : 0), w, h) };
+      }).filter(Boolean);
+    }
+    const win = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#pGlass)" stroke="#1d2129" stroke-width="3"/><path d="M${x + w / 2} ${y}v${h}" stroke="#1d2129" stroke-width="1.5"/>`;
+
+    function draw() {
+      const L = layout(), { n, st, uw, G, sh, total, x0, top } = L;
+      const layers = [];
+      const add = (i, cls, body) => layers.push(`<g class="L ${anim === i ? cls : ''}">${body}</g>`);
+      let base = `<rect width="800" height="440" fill="url(#pSky)"/>
+        <circle cx="690" cy="70" r="26" fill="#ffd56b" opacity=".9"/>
+        <path d="M0 330 Q160 290 330 322 T800 300 V382 H0z" fill="#d9ead0"/>
+        <rect y="${G}" width="800" height="58" fill="#bcd99f"/><path d="M0 ${G}h800" stroke="#9cc27a" stroke-width="2"/>`;
+      const done = !!s.roof;
+      if (!s.type) {
+        base += `<g class="L anim-fade"><path d="M170 ${G}h460" stroke="#e46d2b" stroke-width="1.5" stroke-dasharray="6 5"/>
+          ${[170, 630].map(x => `<rect x="${x - 3}" y="${G - 26}" width="6" height="30" fill="#c58b3e"/><rect x="${x - 4}" y="${G - 30}" width="8" height="6" fill="#e46d2b"/>`).join('')}
+          <text x="400" y="${G - 40}" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-size="16" fill="#3954a5">Your section</text></g>`;
+      }
+      // 0 foundation
+      if (s.type) add(0, 'anim-fade', `<rect x="${x0 - 14}" y="${G - 8}" width="${total + 28}" height="12" fill="#c9c9c3" stroke="#a9a9a2"/>`);
+      // driveway under garages
+      const gw = s.garage === 'double' ? Math.min(112, uw - 76) : s.garage === 'single' ? 66 : 0;
+      if (s.type && s.storeys && gw) {
+        let d = '';
+        for (let u = 0; u < n; u++) { const x = x0 + u * uw + 12; d += `<path d="M${x} ${G + 4}h${gw}l${gw * .15 + 10} 54H${x - gw * .15 - 10}z" fill="#d5d4cf"/>`; }
+        layers.push(`<g class="L ${anim === 4 ? 'anim-fade' : ''}">${d}</g>`);
+      }
+      if (s.storeys) {
+        // 1 frame
+        let f = '';
+        for (let u = 0; u < n; u++) f += `<rect x="${x0 + u * uw}" y="${top}" width="${uw}" height="${st * sh}" fill="url(#pFrame)" stroke="#b8925a" stroke-width="2"/>`;
+        add(1, 'anim-rise', f);
+        // 5 cladding
+        if (s.clad) {
+          let c = '';
+          const P = { white: 'pWhite', dark: 'pDark', cedar: 'pCedar', brick: 'pBrick' };
+          for (let u = 0; u < n; u++) {
+            const x = x0 + u * uw;
+            if (s.clad === 'mixed') {
+              if (st === 2) c += `<rect x="${x}" y="${top}" width="${uw}" height="${sh}" fill="url(#pWhite)"/><rect x="${x}" y="${G - sh}" width="${uw}" height="${sh}" fill="url(#pDark)"/>`;
+              else c += `<rect x="${x}" y="${top}" width="${uw * .45}" height="${sh}" fill="url(#pDark)"/><rect x="${x + uw * .45}" y="${top}" width="${uw * .55}" height="${sh}" fill="url(#pWhite)"/>`;
+            } else c += `<rect x="${x}" y="${top}" width="${uw}" height="${st * sh}" fill="url(#${P[s.clad]})"/>`;
+            c += `<rect x="${x}" y="${top}" width="${uw}" height="${st * sh}" fill="none" stroke="#1d2129" stroke-width="2"/>`;
+          }
+          add(5, 'anim-rise', c);
+        }
+        // 2 bedroom windows + doors, 3 bathroom windows
+        if (s.beds) {
+          let b = '', m = '';
+          const beds = +s.beds, baths = +s.baths || 0;
+          for (let u = 0; u < n; u++) {
+            const x = x0 + u * uw;
+            const doorX = x + 12 + (gw ? gw + 14 : 0);
+            const freeA = doorX + 28 + 14, freeB = x + uw - 12;
+            b += `<rect x="${doorX}" y="${G - 64}" width="28" height="64" fill="#1d2230"/><circle cx="${doorX + 22}" cy="${G - 32}" r="2.5" fill="#ffb703"/><rect x="${doorX - 4}" y="${G - 68}" width="36" height="5" fill="#1d2230"/>`;
+            if (st === 2) {
+              windowRow(x + 10, x + uw - 10, top + 24, Math.min(beds, n === 3 ? 3 : 4), 0).forEach(w => b += w.svg);
+              if (freeB - freeA > 34) b += win(freeA, G - 78, Math.min(freeB - freeA, 120), 52);
+            } else {
+              windowRow(freeA, freeB, G - 82, Math.min(beds, 3), 0).forEach(w => b += w.svg);
+            }
+            if (baths) {
+              // small frosted windows: upstairs between the eaves line and the bedroom row, or high on the wall for single storey
+              const y = st === 2 ? top + 4 : top + 8, a = st === 2 ? x + 18 : freeA, z = st === 2 ? x + uw - 18 : freeB;
+              const k = Math.min(baths, n === 3 ? 2 : 3), slot = (z - a) / k;
+              for (let i = 0; i < k; i++) { const wx = a + slot * i + slot / 2 - 9; m += `<rect x="${wx}" y="${y}" width="18" height="14" fill="#e8f1f6" stroke="#1d2129" stroke-width="2.5"/>`; }
+            }
+          }
+          add(2, 'anim-pop', b);
+          if (baths) add(3, 'anim-pop', m);
+        }
+        // 4 garage doors
+        if (gw) {
+          let g = '';
+          for (let u = 0; u < n; u++) {
+            const x = x0 + u * uw + 12;
+            g += `<rect x="${x}" y="${G - 66}" width="${gw}" height="66" fill="#3b404a" stroke="#1d2129" stroke-width="2.5"/>`;
+            for (let yy = G - 56; yy < G; yy += 11) g += `<path d="M${x + 3} ${yy}h${gw - 6}" stroke="#4d535e" stroke-width="2"/>`;
+          }
+          add(4, 'anim-rise', g);
+        }
+        // party walls
+        if (n > 1) { let p = ''; for (let u = 1; u < n; u++) p += `<path d="M${x0 + u * uw} ${top - 4}V${G}" stroke="#1d2129" stroke-width="4"/>`; layers.push(`<g>${p}</g>`); }
+        // 6 roof
+        if (s.roof) {
+          let r = '';
+          for (let u = 0; u < n; u++) {
+            const x = x0 + u * uw;
+            if (s.roof === 'gable') r += `<path d="M${x - 10} ${top + 2}L${x + uw / 2} ${top - 64}L${x + uw + 10} ${top + 2}z" fill="#2b2f37"/><path d="M${x + uw / 2 - 16} ${top - 18}h32" stroke="#454b55" stroke-width="2"/>`;
+            if (s.roof === 'mono') r += `<path d="M${x - 10} ${top + 2}V${top - 46}L${x + uw + 10} ${top - 14}V${top + 2}z" fill="#2b2f37"/>`;
+            if (s.roof === 'flat') r += `<rect x="${x - 4}" y="${top - 16}" width="${uw + 8}" height="18" fill="#2b2f37"/><path d="M${x - 4} ${top - 16}h${uw + 8}" stroke="#454b55" stroke-width="3"/>`;
+          }
+          add(6, 'anim-drop', r);
+        } else {
+          // scaffolding while the build is under way
+          let sc = '';
+          const l = x0 - 22, rr = x0 + total + 22;
+          sc += `<path d="M${l} ${G}V${top - 20}M${rr} ${G}V${top - 20}" stroke="#8b96a3" stroke-width="3"/>`;
+          for (let k = 0; k <= st; k++) { const y = G - k * sh; sc += `<path d="M${l - 6} ${y}h12M${rr - 6} ${y}h12" stroke="#8b96a3" stroke-width="3"/>`; }
+          for (let k = 0; k < st; k++) { const y = G - k * sh; sc += `<path d="M${l - 10} ${y}L${l + 10} ${y - sh}M${rr + 10} ${y}L${rr - 10} ${y - sh}" stroke="#a7b0ba" stroke-width="1.5"/>`; }
+          layers.push(`<g class="L">${sc}</g>`);
+        }
+      }
+      // finished: landscaping
+      if (done) {
+        let d = '';
+        for (let u = 0; u < n; u++) { const x = x0 + u * uw, doorX = x + 12 + (gw ? gw + 14 : 0); d += `<path d="M${doorX + 4} ${G + 4}h20l6 54h-32z" fill="#e4e1d8"/><circle cx="${x + uw - 26}" cy="${G - 6}" r="12" fill="#6fa356"/><circle cx="${x + uw - 12}" cy="${G - 4}" r="9" fill="#5b9146"/>`; }
+        d += `<g transform="translate(${x0 - 60} ${G})"><rect x="-3" y="-46" width="6" height="46" fill="#8a6542"/><circle cy="-62" r="26" fill="#5b9146"/><circle cx="-14" cy="-48" r="16" fill="#6fa356"/></g>`;
+        d += `<g transform="translate(${x0 + total + 62} ${G})"><rect x="-3" y="-38" width="6" height="38" fill="#8a6542"/><circle cy="-52" r="22" fill="#6fa356"/></g>`;
+        d += `<g transform="translate(400 34)"><rect x="-96" y="-18" width="192" height="34" rx="17" fill="#202448"/><text y="5" text-anchor="middle" font-family="Plus Jakarta Sans, Arial, sans-serif" font-weight="700" font-size="14" fill="#ffffff">Ready for handover</text></g>`;
+        add(6, 'anim-pop', d);
+      }
+      svg.innerHTML = defs + base + layers.join('');
+      const n2 = Object.keys(s).length;
+      svg.setAttribute('aria-label', n2 ? 'Your home so far: ' + Q.filter(q => s[q.key]).map(q => label(q.key, s[q.key])).join(', ') : 'An empty section, ready to build');
+      const pct = Math.round(n2 / Q.length * 100);
+      pctEl.textContent = pct + '%'; barEl.style.width = pct + '%';
+      const last = [...Q].reverse().find(q => s[q.key]);
+      statusEl.textContent = last ? last.status : 'Your section is surveyed and ready';
+    }
+
+    function renderCard() {
+      answersEl.innerHTML = Q.map((q, i) => s[q.key] ? `<button type="button" data-go="${i}" class="${i === step ? 'now' : ''}">${q.label}: ${label(q.key, s[q.key])}</button>` : '').join('');
+      if (step >= Q.length) {
+        card.innerHTML = `<div class="q-top"><span class="label">Your home</span><button type="button" class="q-link" data-reset>Start over</button></div>
+          <h3>Your home is ready for handover.</h3>
+          <dl class="sum">${Q.map(q => `<dt>${q.label}</dt><dd>${label(q.key, s[q.key])}</dd>`).join('')}</dl>
+          <div class="q-actions"><a href="#contact" class="btn btn-amber" data-quote>Get a fixed-price quote <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><button type="button" class="q-link" data-go="0">Change answers</button></div>`;
+        return;
+      }
+      const q = Q[step];
+      card.innerHTML = `<div class="q-top"><span class="label">Step ${step + 1} of ${Q.length}</span><button type="button" class="q-link" data-back ${step === 0 ? 'disabled' : ''}>← Back</button></div>
+        <h3>${q.q}</h3>
+        <div class="opts">${q.opts.map(([v, t, sub]) => `<button type="button" class="opt" data-v="${v}" aria-pressed="${s[q.key] === v}">${q.key === 'clad' ? `<span class="sw" style="background:${CLAD[v]}"></span>` : ''}${q.key === 'roof' ? roofIcon[v] : ''}<span>${t}${sub ? `<small>${sub}</small>` : ''}</span></button>`).join('')}</div>`;
+    }
+
+    function update() { draw(); renderCard(); anim = -1; }
+
+    card.addEventListener('click', e => {
+      const opt = e.target.closest('.opt');
+      if (opt) {
+        const q = Q[step];
+        s[q.key] = opt.dataset.v; anim = step;
+        draw(); anim = -1;
+        card.querySelectorAll('.opt').forEach(b => b.setAttribute('aria-pressed', b === opt));
+        clearTimeout(timer);
+        timer = setTimeout(() => { step = Math.min(step + 1, Q.length); while (step < Q.length && s[Q[step].key]) step++; renderCard(); }, 420);
+        answersEl.innerHTML = Q.map((qq, i) => s[qq.key] ? `<button type="button" data-go="${i}">${qq.label}: ${label(qq.key, s[qq.key])}</button>` : '').join('');
+        return;
+      }
+      if (e.target.closest('[data-back]')) { step = Math.max(0, step - 1); renderCard(); return; }
+      if (e.target.closest('[data-reset]')) { s = {}; step = 0; update(); return; }
+      const go = e.target.closest('[data-go]');
+      if (go) { step = +go.dataset.go; renderCard(); return; }
+      if (e.target.closest('[data-quote]')) {
+        const svc = document.getElementById('f-service'), msg = document.getElementById('f-msg');
+        if (svc) svc.value = s.type === 'standalone' ? 'Design & Build' : 'Terrace Homes & Duplexes';
+        if (msg) msg.value = 'My planned build: ' + Q.map(q => `${q.label}: ${label(q.key, s[q.key])}`).join(', ') + '.';
+      }
+    });
+    answersEl.addEventListener('click', e => { const go = e.target.closest('[data-go]'); if (go) { step = +go.dataset.go; renderCard(); } });
+
+    update();
+  })();
 
   // Hero video: play/pause control, and stay paused for reduced-motion users
   const vid = document.getElementById('heroVideo'), vt = document.getElementById('videoToggle'), vtIcon = document.getElementById('vtIcon');
