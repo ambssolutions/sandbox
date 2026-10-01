@@ -1,10 +1,11 @@
 (function(){
   var panel=document.getElementById('dzPanel');if(!panel)return;
   var $=function(id){return document.getElementById(id);};
-  var DEF={shape:'single',roof:'hip',cladding:'weatherboard',wall:'#ece7da',roofColor:'#8d9ea5',joinery:'#161e1b',door:'#c23434',windows:'standard',veranda:false,bay:false,garage:true,chimney:true,solar:false,deck:false,fence:'none',tod:'day'};
+  var DEF={shape:'single',roof:'hip',cladding:'weatherboard',wall:'#ece7da',roofColor:'#8d9ea5',joinery:'#161e1b',door:'#c23434',windows:'standard',veranda:false,bay:false,garage:true,chimney:true,solar:false,deck:false,fence:'none',detail:'none',tod:'day'};
   var G=[
     {k:'shape',label:'House shape',icon:'home',opts:[['single','Single storey'],['lshape','L-shape'],['twostorey','Two storey']]},
-    {k:'roof',label:'Roof shape',icon:'roof',opts:[['hip','Hip'],['gable','Side gable'],['gablefront','Front gable'],['skillion','Skillion']]},
+    {k:'roof',label:'Roof shape',icon:'roof',opts:[['hip','Hip'],['gable','Side gable'],['gablefront','Front gable'],['skillion','Skillion'],['flat','Flat with parapet']]},
+    {k:'detail',label:'Period details',icon:'palette',opts:[['none','None'],['villa','Villa: sash windows, fretwork, finials'],['bungalow','Bungalow: tapered posts, shingle gable'],['deco','Art Deco: bands, stepped front, porthole']]},
     {k:'cladding',label:'Cladding',icon:'panel',opts:[['weatherboard','Weatherboard'],['boardbatten','Board and batten'],['brick','Brick'],['plaster','Plaster'],['metal','Ribbed metal']]},
     {k:'wall',label:'Wall colour',icon:'palette',sw:[['#ece7da','Cloud white'],['#c9c3b3','Stone'],['#d8b98a','Sand'],['#9bb5a1','Sage'],['#8d9a95','Slate grey'],['#2f3a3d','Charcoal'],['#b5543f','Terracotta']]},
     {k:'roofColor',label:'Roof colour',icon:'roof',sw:[['#8d9ea5','Grey'],['#4d5c63','Charcoal'],['#bcc7cb','Light grey'],['#8a463a','Rust red'],['#4a6b57','Forest green'],['#76624d','Ironsand brown']]},
@@ -21,20 +22,22 @@
     {k:'tod',label:'Time of day',icon:'sun',opts:[['day','Day'],['golden','Golden hour'],['night','Night']]}
   ];
   var PRESETS=[
-    ['Villa',{shape:'single',roof:'hip',cladding:'weatherboard',wall:'#ece7da',roofColor:'#8a463a',joinery:'#f2f2ee',door:'#2f6f6a',windows:'standard',veranda:true,bay:true,garage:false,chimney:true,solar:false,deck:false,fence:'picket'}],
-    ['Bungalow',{shape:'single',roof:'gablefront',cladding:'weatherboard',wall:'#9bb5a1',roofColor:'#4d5c63',joinery:'#f2f2ee',door:'#c23434',windows:'standard',veranda:true,bay:false,garage:false,chimney:true,solar:false,deck:false,fence:'picket'}],
-    ['State house',{shape:'single',roof:'hip',cladding:'weatherboard',wall:'#c9c3b3',roofColor:'#8d9ea5',joinery:'#f2f2ee',door:'#e0a64b',windows:'standard',veranda:false,bay:false,garage:'carport',chimney:true,solar:false,deck:false,fence:'hedge'}],
-    ['Brick and tile',{shape:'single',roof:'hip',cladding:'brick',wall:'#b5543f',roofColor:'#8a463a',joinery:'#5a4632',door:'#161e1b',windows:'standard',veranda:false,bay:false,garage:true,chimney:false,solar:false,deck:false,fence:'none'}],
-    ['Modern',{shape:'single',roof:'skillion',cladding:'boardbatten',wall:'#2f3a3d',roofColor:'#4d5c63',joinery:'#161e1b',door:'timber',windows:'large',veranda:false,bay:false,garage:true,chimney:false,solar:true,deck:true,fence:'none'}],
-    ['Townhouse',{shape:'twostorey',roof:'skillion',cladding:'plaster',wall:'#d8b98a',roofColor:'#bcc7cb',joinery:'#161e1b',door:'#2f6f6a',windows:'standard',veranda:false,bay:false,garage:true,chimney:false,solar:true,deck:false,fence:'none'}],
-    ['Bach',{shape:'single',roof:'gable',cladding:'boardbatten',wall:'#8d9a95',roofColor:'#4a6b57',joinery:'#f2f2ee',door:'#e0a64b',windows:'standard',veranda:true,bay:false,garage:false,chimney:true,solar:false,deck:true,fence:'none'}],
-    ['L-shape lodge',{shape:'lshape',roof:'gable',cladding:'boardbatten',wall:'#5a6a60',roofColor:'#4d5c63',joinery:'#161e1b',door:'timber',windows:'large',veranda:false,bay:false,garage:true,chimney:true,solar:false,deck:true,fence:'none'}]
+    ['Villa','Villa, 1880s to 1920s','A bay window and a front veranda with fretwork, sash windows, a corrugated iron hip roof with finials and a brick chimney. Common across older Auckland suburbs such as Ponsonby, Grey Lynn and Parnell.',{shape:'single',roof:'hip',cladding:'weatherboard',wall:'#ece7da',roofColor:'#8a463a',joinery:'#f2f2ee',door:'#2f6f6a',windows:'standard',veranda:true,bay:true,garage:false,chimney:true,solar:false,deck:false,fence:'picket',detail:'villa'}],
+    ['Bungalow','Californian bungalow, 1910s to 1930s','A low front gable with shingles, a deep veranda on tapered posts and brick piers, and exposed rafter ends under the eaves. Typical of Mt Eden, Epsom and Devonport.',{shape:'single',roof:'gablefront',cladding:'weatherboard',wall:'#9bb5a1',roofColor:'#4d5c63',joinery:'#f2f2ee',door:'#c23434',windows:'standard',veranda:true,bay:false,garage:false,chimney:true,solar:false,deck:false,fence:'picket',detail:'bungalow'}],
+    ['State house','State house, 1930s to 1960s','The simple weatherboard hip-roofed home built in large numbers by the Government from 1937, often with a chimney and a carport added later.',{shape:'single',roof:'hip',cladding:'weatherboard',wall:'#c9c3b3',roofColor:'#8d9ea5',joinery:'#f2f2ee',door:'#e0a64b',windows:'standard',veranda:false,bay:false,garage:'carport',chimney:true,solar:false,deck:false,fence:'hedge',detail:'none'}],
+    ['Art Deco','Art Deco, 1930s','A flat roof behind a parapet, smooth stucco, horizontal bands, a stepped entry and a porthole window. Best known from Napier, rebuilt after the 1931 earthquake.',{shape:'single',roof:'flat',cladding:'plaster',wall:'#f1ede2',roofColor:'#8d9ea5',joinery:'#161e1b',door:'#2f6f6a',windows:'standard',veranda:false,bay:false,garage:true,chimney:false,solar:false,deck:false,fence:'none',detail:'deco'}],
+    ['Brick and tile','Brick and tile, 1960s to 1980s','Brick veneer walls, a low hip roof in tiles, aluminium joinery and an integral garage. Found in suburbs built out across the 1960s to 80s.',{shape:'single',roof:'hip',cladding:'brick',wall:'#b5543f',roofColor:'#8a463a',joinery:'#5a4632',door:'#161e1b',windows:'standard',veranda:false,bay:false,garage:true,chimney:false,solar:false,deck:false,fence:'none',detail:'none'}],
+    ['Mid-century','Mid-century modern, 1950s to 1960s','A low skillion roof, board and batten cladding, big windows and a carport, designed to open up to the garden.',{shape:'single',roof:'skillion',cladding:'boardbatten',wall:'#8d9a95',roofColor:'#4d5c63',joinery:'#161e1b',door:'#e0a64b',windows:'large',veranda:false,bay:false,garage:'carport',chimney:false,solar:false,deck:true,fence:'none',detail:'none'}],
+    ['Modern','Contemporary, 2010s on','A skillion roof, charcoal board and batten, a large picture window, a covered deck and solar panels.',{shape:'single',roof:'skillion',cladding:'boardbatten',wall:'#2f3a3d',roofColor:'#4d5c63',joinery:'#161e1b',door:'timber',windows:'large',veranda:false,bay:false,garage:true,chimney:false,solar:true,deck:true,fence:'none',detail:'none'}],
+    ['Townhouse','Townhouse, 2000s on','A two-storey plaster home with a skillion roof and integral garage, the medium-density type now common across Auckland.',{shape:'twostorey',roof:'skillion',cladding:'plaster',wall:'#d8b98a',roofColor:'#bcc7cb',joinery:'#161e1b',door:'#2f6f6a',windows:'standard',veranda:false,bay:false,garage:true,chimney:false,solar:true,deck:false,fence:'none',detail:'none'}],
+    ['Bach','Kiwi bach','A small gabled holiday cottage with a veranda and deck in board and batten, the classic beach house.',{shape:'single',roof:'gable',cladding:'boardbatten',wall:'#8d9a95',roofColor:'#4a6b57',joinery:'#f2f2ee',door:'#e0a64b',windows:'standard',veranda:true,bay:false,garage:false,chimney:true,solar:false,deck:true,fence:'none',detail:'none'}],
+    ['Lodge','L-shape lodge, today','An L-shaped plan with a gabled roof, charcoal board and batten, a large window, deck and garage, in the modern farmhouse style.',{shape:'lshape',roof:'gable',cladding:'boardbatten',wall:'#5a6a60',roofColor:'#4d5c63',joinery:'#161e1b',door:'timber',windows:'large',veranda:false,bay:false,garage:true,chimney:true,solar:false,deck:true,fence:'none',detail:'none'}]
   ];
   var ICONS={},state=Object.assign({},DEF),api=null,t=null,ready=false;
   function name(g,v){var l=(g.opts||g.sw).filter(function(o){return o[0]===v;})[0];return l?l[1]:String(v);}
   function G_(k){return G.filter(function(g){return g.k===k;})[0];}
   function summary(){
-    var s=state,p=[name(G_('shape'),s.shape)+' house with a '+name(G_('roof'),s.roof).toLowerCase()+' roof in '+name(G_('roofColor'),s.roofColor).toLowerCase(),
+    var s=state,p=[name(G_('shape'),s.shape)+' house with a '+name(G_('roof'),s.roof).toLowerCase()+' roof in '+name(G_('roofColor'),s.roofColor).toLowerCase()+(s.detail!=='none'?' ('+({villa:'villa',bungalow:'bungalow',deco:'Art Deco'})[s.detail]+' details)':''),
       name(G_('cladding'),s.cladding).toLowerCase()+' cladding in '+name(G_('wall'),s.wall).toLowerCase(),
       name(G_('joinery'),s.joinery).toLowerCase()+' window frames',name(G_('door'),s.door).toLowerCase()+' front door'];
     var ex=[];if(s.windows==='large')ex.push('a large picture window');if(s.bay)ex.push('a bay window');if(s.veranda)ex.push('a front veranda');
@@ -63,8 +66,8 @@
     var pf=document.createElement('fieldset');pf.className='dz-group dz-presets';
     var pl=document.createElement('legend');pl.innerHTML=(ICONS.home||'')+'<span>Start from a New Zealand style</span>';pf.appendChild(pl);
     var pw=document.createElement('div');pw.className='dz-opts';
-    PRESETS.forEach(function(p){var b=document.createElement('button');b.type='button';b.className='dz-opt dz-preset';b.textContent=p[0];b.addEventListener('click',function(){apply(Object.assign({},DEF,p[1],{tod:state.tod}));});pw.appendChild(b);});
-    pf.appendChild(pw);panel.appendChild(pf);
+    PRESETS.forEach(function(p){var b=document.createElement('button');b.type='button';b.className='dz-opt dz-preset';b.textContent=p[0];b.title=p[1];b.addEventListener('click',function(){apply(Object.assign({},DEF,p[3],{tod:state.tod}));note.querySelector('b').textContent=p[1];note.querySelector('span').textContent=p[2];note.hidden=false;});pw.appendChild(b);});
+    pf.appendChild(pw);var note=document.createElement('p');note.className='dz-preset-note';note.hidden=true;note.innerHTML='<b></b><span></span>';pf.appendChild(note);panel.appendChild(pf);
     G.forEach(function(g){
       var f=document.createElement('fieldset');f.className='dz-group';
       var l=document.createElement('legend');l.innerHTML=(ICONS[g.icon]||'')+'<span></span>';l.lastChild.textContent=g.label;f.appendChild(l);

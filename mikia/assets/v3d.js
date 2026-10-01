@@ -5,7 +5,7 @@
   var chips=[].slice.call(document.querySelectorAll('#uiBuild .v3d-chip')),play=$('v3dPlay'),fill=$('v3dFill'),label=$('v3dLabel');
   var tabs=[].slice.call(document.querySelectorAll('.v3d-tab')),uiBuild=$('uiBuild'),uiTour=$('uiTour'),card=$('v3dCard'),dots=$('tDots');
   var names=['Survey the site','Plan and consent','Build','Handover'];
-  var ROOF={hip:'hip',gable:'gable',gablefront:'front-gable',skillion:'skillion'},CLAD={weatherboard:'weatherboard',boardbatten:'board and batten',brick:'brick',plaster:'plaster',metal:'ribbed metal'};
+  var ROOF={hip:'hip',gable:'gable',gablefront:'front-gable',skillion:'skillion',flat:'flat'},CLAD={weatherboard:'weatherboard',boardbatten:'board and batten',brick:'brick',plaster:'plaster',metal:'ribbed metal'};
   function fail(){host.classList.add('failed');var f=document.querySelector('#build3d .v3d-fallback');if(f)f.hidden=false;[uiBuild,uiTour,card].forEach(function(e){if(e)e.hidden=true;});document.querySelector('.v3d-tabs').hidden=true;document.dispatchEvent(new CustomEvent('house-fail'));}
   function upd(b){
     var st=Math.min(3,Math.floor(b/4));
@@ -18,7 +18,7 @@
     if(step.text)return step.text;
     var d=api.getDesign(),roof=ROOF[d.roof],clad=CLAD[d.cladding];
     if(step.key==='front')return 'A '+roof+' roof and '+clad+' cladding face the street'+(d.veranda?', behind a classic front veranda':', with the covered entry on the right')+(d.garage===true?' and the garage on the left.':d.garage==='carport'?' and a carport on the left.':'.');
-    if(step.key==='roof')return (d.solar?'Solar panels sit on the '+roof+' roof. ':'')+'The '+roof+' roof is clad in corrugated metal'+(d.chimney?', with a brick chimney.':'.');
+    if(step.key==='roof')return (d.solar?'Solar panels sit on the '+roof+' roof. ':'')+(d.roof==='flat'?'A flat roof sits behind a stucco parapet':'The '+roof+' roof is clad in corrugated metal')+(d.chimney?', with a brick chimney.':'.');
     if(step.key==='back')return d.deck?'The covered timber deck at the side catches the evening sun.':'The back of the house, with windows to the bedrooms and kitchen.';
     return '';
   }

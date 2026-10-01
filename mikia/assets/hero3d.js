@@ -21,6 +21,7 @@
     });
     var complete=b>=15.98;card.classList.toggle('complete',complete);status.textContent=complete?'COMPLETE':'IN PROGRESS';
     stage.textContent=complete?'COMPLETE · TITLE ISSUED':NAMES[st];
+    var mt=document.getElementById('pminiT'),mb=document.getElementById('pminiB');if(mt)mt.textContent=complete?'Title issued':['01 · Site survey','02 · Plan and consent','03 · Engineering and build','04 · Delivery and handover'][st];if(mb)mb.style.width=(b/16*100).toFixed(1)+'%';
   }
   var blockers=[].slice.call(document.querySelectorAll('.hero-copy,#pathCard,.nav'));
   function pos(pts){

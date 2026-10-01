@@ -19,3 +19,5 @@ A static multi-page website. No build step: open `index.html`, or deploy the fol
 
 ## Structure
 `assets/style.css`, `assets/site.js` (menu), `assets/motion.js` (scroll and pointer effects), `assets/home.js` (hero animation), `assets/ui.js` (services index), `assets/v3d.js` and `assets/designer.js` (3D sections), `assets/form.js`, `assets/projects*.js`.
+
+- The style presets in the designer (Villa, Californian bungalow, State house, Art Deco, Brick and tile, Mid-century, Contemporary, Townhouse, Bach, Lodge) are based on real New Zealand architectural periods and their typical features. They are illustrative, not copies of any specific plan, and not a list of council-approved designs.
