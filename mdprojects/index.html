@@ -22,9 +22,9 @@
     --muted: #5a6378;
     --amber: #ffb703;
     --amber-2: #f0a500;
-    --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
-    --body: "Figtree", "Helvetica Neue", Arial, sans-serif;
-    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    --display: "Plus Jakarta Sans", "Helvetica Neue", Arial, sans-serif;
+    --body: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+    --mono: "Plus Jakarta Sans", "Helvetica Neue", Arial, sans-serif;
     --wrap: 1240px;
     --r: 14px;
   }
@@ -35,11 +35,11 @@
   a { color: inherit; }
   :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
   .wrap { max-width: var(--wrap); margin: 0 auto; padding-inline: 24px; }
-  h1, h2, h3 { font-family: var(--display); margin: 0; letter-spacing: -0.02em; text-wrap: balance; color: inherit; }
-  h2 { font-size: clamp(2.1rem, 4.4vw, 3.4rem); line-height: 1.05; font-weight: 700; }
+  h1, h2, h3 { font-family: var(--display); margin: 0; letter-spacing: -0.03em; text-wrap: balance; color: inherit; }
+  h2 { font-size: clamp(2rem, 4.2vw, 3.2rem); line-height: 1.08; font-weight: 800; }
   h3 { font-size: 1.3rem; line-height: 1.2; font-weight: 600; }
   p { margin: 0; }
-  .label { font: 500 .74rem/1 var(--mono); text-transform: uppercase; letter-spacing: .14em; color: var(--blue); }
+  .label { font: 700 .74rem/1 var(--mono); text-transform: uppercase; letter-spacing: .12em; color: var(--blue); }
   .on-dark .label, .label.light { color: var(--sky); }
   .stack { display: flex; flex-direction: column; gap: 20px; }
   .lede { font-size: 1.1rem; color: var(--muted); max-width: 58ch; }
@@ -58,12 +58,10 @@
   /* Header */
   .header { position: fixed; inset: 0 0 auto; z-index: 40; padding-top: env(safe-area-inset-top, 0px); color: var(--white); transition: background .3s, color .3s, box-shadow .3s; }
   .header.solid { background: rgba(255,255,255,.95); backdrop-filter: blur(12px); color: var(--navy); box-shadow: 0 1px 0 var(--line); }
-  .header .wrap { display: flex; align-items: center; justify-content: space-between; height: 84px; }
-  .logo { display: block; position: relative; height: 56px; width: 91px; flex: none; }
-  .logo img { position: absolute; inset: 0; height: 100%; width: auto; transition: opacity .3s; }
-  .logo .on-light { opacity: 0; }
-  .header.solid .logo .on-light, .header.menu-open .logo .on-light { opacity: 1; }
-  .header.solid .logo .on-dark, .header.menu-open .logo .on-dark { opacity: 0; }
+  .header .wrap { display: flex; align-items: center; justify-content: space-between; height: 96px; }
+  .logo { display: block; flex: none; background: var(--white); border-radius: 14px; padding: 6px 14px; box-shadow: 0 10px 30px -12px rgba(20,24,56,.45); transition: box-shadow .3s; }
+  .logo img { display: block; height: 62px; width: auto; }
+  .header.solid .logo { box-shadow: none; padding-inline: 4px; }
   .nav { display: flex; align-items: center; gap: 32px; }
   .nav a { text-decoration: none; font-weight: 500; font-size: .95rem; opacity: .88; }
   .nav a:hover { opacity: 1; }
@@ -72,11 +70,13 @@
 
   /* Hero */
   .hero { position: relative; min-height: clamp(620px, 88vh, 860px); display: flex; align-items: flex-end; color: var(--white); overflow: hidden; background: var(--navy); padding: 0; }
-  .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: settle 2.4s cubic-bezier(.2,.7,.2,1) both; }
+  .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .video-toggle { position: absolute; z-index: 2; right: 24px; bottom: 24px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.5); background: rgba(20,24,56,.45); color: var(--white); display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(6px); }
+  .video-toggle:hover { background: rgba(20,24,56,.75); }
   @keyframes settle { from { transform: scale(1.08); } to { transform: scale(1); } }
   .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,24,56,.78) 0%, rgba(20,24,56,.25) 65%), linear-gradient(180deg, rgba(20,24,56,.55) 0%, rgba(20,24,56,0) 30%, rgba(20,24,56,.25) 60%, rgba(20,24,56,.9) 100%); }
-  .hero-inner { position: relative; z-index: 1; width: 100%; padding-block: 170px 48px; }
-  .hero h1 { font-size: clamp(2.7rem, 6.4vw, 5.4rem); line-height: 1.02; font-weight: 700; max-width: 13ch; }
+  .hero-inner { position: relative; z-index: 1; width: 100%; padding-block: 180px 48px; }
+  .hero h1 { font-size: clamp(2.6rem, 6vw, 5rem); line-height: 1.04; font-weight: 800; max-width: 13ch; }
   .hero .lede { color: rgba(255,255,255,.85); margin-top: 24px; max-width: 48ch; }
   .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
   .assure { margin-top: 64px; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(255,255,255,.22); }
@@ -238,12 +238,22 @@
 
   footer { background: var(--ink); color: rgba(255,255,255,.62); padding-block: 72px 32px; font-size: .95rem; }
   .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.3fr; gap: 40px; padding-bottom: 52px; border-bottom: 1px solid rgba(255,255,255,.1); }
-  .foot-logo { height: 70px; width: auto; margin-bottom: 16px; }
+  .foot-logo { height: 96px; width: auto; margin-bottom: 18px; }
   footer h4 { margin: 0 0 16px; color: var(--sky); font: 500 .72rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
   footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
   footer a { text-decoration: none; }
   footer a:hover { color: var(--white); }
   .foot-bottom { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 26px; font-size: .85rem; }
+
+  /* Gallery */
+  .gallery { background: var(--white); border-top: 1px solid var(--line); }
+  .g-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 220px; grid-auto-flow: dense; gap: 14px; }
+  .g { margin: 0; border-radius: var(--r); overflow: hidden; }
+  .g img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+  .g:hover img { transform: scale(1.05); }
+  .g-wide { grid-column: span 2; }
+  .g-tall { grid-row: span 2; }
+  .contact-logo { height: 84px; width: auto; align-self: flex-start; }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -257,7 +267,7 @@
   }
   @media (max-width: 880px) {
     section { padding-block: 80px; }
-    .nav { position: fixed; top: calc(84px + env(safe-area-inset-top, 0px)); left: 0; right: 0; background: var(--white); color: var(--navy); flex-direction: column; align-items: stretch; gap: 0; padding: 8px 24px 24px; box-shadow: 0 20px 30px -20px rgba(0,0,0,.25); display: none; }
+    .nav { position: fixed; top: calc(96px + env(safe-area-inset-top, 0px)); left: 0; right: 0; background: var(--white); color: var(--navy); flex-direction: column; align-items: stretch; gap: 0; padding: 8px 24px 24px; box-shadow: 0 20px 30px -20px rgba(0,0,0,.25); display: none; }
     .nav.open { display: flex; }
     .nav a { padding: 15px 0; border-bottom: 1px solid var(--line); opacity: 1; }
     .nav .btn { margin-top: 18px; justify-content: center; border-bottom: 0; }
@@ -272,11 +282,17 @@
     .project-img { min-height: 320px; }
     .project-body { padding: 34px 24px; }
     .guide-grid, .proj-grid { grid-template-columns: 1fr; }
+    .g-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 180px; }
     .about-photo { max-width: 520px; }
   }
   @media (max-width: 560px) {
     .wrap { padding-inline: 16px; }
+    .logo img { height: 50px; }
+    .header .wrap { height: 80px; }
+    .nav { top: calc(80px + env(safe-area-inset-top, 0px)); }
     .homes, .testi-grid, .principles, .mv { grid-template-columns: 1fr; }
+    .g-grid { grid-auto-rows: 140px; gap: 10px; }
+    .video-toggle { right: 16px; bottom: auto; top: calc(92px + env(safe-area-inset-top, 0px)); }
     .home { aspect-ratio: 4/3; }
     .support { padding: 28px 20px; }
     .form { grid-template-columns: 1fr; padding: 26px 20px; }
@@ -290,15 +306,14 @@
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <header class="header" id="header">
   <div class="wrap">
     <a href="#top" class="logo" aria-label="MD Projects NZ, back to top">
-      <img class="on-dark" src="images/logo-white.png" alt="MD Projects NZ Ltd">
-      <img class="on-light" src="images/logo.png" alt="">
+      <img src="images/logo.png" alt="MD Projects NZ Ltd">
     </a>
     <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="nav">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -306,6 +321,7 @@
     <nav class="nav" id="nav">
       <a href="#services">Services</a>
       <a href="#projects">Projects</a>
+      <a href="#gallery">Gallery</a>
       <a href="#process">Process</a>
       <a href="#about">About</a>
       <a href="#faqs">FAQs</a>
@@ -318,7 +334,11 @@
 
   <!-- Hero -->
   <section class="hero">
-    <img class="hero-img" src="images/hero.jpg" alt="Aerial view of a completed MD Projects townhouse development in Auckland">
+    <video class="hero-img" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="images/hero.jpg" aria-label="Flyover of completed MD Projects developments in Auckland">
+      <source src="images/hero.webm" type="video/webm">
+      <source src="images/hero.mp4" type="video/mp4">
+    </video>
+    <button class="video-toggle" id="videoToggle" aria-label="Pause background video"><svg id="vtIcon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg></button>
     <div class="hero-inner wrap">
       <div class="stack">
         <span class="label light">MD Projects NZ · Auckland</span>
@@ -506,6 +526,26 @@
     </div>
   </section>
 
+  <!-- Gallery -->
+  <section class="gallery" id="gallery">
+    <div class="wrap">
+      <div class="head-row">
+        <div class="stack"><span class="label">Gallery</span><h2>Recent builds, inside and out.</h2></div>
+        <p class="lede">A look at finished MD Projects homes across Auckland.</p>
+      </div>
+      <div class="g-grid">
+        <figure class="g g-wide"><img src="images/gallery-1.jpg" alt="Row of completed two-storey townhouses" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-2.jpg" alt="Kitchen with island bench and pendant lights" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-3.jpg" alt="New two-storey home with timber deck" loading="lazy"></figure>
+        <figure class="g g-tall"><img src="images/gallery-4.jpg" alt="Bright open-plan living room" loading="lazy"></figure>
+        <figure class="g g-wide"><img src="images/gallery-5.jpg" alt="Townhouse exterior with dark cladding" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-6.jpg" alt="Completed duplex homes" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-7.jpg" alt="Living area with timber floors" loading="lazy"></figure>
+        <figure class="g g-wide"><img src="images/gallery-8.jpg" alt="Two-storey home with single garage" loading="lazy"></figure>
+      </div>
+    </div>
+  </section>
+
   <!-- Testimonials -->
   <section class="testi">
     <div class="wrap">
@@ -631,6 +671,7 @@
   <section class="contact on-dark" id="contact">
     <div class="wrap contact-grid">
       <div class="stack" style="gap:24px">
+        <img class="contact-logo" src="images/logo-white.png" alt="MD Projects NZ Ltd">
         <span class="label">Start your project today</span>
         <h2>Let's talk about your build.</h2>
         <p class="lede">Tell us what you're planning. We'll come back to you to talk through feasibility, timelines and a fixed-price proposal.</p>
@@ -731,6 +772,14 @@
     note.textContent = 'Thanks, ' + f.name.value.trim().split(' ')[0] + '. We’ll be in touch shortly.';
     f.reset();
   });
+
+  // Hero video: play/pause control, and stay paused for reduced-motion users
+  const vid = document.getElementById('heroVideo'), vt = document.getElementById('videoToggle'), vtIcon = document.getElementById('vtIcon');
+  const PAUSE = '<rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/>', PLAY = '<path d="M4 2.5v11a1 1 0 001.5.86l9-5.5a1 1 0 000-1.72l-9-5.5A1 1 0 004 2.5z"/>';
+  const syncVt = () => { vtIcon.innerHTML = vid.paused ? PLAY : PAUSE; vt.setAttribute('aria-label', vid.paused ? 'Play background video' : 'Pause background video'); };
+  vt.addEventListener('click', () => { vid.paused ? vid.play() : vid.pause(); });
+  vid.addEventListener('play', syncVt); vid.addEventListener('pause', syncVt);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { vid.removeAttribute('autoplay'); vid.pause(); syncVt(); }
 
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
