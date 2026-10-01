@@ -24,7 +24,8 @@
     --grid-2: rgba(142, 202, 238, .045);
     --muted: #5b6479;
     --muted-dk: rgba(255, 255, 255, .62);
-    --display: "Archivo", "Arial Black", Arial, sans-serif;
+    --display: "Instrument Serif", "Times New Roman", Georgia, serif;
+    --ui: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
     --body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
     --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
     --wrap: 1320px;
@@ -37,10 +38,11 @@
   a { color: inherit; }
   :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
   p { margin: 0; }
-  h1, h2, h3 { margin: 0; font-family: var(--display); text-wrap: balance; }
+  h1, h2, h3 { margin: 0; font-family: var(--ui); text-wrap: balance; }
   .wrap { max-width: var(--wrap); margin: 0 auto; padding-inline: 28px; }
-  .xl { font-family: var(--display); font-stretch: 125%; font-weight: 800; text-transform: uppercase; letter-spacing: -.015em; line-height: .92; }
-  .h2 { font-size: clamp(2.3rem, 5.6vw, 5.2rem); }
+  .xl { font-family: var(--display); font-weight: 400; letter-spacing: -.025em; line-height: .95; }
+  .xl em, .xl i { font-style: italic; }
+  .h2 { font-size: clamp(2.9rem, 6.6vw, 6.4rem); }
   .tag { font: 500 .74rem/1.2 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--blue); display: inline-flex; align-items: center; gap: 10px; }
   .tag::before { content: ""; width: 8px; height: 8px; background: var(--amber); }
   .dark { background: var(--ink); color: var(--white); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px), linear-gradient(var(--grid-2) 1px, transparent 1px), linear-gradient(90deg, var(--grid-2) 1px, transparent 1px); background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px; }
@@ -98,14 +100,14 @@
   .hero-copy { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 150px; pointer-events: none; }
   .hero-copy .wrap { width: 100%; }
   .hero-copy a, .hero-copy button { pointer-events: auto; }
-  .hero h1 { font-size: clamp(3.2rem, 9.6vw, 10.5rem); margin-top: 22px; }
-  .hero h1 .l2 { display: block; color: var(--ink); -webkit-text-stroke: 2px var(--white); position: relative; z-index: 1; transition: color .5s, -webkit-text-stroke-color .5s; }
-  .hero.built h1 .l2 { color: var(--amber); -webkit-text-stroke-color: var(--amber); }
+  .hero h1 { font-size: clamp(3.8rem, 10.6vw, 11.5rem); margin-top: 18px; line-height: .9; }
+  .hero h1 .l2 { display: block; font-style: italic; color: var(--sky); position: relative; z-index: 1; text-shadow: 0 0 22px var(--ink), 0 0 6px var(--ink); transition: color .6s; padding-left: .04em; }
+  .hero.built h1 .l2 { color: var(--amber); text-shadow: 0 2px 24px rgba(11,15,42,.5); }
   .hero .lede { color: rgba(255,255,255,.82); margin-top: 26px; max-width: 46ch; }
   .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
   .hero-bar { position: absolute; z-index: 4; left: 0; right: 0; bottom: 0; border-top: 1px solid rgba(255,255,255,.14); background: rgba(11,15,42,.55); backdrop-filter: blur(10px); }
   .hero-bar .wrap { display: grid; grid-template-columns: repeat(4, 1fr) auto; align-items: center; height: 96px; gap: 20px; }
-  .hb b { display: block; font: 800 1.9rem/1 var(--display); font-stretch: 125%; color: var(--white); font-variant-numeric: tabular-nums; }
+  .hb b { display: block; font: 800 1.9rem/1 var(--ui);  color: var(--white); font-variant-numeric: tabular-nums; }
   .hb span { font: 500 .7rem/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sky); }
   .scroll-hint { font: 500 .72rem/1 var(--mono); letter-spacing: .14em; color: var(--white); display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
   .scroll-hint i { width: 1px; height: 34px; background: linear-gradient(var(--amber), transparent); animation: hint 1.8s infinite; }
@@ -118,20 +120,20 @@
   /* Ticker */
   .ticker { background: var(--amber); color: var(--ink); overflow: hidden; padding: 22px 0; border-block: 1px solid var(--ink); }
   .ticker-track { display: flex; width: max-content; animation: tick 40s linear infinite; }
-  .ticker span { font: 800 clamp(1.6rem, 3.4vw, 3rem)/1 var(--display); font-stretch: 125%; text-transform: uppercase; white-space: nowrap; padding-right: 48px; display: inline-flex; align-items: center; gap: 48px; }
+  .ticker span { font: 800 clamp(1.6rem, 3.4vw, 3rem)/1 var(--ui);  text-transform: uppercase; white-space: nowrap; padding-right: 48px; display: inline-flex; align-items: center; gap: 48px; }
   .ticker span:nth-child(even) { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
   .ticker span::after { content: ""; width: 14px; height: 14px; background: var(--ink); transform: rotate(45deg); }
   @keyframes tick { to { transform: translateX(-50%); } }
 
   /* Statement */
   .statement { background: var(--paper); }
-  .statement p.big { font: 700 clamp(2rem, 4.6vw, 4.4rem)/1.08 var(--display); font-stretch: 100%; letter-spacing: -.025em; max-width: 22ch; margin-top: 30px; }
+  .statement p.big { font: 400 clamp(2.3rem, 5vw, 4.9rem)/1.05 var(--display); letter-spacing: -.02em; max-width: 22ch; margin-top: 30px; }
   .w { opacity: .14; transition: opacity .25s; }
   .w.on { opacity: 1; }
-  .w.hl { color: var(--blue); }
+  .w.hl { color: var(--blue); font-style: italic; }
   .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 80px; }
   .pr { border-top: 2px solid var(--ink); padding-top: 22px; display: flex; flex-direction: column; gap: 10px; }
-  .pr h3 { font: 700 1.35rem/1.2 var(--display); }
+  .pr h3 { font: 700 1.35rem/1.2 var(--ui); }
   .pr p { color: var(--muted); }
   .pr .k { font: 500 .72rem/1 var(--mono); letter-spacing: .14em; color: var(--blue); text-transform: uppercase; }
 
@@ -139,7 +141,7 @@
   .svc-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap; margin-bottom: 56px; }
   .svc-list { border-top: 1px solid rgba(255,255,255,.16); }
   .svc { display: grid; grid-template-columns: 1fr minmax(0, 380px) 56px; gap: 32px; align-items: center; padding: 30px 0; border-bottom: 1px solid rgba(255,255,255,.16); text-decoration: none; position: relative; }
-  .svc h3 { font-size: clamp(1.8rem, 4.2vw, 3.9rem); transition: color .3s, transform .4s cubic-bezier(.2,.8,.2,1); }
+  .svc h3 { font-size: clamp(2.2rem, 4.8vw, 4.6rem); transition: color .3s, transform .4s cubic-bezier(.2,.8,.2,1); }
   .svc p { color: var(--muted-dk); font-size: 1rem; }
   .svc .arr { width: 56px; height: 56px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); display: grid; place-items: center; transition: background .3s, border-color .3s, transform .3s; }
   .svc:hover h3 { color: var(--amber); transform: translateX(16px); }
@@ -151,23 +153,23 @@
 
   /* Projects: horizontal pinned scroll */
   .projects { padding: 0; background: var(--paper); }
-  .proj-pin { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; gap: 32px; padding-top: 92px; }
+  .proj-pin { height: 100vh; min-height: 640px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; gap: 32px; padding-top: 92px; }
   .proj-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
   .proj-count { font: 500 .8rem/1 var(--mono); letter-spacing: .12em; color: var(--muted); }
   .proj-track { display: flex; gap: 28px; padding-left: max(28px, calc((100vw - var(--wrap)) / 2 + 28px)); will-change: transform; }
   .pcard { flex: none; width: min(64vw, 900px); height: min(58vh, 580px); border-radius: var(--r); overflow: hidden; position: relative; color: var(--white); text-decoration: none; isolation: isolate; }
-  .pcard img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 1.2s cubic-bezier(.2,.8,.2,1); }
-  .pcard:hover img { transform: scale(1.05); }
+  .pcard img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: filter .5s; }
+  .pcard:hover img { filter: brightness(1.12); }
   .pcard::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(11,15,42,.92), rgba(11,15,42,0) 55%); }
   .pcard-body { position: absolute; left: 32px; right: 32px; bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
   .pcard .sub { font: 500 .74rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--amber); }
-  .pcard h3 { font-size: clamp(1.8rem, 3.6vw, 3.4rem); margin-top: 10px; }
+  .pcard h3 { font-size: clamp(2.2rem, 4.4vw, 4.2rem); margin-top: 8px; }
   .specs { display: flex; gap: 22px; font: 500 .78rem/1.3 var(--mono); color: rgba(255,255,255,.85); flex-wrap: wrap; }
   .specs div { border-left: 1px solid var(--amber); padding-left: 10px; }
-  .specs b { display: block; font: 700 1.15rem/1.1 var(--display); color: var(--white); }
+  .specs b { display: block; font: 700 1.15rem/1.1 var(--ui); color: var(--white); }
   .pcard.cta { background: var(--ink); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 24px; padding: 48px; width: min(46vw, 620px); }
   .pcard.cta::before { display: none; }
-  .pcard.cta h3 { font-size: clamp(2rem, 4vw, 3.6rem); }
+  .pcard.cta h3 { font-size: clamp(2.6rem, 5vw, 4.6rem); }
   .proj-bar { height: 3px; background: var(--line); border-radius: 3px; overflow: hidden; }
   .proj-bar span { display: block; height: 100%; width: 0; background: var(--amber); }
 
@@ -186,7 +188,7 @@
   .q-link { background: none; border: 0; color: var(--sky); font: 600 .92rem var(--body); cursor: pointer; padding: 4px 0; }
   .q-link:hover { color: var(--amber); }
   .q-link[disabled] { visibility: hidden; }
-  .quiz h3 { font: 700 1.6rem/1.2 var(--display); margin-bottom: 18px; }
+  .quiz h3 { font: 700 1.6rem/1.2 var(--ui); margin-bottom: 18px; }
   .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .opt { text-align: left; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.04); border-radius: 12px; padding: 15px 16px; cursor: pointer; font: 600 1rem/1.3 var(--body); color: var(--white); display: flex; align-items: center; gap: 12px; transition: border-color .2s, background .2s, transform .15s; min-width: 0; }
   .opt small { display: block; font-weight: 400; color: var(--muted-dk); font-size: .85rem; margin-top: 3px; }
@@ -220,7 +222,7 @@
   .tl-step { display: grid; grid-template-columns: 1fr 120px 1fr; align-items: center; padding: 26px 0; }
   .tl-step .dot { justify-self: center; width: 64px; height: 64px; border-radius: 50%; background: var(--white); border: 2px solid var(--line); display: grid; place-items: center; font: 600 .85rem/1 var(--mono); color: var(--muted); position: relative; z-index: 1; transition: background .4s, border-color .4s, color .4s, transform .4s; }
   .tl-step.on .dot { background: var(--amber); border-color: var(--amber); color: var(--ink); transform: scale(1.08); }
-  .tl-card h3 { font: 700 1.6rem/1.15 var(--display); margin-bottom: 8px; }
+  .tl-card h3 { font: 700 1.6rem/1.15 var(--ui); margin-bottom: 8px; }
   .tl-card p { color: var(--muted); max-width: 42ch; }
   .tl-step:nth-child(odd of .tl-step) .tl-card { grid-column: 1; text-align: right; justify-self: end; }
   .tl-step:nth-child(odd of .tl-step) .tl-card p { margin-left: auto; }
@@ -234,10 +236,10 @@
   .q-slides { position: relative; min-height: 320px; }
   .q-slide { position: absolute; inset: 0; opacity: 0; transform: translateY(20px); transition: opacity .6s, transform .6s cubic-bezier(.2,.8,.2,1); pointer-events: none; }
   .q-slide.on { opacity: 1; transform: none; pointer-events: auto; position: relative; }
-  .q-slide blockquote { margin: 0; font: 600 clamp(1.6rem, 3.4vw, 3rem)/1.18 var(--display); letter-spacing: -.02em; max-width: 30ch; }
-  .q-slide blockquote::before { content: "“"; display: block; font: 800 7rem/0.6 var(--display); color: var(--amber); margin-bottom: 18px; }
+  .q-slide blockquote { margin: 0; font: 400 clamp(1.9rem, 3.8vw, 3.5rem)/1.12 var(--display); letter-spacing: -.015em; max-width: 30ch; }
+  .q-slide blockquote::before { content: "“"; display: block; font: italic 400 9rem/0.6 var(--display); color: var(--amber); margin-bottom: 14px; }
   .q-who { margin-top: 30px; display: flex; gap: 14px; align-items: center; font: 500 .8rem/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--sky); }
-  .q-who b { color: var(--white); font: 700 1.1rem/1 var(--display); letter-spacing: 0; text-transform: none; }
+  .q-who b { color: var(--white); font: 700 1.1rem/1 var(--ui); letter-spacing: 0; text-transform: none; }
   .stars { color: var(--amber); letter-spacing: 2px; }
   .q-nav { display: flex; gap: 10px; align-items: center; }
   .q-nav button.arrow { width: 56px; height: 56px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: none; color: var(--white); cursor: pointer; display: grid; place-items: center; transition: background .25s, color .25s, border-color .25s; }
@@ -253,8 +255,8 @@
   .f-photo img { position: relative; border-radius: var(--r); aspect-ratio: 4/5; object-fit: cover; object-position: center 30%; width: 100%; }
   .f-name { position: absolute; left: -20px; bottom: 40px; background: var(--ink); color: var(--white); border-radius: 12px; padding: 18px 22px; z-index: 1; }
   .f-name small { display: block; font: 500 .7rem/1 var(--mono); letter-spacing: .14em; color: var(--amber); text-transform: uppercase; margin-bottom: 8px; }
-  .f-name b { font: 800 1.4rem/1 var(--display); font-stretch: 112%; }
-  .f-quote { font: 600 clamp(1.5rem, 2.6vw, 2.2rem)/1.25 var(--display); letter-spacing: -.02em; margin: 26px 0; }
+  .f-name b { font: 800 1.4rem/1 var(--ui);  }
+  .f-quote { font: italic 400 clamp(1.8rem, 3vw, 2.6rem)/1.2 var(--display); letter-spacing: -.01em; margin: 26px 0; }
   .f-list { list-style: none; padding: 0; margin: 28px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
   .f-list li { padding: 14px 0; border-top: 1px solid var(--line); font-weight: 600; display: flex; gap: 10px; }
   .f-list li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 8px; background: var(--amber); }
@@ -266,8 +268,8 @@
   .gallery { background: var(--white); }
   .g-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 240px; grid-auto-flow: dense; gap: 14px; margin-top: 56px; }
   .g { margin: 0; border-radius: var(--r); overflow: hidden; position: relative; }
-  .g img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(.2,.8,.2,1), filter .6s; }
-  .g:hover img { transform: scale(1.06); }
+  .g img { width: 100%; height: 100%; object-fit: cover; transition: filter .6s; }
+  .g:hover img { filter: brightness(1.12) saturate(1.1); }
   .g-wide { grid-column: span 2; }
   .g-tall { grid-row: span 2; }
 
@@ -275,24 +277,24 @@
   .faq-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 80px; }
   details { border-bottom: 1px solid var(--line); }
   details:first-of-type { border-top: 1px solid var(--line); }
-  summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; font: 700 1.2rem/1.3 var(--display); }
+  summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; font: 700 1.2rem/1.3 var(--ui); }
   summary::-webkit-details-marker { display: none; }
   summary .pm { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; transition: transform .3s, background .3s; }
   details[open] summary .pm { transform: rotate(45deg); background: var(--amber); border-color: var(--amber); }
   details p { padding: 0 60px 26px 0; color: var(--muted); }
 
   /* Closing CTA + contact */
-  .cta-big { font-size: clamp(4rem, 15vw, 15rem); line-height: .85; }
-  .cta-big em { font-style: normal; color: var(--amber); }
+  .cta-big { font-size: clamp(4.6rem, 17vw, 17rem); line-height: .82; }
+  .cta-big em { font-style: italic; color: var(--amber); }
   .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; margin-top: 70px; align-items: start; }
   .details { list-style: none; padding: 0; margin: 0; }
   .details li { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 22px 0; border-top: 1px solid rgba(255,255,255,.15); }
   .details li:last-child { border-bottom: 1px solid rgba(255,255,255,.15); }
   .details small { font: 500 .72rem/1.9 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sky); }
-  .details a, .details address, .details .v { font-style: normal; font: 600 1.25rem/1.4 var(--display); text-decoration: none; }
+  .details a, .details address, .details .v { font-style: normal; font: 600 1.25rem/1.4 var(--ui); text-decoration: none; }
   .details a:hover { color: var(--amber); }
   .form { background: var(--white); color: var(--ink); border-radius: var(--r); padding: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  .form h3 { grid-column: 1 / -1; font: 800 1.6rem/1.1 var(--display); font-stretch: 112%; }
+  .form h3 { grid-column: 1 / -1; font: 800 1.6rem/1.1 var(--ui);  }
   .field { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
   .field.full { grid-column: 1 / -1; }
   .field label { font-size: .85rem; font-weight: 600; }
@@ -310,13 +312,38 @@
   footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
   footer a { text-decoration: none; }
   footer a:hover { color: var(--amber); }
-  .wordmark { display: block; width: max-content; font: 800 10vw/.8 var(--display); font-stretch: 125%; text-transform: uppercase; color: transparent; -webkit-text-stroke: 1px rgba(142,202,238,.35); white-space: nowrap; margin: 70px 0 30px; letter-spacing: -.02em; }
+  .wordmark { display: block; width: max-content; font: italic 400 10vw/.8 var(--display);  text-transform: uppercase; color: rgba(142,202,238,.16); white-space: nowrap; margin: 70px 0 30px; letter-spacing: -.03em; }
   .foot-bottom { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: .85rem; border-top: 1px solid rgba(255,255,255,.1); padding-top: 24px; }
 
   .rv { transition: transform 1s cubic-bezier(.2,.8,.2,1), opacity 1s ease; }
   .rv.pre { transform: translateY(70px); opacity: 0; }
   .unveil img { clip-path: inset(0 0 0 0); transition: clip-path 1.3s cubic-bezier(.7,0,.2,1), transform 1.6s cubic-bezier(.2,.8,.2,1); }
   .unveil.pre img { clip-path: inset(0 0 100% 0); transform: scale(1.15); }
+
+  /* Intro (shown only when the animation library has loaded) */
+  .intro { display: none; position: fixed; inset: 0; z-index: 200; color: var(--white); }
+  .has-intro .intro { display: block; }
+  .intro-half { position: absolute; left: 0; right: 0; height: 50.5%; background: var(--ink); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 120px 120px; }
+  .intro-half.t { top: 0; } .intro-half.b { bottom: 0; }
+  .intro-inner { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 26px; text-align: center; padding-inline: 24px; }
+  .intro-logo { background: var(--white); border-radius: 16px; padding: 8px 16px; }
+  .intro-logo img { height: 76px; width: auto; }
+  .intro-count { font: 400 clamp(5rem, 16vw, 13rem)/.85 var(--display);  font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  .intro-count small { font-size: .4em; font-style: italic; color: var(--amber); margin-left: .08em; }
+  .intro-bar { width: min(420px, 70vw); height: 2px; background: rgba(255,255,255,.15); }
+  .intro-bar span { display: block; height: 100%; width: 0; background: var(--amber); }
+  .intro-step { font: 500 .78rem/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sky); min-height: 1em; }
+  /* split text */
+  .ln { display: block; overflow: hidden; padding: .02em .06em .16em 0; margin-bottom: -.16em; }
+  .ln > .li { display: block; }
+  .ch { display: inline-block; will-change: transform; }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
+  .has-gsap .ticker-track { animation: none; }
+  .has-gsap .w { transition: none; }
+  .pcard img, .g img, .f-photo img { will-change: transform; }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -369,7 +396,6 @@
     .header .wrap { height: 78px; }
     .logo img { height: 46px; }
     .nav { top: calc(78px + env(safe-area-inset-top, 0px)); }
-    .hero h1 .l2 { -webkit-text-stroke-width: 1.5px; }
     .hb b { font-size: 1.45rem; }
     .video-toggle { top: 92px; right: 18px; }
     .opts, .f-list, .mv { grid-template-columns: 1fr; }
@@ -388,9 +414,22 @@
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 </head>
 <body>
+<script>if (window.gsap && window.ScrollTrigger) document.documentElement.classList.add('has-gsap', 'has-intro');</script>
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-half t"></div><div class="intro-half b"></div>
+  <div class="intro-inner" id="introInner">
+    <div class="intro-logo"><img src="images/logo.png" alt=""></div>
+    <div class="intro-count"><span id="introNum">0</span><small>%</small></div>
+    <div class="intro-bar"><span id="introBar"></span></div>
+    <div class="intro-step" id="introStep">Surveying the section</div>
+  </div>
+</div>
 
 <header class="header" id="header">
   <div class="wrap">
@@ -432,7 +471,7 @@
       <div class="hero-copy">
         <div class="wrap">
           <span class="tag">MD Projects NZ · Residential builders · Auckland</span>
-          <h1 class="xl"><span>From plan</span><span class="l2">to reality.</span></h1>
+          <h1 class="xl"><span class="ln l1">From plan</span><span class="ln l2">to reality.</span></h1>
           <p class="lede">Expert builders. Proven results. Over 1,000 homes delivered at a fixed price, on time and with complete transparency.</p>
           <div class="hero-ctas">
             <a href="#contact" class="btn btn-amber">Get a free quote <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
@@ -442,10 +481,10 @@
       </div>
       <div class="hero-bar">
         <div class="wrap">
-          <div class="hb"><b>1,000+</b><span>Successful builds</span></div>
-          <div class="hb"><b>500+</b><span>Clients</span></div>
-          <div class="hb"><b>100+</b><span>Trusted contractors</span></div>
-          <div class="hb"><b>10 yr</b><span>Stamford guarantee</span></div>
+          <div class="hb"><b data-to="1000" data-fmt="comma+">1,000+</b><span>Successful builds</span></div>
+          <div class="hb"><b data-to="500" data-fmt="+">500+</b><span>Clients</span></div>
+          <div class="hb"><b data-to="100" data-fmt="+">100+</b><span>Trusted contractors</span></div>
+          <div class="hb"><b data-to="10" data-fmt=" yr">10 yr</b><span>Stamford guarantee</span></div>
           <div class="scroll-hint"><i></i>Scroll</div>
         </div>
       </div>
@@ -466,9 +505,9 @@
       <span class="tag">About MD Projects NZ</span>
       <p class="big" id="statement">Since March 2020 we've built over 1,000 homes across Auckland. *Fixed* *prices.* *No* *surprises.* Building structures that last a lifetime, from your first sketch to the final code compliance certificate.</p>
       <div class="principles">
-        <div class="pr rv"><span class="k">Quality</span><h3>Best build quality at an affordable price</h3><p>High-quality homes and investment properties, delivered within budget.</p></div>
-        <div class="pr rv"><span class="k">Time</span><h3>We stick to the project plan</h3><p>Typical terrace builds take 7 to 9 months, and you get regular updates throughout.</p></div>
-        <div class="pr rv"><span class="k">Price</span><h3>Fixed price, no variations</h3><p>We agree on a fixed cost before the build begins, so you can plan with confidence.</p></div>
+        <div class="pr"><span class="k">Quality</span><h3>Best build quality at an affordable price</h3><p>High-quality homes and investment properties, delivered within budget.</p></div>
+        <div class="pr"><span class="k">Time</span><h3>We stick to the project plan</h3><p>Typical terrace builds take 7 to 9 months, and you get regular updates throughout.</p></div>
+        <div class="pr"><span class="k">Price</span><h3>Fixed price, no variations</h3><p>We agree on a fixed cost before the build begins, so you can plan with confidence.</p></div>
       </div>
     </div>
   </section>
@@ -476,17 +515,17 @@
   <!-- Services -->
   <section class="dark" id="services">
     <div class="wrap">
-      <div class="svc-head rv">
-        <div><span class="tag">Our services</span><h2 class="xl h2" style="margin-top:20px">Concept<br>to keys.</h2></div>
+      <div class="svc-head">
+        <div><span class="tag">Our services</span><h2 class="xl h2" style="margin-top:20px">Concept<br><em>to keys.</em></h2></div>
         <p class="lede">Our full range of residential construction services takes your project from concept to completion with ease and excellence.</p>
       </div>
       <div class="svc-list" id="svcList">
-        <a class="svc rv" href="https://www.mdprojects.co.nz/services/design-build/" data-img="images/service-design-build.jpg"><span class="thumb"><img src="images/service-design-build.jpg" alt="" loading="lazy"></span><h3 class="xl">Design &amp; Build</h3><p>A complete custom home solution, taking your vision from concept through to final construction.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc rv" href="https://www.mdprojects.co.nz/services/" data-img="images/service-build-from-plans.jpg"><span class="thumb"><img src="images/service-build-from-plans.jpg" alt="" loading="lazy"></span><h3 class="xl">Build from Plans</h3><p>Already have approved plans? We'll bring them to life with expert craftsmanship and precision.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc rv" href="https://www.mdprojects.co.nz/services/" data-img="images/service-terrace-duplex.jpg"><span class="thumb"><img src="images/service-terrace-duplex.jpg" alt="" loading="lazy"></span><h3 class="xl">Terrace &amp; Duplex</h3><p>Efficient, modern multi-unit housing designed to maximise land use and investment return.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc rv" href="https://www.mdprojects.co.nz/services/subdivision/" data-img="images/service-subdivision.jpg"><span class="thumb"><img src="images/service-subdivision.jpg" alt="" loading="lazy"></span><h3 class="xl">Subdivision</h3><p>Land development managed end to end, from planning through to title.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc rv" href="https://www.mdprojects.co.nz/services/resource-building-consent/" data-img="images/guide-feasibility.jpg"><span class="thumb"><img src="images/guide-feasibility.jpg" alt="" loading="lazy"></span><h3 class="xl">Consents</h3><p>We take care of all council approvals and compliance to get your project started without delay.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc rv" href="https://www.mdprojects.co.nz/services/project-management/" data-img="images/guide-project-management.jpg"><span class="thumb"><img src="images/guide-project-management.jpg" alt="" loading="lazy"></span><h3 class="xl">Project Mgmt</h3><p>Every aspect of your build coordinated for on-time and on-budget delivery.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/design-build/" data-img="images/service-design-build.jpg"><span class="thumb"><img src="images/service-design-build.jpg" alt="" loading="lazy"></span><h3 class="xl">Design &amp; Build</h3><p>A complete custom home solution, taking your vision from concept through to final construction.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/" data-img="images/service-build-from-plans.jpg"><span class="thumb"><img src="images/service-build-from-plans.jpg" alt="" loading="lazy"></span><h3 class="xl">Build from Plans</h3><p>Already have approved plans? We'll bring them to life with expert craftsmanship and precision.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/" data-img="images/service-terrace-duplex.jpg"><span class="thumb"><img src="images/service-terrace-duplex.jpg" alt="" loading="lazy"></span><h3 class="xl">Terrace &amp; Duplex</h3><p>Efficient, modern multi-unit housing designed to maximise land use and investment return.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/subdivision/" data-img="images/service-subdivision.jpg"><span class="thumb"><img src="images/service-subdivision.jpg" alt="" loading="lazy"></span><h3 class="xl">Subdivision</h3><p>Land development managed end to end, from planning through to title.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/resource-building-consent/" data-img="images/guide-feasibility.jpg"><span class="thumb"><img src="images/guide-feasibility.jpg" alt="" loading="lazy"></span><h3 class="xl">Consents</h3><p>We take care of all council approvals and compliance to get your project started without delay.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/project-management/" data-img="images/guide-project-management.jpg"><span class="thumb"><img src="images/guide-project-management.jpg" alt="" loading="lazy"></span><h3 class="xl">Project Mgmt</h3><p>Every aspect of your build coordinated for on-time and on-budget delivery.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
       </div>
     </div>
     <div class="float-img" id="floatImg" aria-hidden="true"><img alt="" id="floatImgEl"></div>
@@ -496,7 +535,7 @@
   <section class="projects" id="projects">
     <div class="proj-pin">
       <div class="wrap proj-head">
-        <div><span class="tag">Our projects</span><h2 class="xl h2" style="margin-top:20px">Built, not<br>rendered.</h2></div>
+        <div><span class="tag">Our projects</span><h2 class="xl h2" style="margin-top:20px">Built, not<br><em>rendered.</em></h2></div>
         <span class="proj-count" id="projCount">01 / 06</span>
       </div>
       <div class="proj-track" id="projTrack">
@@ -522,7 +561,7 @@
         </a>
         <div class="pcard cta dark">
           <span class="tag">Next project</span>
-          <h3 class="xl">Yours<br>could be<br>next.</h3>
+          <h3 class="xl">Yours could<br>be <em>next.</em></h3>
           <a href="#planner" class="btn btn-amber">Plan your home <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
         </div>
       </div>
@@ -533,11 +572,11 @@
   <!-- Home planner -->
   <section class="dark" id="planner">
     <div class="wrap">
-      <div class="svc-head rv" style="margin-bottom:0">
-        <div><span class="tag">Plan your home</span><h2 class="xl h2" style="margin-top:20px">Watch it<br>get built.</h2></div>
+      <div class="svc-head" style="margin-bottom:0">
+        <div><span class="tag">Plan your home</span><h2 class="xl h2" style="margin-top:20px">Watch it<br><em>get built.</em></h2></div>
         <p class="lede">Answer seven quick questions and see your home go up, from bare section to finished build. Then send it to us for a fixed-price quote.</p>
       </div>
-      <div class="planner-grid rv">
+      <div class="planner-grid">
         <div class="stage">
           <div class="stage-top"><span id="pStatus">Your section is surveyed and ready</span><span class="stage-pct" id="pPct">0%</span></div>
           <div class="stage-bar"><span id="pBar"></span></div>
@@ -556,8 +595,8 @@
   <section class="process" id="process">
     <div class="wrap">
       <span class="tag">How it works</span>
-      <h2 class="xl h2 rv" style="margin-top:20px">Six steps.<br>One team.</h2>
-      <div class="tl rv" id="tl">
+      <h2 class="xl h2" style="margin-top:20px">Six steps.<br><em>One team.</em></h2>
+      <div class="tl" id="tl">
         <div class="tl-line"><span id="tlFill"></span></div>
         <div class="tl-step"><div class="tl-card"><h3>Feasibility study</h3><p>Zoning, services, geotechnical conditions and council rules, checked before you commit.</p></div><span class="dot">01</span></div>
         <div class="tl-step"><span class="dot">02</span><div class="tl-card"><h3>Resource &amp; building consents</h3><p>Applications prepared, lodged and managed with Auckland Council on your behalf.</p></div></div>
@@ -573,7 +612,7 @@
   <section class="dark quotes">
     <div class="wrap">
       <span class="tag">What people are saying</span>
-      <div class="q-wrap rv">
+      <div class="q-wrap">
         <div class="q-slides" id="qSlides">
           <figure class="q-slide on" style="margin:0"><blockquote>We were first-time developers and a bit nervous. Maninder and the team guided us through everything, from feasibility to final CCC.</blockquote><figcaption class="q-who"><span class="stars">★★★★★</span><b>Amit P</b>Blockhouse Bay</figcaption></figure>
           <figure class="q-slide" style="margin:0"><blockquote>What impressed us most was the clear communication and fixed-price contract. No hidden surprises, and the build quality exceeded our expectations.</blockquote><figcaption class="q-who"><span class="stars">★★★★★</span><b>Lisa &amp; James R</b>Weymouth</figcaption></figure>
@@ -592,13 +631,13 @@
   <!-- Founder -->
   <section id="about">
     <div class="wrap founder-grid">
-      <div class="f-photo unveil">
+      <div class="f-photo">
         <img src="images/team.jpg" alt="The MD Projects team" loading="lazy">
         <div class="f-name"><small>Founder</small><b>Maninder Singh</b></div>
       </div>
       <div>
         <span class="tag">Meet the founder</span>
-        <h2 class="xl h2 rv" style="margin-top:20px">Your dream is our project.</h2>
+        <h2 class="xl h2" style="margin-top:20px">Your dream is <em>our project.</em></h2>
         <p class="f-quote">From house renovations to over 1,000 builds, delivered to top-tier quality, within budget and on schedule.</p>
         <p class="lede">Maninder Singh has years of experience in the construction sector, leading residential projects for large companies and private clients. His passion for construction took him from renovations to full-scale residential builds.</p>
         <ul class="f-list"><li>Integrity</li><li>Transparency</li><li>Quality craftsmanship</li><li>Client-focused service</li></ul>
@@ -614,26 +653,26 @@
   <section class="gallery" id="gallery">
     <div class="wrap">
       <span class="tag">Gallery</span>
-      <h2 class="xl h2 rv" style="margin-top:20px">Inside &amp; out.</h2>
+      <h2 class="xl h2" style="margin-top:20px">Inside <em>&amp; out.</em></h2>
       <div class="g-grid">
-        <figure class="unveil g g-wide"><img src="images/gallery-1.jpg" alt="Row of completed two-storey townhouses" loading="lazy"></figure>
-        <figure class="unveil g"><img src="images/gallery-2.jpg" alt="Kitchen with island bench" loading="lazy"></figure>
-        <figure class="unveil g"><img src="images/gallery-3.jpg" alt="New two-storey home with timber deck" loading="lazy"></figure>
-        <figure class="unveil g g-tall"><img src="images/gallery-4.jpg" alt="Bright open-plan living room" loading="lazy"></figure>
-        <figure class="unveil g g-wide"><img src="images/gallery-5.jpg" alt="Townhouse exterior with dark cladding" loading="lazy"></figure>
-        <figure class="unveil g"><img src="images/gallery-6.jpg" alt="Completed duplex homes" loading="lazy"></figure>
-        <figure class="unveil g"><img src="images/gallery-7.jpg" alt="Living area with timber floors" loading="lazy"></figure>
-        <figure class="unveil g g-wide"><img src="images/gallery-8.jpg" alt="Two-storey home with single garage" loading="lazy"></figure>
+        <figure class="g g-wide"><img src="images/gallery-1.jpg" alt="Row of completed two-storey townhouses" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-2.jpg" alt="Kitchen with island bench" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-3.jpg" alt="New two-storey home with timber deck" loading="lazy"></figure>
+        <figure class="g g-tall"><img src="images/gallery-4.jpg" alt="Bright open-plan living room" loading="lazy"></figure>
+        <figure class="g g-wide"><img src="images/gallery-5.jpg" alt="Townhouse exterior with dark cladding" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-6.jpg" alt="Completed duplex homes" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-7.jpg" alt="Living area with timber floors" loading="lazy"></figure>
+        <figure class="g g-wide"><img src="images/gallery-8.jpg" alt="Two-storey home with single garage" loading="lazy"></figure>
       </div>
     </div>
   </section>
 
   <!-- FAQs -->
   <section id="faqs">
-    <div class="wrap faq-grid rv">
+    <div class="wrap faq-grid">
       <div>
         <span class="tag">FAQs</span>
-        <h2 class="xl h2" style="margin-top:20px">Good<br>questions.</h2>
+        <h2 class="xl h2" style="margin-top:20px">Good<br><em>questions.</em></h2>
         <p class="lede" style="margin-top:24px">Can't see yours? Call 0210 590 409 or send us a message.</p>
       </div>
       <div>
@@ -651,8 +690,8 @@
   <section class="dark" id="contact">
     <div class="wrap">
       <span class="tag">Start your project today</span>
-      <h2 class="xl cta-big rv" style="margin-top:24px">Let's<br>build<em>.</em></h2>
-      <div class="contact-grid rv">
+      <h2 class="xl cta-big" style="margin-top:24px">Let's<br>build<em>.</em></h2>
+      <div class="contact-grid">
         <div>
           <p class="lede" style="margin-bottom:32px">Tell us what you're planning. We'll come back to you to talk through feasibility, timelines and a fixed-price proposal.</p>
           <ul class="details">
@@ -684,7 +723,7 @@
 
 <footer>
   <div class="wrap">
-    <div class="foot-grid rv">
+    <div class="foot-grid">
       <div><img src="images/logo-white.png" alt="MD Projects NZ Ltd"><p style="max-width:34ch">Quality developments with expert project management, innovative design and a commitment to excellence in every build.</p></div>
       <div><h4>Services</h4><ul>
         <li><a href="https://www.mdprojects.co.nz/services/design-build/">Design &amp; Build</a></li>
@@ -720,58 +759,10 @@
   st.innerHTML = st.textContent.trim().split(/\s+/).map(w => w.startsWith('*') ? `<span class="w hl">${w.replace(/\*/g, '')}</span>` : `<span class="w">${w}</span>`).join(' ');
   const words = [...st.querySelectorAll('.w')];
 
-  // Reveal-on-scroll (transform only, content is visible at rest)
-  const rvs = [...document.querySelectorAll('.rv, .unveil')];
-  rvs.forEach(el => { if (el.getBoundingClientRect().top > innerHeight * .95) el.classList.add('pre'); });
-  const io = new IntersectionObserver(es => es.forEach(e => {
-    if (!e.isIntersecting) return;
-    const sibs = [...e.target.parentElement.children].filter(c => c.classList.contains('pre'));
-    e.target.style.transitionDelay = Math.min(sibs.indexOf(e.target), 5) * 90 + 'ms';
-    e.target.classList.remove('pre'); io.unobserve(e.target);
-  }), { threshold: .12, rootMargin: '0px 0px -6% 0px' });
-  rvs.forEach(el => io.observe(el));
-  // safety net: never leave anything hidden
-  setTimeout(() => addEventListener('scroll', () => rvs.forEach(el => { if (el.getBoundingClientRect().top < innerHeight) el.classList.remove('pre'); }), { passive: true }), 100);
-
-  // Scroll-linked scenes
   const hero = document.getElementById('hero'), scanLabel = document.getElementById('scanLabel');
   const projSec = document.getElementById('projects'), track = document.getElementById('projTrack'), projBar = document.getElementById('projBar'), projCount = document.getElementById('projCount');
   const tl = document.getElementById('tl'), tlFill = document.getElementById('tlFill'), tlSteps = [...tl.querySelectorAll('.tl-step')];
-  const wide = () => innerWidth > 960;
-  function sizeProjects() {
-    if (!wide()) { projSec.style.height = ''; return; }
-    const extra = track.scrollWidth - innerWidth + 80;
-    projSec.style.height = (innerHeight + Math.max(extra, 0)) + 'px';
-  }
-  function frame() {
-    const y = scrollY, vh = innerHeight;
-    header.classList.toggle('solid', y > 40);
-    // statement words
-    const sr = st.getBoundingClientRect();
-    const sp = clamp((vh * .85 - sr.top) / (sr.height + vh * .35));
-    const lit = Math.round(sp * words.length);
-    words.forEach((w, i) => w.classList.toggle('on', i < lit));
-    // projects horizontal
-    if (wide()) {
-      const pr = projSec.getBoundingClientRect();
-      const pp = clamp(-pr.top / (pr.height - vh));
-      const max = track.scrollWidth - innerWidth + 80;
-      track.style.transform = `translateX(${-pp * Math.max(max, 0)}px)`;
-      projBar.style.width = (pp * 100) + '%';
-      const n = track.children.length;
-      projCount.textContent = String(Math.min(n, 1 + Math.floor(pp * n * .999))).padStart(2, '0') + ' / ' + String(n).padStart(2, '0');
-    }
-    // process line
-    const tr = tl.getBoundingClientRect();
-    const tp = clamp((vh * .6 - tr.top) / tr.height);
-    tlFill.style.height = (tp * 100) + '%';
-    tlSteps.forEach(s => { const d = s.querySelector('.dot').getBoundingClientRect(); s.classList.toggle('on', d.top < vh * .6); });
-  }
-  let ticking = false;
-  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { frame(); ticking = false; }); } }, { passive: true });
-  addEventListener('resize', () => { sizeProjects(); frame(); });
-  addEventListener('load', () => { sizeProjects(); frame(); });
-  sizeProjects(); frame();
+  addEventListener('scroll', () => header.classList.toggle('solid', scrollY > 40), { passive: true });
 
   // Services: floating photo follows the cursor
   const fl = document.getElementById('floatImg'), flImg = document.getElementById('floatImgEl');
@@ -821,7 +812,6 @@
     }, 2900);
   }
   document.getElementById('replay').addEventListener('click', runBuild);
-  runBuild();
 
   // Home planner: each answer adds a construction stage to the drawing
   (() => {
@@ -1043,6 +1033,180 @@
     answersEl.addEventListener('click', e => { const go = e.target.closest('[data-go]'); if (go) { step = +go.dataset.go; renderCard(); } });
 
     update();
+  })();
+
+
+  // ===== Motion: cinematic intro, smooth scroll and parallax (GSAP + ScrollTrigger + Lenis) =====
+  (() => {
+    const fmt = (n, f) => f === 'comma+' ? n.toLocaleString('en-NZ') + '+' : f === '+' ? n + '+' : n + f;
+    const intro = document.getElementById('intro');
+    if (!(window.gsap && window.ScrollTrigger)) {
+      // No animation library: show everything as is, and still play the hero build.
+      intro && intro.remove(); runBuild(); return;
+    }
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Smooth, weighted scrolling
+    let lenis = null;
+    if (window.Lenis) {
+      lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(t => lenis.raf(t * 1000));
+      gsap.ticker.lagSmoothing(0);
+      document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+        const id = a.getAttribute('href'); const el = id.length > 1 && document.querySelector(id);
+        if (el) { e.preventDefault(); lenis.scrollTo(el, { offset: id === '#top' ? 0 : -70, duration: 1.4 }); }
+      }));
+    }
+
+    // Split helpers
+    const splitChars = el => { el.innerHTML = el.textContent.split('').map(c => c === ' ' ? ' ' : `<span class="ch">${c}</span>`).join(''); return el.querySelectorAll('.ch'); };
+    const splitLines = el => { el.innerHTML = el.innerHTML.split(/<br\s*\/?>/i).map(l => `<span class="ln"><span class="li">${l.trim()}</span></span>`).join(''); return el.querySelectorAll('.li'); };
+
+    const h1Chars = [...document.querySelectorAll('.hero h1 .ln')].flatMap(l => [...splitChars(l)]);
+    const heroBits = ['.hero .tag', '.hero .lede', '.hero-ctas'];
+
+    // ---------- Intro ----------
+    const introTl = () => {
+      const num = document.getElementById('introNum'), bar = document.getElementById('introBar'), stepEl = document.getElementById('introStep');
+      const steps = ['Surveying the section', 'Pouring foundations', 'Framing', 'Roofing', 'Handing over the keys'];
+      const c = { v: 0 };
+      lenis && lenis.stop();
+      gsap.set(h1Chars, { yPercent: 115 });
+      gsap.set(heroBits, { y: 40, opacity: 0 });
+      gsap.set('.hero-bar', { yPercent: 100 });
+      gsap.set('.hero-real video', { scale: 1.25 });
+      const t = gsap.timeline({ onComplete: () => { intro.remove(); lenis && lenis.start(); ScrollTrigger.refresh(); } });
+      t.from('#introInner > *', { y: 30, opacity: 0, stagger: .08, duration: .7, ease: 'power3.out' })
+       .to(c, { v: 100, duration: 2.1, ease: 'power2.inOut', onUpdate: () => {
+          const v = Math.round(c.v); num.textContent = v; bar.style.width = v + '%';
+          stepEl.textContent = steps[Math.min(steps.length - 1, Math.floor(v / 21))];
+        } }, '-=.3')
+       .to('#introInner', { opacity: 0, scale: .96, duration: .45, ease: 'power2.in' })
+       .to('.intro-half.t', { yPercent: -100, duration: 1.1, ease: 'expo.inOut' }, '<.2')
+       .to('.intro-half.b', { yPercent: 100, duration: 1.1, ease: 'expo.inOut' }, '<')
+       .add(heroIn(), '<.35');
+      return t;
+    };
+
+    // ---------- Hero entrance ----------
+    function heroIn() {
+      const t = gsap.timeline();
+      t.to('.hero-real video', { scale: 1, duration: 2.4, ease: 'power3.out' }, 0)
+       .to(h1Chars, { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: .028 }, 0)
+       .to(heroBits, { y: 0, opacity: 1, duration: .9, ease: 'power3.out', stagger: .12 }, .45)
+       .to('.hero-bar', { yPercent: 0, duration: 1, ease: 'power4.out' }, .6)
+       .add(() => {
+          runBuild();
+          document.querySelectorAll('.hb b[data-to]').forEach(b => {
+            const o = { v: 0 }, to = +b.dataset.to, f = b.dataset.fmt;
+            gsap.to(o, { v: to, duration: 2, ease: 'power2.out', onUpdate: () => b.textContent = fmt(Math.round(o.v), f) });
+          });
+        }, .6);
+      return t;
+    }
+
+    // Start the intro only once the page is actually on screen, so it is never missed
+    let started = false;
+    const start = () => { if (started) return; started = true; introTl(); };
+    const vio = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && document.visibilityState === 'visible') { vio.disconnect(); (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => setTimeout(start, 150)); } }, { threshold: .4 });
+    vio.observe(hero);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && !started) setTimeout(start, 150); });
+    setTimeout(() => { if (!started && intro.isConnected) start(); }, 5000);
+    intro.addEventListener('click', () => { gsap.globalTimeline.getChildren(false, true, false).forEach(t => t.progress(1)); });
+
+    // ---------- Hero parallax ----------
+    const heroST = { trigger: hero, start: 'top top', end: 'bottom top', scrub: true };
+    gsap.to('.hero-real', { yPercent: 22, ease: 'none', scrollTrigger: heroST });
+    gsap.to('.hero-copy .wrap', { yPercent: -45, opacity: 0, ease: 'none', scrollTrigger: { ...heroST, end: '80% top' } });
+    gsap.to('.bp-svg', { yPercent: -18, xPercent: 6, ease: 'none', scrollTrigger: heroST });
+    gsap.to('.hero-bar', { opacity: 0, ease: 'none', scrollTrigger: { ...heroST, start: '30% top', end: '70% top' } });
+
+    // ---------- Ticker reacts to scroll speed ----------
+    const tt = document.querySelector('.ticker-track');
+    let tx = 0, vel = 0, skew = 0;
+    ScrollTrigger.create({ trigger: '.ticker', start: 'top bottom', end: 'bottom top', onUpdate: self => { vel = self.getVelocity(); } });
+    gsap.ticker.add(() => {
+      const half = tt.scrollWidth / 2;
+      tx -= 1.1 + Math.min(Math.abs(vel) / 120, 18);
+      if (tx <= -half) tx += half;
+      skew += ((Math.max(-14, Math.min(14, vel / 160))) - skew) * .12;
+      vel *= .92;
+      tt.style.transform = `translate3d(${tx}px,0,0) skewX(${-skew}deg)`;
+    });
+
+    // ---------- Headings rise line by line ----------
+    document.querySelectorAll('h2.xl').forEach(h => {
+      const lines = splitLines(h);
+      gsap.from(lines, { yPercent: 110, duration: 1.15, ease: 'power4.out', stagger: .12, scrollTrigger: { trigger: h, start: 'top 88%' } });
+    });
+    gsap.utils.toArray('.tag, .lede').forEach(el => {
+      if (el.closest('.hero')) return;
+      gsap.from(el, { y: 30, opacity: 0, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
+    });
+
+    // ---------- Statement: words light up as you scroll ----------
+    gsap.fromTo(words, { opacity: .12 }, { opacity: 1, ease: 'none', stagger: .06, scrollTrigger: { trigger: st, start: 'top 82%', end: 'bottom 40%', scrub: .6 } });
+    gsap.from('.pr', { y: 70, opacity: 0, duration: 1, ease: 'power3.out', stagger: .15, scrollTrigger: { trigger: '.principles', start: 'top 85%' } });
+
+    // ---------- Services rows sweep in ----------
+    gsap.from('.svc', { x: -90, opacity: 0, duration: 1, ease: 'power3.out', stagger: .09, scrollTrigger: { trigger: '#svcList', start: 'top 80%' } });
+
+    // ---------- Projects: pinned horizontal scroll with parallax photos (desktop) ----------
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 961px)', () => {
+      const dist = () => Math.max(0, track.scrollWidth - innerWidth + 80);
+      const n = track.children.length;
+      const tween = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: {
+        trigger: projSec, start: 'top top', end: () => '+=' + dist(), pin: '.proj-pin', scrub: 1, invalidateOnRefresh: true,
+        onUpdate: self => { projBar.style.width = (self.progress * 100) + '%'; projCount.textContent = String(Math.min(n, 1 + Math.floor(self.progress * n * .999))).padStart(2, '0') + ' / ' + String(n).padStart(2, '0'); }
+      } });
+      track.querySelectorAll('.pcard img').forEach(img => {
+        gsap.fromTo(img, { xPercent: -10, scale: 1.25 }, { xPercent: 10, scale: 1.25, ease: 'none', scrollTrigger: { trigger: img.parentElement, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true } });
+      });
+      track.querySelectorAll('.pcard h3').forEach(h => {
+        gsap.from(h, { xPercent: 30, opacity: 0, ease: 'power2.out', scrollTrigger: { trigger: h.closest('.pcard'), containerAnimation: tween, start: 'left 85%', end: 'left 40%', scrub: true } });
+      });
+    });
+    mm.add('(max-width: 960px)', () => {
+      gsap.from('.pcard', { y: 60, opacity: 0, duration: 1, stagger: .1, ease: 'power3.out', scrollTrigger: { trigger: track, start: 'top 85%' } });
+    });
+
+    // ---------- Planner ----------
+    gsap.from('.stage', { x: -60, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: '.planner-grid', start: 'top 80%' } });
+    gsap.from('.quiz', { x: 60, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: '.planner-grid', start: 'top 80%' } });
+
+    // ---------- Process timeline ----------
+    gsap.fromTo(tlFill, { height: '0%' }, { height: '100%', ease: 'none', scrollTrigger: { trigger: tl, start: 'top 62%', end: 'bottom 62%', scrub: .5 } });
+    tlSteps.forEach((s, i) => {
+      const card = s.querySelector('.tl-card');
+      ScrollTrigger.create({ trigger: s, start: 'top 62%', onEnter: () => s.classList.add('on'), onLeaveBack: () => s.classList.remove('on') });
+      gsap.from(card, { x: innerWidth > 960 ? (i % 2 ? 80 : -80) : 50, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: s, start: 'top 85%' } });
+    });
+
+    // ---------- Testimonials ----------
+    gsap.from('.q-wrap', { y: 80, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: '.q-wrap', start: 'top 85%' } });
+
+    // ---------- Founder: photo wipes open, then drifts ----------
+    gsap.fromTo('.f-photo img', { clipPath: 'inset(100% 0 0 0)', scale: 1.3 }, { clipPath: 'inset(0% 0 0 0)', scale: 1, duration: 1.6, ease: 'power4.inOut', scrollTrigger: { trigger: '.f-photo', start: 'top 78%' } });
+    gsap.to('.f-photo', { yPercent: -8, ease: 'none', scrollTrigger: { trigger: '#about', start: 'top bottom', end: 'bottom top', scrub: true } });
+    gsap.from('.f-name', { x: -40, opacity: 0, duration: 1, delay: .9, ease: 'power3.out', scrollTrigger: { trigger: '.f-photo', start: 'top 78%' } });
+    gsap.from('.f-list li, .mv > div', { y: 30, opacity: 0, duration: .8, stagger: .08, ease: 'power3.out', scrollTrigger: { trigger: '.f-list', start: 'top 88%' } });
+
+    // ---------- Gallery: staggered wipes + parallax inside each frame ----------
+    gsap.fromTo('.g', { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1.3, ease: 'power4.inOut', stagger: .1, scrollTrigger: { trigger: '.g-grid', start: 'top 82%' } });
+    gsap.utils.toArray('.g img').forEach((img, i) => {
+      gsap.fromTo(img, { yPercent: -10, scale: 1.25 }, { yPercent: 10, scale: 1.25, ease: 'none', scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } });
+    });
+
+    // ---------- FAQ, contact, closing ----------
+    gsap.from('details', { y: 40, opacity: 0, duration: .8, stagger: .07, ease: 'power3.out', scrollTrigger: { trigger: '.faq-grid', start: 'top 80%' } });
+    gsap.from('.contact-grid > *', { y: 60, opacity: 0, duration: 1, stagger: .15, ease: 'power3.out', scrollTrigger: { trigger: '.contact-grid', start: 'top 85%' } });
+    gsap.from('.cta-big em', { scale: 0, rotate: -90, duration: 1, ease: 'back.out(3)', scrollTrigger: { trigger: '.cta-big', start: 'top 70%' } });
+    gsap.fromTo('.wordmark', { xPercent: 8 }, { xPercent: -4, ease: 'none', scrollTrigger: { trigger: 'footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+    gsap.from('.foot-grid > *', { y: 40, opacity: 0, duration: .9, stagger: .1, ease: 'power3.out', scrollTrigger: { trigger: '.foot-grid', start: 'top 92%' } });
+
+    addEventListener('load', () => ScrollTrigger.refresh());
   })();
 
   // Placeholder submit handler: replace with the site's real form endpoint
