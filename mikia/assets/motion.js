@@ -23,7 +23,7 @@
   root.classList.add('motion');
 
   /* scroll reveal with stagger */
-  var sel='.head-row>*,.service,.project,.values>div,.contact>*,.contact-card,.cs-head,.cs-side>*,.dz-bar,.dz-panel,.svc-grid,.prose>h2,.prose>p,.prose>ul,.side,.pcard,.band-in>*,.empty,.cform>*:not(.hp),.more';
+  var sel='.head-row>*,.service,.project,.values>div,.contact>*,.contact-card,.cs-head,.cs-side>*,.dz-bar,.dz-panel,.car-tabs,.prose>h2,.prose>p,.prose>ul,.side,.pcard,.band-in>*,.empty,.cform>*:not(.hp),.more';
   var items=$(sel).filter(function(e){return !e.closest('.hero')});
   var seen=new Map();
   items.forEach(function(e){
@@ -43,7 +43,7 @@
 
 
   /* section entrance variants */
-  var VARS=[['.svc-list li','left',1],['.svc-panels','right'],['.st-card','zoom'],['.viewer3d','zoom'],['.split-panel:nth-child(1)','left'],['.split-panel:nth-child(2)','right'],['.dz-panel','left'],['.dz-canvas','right'],['.foot-main>*','up',1],['.foot-word','up'],['.cs-list a','right',1],['.hero-tl','up']];
+  var VARS=[['.car','zoom'],['.st-card','zoom'],['.viewer3d','zoom'],['.split-panel:nth-child(1)','left'],['.split-panel:nth-child(2)','right'],['.dz-panel','left'],['.dz-canvas','right'],['.foot-main>*','up',1],['.foot-word','up'],['.cs-list a','right',1],['.hero-tl','up']];
   var extra=[];
   VARS.forEach(function(v){if(v[0]==='.svc-list li'&&window.innerWidth<=960)return;$(v[0]).forEach(function(e,i){
     if(e.closest('.hero')||e.hasAttribute('data-rv'))return;

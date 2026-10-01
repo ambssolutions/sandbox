@@ -1,46 +1,46 @@
 (function(){
-  var list=document.querySelector('.svc-list');if(!list)return;
-  var wrap=list.parentNode,ind=wrap.querySelector('.svc-ind');
-  var tabs=[].slice.call(list.querySelectorAll('[role="tab"]')),panels=[].slice.call(document.querySelectorAll('.svc-panel'));
-  var cur=0,timer=null,hoverT=null,CYC=7000,user=false,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  list.style.setProperty('--cyc',CYC+'ms');
-  function moveInd(){
-    if(!ind)return;
-    var t=tabs[cur];
-    if(getComputedStyle(ind).display==='none')return;
-    ind.style.height=t.offsetHeight+'px';ind.style.transform='translateY('+t.parentNode.offsetTop+'px)';
+  var track=document.getElementById('carTrack');if(!track)return;
+  var slides=[].slice.call(track.children),tabs=[].slice.call(document.querySelectorAll('.car-tab')),count=document.getElementById('carCount'),
+      prev=document.getElementById('carPrev'),next=document.getElementById('carNext'),pp=document.getElementById('carPP'),section=document.getElementById('services');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,N=slides.length,cur=0,timer=null,auto=!reduce,hovering=false,inView=false,CYC=6500;
+  track.style.setProperty('--cyc',CYC+'ms');
+  function slideW(){return slides[0].getBoundingClientRect().width+parseFloat(getComputedStyle(track).columnGap||getComputedStyle(track).gap||0);}
+  function setActive(i){
+    if(i===cur&&tabs[i].getAttribute('aria-current')==='true')return;
+    cur=i;
+    tabs.forEach(function(t,k){t.setAttribute('aria-current',k===i?'true':'false');});
+    slides.forEach(function(sl,k){sl.classList.toggle('is-on',k===i);});
+    count.textContent='0'+(i+1)+' / 0'+N;
+    var t=tabs[i];if(t.scrollIntoView&&t.parentNode.parentNode.scrollWidth>t.parentNode.parentNode.clientWidth+2)t.scrollIntoView({block:'nearest',inline:'center',behavior:reduce?'auto':'smooth'});
+    restartBar();
   }
-  function show(i,byUser){
-    if(i===cur&&!byUser)return;
-    var dir=i>cur?1:-1,prev=cur;cur=i;
-    tabs.forEach(function(t,k){var on=k===i;t.setAttribute('aria-selected',on?'true':'false');t.tabIndex=on?0:-1;});
-    panels.forEach(function(p,k){
-      p.style.setProperty('--dir',dir);
-      if(k===i){p.classList.add('is-on');p.removeAttribute('aria-hidden');p.inert=false;}
-      else{p.classList.remove('is-on');p.setAttribute('aria-hidden','true');p.inert=true;}
-    });
-    moveInd();
-    if(byUser){user=true;stop();}else{restartBar();}
-    var t=tabs[i];if(list.scrollWidth>list.clientWidth+2&&t.scrollIntoView)t.scrollIntoView({block:'nearest',inline:'center',behavior:reduce?'auto':'smooth'});
+  function go(i,smooth){
+    i=(i+N)%N;
+    track.scrollTo({left:i*slideW(),behavior:(smooth===false||reduce)?'auto':'smooth'});
+    setActive(i);
   }
-  function restartBar(){list.classList.remove('cycling');void list.offsetWidth;list.classList.add('cycling');}
-  function next(){show((cur+1)%tabs.length,false);}
-  function start(){if(user||reduce||timer)return;restartBar();timer=setInterval(next,CYC);}
-  function stop(){clearInterval(timer);timer=null;list.classList.remove('cycling');}
-  tabs.forEach(function(t,i){
-    t.addEventListener('click',function(){clearTimeout(hoverT);show(i,true);});
-    t.addEventListener('mouseenter',function(){if(!matchMedia('(hover:hover)').matches)return;clearTimeout(hoverT);hoverT=setTimeout(function(){show(i,true);},140);});
-    t.addEventListener('mouseleave',function(){clearTimeout(hoverT);});
-    t.addEventListener('keydown',function(e){
-      var k=e.key,n=null;
-      if(k==='ArrowDown'||k==='ArrowRight')n=(i+1)%tabs.length;else if(k==='ArrowUp'||k==='ArrowLeft')n=(i-1+tabs.length)%tabs.length;else if(k==='Home')n=0;else if(k==='End')n=tabs.length-1;
-      if(n!==null){e.preventDefault();show(n,true);tabs[n].focus();}
-    });
-  });
-  window.addEventListener('resize',moveInd);
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(moveInd);
-  moveInd();
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)start();else if(!user)stop();});},{threshold:.3}).observe(document.getElementById('services'));
-  }
+  var raf=0;
+  track.addEventListener('scroll',function(){
+    if(raf)return;raf=requestAnimationFrame(function(){raf=0;var i=Math.round(track.scrollLeft/slideW());i=Math.max(0,Math.min(N-1,i));if(i!==cur)setActive(i);});
+  },{passive:true});
+  prev.addEventListener('click',function(){stopAuto(true);go(cur-1);});
+  next.addEventListener('click',function(){stopAuto(true);go(cur+1);});
+  tabs.forEach(function(t,i){t.addEventListener('click',function(){stopAuto(true);go(i);});});
+  track.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){e.preventDefault();stopAuto(true);go(cur+1);}else if(e.key==='ArrowLeft'){e.preventDefault();stopAuto(true);go(cur-1);}});
+  function restartBar(){var ol=document.querySelector('.car-tabs');ol.classList.remove('cycling');void ol.offsetWidth;if(timer)ol.classList.add('cycling');}
+  function tick(){go(cur+1);}
+  function startAuto(){if(!auto||timer||hovering||!inView)return;timer=setInterval(tick,CYC);restartBar();}
+  function stopTimer(){clearInterval(timer);timer=null;document.querySelector('.car-tabs').classList.remove('cycling');}
+  function stopAuto(user){stopTimer();if(user){auto=false;pp.setAttribute('aria-pressed','false');pp.setAttribute('aria-label','Play automatic slides');}}
+  pp.addEventListener('click',function(){if(auto){stopAuto(true);}else{auto=true;pp.setAttribute('aria-pressed','true');pp.setAttribute('aria-label','Pause automatic slides');startAuto();}});
+  var car=track.parentNode;
+  car.addEventListener('mouseenter',function(){hovering=true;stopTimer();});
+  car.addEventListener('mouseleave',function(){hovering=false;startAuto();});
+  car.addEventListener('focusin',function(){stopTimer();});
+  car.addEventListener('focusout',function(){startAuto();});
+  var touched=false;track.addEventListener('touchstart',function(){touched=true;stopAuto(true);},{passive:true});
+  window.addEventListener('resize',function(){go(cur,false);});
+  slides[0].classList.add('is-on');
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es){inView=es[0].isIntersecting;if(inView)startAuto();else stopTimer();},{threshold:.35}).observe(section);
+  else{inView=true;startAuto();}
 })();
