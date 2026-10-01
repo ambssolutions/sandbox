@@ -35,7 +35,7 @@
   ];
   var CATS=[['style','Styles'],['shape','Shape'],['material','Materials'],['colour','Colours'],['extras','Extras'],['scene','Scene']];
   var CAT={shape:'shape',roof:'shape',detail:'shape',cladding:'material',windows:'material',bay:'material',veranda:'material',wall:'colour',roofColor:'colour',joinery:'colour',door:'colour',garage:'extras',chimney:'extras',solar:'extras',deck:'extras',fence:'extras',tod:'scene'};
-  var ICONS={},state=Object.assign({},DEF),api=null,t=null,ready=false;
+  var curCat='style',touched={},ICONS={},state=Object.assign({},DEF),api=null,t=null,ready=false;
   function name(g,v){var l=(g.opts||g.sw).filter(function(o){return o[0]===v;})[0];return l?l[1]:String(v);}
   function G_(k){return G.filter(function(g){return g.k===k;})[0];}
   function summary(){
@@ -63,16 +63,32 @@
       if(window.__house&&window.__house.onDesigned)window.__house.onDesigned();
     },60);
   }
+  function catGroups(c){return G.filter(function(g){return (CAT[g.k]||'extras')===c;}).map(function(g){return g.k;});}
+  var advTimer=null;
+  function markDone(c,go){
+    var t=[].filter.call(document.querySelectorAll('.dz-tab'),function(x){return x.dataset.cat===c;})[0];if(t)t.classList.add('done');
+    if(!go)return;var idx=CATS.map(function(x){return x[0];}).indexOf(c);
+    if(idx<CATS.length-1){clearTimeout(advTimer);advTimer=setTimeout(function(){if(curCat===c&&window.__dzShow)window.__dzShow(CATS[idx+1][0]);},550);}
+  }
+  function touch(k){
+    var c=CAT[k]||'extras';touched[k]=true;
+    var all=catGroups(c).every(function(x){return touched[x];});
+    if(all)markDone(c,true);
+  }
   function build(){
     panel.textContent='';
     var tl=document.createElement('div');tl.className='dz-tabs';tl.setAttribute('role','tablist');tl.setAttribute('aria-label','Design categories');
     var body=document.createElement('div');body.className='dz-body';panel.appendChild(tl);panel.appendChild(body);
     CATS.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.className='dz-tab';b.setAttribute('role','tab');b.dataset.cat=c[0];b.textContent=c[1];b.setAttribute('aria-selected',i===0?'true':'false');b.addEventListener('click',function(){showCat(c[0]);});tl.appendChild(b);});
-    function showCat(k){[].forEach.call(tl.children,function(t){t.setAttribute('aria-selected',t.dataset.cat===k?'true':'false');});[].forEach.call(body.querySelectorAll('[data-cat]'),function(g){g.hidden=g.dataset.cat!==k;});body.scrollTop=0;}
+    var nx=document.createElement('div');nx.className='dz-next';nx.innerHTML='<span class="dz-step"></span><button type="button" class="dz-nextbtn"><span>Next</span>'+(ICONS.arrow||'')+'</button>';panel.appendChild(nx);
+    var stepEl=nx.querySelector('.dz-step'),nextBtn=nx.querySelector('.dz-nextbtn');
+    function showCat(k){curCat=k;var idx=CATS.map(function(c){return c[0];}).indexOf(k);[].forEach.call(tl.children,function(t){t.setAttribute('aria-selected',t.dataset.cat===k?'true':'false');});[].forEach.call(body.querySelectorAll('[data-cat]'),function(g){g.hidden=g.dataset.cat!==k;});body.scrollTop=0;body.classList.remove('flash');void body.offsetWidth;body.classList.add('flash');stepEl.textContent='Step '+(idx+1)+' of '+CATS.length+' · '+CATS[idx][1];nextBtn.firstChild.textContent=idx===CATS.length-1?'Build it':'Next';nextBtn.dataset.last=idx===CATS.length-1?'1':'';}
+    window.__dzShow=showCat;
+    nextBtn.addEventListener('click',function(){var idx=CATS.map(function(c){return c[0];}).indexOf(curCat);if(idx<CATS.length-1)showCat(CATS[idx+1][0]);else document.getElementById('dzBuild').click();});
     var pf=document.createElement('fieldset');pf.className='dz-group dz-presets';pf.dataset.cat='style';
     var pl=document.createElement('legend');pl.innerHTML=(ICONS.home||'')+'<span>Start from a New Zealand style</span>';pf.appendChild(pl);
     var pw=document.createElement('div');pw.className='dz-opts';
-    PRESETS.forEach(function(p){var b=document.createElement('button');b.type='button';b.className='dz-opt dz-preset';b.textContent=p[0];b.title=p[1];b.addEventListener('click',function(){apply(Object.assign({},DEF,p[3],{tod:state.tod}));note.querySelector('b').textContent=p[1];note.querySelector('span').textContent=p[2];note.hidden=false;});pw.appendChild(b);});
+    PRESETS.forEach(function(p){var b=document.createElement('button');b.type='button';b.className='dz-opt dz-preset';b.textContent=p[0];b.title=p[1];b.addEventListener('click',function(){apply(Object.assign({},DEF,p[3],{tod:state.tod}));note.querySelector('b').textContent=p[1];note.querySelector('span').textContent=p[2];note.hidden=false;markDone('style',true);});pw.appendChild(b);});
     pf.appendChild(pw);var note=document.createElement('p');note.className='dz-preset-note';note.hidden=true;note.innerHTML='<b></b><span></span>';pf.appendChild(note);body.appendChild(pf);
     G.forEach(function(g){
       var f=document.createElement('fieldset');f.className='dz-group';f.dataset.cat=CAT[g.k]||'extras';f.hidden=true;
@@ -81,7 +97,7 @@
       (g.opts||g.sw).forEach(function(o){
         var b=document.createElement('button');b.type='button';b.setAttribute('role','radio');b.dataset.k=g.k;b.dataset.v=o[0];b.setAttribute('aria-label',o[1]);b.title=o[1];
         if(g.sw){b.className='dz-sw';b.style.background=o[0]==='timber'?'linear-gradient(135deg,#b98e5e,#8a5a32)':o[0];}else{b.className='dz-opt';b.textContent=o[1];}
-        b.addEventListener('click',function(){var x={};x[g.k]=o[0];apply(x);});
+        b.addEventListener('click',function(){var x={};x[g.k]=o[0];apply(x);touch(g.k);});
         w.appendChild(b);
       });
       f.appendChild(w);body.appendChild(f);
@@ -104,7 +120,7 @@
   [].forEach.call(document.querySelectorAll('#dzIcons [data-ic]'),function(e){ICONS[e.dataset.ic]=e.innerHTML;});
   var h=location.hash.match(/#design=(.+)$/),fromHash=false;
   if(h){try{Object.assign(state,decode(decodeURIComponent(h[1])));fromHash=true;}catch(e){}}
-  build();sync();wire();
+  build();sync();wire();if(window.__dzShow)window.__dzShow('style');
   document.addEventListener('house-ready',function(){
     api=window.__house.api;ready=true;
     if(fromHash){api.designed=true;api.setDesign(Object.assign({},state));window.__house.onDesigned();}
