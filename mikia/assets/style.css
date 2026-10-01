@@ -1176,3 +1176,13 @@ html{overflow-x:hidden}
   .car-tabs li{flex:none}.car-tab{min-width:110px}
 }
 @media (prefers-reduced-motion:reduce){.car-slide .cs-copy>*,.cs-art .ill{transition:none!important;opacity:1!important;transform:none!important}.car-tabs.cycling .car-tab::after{animation:none}}
+
+/* ===== SMALLER, DARKER HERO ===== */
+.hero-cine{min-height:clamp(340px,46svh,480px)}
+.hero-cine .hero-main{padding-top:clamp(12px,2.5vh,28px);padding-bottom:clamp(36px,6vh,56px)}
+.hero-cine h1{font-size:clamp(28px,3.6vw,54px)}
+.hero-cine .hero-lede{font-size:clamp(14px,1vw,16px)}
+.hero-cine .btn{min-height:44px;font-size:15px}
+.hero-3d canvas{filter:brightness(.62) saturate(.8)}
+.hero-bgimg img.bg[data-bg="live"]{filter:saturate(.7) brightness(.55)}
+@media (max-width:860px){.hero-cine{min-height:clamp(380px,54svh,500px)}}
