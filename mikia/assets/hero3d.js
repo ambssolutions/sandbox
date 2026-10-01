@@ -55,6 +55,7 @@
     prev.classList.remove('on');prev.classList.add('out');
     setTimeout(function(){prev.classList.remove('out');},700);
     next.classList.add('on');cur=n;
+    var acts=document.querySelector('.hero-actions');if(acts){acts.classList.remove('cyc');void acts.offsetWidth;acts.classList.add('cyc');}
     setBg(next.dataset.bg);
   }
   function step(){if(paused||document.hidden)return;go((cur+1)%sps.length);}

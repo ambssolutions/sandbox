@@ -1887,3 +1887,13 @@ html.nav-lock .sticky-nav,html.nav-lock .menu-fab{display:none}
 .menu-fab.show{opacity:1;transform:none;pointer-events:auto}
 .menu-fab:hover{background:var(--accent);border-color:var(--accent)}
 @media (prefers-reduced-motion:reduce){.ms-panel,.ms-back,.ms-list a,.ms-foot,.menu-fab{transition-duration:.01s!important;transition-delay:0s!important}}
+
+/* ===== HERO BUTTONS: rise in with the headline, then follow each phrase change ===== */
+.hero-cine .hero-actions.reveal{opacity:1!important;transform:none!important;filter:none!important}
+.hero-cine .hero-actions .btn{animation:heroBtn 1.05s cubic-bezier(.2,.8,.2,1) 1.3s backwards}
+.hero-cine .hero-actions .hero-build{animation-delay:1.5s}
+.hero-cine .hero-actions.cyc .btn{animation:heroBtnSoft .85s cubic-bezier(.2,.8,.2,1) .3s backwards}
+.hero-cine .hero-actions.cyc .hero-build{animation-delay:.44s}
+@keyframes heroBtn{from{opacity:0;translate:0 26px;filter:blur(8px)}to{opacity:1;translate:0 0;filter:blur(0)}}
+@keyframes heroBtnSoft{from{opacity:.25;translate:0 12px;filter:blur(3px)}to{opacity:1;translate:0 0;filter:blur(0)}}
+@media (prefers-reduced-motion:reduce){.hero-cine .hero-actions .btn,.hero-cine .hero-actions.cyc .btn{animation:none}}
