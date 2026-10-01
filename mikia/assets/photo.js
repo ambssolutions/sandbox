@@ -38,22 +38,34 @@
       empty.hidden=true;img.hidden=false;panel.hidden=false;houseEl.hidden=false;S.x=.5;S.y=.7;fit();start();
       panel.scrollIntoView&&matchMedia('(max-width:900px)').matches&&setTimeout(function(){stage.scrollIntoView({behavior:'smooth',block:'start'});},50);
     };
+    img.onerror=function(){msg('Could not display that photo. Please try another.');};
     img.src=src;
   }
+  function msg(t){err.textContent=t;err.hidden=!t;}
   function fromFile(f){
-    if(!f)return;if(!/^image\//.test(f.type)){alert('Please choose an image file.');return;}
-    var r=new FileReader();r.onload=function(){setPhoto(r.result);};r.readAsDataURL(f);
+    if(!f)return;msg('');
+    if(f.type&&!/^image\//.test(f.type)&&!/\.(jpe?g|png|webp|gif|bmp|heic|heif|avif)$/i.test(f.name||'')){msg('That file is not a photo. Please choose a JPG or PNG.');return;}
+    var url=URL.createObjectURL(f),im=new Image();
+    im.onload=function(){
+      try{
+        var m=Math.max(im.naturalWidth,im.naturalHeight),sc=m>2400?2400/m:1;
+        if(sc<1||f.size>4e6){var c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*sc);c.height=Math.round(im.naturalHeight*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+          c.toBlob(function(b){URL.revokeObjectURL(url);if(b)setPhoto(URL.createObjectURL(b));else setPhoto(c.toDataURL('image/jpeg',.9));},'image/jpeg',.9);return;}
+      }catch(e){}
+      setPhoto(url);
+    };
+    im.onerror=function(){URL.revokeObjectURL(url);msg('This browser could not open that photo. If it is a HEIC file, take a screenshot of it or share it as a JPG, then try again.');};
+    im.src=url;
   }
-  ['lpCam','lpUp'].forEach(function(id){var e=$(id);if(e)e.addEventListener('change',function(){fromFile(e.files&&e.files[0]);e.value='';});});
+  ['lpCam','lpUp'].forEach(function(id){var e=$(id);if(e)e.addEventListener('change',function(){fromFile(e.files&&e.files[0]);});});
   /* camera: phones use the native camera app; desktops get a live viewfinder */
-  var stream=null,camLab=document.querySelector('label.lp-file');
+  var stream=null,camLab=$('lpWebcam');
   function stopCam(){if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}$('lpCamView').hidden=true;}
-  if(camLab&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&!matchMedia('(pointer:coarse)').matches){
+  if(camLab&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&!matchMedia('(pointer:coarse)').matches){camLab.hidden=false;
     camLab.addEventListener('click',function(e){
-      e.preventDefault();
       navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1920}},audio:false}).then(function(s){
         stream=s;var v=$('lpVideo');v.srcObject=s;$('lpCamView').hidden=false;
-      }).catch(function(){var i=$('lpCam');if(i)i.click();});
+      }).catch(function(){msg('The camera is not available here. Use Take a photo or Upload a photo instead.');});
     });
     $('lpShot').addEventListener('click',function(){
       var v=$('lpVideo');if(!v.videoWidth)return;var c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);
@@ -93,7 +105,7 @@
     try{api=window.House3D&&window.House3D.createHouseScene(houseEl,{cutout:true,startFinished:true,autoplay:false,tod:'day',design:Object.assign({},(cur&&cur.design)||BASE,{tod:'day'})});}catch(e){api=null;}
     load.hidden=true;if(!api){fail();return;}apply();
   }
-  function fail(){loading=false;load.hidden=true;err.hidden=false;houseEl.hidden=true;}
+  function fail(){loading=false;load.hidden=true;msg('The 3D house needs WebGL, which this device does not support.');houseEl.hidden=true;}
   function apply(){
     if(!api)return;api.setCutView(S.turn);api.setSun(S.sun);api.setTod(S.tod);if(cur)api.setDesign(Object.assign({},cur.design,{tod:S.tod}));
   }

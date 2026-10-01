@@ -1706,3 +1706,5 @@ main h2.fx-in em{background-size:100% 2px}
 .lp-cam-bar{display:flex;gap:12px;justify-content:center;align-items:center;padding:12px;background:rgba(0,0,0,.6)}
 #dzLand{grid-column:1/-1}
 @media (prefers-reduced-motion:reduce){.fx-scrub .wi{opacity:1!important;filter:none!important}main h2 em{background-size:100% 2px}}
+.lp-err{max-width:86%;text-align:center;line-height:1.4;z-index:7}
+.lp-btns #lpWebcam{border:1px solid var(--line);background:#fff;color:var(--ink)}

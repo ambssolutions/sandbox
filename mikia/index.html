@@ -134,14 +134,14 @@
    <span class="lp-ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
    <h3>Start with a photo of your land</h3>
    <p>Stand where the front of the house will face the street and keep the camera level.</p>
-   <div class="lp-btns"><label class="btn btn-accent lp-file"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Take a photo</span><input type="file" accept="image/*" capture="environment" id="lpCam"></label><label class="btn btn-dark lp-file"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5M7.5 9.5 12 5l4.5 4.5M5 19h14"/></svg><span>Upload a photo</span><input type="file" accept="image/*" id="lpUp"></label><button class="lp-sample" id="lpSample" type="button">Try a sample section</button></div>
+   <div class="lp-btns"><label class="btn btn-accent lp-file"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Take a photo</span><input type="file" accept="image/*" capture="environment" id="lpCam"></label><label class="btn btn-dark lp-file"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5M7.5 9.5 12 5l4.5 4.5M5 19h14"/></svg><span>Upload a photo</span><input type="file" accept="image/*" id="lpUp"></label><button class="btn btn-light" id="lpWebcam" type="button" hidden>Use webcam</button><button class="lp-sample" id="lpSample" type="button">Try a sample section</button></div>
    <p class="lp-priv">Your photo stays on your device. It is not uploaded anywhere.</p>
   </div>
   <div class="lp-cam" id="lpCamView" hidden><video id="lpVideo" playsinline muted autoplay></video><div class="lp-cam-bar"><button class="btn btn-accent" id="lpShot" type="button">Take photo</button><button class="lp-sample" id="lpCamX" type="button" style="color:#fff">Cancel</button></div></div>
   <img id="lpImg" alt="Your land with a house placed on it" hidden>
   <div class="lp-house" id="lpHouse" hidden></div>
   <div class="lp-load" id="lpLoad" hidden>Loading the house</div>
-  <p class="lp-err" id="lpErr" hidden>The 3D house needs WebGL, which this device does not support.</p>
+  <p class="lp-err" id="lpErr" hidden></p>
  </div></div>
  <aside class="lp-panel" id="lpPanel" hidden aria-label="Place your house">
   <span class="mono">PLACE YOUR HOUSE</span>
