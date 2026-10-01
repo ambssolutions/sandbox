@@ -32,7 +32,7 @@
       el.style.transform='translate('+p.x.toFixed(0)+'px,'+p.y.toFixed(0)+'px)';el.classList.toggle('on',!hide);});
   }
   function init(){
-    try{api=window.House3D&&window.House3D.createHouseScene(host,{hero:true,design:{roof:'hip',cladding:'weatherboard',wall:'#ece7da',roofColor:'#8a463a',joinery:'#f2f2ee',door:'#2f6f6a',veranda:true,bay:true,garage:false,chimney:true,fence:'picket'},onProgress:upd,onAnchors:pos});}catch(e){api=null;}
+    try{api=window.House3D&&window.House3D.createHouseScene(host,{hero:true,loop:true,design:{roof:'hip',cladding:'weatherboard',wall:'#ece7da',roofColor:'#8a463a',joinery:'#f2f2ee',door:'#2f6f6a',veranda:true,bay:true,garage:false,chimney:true,fence:'picket'},onProgress:upd,onAnchors:pos});}catch(e){api=null;}
     if(!api)return;
     host.classList.add('ready');document.getElementById('top').classList.add('live');
     lis.forEach(function(l,i){l.style.cursor='pointer';l.addEventListener('click',function(){api.goStage(i);});});

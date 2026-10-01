@@ -33,6 +33,7 @@
     ['Bach','Kiwi bach','A small gabled holiday cottage with a veranda and deck in board and batten, the classic beach house.',{shape:'single',roof:'gable',cladding:'boardbatten',wall:'#8d9a95',roofColor:'#4a6b57',joinery:'#f2f2ee',door:'#e0a64b',windows:'standard',veranda:true,bay:false,garage:false,chimney:true,solar:false,deck:true,fence:'none',detail:'none'}],
     ['Lodge','L-shape lodge, today','An L-shaped plan with a gabled roof, charcoal board and batten, a large window, deck and garage, in the modern farmhouse style.',{shape:'lshape',roof:'gable',cladding:'boardbatten',wall:'#5a6a60',roofColor:'#4d5c63',joinery:'#161e1b',door:'timber',windows:'large',veranda:false,bay:false,garage:true,chimney:true,solar:false,deck:true,fence:'none',detail:'none'}]
   ];
+  window.__presets=PRESETS;
   var CATS=[['style','Styles'],['shape','Shape'],['material','Materials'],['colour','Colours'],['extras','Extras'],['scene','Scene']];
   var CAT={shape:'shape',roof:'shape',detail:'shape',cladding:'material',windows:'material',bay:'material',veranda:'material',wall:'colour',roofColor:'colour',joinery:'colour',door:'colour',garage:'extras',chimney:'extras',solar:'extras',deck:'extras',fence:'extras',tod:'scene'};
   var curCat='style',touched={},ICONS={},state=Object.assign({},DEF),api=null,t=null,ready=false;
