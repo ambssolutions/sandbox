@@ -12,7 +12,7 @@
     var st=Math.min(3,Math.floor(b/4));
     if(fill)fill.style.width=(b/16*100).toFixed(1)+'%';
     chips.forEach(function(c,i){c.setAttribute('aria-pressed',i===st?'true':'false');});
-    if(label&&mode==='build')label.textContent=b>=15.9?(api.designed?'Your design':names[3]):names[st];
+    if(label&&mode==='build'){var lt=b>=15.9?(api.designed?'Your design':names[3]):names[st];if(window.__fx)window.__fx.swap(label,lt);else label.textContent=lt;}
   }
   function setPlay(btn,on,txt){btn.setAttribute('aria-pressed',on?'true':'false');var s=btn.querySelector('span');if(s)s.textContent=on?txt[0]:txt[1];}
   function stepText(i,step){
@@ -27,7 +27,7 @@
     if(i<0){card.hidden=true;return;}
     card.hidden=false;
     $('v3dStep').textContent='STEP '+(i+1)+' OF '+window.House3D.TOUR_STEPS.length;
-    $('v3dTitle').textContent=step.title;$('v3dText').textContent=stepText(i,step);
+    if(window.__fx){window.__fx.swap($('v3dTitle'),step.title);window.__fx.swap($('v3dText'),stepText(i,step));}else{$('v3dTitle').textContent=step.title;$('v3dText').textContent=stepText(i,step);}
     label.textContent='Tour';
     [].forEach.call(dots.children,function(d,k){d.classList.toggle('on',k===i);});
   }

@@ -132,7 +132,7 @@
       qi=i;var q=WQ[i];clearTimeout(adv);
       stepEl.textContent='Question '+(i+1)+' of '+WQ.length;back.style.visibility=i?'visible':'hidden';
       [].forEach.call(dots.children,function(x,k){x.className=k<i?'done':k===i?'on':'';});
-      qEl.textContent=q.t;sEl.textContent=q.s||'';sEl.hidden=!q.s;oEl.textContent='';fEl.textContent='';
+      qEl.textContent=q.t;if(i&&window.__fx)window.__fx.words(qEl);sEl.textContent=q.s||'';sEl.hidden=!q.s;oEl.textContent='';fEl.textContent='';
       oEl.className='dz-wopts'+(q.sw?' sw':'');
       var side=document.getElementById('design');if(side)side.classList.toggle('wiz-last',i===WQ.length-1);
       oEl.style.animation='none';void oEl.offsetWidth;oEl.style.animation='';
@@ -149,7 +149,7 @@
       }
       sync();
     }
-    function go(n){var t=qi+n;if(t<0)return;if(t>=WQ.length)return;render(t);}
+    function go(n){var t=qi+n;if(t<0)return;if(t>=WQ.length)return;render(t);if(matchMedia('(max-width:1100px)').matches){var vw=document.querySelector('.viewer3d');if(vw){var d=wiz.getBoundingClientRect().top-(vw.getBoundingClientRect().bottom+10);if(Math.abs(d)>6)window.scrollBy({top:d,behavior:'smooth'});}}}
     back.addEventListener('click',function(){go(-1);});
     var fine=wiz.querySelector('.dz-wfine');
     fine.addEventListener('click',function(){var on=panel.classList.toggle('fine');fine.textContent=on?'Back to questions':'Fine-tune';var sd=document.getElementById('design');if(sd)sd.classList.toggle('is-fine',on);fine.setAttribute('aria-pressed',on?'true':'false');});

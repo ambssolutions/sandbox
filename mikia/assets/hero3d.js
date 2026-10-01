@@ -20,8 +20,8 @@
       if(!done)l.classList.remove('done');
     });
     var complete=b>=15.98;card.classList.toggle('complete',complete);status.textContent=complete?'COMPLETE':'IN PROGRESS';
-    stage.textContent=complete?'COMPLETE':NAMES[st];
-    var mt=document.getElementById('pminiT'),mb=document.getElementById('pminiB');if(mt)mt.textContent=complete?'Complete':['01 · Site survey','02 · Plan and consent','03 · Engineering and build','04 · Delivery and handover'][st];if(mb)mb.style.width=(b/16*100).toFixed(1)+'%';
+    var fxs=window.__fx;if(fxs)fxs.swap(stage,complete?'COMPLETE':NAMES[st]);else stage.textContent=complete?'COMPLETE':NAMES[st];
+    var mt=document.getElementById('pminiT'),mb=document.getElementById('pminiB');if(mt){var mtx=complete?'Complete':['01 · Site survey','02 · Plan and consent','03 · Engineering and build','04 · Delivery and handover'][st];if(window.__fx)window.__fx.swap(mt,mtx);else mt.textContent=mtx;}if(mb)mb.style.width=(b/16*100).toFixed(1)+'%';
   }
   var blockers=[].slice.call(document.querySelectorAll('.hero-copy,#pathCard,.nav'));
   function pos(pts){
@@ -47,7 +47,7 @@
   var cur=0,timer=null,paused=false,started=false;
   function setBg(key){
     bgs.forEach(function(im){im.classList.toggle('on',im.dataset.bg===key);});
-    var live=key==='live';host.classList.toggle('away',!live);if(api&&api.setHeld)api.setHeld(!live);
+    var live=key==='live';host.classList.toggle('away',!live);
   }
   function go(n){
     var prev=sps[cur],next=sps[n];if(prev===next)return;
