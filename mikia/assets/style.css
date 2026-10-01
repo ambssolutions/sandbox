@@ -1857,3 +1857,33 @@ main h2.fx-in em{background-size:100% 2px}
 .cs-copy p.cs-typed{background:linear-gradient(100deg,currentColor 40%,rgba(239,106,98,1) 50%,currentColor 60%) 150% 0/250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:csSweep 1.6s ease-out .45s both,csDrop .95s cubic-bezier(.2,.9,.25,1.1) .18s both!important}
 @keyframes csSweep{from{background-position:150% 0}to{background-position:-50% 0}}
 @media (prefers-reduced-motion:reduce){.car-slide.is-on .cs-copy>*,.car-slide.is-on .cs-copy .ticks li{animation:none!important;opacity:1}.cs-copy p.cs-typed{animation:none!important;-webkit-text-fill-color:currentColor}}
+
+/* ===== MENU SHEET: opens from anywhere, slides in smoothly ===== */
+@media (max-width:1100px){.nav .nav-links{display:none!important}}
+html.nav-lock{overflow:hidden;padding-right:var(--sbw,0)}
+html.nav-lock .sticky-nav,html.nav-lock .menu-fab{display:none}
+.menu-sheet{position:fixed;inset:0;z-index:200;visibility:hidden;pointer-events:none;transition:visibility 0s .55s}
+.menu-sheet.on{visibility:visible;pointer-events:auto;transition:visibility 0s}
+.ms-back{position:absolute;inset:0;background:rgba(6,12,9,.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;transition:opacity .5s ease}
+.menu-sheet.on .ms-back{opacity:1}
+.ms-panel{position:absolute;top:0;right:0;bottom:0;width:min(460px,100%);display:flex;flex-direction:column;padding:max(20px,env(safe-area-inset-top)) clamp(22px,4vw,36px) max(24px,env(safe-area-inset-bottom));background:radial-gradient(700px 420px at 100% 0,rgba(194,52,52,.18),transparent 60%),#0F1C17;color:var(--on-dark);overflow-y:auto;overscroll-behavior:contain;transform:translateX(104%);transition:transform .55s cubic-bezier(.7,0,.2,1);box-shadow:-40px 0 80px -30px rgba(0,0,0,.7)}
+.menu-sheet.on .ms-panel{transform:none;transition:transform .6s cubic-bezier(.16,.84,.24,1)}
+.ms-head{display:flex;align-items:center;justify-content:space-between;min-height:56px;margin-bottom:12px}
+.ms-logo img{display:block;height:34px;width:auto}
+.ms-close{width:44px;height:44px;border-radius:50%;border:1px solid rgba(238,242,234,.35);background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer;transition:transform .5s cubic-bezier(.2,.8,.2,1),background .25s}
+.ms-close:hover{background:rgba(255,255,255,.1);transform:rotate(90deg)}
+.ms-list{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column}
+.ms-list a{display:flex;align-items:center;gap:16px;min-height:60px;padding:8px 0;border-bottom:1px solid rgba(159,194,174,.16);color:var(--on-dark);text-decoration:none;font:300 clamp(24px,3.2vw,30px)/1.1 var(--serif);opacity:0;transform:translateX(34px);transition:opacity .25s ease,transform .3s ease,color .25s,padding-left .3s}
+.menu-sheet.on .ms-list a{opacity:1;transform:none;transition:opacity .6s ease,transform .7s cubic-bezier(.16,.84,.24,1),color .25s,padding-left .3s;transition-delay:calc(.14s + var(--i,0)*.05s),calc(.14s + var(--i,0)*.05s),0s,0s}
+.ms-list a:hover{color:var(--accent-hi);padding-left:8px}
+.ms-list a[aria-current="page"]{color:var(--accent-hi)}
+.ms-n{font:500 11px var(--mono);letter-spacing:.16em;color:var(--accent-hi);opacity:.85;min-width:22px}
+.ms-t{flex:1}.ms-a{font:400 18px var(--sans);opacity:.6;transition:transform .3s,opacity .3s}.ms-list a:hover .ms-a{transform:translateX(6px);opacity:1}
+.ms-foot{margin-top:auto;padding-top:26px;display:flex;flex-direction:column;gap:16px;opacity:0;transform:translateY(16px);transition:opacity .3s,transform .3s}
+.menu-sheet.on .ms-foot{opacity:1;transform:none;transition:opacity .7s ease .5s,transform .7s cubic-bezier(.16,.84,.24,1) .5s}
+.ms-cta{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:99px;background:var(--accent);color:#fff;text-decoration:none;font:600 17px var(--sans)}
+.ms-contact{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:15px}.ms-contact a{color:#C9D4CC;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}.ms-contact a:hover{color:#fff}
+.menu-fab{position:fixed;top:max(14px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));z-index:56;width:48px;height:48px;border-radius:50%;border:1px solid rgba(238,242,234,.3);background:rgba(15,28,23,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;display:grid;place-items:center;cursor:pointer;opacity:0;transform:scale(.6) translateY(-12px);pointer-events:none;transition:opacity .35s ease,transform .45s cubic-bezier(.2,.9,.25,1.2),background .25s;box-shadow:0 14px 30px -12px rgba(0,0,0,.6)}
+.menu-fab.show{opacity:1;transform:none;pointer-events:auto}
+.menu-fab:hover{background:var(--accent);border-color:var(--accent)}
+@media (prefers-reduced-motion:reduce){.ms-panel,.ms-back,.ms-list a,.ms-foot,.menu-fab{transition-duration:.01s!important;transition-delay:0s!important}}
