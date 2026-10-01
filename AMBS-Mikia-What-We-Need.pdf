@@ -107,7 +107,7 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 6 0 R /Rect [ 42 652.89 55 665.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 6 0 R /Rect [ 48 661.89 61 674.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 14 0 obj
@@ -154,46 +154,100 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 6 0 R /Rect [ 86 652.89 99 665.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 6 0 R /Rect [ 96 661.89 109 674.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 18 0 obj
-<</Type /Encoding /Differences [24 /breve /caron /circumflex /dotaccent /hungarumlaut /ogonek /ring /tilde 39 /quotesingle 96 /grave 128 /bullet /dagger /daggerdbl /ellipsis /emdash /endash /florin /fraction /guilsinglleft /guilsinglright /minus /perthousand /quotedblbase /quotedblleft /quotedblright /quoteleft /quoteright /quotesinglbase /trademark /fi /fl /Lslash /OE /Scaron /Ydieresis /Zcaron /dotlessi /lslash /oe /scaron /zcaron 160 /Euro 164 /currency 166 /brokenbar 168 /dieresis /copyright /ordfeminine 172 /logicalnot /.notdef /registered /macron /degree /plusminus /twosuperior /threesuperior /acute /mu 183 /periodcentered /cedilla /onesuperior /ordmasculine 188 /onequarter /onehalf /threequarters 192 /Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla /Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis /Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply /Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls /agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla /egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis /eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide /oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis]>>
+<<
+/FT /Btn /Ff 49154 /Kids [ 19 0 R 20 0 R ] /T (status_2) /TU (Tick)
+>>
 endobj
 19 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
+<<
+/AP <<
+/D <<
+/Off 10 0 R /Tick 9 0 R
+>> /N <<
+/Off 8 0 R /Tick 7 0 R
+>> /R <<
+/Off 12 0 R /Tick 11 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
+>> /P 78 0 R /Parent 18 0 R /Rect [ 48 640.89 61 653.89 ] /Subtype /Widget /Type /Annot
+>>
 endobj
 20 0 obj
 <<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 19 0 R>> >> 
-  /Subtype /Form /Type /XObject
+/AP <<
+/D <<
+/Not#20applicable 15 0 R /Off 10 0 R
+>> /N <<
+/Not#20applicable 14 0 R /Off 8 0 R
+>> /R <<
+/Not#20applicable 16 0 R /Off 12 0 R
 >>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
+>> /P 78 0 R /Parent 18 0 R /Rect [ 96 640.89 109 653.89 ] /Subtype /Widget /Type /Annot
+>>
 endobj
 21 0 obj
 <<
-/AP <<
-/N 20 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 652.89 554.28 668.89 ] /Subtype /Widget 
-  /T (note_1) /TU (Notes: 5 to 8 best project photos for the home page \(replaces our illustrative renders\)) /Type /Annot /V ()
+/FT /Btn /Ff 49154 /Kids [ 22 0 R 23 0 R ] /T (status_3) /TU (Tick)
 >>
 endobj
 22 0 obj
 <<
-/FT /Btn /Ff 49154 /Kids [ 23 0 R 24 0 R ] /T (status_2) /TU (Tick)
+/AP <<
+/D <<
+/Off 10 0 R /Tick 9 0 R
+>> /N <<
+/Off 8 0 R /Tick 7 0 R
+>> /R <<
+/Off 12 0 R /Tick 11 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
+>> /P 78 0 R /Parent 21 0 R /Rect [ 48 619.89 61 632.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 23 0 obj
 <<
 /AP <<
 /D <<
+/Not#20applicable 15 0 R /Off 10 0 R
+>> /N <<
+/Not#20applicable 14 0 R /Off 8 0 R
+>> /R <<
+/Not#20applicable 16 0 R /Off 12 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
+>> /P 78 0 R /Parent 21 0 R /Rect [ 96 619.89 109 632.89 ] /Subtype /Widget /Type /Annot
+>>
+endobj
+24 0 obj
+<<
+/FT /Btn /Ff 49154 /Kids [ 25 0 R 26 0 R ] /T (status_4) /TU (Tick)
+>>
+endobj
+25 0 obj
+<<
+/AP <<
+/D <<
 /Off 10 0 R /Tick 9 0 R
 >> /N <<
 /Off 8 0 R /Tick 7 0 R
@@ -205,10 +259,10 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 22 0 R /Rect [ 42 625.89 55 638.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 24 0 R /Rect [ 48 598.89 61 611.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
-24 0 obj
+26 0 obj
 <<
 /AP <<
 /D <<
@@ -223,43 +277,59 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 22 0 R /Rect [ 86 625.89 99 638.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 24 0 R /Rect [ 96 598.89 109 611.89 ] /Subtype /Widget /Type /Annot
 >>
-endobj
-25 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-26 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 25 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
 endobj
 27 0 obj
 <<
-/AP <<
-/N 26 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 625.89 554.28 641.89 ] /Subtype /Widget 
-  /T (note_2) /TU (Notes: 6 to 12 projects: title, suburb, year, type of work and size) /Type /Annot /V ()
+/FT /Btn /Ff 49154 /Kids [ 28 0 R 29 0 R ] /T (status_5) /TU (Tick)
 >>
 endobj
 28 0 obj
 <<
-/FT /Btn /Ff 49154 /Kids [ 29 0 R 30 0 R ] /T (status_3) /TU (Tick)
+/AP <<
+/D <<
+/Off 10 0 R /Tick 9 0 R
+>> /N <<
+/Off 8 0 R /Tick 7 0 R
+>> /R <<
+/Off 12 0 R /Tick 11 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
+>> /P 78 0 R /Parent 27 0 R /Rect [ 48 547.89 61 560.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 29 0 obj
 <<
 /AP <<
 /D <<
+/Not#20applicable 15 0 R /Off 10 0 R
+>> /N <<
+/Not#20applicable 14 0 R /Off 8 0 R
+>> /R <<
+/Not#20applicable 16 0 R /Off 12 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
+>> /P 78 0 R /Parent 27 0 R /Rect [ 96 547.89 109 560.89 ] /Subtype /Widget /Type /Annot
+>>
+endobj
+30 0 obj
+<<
+/FT /Btn /Ff 49154 /Kids [ 31 0 R 32 0 R ] /T (status_6) /TU (Tick)
+>>
+endobj
+31 0 obj
+<<
+/AP <<
+/D <<
 /Off 10 0 R /Tick 9 0 R
 >> /N <<
 /Off 8 0 R /Tick 7 0 R
@@ -271,10 +341,10 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 28 0 R /Rect [ 42 598.89 55 611.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 30 0 R /Rect [ 48 526.89 61 539.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
-30 0 obj
+32 0 obj
 <<
 /AP <<
 /D <<
@@ -289,43 +359,59 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 28 0 R /Rect [ 86 598.89 99 611.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 30 0 R /Rect [ 96 526.89 109 539.89 ] /Subtype /Widget /Type /Annot
 >>
-endobj
-31 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-32 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 31 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
 endobj
 33 0 obj
 <<
-/AP <<
-/N 32 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 598.89 554.28 614.89 ] /Subtype /Widget 
-  /T (note_3) /TU (Notes: For each project: the brief, the challenge and the result) /Type /Annot /V ()
+/FT /Btn /Ff 49154 /Kids [ 34 0 R 35 0 R ] /T (status_7) /TU (Tick)
 >>
 endobj
 34 0 obj
 <<
-/FT /Btn /Ff 49154 /Kids [ 35 0 R 36 0 R ] /T (status_4) /TU (Tick)
+/AP <<
+/D <<
+/Off 10 0 R /Tick 9 0 R
+>> /N <<
+/Off 8 0 R /Tick 7 0 R
+>> /R <<
+/Off 12 0 R /Tick 11 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
+>> /P 78 0 R /Parent 33 0 R /Rect [ 48 505.89 61 518.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 35 0 obj
 <<
 /AP <<
 /D <<
+/Not#20applicable 15 0 R /Off 10 0 R
+>> /N <<
+/Not#20applicable 14 0 R /Off 8 0 R
+>> /R <<
+/Not#20applicable 16 0 R /Off 12 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
+>> /P 78 0 R /Parent 33 0 R /Rect [ 96 505.89 109 518.89 ] /Subtype /Widget /Type /Annot
+>>
+endobj
+36 0 obj
+<<
+/FT /Btn /Ff 49154 /Kids [ 37 0 R 38 0 R ] /T (status_8) /TU (Tick)
+>>
+endobj
+37 0 obj
+<<
+/AP <<
+/D <<
 /Off 10 0 R /Tick 9 0 R
 >> /N <<
 /Off 8 0 R /Tick 7 0 R
@@ -337,10 +423,10 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 34 0 R /Rect [ 42 571.89 55 584.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 36 0 R /Rect [ 48 454.89 61 467.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
-36 0 obj
+38 0 obj
 <<
 /AP <<
 /D <<
@@ -355,43 +441,59 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 34 0 R /Rect [ 86 571.89 99 584.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 36 0 R /Rect [ 96 454.89 109 467.89 ] /Subtype /Widget /Type /Annot
 >>
-endobj
-37 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-38 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 37 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
 endobj
 39 0 obj
 <<
-/AP <<
-/N 38 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 571.89 554.28 587.89 ] /Subtype /Widget 
-  /T (note_4) /TU (Notes: 5 to 10 high-resolution photos per project, including before and after) /Type /Annot /V ()
+/FT /Btn /Ff 49154 /Kids [ 40 0 R 41 0 R ] /T (status_9) /TU (Tick)
 >>
 endobj
 40 0 obj
 <<
-/FT /Btn /Ff 49154 /Kids [ 41 0 R 42 0 R ] /T (status_5) /TU (Tick)
+/AP <<
+/D <<
+/Off 10 0 R /Tick 9 0 R
+>> /N <<
+/Off 8 0 R /Tick 7 0 R
+>> /R <<
+/Off 12 0 R /Tick 11 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
+>> /P 78 0 R /Parent 39 0 R /Rect [ 48 433.89 61 446.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 41 0 obj
 <<
 /AP <<
 /D <<
+/Not#20applicable 15 0 R /Off 10 0 R
+>> /N <<
+/Not#20applicable 14 0 R /Off 8 0 R
+>> /R <<
+/Not#20applicable 16 0 R /Off 12 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
+>> /P 78 0 R /Parent 39 0 R /Rect [ 96 433.89 109 446.89 ] /Subtype /Widget /Type /Annot
+>>
+endobj
+42 0 obj
+<<
+/FT /Btn /Ff 49154 /Kids [ 43 0 R 44 0 R ] /T (status_10) /TU (Tick)
+>>
+endobj
+43 0 obj
+<<
+/AP <<
+/D <<
 /Off 10 0 R /Tick 9 0 R
 >> /N <<
 /Off 8 0 R /Tick 7 0 R
@@ -403,10 +505,10 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 40 0 R /Rect [ 42 544.89 55 557.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 42 0 R /Rect [ 48 412.89 61 425.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
-42 0 obj
+44 0 obj
 <<
 /AP <<
 /D <<
@@ -421,43 +523,59 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 40 0 R /Rect [ 86 544.89 99 557.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 42 0 R /Rect [ 96 412.89 109 425.89 ] /Subtype /Widget /Type /Annot
 >>
-endobj
-43 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-44 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 43 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
 endobj
 45 0 obj
 <<
-/AP <<
-/N 44 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 544.89 554.28 560.89 ] /Subtype /Widget 
-  /T (note_5) /TU (Notes: A client quote for each project, if you have one) /Type /Annot /V ()
+/FT /Btn /Ff 49154 /Kids [ 46 0 R 47 0 R ] /T (status_11) /TU (Tick)
 >>
 endobj
 46 0 obj
 <<
-/FT /Btn /Ff 49154 /Kids [ 47 0 R 48 0 R ] /T (status_6) /TU (Tick)
+/AP <<
+/D <<
+/Off 10 0 R /Tick 9 0 R
+>> /N <<
+/Off 8 0 R /Tick 7 0 R
+>> /R <<
+/Off 12 0 R /Tick 11 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
+>> /P 78 0 R /Parent 45 0 R /Rect [ 48 361.89 61 374.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 47 0 obj
 <<
 /AP <<
 /D <<
+/Not#20applicable 15 0 R /Off 10 0 R
+>> /N <<
+/Not#20applicable 14 0 R /Off 8 0 R
+>> /R <<
+/Not#20applicable 16 0 R /Off 12 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
+>> /P 78 0 R /Parent 45 0 R /Rect [ 96 361.89 109 374.89 ] /Subtype /Widget /Type /Annot
+>>
+endobj
+48 0 obj
+<<
+/FT /Btn /Ff 49154 /Kids [ 49 0 R 50 0 R ] /T (status_12) /TU (Tick)
+>>
+endobj
+49 0 obj
+<<
+/AP <<
+/D <<
 /Off 10 0 R /Tick 9 0 R
 >> /N <<
 /Off 8 0 R /Tick 7 0 R
@@ -469,10 +587,10 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 46 0 R /Rect [ 42 517.89 55 530.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 48 0 R /Rect [ 48 340.89 61 353.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
-48 0 obj
+50 0 obj
 <<
 /AP <<
 /D <<
@@ -487,43 +605,59 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 46 0 R /Rect [ 86 517.89 99 530.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 48 0 R /Rect [ 96 340.89 109 353.89 ] /Subtype /Widget /Type /Annot
 >>
-endobj
-49 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-50 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 49 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
 endobj
 51 0 obj
 <<
-/AP <<
-/N 50 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 517.89 554.28 533.89 ] /Subtype /Widget 
-  /T (note_6) /TU (Notes: Written permission from each client to publish their project) /Type /Annot /V ()
+/FT /Btn /Ff 49154 /Kids [ 52 0 R 53 0 R ] /T (status_13) /TU (Tick)
 >>
 endobj
 52 0 obj
 <<
-/FT /Btn /Ff 49154 /Kids [ 53 0 R 54 0 R ] /T (status_7) /TU (Tick)
+/AP <<
+/D <<
+/Off 10 0 R /Tick 9 0 R
+>> /N <<
+/Off 8 0 R /Tick 7 0 R
+>> /R <<
+/Off 12 0 R /Tick 11 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
+>> /P 78 0 R /Parent 51 0 R /Rect [ 48 289.89 61 302.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 53 0 obj
 <<
 /AP <<
 /D <<
+/Not#20applicable 15 0 R /Off 10 0 R
+>> /N <<
+/Not#20applicable 14 0 R /Off 8 0 R
+>> /R <<
+/Not#20applicable 16 0 R /Off 12 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
+>> /P 78 0 R /Parent 51 0 R /Rect [ 96 289.89 109 302.89 ] /Subtype /Widget /Type /Annot
+>>
+endobj
+54 0 obj
+<<
+/FT /Btn /Ff 49154 /Kids [ 55 0 R 56 0 R ] /T (status_14) /TU (Tick)
+>>
+endobj
+55 0 obj
+<<
+/AP <<
+/D <<
 /Off 10 0 R /Tick 9 0 R
 >> /N <<
 /Off 8 0 R /Tick 7 0 R
@@ -535,10 +669,10 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 52 0 R /Rect [ 42 463.89 55 476.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 54 0 R /Rect [ 48 268.89 61 281.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
-54 0 obj
+56 0 obj
 <<
 /AP <<
 /D <<
@@ -553,43 +687,59 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 52 0 R /Rect [ 86 463.89 99 476.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 54 0 R /Rect [ 96 268.89 109 281.89 ] /Subtype /Widget /Type /Annot
 >>
-endobj
-55 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-56 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 55 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
 endobj
 57 0 obj
 <<
-/AP <<
-/N 56 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 463.89 554.28 479.89 ] /Subtype /Widget 
-  /T (note_7) /TU (Notes: Names, roles and a short bio for the owners and key staff \(please confirm Neelam Gandhi's title\)) /Type /Annot /V ()
+/FT /Btn /Ff 49154 /Kids [ 58 0 R 59 0 R ] /T (status_15) /TU (Tick)
 >>
 endobj
 58 0 obj
 <<
-/FT /Btn /Ff 49154 /Kids [ 59 0 R 60 0 R ] /T (status_8) /TU (Tick)
+/AP <<
+/D <<
+/Off 10 0 R /Tick 9 0 R
+>> /N <<
+/Off 8 0 R /Tick 7 0 R
+>> /R <<
+/Off 12 0 R /Tick 11 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
+>> /P 78 0 R /Parent 57 0 R /Rect [ 48 247.89 61 260.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 59 0 obj
 <<
 /AP <<
 /D <<
+/Not#20applicable 15 0 R /Off 10 0 R
+>> /N <<
+/Not#20applicable 14 0 R /Off 8 0 R
+>> /R <<
+/Not#20applicable 16 0 R /Off 12 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
+>> /P 78 0 R /Parent 57 0 R /Rect [ 96 247.89 109 260.89 ] /Subtype /Widget /Type /Annot
+>>
+endobj
+60 0 obj
+<<
+/FT /Btn /Ff 49154 /Kids [ 61 0 R 62 0 R ] /T (status_16) /TU (Tick)
+>>
+endobj
+61 0 obj
+<<
+/AP <<
+/D <<
 /Off 10 0 R /Tick 9 0 R
 >> /N <<
 /Off 8 0 R /Tick 7 0 R
@@ -601,10 +751,10 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 58 0 R /Rect [ 42 436.89 55 449.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 60 0 R /Rect [ 48 226.89 61 239.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
-60 0 obj
+62 0 obj
 <<
 /AP <<
 /D <<
@@ -619,43 +769,59 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 58 0 R /Rect [ 86 436.89 99 449.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 60 0 R /Rect [ 96 226.89 109 239.89 ] /Subtype /Widget /Type /Annot
 >>
-endobj
-61 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-62 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 61 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
 endobj
 63 0 obj
 <<
-/AP <<
-/N 62 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 436.89 554.28 452.89 ] /Subtype /Widget 
-  /T (note_8) /TU (Notes: A headshot for each person, high resolution) /Type /Annot /V ()
+/FT /Btn /Ff 49154 /Kids [ 64 0 R 65 0 R ] /T (status_17) /TU (Tick)
 >>
 endobj
 64 0 obj
 <<
-/FT /Btn /Ff 49154 /Kids [ 65 0 R 66 0 R ] /T (status_9) /TU (Tick)
+/AP <<
+/D <<
+/Off 10 0 R /Tick 9 0 R
+>> /N <<
+/Off 8 0 R /Tick 7 0 R
+>> /R <<
+/Off 12 0 R /Tick 11 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
+>> /P 78 0 R /Parent 63 0 R /Rect [ 48 205.89 61 218.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 65 0 obj
 <<
 /AP <<
 /D <<
+/Not#20applicable 15 0 R /Off 10 0 R
+>> /N <<
+/Not#20applicable 14 0 R /Off 8 0 R
+>> /R <<
+/Not#20applicable 16 0 R /Off 12 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
+>> /P 78 0 R /Parent 63 0 R /Rect [ 96 205.89 109 218.89 ] /Subtype /Widget /Type /Annot
+>>
+endobj
+66 0 obj
+<<
+/FT /Btn /Ff 49154 /Kids [ 67 0 R 68 0 R ] /T (status_18) /TU (Tick)
+>>
+endobj
+67 0 obj
+<<
+/AP <<
+/D <<
 /Off 10 0 R /Tick 9 0 R
 >> /N <<
 /Off 8 0 R /Tick 7 0 R
@@ -667,10 +833,10 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 64 0 R /Rect [ 42 409.89 55 422.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 66 0 R /Rect [ 48 154.89 61 167.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
-66 0 obj
+68 0 obj
 <<
 /AP <<
 /D <<
@@ -685,43 +851,59 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 64 0 R /Rect [ 86 409.89 99 422.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 66 0 R /Rect [ 96 154.89 109 167.89 ] /Subtype /Widget /Type /Annot
 >>
-endobj
-67 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-68 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 67 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
 endobj
 69 0 obj
 <<
-/AP <<
-/N 68 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 409.89 554.28 425.89 ] /Subtype /Widget 
-  /T (note_9) /TU (Notes: A group photo, or photos of the team on site) /Type /Annot /V ()
+/FT /Btn /Ff 49154 /Kids [ 70 0 R 71 0 R ] /T (status_19) /TU (Tick)
 >>
 endobj
 70 0 obj
 <<
-/FT /Btn /Ff 49154 /Kids [ 71 0 R 72 0 R ] /T (status_10) /TU (Tick)
+/AP <<
+/D <<
+/Off 10 0 R /Tick 9 0 R
+>> /N <<
+/Off 8 0 R /Tick 7 0 R
+>> /R <<
+/Off 12 0 R /Tick 11 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
+>> /P 78 0 R /Parent 69 0 R /Rect [ 48 133.89 61 146.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 71 0 obj
 <<
 /AP <<
 /D <<
+/Not#20applicable 15 0 R /Off 10 0 R
+>> /N <<
+/Not#20applicable 14 0 R /Off 8 0 R
+>> /R <<
+/Not#20applicable 16 0 R /Off 12 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
+>> /P 78 0 R /Parent 69 0 R /Rect [ 96 133.89 109 146.89 ] /Subtype /Widget /Type /Annot
+>>
+endobj
+72 0 obj
+<<
+/FT /Btn /Ff 49154 /Kids [ 73 0 R 74 0 R ] /T (status_20) /TU (Tick)
+>>
+endobj
+73 0 obj
+<<
+/AP <<
+/D <<
 /Off 10 0 R /Tick 9 0 R
 >> /N <<
 /Off 8 0 R /Tick 7 0 R
@@ -733,10 +915,10 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 70 0 R /Rect [ 42 382.89 55 395.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 72 0 R /Rect [ 48 112.89 61 125.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
-72 0 obj
+74 0 obj
 <<
 /AP <<
 /D <<
@@ -751,1900 +933,98 @@ endobj
 >> /F 4 /FT /Btn /H /N 
   /MK <<
 /BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 70 0 R /Rect [ 86 382.89 99 395.89 ] /Subtype /Widget /Type /Annot
+>> /P 78 0 R /Parent 72 0 R /Rect [ 96 112.89 109 125.89 ] /Subtype /Widget /Type /Annot
 >>
-endobj
-73 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-74 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 73 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
 endobj
 75 0 obj
 <<
-/AP <<
-/N 74 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 382.89 554.28 398.89 ] /Subtype /Widget 
-  /T (note_10) /TU (Notes: Licences, certifications and insurance, with numbers you are happy to show) /Type /Annot /V ()
+/FT /Btn /Ff 49154 /Kids [ 76 0 R 77 0 R ] /T (status_21) /TU (Tick)
 >>
 endobj
 76 0 obj
 <<
-/FT /Btn /Ff 49154 /Kids [ 77 0 R 78 0 R ] /T (status_11) /TU (Tick)
+/AP <<
+/D <<
+/Off 10 0 R /Tick 9 0 R
+>> /N <<
+/Off 8 0 R /Tick 7 0 R
+>> /R <<
+/Off 12 0 R /Tick 11 0 R
+>>
+>> /AS /Off /BS <<
+/S /S /W 1
+>> /F 4 /FT /Btn /H /N 
+  /MK <<
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
+>> /P 78 0 R /Parent 75 0 R /Rect [ 48 91.89 61 104.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 77 0 obj
 <<
 /AP <<
 /D <<
-/Off 10 0 R /Tick 9 0 R
+/Not#20applicable 15 0 R /Off 10 0 R
 >> /N <<
-/Off 8 0 R /Tick 7 0 R
+/Not#20applicable 14 0 R /Off 8 0 R
 >> /R <<
-/Off 12 0 R /Tick 11 0 R
+/Not#20applicable 16 0 R /Off 12 0 R
 >>
 >> /AS /Off /BS <<
 /S /S /W 1
 >> /F 4 /FT /Btn /H /N 
   /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 76 0 R /Rect [ 42 355.89 55 368.89 ] /Subtype /Widget /Type /Annot
+/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
+>> /P 78 0 R /Parent 75 0 R /Rect [ 96 91.89 109 104.89 ] /Subtype /Widget /Type /Annot
 >>
 endobj
 78 0 obj
 <<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
+/Annots [ 13 0 R 17 0 R 19 0 R 20 0 R 22 0 R 23 0 R 25 0 R 26 0 R 28 0 R 29 0 R 
+  31 0 R 32 0 R 34 0 R 35 0 R 37 0 R 38 0 R 40 0 R 41 0 R 43 0 R 44 0 R 
+  46 0 R 47 0 R 49 0 R 50 0 R 52 0 R 53 0 R 55 0 R 56 0 R 58 0 R 59 0 R 
+  61 0 R 62 0 R 64 0 R 65 0 R 67 0 R 68 0 R 70 0 R 71 0 R 73 0 R 74 0 R 
+  76 0 R 77 0 R ] /Contents 82 0 R /MediaBox [ 0 0 595.28 841.89 ] /Parent 81 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
+/FormXob.e85fa36b59e2cdbf071e5c543a4fd0bb 3 0 R
 >>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 76 0 R /Rect [ 86 355.89 99 368.89 ] /Subtype /Widget /Type /Annot
+>> /Rotate 0 
+  /Trans <<
+
+>> /Type /Page
 >>
 endobj
 79 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
+<<
+/AcroForm 83 0 R /PageMode /UseNone /Pages 81 0 R /Type /Catalog
+>>
 endobj
 80 0 obj
 <<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 79 0 R>> >> 
-  /Subtype /Form /Type /XObject
+/Author (AMBS Solutions) /CreationDate (D:20261001190340+00'00') /Creator (anonymous) /Keywords () /ModDate (D:20261001190340+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (unspecified) /Title (What AMBS needs from Mikia to complete the website) /Trapped /False
 >>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
 endobj
 81 0 obj
 <<
-/AP <<
-/N 80 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 355.89 554.28 371.89 ] /Subtype /Widget 
-  /T (note_11) /TU (Notes: Logos of accreditations and associations \(SVG or PNG\)) /Type /Annot /V ()
+/Count 1 /Kids [ 78 0 R ] /Type /Pages
 >>
 endobj
 82 0 obj
 <<
-/FT /Btn /Ff 49154 /Kids [ 83 0 R 84 0 R ] /T (status_12) /TU (Tick)
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2942
 >>
+stream
+Gau0G?#uK+(4Ff<\8RST\d6P>qm:P+A5ecG*a?7Efua\q7e@PF$8g=IIf8%08Dl%j)2Y6WP10b4hsN\`O4/o9M1;UP9f;uQ96g'"!OH1%!cnbTQCm)]\M-?#FRZ4@g:l[[pl98f#j$A01`*ctCKLT?%Pn/KbTZq)@@3YJ4*\&fY7(ij@W^5s[S<ZC(G[f1Y55R4]`uo._84TP"u4d^hRo3:k%>PN4E/cjp0ouA<jIT]dq@H1>fVkpFCiHH]T\8G(5D.CIc,_g"DA!C@>-$qB^EGPV,)^PNap#&XIB^O1_%of^iZREjT]&Ih-]&FhI"$MpUBn#@JME)J,G4MBf`MLg!*L-LA1`(3+cQCY)Qp"&,gkkO!91bZDd%nM.-o98m-';4a+&1")I_mYi*,`bJ.SMJfTV=M*-QFo+e'tgq[7I_h%U,pDb7`hdQ9dB?^o<2OpnrBM$#KF(E:h:WGTi\]h9BTf@i8i`bF.fOY@\?'`,GP@?SlJ7XIJiP-r74m^6nChuL>iUDi#M)<a6!5iD*fjHeH^@o@\TJ[</o*#NTEE8ALH,S!Q5t4-U4e]]&Pu&8>9@uYo,M]rB"Hh[e=@lgb+VdE"D8%seD'gQsLGj4Lm5C"<4@.r)-,,ViXFB[d3"U`\DDSPB4,dA1L";B?R8gJDW*$mEPeZcW<@:O<gQb>DomKoc`NPiZ*HkPaW)S:7iYOGaMM$d-3TRJJo1BJhAq>et!Q4<]c.83X%guu'f\nDX6OB1bfRW9GGCA)giF0RD!\tLYkMeagJZ]mM@)A4s#_^2>E6qST*NVQ3(qGYWEZOM75?gt)0.[)@G3BPnBkBKR1@1*m+"^<ApsTAid!H)*>Bu8FS3.?Egr(kj@_73s6Tc;r4b>gNq:Ua$Z\LGA(<n)Xk)o]@%Y?Dn`'C4"IEJ97kX[PI=%97>"1t3O":ue\%ZH*Y6fJKp`&bdbWFT<c+cCmPVfBQHkMQCG1@8<`_plI*a.:M0*^__"H=2fDJCbi)f0;P-Q(qiglF8J,$eY'L6oVI0dP:9=lZ++#"]$)(7kNd0#0+![_Rqn=@[[)'15;cZ/!_u^.m8W!Y4TMhhdC'Z.q$QD")TYU'M2W7./LqGPrL_@N@7f>4I6hJKBf@g)i!'\0oDr](8a6c(-RCa>4fUKF$WCO[ot8A&VLpK<skcXNC/R[3MS.Z>a%ZL#"a/*EbSau\Yq9cM4*Z7a)mJ7S&Utoj=BRp7!WoqG3&Md=a&<&:X4u*a-hS*po9n1A!ka0m(1bY3Y*q:dWl*<D2?3.biu7P,j*gckS!fP7k6]t.R5?dE`_b9rSit.Z'^HtoE)IHNQ5F$2.Gl%cZXl*4U5W(5h4/J0h`%HZ.X6EoGF#WdfY(4#qlqN9>X=J;NXA34h&oP79,ZdIXM5YTe\%]9h_pf)E5ODb-6?NP<20AmEVSdC!ApYe'h*X0h`$U@HM[3oGF$rdK=u^C\/ncPNRV9P#)7X6rbNHd2i#YlJ]K"8G9R*q=+'beemWS8'0jYa`;mX/nB9KG]_YYHOPs@qrI7&,FO+tNpCHCmjR=?r]4pVRD/h4^&/lN^Qk:*<)BeDid?0^b9Y*E\leK&UXM*k?'>A&qld2m:K0Y]kQW35.oGf93nMJ6[Q+RaCe$]]`\993`"&Z.UrUhUOri8ME+T4'"%mB?6&Be%q_5Qq3,t#r"r0I3&@=ko,><TKEh/E2n0Ie3Jm9"NB=#Vek?nh,os89>;ZhB65Fjr#L1^/O^mE#HAL&QuL:!,'`kR\(MbDbZ8SSF'/:#O5+tOsanZ<S'i0Dk!C%lB>"#$8Lm3Hd>13r<'ra(u!^XLj&1Gs?&(6..A6";"USBbPIK>qfTV6LPjgMa>&a>)bXem&7<s6J8+Ffr!ud&;h<7$4K\f`gb[&aaeL03Ddb+/k-:cLlJV/3:F,K+:,'WIZ]@FEi-b*I_[,`ts]$4=s-V(iVi2CFUC#&o"08Y`g@^X_j=#<`>*VJt^`FcqdZ&=C3I_kk0b_E?k:Z9B0F!<@#l:e8/_]pP*P^A8c,bF6jlKU&LU8;9\:k`r7<kH[qfVh#lTi/MANFB:.,0W7F!k;El@AhYcj-VU]Cmg7hS<cLlIK2oiphjltY^(rb"?$@hol_#QhY.sg,,oE[gV^leUrk:9ZXDA*%$96uQWH#@gE'kS'6XVjP$;+qEuclfo(F,B;ei!7]DEnKlHLmfOVr$@t(1UguCbXXBF/@bu0gmUkl*u]p"J(;+.@O9_J7e,BciU5n$e5i%I;kY!nSBLTY[$X9([q="-7klmJ6A%I>c)$I3J14K32r>Ml`4Y$-:f[)e@+9&6rI>dT@k/tXeIRld/&&jT=)5[rHBJ+\Tq]<,-]dO:a\L-+flo234&[J=ZcM3D#+9iQF#o;K#+;"+-'JjihoSS<ON;f$.TJqaT^NMq0]#f(boREC]DOTMUJ6c<pN&J;Rme<01Pk(dQl;os5oaNYM;n]r:=?j-U3s.4de]6si3BZ'.qL4"5a3N-2GDaSOuJjrnfGd"^^1I52k*J2*WXZl0^XrbnO-fY94bYj<5/Taq6A[H,DQktoI6&Z3h$r%*%H!-?UPrfS5+r\\qD'KU`fEAG9p%1=n4r&!@pia:0[0riHSb<M9!JU_Ig(-]OO5<4Lq/03,fSk%+htjA$`/+PJuL9!S65`[cnZsWs3Nrnli!#UUH;H$!u5]@i8U'k\[qW-G;i]*]*1Y2nNDfk$r&MiQBa(j/A,0[QmUcohR-O2V7Q@VVT5M3lfL:l^N+fbO'fIiU-$Wo(lr)bM,t$b!0$8m&0k8cK45i#C,GRZ9Ra>,(DKdk*^k<>^sKcpdp\BK\W&hnN<0<MDfHc,gn)if/<WP+0NW>^Me%n2%>(tqZ6W4F0PWJ1CPFKrBQkN[Qe#I0@s9oX=)f[qACX:EJ>-VFnp"T%R/`_ZC\i:golp^*(/?^'[<CJ40]\b2H]kX!1g%@~>endstream
 endobj
 83 0 obj
 <<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 82 0 R /Rect [ 42 301.89 55 314.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-84 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 82 0 R /Rect [ 86 301.89 99 314.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-85 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-86 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 85 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-87 0 obj
-<<
-/AP <<
-/N 86 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 301.89 554.28 317.89 ] /Subtype /Widget 
-  /T (note_12) /TU (Notes: Company story: who founded MiKia, when and why \(two or three short paragraphs\)) /Type /Annot /V ()
->>
-endobj
-88 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 89 0 R 90 0 R ] /T (status_13) /TU (Tick)
->>
-endobj
-89 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 88 0 R /Rect [ 42 274.89 55 287.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-90 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 88 0 R /Rect [ 86 274.89 99 287.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-91 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-92 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 91 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-93 0 obj
-<<
-/AP <<
-/N 92 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 274.89 554.28 290.89 ] /Subtype /Widget 
-  /T (note_13) /TU (Notes: Years in business and any numbers you are happy to publish) /Type /Annot /V ()
->>
-endobj
-94 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 95 0 R 96 0 R ] /T (status_14) /TU (Tick)
->>
-endobj
-95 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 94 0 R /Rect [ 42 247.89 55 260.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-96 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 94 0 R /Rect [ 86 247.89 99 260.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-97 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-98 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 97 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-99 0 obj
-<<
-/AP <<
-/N 98 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 247.89 554.28 263.89 ] /Subtype /Widget 
-  /T (note_14) /TU (Notes: Anything MiKia does not do, so you get fewer irrelevant enquiries) /Type /Annot /V ()
->>
-endobj
-100 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 101 0 R 102 0 R ] /T (status_15) /TU (Tick)
->>
-endobj
-101 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 100 0 R /Rect [ 42 220.89 55 233.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-102 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 100 0 R /Rect [ 86 220.89 99 233.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-103 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-104 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 103 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-105 0 obj
-<<
-/AP <<
-/N 104 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 220.89 554.28 236.89 ] /Subtype /Widget 
-  /T (note_15) /TU (Notes: 2 to 3 written testimonials with the client's name and suburb, and permission to publish) /Type /Annot /V ()
->>
-endobj
-106 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 107 0 R 108 0 R ] /T (status_16) /TU (Tick)
->>
-endobj
-107 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 106 0 R /Rect [ 42 193.89 55 206.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-108 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 106 0 R /Rect [ 86 193.89 99 206.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-109 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-110 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 109 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-111 0 obj
-<<
-/AP <<
-/N 110 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 193.89 554.28 209.89 ] /Subtype /Widget 
-  /T (note_16) /TU (Notes: Link to your Google reviews page, if you have one) /Type /Annot /V ()
->>
-endobj
-112 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 113 0 R 114 0 R ] /T (status_17) /TU (Tick)
->>
-endobj
-113 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 112 0 R /Rect [ 42 139.89 55 152.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-114 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 112 0 R /Rect [ 86 139.89 99 152.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-115 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-116 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 115 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-117 0 obj
-<<
-/AP <<
-/N 116 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 139.89 554.28 155.89 ] /Subtype /Widget 
-  /T (note_17) /TU (Notes: Check the wording of the six services and correct anything) /Type /Annot /V ()
->>
-endobj
-118 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 119 0 R 120 0 R ] /T (status_18) /TU (Tick)
->>
-endobj
-119 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 118 0 R /Rect [ 42 112.89 55 125.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-120 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 118 0 R /Rect [ 86 112.89 99 125.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-121 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-122 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 121 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-123 0 obj
-<<
-/AP <<
-/N 122 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 112.89 554.28 128.89 ] /Subtype /Widget 
-  /T (note_18) /TU (Notes: Typical project size or budget range for each service, if you will share it) /Type /Annot /V ()
->>
-endobj
-124 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 125 0 R 126 0 R ] /T (status_19) /TU (Tick)
->>
-endobj
-125 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 124 0 R /Rect [ 42 85.89 55 98.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-126 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 124 0 R /Rect [ 86 85.89 99 98.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-127 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-128 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 127 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-129 0 obj
-<<
-/AP <<
-/N 128 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 85.89 554.28 101.89 ] /Subtype /Widget 
-  /T (note_19) /TU (Notes: 2 to 3 photos for each service) /Type /Annot /V ()
->>
-endobj
-130 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 131 0 R 132 0 R ] /T (status_20) /TU (Tick)
->>
-endobj
-131 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 136 0 R /Parent 130 0 R /Rect [ 42 58.89 55 71.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-132 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 136 0 R /Parent 130 0 R /Rect [ 86 58.89 99 71.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-133 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-134 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 133 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-135 0 obj
-<<
-/AP <<
-/N 134 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 136 0 R /Rect [ 384 58.89 554.28 74.89 ] /Subtype /Widget 
-  /T (note_20) /TU (Notes: Typical timeframes for each of the four stages) /Type /Annot /V ()
->>
-endobj
-136 0 obj
-<<
-/Annots [ 13 0 R 17 0 R 21 0 R 23 0 R 24 0 R 27 0 R 29 0 R 30 0 R 33 0 R 35 0 R 
-  36 0 R 39 0 R 41 0 R 42 0 R 45 0 R 47 0 R 48 0 R 51 0 R 53 0 R 54 0 R 
-  57 0 R 59 0 R 60 0 R 63 0 R 65 0 R 66 0 R 69 0 R 71 0 R 72 0 R 75 0 R 
-  77 0 R 78 0 R 81 0 R 83 0 R 84 0 R 87 0 R 89 0 R 90 0 R 93 0 R 95 0 R 
-  96 0 R 99 0 R 101 0 R 102 0 R 105 0 R 107 0 R 108 0 R 111 0 R 113 0 R 114 0 R 
-  117 0 R 119 0 R 120 0 R 123 0 R 125 0 R 126 0 R 129 0 R 131 0 R 132 0 R 135 0 R ] /Contents 243 0 R /MediaBox [ 0 0 595.28 841.89 ] /Parent 242 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.e85fa36b59e2cdbf071e5c543a4fd0bb 3 0 R
->>
->> /Rotate 0 
-  /Trans <<
-
->> /Type /Page
->>
-endobj
-137 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 138 0 R 139 0 R ] /T (status_21) /TU (Tick)
->>
-endobj
-138 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 137 0 R /Rect [ 42 765.89 55 778.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-139 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 137 0 R /Rect [ 86 765.89 99 778.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-140 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-141 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 140 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-142 0 obj
-<<
-/AP <<
-/N 141 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 765.89 554.28 781.89 ] /Subtype /Widget 
-  /T (note_21) /TU (Notes: Warranty or guarantee wording, if you offer one) /Type /Annot /V ()
->>
-endobj
-143 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 144 0 R 145 0 R ] /T (status_22) /TU (Tick)
->>
-endobj
-144 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 143 0 R /Rect [ 42 711.89 55 724.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-145 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 143 0 R /Rect [ 86 711.89 99 724.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-146 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-147 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 146 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-148 0 obj
-<<
-/AP <<
-/N 147 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 711.89 554.28 727.89 ] /Subtype /Widget 
-  /T (note_22) /TU (Notes: Check and correct our ten draft FAQ answers \(timing, costs, what you do\)) /Type /Annot /V ()
->>
-endobj
-149 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 150 0 R 151 0 R ] /T (status_23) /TU (Tick)
->>
-endobj
-150 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 149 0 R /Rect [ 42 684.89 55 697.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-151 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 149 0 R /Rect [ 86 684.89 99 697.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-152 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-153 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 152 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-154 0 obj
-<<
-/AP <<
-/N 153 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 684.89 554.28 700.89 ] /Subtype /Widget 
-  /T (note_23) /TU (Notes: Add any questions clients ask often: pricing, payment terms, consents) /Type /Annot /V ()
->>
-endobj
-155 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 156 0 R 157 0 R ] /T (status_24) /TU (Tick)
->>
-endobj
-156 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 155 0 R /Rect [ 42 657.89 55 670.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-157 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 155 0 R /Rect [ 86 657.89 99 670.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-158 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-159 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 158 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-160 0 obj
-<<
-/AP <<
-/N 159 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 657.89 554.28 673.89 ] /Subtype /Widget 
-  /T (note_24) /TU (Notes: Opening hours) /Type /Annot /V ()
->>
-endobj
-161 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 162 0 R 163 0 R ] /T (status_25) /TU (Tick)
->>
-endobj
-162 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 161 0 R /Rect [ 42 630.89 55 643.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-163 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 161 0 R /Rect [ 86 630.89 99 643.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-164 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-165 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 164 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-166 0 obj
-<<
-/AP <<
-/N 165 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 630.89 554.28 646.89 ] /Subtype /Widget 
-  /T (note_25) /TU (Notes: Service areas: which suburbs or regions you cover) /Type /Annot /V ()
->>
-endobj
-167 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 168 0 R 169 0 R ] /T (status_26) /TU (Tick)
->>
-endobj
-168 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 167 0 R /Rect [ 42 603.89 55 616.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-169 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 167 0 R /Rect [ 86 603.89 99 616.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-170 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-171 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 170 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-172 0 obj
-<<
-/AP <<
-/N 171 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 603.89 554.28 619.89 ] /Subtype /Widget 
-  /T (note_26) /TU (Notes: Where enquiries should go and who replies \(we use info@mikia.co.nz now\)) /Type /Annot /V ()
->>
-endobj
-173 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 174 0 R 175 0 R ] /T (status_27) /TU (Tick)
->>
-endobj
-174 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 173 0 R /Rect [ 42 576.89 55 589.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-175 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 173 0 R /Rect [ 86 576.89 99 589.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-176 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-177 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 176 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-178 0 obj
-<<
-/AP <<
-/N 177 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 576.89 554.28 592.89 ] /Subtype /Widget 
-  /T (note_27) /TU (Notes: Social media links) /Type /Annot /V ()
->>
-endobj
-179 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 180 0 R 181 0 R ] /T (status_28) /TU (Tick)
->>
-endobj
-180 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 179 0 R /Rect [ 42 522.89 55 535.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-181 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 179 0 R /Rect [ 86 522.89 99 535.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-182 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-183 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 182 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-184 0 obj
-<<
-/AP <<
-/N 183 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 522.89 554.28 538.89 ] /Subtype /Widget 
-  /T (note_28) /TU (Notes: Open roles, or a short 'work with us' statement, plus benefits and culture) /Type /Annot /V ()
->>
-endobj
-185 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 186 0 R 187 0 R ] /T (status_29) /TU (Tick)
->>
-endobj
-186 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 185 0 R /Rect [ 42 495.89 55 508.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-187 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 185 0 R /Rect [ 86 495.89 99 508.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-188 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-189 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 188 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-190 0 obj
-<<
-/AP <<
-/N 189 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 495.89 554.28 511.89 ] /Subtype /Widget 
-  /T (note_29) /TU (Notes: Please review our draft privacy page) /Type /Annot /V ()
->>
-endobj
-191 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 192 0 R 193 0 R ] /T (status_30) /TU (Tick)
->>
-endobj
-192 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 191 0 R /Rect [ 42 468.89 55 481.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-193 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 191 0 R /Rect [ 86 468.89 99 481.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-194 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-195 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 194 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-196 0 obj
-<<
-/AP <<
-/N 195 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 468.89 554.28 484.89 ] /Subtype /Widget 
-  /T (note_30) /TU (Notes: Terms and conditions text, if you want them on the site) /Type /Annot /V ()
->>
-endobj
-197 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 198 0 R 199 0 R ] /T (status_31) /TU (Tick)
->>
-endobj
-198 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 197 0 R /Rect [ 42 441.89 55 454.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-199 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 197 0 R /Rect [ 86 441.89 99 454.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-200 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-201 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 200 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-202 0 obj
-<<
-/AP <<
-/N 201 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 441.89 554.28 457.89 ] /Subtype /Widget 
-  /T (note_31) /TU (Notes: NZBN and company number for the footer) /Type /Annot /V ()
->>
-endobj
-203 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 204 0 R 205 0 R ] /T (status_32) /TU (Tick)
->>
-endobj
-204 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 203 0 R /Rect [ 42 414.89 55 427.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-205 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 203 0 R /Rect [ 86 414.89 99 427.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-206 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-207 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 206 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-208 0 obj
-<<
-/AP <<
-/N 207 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 414.89 554.28 430.89 ] /Subtype /Widget 
-  /T (note_32) /TU (Notes: Blog or news: yes or no, and who would write it) /Type /Annot /V ()
->>
-endobj
-209 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 210 0 R 211 0 R ] /T (status_33) /TU (Tick)
->>
-endobj
-210 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 209 0 R /Rect [ 42 360.89 55 373.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-211 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 209 0 R /Rect [ 86 360.89 99 373.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-212 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-213 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 212 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-214 0 obj
-<<
-/AP <<
-/N 213 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 360.89 554.28 376.89 ] /Subtype /Widget 
-  /T (note_33) /TU (Notes: Domain registrar login for mikia.co.nz and details of any existing hosting) /Type /Annot /V ()
->>
-endobj
-215 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 216 0 R 217 0 R ] /T (status_34) /TU (Tick)
->>
-endobj
-216 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 215 0 R /Rect [ 42 333.89 55 346.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-217 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 215 0 R /Rect [ 86 333.89 99 346.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-218 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-219 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 218 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-220 0 obj
-<<
-/AP <<
-/N 219 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 333.89 554.28 349.89 ] /Subtype /Widget 
-  /T (note_34) /TU (Notes: Google Analytics and Google Business Profile access) /Type /Annot /V ()
->>
-endobj
-221 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 222 0 R 223 0 R ] /T (status_35) /TU (Tick)
->>
-endobj
-222 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 221 0 R /Rect [ 42 306.89 55 319.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-223 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 221 0 R /Rect [ 86 306.89 99 319.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-224 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-225 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 224 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-226 0 obj
-<<
-/AP <<
-/N 225 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 306.89 554.28 322.89 ] /Subtype /Widget 
-  /T (note_35) /TU (Notes: Logo in vector format \(SVG or AI\), and confirm brand colours and any brand fonts) /Type /Annot /V ()
->>
-endobj
-227 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 228 0 R 229 0 R ] /T (status_36) /TU (Tick)
->>
-endobj
-228 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 227 0 R /Rect [ 42 279.89 55 292.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-229 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 227 0 R /Rect [ 86 279.89 99 292.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-230 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-231 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 230 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-232 0 obj
-<<
-/AP <<
-/N 231 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 279.89 554.28 295.89 ] /Subtype /Widget 
-  /T (note_36) /TU (Notes: Confirm you are happy for the 3D house designer and photo tool to go live) /Type /Annot /V ()
->>
-endobj
-233 0 obj
-<<
-/FT /Btn /Ff 49154 /Kids [ 234 0 R 235 0 R ] /T (status_37) /TU (Tick)
->>
-endobj
-234 0 obj
-<<
-/AP <<
-/D <<
-/Off 10 0 R /Tick 9 0 R
->> /N <<
-/Off 8 0 R /Tick 7 0 R
->> /R <<
-/Off 12 0 R /Tick 11 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (4)
->> /P 239 0 R /Parent 233 0 R /Rect [ 42 252.89 55 265.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-235 0 obj
-<<
-/AP <<
-/D <<
-/Not#20applicable 15 0 R /Off 10 0 R
->> /N <<
-/Not#20applicable 14 0 R /Off 8 0 R
->> /R <<
-/Not#20applicable 16 0 R /Off 12 0 R
->>
->> /AS /Off /BS <<
-/S /S /W 1
->> /F 4 /FT /Btn /H /N 
-  /MK <<
-/BC [ .062745 .07451 .129412 ] /BG [ 1 1 1 ] /CA (5)
->> /P 239 0 R /Parent 233 0 R /Rect [ 86 252.89 99 265.89 ] /Subtype /Widget /Type /Annot
->>
-endobj
-236 0 obj
-<< /BaseFont /Helvetica /Subtype /Type1 /Name /Helv /Type /Font /Encoding 18 0 R >>
-endobj
-237 0 obj
-<<
-/BBox [ 0 0 170.28 16 ] /Filter [ /FlateDecode ] /FormType 1 /Length 133 /Matrix [ 1 0 0 1 0 0 ] /Resources << /ProcSet [/PDF /Text] /Font <</Helv 236 0 R>> >> 
-  /Subtype /Form /Type /XObject
->>
-stream
-xœeNA
-A»÷yAmg§ÓéÕEö´EğêMp=èóíz´ĞJ’†£DÕÁ‹YrR,WÔ…‹ÇwÚ°œéBÜK/¸›DO£z«ÃDÂ†gb1|@[°ÿ„Xj2æA›ãÛyİI9®ÛúßÓš÷ÔŸè–½Öníi7ôõÊ'endstream
-endobj
-238 0 obj
-<<
-/AP <<
-/N 237 0 R
->> /BS <<
-/S /S /W .5
->> /DA (/Helv 8 Tf .062745 .07451 .129412 rg) /DV () /F 4 /FT /Tx 
-  /Ff 0 /MK <<
-/BC [ .835294 .85098 .917647 ] /BG [ .929412 .937255 .972549 ]
->> /MaxLen 100 /P 239 0 R /Rect [ 384 252.89 554.28 268.89 ] /Subtype /Widget 
-  /T (note_37) /TU (Notes: Preferred launch date) /Type /Annot /V ()
->>
-endobj
-239 0 obj
-<<
-/Annots [ 138 0 R 139 0 R 142 0 R 144 0 R 145 0 R 148 0 R 150 0 R 151 0 R 154 0 R 156 0 R 
-  157 0 R 160 0 R 162 0 R 163 0 R 166 0 R 168 0 R 169 0 R 172 0 R 174 0 R 175 0 R 
-  178 0 R 180 0 R 181 0 R 184 0 R 186 0 R 187 0 R 190 0 R 192 0 R 193 0 R 196 0 R 
-  198 0 R 199 0 R 202 0 R 204 0 R 205 0 R 208 0 R 210 0 R 211 0 R 214 0 R 216 0 R 
-  217 0 R 220 0 R 222 0 R 223 0 R 226 0 R 228 0 R 229 0 R 232 0 R 234 0 R 235 0 R 
-  238 0 R ] /Contents 244 0 R /MediaBox [ 0 0 595.28 841.89 ] /Parent 242 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.e85fa36b59e2cdbf071e5c543a4fd0bb 3 0 R
->>
->> /Rotate 0 
-  /Trans <<
-
->> /Type /Page
->>
-endobj
-240 0 obj
-<<
-/AcroForm 245 0 R /PageMode /UseNone /Pages 242 0 R /Type /Catalog
->>
-endobj
-241 0 obj
-<<
-/Author (AMBS Solutions) /CreationDate (D:20261001190137+00'00') /Creator (anonymous) /Keywords () /ModDate (D:20261001190137+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (unspecified) /Title (What AMBS needs from Mikia to complete the website) /Trapped /False
->>
-endobj
-242 0 obj
-<<
-/Count 2 /Kids [ 136 0 R 239 0 R ] /Type /Pages
->>
-endobj
-243 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 2826
->>
-stream
-GauI:?$"c/&r,lR/+tSea(5O*1NuT_pu8)`RWt9E`]"S8MPqsj!@b'1^]*SO'M5p$:H\hASrk<kH3%Is/9Vg@!uM!)Ia#8$Df=S,#6rD)RfZ^M"E<rEhVVQtWL!g6eOf_l$UaiQs+1s7k+^F6%b&ep&kE)d,^>_En\^(@7U@(mLL#:<i35tOs%^d9qIomtk'?p7^0d[uQLmQ6,DbBA5*g+??@S&Oqn$)n4:-qiO&f]3]mRLCgmIUc%g,$(MRC'"_,'X]f*`sbgc,VU8J:@op;0I.L=4_%J!VnGA2;pb?=j(SKPo_X+iLAJilr6FIfAp;o@93%5J`+^^:]&e5N1a[s"c:=&J(84LGEtG^Ggf&FJ@-;3:Tf3r%.8(#4H*Ym&O1:)n8ph^RMU_bBd@CMs"Vbe:RIkpoVbD3,iP7;,pG6^4ntr/KEl$H6Y/&UEBag%N%CI;=d_I9h-^V3[gBUcAWUJl+<iODb=hAZlDI9X1bH8#OkX/+[[3Xpnk-n,N&g8%91!5[mb`N#O3f4$d.fW"aJj0JlJu!e/`q"/S)J!-1YkPEG+!J1'(%`nJN2FS:Kto:V*,oa4#)sjUOY3J-"!e;YLUj;G-;]mb-u#lHS]HlHZ/r^cVB4R7c$M);\@rcC=5SnNf0S[9c3P>J)A!I9h\(g&>)cobpm%Y6XfBG06=o@SWlHJAf[g:6^D6Z__JL"4YOiaZk(-2U<>N^+#C"s0sKn"qHe;:)j*ZlO@c91hjCQ<c%RX1_RXJ<!tYuI+gVS>U0`JYlF08^%l\s_6CHP\d3^?)Q><A@7jk#IpKnB$V#Q;c6B52h?jl7\gcK2g4>2Lf_q"/T_fRP5,ic]\XL"gC=iXgLG'2$9L'U[2-E<)Tf>eQa%sf[19XdWFb+-;S^ZqB+#upUZ.OooF/.C@E:@Hob!mYWk9fct@,fZ!@@oZC`Y&(`OhZ8h_-AnKq"4FJT0l6o76O3@*(fAjUPPJJ6YIdkfG/te@gfo/j8rs9c(@mO3UF$\a*B[=34W*$h;e\:E6q*.\8PQ9[GmdTCVAl1\U?@2lJF.k3I1b5Vq+=%#op-).gpkrW=pYd)ME`_T*I,ECk1k@k!>Tf1]XhJ/dH[O0G!`Q*>-BfoonimK.aF2a=$CWHaUG<,L=jc[)X2i'EoI%Y&`U()t@9Q)b2`F#opjI=hlac;r]j_C)Xn8op4VtC7*%]e/j42T#WeDQ*-A0`MJ$PQW[=.>er:O3_nWJKj&)N/7X@P.'UNsm$VL+:3/FR+_F>>=e'.BB+b%@@#\eOPSa]+Lm6"rh[3MYf(g=f-V?$HB$RIURc<WJ`rJBRH%)Ftj.VU:BXtDX0:L;p]RFZ!hB4Wcn!p6UG_9Ne]VC4,GXq-Oa=Dhp+FN'V;Q#/qWF&)'M_U(-SBs0GBFlBo1=l_^/2<4DS>H;i4gl?H;8YMJU\6Vmg6U@O.(>pbaE?d:NomRD'0Y]"^T'\#dTS7-O(oV(1sQsYQPVT41`At[4PT-d-!,JRpFEPlA9A"G;%--q%DLYVC>D.U0RJ1j+X?1Pje7d`^OC>L,7#M%P;L)%an-jLeQb:0K.(%g8LGFr-YX-Q_0i]Qbp=c@nZE.a5uUD+_FhnCPT^Pp=5DVTr(+6$U4D!b]8C5159K"jdEkQ>lU%O%I,_fU.<1>FV0LC0aenaJ#+=/_l4\EA%C#f`4P4_D#/C`(j^=,fk.r+HYFst0)Hgr*_%0EplUr8G_\geUV@RNPKK`(n/^VOCoCU:A)PE/ebNTs'bgSLc?bqK*`4B2Nmgo(oUF`cBD(.0SJ;EokCu^:62M%JBgXr+e'D'rlZ^T)-o98:j',(i8q"a.cH@HVhYB*n"F08\DLccnPf.GsUDY>Qt[kH\_g(N]LG"'S9V1Y1^@QjILTn+uRm>_moUOt^3#+3VK"Q7)8[Y,`khj0Y[1]VL)Hs:'S@34?(qkMqgc8*QlFV=(phlLO&0)>sb0>IL0:&ahWVebU<,h^.?g?AFM.?")W8p*75M9EbD`eXY3`8YaifH5.;BO>E.NUDp8G1h04U:^Ek7+1P`j<9ZP?U$W7`:n,m=P%r.Hre_3N-1Igb9n4jB.P"]m<<T_bA'WZOkhs8-n0T"f5&*TT>c:JL5SdJCQ6u?4Q="j%h`u5WVBD-N]XVpje]R_AK-p%9)JMEA5j3MNu-KJRsVF9](rGiEf@\VH/3kB@3"<ap)cCqq?YSchh[^[rK;e@573T^#_DgRVI^Ud1e(j]CfJcp^jH<6<mq&-iUR?P7)M-GU\7]9CeNJ]e/f=TOuIJP&"i&ACII0:[nuPr=!3ae'u/)[(3oe+09kCSD'jnAAb>.?aa>%$G$>PjR@M__^n_btB6)KUcfB=Ya<R&7_kGuCBmJ0bXfQ5LUJ!!-.1I:^^-Gl.D0Jn<FI_R:I;t;WbtL$Tr]M'U`\i<'95NsEYgiUMa/nEDS6<FNs'qd3*9W1P7oA.U@63edQ?#pOM5#@5%uiccq/:29P=;RLQn7rc'U,SEOn7Pi2*Nn/1[3lC?sb95IcK6$XqdLQd:]p,*8YQH$1a6D"Q^^OR]MFKLIAIurTlq9q)1k2/21F7T@GbP@tWm>oneG!)*;TJ,?".`6cBB1PD66;hMAq>R:;^[%#OP@U3@VIfq,d+R6iuVD%t\A1LFgfeMI7N>@)!8BUFQpEX(^:'7!Uf^B(!;d8\XumFN&?X,KfR%f;;MS\pn:&63j:)IeYbV%:^.L$`A)A5<jAa#4:lM>940SE+^<PN>g<`*SQhGoXq%I^V"ce1tcqTsO]@NqQ[:fl-%t-3ep2@e!MHO1ch;g9+7oib694?b?c(^RGu`DVIU<nE`_q\G.06X\uh~>endstream
-endobj
-244 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 2754
->>
-stream
-Gau12?#uK-&r,lJ/,JZZB3g1Y@JIponQ3#q9'kV0]@l$2%72:r2.DdN=i[H6a)<mZ^kq-RQ_@Yq!J5N-HCf#O)oTP25?@_Y2?4OLGk6prj"O[=o,J9Q+5qN(E?ZHLGgqR<^nntFr9tmaX%?W'/0jEK&42F<+Wa[gr,q#/4qBb<fu<t"**-i3f7\$,V`#=uYIWlO`-3_#c9_4:@OLZHA2AN&:7KKmo\<<;>fOXQb=M/60jhKm;_jK,LqVoeS^67e:VKMmJ-EY'J.m/9\%i;=`0jE'2hMNQN03-Z6c>b$Z%hGQ%[Yg-GH(,c#$u^Mn'`++F^FF?1<inihWWc2i'.3Kf5V+D"\"hk)<=CA?Gl-e0`.,7d?aQ_NFMbta,g1\DA8fGlgF`NIc<oNUIB.+JIF&mE'Yi0!L`##9Z!Ap'CP9a)&Mu"-?JZ9M?glaLkt2XN*e#_)5%lDV_fp9Eq#XBZD#/GVKH#)U@l?bc)6K2/8XJ.ck..gCdbR>n6)48p[%)HA3K8mk@@*LRihK;TdLJsAUTQ-2s5UGP;jV6+;PN8f+IpN-l<$=e,C7)'BeI%BEP;@9\W1U?CM,HE<bY?*q^$8EiBK2>kRs`KBXldT&J]ih\2]=W)iN+4CHgV+9X#gnh;RY))fb__m=(4JgTp_@2"ruGAr0f4,'&s(I4KD+OPHP-Y;2T-YAeYEd5d<Le)Ie;FX'#Z_,)+L&U(XA,$GlpAO*?V?MIcR3(]JSVDQB_#W2&?`mCLhb[gA8kRGl"/X.K@H(i)n'8]+\&D[A!q'B[l)&Kr6l0ES#($c`]q0Z0$>WihT3LNkf42E3:?Mq-HP+&B&<$Un+%ki!+4V>@YTJUP!UaZ(#M>*U62Q&75X6FM>8mX-/6-tPTs2&I5`[>.Krmq1$J]Lr\A9g1E3h"=::'8AD$(VL$dou^?(+>8lq2I1G%G?Zh.)lhf_*p:Fup01luq*l>F![3FcA,"FM?,U<qo"c7c6onqg9F5[(r$tL@`r0f]T<aSgs>n-444Wio2QHY1$nj`GWCGo7@b!7]i\H8[mkN5:A<GK/b)6(mL.I#(s'kT>>$+()Xt8I5$;EL4'9lF`it2XVHk#jkk6\8Q>cp#.n[P.pX_fpM5b#fk0m$h(-_#GD1A*Y3`U&Bti*3D(,:*'(+b06E^'XY:jTJXmkXH,Od49^cK5#22Cd]h[ekYVdZ.RT(Z,2Bq3"//^bKA1qt.07SP3OX_&]P4OaclnZICFh&0a<K``T=bgjFPERd>*$dQ1qd-SNWC*8oa_^W+"mhEf!/N<q.LH@r&@G`NPPD(M(SLMJ^f+B`+F]6.1HYr1ZT9a8Oj1diV`hfDO$hLN;=28)&C71AfOm7%MQb7/^fk'9jN*W6Sl*M&Q]l8ocYnu(H'-GaE%^6`Y0,+(:X978,rg_r)=Q.mS;RN]#??NeoCXRttH%^%I)B1c,"=r.#C^f[qP.FrcNbM\40&XXPlSRs<fBXNDSIROR79\<D9(b^-5+1'D<1R3n%Hs<GTh*AS8]5nZ6D><lmdGGpli'C3/Wf0*YP\&Nm$$)Nrn#+`"6*ocp!\;tR4AA4]U]^Z9<HCblN&gO<krdsW7QC?I_G`ZV?QJAn9TLY_`i=9p-ki[Zt?+=j"3BnWXtH]ZaLjXYNc4:K5hFMEbkg1af>7-A4o>MODLI8M(7f3T>eE)=nh=,lWJ?5UQ0qY3/=)M@URk+pm?Im,UNe.^U^>@2]n2BV`IJ:5,]91FeW3d[TQnBs5L+Ta>(iV_REl)5,pWu22+9->hmf4m[BksGN)55i\[j=_F80J"6cbp:Uc"+V2ZU(W%q+(o\F*On4ik4=/>ZWFB0c"gWWiNJ*n/F:"*h:hBM_3[:UTKf:%b8=o_Y5Y;Q&2liZ$W^Xmds.6,Z6m'06J3o2b"06TdQ;[iYAoJ4AfE>=YWVGPpE)"VF"MQq-f=,`2T>+grdY8I!jlr2QMY4GNN9c)jPK1\aAXf+0u$$WSMIt(70Sb!A9YKm\=i%d//R%&CTUW:0r(WV3`2FDJn^2g3nIm&@[eI'Bb%,2#TfCaHj+<T,R%PmM0/G[%HmV,c.R<Pk%>W-t->p;`GXQ/^AZ-<j!'tq(Q-sR,okpja/O]^DAFfD(a3]dd*&)&B"g`KUrA+3-tBn]o4N2I@pg4)_7<7:o`EqiRjSq_ZB471?`/X8'UOE85^*kdk/<e#*UR85s3\6EN:Ru*@e>P3H"q`(./h]?Je1@F/\!6rmY=%e3WEnD2pE.,&G*P@+JclMaH>rHENX7qdW0D0KH&SUZ1Zj4YQ%PlQmX"U16](rGaDS"D*?MD)OAMRCakbe^7Vd($T9r+FrGiZ0/q_\A/W1!&u)7G<KB)Wt8SYb)MI?I@O<J/^UaoUr]:XpVk'nGhY-lr0#6!:lj8A?m8NPYBi+Cq=#NM]F-O$2XNTYM\J9%`+iI:X*F4u$flM[W[_cHC[%:nbb=kQr``ILh_+82Kp4ngCB?qC-BA$4Ffd<*0ubLC+Ea*\,E@KhA]-U!aoG$sK'6>I:=cc"H]-Iu6kIo59eG$Mr)pX!E.",md>N_LhL/p[n=E$N>>J\)608p1AJr1P=BJruQlC"sp;laAc`C:DZrsl>0O%qHm4nH#>H4qYfAXIldW!d8Kupl#$K:Q"Bg$GV_#<jPSZ&\0(C!nG08s2qO@M:e>jupl"UgO-\QLJk-*>[1N[/k`=ZfonB7A=2J8C7khZ44mR7hid?'#"WqVu\H&W'Hsi;rB=Kc\K01J>fVaZ,9c,5W"^HcBKE~>endstream
-endobj
-245 0 obj
-<<
-/DA (/Helv 0 Tf 0 g) /DR << /Encoding
-<<
-/RLAFencoding
-18 0 R
->>
-/Font << /Helv 19 0 R >>
->> /Fields [ 6 0 R 21 0 R 22 0 R 27 0 R 28 0 R 33 0 R 34 0 R 39 0 R 40 0 R 45 0 R 
-  46 0 R 51 0 R 52 0 R 57 0 R 58 0 R 63 0 R 64 0 R 69 0 R 70 0 R 75 0 R 
-  76 0 R 81 0 R 82 0 R 87 0 R 88 0 R 93 0 R 94 0 R 99 0 R 100 0 R 105 0 R 
-  106 0 R 111 0 R 112 0 R 117 0 R 118 0 R 123 0 R 124 0 R 129 0 R 130 0 R 135 0 R 
-  137 0 R 142 0 R 143 0 R 148 0 R 149 0 R 154 0 R 155 0 R 160 0 R 161 0 R 166 0 R 
-  167 0 R 172 0 R 173 0 R 178 0 R 179 0 R 184 0 R 185 0 R 190 0 R 191 0 R 196 0 R 
-  197 0 R 202 0 R 203 0 R 208 0 R 209 0 R 214 0 R 215 0 R 220 0 R 221 0 R 226 0 R 
-  227 0 R 232 0 R 233 0 R 238 0 R ]
+/Fields [ 6 0 R 18 0 R 21 0 R 24 0 R 27 0 R 30 0 R 33 0 R 36 0 R 39 0 R 42 0 R 
+  45 0 R 48 0 R 51 0 R 54 0 R 57 0 R 60 0 R 63 0 R 66 0 R 69 0 R 72 0 R 
+  75 0 R ]
 >>
 endobj
 xref
-0 246
+0 84
 0000000000 65535 f 
 0000000061 00000 n 
 0000000102 00000 n 
@@ -2659,248 +1039,86 @@ xref
 0000245506 00000 n 
 0000246151 00000 n 
 0000246420 00000 n 
-0000246752 00000 n 
-0000247128 00000 n 
-0000247503 00000 n 
-0000247878 00000 n 
-0000248248 00000 n 
-0000249571 00000 n 
-0000249671 00000 n 
-0000250035 00000 n 
-0000250449 00000 n 
-0000250539 00000 n 
-0000250872 00000 n 
-0000251243 00000 n 
-0000251343 00000 n 
-0000251707 00000 n 
-0000252099 00000 n 
-0000252189 00000 n 
-0000252522 00000 n 
-0000252893 00000 n 
-0000252993 00000 n 
-0000253357 00000 n 
-0000253746 00000 n 
-0000253836 00000 n 
-0000254169 00000 n 
-0000254540 00000 n 
-0000254640 00000 n 
-0000255004 00000 n 
-0000255406 00000 n 
-0000255496 00000 n 
-0000255829 00000 n 
-0000256200 00000 n 
-0000256300 00000 n 
-0000256664 00000 n 
-0000257044 00000 n 
-0000257134 00000 n 
-0000257467 00000 n 
-0000257838 00000 n 
-0000257938 00000 n 
-0000258302 00000 n 
-0000258694 00000 n 
-0000258784 00000 n 
-0000259117 00000 n 
-0000259488 00000 n 
-0000259588 00000 n 
-0000259952 00000 n 
-0000260382 00000 n 
-0000260472 00000 n 
-0000260805 00000 n 
-0000261176 00000 n 
-0000261276 00000 n 
-0000261640 00000 n 
-0000262015 00000 n 
-0000262105 00000 n 
-0000262438 00000 n 
-0000262809 00000 n 
-0000262909 00000 n 
-0000263273 00000 n 
-0000263649 00000 n 
-0000263740 00000 n 
-0000264073 00000 n 
-0000264444 00000 n 
-0000264544 00000 n 
-0000264908 00000 n 
-0000265315 00000 n 
-0000265406 00000 n 
-0000265739 00000 n 
-0000266110 00000 n 
-0000266210 00000 n 
-0000266574 00000 n 
-0000266962 00000 n 
-0000267053 00000 n 
-0000267386 00000 n 
-0000267757 00000 n 
-0000267857 00000 n 
-0000268221 00000 n 
-0000268634 00000 n 
-0000268725 00000 n 
-0000269058 00000 n 
-0000269429 00000 n 
-0000269529 00000 n 
-0000269893 00000 n 
-0000270284 00000 n 
-0000270375 00000 n 
-0000270708 00000 n 
-0000271079 00000 n 
-0000271179 00000 n 
-0000271543 00000 n 
-0000271941 00000 n 
-0000272035 00000 n 
-0000272370 00000 n 
-0000272743 00000 n 
-0000272844 00000 n 
-0000273210 00000 n 
-0000273633 00000 n 
-0000273727 00000 n 
-0000274062 00000 n 
-0000274435 00000 n 
-0000274536 00000 n 
-0000274902 00000 n 
-0000275286 00000 n 
-0000275380 00000 n 
-0000275715 00000 n 
-0000276088 00000 n 
-0000276189 00000 n 
-0000276555 00000 n 
-0000276948 00000 n 
-0000277042 00000 n 
-0000277377 00000 n 
-0000277750 00000 n 
-0000277851 00000 n 
-0000278217 00000 n 
-0000278627 00000 n 
-0000278721 00000 n 
-0000279054 00000 n 
-0000279425 00000 n 
-0000279526 00000 n 
-0000279892 00000 n 
-0000280256 00000 n 
-0000280350 00000 n 
-0000280683 00000 n 
-0000281054 00000 n 
-0000281155 00000 n 
-0000281521 00000 n 
-0000281900 00000 n 
-0000282633 00000 n 
-0000282727 00000 n 
-0000283062 00000 n 
-0000283435 00000 n 
-0000283536 00000 n 
-0000283902 00000 n 
-0000284284 00000 n 
-0000284378 00000 n 
-0000284713 00000 n 
-0000285086 00000 n 
-0000285187 00000 n 
-0000285553 00000 n 
-0000285962 00000 n 
-0000286056 00000 n 
-0000286391 00000 n 
-0000286764 00000 n 
-0000286865 00000 n 
-0000287231 00000 n 
-0000287635 00000 n 
-0000287729 00000 n 
-0000288064 00000 n 
-0000288437 00000 n 
-0000288538 00000 n 
-0000288904 00000 n 
-0000289252 00000 n 
-0000289346 00000 n 
-0000289681 00000 n 
-0000290054 00000 n 
-0000290155 00000 n 
-0000290521 00000 n 
-0000290905 00000 n 
-0000290999 00000 n 
-0000291334 00000 n 
-0000291707 00000 n 
-0000291808 00000 n 
-0000292174 00000 n 
-0000292582 00000 n 
-0000292676 00000 n 
-0000293011 00000 n 
-0000293384 00000 n 
-0000293485 00000 n 
-0000293851 00000 n 
-0000294204 00000 n 
-0000294298 00000 n 
-0000294633 00000 n 
-0000295006 00000 n 
-0000295107 00000 n 
-0000295473 00000 n 
-0000295882 00000 n 
-0000295976 00000 n 
-0000296311 00000 n 
-0000296684 00000 n 
-0000296785 00000 n 
-0000297151 00000 n 
-0000297522 00000 n 
-0000297616 00000 n 
-0000297951 00000 n 
-0000298324 00000 n 
-0000298425 00000 n 
-0000298791 00000 n 
-0000299181 00000 n 
-0000299275 00000 n 
-0000299610 00000 n 
-0000299983 00000 n 
-0000300084 00000 n 
-0000300450 00000 n 
-0000300823 00000 n 
-0000300917 00000 n 
-0000301252 00000 n 
-0000301625 00000 n 
-0000301726 00000 n 
-0000302092 00000 n 
-0000302474 00000 n 
-0000302568 00000 n 
-0000302903 00000 n 
-0000303276 00000 n 
-0000303377 00000 n 
-0000303743 00000 n 
-0000304152 00000 n 
-0000304246 00000 n 
-0000304581 00000 n 
-0000304954 00000 n 
-0000305055 00000 n 
-0000305421 00000 n 
-0000305807 00000 n 
-0000305901 00000 n 
-0000306236 00000 n 
-0000306609 00000 n 
-0000306710 00000 n 
-0000307076 00000 n 
-0000307493 00000 n 
-0000307587 00000 n 
-0000307922 00000 n 
-0000308295 00000 n 
-0000308396 00000 n 
-0000308762 00000 n 
-0000309170 00000 n 
-0000309264 00000 n 
-0000309599 00000 n 
-0000309972 00000 n 
-0000310073 00000 n 
-0000310439 00000 n 
-0000310795 00000 n 
-0000311498 00000 n 
-0000311588 00000 n 
-0000311898 00000 n 
-0000311969 00000 n 
-0000314888 00000 n 
-0000317735 00000 n 
+0000246751 00000 n 
+0000247127 00000 n 
+0000247502 00000 n 
+0000247877 00000 n 
+0000248247 00000 n 
+0000248337 00000 n 
+0000248669 00000 n 
+0000249040 00000 n 
+0000249130 00000 n 
+0000249462 00000 n 
+0000249833 00000 n 
+0000249923 00000 n 
+0000250255 00000 n 
+0000250626 00000 n 
+0000250716 00000 n 
+0000251048 00000 n 
+0000251419 00000 n 
+0000251509 00000 n 
+0000251841 00000 n 
+0000252212 00000 n 
+0000252302 00000 n 
+0000252634 00000 n 
+0000253005 00000 n 
+0000253095 00000 n 
+0000253427 00000 n 
+0000253798 00000 n 
+0000253888 00000 n 
+0000254220 00000 n 
+0000254591 00000 n 
+0000254682 00000 n 
+0000255014 00000 n 
+0000255385 00000 n 
+0000255476 00000 n 
+0000255808 00000 n 
+0000256179 00000 n 
+0000256270 00000 n 
+0000256602 00000 n 
+0000256973 00000 n 
+0000257064 00000 n 
+0000257396 00000 n 
+0000257767 00000 n 
+0000257858 00000 n 
+0000258190 00000 n 
+0000258561 00000 n 
+0000258652 00000 n 
+0000258984 00000 n 
+0000259355 00000 n 
+0000259446 00000 n 
+0000259778 00000 n 
+0000260149 00000 n 
+0000260240 00000 n 
+0000260572 00000 n 
+0000260943 00000 n 
+0000261034 00000 n 
+0000261366 00000 n 
+0000261737 00000 n 
+0000261828 00000 n 
+0000262160 00000 n 
+0000262531 00000 n 
+0000262622 00000 n 
+0000262954 00000 n 
+0000263325 00000 n 
+0000263416 00000 n 
+0000263747 00000 n 
+0000264117 00000 n 
+0000264700 00000 n 
+0000264787 00000 n 
+0000265096 00000 n 
+0000265157 00000 n 
+0000268191 00000 n 
 trailer
 <<
 /ID 
-[<902253072864378acca598de986a814d><902253072864378acca598de986a814d>]
+[<b9333f84731d1dea5730db0adb59b20d><b9333f84731d1dea5730db0adb59b20d>]
 % ReportLab generated PDF document -- digest (opensource)
 
-/Info 241 0 R
-/Root 240 0 R
-/Size 246
+/Info 80 0 R
+/Root 79 0 R
+/Size 84
 >>
 startxref
-318447
+268377
 %%EOF
