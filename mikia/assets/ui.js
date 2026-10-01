@@ -17,7 +17,7 @@
   function setUi(i){
     tabs.forEach(function(t,k){t.setAttribute('aria-current',k===i?'true':'false');});
     sbs.forEach(function(x,k){x.classList.toggle('is-cur',k===i);x.setAttribute('aria-current',k===i?'true':'false');});
-    count.textContent='0'+(i+1)+' / 0'+N;stName.textContent=NAMES[i];stMeta.textContent='Mikia \u00b7 '+(i+1)+' of '+N;
+    count.textContent='0'+(i+1)+' / 0'+N;if(stName)stName.textContent=NAMES[i];if(stMeta)stMeta.textContent='Mikia \u00b7 '+(i+1)+' of '+N;
     var t=tabs[i];if(tabsOl.scrollWidth>tabsOl.clientWidth+2&&t.scrollIntoView)t.scrollIntoView({block:'nearest',inline:'center',behavior:reduce?'auto':'smooth'});
     paintBars();
   }
