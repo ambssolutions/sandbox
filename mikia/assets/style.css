@@ -1226,3 +1226,37 @@ html{overflow-x:hidden}
 .car-slide{cursor:pointer}
 .car-slide a{cursor:pointer}
 @media (prefers-reduced-motion:reduce){.story-bars i.run b{animation:none;width:100%}}
+
+/* ===== TYPE SCALE: calmer section copy ===== */
+h2{font-size:clamp(24px,2.9vw,40px);line-height:1.1}
+section.block{padding:clamp(48px,7vw,88px) 0}
+.head-row{margin-bottom:clamp(24px,3.4vw,40px);gap:clamp(16px,4vw,56px)}
+.head-row .lede,.band .lede{font-size:clamp(14px,1.05vw,16px);line-height:1.6;max-width:44ch}
+.eyebrow{font-size:11px}
+.ticker-track span{font-size:clamp(26px,3.6vw,52px)}
+.ticker{padding:18px 0 22px}
+.cs-copy h3{font-size:clamp(24px,2.6vw,38px)}
+.cs-copy p{font-size:clamp(14px,1.05vw,16px)}
+.cs-copy .ticks{font-size:clamp(13px,1vw,15px)}
+.cs-num{font-size:clamp(70px,10vw,150px)}
+.car-slide{min-height:clamp(300px,42svh,420px)}
+.cs-copy{padding:clamp(18px,3vw,44px)}
+.st-body h3{font-size:clamp(22px,2.4vw,34px)}
+.st-body p{font-size:clamp(14px,1.05vw,16px)}
+.st-num{font-size:clamp(56px,8vw,130px)}
+.st-card{min-height:clamp(200px,34svh,320px);padding:clamp(18px,2.6vw,38px)}
+.v3d-card h3{font-size:clamp(17px,1.5vw,22px)}
+.dz-head h3{font-size:clamp(18px,1.5vw,22px)}
+.sp-body h3{font-size:clamp(26px,3.2vw,48px)}
+.sp-body p{font-size:clamp(13px,1vw,15px)}
+.split{height:clamp(360px,56svh,600px)}
+.about h2{font-size:clamp(24px,3vw,44px);max-width:22ch}
+.values p{font-size:clamp(14px,1.05vw,16px)}
+.values{margin-top:clamp(28px,4vw,48px)}
+.cs-head h2{font-size:clamp(34px,5.6vw,84px)}
+.cs-txt{font-size:clamp(15px,1.3vw,19px)}
+.cs-list a{font-size:clamp(14px,1.1vw,17px)}
+.prose{font-size:clamp(15px,1.1vw,17px)}
+.prose h2{font-size:clamp(22px,2.2vw,30px)}
+.page-hero h1{font-size:clamp(30px,3.8vw,54px)}
+.foot-word{font-size:clamp(70px,16vw,240px)!important}
