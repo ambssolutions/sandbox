@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MD Projects | Residential Construction & Project Management, Auckland</title>
+<meta name="description" content="MD Projects builds standalone homes, duplexes, terrace homes and subdivisions across Auckland. Design & build, project management and consents, all handled in-house.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14161a;
+    --ink-2: #23262c;
+    --concrete: #efece6;
+    --paper: #f8f6f2;
+    --line: #d9d4ca;
+    --muted: #6b6a66;
+    --accent: #d2652d;      /* copper */
+    --accent-ink: #b14f1c;
+    --white: #fff;
+    --radius: 4px;
+    --wrap: 1200px;
+    --display: "Archivo", system-ui, sans-serif;
+    --body: "Inter", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: var(--body); color: var(--ink); background: var(--paper); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+  h1, h2, h3 { font-family: var(--display); font-stretch: 112%; line-height: 1.02; letter-spacing: -0.01em; margin: 0; }
+  h2 { font-size: clamp(2rem, 4.5vw, 3.4rem); font-weight: 800; }
+  h3 { font-size: 1.25rem; font-weight: 700; }
+  .eyebrow { font-family: var(--display); font-stretch: 125%; text-transform: uppercase; letter-spacing: .14em; font-size: .75rem; font-weight: 700; color: var(--accent); display: inline-flex; align-items: center; gap: 10px; }
+  .eyebrow::before { content: ""; width: 28px; height: 2px; background: currentColor; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 24px; border-radius: var(--radius); font-weight: 600; text-decoration: none; font-size: .95rem; transition: background .2s, color .2s, transform .2s; border: 1.5px solid transparent; cursor: pointer; font-family: var(--body); }
+  .btn-primary { background: var(--accent); color: var(--white); }
+  .btn-primary:hover { background: var(--accent-ink); }
+  .btn-ghost { border-color: currentColor; }
+  .btn-ghost:hover { background: var(--white); color: var(--ink); border-color: var(--white); }
+  .btn .arrow { transition: transform .2s; }
+  .btn:hover .arrow { transform: translateX(4px); }
+  section { padding: 120px 0; }
+
+  /* ---------- Header ---------- */
+  .header { position: fixed; inset: 0 0 auto; z-index: 50; transition: background .3s, box-shadow .3s; }
+  .header.scrolled { background: rgba(20,22,26,.94); backdrop-filter: blur(10px); box-shadow: 0 1px 0 rgba(255,255,255,.06); }
+  .header .wrap { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+  .logo { display: flex; align-items: center; gap: 12px; color: var(--white); text-decoration: none; }
+  .logo-mark { width: 38px; height: 38px; background: var(--accent); display: grid; place-items: center; font-family: var(--display); font-weight: 900; font-stretch: 100%; font-size: 1rem; color: var(--white); border-radius: 2px; }
+  .logo-text { font-family: var(--display); font-weight: 800; font-stretch: 125%; letter-spacing: .06em; font-size: 1rem; text-transform: uppercase; }
+  .nav { display: flex; align-items: center; gap: 32px; }
+  .nav a { color: rgba(255,255,255,.82); text-decoration: none; font-size: .9rem; font-weight: 500; }
+  .nav a:hover { color: var(--white); }
+  .nav .btn { color: var(--white); padding: 11px 18px; }
+  .menu-toggle { display: none; background: none; border: 0; color: var(--white); padding: 8px; cursor: pointer; }
+
+  /* ---------- Hero ---------- */
+  .hero { background: var(--ink); color: var(--white); padding: 170px 0 0; position: relative; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 48px 48px; mask-image: linear-gradient(to bottom, #000 40%, transparent); }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: end; position: relative; }
+  .hero h1 { font-size: clamp(2.8rem, 7vw, 5.6rem); font-weight: 900; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-lede { font-size: 1.15rem; color: rgba(255,255,255,.72); max-width: 520px; margin: 28px 0 40px; }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+  .hero-art { position: relative; }
+  .hero-art svg { width: 100%; height: auto; }
+  .stats { position: relative; margin-top: 96px; border-top: 1px solid rgba(255,255,255,.12); display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 34px 24px 40px; border-left: 1px solid rgba(255,255,255,.12); }
+  .stat:first-child { border-left: 0; padding-left: 0; }
+  .stat b { display: block; font-family: var(--display); font-stretch: 112%; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1; }
+  .stat span { display: block; margin-top: 8px; color: rgba(255,255,255,.6); font-size: .9rem; }
+
+  /* ---------- Guarantee band ---------- */
+  .band { background: var(--accent); color: var(--white); padding: 22px 0; }
+  .band .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .band-item { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: .95rem; }
+  .band-item svg { flex: none; }
+
+  /* ---------- Intro ---------- */
+  .intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .intro p { font-size: 1.1rem; color: #3b3b39; margin: 0 0 18px; }
+  .intro-types { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+  .chip { border: 1px solid var(--line); background: var(--white); border-radius: 100px; padding: 8px 16px; font-size: .88rem; font-weight: 500; }
+
+  /* ---------- Services ---------- */
+  .services { background: var(--concrete); }
+  .section-head { display: flex; justify-content: space-between; align-items: end; gap: 40px; margin-bottom: 56px; flex-wrap: wrap; }
+  .section-head p { max-width: 440px; color: var(--muted); margin: 0; }
+  .service-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .service { background: var(--paper); padding: 36px 28px 40px; display: flex; flex-direction: column; min-height: 290px; transition: background .25s, color .25s; text-decoration: none; }
+  .service:hover { background: var(--ink); color: var(--white); }
+  .service:hover p { color: rgba(255,255,255,.65); }
+  .service-num { font-family: var(--display); font-weight: 700; font-size: .8rem; color: var(--accent); letter-spacing: .1em; }
+  .service-icon { margin: 26px 0 22px; color: var(--accent); }
+  .service p { color: var(--muted); font-size: .93rem; margin: 10px 0 0; transition: color .25s; }
+
+  /* ---------- Process ---------- */
+  .process { background: var(--ink); color: var(--white); }
+  .process .section-head p { color: rgba(255,255,255,.6); }
+  .steps { display: grid; grid-template-columns: repeat(6, 1fr); counter-reset: step; position: relative; }
+  .steps::before { content: ""; position: absolute; top: 23px; left: 0; right: 0; height: 1px; background: rgba(255,255,255,.18); }
+  .step { padding-right: 20px; position: relative; }
+  .step-dot { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: var(--ink); display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: .9rem; margin-bottom: 26px; transition: background .25s, border-color .25s; }
+  .step:hover .step-dot { background: var(--accent); border-color: var(--accent); }
+  .step h3 { font-size: 1.05rem; margin-bottom: 10px; }
+  .step p { margin: 0; color: rgba(255,255,255,.6); font-size: .9rem; }
+
+  /* ---------- Featured project ---------- */
+  .project-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 0; background: var(--white); border: 1px solid var(--line); }
+  .project-visual { background: #e4ded3; position: relative; min-height: 480px; overflow: hidden; }
+  .project-visual svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .project-tag { position: absolute; top: 24px; left: 24px; background: var(--ink); color: var(--white); padding: 8px 14px; font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+  .project-body { padding: 56px 48px; display: flex; flex-direction: column; }
+  .project-body h3 { font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 800; margin: 16px 0 6px; }
+  .project-loc { color: var(--muted); margin: 0 0 28px; }
+  .specs { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); margin: 0 0 32px; }
+  .spec { padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .spec:nth-child(odd) { padding-right: 16px; border-right: 1px solid var(--line); }
+  .spec:nth-child(even) { padding-left: 20px; }
+  .spec dt { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  .spec dd { margin: 4px 0 0; font-family: var(--display); font-weight: 700; font-size: 1.35rem; }
+  .project-body .btn { align-self: flex-start; margin-top: auto; }
+  .btn-dark { background: var(--ink); color: var(--white); }
+  .btn-dark:hover { background: var(--accent); }
+
+  /* ---------- About ---------- */
+  .about { background: var(--concrete); }
+  .about-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 80px; align-items: center; }
+  .founder-card { background: var(--ink); color: var(--white); aspect-ratio: 4/5; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 36px; }
+  .founder-card::before { content: "MS"; position: absolute; top: -40px; right: -20px; font-family: var(--display); font-weight: 900; font-size: 15rem; color: rgba(255,255,255,.05); line-height: 1; }
+  .founder-card .role { color: var(--accent); font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; }
+  .founder-card h3 { font-size: 2rem; margin-top: 8px; font-weight: 800; }
+  .founder-card p { color: rgba(255,255,255,.65); font-size: .95rem; margin: 14px 0 0; }
+  .about blockquote { margin: 28px 0 32px; font-family: var(--display); font-stretch: 100%; font-weight: 500; font-size: clamp(1.3rem, 2.4vw, 1.75rem); line-height: 1.35; padding-left: 26px; border-left: 3px solid var(--accent); }
+  .about p { color: #3b3b39; font-size: 1.05rem; }
+  .why { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 32px; margin-top: 32px; padding: 0; list-style: none; }
+  .why li { display: flex; gap: 12px; font-weight: 500; }
+  .why li::before { content: ""; flex: none; width: 20px; height: 20px; margin-top: 2px; border-radius: 50%; background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6 10.5l2.5 2.5L14 7.5' stroke='%23fff' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat; }
+
+  /* ---------- FAQ ---------- */
+  .faq-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 80px; }
+  .faq-grid > div:first-child p { color: var(--muted); margin: 20px 0 28px; }
+  details { border-bottom: 1px solid var(--line); }
+  details:first-child { border-top: 1px solid var(--line); }
+  summary { list-style: none; cursor: pointer; padding: 26px 48px 26px 0; position: relative; font-family: var(--display); font-weight: 700; font-size: 1.15rem; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: linear-gradient(var(--accent), var(--accent)) center/100% 2px no-repeat, linear-gradient(var(--accent), var(--accent)) center/2px 100% no-repeat; transition: transform .25s; }
+  details[open] summary::after { transform: rotate(45deg); }
+  details p { margin: 0 0 26px; color: #4a4946; max-width: 620px; }
+
+  /* ---------- Insights ---------- */
+  .insights { background: var(--white); border-top: 1px solid var(--line); }
+  .post-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .post { text-decoration: none; border-top: 2px solid var(--ink); padding-top: 22px; display: flex; flex-direction: column; gap: 14px; }
+  .post small { color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: .1em; font-size: .72rem; }
+  .post h3 { font-size: 1.3rem; transition: color .2s; }
+  .post:hover h3 { color: var(--accent); }
+  .post span { color: var(--muted); font-size: .9rem; }
+
+  /* ---------- Contact ---------- */
+  .contact { background: var(--ink); color: var(--white); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .contact h2 em { font-style: normal; color: var(--accent); }
+  .contact-lede { color: rgba(255,255,255,.65); font-size: 1.08rem; margin: 22px 0 44px; max-width: 460px; }
+  .contact-list { list-style: none; padding: 0; margin: 0; }
+  .contact-list li { padding: 20px 0; border-top: 1px solid rgba(255,255,255,.12); display: grid; grid-template-columns: 110px 1fr; gap: 16px; }
+  .contact-list li:last-child { border-bottom: 1px solid rgba(255,255,255,.12); }
+  .contact-list small { color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .1em; font-size: .72rem; padding-top: 4px; }
+  .contact-list a, .contact-list address { font-style: normal; font-size: 1.1rem; font-weight: 500; text-decoration: none; }
+  .contact-list a:hover { color: var(--accent); }
+  form { background: var(--ink-2); padding: 44px; border-radius: var(--radius); display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-self: start; }
+  form h3 { grid-column: 1 / -1; font-size: 1.4rem; margin-bottom: 6px; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: .8rem; color: rgba(255,255,255,.6); font-weight: 500; }
+  input, select, textarea { font: inherit; color: var(--white); background: transparent; border: 0; border-bottom: 1px solid rgba(255,255,255,.25); padding: 10px 0; outline: none; transition: border-color .2s; border-radius: 0; }
+  select option { color: var(--ink); }
+  textarea { resize: vertical; min-height: 96px; }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  form .btn { grid-column: 1 / -1; justify-content: center; margin-top: 10px; border: 0; }
+  .form-note { grid-column: 1 / -1; font-size: .85rem; color: var(--accent); margin: 0; min-height: 1.2em; }
+
+  /* ---------- Footer ---------- */
+  footer { background: #0d0e11; color: rgba(255,255,255,.55); padding: 72px 0 36px; font-size: .9rem; }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  footer h4 { color: var(--white); font-family: var(--display); font-size: .8rem; text-transform: uppercase; letter-spacing: .12em; margin: 0 0 18px; }
+  footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--white); }
+  .footer-bottom { display: flex; justify-content: space-between; padding-top: 28px; flex-wrap: wrap; gap: 12px; }
+
+  /* ---------- Reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1024px) {
+    .service-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps { grid-template-columns: repeat(3, 1fr); row-gap: 48px; }
+    .steps::before { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 860px) {
+    section { padding: 84px 0; }
+    .nav { position: fixed; inset: 76px 0 auto; background: var(--ink); flex-direction: column; align-items: stretch; gap: 0; padding: 8px 24px 24px; display: none; }
+    .nav.open { display: flex; }
+    .nav a { padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .nav .btn { margin-top: 16px; justify-content: center; border: 0; }
+    .menu-toggle { display: block; }
+    .header.menu-open { background: var(--ink); }
+    .hero { padding-top: 130px; }
+    .hero-grid, .intro-grid, .project-grid, .about-grid, .faq-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+    .hero-art { max-width: 520px; }
+    .stats { grid-template-columns: 1fr 1fr; margin-top: 56px; }
+    .stat { padding: 26px 16px 28px; }
+    .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+    .stat:nth-child(n+3) { border-top: 1px solid rgba(255,255,255,.12); }
+    .project-visual { min-height: 320px; }
+    .project-body { padding: 36px 24px; }
+    .post-grid { grid-template-columns: 1fr; }
+    .founder-card { aspect-ratio: auto; min-height: 340px; }
+  }
+  @media (max-width: 560px) {
+    .wrap { padding: 0 16px; }
+    .service-grid { grid-template-columns: 1fr; }
+    .service { min-height: 0; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .why { grid-template-columns: 1fr; }
+    form { grid-template-columns: 1fr; padding: 28px 20px; }
+    .contact-list li { grid-template-columns: 1fr; gap: 4px; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .band .wrap { flex-direction: column; gap: 12px; }
+    .logo-text { font-size: .9rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header" id="header">
+  <div class="wrap">
+    <a href="#top" class="logo" aria-label="MD Projects home">
+      <span class="logo-mark">MD</span>
+      <span class="logo-text">Projects</span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+    </button>
+    <nav class="nav" id="nav">
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="#faqs">FAQs</a>
+      <a href="#contact" class="btn btn-primary">Get a quote</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Auckland residential builders</span>
+          <h1 style="margin-top:22px">From feasibility<br>to <em>final CCC.</em></h1>
+          <p class="hero-lede">Standalone homes, duplexes, terrace homes and full subdivisions, designed, consented, built and project managed by one team.</p>
+          <div class="hero-ctas">
+            <a href="#contact" class="btn btn-primary">Start your project <span class="arrow">→</span></a>
+            <a href="tel:0210590409" class="btn btn-ghost">Call 0210 590 409</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <!-- Blueprint-style terrace elevation. Swap for a hero photo of a completed build. -->
+          <svg viewBox="0 0 520 380" fill="none" stroke="currentColor">
+            <g stroke="rgba(255,255,255,.85)" stroke-width="1.5">
+              <path d="M10 360h500"/>
+              <!-- unit 1 -->
+              <path d="M30 360V150l65-55 65 55v210"/>
+              <rect x="55" y="180" width="30" height="40"/><rect x="105" y="180" width="30" height="40"/>
+              <rect x="55" y="260" width="30" height="40"/><rect x="100" y="280" width="40" height="80"/>
+              <!-- unit 2 -->
+              <path d="M160 360V150l65-55 65 55v210"/>
+              <rect x="185" y="180" width="30" height="40"/><rect x="235" y="180" width="30" height="40"/>
+              <rect x="185" y="260" width="30" height="40"/><rect x="230" y="280" width="40" height="80"/>
+              <!-- unit 3 -->
+              <path d="M290 360V150l65-55 65 55v210"/>
+              <rect x="315" y="180" width="30" height="40"/><rect x="365" y="180" width="30" height="40"/>
+              <rect x="315" y="260" width="30" height="40"/><rect x="360" y="280" width="40" height="80"/>
+              <!-- unit 4 (partial, flat roof) -->
+              <path d="M420 360V120h80v240"/>
+              <rect x="440" y="160" width="40" height="60"/><rect x="440" y="260" width="40" height="100"/>
+            </g>
+            <!-- accent unit fill -->
+            <path d="M160 360V150l65-55 65 55v210z" fill="rgba(210,101,45,.16)" stroke="#d2652d" stroke-width="2"/>
+            <!-- dimension lines -->
+            <g stroke="rgba(255,255,255,.35)" stroke-width="1" font-family="Inter" font-size="11" fill="rgba(255,255,255,.5)">
+              <path d="M30 40h470M30 34v12M500 34v12"/>
+              <text x="230" y="30" stroke="none">4 UNITS · TERRACE</text>
+              <path d="M510 95v265M504 95h12M504 360h12"/>
+            </g>
+            <circle cx="225" cy="95" r="5" fill="#d2652d" stroke="none"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b data-count="500">500+</b><span>Homes built &amp; managed</span></div>
+        <div class="stat"><b data-count="150">150+</b><span>Homes completed every year</span></div>
+        <div class="stat"><b data-count="100">100+</b><span>Trusted contractors</span></div>
+        <div class="stat"><b>$160M</b><span>Combined project value</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Guarantee band ===== -->
+  <div class="band">
+    <div class="wrap">
+      <div class="band-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>10-year Stamford Insurance Guarantee</div>
+      <div class="band-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>12-month workmanship warranty</div>
+      <div class="band-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V10l7-6 7 6v11M10 21v-6h4v6"/></svg>Building across Auckland since 2020</div>
+    </div>
+  </div>
+
+  <!-- ===== Intro ===== -->
+  <section class="intro">
+    <div class="wrap intro-grid">
+      <div class="reveal">
+        <span class="eyebrow">Who we are</span>
+        <h2 style="margin-top:18px">Your trusted partner in residential construction.</h2>
+      </div>
+      <div class="reveal">
+        <p>Founded in March 2020, MD Projects has quickly become a trusted name in Auckland construction, delivering high-quality homes and hands-on project management for homeowners and developers alike.</p>
+        <p>Whether you're building your first home, subdividing a single lot or developing a multi-unit site, we handle every stage in-house: feasibility, design, consents, construction and handover.</p>
+        <div class="intro-types">
+          <span class="chip">Standalone homes</span>
+          <span class="chip">Duplexes</span>
+          <span class="chip">Terrace homes</span>
+          <span class="chip">Full subdivisions</span>
+          <span class="chip">Multi-unit developments</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Services ===== -->
+  <section class="services" id="services">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">What we do</span>
+          <h2 style="margin-top:18px">Every service.<br>One team.</h2>
+        </div>
+        <p>From the first sketch to the code compliance certificate, there's no handing off between firms. You get one point of contact and one accountable team.</p>
+      </div>
+      <div class="service-grid reveal">
+        <a class="service" href="https://www.mdprojects.co.nz/services/design-build/">
+          <span class="service-num">01</span>
+          <svg class="service-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21l3-1 12-12-2-2L4 18zM14 6l2 2M15 3l6 6"/></svg>
+          <h3>Design &amp; Build</h3>
+          <p>A single contract covering design and construction, tailored to your site, budget and lifestyle.</p>
+        </a>
+        <a class="service" href="https://www.mdprojects.co.nz/services/">
+          <span class="service-num">02</span>
+          <svg class="service-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+          <h3>Build from Plans</h3>
+          <p>Already have approved plans? We'll price them and bring them to life with the same quality and care.</p>
+        </a>
+        <a class="service" href="https://www.mdprojects.co.nz/services/">
+          <span class="service-num">03</span>
+          <svg class="service-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 21h20M3 21V10l4-4 4 4v11M11 21V10l4-4 4 4v11"/></svg>
+          <h3>Terrace Homes</h3>
+          <p>Efficient, well-designed terraces with a typical build cycle of 7–9 months.</p>
+        </a>
+        <a class="service" href="https://www.mdprojects.co.nz/services/">
+          <span class="service-num">04</span>
+          <svg class="service-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 21h20M4 21V11l8-6 8 6v10M12 5v16"/></svg>
+          <h3>Duplex Homes</h3>
+          <p>Two homes on one site, ideal for families, investors and owner-occupiers wanting rental income.</p>
+        </a>
+        <a class="service" href="https://www.mdprojects.co.nz/services/subdivision/">
+          <span class="service-num">05</span>
+          <svg class="service-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18"/><path d="M12 3v18M3 12h9"/></svg>
+          <h3>Subdivision</h3>
+          <p>End-to-end land development, from splitting a single lot to high-density housing projects.</p>
+        </a>
+        <a class="service" href="https://www.mdprojects.co.nz/services/project-management/">
+          <span class="service-num">06</span>
+          <svg class="service-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="17" rx="1"/><path d="M3 9h18M8 2v4M16 2v4M7 14l2 2 4-4"/></svg>
+          <h3>Project Management</h3>
+          <p>Programme, budget and trades coordinated for new homes, subdivisions and multi-unit complexes.</p>
+        </a>
+        <a class="service" href="https://www.mdprojects.co.nz/services/resource-building-consent/">
+          <span class="service-num">07</span>
+          <svg class="service-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="10" r="6"/><path d="M9 15l-1 6 4-2 4 2-1-6M10 10l1.5 1.5L14 9"/></svg>
+          <h3>Resource Consent</h3>
+          <p>Applications under Auckland's Unitary Plan for subdivision, height, boundaries, land use and stormwater.</p>
+        </a>
+        <a class="service" href="https://www.mdprojects.co.nz/services/resource-building-consent/">
+          <span class="service-num">08</span>
+          <svg class="service-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 3H6a1 1 0 00-1 1v16a1 1 0 001 1h12a1 1 0 001-1V8z"/><path d="M14 3v5h5M9 14l2 2 4-4"/></svg>
+          <h3>Building Consent</h3>
+          <p>All approvals managed for you, keeping your project compliant with council regulations.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Process ===== -->
+  <section class="process" id="process">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">How it works</span>
+          <h2 style="margin-top:18px">A clear path,<br>start to finish.</h2>
+        </div>
+        <p>Our proven process keeps your project on time, on budget and fully compliant, with no surprises along the way.</p>
+      </div>
+      <div class="steps reveal">
+        <div class="step"><div class="step-dot">01</div><h3>Feasibility</h3><p>We assess your site, zoning and budget so you know what's possible before you commit.</p></div>
+        <div class="step"><div class="step-dot">02</div><h3>Consents</h3><p>Resource and building consents prepared, lodged and managed with council.</p></div>
+        <div class="step"><div class="step-dot">03</div><h3>Engineering</h3><p>Infrastructure, drainage and services planned with our engineering partners.</p></div>
+        <div class="step"><div class="step-dot">04</div><h3>Construction</h3><p>Our network of 100+ trusted trades builds to plan, managed day to day.</p></div>
+        <div class="step"><div class="step-dot">05</div><h3>Certification</h3><p>Inspections and compliance through to your Code Compliance Certificate.</p></div>
+        <div class="step"><div class="step-dot">06</div><h3>Handover</h3><p>Keys in hand, ready to move in, rent or sell, backed by our guarantees.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Featured project ===== -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">Featured project</span>
+          <h2 style="margin-top:18px">Recent work.</h2>
+        </div>
+        <p>A look at one of our recent multi-unit developments in central Auckland.</p>
+      </div>
+      <article class="project-grid reveal">
+        <div class="project-visual">
+          <!-- Replace this illustration with a project photo: <img src="..." style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"> -->
+          <svg viewBox="0 0 600 480" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <rect width="600" height="480" fill="#e4ded3"/>
+            <rect y="400" width="600" height="80" fill="#cfc7b8"/>
+            <g fill="#2a2d33">
+              <rect x="40" y="170" width="100" height="230"/><rect x="146" y="150" width="100" height="250"/>
+              <rect x="252" y="170" width="100" height="230"/><rect x="358" y="150" width="100" height="250"/>
+              <rect x="464" y="170" width="100" height="230"/>
+            </g>
+            <g fill="#f2ede4" opacity=".9">
+              <rect x="58" y="200" width="64" height="70"/><rect x="164" y="180" width="64" height="70"/>
+              <rect x="270" y="200" width="64" height="70"/><rect x="376" y="180" width="64" height="70"/>
+              <rect x="482" y="200" width="64" height="70"/>
+            </g>
+            <g fill="#d2652d">
+              <rect x="70" y="320" width="40" height="80"/><rect x="176" y="320" width="40" height="80"/>
+              <rect x="282" y="320" width="40" height="80"/><rect x="388" y="320" width="40" height="80"/>
+              <rect x="494" y="320" width="40" height="80"/>
+            </g>
+          </svg>
+          <span class="project-tag">5 Townhouses</span>
+        </div>
+        <div class="project-body">
+          <span class="eyebrow">Terrace development</span>
+          <h3>Mt Albert Road</h3>
+          <p class="project-loc">Sandringham, Auckland</p>
+          <dl class="specs">
+            <div class="spec"><dt>Homes</dt><dd>5</dd></div>
+            <div class="spec"><dt>Bedrooms</dt><dd>4 each</dd></div>
+            <div class="spec"><dt>Bathrooms</dt><dd>2 + WC</dd></div>
+            <div class="spec"><dt>Garage</dt><dd>Single</dd></div>
+            <div class="spec"><dt>Built area</dt><dd>132 m²</dd></div>
+            <div class="spec"><dt>Total area</dt><dd>153 m²</dd></div>
+          </dl>
+          <a href="https://www.mdprojects.co.nz/projects/mt-albert-road-sandringham/" class="btn btn-dark">View project <span class="arrow">→</span></a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== About ===== -->
+  <section class="about" id="about">
+    <div class="wrap about-grid">
+      <div class="founder-card reveal">
+        <!-- Replace with a portrait photo of the founder -->
+        <span class="role">Founder</span>
+        <h3>Maninder Singh</h3>
+        <p>500+ homes built and managed for large companies and private clients.</p>
+      </div>
+      <div class="reveal">
+        <span class="eyebrow">About MD Projects</span>
+        <h2 style="margin-top:18px">Built on experience. Run with care.</h2>
+        <blockquote>Maninder and the team guide you through everything, from feasibility to final CCC.</blockquote>
+        <p>Maninder started out with house renovations before moving into full-scale residential builds. He has since managed and led residential projects for large companies and private clients, and founded MD Projects in 2020 to bring that experience directly to homeowners and developers.</p>
+        <ul class="why">
+          <li>One team from design to handover</li>
+          <li>100+ trusted contractors</li>
+          <li>Transparent pricing and timelines</li>
+          <li>10-year insurance guarantee</li>
+          <li>Homeowners &amp; developers</li>
+          <li>12-month workmanship warranty</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQs ===== -->
+  <section id="faqs">
+    <div class="wrap faq-grid">
+      <div class="reveal">
+        <span class="eyebrow">FAQs</span>
+        <h2 style="margin-top:18px">Good questions.</h2>
+        <p>Building is a big decision. Here are the answers to the questions we hear most. Can't find yours? Just ask.</p>
+        <a href="#contact" class="btn btn-dark">Ask us anything <span class="arrow">→</span></a>
+      </div>
+      <div class="reveal">
+        <details open>
+          <summary>What types of homes do you build?</summary>
+          <p>We build standalone houses, duplexes, terrace homes and full subdivisions, for both homeowners and developers, across the Auckland region.</p>
+        </details>
+        <details>
+          <summary>How long does it take to build terrace homes?</summary>
+          <p>Our typical build cycle for terrace homes is 7 to 9 months, depending on the complexity of the project.</p>
+        </details>
+        <details>
+          <summary>Do I need a resource consent?</summary>
+          <p>A resource consent is required when your project doesn't meet the permitted activity standards under Auckland Council's Unitary Plan. This typically applies to subdividing land into multiple lots, building height and boundary adjustments, land use changes, and stormwater and drainage connections. We'll tell you exactly what's needed during feasibility.</p>
+        </details>
+        <details>
+          <summary>What guarantees come with my home?</summary>
+          <p>Every home we build comes with a 10-year Stamford Insurance Guarantee and a 12-month workmanship warranty.</p>
+        </details>
+        <details>
+          <summary>Can you help with subdividing my property?</summary>
+          <p>Yes. We manage the full subdivision process: feasibility study, resource and building consents, engineering and infrastructure planning, construction and services installation, compliance and certification, and final handover or sale.</p>
+        </details>
+        <details>
+          <summary>Can I bring my own plans?</summary>
+          <p>Absolutely. Our Build from Plans service means we can price and construct from your existing approved drawings, or we can take care of design for you through Design &amp; Build.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Insights ===== -->
+  <section class="insights">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">Insights</span>
+          <h2 style="margin-top:18px">Guides &amp; advice.</h2>
+        </div>
+      </div>
+      <div class="post-grid reveal">
+        <a class="post" href="https://www.mdprojects.co.nz/the-importance-of-a-feasibility-study-before-you-build/">
+          <small>Planning</small>
+          <h3>Why a feasibility study is crucial before building</h3>
+          <span>Read article →</span>
+        </a>
+        <a class="post" href="https://www.mdprojects.co.nz/the-ultimate-guide-to-subdividing-your-property/">
+          <small>Subdivision</small>
+          <h3>The ultimate subdivision guide for NZ property owners</h3>
+          <span>Read article →</span>
+        </a>
+        <a class="post" href="https://www.mdprojects.co.nz/navigating-resource-building-consents-a-step-by-step-guide/">
+          <small>Consents</small>
+          <h3>Resource &amp; building consent process, simplified</h3>
+          <span>Read article →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Contact ===== -->
+  <section class="contact" id="contact">
+    <div class="wrap contact-grid">
+      <div class="reveal">
+        <span class="eyebrow">Get in touch</span>
+        <h2 style="margin-top:18px">Let's build <em>something great.</em></h2>
+        <p class="contact-lede">Tell us about your site or plans. We'll get back to you to talk through feasibility, timelines and pricing.</p>
+        <ul class="contact-list">
+          <li><small>Phone</small><a href="tel:0210590409">0210 590 409</a></li>
+          <li><small>Email</small><a href="mailto:info@mdprojects.co.nz">info@mdprojects.co.nz</a></li>
+          <li><small>Office</small><address>409 Bucklands Beach Road,<br>Bucklands Beach, Auckland 2012</address></li>
+        </ul>
+      </div>
+      <!-- Hook this form up to your form handler (e.g. Formspree, Netlify Forms, or the existing WordPress form endpoint). -->
+      <form class="reveal" id="contactForm" novalidate>
+        <h3>Request a free consultation</h3>
+        <div class="field"><label for="name">Name</label><input id="name" name="name" required autocomplete="name"></div>
+        <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
+        <div class="field full"><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email"></div>
+        <div class="field full"><label for="service">I'm interested in</label>
+          <select id="service" name="service">
+            <option>Design &amp; Build</option><option>Build from Plans</option><option>Terrace Homes</option><option>Duplex Homes</option>
+            <option>Subdivision</option><option>Project Management</option><option>Resource / Building Consent</option><option>Something else</option>
+          </select>
+        </div>
+        <div class="field full"><label for="message">Tell us about your project</label><textarea id="message" name="message"></textarea></div>
+        <button type="submit" class="btn btn-primary">Send enquiry <span class="arrow">→</span></button>
+        <p class="form-note" id="formNote" role="status"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="#top" class="logo" style="margin-bottom:18px"><span class="logo-mark">MD</span><span class="logo-text">Projects</span></a>
+        <p style="max-width:300px;margin:0">Residential construction and project management across Auckland. Standalone, duplex, terrace and subdivision.</p>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="https://www.mdprojects.co.nz/services/design-build/">Design &amp; Build</a></li>
+          <li><a href="https://www.mdprojects.co.nz/services/subdivision/">Subdivision</a></li>
+          <li><a href="https://www.mdprojects.co.nz/services/project-management/">Project Management</a></li>
+          <li><a href="https://www.mdprojects.co.nz/services/resource-building-consent/">Consents</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#faqs">FAQs</a></li>
+          <li><a href="https://www.facebook.com/p/MD-Projects-NZ-Limited-100063621871436/">Facebook</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:0210590409">0210 590 409</a></li>
+          <li><a href="mailto:info@mdprojects.co.nz">info@mdprojects.co.nz</a></li>
+          <li>409 Bucklands Beach Rd<br>Auckland 2012</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> MD Projects NZ Limited</span>
+      <span>Auckland, New Zealand</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Header background on scroll
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 40);
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Mobile menu
+  const toggle = document.getElementById('menuToggle'), nav = document.getElementById('nav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    header.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', open);
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open'); header.classList.remove('menu-open'); toggle.setAttribute('aria-expanded', false);
+  }));
+
+  // Reveal on scroll
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Count-up stats
+  const counters = document.querySelectorAll('[data-count]');
+  const countIO = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target, target = +el.dataset.count, t0 = performance.now();
+    const tick = now => {
+      const p = Math.min((now - t0) / 1400, 1), eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + '+';
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick); countIO.unobserve(el);
+  }), { threshold: 0.5 });
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) counters.forEach(c => countIO.observe(c));
+
+  // Contact form (placeholder handler: falls back to an email draft)
+  document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const f = e.target, note = document.getElementById('formNote');
+    if (!f.name.value.trim() || !f.email.checkValidity() || !f.email.value) {
+      note.textContent = 'Please add your name and a valid email.'; return;
+    }
+    const body = `Name: ${f.name.value}\nPhone: ${f.phone.value}\nEmail: ${f.email.value}\nService: ${f.service.value}\n\n${f.message.value}`;
+    location.href = `mailto:info@mdprojects.co.nz?subject=${encodeURIComponent('Website enquiry: ' + f.service.value)}&body=${encodeURIComponent(body)}`;
+    note.textContent = 'Opening your email app…';
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
