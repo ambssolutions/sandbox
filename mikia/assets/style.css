@@ -1897,3 +1897,7 @@ html.nav-lock .sticky-nav,html.nav-lock .menu-fab{display:none}
 @keyframes heroBtn{from{opacity:0;translate:0 26px;filter:blur(8px)}to{opacity:1;translate:0 0;filter:blur(0)}}
 @keyframes heroBtnSoft{from{opacity:.25;translate:0 12px;filter:blur(3px)}to{opacity:1;translate:0 0;filter:blur(0)}}
 @media (prefers-reduced-motion:reduce){.hero-cine .hero-actions .btn,.hero-cine .hero-actions.cyc .btn{animation:none}}
+.foot-fine{margin:14px 0 0;padding-top:14px;border-top:1px solid rgba(159,194,174,.16);font-size:13px;line-height:1.55;color:#9FB0A5;max-width:none}
+.foot-fine a{color:#C9D4CC;text-decoration:underline;text-underline-offset:3px;display:inline;min-height:0;padding:0}
+.foot-fine a:hover{color:#fff}
+@media (max-width:860px){.foot-base{align-items:flex-start!important;text-align:left!important;gap:0!important}.foot-base a{justify-content:flex-start!important}}
