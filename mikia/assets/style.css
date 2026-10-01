@@ -1421,3 +1421,6 @@ section.block{padding:clamp(48px,7vw,88px) 0}
 .car-slide.is-on .cs-copy .ticks li:nth-child(1){transition-delay:.7s!important}.car-slide.is-on .cs-copy .ticks li:nth-child(2){transition-delay:.8s!important}.car-slide.is-on .cs-copy .ticks li:nth-child(3){transition-delay:.9s!important}.car-slide.is-on .cs-copy .ticks li:nth-child(4){transition-delay:1s!important}
 .car-slide.is-leaving .cs-copy>*,.car-slide.is-leaving .cs-copy .ticks li{opacity:0;transition:opacity .4s ease!important;transition-delay:0s!important}
 .car-slide.is-leaving .cs-copy .ticks{opacity:1}
+
+.car-slide.is-leaving .cs-copy>*,.car-slide.is-leaving .cs-copy>*:nth-child(n),.car-slide.is-leaving .cs-copy .ticks li,.car-slide.is-leaving .cs-copy .ticks li:nth-child(n){opacity:0!important;transition:opacity .4s ease!important;transition-delay:0s!important}
+.car-slide.is-leaving .cs-copy .ticks{opacity:1!important}

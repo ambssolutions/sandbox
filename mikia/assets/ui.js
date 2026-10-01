@@ -29,20 +29,24 @@
     busy=true;
     if(track.firstElementChild!==curEl)track.insertBefore(curEl,track.firstElementChild);
     track.insertBefore(tgt,curEl.nextSibling);
-    tgt.classList.add('is-on');cur=t;setUi(t);
+    cur=t;setUi(t);setTimeout(function(){tgt.classList.add('is-on');},reduce?0:900);
     var dist=curEl.getBoundingClientRect().width+gap();
     function done(){
       track.style.transition='none';track.style.transform='translateX(0)';
-      curEl.classList.remove('is-on');track.appendChild(curEl);
+      curEl.classList.remove('is-on','is-leaving');track.appendChild(curEl);
       void track.offsetWidth;busy=false;
     }
     if(reduce){done();return;}
-    track.style.transition='transform .95s cubic-bezier(.65,0,.15,1)';
-    track.style.transform='translateX(-'+dist+'px)';
-    var fired=false;function once(){if(fired)return;fired=true;track.removeEventListener('transitionend',onEnd);done();}
-    function onEnd(e){if(e.target===track)once();}
-    track.addEventListener('transitionend',onEnd);setTimeout(once,1200);
-    curEl.classList.add('is-leaving');setTimeout(function(){curEl.classList.remove('is-leaving');},1000);
+    /* text fades out first, then the card slides, then the new text fades in */
+    curEl.classList.add('is-leaving');
+    setTimeout(function(){
+      track.style.transition='transform .9s cubic-bezier(.65,0,.15,1)';
+      track.style.transform='translateX(-'+dist+'px)';
+      var fired=false;function once(){if(fired)return;fired=true;track.removeEventListener('transitionend',onEnd);done();}
+      function onEnd(e){if(e.target===track)once();}
+      track.addEventListener('transitionend',onEnd);setTimeout(once,1200);
+    },420);
+    setTimeout(function(){curEl.classList.remove('is-leaving');},1500);
   }
   /* like a social story: the bar for the current slide fills, then the next slide starts */
   bars.forEach(function(b,i){b.firstElementChild.addEventListener('animationend',function(){if(i===cur&&auto)goTo(cur+1);});});
