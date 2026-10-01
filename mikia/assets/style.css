@@ -1690,3 +1690,19 @@ h1,h2,h3,h4,.logo-text b,.cs-num,.st-num,.svc-list button,.ticker-track span{tex
 .dz-wq.fx-words{display:block}
 @media (prefers-reduced-motion:reduce){.fx-words .wi,.fx-eye,.fx-fade{opacity:1!important;transform:none!important;filter:none!important;letter-spacing:inherit}}
 .dz-panel.fine .dz-wfine{padding-left:8px!important}
+
+/* ===== MORE TEXT MOTION ===== */
+.fx-scrub .w{display:inline-block}
+.fx-scrub .wi{display:inline-block;opacity:calc(.22 + .78*clamp(0,(var(--p,0) - var(--k,0)*.7)*3.4,1));filter:blur(calc(3px*(1 - clamp(0,(var(--p,0) - var(--k,0)*.7)*3.4,1))))}
+main h2 em,.hero-copy em{background:linear-gradient(currentColor,currentColor) 0 100%/0 2px no-repeat;transition:background-size 1.1s cubic-bezier(.2,.8,.2,1) .9s}
+main h2.fx-in em{background-size:100% 2px}
+.btn{position:relative;overflow:hidden}
+.btn::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .7s ease;pointer-events:none}
+.btn:hover::after{left:130%}
+.lp-file input{z-index:2}
+.lp-cam{position:absolute;inset:0;background:#000;z-index:6;display:flex;flex-direction:column}
+.lp-cam[hidden]{display:none!important}
+.lp-cam video{flex:1;min-height:0;width:100%;object-fit:cover}
+.lp-cam-bar{display:flex;gap:12px;justify-content:center;align-items:center;padding:12px;background:rgba(0,0,0,.6)}
+#dzLand{grid-column:1/-1}
+@media (prefers-reduced-motion:reduce){.fx-scrub .wi{opacity:1!important;filter:none!important}main h2 em{background-size:100% 2px}}

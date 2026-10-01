@@ -45,6 +45,22 @@
     var r=new FileReader();r.onload=function(){setPhoto(r.result);};r.readAsDataURL(f);
   }
   ['lpCam','lpUp'].forEach(function(id){var e=$(id);if(e)e.addEventListener('change',function(){fromFile(e.files&&e.files[0]);e.value='';});});
+  /* camera: phones use the native camera app; desktops get a live viewfinder */
+  var stream=null,camLab=document.querySelector('label.lp-file');
+  function stopCam(){if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}$('lpCamView').hidden=true;}
+  if(camLab&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&!matchMedia('(pointer:coarse)').matches){
+    camLab.addEventListener('click',function(e){
+      e.preventDefault();
+      navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1920}},audio:false}).then(function(s){
+        stream=s;var v=$('lpVideo');v.srcObject=s;$('lpCamView').hidden=false;
+      }).catch(function(){var i=$('lpCam');if(i)i.click();});
+    });
+    $('lpShot').addEventListener('click',function(){
+      var v=$('lpVideo');if(!v.videoWidth)return;var c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);
+      var d=c.toDataURL('image/jpeg',.9);stopCam();setPhoto(d);
+    });
+    $('lpCamX').addEventListener('click',stopCam);
+  }
   $('lpSample').addEventListener('click',function(){setPhoto(sample());});
   $('lpChange').addEventListener('click',function(){
     stage.dataset.empty='true';img.hidden=true;img.removeAttribute('src');panel.hidden=true;houseEl.hidden=true;empty.hidden=false;stage.style.width='';stage.style.height='';
