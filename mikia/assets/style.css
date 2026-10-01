@@ -1914,3 +1914,12 @@ html.nav-lock .sticky-nav,html.nav-lock .menu-fab{display:none}
 .hero-cine .hero-actions .btn{will-change:transform,opacity}
 .swap .sp .wd{will-change:transform,opacity}
 .hero-mini b{width:100%!important;transform-origin:0 50%;transform:scaleX(0);will-change:transform}
+
+/* ===== BUTTERY: only transform and opacity animate; no blur filters while scrolling ===== */
+.fx-fade{filter:none!important;transition:opacity .9s ease .2s,transform .9s cubic-bezier(.2,.8,.2,1) .2s}
+.fx-scrub .wi{filter:none!important}
+.st-card{filter:none!important;will-change:transform}
+.st-card::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#000;opacity:var(--dim,0);pointer-events:none}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+img{image-rendering:auto}

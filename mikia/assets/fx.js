@@ -46,14 +46,12 @@
   var scr=[].slice.call(document.querySelectorAll('main .lede,main .st-body>p,.about .stack+p')).filter(function(e){return !e.closest('.car-slide');});
   scr.forEach(function(e){e.classList.remove('fx-fade');e.style.opacity=1;e.classList.add('fx-scrub');var st={i:0};[].slice.call(e.childNodes).forEach(function(c){splitNode(c,st);});[].forEach.call(e.querySelectorAll('.wi'),function(w,i,all){w.style.setProperty('--k',(i/Math.max(1,all.length-1)).toFixed(3));});});
   var par=[].slice.call(document.querySelectorAll('.st-num,.cs-num'));
-  var tr=document.querySelector('.ticker-track'),ta=null,vel=0,lastY=scrollY,ticking=false;
+  var ticking=false;
   function frame(){
     ticking=false;var vh=innerHeight;
-    scr.forEach(function(e){var r=e.getBoundingClientRect();if(r.bottom<0||r.top>vh)return;var p=Math.max(0,Math.min(1,(vh*.92-r.top)/(vh*.5)));e.style.setProperty('--p',p.toFixed(3));});
-    par.forEach(function(e){var r=e.getBoundingClientRect();if(r.bottom<-200||r.top>vh+200)return;e.style.transform='translateY('+(((r.top+r.height/2)-vh/2)*-.12).toFixed(1)+'px)';});
-    var y=scrollY;vel=vel*.8+(y-lastY)*.2;lastY=y;
-    if(tr){if(!ta){var a=tr.getAnimations&&tr.getAnimations()[0];if(a)ta=a;}if(ta){var rate=1+Math.min(7,Math.abs(vel)/6);ta.playbackRate=rate;}}
-    if(Math.abs(vel)>.05)requestAnimationFrame(frame);else ticking=false;
+    var rs=scr.map(function(e){return e.getBoundingClientRect();}),ps=par.map(function(e){return e.getBoundingClientRect();});
+    scr.forEach(function(e,i){var r=rs[i];if(r.bottom<0||r.top>vh)return;var p=Math.max(0,Math.min(1,(vh*.92-r.top)/(vh*.5))),q=Math.round(p*100)/100;if(e.__p!==q){e.__p=q;e.style.setProperty('--p',q);}});
+    par.forEach(function(e,i){var r=ps[i];if(r.bottom<-200||r.top>vh+200)return;e.style.transform='translateY('+(((r.top+r.height/2)-vh/2)*-.12).toFixed(1)+'px)';});
   }
   function kick(){if(!ticking){ticking=true;requestAnimationFrame(frame);}}
   addEventListener('scroll',kick,{passive:true});addEventListener('resize',kick);kick();

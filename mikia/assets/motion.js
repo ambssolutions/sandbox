@@ -157,22 +157,23 @@
   var stCards=$('.st-card'),hero=document.querySelector('.hero'),steps=document.querySelector('.steps'),stepLis=steps?$('li:not(.steps-fill)',steps):[];
   var lastY=window.pageYOffset,vel=0,ticking=false,loopOn=false;
   function frame(){
-    var y=window.pageYOffset,h=document.documentElement.scrollHeight-window.innerHeight,vh=window.innerHeight,vw=window.innerWidth;
+    /* read phase */
+    var y=window.pageYOffset,vh=window.innerHeight,vw=window.innerWidth,h=document.documentElement.scrollHeight-vh;
+    var sR=steps?steps.getBoundingClientRect():null;
+    var tR=(stmt&&words.length)?stmt.getBoundingClientRect():null;
+    var tops=null;if(stCards.length&&vw>860){tops=[];for(var i=0;i<stCards.length;i++){var nx=stCards[i+1];tops.push(nx?nx.getBoundingClientRect().top:null);}}
+    /* write phase */
     bar.style.setProperty('--p',h>0?Math.min(1,y/h):0);
-    if(hero&&y<hero.offsetHeight)hero.style.setProperty('--py',(y*.22).toFixed(1)+'px');
-    /* how we work */
-    if(steps){
-      var r=steps.getBoundingClientRect(),sp=clamp((vh*.86-r.top)/(vh*.45),0,1);
+    if(sR){
+      var sp=clamp((vh*.86-sR.top)/(vh*.45),0,1);
       steps.style.setProperty('--sp',sp.toFixed(3));
       stepLis.forEach(function(li,i){li.classList.toggle('lit',sp>=i/(stepLis.length-1)-.001&&sp>0);});
     }
-    /* about statement */
-    if(stmt&&words.length){
-      var rr=stmt.getBoundingClientRect(),p=clamp((vh*.88-rr.top)/(vh*.5+rr.height*.3),0,1),n=words.length;
-      words.forEach(function(w,i){w.style.opacity=(.16+.84*clamp(p*(n+3)-i,0,1)).toFixed(2);});
+    if(tR){
+      var p=clamp((vh*.88-tR.top)/(vh*.5+tR.height*.3),0,1),n=words.length;
+      for(var k=0;k<n;k++){words[k].style.opacity=(.16+.84*clamp(p*(n+3)-k,0,1)).toFixed(2);}
     }
-    /* stacking process cards */
-    var sc=stCards;if(sc.length&&vw>860){sc.forEach(function(c,i){var n=sc[i+1];if(!n)return;var r=n.getBoundingClientRect(),p=clamp((vh*.9-r.top)/(vh*.55),0,1);c.style.transform='scale('+(1-p*.06).toFixed(3)+')';c.style.filter='brightness('+(1-p*.4).toFixed(2)+')';});}
+    if(tops){stCards.forEach(function(c,i){var t=tops[i];if(t==null)return;var pp=clamp((vh*.9-t)/(vh*.55),0,1);c.style.transform='scale('+(1-pp*.06).toFixed(3)+')';c.style.setProperty('--dim',(pp*.4).toFixed(2));});}
     ticking=false;
   }
   function loop(){

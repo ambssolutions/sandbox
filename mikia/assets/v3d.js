@@ -78,5 +78,5 @@
   };
   function start(){if(started)return;started=true;window.__h3dLoad(init,fail);}
   window.__h3dStart=start;
-  if('IntersectionObserver' in window)new IntersectionObserver(function(es,o){if(es[0].isIntersecting){o.disconnect();start();}},{rootMargin:'400px'}).observe(host);else start();
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es,o){if(es[0].isIntersecting){o.disconnect();('requestIdleCallback' in window)?requestIdleCallback(start,{timeout:1500}):start();}},{rootMargin:'1400px'}).observe(host);else start();
 })();
