@@ -73,15 +73,20 @@
   .menu-btn { display: none; background: none; border: 0; color: var(--white); padding: 8px; cursor: pointer; }
 
   /* Hero: blueprint to reality, scroll-linked */
-  .hero { height: 220vh; padding: 0; --p: 0; }
-  .hero-pin { position: sticky; top: 0; height: 100vh; min-height: 640px; overflow: hidden; }
+  .hero { height: 100vh; min-height: 680px; padding: 0; --p: 0; }
+  .hero-pin { position: relative; height: 100%; overflow: hidden; }
   .hero-plan { position: absolute; inset: 0; }
   .bp-svg { position: absolute; right: 2%; bottom: 104px; width: min(50vw, 820px); height: auto; }
-  .bp-l { fill: none; stroke: #cfe8f8; stroke-width: 1.6; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 2.4s cubic-bezier(.6,.1,.2,1) forwards; }
-  .bp-thin { stroke-width: 1; stroke: rgba(207,232,248,.6); animation-delay: .5s; }
-  .bp-ground { stroke: var(--sky); animation-duration: 1.2s; }
-  .bp-d { fill: none; stroke: var(--amber); stroke-width: 1; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.4s 1.6s ease forwards; }
-  .bp-t { font: 500 13px var(--mono); fill: var(--amber); letter-spacing: .08em; opacity: 0; animation: fadein .8s 2.2s forwards; }
+  .bp-l { fill: none; stroke: #cfe8f8; stroke-width: 1.6; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .go .bp-l { animation: draw 2.4s cubic-bezier(.6,.1,.2,1) forwards; }
+  .bp-thin { stroke-width: 1; stroke: rgba(207,232,248,.6); }
+  .go .bp-thin { animation-delay: .5s; }
+  .bp-ground { stroke: var(--sky); }
+  .go .bp-ground { animation-duration: 1.2s; }
+  .bp-d { fill: none; stroke: var(--amber); stroke-width: 1; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .go .bp-d { animation: draw 1.4s 1.6s ease forwards; }
+  .bp-t { font: 500 13px var(--mono); fill: var(--amber); letter-spacing: .08em; opacity: 0; }
+  .go .bp-t { animation: fadein .8s 2.2s forwards; }
   .bp-unit { fill: var(--sky); }
   @keyframes draw { to { stroke-dashoffset: 0; } }
   @keyframes fadein { to { opacity: 1; } }
@@ -89,7 +94,7 @@
   .hero-real video { width: 100%; height: 100%; object-fit: cover; }
   .hero-real::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,15,42,.85), rgba(11,15,42,.2) 70%), linear-gradient(0deg, rgba(11,15,42,.85), transparent 40%); }
   .scan { position: absolute; top: 0; bottom: 0; left: calc(var(--p) * 100%); width: 2px; background: var(--amber); box-shadow: 0 0 24px 4px rgba(255,183,3,.55); z-index: 3; opacity: calc(min(var(--p) * 30, 1) * min((1 - var(--p)) * 30, 1)); }
-  .scan span { position: absolute; top: 118px; left: 10px; white-space: nowrap; background: var(--amber); color: var(--ink); font: 600 .72rem/1 var(--mono); letter-spacing: .1em; padding: 7px 10px; border-radius: 4px; }
+  .scan span { position: absolute; top: 172px; left: 10px; white-space: nowrap; background: var(--amber); color: var(--ink); font: 600 .72rem/1 var(--mono); letter-spacing: .1em; padding: 7px 10px; border-radius: 4px; }
   .hero-copy { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 150px; pointer-events: none; }
   .hero-copy .wrap { width: 100%; }
   .hero-copy a, .hero-copy button { pointer-events: auto; }
@@ -105,6 +110,9 @@
   .scroll-hint { font: 500 .72rem/1 var(--mono); letter-spacing: .14em; color: var(--white); display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
   .scroll-hint i { width: 1px; height: 34px; background: linear-gradient(var(--amber), transparent); animation: hint 1.8s infinite; }
   @keyframes hint { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+  .replay { position: absolute; z-index: 5; right: 80px; top: 112px; height: 42px; padding: 0 16px; border-radius: 100px; border: 1px solid rgba(255,255,255,.4); background: rgba(11,15,42,.45); color: var(--white); font: 500 .72rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; opacity: 0; pointer-events: none; transition: opacity .5s, background .25s, color .25s; backdrop-filter: blur(6px); }
+  .hero.built .replay { opacity: 1; pointer-events: auto; }
+  .replay:hover { background: var(--amber); color: var(--ink); border-color: var(--amber); }
   .video-toggle { position: absolute; z-index: 5; right: 28px; top: 112px; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); background: rgba(11,15,42,.45); color: var(--white); display: grid; place-items: center; cursor: pointer; opacity: calc(min(var(--p) * 4, 1)); }
 
   /* Ticker */
@@ -305,18 +313,15 @@
   .wordmark { display: block; width: max-content; font: 800 10vw/.8 var(--display); font-stretch: 125%; text-transform: uppercase; color: transparent; -webkit-text-stroke: 1px rgba(142,202,238,.35); white-space: nowrap; margin: 70px 0 30px; letter-spacing: -.02em; }
   .foot-bottom { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: .85rem; border-top: 1px solid rgba(255,255,255,.1); padding-top: 24px; }
 
-  .rv { transition: transform .9s cubic-bezier(.2,.8,.2,1); }
-  .rv.pre { transform: translateY(40px); }
+  .rv { transition: transform 1s cubic-bezier(.2,.8,.2,1), opacity 1s ease; }
+  .rv.pre { transform: translateY(70px); opacity: 0; }
+  .unveil img { clip-path: inset(0 0 0 0); transition: clip-path 1.3s cubic-bezier(.7,0,.2,1), transform 1.6s cubic-bezier(.2,.8,.2,1); }
+  .unveil.pre img { clip-path: inset(0 0 100% 0); transform: scale(1.15); }
 
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
     html { scroll-behavior: auto; }
-    .bp-l, .bp-d { stroke-dashoffset: 0; }
-    .bp-t { opacity: 1; }
-    .hero { height: auto; }
-    .hero-pin { position: relative; }
-    .w { opacity: 1; }
-    .ticker-track { transform: none; }
+    .ticker-track { animation-duration: 120s; }
+    .scroll-hint i { animation: none; }
   }
   @media (max-width: 1100px) {
     .nav { gap: 20px; }
@@ -410,7 +415,7 @@
   <!-- Hero: a blueprint that turns into the real thing as you scroll -->
   <section class="hero" id="hero">
     <div class="hero-pin dark">
-      <div class="hero-plan"><svg class="bp-svg" viewBox="0 0 900 560" aria-hidden="true">
+      <div class="hero-plan"><svg class="bp-svg" id="bpSvg" viewBox="0 0 900 560" aria-hidden="true">
   <g class="bp-lines"><path class="bp-l bp-ground" pathLength="1" d="M40 470H860"/><path class="bp-l" pathLength="1" d="M130 220h210v250h-210z"/><path class="bp-l" pathLength="1" d="M120 220L235.0 142L350 220"/><path class="bp-l bp-thin" pathLength="1" d="M130 345h210"/><path class="bp-l" pathLength="1" d="M160 248h56v70h-56z"/><path class="bp-l" pathLength="1" d="M254 248h56v70h-56z"/><path class="bp-l bp-thin" pathLength="1" d="M188 248v70M282 248v70"/><path class="bp-l" pathLength="1" d="M144 388h92v82h-92z"/><path class="bp-l bp-thin" pathLength="1" d="M144 404h92"/><path class="bp-l bp-thin" pathLength="1" d="M144 420h92"/><path class="bp-l bp-thin" pathLength="1" d="M144 436h92"/><path class="bp-l bp-thin" pathLength="1" d="M144 452h92"/><path class="bp-l" pathLength="1" d="M248 386h34v84h-34z"/><path class="bp-l" pathLength="1" d="M292 396h36v46h-36z"/><path class="bp-l bp-thin" pathLength="1" d="M221.0 180h28v18h-28z"/><path class="bp-l" pathLength="1" d="M340 220h210v250h-210z"/><path class="bp-l" pathLength="1" d="M330 220L445.0 142L560 220"/><path class="bp-l bp-thin" pathLength="1" d="M340 345h210"/><path class="bp-l" pathLength="1" d="M370 248h56v70h-56z"/><path class="bp-l" pathLength="1" d="M464 248h56v70h-56z"/><path class="bp-l bp-thin" pathLength="1" d="M398 248v70M492 248v70"/><path class="bp-l" pathLength="1" d="M354 388h92v82h-92z"/><path class="bp-l bp-thin" pathLength="1" d="M354 404h92"/><path class="bp-l bp-thin" pathLength="1" d="M354 420h92"/><path class="bp-l bp-thin" pathLength="1" d="M354 436h92"/><path class="bp-l bp-thin" pathLength="1" d="M354 452h92"/><path class="bp-l" pathLength="1" d="M458 386h34v84h-34z"/><path class="bp-l" pathLength="1" d="M502 396h36v46h-36z"/><path class="bp-l bp-thin" pathLength="1" d="M431.0 180h28v18h-28z"/><path class="bp-l" pathLength="1" d="M550 220h210v250h-210z"/><path class="bp-l" pathLength="1" d="M540 220L655.0 142L770 220"/><path class="bp-l bp-thin" pathLength="1" d="M550 345h210"/><path class="bp-l" pathLength="1" d="M580 248h56v70h-56z"/><path class="bp-l" pathLength="1" d="M674 248h56v70h-56z"/><path class="bp-l bp-thin" pathLength="1" d="M608 248v70M702 248v70"/><path class="bp-l" pathLength="1" d="M564 388h92v82h-92z"/><path class="bp-l bp-thin" pathLength="1" d="M564 404h92"/><path class="bp-l bp-thin" pathLength="1" d="M564 420h92"/><path class="bp-l bp-thin" pathLength="1" d="M564 436h92"/><path class="bp-l bp-thin" pathLength="1" d="M564 452h92"/><path class="bp-l" pathLength="1" d="M668 386h34v84h-34z"/><path class="bp-l" pathLength="1" d="M712 396h36v46h-36z"/><path class="bp-l bp-thin" pathLength="1" d="M641.0 180h28v18h-28z"/></g>
   <g class="bp-dims"><path class="bp-d" pathLength="1" d="M130 510H760M130 502v16M760 502v16"/><text class="bp-t" x="445.0" y="504" text-anchor="middle">19 800</text><path class="bp-d" pathLength="1" d="M84 220V470M76 220h16M76 470h16"/><text class="bp-t" x="78" y="345.0" text-anchor="middle" transform="rotate(-90 78 345.0)">6 000</text><path class="bp-d" pathLength="1" d="M806 142V470M798 142h16M798 470h16"/><text class="bp-t" x="820" y="306.0" text-anchor="middle" transform="rotate(90 820 306.0)">8 400</text><text class="bp-t bp-unit" x="235.0" y="124" text-anchor="middle">UNIT 01 · 132 m²</text><text class="bp-t bp-unit" x="445.0" y="124" text-anchor="middle">UNIT 02 · 132 m²</text><text class="bp-t bp-unit" x="655.0" y="124" text-anchor="middle">UNIT 03 · 132 m²</text><text class="bp-t" x="130" y="338" >L1</text><text class="bp-t" x="130" y="464">L0</text></g>
   <g class="bp-stamp" transform="translate(690 40)"><path class="bp-d" pathLength="1" d="M0 0h190v62H0z"/><text class="bp-t" x="12" y="22">MD PROJECTS NZ</text><text class="bp-t" x="12" y="40">FRONT ELEVATION</text><text class="bp-t" x="12" y="56">SCALE 1:100 · DWG A-201</text></g>
@@ -422,6 +427,7 @@
         </video>
       </div>
       <div class="scan" aria-hidden="true"><span id="scanLabel">BUILD 0%</span></div>
+      <button class="replay" id="replay" aria-label="Replay the build animation"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 8a5.5 5.5 0 105.5-5.5H5M5 .5v4h4" transform="translate(0 1)"/></svg>Replay build</button>
       <button class="video-toggle" id="videoToggle" aria-label="Pause background video"><svg id="vtIcon" width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg></button>
       <div class="hero-copy">
         <div class="wrap">
@@ -440,7 +446,7 @@
           <div class="hb"><b>500+</b><span>Clients</span></div>
           <div class="hb"><b>100+</b><span>Trusted contractors</span></div>
           <div class="hb"><b>10 yr</b><span>Stamford guarantee</span></div>
-          <div class="scroll-hint"><i></i>Scroll to build</div>
+          <div class="scroll-hint"><i></i>Scroll</div>
         </div>
       </div>
     </div>
@@ -470,17 +476,17 @@
   <!-- Services -->
   <section class="dark" id="services">
     <div class="wrap">
-      <div class="svc-head">
+      <div class="svc-head rv">
         <div><span class="tag">Our services</span><h2 class="xl h2" style="margin-top:20px">Concept<br>to keys.</h2></div>
         <p class="lede">Our full range of residential construction services takes your project from concept to completion with ease and excellence.</p>
       </div>
       <div class="svc-list" id="svcList">
-        <a class="svc" href="https://www.mdprojects.co.nz/services/design-build/" data-img="images/service-design-build.jpg"><span class="thumb"><img src="images/service-design-build.jpg" alt="" loading="lazy"></span><h3 class="xl">Design &amp; Build</h3><p>A complete custom home solution, taking your vision from concept through to final construction.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc" href="https://www.mdprojects.co.nz/services/" data-img="images/service-build-from-plans.jpg"><span class="thumb"><img src="images/service-build-from-plans.jpg" alt="" loading="lazy"></span><h3 class="xl">Build from Plans</h3><p>Already have approved plans? We'll bring them to life with expert craftsmanship and precision.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc" href="https://www.mdprojects.co.nz/services/" data-img="images/service-terrace-duplex.jpg"><span class="thumb"><img src="images/service-terrace-duplex.jpg" alt="" loading="lazy"></span><h3 class="xl">Terrace &amp; Duplex</h3><p>Efficient, modern multi-unit housing designed to maximise land use and investment return.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc" href="https://www.mdprojects.co.nz/services/subdivision/" data-img="images/service-subdivision.jpg"><span class="thumb"><img src="images/service-subdivision.jpg" alt="" loading="lazy"></span><h3 class="xl">Subdivision</h3><p>Land development managed end to end, from planning through to title.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc" href="https://www.mdprojects.co.nz/services/resource-building-consent/" data-img="images/guide-feasibility.jpg"><span class="thumb"><img src="images/guide-feasibility.jpg" alt="" loading="lazy"></span><h3 class="xl">Consents</h3><p>We take care of all council approvals and compliance to get your project started without delay.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc" href="https://www.mdprojects.co.nz/services/project-management/" data-img="images/guide-project-management.jpg"><span class="thumb"><img src="images/guide-project-management.jpg" alt="" loading="lazy"></span><h3 class="xl">Project Mgmt</h3><p>Every aspect of your build coordinated for on-time and on-budget delivery.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc rv" href="https://www.mdprojects.co.nz/services/design-build/" data-img="images/service-design-build.jpg"><span class="thumb"><img src="images/service-design-build.jpg" alt="" loading="lazy"></span><h3 class="xl">Design &amp; Build</h3><p>A complete custom home solution, taking your vision from concept through to final construction.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc rv" href="https://www.mdprojects.co.nz/services/" data-img="images/service-build-from-plans.jpg"><span class="thumb"><img src="images/service-build-from-plans.jpg" alt="" loading="lazy"></span><h3 class="xl">Build from Plans</h3><p>Already have approved plans? We'll bring them to life with expert craftsmanship and precision.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc rv" href="https://www.mdprojects.co.nz/services/" data-img="images/service-terrace-duplex.jpg"><span class="thumb"><img src="images/service-terrace-duplex.jpg" alt="" loading="lazy"></span><h3 class="xl">Terrace &amp; Duplex</h3><p>Efficient, modern multi-unit housing designed to maximise land use and investment return.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc rv" href="https://www.mdprojects.co.nz/services/subdivision/" data-img="images/service-subdivision.jpg"><span class="thumb"><img src="images/service-subdivision.jpg" alt="" loading="lazy"></span><h3 class="xl">Subdivision</h3><p>Land development managed end to end, from planning through to title.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc rv" href="https://www.mdprojects.co.nz/services/resource-building-consent/" data-img="images/guide-feasibility.jpg"><span class="thumb"><img src="images/guide-feasibility.jpg" alt="" loading="lazy"></span><h3 class="xl">Consents</h3><p>We take care of all council approvals and compliance to get your project started without delay.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc rv" href="https://www.mdprojects.co.nz/services/project-management/" data-img="images/guide-project-management.jpg"><span class="thumb"><img src="images/guide-project-management.jpg" alt="" loading="lazy"></span><h3 class="xl">Project Mgmt</h3><p>Every aspect of your build coordinated for on-time and on-budget delivery.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
       </div>
     </div>
     <div class="float-img" id="floatImg" aria-hidden="true"><img alt="" id="floatImgEl"></div>
@@ -527,11 +533,11 @@
   <!-- Home planner -->
   <section class="dark" id="planner">
     <div class="wrap">
-      <div class="svc-head" style="margin-bottom:0">
+      <div class="svc-head rv" style="margin-bottom:0">
         <div><span class="tag">Plan your home</span><h2 class="xl h2" style="margin-top:20px">Watch it<br>get built.</h2></div>
         <p class="lede">Answer seven quick questions and see your home go up, from bare section to finished build. Then send it to us for a fixed-price quote.</p>
       </div>
-      <div class="planner-grid">
+      <div class="planner-grid rv">
         <div class="stage">
           <div class="stage-top"><span id="pStatus">Your section is surveyed and ready</span><span class="stage-pct" id="pPct">0%</span></div>
           <div class="stage-bar"><span id="pBar"></span></div>
@@ -550,8 +556,8 @@
   <section class="process" id="process">
     <div class="wrap">
       <span class="tag">How it works</span>
-      <h2 class="xl h2" style="margin-top:20px">Six steps.<br>One team.</h2>
-      <div class="tl" id="tl">
+      <h2 class="xl h2 rv" style="margin-top:20px">Six steps.<br>One team.</h2>
+      <div class="tl rv" id="tl">
         <div class="tl-line"><span id="tlFill"></span></div>
         <div class="tl-step"><div class="tl-card"><h3>Feasibility study</h3><p>Zoning, services, geotechnical conditions and council rules, checked before you commit.</p></div><span class="dot">01</span></div>
         <div class="tl-step"><span class="dot">02</span><div class="tl-card"><h3>Resource &amp; building consents</h3><p>Applications prepared, lodged and managed with Auckland Council on your behalf.</p></div></div>
@@ -567,7 +573,7 @@
   <section class="dark quotes">
     <div class="wrap">
       <span class="tag">What people are saying</span>
-      <div class="q-wrap">
+      <div class="q-wrap rv">
         <div class="q-slides" id="qSlides">
           <figure class="q-slide on" style="margin:0"><blockquote>We were first-time developers and a bit nervous. Maninder and the team guided us through everything, from feasibility to final CCC.</blockquote><figcaption class="q-who"><span class="stars">★★★★★</span><b>Amit P</b>Blockhouse Bay</figcaption></figure>
           <figure class="q-slide" style="margin:0"><blockquote>What impressed us most was the clear communication and fixed-price contract. No hidden surprises, and the build quality exceeded our expectations.</blockquote><figcaption class="q-who"><span class="stars">★★★★★</span><b>Lisa &amp; James R</b>Weymouth</figcaption></figure>
@@ -586,13 +592,13 @@
   <!-- Founder -->
   <section id="about">
     <div class="wrap founder-grid">
-      <div class="f-photo rv">
+      <div class="f-photo unveil">
         <img src="images/team.jpg" alt="The MD Projects team" loading="lazy">
         <div class="f-name"><small>Founder</small><b>Maninder Singh</b></div>
       </div>
       <div>
         <span class="tag">Meet the founder</span>
-        <h2 class="xl h2" style="margin-top:20px">Your dream is our project.</h2>
+        <h2 class="xl h2 rv" style="margin-top:20px">Your dream is our project.</h2>
         <p class="f-quote">From house renovations to over 1,000 builds, delivered to top-tier quality, within budget and on schedule.</p>
         <p class="lede">Maninder Singh has years of experience in the construction sector, leading residential projects for large companies and private clients. His passion for construction took him from renovations to full-scale residential builds.</p>
         <ul class="f-list"><li>Integrity</li><li>Transparency</li><li>Quality craftsmanship</li><li>Client-focused service</li></ul>
@@ -608,23 +614,23 @@
   <section class="gallery" id="gallery">
     <div class="wrap">
       <span class="tag">Gallery</span>
-      <h2 class="xl h2" style="margin-top:20px">Inside &amp; out.</h2>
+      <h2 class="xl h2 rv" style="margin-top:20px">Inside &amp; out.</h2>
       <div class="g-grid">
-        <figure class="g g-wide"><img src="images/gallery-1.jpg" alt="Row of completed two-storey townhouses" loading="lazy"></figure>
-        <figure class="g"><img src="images/gallery-2.jpg" alt="Kitchen with island bench" loading="lazy"></figure>
-        <figure class="g"><img src="images/gallery-3.jpg" alt="New two-storey home with timber deck" loading="lazy"></figure>
-        <figure class="g g-tall"><img src="images/gallery-4.jpg" alt="Bright open-plan living room" loading="lazy"></figure>
-        <figure class="g g-wide"><img src="images/gallery-5.jpg" alt="Townhouse exterior with dark cladding" loading="lazy"></figure>
-        <figure class="g"><img src="images/gallery-6.jpg" alt="Completed duplex homes" loading="lazy"></figure>
-        <figure class="g"><img src="images/gallery-7.jpg" alt="Living area with timber floors" loading="lazy"></figure>
-        <figure class="g g-wide"><img src="images/gallery-8.jpg" alt="Two-storey home with single garage" loading="lazy"></figure>
+        <figure class="unveil g g-wide"><img src="images/gallery-1.jpg" alt="Row of completed two-storey townhouses" loading="lazy"></figure>
+        <figure class="unveil g"><img src="images/gallery-2.jpg" alt="Kitchen with island bench" loading="lazy"></figure>
+        <figure class="unveil g"><img src="images/gallery-3.jpg" alt="New two-storey home with timber deck" loading="lazy"></figure>
+        <figure class="unveil g g-tall"><img src="images/gallery-4.jpg" alt="Bright open-plan living room" loading="lazy"></figure>
+        <figure class="unveil g g-wide"><img src="images/gallery-5.jpg" alt="Townhouse exterior with dark cladding" loading="lazy"></figure>
+        <figure class="unveil g"><img src="images/gallery-6.jpg" alt="Completed duplex homes" loading="lazy"></figure>
+        <figure class="unveil g"><img src="images/gallery-7.jpg" alt="Living area with timber floors" loading="lazy"></figure>
+        <figure class="unveil g g-wide"><img src="images/gallery-8.jpg" alt="Two-storey home with single garage" loading="lazy"></figure>
       </div>
     </div>
   </section>
 
   <!-- FAQs -->
   <section id="faqs">
-    <div class="wrap faq-grid">
+    <div class="wrap faq-grid rv">
       <div>
         <span class="tag">FAQs</span>
         <h2 class="xl h2" style="margin-top:20px">Good<br>questions.</h2>
@@ -645,8 +651,8 @@
   <section class="dark" id="contact">
     <div class="wrap">
       <span class="tag">Start your project today</span>
-      <h2 class="xl cta-big" style="margin-top:24px">Let's<br>build<em>.</em></h2>
-      <div class="contact-grid">
+      <h2 class="xl cta-big rv" style="margin-top:24px">Let's<br>build<em>.</em></h2>
+      <div class="contact-grid rv">
         <div>
           <p class="lede" style="margin-bottom:32px">Tell us what you're planning. We'll come back to you to talk through feasibility, timelines and a fixed-price proposal.</p>
           <ul class="details">
@@ -678,7 +684,7 @@
 
 <footer>
   <div class="wrap">
-    <div class="foot-grid">
+    <div class="foot-grid rv">
       <div><img src="images/logo-white.png" alt="MD Projects NZ Ltd"><p style="max-width:34ch">Quality developments with expert project management, innovative design and a commitment to excellence in every build.</p></div>
       <div><h4>Services</h4><ul>
         <li><a href="https://www.mdprojects.co.nz/services/design-build/">Design &amp; Build</a></li>
@@ -715,12 +721,17 @@
   const words = [...st.querySelectorAll('.w')];
 
   // Reveal-on-scroll (transform only, content is visible at rest)
-  const rvs = [...document.querySelectorAll('.rv')];
-  if (!RM) {
-    rvs.forEach(el => { if (el.getBoundingClientRect().top > innerHeight) el.classList.add('pre'); });
-    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.remove('pre'); io.unobserve(e.target); } }), { threshold: .15 });
-    rvs.forEach(el => io.observe(el));
-  }
+  const rvs = [...document.querySelectorAll('.rv, .unveil')];
+  rvs.forEach(el => { if (el.getBoundingClientRect().top > innerHeight * .95) el.classList.add('pre'); });
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const sibs = [...e.target.parentElement.children].filter(c => c.classList.contains('pre'));
+    e.target.style.transitionDelay = Math.min(sibs.indexOf(e.target), 5) * 90 + 'ms';
+    e.target.classList.remove('pre'); io.unobserve(e.target);
+  }), { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+  rvs.forEach(el => io.observe(el));
+  // safety net: never leave anything hidden
+  setTimeout(() => addEventListener('scroll', () => rvs.forEach(el => { if (el.getBoundingClientRect().top < innerHeight) el.classList.remove('pre'); }), { passive: true }), 100);
 
   // Scroll-linked scenes
   const hero = document.getElementById('hero'), scanLabel = document.getElementById('scanLabel');
@@ -728,29 +739,20 @@
   const tl = document.getElementById('tl'), tlFill = document.getElementById('tlFill'), tlSteps = [...tl.querySelectorAll('.tl-step')];
   const wide = () => innerWidth > 960;
   function sizeProjects() {
-    if (!wide() || RM) { projSec.style.height = ''; return; }
+    if (!wide()) { projSec.style.height = ''; return; }
     const extra = track.scrollWidth - innerWidth + 80;
     projSec.style.height = (innerHeight + Math.max(extra, 0)) + 'px';
   }
   function frame() {
     const y = scrollY, vh = innerHeight;
     header.classList.toggle('solid', y > 40);
-    // hero: blueprint -> reality
-    if (!RM) {
-      const r = hero.getBoundingClientRect();
-      const p = clamp(-r.top / (r.height - vh));
-      const e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-      hero.style.setProperty('--p', e.toFixed(4));
-      scanLabel.textContent = 'BUILD ' + Math.round(e * 100) + '%';
-      hero.classList.toggle('built', e > .6);
-    }
     // statement words
     const sr = st.getBoundingClientRect();
     const sp = clamp((vh * .85 - sr.top) / (sr.height + vh * .35));
-    const lit = RM ? words.length : Math.round(sp * words.length);
+    const lit = Math.round(sp * words.length);
     words.forEach((w, i) => w.classList.toggle('on', i < lit));
     // projects horizontal
-    if (wide() && !RM) {
+    if (wide()) {
       const pr = projSec.getBoundingClientRect();
       const pp = clamp(-pr.top / (pr.height - vh));
       const max = track.scrollWidth - innerWidth + 80;
@@ -797,7 +799,29 @@
   const syncVt = () => { vtIcon.innerHTML = vid.paused ? PLAY : PAUSE; vt.setAttribute('aria-label', vid.paused ? 'Play background video' : 'Pause background video'); };
   vt.addEventListener('click', () => { vid.paused ? vid.play() : vid.pause(); });
   vid.addEventListener('play', syncVt); vid.addEventListener('pause', syncVt);
-  if (RM) { vid.removeAttribute('autoplay'); vid.pause(); hero.style.setProperty('--p', 1); hero.classList.add('built'); syncVt(); }
+  if (RM) { vid.removeAttribute('autoplay'); vid.pause(); syncVt(); }
+
+  // Hero build sequence: the blueprint draws itself, then the build line sweeps across to reveal the real homes
+  const bp = document.getElementById('bpSvg');
+  let buildRaf, buildTimer;
+  function runBuild() {
+    cancelAnimationFrame(buildRaf); clearTimeout(buildTimer);
+    hero.classList.remove('built'); hero.style.setProperty('--p', 0); scanLabel.textContent = 'BUILD 0%';
+    bp.classList.remove('go'); void bp.getBoundingClientRect(); bp.classList.add('go');
+    buildTimer = setTimeout(() => {
+      const t0 = performance.now(), D = 3800;
+      const step = now => {
+        const t = clamp((now - t0) / D), e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        hero.style.setProperty('--p', e.toFixed(4));
+        scanLabel.textContent = 'BUILD ' + Math.round(e * 100) + '%';
+        hero.classList.toggle('built', e > .62);
+        if (t < 1) buildRaf = requestAnimationFrame(step);
+      };
+      buildRaf = requestAnimationFrame(step);
+    }, 2900);
+  }
+  document.getElementById('replay').addEventListener('click', runBuild);
+  runBuild();
 
   // Home planner: each answer adds a construction stage to the drawing
   (() => {
