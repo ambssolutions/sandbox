@@ -9,7 +9,10 @@
   function setStatic(){
     lis.forEach(function(l){l.classList.add('done');});bar.style.width='100%';pct.textContent='100%';card.classList.add('complete');status.textContent='COMPLETE';stage.textContent='COMPLETE';
   }
+  var lastP=-1,lastSt=-1,lastDone=null;
   function upd(b){
+    var q=Math.round(b/16*500)/5,stq=Math.min(3,Math.floor(b/4)),dq=b>=15.98;
+    if(q===lastP&&stq===lastSt&&dq===lastDone)return;lastP=q;lastSt=stq;lastDone=dq;
     var st=Math.min(3,Math.floor(b/4)),p=Math.round(Math.min(1,b/16)*100);
     bar.style.width=(b/16*100).toFixed(1)+'%';pct.textContent=p+'%';
     var n=Math.min(4,Math.floor(b/4));
@@ -21,11 +24,15 @@
     });
     var complete=b>=15.98;card.classList.toggle('complete',complete);status.textContent=complete?'COMPLETE':'IN PROGRESS';
     var fxs=window.__fx;if(fxs)fxs.swap(stage,complete?'COMPLETE':NAMES[st]);else stage.textContent=complete?'COMPLETE':NAMES[st];
-    var mt=document.getElementById('pminiT'),mb=document.getElementById('pminiB');if(mt){var mtx=complete?'Complete':['01 · Site survey','02 · Plan and consent','03 · Engineering and build','04 · Delivery and handover'][st];if(window.__fx)window.__fx.swap(mt,mtx);else mt.textContent=mtx;}if(mb)mb.style.width=(b/16*100).toFixed(1)+'%';
+    var mt=document.getElementById('pminiT'),mb=document.getElementById('pminiB');if(mt){var mtx=complete?'Complete':['01 · Site survey','02 · Plan and consent','03 · Engineering and build','04 · Delivery and handover'][st];if(window.__fx)window.__fx.swap(mt,mtx);else mt.textContent=mtx;}if(mb)mb.style.transform='scaleX('+(b/16).toFixed(3)+')';
   }
   var blockers=[].slice.call(document.querySelectorAll('.hero-copy,#pathCard,.nav'));
+  var rsC=null,topC=0,lastPos=0;function invalidate(){rsC=null;}
+  addEventListener('resize',invalidate);addEventListener('scroll',invalidate,{passive:true});
   function pos(pts){
-    var rs=blockers.map(function(e){return e.getBoundingClientRect();}),top=document.getElementById('top').getBoundingClientRect().top;
+    var nw=performance.now();if(nw-lastPos<66)return;lastPos=nw;
+    if(!rsC){rsC=blockers.map(function(e){return e.getBoundingClientRect();});topC=document.getElementById('top').getBoundingClientRect().top;}
+    var rs=rsC,top=topC;
     anch.forEach(function(el,i){var p=pts[i];if(!p)return;
       var x=p.x,y=p.y+top,hide=!p.v||!(api&&api.progress>15.5);
       for(var k=0;k<rs.length&&!hide;k++){var r=rs[k];if(x>r.left-120&&x<r.right+10&&y>r.top-24&&y<r.bottom+24)hide=true;}

@@ -1901,3 +1901,16 @@ html.nav-lock .sticky-nav,html.nav-lock .menu-fab{display:none}
 .foot-fine a{color:#C9D4CC;text-decoration:underline;text-underline-offset:3px;display:inline;min-height:0;padding:0}
 .foot-fine a:hover{color:#fff}
 @media (max-width:860px){.foot-base{align-items:flex-start!important;text-align:left!important;gap:0!important}.foot-base a{justify-content:flex-start!important}}
+
+/* ===== HERO PERFORMANCE: no live CSS filters over the 3D canvas or full-screen images ===== */
+.hero-bgimg img.bg,.hero-bgimg img.bg:not([data-bg="live"]),.hero-bgimg img.bg[data-bg="live"]{filter:none!important}
+.hero-bgimg img.bg{will-change:opacity;transform:translateZ(0)}
+.hero-3d canvas{filter:none!important}
+.hero-3d{will-change:opacity}
+.hero-3d::after{content:"";position:absolute;inset:0;background:rgba(6,12,9,.36);pointer-events:none}
+.hero-cine .hero-actions .hero-build{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.14)}
+@keyframes heroBtn{from{opacity:0;translate:0 26px}to{opacity:1;translate:0 0}}
+@keyframes heroBtnSoft{from{opacity:.25;translate:0 12px}to{opacity:1;translate:0 0}}
+.hero-cine .hero-actions .btn{will-change:transform,opacity}
+.swap .sp .wd{will-change:transform,opacity}
+.hero-mini b{width:100%!important;transform-origin:0 50%;transform:scaleX(0);will-change:transform}
