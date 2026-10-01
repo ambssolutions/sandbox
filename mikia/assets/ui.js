@@ -55,8 +55,6 @@
   sbs.forEach(function(x,i){x.addEventListener('click',function(){goTo(i);});});
   pp.addEventListener('click',function(){setAuto(!auto);});
   track.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();goTo(cur+1);}});
-  car.addEventListener('mouseenter',function(){setPaused(true);});car.addEventListener('mouseleave',function(){setPaused(false);});
-  car.addEventListener('focusin',function(){setPaused(true);});car.addEventListener('focusout',function(){setPaused(false);});
   /* press and hold pauses, a quick tap or a swipe to the left moves on */
   var sx=null,st=0;
   track.addEventListener('pointerdown',function(e){sx=e.clientX;st=performance.now();setPaused(true);});
@@ -64,6 +62,7 @@
     if(e.target.closest&&e.target.closest('a'))return;
     if(dx>50||(Math.abs(dx)<10&&dt<250&&e.pointerType==='touch')){goTo(cur+1);}}
   track.addEventListener('pointerup',endPress);track.addEventListener('pointercancel',function(){sx=null;setPaused(false);});
+  document.addEventListener('pointerup',function(){setPaused(false);});document.addEventListener('visibilitychange',function(){if(!document.hidden){setPaused(false);paintBars();}});
   slides[0].classList.add('is-on');
   if('IntersectionObserver' in window)new IntersectionObserver(function(es){inView=es[0].isIntersecting;paintBars();},{threshold:.35}).observe(section);
   else{inView=true;paintBars();}
