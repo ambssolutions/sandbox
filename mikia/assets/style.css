@@ -1515,3 +1515,22 @@ section.block{padding:clamp(48px,7vw,88px) 0}
   .hero-mini i{width:100%}
 }
 @media (max-width:340px){.hero-cine h1{font-size:30px}.hero-cine .hero-lede{font-size:15px}}
+
+/* ===== SEE IT BUILT: progress controls sit below the picture on phones ===== */
+@media (max-width:760px){
+  .v3d-ui{position:static!important;left:auto;right:auto;bottom:auto;margin:0;border-radius:0;border:0;border-top:1px solid rgba(159,194,174,.2);background:rgba(11,21,17,.96);backdrop-filter:none;padding:10px 10px 12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) 46px;gap:6px;align-items:center}
+  .v3d-ui[hidden]{display:none!important}
+  .v3d-ui .v3d-track{grid-column:1/-1;order:-1;height:6px;margin-bottom:4px}
+  .v3d-ui .v3d-chip{min-height:40px;padding:0 2px;font-size:10px;letter-spacing:.04em;width:100%;text-align:center}
+  .v3d-ui .v3d-play{grid-column:5;margin:0;min-width:0;width:46px;min-height:40px;padding:0}
+  .v3d-ui .v3d-play span{display:none}
+  .v3d-ui .v3d-dots{grid-column:1/-1}
+  #uiTour{grid-template-columns:repeat(2,minmax(0,1fr)) 46px 1fr}
+  #uiTour .v3d-chip,#uiTour .v3d-play{min-height:42px}
+  #uiTour .v3d-dots{order:-1;grid-column:1/-1;margin-bottom:4px}
+  #uiInside{grid-template-columns:repeat(5,minmax(0,1fr))}
+  #uiInside .v3d-chip{font-size:9.5px}
+  #uiInside .v3d-play{grid-column:1/-1;width:100%;justify-self:stretch;min-height:40px}
+  #uiInside .v3d-play span{display:inline}
+  .v3d-top{left:8px;right:8px}
+}
