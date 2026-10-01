@@ -1071,3 +1071,24 @@ html{overflow-x:hidden}
 .hero-cine .path-card{transition:opacity 1.2s ease,transform 1s ease}
 @media (prefers-reduced-motion:reduce){.swap .sp .wd{transition:none}.hero-bgimg img.bg{transition:none}}
 @supports not (color:color-mix(in srgb,red 50%,blue)){.hero-tint{display:none}}
+
+
+/* ===== QUIETER HERO ===== */
+.hero-cine .hero-tag{display:none}
+.hero-cine h1{font-size:clamp(34px,5vw,84px);line-height:1.04;letter-spacing:-.028em;text-shadow:none}
+.hero-cine .hero-lede{font-size:clamp(16px,1.25vw,19px);max-width:40ch;color:#DDE6DE;text-shadow:none}
+.hero-cine .hero-actions{padding-top:4px}
+.hero-cine .hero-actions .link-under{opacity:.85}
+.hero-cine .hero-shade{background:linear-gradient(90deg,rgba(11,21,17,.93) 0%,rgba(11,21,17,.82) 34%,rgba(11,21,17,.38) 58%,rgba(11,21,17,.05) 80%),linear-gradient(0deg,rgba(11,21,17,.6),transparent 30%),linear-gradient(180deg,rgba(11,21,17,.5),transparent 18%)}
+.hero-bgimg img.bg{filter:saturate(.78) brightness(.74)}
+.hero-bgimg img.bg:not([data-bg="live"]){filter:saturate(.7) brightness(.7) blur(2px)}
+.hero-tint{opacity:.55}
+.hero-cine .path-head,.hero-cine .path-stage{display:none}
+.hero-cine .path-card{width:clamp(250px,19vw,290px);padding:18px 20px;gap:12px;background:rgba(11,21,17,.42);border-color:rgba(159,194,174,.18);box-shadow:none}
+.hero-cine .path li{padding-bottom:12px}
+.hero-cine .path strong{font-size:14px;font-weight:500}
+.hero-cine .progress-top{font-size:12px}
+.hero-cine .nav-links a{font-size:14px}
+.hero-cine .scrollbar-x{display:none}
+@media (max-width:1180px){.hero-cine .path-card{max-width:340px}}
+@media (max-width:860px){.hero-cine .hero-shade{background:linear-gradient(180deg,rgba(11,21,17,.9) 0%,rgba(11,21,17,.78) 45%,rgba(11,21,17,.55) 70%,rgba(11,21,17,.9) 100%)}}
