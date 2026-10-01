@@ -1,5 +1,6 @@
 (function(){
   var host=document.getElementById('hero3d');if(!host)return;
+  var hero=document.getElementById('top');
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var lis=[].slice.call(document.querySelectorAll('#pathCard .path li')),card=document.getElementById('pathCard'),
       bar=document.getElementById('pbar'),pct=document.getElementById('ppct'),status=document.getElementById('pstatus'),stage=document.getElementById('pstage'),
@@ -30,7 +31,7 @@
       el.style.transform='translate('+p.x.toFixed(0)+'px,'+p.y.toFixed(0)+'px)';el.classList.toggle('on',!hide);});
   }
   function init(){
-    try{api=window.House3D&&window.House3D.createHouseScene(host,{hero:true,onProgress:upd,onAnchors:pos});}catch(e){api=null;}
+    try{api=window.House3D&&window.House3D.createHouseScene(host,{hero:true,design:{roof:'hip',cladding:'weatherboard',wall:'#ece7da',roofColor:'#8a463a',joinery:'#f2f2ee',door:'#2f6f6a',veranda:true,bay:true,garage:false,chimney:true,fence:'picket'},onProgress:upd,onAnchors:pos});}catch(e){api=null;}
     if(!api)return;
     host.classList.add('ready');document.getElementById('top').classList.add('live');
     lis.forEach(function(l,i){l.style.cursor='pointer';l.addEventListener('click',function(){api.goStage(i);});});
@@ -39,8 +40,42 @@
     if(window.House3D){init();return;}
     var s=document.createElement('script');s.src='assets/house3d.js';s.onload=init;document.head.appendChild(s);
   }
+
+  /* rotating headline: words and background change together, smoothly */
+  var sps=[].slice.call(document.querySelectorAll('.swap .sp')),bgs=[].slice.call(document.querySelectorAll('.hero-bgimg img.bg'));
+  var cur=0,timer=null,paused=false,started=false;
+  function setBg(key){
+    bgs.forEach(function(im){im.classList.toggle('on',im.dataset.bg===key);});
+    var live=key==='live';host.classList.toggle('away',!live);if(api&&api.setHeld)api.setHeld(!live);
+  }
+  function go(n){
+    var prev=sps[cur],next=sps[n];if(prev===next)return;
+    prev.classList.remove('on');prev.classList.add('out');
+    setTimeout(function(){prev.classList.remove('out');},1300);
+    next.classList.add('on');cur=n;
+    hero.style.setProperty('--ph',next.dataset.c);
+    setBg(next.dataset.bg);
+  }
+  function step(){if(paused||document.hidden)return;go((cur+1)%sps.length);}
+  function startRot(){
+    if(started||sps.length<2)return;started=true;
+    bgs.forEach(function(im){if(im.dataset.src&&!im.src)im.src=im.dataset.src;});
+    timer=setInterval(step,5600);
+  }
+  if(sps.length){
+    hero.style.setProperty('--ph',sps[0].dataset.c);
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){paused=!es[0].isIntersecting;},{threshold:.2}).observe(hero);
+    var reduceR=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(!reduceR){
+      // wait until the house is finished and its lights are coming on, then start changing
+      var wait=setInterval(function(){
+        if((api&&api.progress>=15.9)||(!api&&performance.now()>14000)){clearInterval(wait);setTimeout(startRot,api?5200:800);}
+      },400);
+      setTimeout(function(){clearInterval(wait);startRot();},30000);
+    }
+  }
   if(reduce){setStatic();return;}
   var c=navigator.connection;if(c&&(c.saveData||/2g/.test(c.effectiveType||''))){setStatic();return;}
-  var go=function(){('requestIdleCallback' in window)?requestIdleCallback(load,{timeout:2500}):setTimeout(load,800);};
-  if(document.readyState==='complete')go();else window.addEventListener('load',go);
+  var kick=function(){('requestIdleCallback' in window)?requestIdleCallback(load,{timeout:2500}):setTimeout(load,800);};
+  if(document.readyState==='complete')kick();else window.addEventListener('load',kick);
 })();

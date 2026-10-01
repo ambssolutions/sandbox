@@ -5,19 +5,19 @@
   var chips=[].slice.call(document.querySelectorAll('#uiBuild .v3d-chip')),play=$('v3dPlay'),fill=$('v3dFill'),label=$('v3dLabel');
   var tabs=[].slice.call(document.querySelectorAll('.v3d-tab')),uiBuild=$('uiBuild'),uiTour=$('uiTour'),card=$('v3dCard'),dots=$('tDots');
   var names=['Survey the site','Plan and consent','Build','Handover'];
-  var ROOF={hip:'hip',gable:'gable',skillion:'skillion'},CLAD={weatherboard:'weatherboard',boardbatten:'board and batten',brick:'brick',plaster:'plaster',metal:'ribbed metal'};
-  function fail(){host.classList.add('failed');var f=document.querySelector('#build3d .v3d-fallback');if(f)f.hidden=false;[uiBuild,uiTour,card].forEach(function(e){if(e)e.hidden=true;});document.querySelector('.v3d-tabs').hidden=true;}
+  var ROOF={hip:'hip',gable:'gable',gablefront:'front-gable',skillion:'skillion'},CLAD={weatherboard:'weatherboard',boardbatten:'board and batten',brick:'brick',plaster:'plaster',metal:'ribbed metal'};
+  function fail(){host.classList.add('failed');var f=document.querySelector('#build3d .v3d-fallback');if(f)f.hidden=false;[uiBuild,uiTour,card].forEach(function(e){if(e)e.hidden=true;});document.querySelector('.v3d-tabs').hidden=true;document.dispatchEvent(new CustomEvent('house-fail'));}
   function upd(b){
     var st=Math.min(3,Math.floor(b/4));
     if(fill)fill.style.width=(b/16*100).toFixed(1)+'%';
     chips.forEach(function(c,i){c.setAttribute('aria-pressed',i===st?'true':'false');});
-    if(label&&mode==='build')label.textContent=names[st];
+    if(label&&mode==='build')label.textContent=b>=15.9?(api.designed?'Your design':names[3]):names[st];
   }
   function setPlay(btn,on,txt){btn.setAttribute('aria-pressed',on?'true':'false');var s=btn.querySelector('span');if(s)s.textContent=on?txt[0]:txt[1];}
   function stepText(i,step){
     if(step.text)return step.text;
     var d=api.getDesign(),roof=ROOF[d.roof],clad=CLAD[d.cladding];
-    if(step.key==='front')return 'A '+roof+' roof and '+clad+' cladding face the street, with the covered entry on the right'+(d.garage?' and the garage on the left.':'.');
+    if(step.key==='front')return 'A '+roof+' roof and '+clad+' cladding face the street'+(d.veranda?', behind a classic front veranda':', with the covered entry on the right')+(d.garage===true?' and the garage on the left.':d.garage==='carport'?' and a carport on the left.':'.');
     if(step.key==='roof')return (d.solar?'Solar panels sit on the '+roof+' roof. ':'')+'The '+roof+' roof is clad in corrugated metal'+(d.chimney?', with a brick chimney.':'.');
     if(step.key==='back')return d.deck?'The covered timber deck at the side catches the evening sun.':'The back of the house, with windows to the bedrooms and kitchen.';
     return '';
@@ -35,7 +35,7 @@
     tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.mode===m?'true':'false');});
     uiBuild.hidden=m!=='build';uiTour.hidden=m!=='tour';
     if(m==='tour'){api.startTour();setPlay($('tAuto'),true,['Auto','Auto']);}
-    else{api.stopTour();api.play();setPlay(play,true,['Pause','Play']);card.hidden=true;upd(api.progress);}
+    else{api.stopTour();card.hidden=true;upd(api.progress);}
   }
   function init(){
     try{api=window.House3D&&window.House3D.createHouseScene(host,{onProgress:upd,onTour:onTour});}catch(e){api=null;}
@@ -50,11 +50,14 @@
     $('tAuto').addEventListener('click',function(){var on=$('tAuto').getAttribute('aria-pressed')!=='true';api.tourAutoplay(on);setPlay($('tAuto'),on,['Auto','Auto']);});
     $('tExit').addEventListener('click',function(){setMode('build');});
     setPlay(play,api.playing,['Pause','Play']);
+    window.__house={api:api,setMode:setMode,onDesigned:function(){mode='build';tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.mode==='build'?'true':'false');});uiBuild.hidden=false;uiTour.hidden=true;card.hidden=true;setPlay(play,false,['Pause','Play']);}};
+    document.dispatchEvent(new CustomEvent('house-ready'));
   }
   window.__h3dLoad=window.__h3dLoad||function(cb,err){
     if(window.House3D){cb();return;}
     var s=document.createElement('script');s.src='assets/house3d.js';s.onload=cb;s.onerror=err;document.head.appendChild(s);
   };
   function start(){if(started)return;started=true;window.__h3dLoad(init,fail);}
+  window.__h3dStart=start;
   if('IntersectionObserver' in window)new IntersectionObserver(function(es,o){if(es[0].isIntersecting){o.disconnect();start();}},{rootMargin:'400px'}).observe(host);else start();
 })();
