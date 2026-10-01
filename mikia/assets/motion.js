@@ -38,7 +38,8 @@
     es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}});
   },{threshold:.15,rootMargin:'0px 0px -6% 0px'});
   items.forEach(function(e){io.observe(e);});
-  $('.service svg *').forEach(function(n){if(n.getTotalLength)n.setAttribute('pathLength','1');});
+
+  $('.about').forEach(function(a){new IntersectionObserver(function(es,o){if(es[0].isIntersecting){a.classList.add('seen');o.disconnect();}},{threshold:.15}).observe(a);});
 
   /* eyebrow labels decode like a survey readout */
   var chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/+';
@@ -121,6 +122,18 @@
         box.style.setProperty('--py',(((e.clientY-r.top)/r.height-.5)*-10).toFixed(1)+'px');
       });
     });
+    /* 3D tilt for project tiles, contact card and hero scene */
+    function tilt(el,tgt,mx,my){
+      el.addEventListener('pointermove',function(e){
+        var r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+        tgt.style.setProperty('--rx',((.5-y)*my).toFixed(2)+'deg');tgt.style.setProperty('--ry',((x-.5)*mx).toFixed(2)+'deg');
+      });
+      el.addEventListener('pointerleave',function(){tgt.style.setProperty('--rx','0deg');tgt.style.setProperty('--ry','0deg');});
+    }
+    $('.project').forEach(function(p){tilt(p,p,9,6);});
+    $('.contact-card').forEach(function(c){tilt(c,c,7,5);});
+    var pc=document.querySelector('.path-card'),sc=document.querySelector('.path-card .scene');
+    if(pc&&sc)tilt(pc,sc,10,7);
     /* magnetic buttons */
     $('.btn,.nav-cta').forEach(function(b){
       b.addEventListener('pointermove',function(e){
