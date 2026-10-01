@@ -1562,3 +1562,10 @@ section.block{padding:clamp(48px,7vw,88px) 0}
   .car-count{font-size:12px}
 }
 @media (max-width:700px){.cs-art{display:block;position:relative}.cs-art .ill{position:absolute;inset:8px 16px;width:calc(100% - 32px);height:calc(100% - 16px);max-width:none}}
+
+/* counter and header centred */
+.car-ui{display:grid!important;grid-template-columns:1fr auto 1fr;align-items:center}
+.car-ui .car-count{grid-column:2;grid-row:1;justify-self:center;text-align:center}
+.car-ui #carNext{grid-column:1;grid-row:1;justify-self:start}
+.car-ui .car-pp{grid-column:3;grid-row:1;justify-self:end;margin-left:0}
+.story-head{justify-content:center;text-align:center}
