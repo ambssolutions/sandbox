@@ -1805,3 +1805,9 @@ main h2.fx-in em{background-size:100% 2px}
 .story p{max-width:68ch}
 @media (max-width:1000px){.why-grid,.tell-l{grid-template-columns:repeat(2,minmax(0,1fr))}.tgrid{grid-template-columns:1fr}.diff-l{grid-template-columns:1fr}}
 @media (max-width:560px){.why-grid,.tell-l{grid-template-columns:1fr}.faq-i summary{padding:14px 16px}.faq-a{padding:0 16px 16px}}
+
+/* hero: Build your own house under Start your project */
+.hero-cine .hero-actions{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.hero-cine .hero-actions .hero-build{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.55);color:#fff;backdrop-filter:blur(6px)}
+.hero-cine .hero-actions .hero-build:hover{background:#fff;color:var(--ink)}
+@media (max-width:860px){.hero-cine .hero-actions{align-items:stretch}.hero-cine .hero-actions .btn{width:100%;justify-content:center}}

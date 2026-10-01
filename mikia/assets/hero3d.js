@@ -79,3 +79,12 @@
   var kick=function(){('requestIdleCallback' in window)?requestIdleCallback(load,{timeout:2500}):setTimeout(load,800);};
   if(document.readyState==='complete')kick();else window.addEventListener('load',kick);
 })();
+
+(function(){var a=document.getElementById('heroBuild');if(!a)return;
+  a.addEventListener('click',function(e){var s=document.getElementById('build3d');if(!s)return;e.preventDefault();
+    if(window.__h3dStart)window.__h3dStart();
+    var top=s.getBoundingClientRect().top+scrollY-8;
+    window.scrollTo({top:top,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    try{history.replaceState(null,'','#build3d');}catch(_){}
+    setTimeout(function(){var d=document.getElementById('design');if(d&&d.scrollIntoView&&matchMedia('(min-width:1101px)').matches){}},0);});
+})();
