@@ -1284,13 +1284,13 @@ section.block{padding:clamp(48px,7vw,88px) 0}
 
 /* ===== STATUS-BAR DISCIPLINES: bar segments carry the names ===== */
 .story-bars{gap:clamp(6px,.8vw,12px);margin:0 0 14px}
-.story-bars .sb{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:8px;padding:0;border:0;background:none;cursor:pointer;text-align:left;color:#8b958e;font-family:inherit;transition:color .3s}
-.story-bars .sb i{display:block;width:100%;height:5px;background:rgba(18,32,27,.14)}
-.story-bars .sb span{font-size:clamp(11px,.95vw,14px);font-weight:600;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
-.story-bars .sb em{font:500 10px var(--mono);letter-spacing:.16em;font-style:normal;margin-right:6px;color:var(--accent-text)}
-.story-bars .sb.cur,.story-bars .sb:hover{color:var(--text)}
-.story-bars .sb:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
-@media (max-width:700px){.story-bars .sb span{font-size:0}.story-bars .sb em{font-size:10px;margin:0}.story-bars .sb.cur span{font-size:0}}
+.story-bars .sbar{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:8px;padding:0;border:0;background:none;cursor:pointer;text-align:left;color:#8b958e;font-family:inherit;transition:color .3s}
+.story-bars .sbar i{display:block;width:100%;height:5px;background:rgba(18,32,27,.14)}
+.story-bars .sbar span{font-size:clamp(11px,.95vw,14px);font-weight:600;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.story-bars .sbar em{font:500 10px var(--mono);letter-spacing:.16em;font-style:normal;margin-right:6px;color:var(--accent-text)}
+.story-bars .sbar.is-cur,.story-bars .sbar:hover{color:var(--text)}
+.story-bars .sbar:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
+@media (max-width:700px){.story-bars .sbar span{font-size:0}.story-bars .sbar em{font-size:10px;margin:0}.story-bars .sbar.is-cur span{font-size:0}}
 
 
 /* ===== FASTER HEADLINE SWAP ===== */
@@ -1300,3 +1300,5 @@ section.block{padding:clamp(48px,7vw,88px) 0}
 .hero-bgimg img.bg{transition:opacity .9s ease,transform 5s ease-out}
 .hero-bgimg img.bg[data-bg="live"]{transition:opacity .9s ease}
 .hero-3d{transition:opacity .9s ease}
+.story-bars .sbar i{flex:none;align-self:stretch;width:100%;min-width:0}
+.story-bars .sbar{align-items:stretch}
