@@ -405,3 +405,88 @@ html.motion .project.in-view .project-img svg path{stroke-dashoffset:0}
   .service:hover,.btn-accent:hover{transform:none}
   @view-transition{navigation:none}
 }
+
+/* ===== HERO SCENE (NZ house) ===== */
+@media (min-width:1181px){.path-card{width:520px}.hero-copy{max-width:620px}}
+.scene .tw{animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+.scene .sway{transform-box:fill-box;transform-origin:bottom center;animation:sway 5s ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(-1.4deg)}to{transform:rotate(1.4deg)}}
+.scene .dig{animation:dig 1.6s ease-in-out infinite alternate}
+@keyframes dig{from{transform:rotate(-7deg)}to{transform:rotate(6deg)}}
+.scene .bird{animation:fly 11s linear infinite;animation-delay:var(--d,0s)}
+@keyframes fly{0%{transform:translate(-30px,10px)}100%{transform:translate(300px,-26px)}}
+.scene .sun{animation:sunpulse 4s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+@keyframes sunpulse{from{transform:scale(.94)}to{transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.scene .tw,.scene .sway,.scene .dig,.scene .bird,.scene .sun{animation:none}}
+
+/* ===== SIGNATURE SECTION MOTION ===== */
+/* ticker */
+.ticker{overflow:hidden;background:var(--paper);border-bottom:1px solid var(--line);padding:30px 0 34px}
+.ticker-skew{transform:skewX(var(--sk,0deg));transition:transform .25s ease-out}
+.ticker-track{display:flex;width:max-content;will-change:transform}
+.ticker-track span{font-family:var(--serif);font-weight:300;font-size:clamp(38px,6.2vw,96px);line-height:1.05;letter-spacing:-.025em;white-space:nowrap;color:transparent;-webkit-text-stroke:1px var(--text);padding:0 .3em;display:inline-flex;align-items:center;gap:.6em}
+.ticker-track span:nth-child(even){color:var(--accent);-webkit-text-stroke:0;font-style:italic;font-weight:400}
+.ticker-track span::after{content:"";width:.22em;height:.22em;background:var(--accent);transform:rotate(45deg);flex:none}
+
+/* custom cursor */
+.cur{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid rgba(239,106,98,.95);border-radius:50%;pointer-events:none;z-index:80;opacity:0;display:flex;align-items:center;justify-content:center;font:500 11px var(--mono);letter-spacing:.12em;color:#fff;transition:width .28s cubic-bezier(.2,.8,.2,1),height .28s cubic-bezier(.2,.8,.2,1),margin .28s cubic-bezier(.2,.8,.2,1),background .25s,opacity .25s}
+.cur.on{opacity:1}
+.cur.big{width:62px;height:62px;margin:-31px 0 0 -31px;background:rgba(239,106,98,.14)}
+.cur.view{width:88px;height:88px;margin:-44px 0 0 -44px;background:var(--accent);border-color:var(--accent)}
+
+/* service cards: tilt and spotlight */
+html.motion .service{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0px));transform-style:preserve-3d}
+html.motion .service:hover{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-6px)}
+.service{overflow:hidden}
+.service::before{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(239,106,98,.16),transparent 65%);opacity:0;transition:opacity .3s;pointer-events:none}
+.service.feature::before{background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(239,106,98,.28),transparent 65%)}
+.service:hover::before{opacity:1}
+html.motion .service.in-view svg *{animation:redraw 1.3s cubic-bezier(.5,0,.3,1) .3s both}
+
+/* how we work: scroll-scrubbed */
+html.motion .steps .steps-fill{width:calc((100% - 8px)*var(--sp,0));transition:width .12s linear;height:3px;top:6px;background:linear-gradient(90deg,var(--accent),var(--accent-hi));border-radius:3px}
+html.motion .steps .steps-fill::after{content:"";position:absolute;right:-6px;top:-4px;width:11px;height:11px;border-radius:50%;background:var(--accent-hi);box-shadow:0 0 0 4px rgba(239,106,98,.25),0 0 18px 4px rgba(239,106,98,.7)}
+html.motion .steps.in .peg{background:var(--sand);border-color:var(--text);transform:none}
+html.motion .steps li.lit .peg{background:var(--accent);border-color:var(--accent);transform:scale(1.3);transition:transform .45s cubic-bezier(.3,1.6,.5,1),background .3s}
+html.motion .steps li:not(.steps-fill) h3,html.motion .steps li:not(.steps-fill) p,html.motion .steps li:not(.steps-fill) .mono{opacity:.28;translate:0 10px;transition:opacity .6s,translate .6s}
+html.motion .steps li.lit h3,html.motion .steps li.lit p,html.motion .steps li.lit .mono{opacity:1;translate:0 0}
+@media (max-width:1180px){html.motion .steps li.lit .peg{transform:scale(1.3)}}
+
+/* projects: curtain reveal and parallax */
+html.motion .project-img{clip-path:inset(0 0 100% 0 round 18px);transition:clip-path 1.2s cubic-bezier(.7,0,.2,1) .1s}
+html.motion .project.in-view .project-img{clip-path:inset(0 0 0 0 round 18px)}
+.project:hover .project-img svg{transform:scale(1.08) translate(var(--px,0px),var(--py,0px))}
+
+/* about: aurora and word fill */
+.about{position:relative;overflow:hidden}
+.about .wrap{position:relative;z-index:1}
+.about::before{content:"";position:absolute;inset:-25%;background:radial-gradient(620px 420px at 18% 32%,rgba(194,52,52,.24),transparent 62%),radial-gradient(520px 420px at 82% 72%,rgba(159,194,174,.14),transparent 62%);animation:aurora 20s ease-in-out infinite alternate}
+@keyframes aurora{from{transform:translate3d(-4%,-3%,0) rotate(0deg)}to{transform:translate3d(5%,4%,0) rotate(6deg)}}
+.about h2 .word{display:inline-block;transition:opacity .15s linear}
+html.motion .values div{border-top-color:transparent;position:relative}
+html.motion .values div::before{content:"";position:absolute;top:-1px;left:0;right:0;height:1px;background:rgba(159,194,174,.45);transform:scaleX(0);transform-origin:0 50%;transition:transform 1.3s cubic-bezier(.6,0,.2,1) calc(var(--rd,0s) + .2s)}
+html.motion .values div.in-view::before{transform:scaleX(1)}
+
+/* contact and bands */
+@property --ang{syntax:"<angle>";initial-value:0deg;inherits:false}
+.contact-card{position:relative}
+.contact-card::before{content:"";position:absolute;inset:-1px;border-radius:21px;padding:1.5px;background:conic-gradient(from var(--ang),transparent 0 62%,var(--accent-hi) 80%,transparent 96%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:spinang 6s linear infinite;pointer-events:none}
+@keyframes spinang{to{--ang:360deg}}
+.addr::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--accent);margin-right:10px;box-shadow:0 0 0 0 rgba(194,52,52,.5);animation:pingdot 2s ease-out infinite;vertical-align:middle}
+@keyframes pingdot{70%{box-shadow:0 0 0 12px rgba(194,52,52,0)}100%{box-shadow:0 0 0 0 rgba(194,52,52,0)}}
+.btn{transition:transform .2s ease,box-shadow .2s ease,opacity .15s,translate .3s cubic-bezier(.2,.8,.2,1)}
+.band{position:relative;overflow:hidden}
+.band::before{content:"";position:absolute;inset:-40%;background:radial-gradient(520px 320px at 20% 40%,rgba(194,52,52,.3),transparent 60%),radial-gradient(480px 320px at 85% 60%,rgba(159,194,174,.14),transparent 60%);animation:aurora 16s ease-in-out infinite alternate}
+.band .wrap{position:relative;z-index:1}
+
+/* sub-page hero: drifting survey rings */
+.page-hero::before{content:"";position:absolute;right:-12%;top:-60%;width:90vmin;height:90vmin;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,transparent 0 26px,rgba(159,194,174,.11) 26px 27px);animation:rings 24s linear infinite;pointer-events:none}
+@keyframes rings{from{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.12)}to{transform:rotate(360deg) scale(1)}}
+
+@media (prefers-reduced-motion:reduce){
+  .ticker-skew{transform:none}
+  .about::before,.band::before,.page-hero::before,.contact-card::before,.addr::before{animation:none}
+  .cur{display:none}
+}
+@media (max-width:860px){.ticker{padding:20px 0 24px}}

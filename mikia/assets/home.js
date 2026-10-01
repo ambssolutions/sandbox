@@ -9,7 +9,7 @@
     const f=n=>{const k=Math.min(1,(n-st)/900);shown=Math.round(from+(t-from)*k);pct.textContent=shown+'%';if(k<1)raf=requestAnimationFrame(f);};
     raf=requestAnimationFrame(f);bar.style.width=t+'%';};
   const wait=ms=>new Promise(r=>setTimeout(r,ms));
-  const show=k=>scene.querySelectorAll('.st-'+k).forEach(el=>el.classList.add('on'));
+  const show=k=>{scene.querySelectorAll('.st-'+k).forEach(el=>el.classList.add('on'));scene.querySelectorAll('.off-'+k).forEach(el=>el.classList.remove('on'));};
   function reset(){
     scene.querySelectorAll('.on').forEach(el=>el.classList.remove('on'));
     items.forEach(li=>li.classList.remove('active','done','flowing'));
