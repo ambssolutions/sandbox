@@ -133,10 +133,11 @@
       [].forEach.call(dots.children,function(x,k){x.className=k<i?'done':k===i?'on':'';});
       qEl.textContent=q.t;sEl.textContent=q.s||'';sEl.hidden=!q.s;oEl.textContent='';fEl.textContent='';
       oEl.className='dz-wopts'+(q.sw?' sw':'');
+      var side=document.getElementById('design');if(side)side.classList.toggle('wiz-last',i===WQ.length-1);
       oEl.style.animation='none';void oEl.offsetWidth;oEl.style.animation='';
       if(q.type==='preset'){
         PRESETS.forEach(function(p){var b=document.createElement('button');b.type='button';b.className='dz-wopt';b.innerHTML='<b>'+p[0]+'</b><small>'+p[1].split(',')[1]?'':'';b.textContent=p[0];b.title=p[1];b.addEventListener('click',function(){apply(Object.assign({},DEF,p[3],{tod:state.tod}),true);stageTo(0);go(1);});oEl.appendChild(b);});
-        var sc=document.createElement('button');sc.type='button';sc.className='dz-wopt ghost';sc.textContent='Start from scratch';sc.addEventListener('click',function(){apply(Object.assign({},DEF,{tod:state.tod}),true);stageTo(0);go(1);});oEl.appendChild(sc);
+        var sc=document.createElement('button');sc.type='button';sc.className='dz-wopt dz-alt';sc.textContent='Start from scratch';sc.addEventListener('click',function(){apply(Object.assign({},DEF,{tod:state.tod}),true);stageTo(0);go(1);});oEl.appendChild(sc);
       }else if(q.type==='extras'){
         q.opts.forEach(function(o){var b=document.createElement('button');b.type='button';b.className='dz-wopt';b.dataset.wk=o[0];b.dataset.wm='1';b.setAttribute('role','checkbox');b.textContent=o[1];
           b.addEventListener('click',function(){var k=o[0],v=!(state[k]&&state[k]!=='none'&&state[k]!==false);var x={};x[k]=v;apply(x,true);stageTo(4);});oEl.appendChild(b);});
@@ -150,7 +151,7 @@
     function go(n){var t=qi+n;if(t<0)return;if(t>=WQ.length)return;render(t);}
     back.addEventListener('click',function(){go(-1);});
     var fine=wiz.querySelector('.dz-wfine');
-    fine.addEventListener('click',function(){var on=panel.classList.toggle('fine');fine.textContent=on?'Back to questions':'Fine-tune';fine.setAttribute('aria-pressed',on?'true':'false');});
+    fine.addEventListener('click',function(){var on=panel.classList.toggle('fine');fine.textContent=on?'Back to questions':'Fine-tune';var sd=document.getElementById('design');if(sd)sd.classList.toggle('is-fine',on);fine.setAttribute('aria-pressed',on?'true':'false');});
     render(0);
   }
   function wire(){

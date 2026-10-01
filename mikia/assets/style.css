@@ -1406,7 +1406,7 @@ section.block{padding:clamp(48px,7vw,88px) 0}
 .dz-wopt{flex:1 1 calc(50% - 8px);min-width:0;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid rgba(238,242,234,.25);background:rgba(255,255,255,.05);color:var(--on-dark);font:600 14px var(--sans);cursor:pointer;text-align:center;transition:background .2s,border-color .2s,transform .2s}
 .dz-wopt:hover{border-color:var(--accent-hi);transform:translateY(-1px)}
 .dz-wopt[aria-checked="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
-.dz-wopt.ghost{background:none;border-style:dashed;flex-basis:100%;color:var(--on-dark-muted)}
+.dz-wopt.dz-alt{background:none;border-style:dashed;flex-basis:100%;color:var(--on-dark-muted)}
 .dz-wopts.sw .dz-sw{width:48px;height:48px}
 .dz-wfoot{margin-top:auto}
 .dz-wbuild{width:100%;justify-content:center}
@@ -1424,3 +1424,94 @@ section.block{padding:clamp(48px,7vw,88px) 0}
 
 .car-slide.is-leaving .cs-copy>*,.car-slide.is-leaving .cs-copy>*:nth-child(n),.car-slide.is-leaving .cs-copy .ticks li,.car-slide.is-leaving .cs-copy .ticks li:nth-child(n){opacity:0!important;transition:opacity .4s ease!important;transition-delay:0s!important}
 .car-slide.is-leaving .cs-copy .ticks{opacity:1!important}
+
+
+/* ===== QUESTION FLOW: fit the screen ===== */
+.dz-side:not(.is-fine):not(.wiz-last) .dz-bar{display:none}
+.dz-side.wiz-last:not(.is-fine) .dz-sum .mono,.dz-side.wiz-last:not(.is-fine) .dz-count{display:none}
+.dz-side.wiz-last:not(.is-fine) .dz-sum p{font-size:12px;-webkit-line-clamp:3}
+.dz-side:not(.is-fine) .dz-actions #dzBuild{display:none}
+.dz-side:not(.is-fine) .dz-head{display:none}
+.dz-side{justify-content:flex-start}
+.dz-side .dz-panel{flex:1 1 auto}
+.dz-wiz{justify-content:flex-start;gap:10px}
+.dz-wopts{align-content:flex-start;overflow:auto;max-height:100%}
+.dz-wopt{min-height:clamp(46px,6.5svh,58px);font-size:clamp(14px,1.2vw,15px)}
+.dz-wq{font-size:clamp(20px,2.2vw,28px)}
+.dz-wopts.sw{gap:10px}
+.dz-wopts.sw .dz-sw{width:clamp(44px,5vw,54px);height:clamp(44px,5vw,54px)}
+@media (min-width:1101px){.dz-side{height:clamp(540px,78svh,800px);max-height:none}}
+@media (max-width:1100px){
+  .dz-side{padding:12px 14px 16px}
+  .dz-wopt{flex:1 1 calc(50% - 8px)}
+  .dz-wtop{position:sticky;top:0}
+  .dz-wq{font-size:22px}
+  .dz-wfoot .btn{min-height:50px}
+}
+@media (max-width:360px){.dz-wopt{flex:1 1 100%}}
+@media (max-height:640px){.studio-grid .v3d-canvas{height:clamp(200px,34svh,300px)}}
+
+/* ===== DISCIPLINE TEXT FALLS IN ===== */
+.cs-copy>*,.cs-copy .ticks li{transform:translateY(-46px)!important;opacity:0;transition:opacity .55s ease,transform .9s cubic-bezier(.3,1.35,.5,1)!important}
+.car-slide.is-on .cs-copy>*,.car-slide.is-on .cs-copy .ticks li{transform:none!important;opacity:1}
+.car-slide.is-on .cs-copy .ticks{transform:none!important}
+.car-slide.is-leaving .cs-copy>*,.car-slide.is-leaving .cs-copy>*:nth-child(n),.car-slide.is-leaving .cs-copy .ticks li,.car-slide.is-leaving .cs-copy .ticks li:nth-child(n){opacity:0!important;transform:translateY(36px)!important;transition:opacity .38s ease-in,transform .42s cubic-bezier(.5,0,.9,.4)!important;transition-delay:0s!important}
+.car-slide.is-leaving .cs-copy .ticks{transform:none!important}
+@media (prefers-reduced-motion:reduce){.cs-copy>*,.cs-copy .ticks li{transform:none!important;opacity:1!important;transition:none!important}}
+/* question flow: stop options overlapping on small screens */
+@media (max-width:1100px){
+  .dz-wiz{flex:none;min-height:auto}
+  .dz-wopts{max-height:none;overflow:visible}
+  .dz-side .dz-panel{flex:none}
+}
+.car-track{will-change:auto!important}
+
+/* the clipping box must not be the element that moves */
+.car{overflow-x:clip!important;overflow-y:visible!important}
+.car-track{overflow:visible!important}
+@supports not (overflow:clip){.car{overflow:hidden!important}}
+
+/* ===== MEETING BUTTONS: easy to tap on every screen ===== */
+.nav-cta{min-height:44px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}
+.cs-book{max-width:100%}
+.cs-book .cs-txt{min-width:0}
+.cs-book .cs-txt,.cs-book .cs-txt small{overflow-wrap:anywhere}
+@media (max-width:860px){
+  .cs-book{width:100%;padding:14px 18px 14px 14px;gap:14px;border-radius:24px}
+  .cs-ico{width:52px;height:52px}
+  .cs-txt{font-size:17px;line-height:1.25}
+  .cs-ring{display:none}
+  .nav-links .nav-cta{width:100%!important;margin-top:10px;min-height:52px;font-size:16px;background:var(--accent);border-color:var(--accent);color:#fff!important}
+  .band-actions .btn,.hero-actions .btn{width:100%}
+}
+@media (max-width:420px){.cs-txt small{display:block;font-size:13px}.cs-book{padding:12px 14px 12px 12px}.cs-ico{width:46px;height:46px}.cs-txt{font-size:16px}}
+@media (max-width:300px){.cs-ico{display:none}}
+
+
+/* ===== MODE SWITCH: a proper segmented control on small screens ===== */
+.v3d-tab .sh{display:none}
+@media (max-width:760px){
+  .viewer3d{display:flex;flex-direction:column}
+  .v3d-tabs{position:static;translate:none;order:-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin:0;padding:6px;border-radius:0;border:0;border-bottom:1px solid rgba(159,194,174,.2);background:rgba(11,21,17,.92);max-width:none;width:100%}
+  .v3d-tab{width:100%;justify-content:center;min-height:46px;padding:0 6px;font-size:14px;gap:6px}
+  .v3d-tab .l{display:none}.v3d-tab .sh{display:inline}
+  .v3d-tab span{display:none}.v3d-tab .sh{display:inline}
+  .v3d-top{top:62px}
+  .v3d-label{font-size:10px;padding:6px 10px}
+  .v3d-ui{bottom:8px;left:8px;right:8px}
+  .v3d-chip{flex:1 1 auto}
+}
+
+/* ===== HERO TEXT ON PHONES ===== */
+@media (max-width:640px){
+  .hero-cine{min-height:clamp(470px,64svh,560px)!important}
+  .hero-cine .hero-main{align-items:flex-start;padding-top:20px!important;padding-bottom:64px}
+  .hero-cine .hero-copy{gap:16px;max-width:100%}
+  .hero-cine h1{font-size:clamp(32px,9.6vw,44px);line-height:1.1;letter-spacing:-.02em;min-height:3.3em;text-shadow:0 2px 18px rgba(0,0,0,.55)}
+  .hero-cine .hero-lede{font-size:16px;line-height:1.55;max-width:32ch;text-shadow:0 1px 12px rgba(0,0,0,.6)}
+  .hero-cine .hero-actions .btn{width:100%;min-height:54px;font-size:17px}
+  .hero-cine .hero-shade{background:linear-gradient(180deg,rgba(11,21,17,.9) 0%,rgba(11,21,17,.8) 50%,rgba(11,21,17,.55) 78%,rgba(11,21,17,.8) 100%)}
+  .hero-mini{left:var(--pad);right:var(--pad);bottom:16px;align-items:flex-start}
+  .hero-mini i{width:100%}
+}
+@media (max-width:340px){.hero-cine h1{font-size:30px}.hero-cine .hero-lede{font-size:15px}}
