@@ -1538,3 +1538,27 @@ section.block{padding:clamp(48px,7vw,88px) 0}
 /* ===== TICKER: solid, readable colours (no hollow outlines) ===== */
 .ticker-track span{color:var(--text)!important;-webkit-text-stroke:0!important;font-weight:400}
 .ticker-track span:nth-child(even){color:var(--accent-text)!important;font-style:italic}
+
+/* ===== SIX DISCIPLINES: compact on phones ===== */
+@media (max-width:700px){
+  .story-bars{margin-bottom:8px}
+  .story-bars .sbar em{font-size:9px}
+  .story-head{margin-bottom:10px;gap:8px;font-size:13px}
+  .story-head .av{width:28px;height:28px;font-size:13px}
+  .car-slide{min-height:0!important;border-radius:20px}
+  .cs-art{padding:10px 16px;min-height:0;height:clamp(110px,22svh,160px)}
+  .cs-art .ill{max-width:none;width:auto;height:100%;max-height:100%}
+  .cs-num{font-size:64px;left:12px;top:0}
+  .cs-copy{padding:16px 16px 18px;gap:8px}
+  .cs-copy .mono{font-size:10px}
+  .cs-copy h3{font-size:24px}
+  .cs-copy p{font-size:14px;line-height:1.5}
+  .cs-copy .ticks{margin:2px 0;gap:6px;font-size:13px}
+  .cs-copy .ticks li{padding-left:26px;line-height:1.4}
+  .cs-copy .ticks li:nth-child(n+4){display:none}
+  .cs-copy .textlink{min-height:44px;display:inline-flex;align-items:center}
+  .car-ui{margin-top:10px}
+  .car-btn{width:48px;height:48px}
+  .car-count{font-size:12px}
+}
+@media (max-width:700px){.cs-art{display:block;position:relative}.cs-art .ill{position:absolute;inset:8px 16px;width:calc(100% - 32px);height:calc(100% - 16px);max-width:none}}
