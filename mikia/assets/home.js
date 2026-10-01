@@ -3,7 +3,7 @@
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const card=document.querySelector('.path-card'), items=[...document.querySelectorAll('.path li')];
   const bar=document.getElementById('pbar'), pct=document.getElementById('ppct'), status=document.getElementById('pstatus');
-  const scene=document.querySelector('.scene'), STEPS=16, BEAT=1250;   // 16 x 1.25s = 20s
+  const scene=document.querySelector('.scene'), STEPS=16, BEAT=520;   // 16 x 1.25s = 20s
   let shown=0, raf;
   const setPct=t=>{cancelAnimationFrame(raf);const from=shown,st=performance.now();
     const f=n=>{const k=Math.min(1,(n-st)/900);shown=Math.round(from+(t-from)*k);pct.textContent=shown+'%';if(k<1)raf=requestAnimationFrame(f);};
@@ -18,7 +18,7 @@
   async function run(){
     while(true){
       reset();
-      await wait(800);
+      await wait(500);
       for(let k=1;k<=STEPS;k++){
         show(k);
         const stage=Math.floor((k-1)/4);
@@ -32,14 +32,14 @@
         await wait(BEAT);
       }
       card.classList.add('complete');status.textContent='COMPLETE';
-      await wait(3400);
+      await wait(2600);
     }
   }
   if(reduce){
     for(let k=1;k<=STEPS;k++)show(k);
     items.forEach(li=>li.classList.add('done'));
     bar.style.width='100%';pct.textContent='100%';card.classList.add('complete');status.textContent='COMPLETE';
-  } else setTimeout(run,2200);
+  } else setTimeout(run,1100);
 
   
 })();

@@ -6,6 +6,7 @@
   var EMAIL='info@mikia.co.nz';
   var form=document.getElementById('enquiry'),status=document.getElementById('status');
   if(!form)return;
+  try{var dz=new URLSearchParams(location.search).get('design');if(dz){form.elements.message.value='I would like to talk about this house design: '+dz+'\n\n';form.elements.type.value='Residential subdivision';}}catch(e){}
   function say(msg,bad){status.textContent=msg;status.className='status'+(bad?' bad':' ok');}
   form.addEventListener('submit',function(e){
     e.preventDefault();

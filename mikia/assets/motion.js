@@ -23,7 +23,7 @@
   root.classList.add('motion');
 
   /* scroll reveal with stagger */
-  var sel='.head-row>*,.service,.project,.values>div,.contact>*,.contact-card,.prose>h2,.prose>p,.prose>ul,.side,.pcard,.band-in>*,.empty,.cform>*:not(.hp),.more';
+  var sel='.head-row>*,.service,.project,.values>div,.contact>*,.contact-card,.cs-head,.cs-side>*,.dz-bar,.dz-panel,.svc-grid,.prose>h2,.prose>p,.prose>ul,.side,.pcard,.band-in>*,.empty,.cform>*:not(.hp),.more';
   var items=$(sel).filter(function(e){return !e.closest('.hero')});
   var seen=new Map();
   items.forEach(function(e){
@@ -146,10 +146,10 @@
 
   /* scroll progress, parallax, scrub effects */
   var bar=document.createElement('div');bar.className='scrollbar-x';bar.setAttribute('aria-hidden','true');document.body.appendChild(bar);
-  var hero=document.querySelector('.hero'),steps=document.querySelector('.steps'),stepLis=steps?$('li:not(.steps-fill)',steps):[];
+  var stCards=$('.st-card'),hero=document.querySelector('.hero'),steps=document.querySelector('.steps'),stepLis=steps?$('li:not(.steps-fill)',steps):[];
   var lastY=window.pageYOffset,vel=0,ticking=false,loopOn=false;
   function frame(){
-    var y=window.pageYOffset,h=document.documentElement.scrollHeight-window.innerHeight,vh=window.innerHeight;
+    var y=window.pageYOffset,h=document.documentElement.scrollHeight-window.innerHeight,vh=window.innerHeight,vw=window.innerWidth;
     bar.style.setProperty('--p',h>0?Math.min(1,y/h):0);
     if(hero&&y<hero.offsetHeight)hero.style.setProperty('--py',(y*.22).toFixed(1)+'px');
     /* how we work */
@@ -163,6 +163,8 @@
       var rr=stmt.getBoundingClientRect(),p=clamp((vh*.88-rr.top)/(vh*.5+rr.height*.3),0,1),n=words.length;
       words.forEach(function(w,i){w.style.opacity=(.16+.84*clamp(p*(n+3)-i,0,1)).toFixed(2);});
     }
+    /* stacking process cards */
+    var sc=stCards;if(sc.length&&vw>860){sc.forEach(function(c,i){var n=sc[i+1];if(!n)return;var r=n.getBoundingClientRect(),p=clamp((vh*.9-r.top)/(vh*.55),0,1);c.style.transform='scale('+(1-p*.06).toFixed(3)+')';c.style.filter='brightness('+(1-p*.4).toFixed(2)+')';});}
     ticking=false;
   }
   function loop(){
