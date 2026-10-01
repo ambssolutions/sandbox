@@ -52,7 +52,7 @@
   function go(n){
     var prev=sps[cur],next=sps[n];if(prev===next)return;
     prev.classList.remove('on');prev.classList.add('out');
-    setTimeout(function(){prev.classList.remove('out');},1300);
+    setTimeout(function(){prev.classList.remove('out');},700);
     next.classList.add('on');cur=n;
     setBg(next.dataset.bg);
   }
@@ -60,7 +60,7 @@
   function startRot(){
     if(started||sps.length<2)return;started=true;
     bgs.forEach(function(im){if(im.dataset.src&&!im.src)im.src=im.dataset.src;});
-    timer=setInterval(step,7500);
+    timer=setInterval(step,3200);
   }
   if(sps.length){
     if('IntersectionObserver' in window)new IntersectionObserver(function(es){paused=!es[0].isIntersecting;},{threshold:.2}).observe(hero);
@@ -68,7 +68,7 @@
     if(!reduceR){
       // wait until the house is finished and its lights are coming on, then start changing
       var wait=setInterval(function(){
-        if((api&&api.progress>=15.9)||(!api&&performance.now()>14000)){clearInterval(wait);setTimeout(startRot,api?5200:800);}
+        if(performance.now()>3500){clearInterval(wait);startRot();}
       },400);
       setTimeout(function(){clearInterval(wait);startRot();},30000);
     }

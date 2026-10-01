@@ -2,7 +2,7 @@
   var track=document.getElementById('carTrack');if(!track)return;
   var car=track.parentNode,slides=[].slice.call(track.children),N=slides.length,tabs=[].slice.call(document.querySelectorAll('.car-tab')),count=document.getElementById('carCount'),
       next=document.getElementById('carNext'),pp=document.getElementById('carPP'),section=document.getElementById('services'),tabsOl=document.querySelector('.car-tabs'),
-      bars=[].slice.call(car.querySelectorAll('.story-bars i')),stName=document.getElementById('stName'),stMeta=document.getElementById('stMeta');
+      sbs=[].slice.call(car.querySelectorAll('.story-bars .sb')),bars=sbs.map(function(x){return x.querySelector('i');}),stName=document.getElementById('stName'),stMeta=document.getElementById('stMeta');
   var NAMES=slides.map(function(s){return s.querySelector('h3').textContent;});
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,cur=0,busy=false,auto=!reduce,inView=false,held=false,CYC=6500;
   car.style.setProperty('--cyc',CYC+'ms');
@@ -16,6 +16,7 @@
   }
   function setUi(i){
     tabs.forEach(function(t,k){t.setAttribute('aria-current',k===i?'true':'false');});
+    sbs.forEach(function(x,k){x.classList.toggle('cur',k===i);x.setAttribute('aria-current',k===i?'true':'false');});
     count.textContent='0'+(i+1)+' / 0'+N;stName.textContent=NAMES[i];stMeta.textContent='Mikia \u00b7 '+(i+1)+' of '+N;
     var t=tabs[i];if(tabsOl.scrollWidth>tabsOl.clientWidth+2&&t.scrollIntoView)t.scrollIntoView({block:'nearest',inline:'center',behavior:reduce?'auto':'smooth'});
     paintBars();
@@ -51,7 +52,7 @@
   }
   next.addEventListener('click',function(){setAuto(false);goTo(cur+1);});
   tabs.forEach(function(t,i){t.addEventListener('click',function(){setAuto(false);goTo(i);});});
-  bars.forEach(function(b,i){b.style.cursor='pointer';});
+  sbs.forEach(function(x,i){x.addEventListener('click',function(){setAuto(false);goTo(i);});});
   pp.addEventListener('click',function(){setAuto(!auto);});
   track.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();setAuto(false);goTo(cur+1);}});
   car.addEventListener('mouseenter',function(){setPaused(true);});car.addEventListener('mouseleave',function(){setPaused(false);});
