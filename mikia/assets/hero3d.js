@@ -54,17 +54,15 @@
     prev.classList.remove('on');prev.classList.add('out');
     setTimeout(function(){prev.classList.remove('out');},1300);
     next.classList.add('on');cur=n;
-    hero.style.setProperty('--ph',next.dataset.c);
     setBg(next.dataset.bg);
   }
   function step(){if(paused||document.hidden)return;go((cur+1)%sps.length);}
   function startRot(){
     if(started||sps.length<2)return;started=true;
     bgs.forEach(function(im){if(im.dataset.src&&!im.src)im.src=im.dataset.src;});
-    timer=setInterval(step,5600);
+    timer=setInterval(step,7500);
   }
   if(sps.length){
-    hero.style.setProperty('--ph',sps[0].dataset.c);
     if('IntersectionObserver' in window)new IntersectionObserver(function(es){paused=!es[0].isIntersecting;},{threshold:.2}).observe(hero);
     var reduceR=matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(!reduceR){
