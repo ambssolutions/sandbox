@@ -1534,3 +1534,7 @@ section.block{padding:clamp(48px,7vw,88px) 0}
   #uiInside .v3d-play span{display:inline}
   .v3d-top{left:8px;right:8px}
 }
+
+/* ===== TICKER: solid, readable colours (no hollow outlines) ===== */
+.ticker-track span{color:var(--text)!important;-webkit-text-stroke:0!important;font-weight:400}
+.ticker-track span:nth-child(even){color:var(--accent-text)!important;font-style:italic}
