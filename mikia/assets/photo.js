@@ -102,7 +102,7 @@
   }
   function init(){
     loading=false;
-    try{api=window.House3D&&window.House3D.createHouseScene(houseEl,{cutout:true,startFinished:true,autoplay:false,tod:'day',design:Object.assign({},(cur&&cur.design)||BASE,{tod:'day'})});}catch(e){api=null;}
+    try{api=window.House3D&&window.House3D.createHouseScene(houseEl,{pbr:true,cutout:true,startFinished:true,autoplay:false,tod:'day',design:Object.assign({},(cur&&cur.design)||BASE,{tod:'day'})});}catch(e){api=null;}
     load.hidden=true;if(!api){fail();return;}apply();
   }
   function fail(){loading=false;load.hidden=true;msg('The 3D house needs WebGL, which this device does not support.');houseEl.hidden=true;}

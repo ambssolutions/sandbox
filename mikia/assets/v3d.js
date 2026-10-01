@@ -55,7 +55,7 @@
     else{api.stopTour();card.hidden=true;upd(api.progress);}
   }
   function init(){
-    try{api=window.House3D&&window.House3D.createHouseScene(host,{onProgress:upd,onTour:onTour,onInside:onInside});}catch(e){api=null;}
+    try{api=window.House3D&&window.House3D.createHouseScene(host,{pbr:true,onProgress:upd,onTour:onTour,onInside:onInside});}catch(e){api=null;}
     if(!api){fail();return;}
     host.classList.add('ready');
     window.House3D.TOUR_STEPS.forEach(function(){dots.appendChild(document.createElement('i'));});
