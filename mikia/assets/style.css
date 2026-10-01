@@ -964,3 +964,13 @@ html.motion .swh.in-view .sw>span{transform:none}
 @media (prefers-reduced-motion:reduce){html.motion [data-rv]{opacity:1;translate:none;scale:none}html.motion .swh .sw>span{transform:none}}
 html{overflow-x:hidden}
 @media (max-width:860px){html.motion [data-rv="left"]{translate:-28px 0}html.motion [data-rv="right"]{translate:28px 0}}
+
+/* hero project path card (the development) */
+.hero-cine .hero-main{display:flex;justify-content:space-between;align-items:center;gap:clamp(20px,3vw,48px)}
+.hero-cine .path-card{flex:none;width:clamp(300px,26vw,400px);background:rgba(15,28,23,.68);backdrop-filter:blur(14px);border:1px solid rgba(159,194,174,.28);box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}
+.path-stage{display:inline-flex;align-self:flex-start;font:500 11px var(--mono);letter-spacing:.2em;color:#fff;background:var(--accent);padding:7px 12px;border-radius:99px}
+.hero-cine .path li{cursor:pointer}
+.hero-cine .path li:hover strong{color:#fff}
+.hero-cine .hero-tl{display:none}
+@media (max-width:1180px){.hero-cine .hero-main{flex-direction:column;align-items:flex-start}.hero-cine .path-card{width:100%;max-width:520px}}
+.hero-cine .hero-shade{background:linear-gradient(90deg,rgba(11,21,17,.86) 0%,rgba(11,21,17,.5) 36%,rgba(11,21,17,.05) 58%,transparent 78%),linear-gradient(0deg,rgba(11,21,17,.85) 0%,rgba(11,21,17,.2) 22%,transparent 40%),linear-gradient(180deg,rgba(11,21,17,.55),transparent 18%)}
