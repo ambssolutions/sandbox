@@ -7,7 +7,7 @@
       anch=[].slice.call(document.querySelectorAll('.hero-anchors span'));
   var api=null,doneN=0,shown=0,NAMES=['01 · SITE SURVEY','02 · PLAN & CONSENT','03 · ENGINEERING & BUILD','04 · DELIVERY & HANDOVER'];
   function setStatic(){
-    lis.forEach(function(l){l.classList.add('done');});bar.style.width='100%';pct.textContent='100%';card.classList.add('complete');status.textContent='COMPLETE';stage.textContent='COMPLETE · TITLE ISSUED';
+    lis.forEach(function(l){l.classList.add('done');});bar.style.width='100%';pct.textContent='100%';card.classList.add('complete');status.textContent='COMPLETE';stage.textContent='COMPLETE';
   }
   function upd(b){
     var st=Math.min(3,Math.floor(b/4)),p=Math.round(Math.min(1,b/16)*100);
@@ -20,8 +20,8 @@
       if(!done)l.classList.remove('done');
     });
     var complete=b>=15.98;card.classList.toggle('complete',complete);status.textContent=complete?'COMPLETE':'IN PROGRESS';
-    stage.textContent=complete?'COMPLETE · TITLE ISSUED':NAMES[st];
-    var mt=document.getElementById('pminiT'),mb=document.getElementById('pminiB');if(mt)mt.textContent=complete?'Title issued':['01 · Site survey','02 · Plan and consent','03 · Engineering and build','04 · Delivery and handover'][st];if(mb)mb.style.width=(b/16*100).toFixed(1)+'%';
+    stage.textContent=complete?'COMPLETE':NAMES[st];
+    var mt=document.getElementById('pminiT'),mb=document.getElementById('pminiB');if(mt)mt.textContent=complete?'Complete':['01 · Site survey','02 · Plan and consent','03 · Engineering and build','04 · Delivery and handover'][st];if(mb)mb.style.width=(b/16*100).toFixed(1)+'%';
   }
   var blockers=[].slice.call(document.querySelectorAll('.hero-copy,#pathCard,.nav'));
   function pos(pts){

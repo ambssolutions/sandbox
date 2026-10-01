@@ -1,46 +1,70 @@
 (function(){
   var track=document.getElementById('carTrack');if(!track)return;
-  var slides=[].slice.call(track.children),tabs=[].slice.call(document.querySelectorAll('.car-tab')),count=document.getElementById('carCount'),
-      prev=document.getElementById('carPrev'),next=document.getElementById('carNext'),pp=document.getElementById('carPP'),section=document.getElementById('services');
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,N=slides.length,cur=0,timer=null,auto=!reduce,hovering=false,inView=false,CYC=6500;
-  track.style.setProperty('--cyc',CYC+'ms');
-  function slideW(){return slides[0].getBoundingClientRect().width+parseFloat(getComputedStyle(track).columnGap||getComputedStyle(track).gap||0);}
-  function setActive(i){
-    if(i===cur&&tabs[i].getAttribute('aria-current')==='true')return;
-    cur=i;
+  var car=track.parentNode,slides=[].slice.call(track.children),N=slides.length,tabs=[].slice.call(document.querySelectorAll('.car-tab')),count=document.getElementById('carCount'),
+      next=document.getElementById('carNext'),pp=document.getElementById('carPP'),section=document.getElementById('services'),tabsOl=document.querySelector('.car-tabs'),
+      bars=[].slice.call(car.querySelectorAll('.story-bars i')),stName=document.getElementById('stName'),stMeta=document.getElementById('stMeta');
+  var NAMES=slides.map(function(s){return s.querySelector('h3').textContent;});
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,cur=0,busy=false,auto=!reduce,inView=false,held=false,CYC=6500;
+  car.style.setProperty('--cyc',CYC+'ms');
+  function gap(){return parseFloat(getComputedStyle(slides[0]).marginRight)||0;}
+  function paintBars(){
+    bars.forEach(function(b,i){
+      b.classList.remove('done','run','full');
+      if(i<cur)b.classList.add('done');
+      else if(i===cur){if(auto&&!reduce&&inView){void b.offsetWidth;b.classList.add('run');}else b.classList.add('full');}
+    });
+  }
+  function setUi(i){
     tabs.forEach(function(t,k){t.setAttribute('aria-current',k===i?'true':'false');});
-    slides.forEach(function(sl,k){sl.classList.toggle('is-on',k===i);});
-    count.textContent='0'+(i+1)+' / 0'+N;
-    var t=tabs[i];if(t.scrollIntoView&&t.parentNode.parentNode.scrollWidth>t.parentNode.parentNode.clientWidth+2)t.scrollIntoView({block:'nearest',inline:'center',behavior:reduce?'auto':'smooth'});
-    restartBar();
+    count.textContent='0'+(i+1)+' / 0'+N;stName.textContent=NAMES[i];stMeta.textContent='Mikia \u00b7 '+(i+1)+' of '+N;
+    var t=tabs[i];if(tabsOl.scrollWidth>tabsOl.clientWidth+2&&t.scrollIntoView)t.scrollIntoView({block:'nearest',inline:'center',behavior:reduce?'auto':'smooth'});
+    paintBars();
   }
-  function go(i,smooth){
-    i=(i+N)%N;
-    track.scrollTo({left:i*slideW(),behavior:(smooth===false||reduce)?'auto':'smooth'});
-    setActive(i);
+  /* Slides only ever travel to the left: the next one enters from the right,
+     whichever slide is chosen, including the move from the last back to the first. */
+  function goTo(t){
+    t=(t+N)%N;if(busy||t===cur)return;
+    var curEl=slides[cur],tgt=slides[t];
+    busy=true;
+    if(track.firstElementChild!==curEl)track.insertBefore(curEl,track.firstElementChild);
+    track.insertBefore(tgt,curEl.nextSibling);
+    tgt.classList.add('is-on');cur=t;setUi(t);
+    var dist=curEl.getBoundingClientRect().width+gap();
+    function done(){
+      track.style.transition='none';track.style.transform='translateX(0)';
+      curEl.classList.remove('is-on');track.appendChild(curEl);
+      void track.offsetWidth;busy=false;
+    }
+    if(reduce){done();return;}
+    track.style.transition='transform .95s cubic-bezier(.65,0,.15,1)';
+    track.style.transform='translateX(-'+dist+'px)';
+    var fired=false;function once(){if(fired)return;fired=true;track.removeEventListener('transitionend',onEnd);done();}
+    function onEnd(e){if(e.target===track)once();}
+    track.addEventListener('transitionend',onEnd);setTimeout(once,1200);
+    curEl.classList.add('is-leaving');setTimeout(function(){curEl.classList.remove('is-leaving');},1000);
   }
-  var raf=0;
-  track.addEventListener('scroll',function(){
-    if(raf)return;raf=requestAnimationFrame(function(){raf=0;var i=Math.round(track.scrollLeft/slideW());i=Math.max(0,Math.min(N-1,i));if(i!==cur)setActive(i);});
-  },{passive:true});
-  prev.addEventListener('click',function(){stopAuto(true);go(cur-1);});
-  next.addEventListener('click',function(){stopAuto(true);go(cur+1);});
-  tabs.forEach(function(t,i){t.addEventListener('click',function(){stopAuto(true);go(i);});});
-  track.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){e.preventDefault();stopAuto(true);go(cur+1);}else if(e.key==='ArrowLeft'){e.preventDefault();stopAuto(true);go(cur-1);}});
-  function restartBar(){var ol=document.querySelector('.car-tabs');ol.classList.remove('cycling');void ol.offsetWidth;if(timer)ol.classList.add('cycling');}
-  function tick(){go(cur+1);}
-  function startAuto(){if(!auto||timer||hovering||!inView)return;timer=setInterval(tick,CYC);restartBar();}
-  function stopTimer(){clearInterval(timer);timer=null;document.querySelector('.car-tabs').classList.remove('cycling');}
-  function stopAuto(user){stopTimer();if(user){auto=false;pp.setAttribute('aria-pressed','false');pp.setAttribute('aria-label','Play automatic slides');}}
-  pp.addEventListener('click',function(){if(auto){stopAuto(true);}else{auto=true;pp.setAttribute('aria-pressed','true');pp.setAttribute('aria-label','Pause automatic slides');startAuto();}});
-  var car=track.parentNode;
-  car.addEventListener('mouseenter',function(){hovering=true;stopTimer();});
-  car.addEventListener('mouseleave',function(){hovering=false;startAuto();});
-  car.addEventListener('focusin',function(){stopTimer();});
-  car.addEventListener('focusout',function(){startAuto();});
-  var touched=false;track.addEventListener('touchstart',function(){touched=true;stopAuto(true);},{passive:true});
-  window.addEventListener('resize',function(){go(cur,false);});
+  /* like a social story: the bar for the current slide fills, then the next slide starts */
+  bars.forEach(function(b,i){b.firstElementChild.addEventListener('animationend',function(){if(i===cur&&auto)goTo(cur+1);});});
+  function setPaused(v){car.classList.toggle('held',v);}
+  function setAuto(on,user){
+    auto=on;pp.setAttribute('aria-pressed',on?'true':'false');pp.setAttribute('aria-label',on?'Pause automatic slides':'Play automatic slides');paintBars();
+  }
+  next.addEventListener('click',function(){setAuto(false);goTo(cur+1);});
+  tabs.forEach(function(t,i){t.addEventListener('click',function(){setAuto(false);goTo(i);});});
+  bars.forEach(function(b,i){b.style.cursor='pointer';});
+  pp.addEventListener('click',function(){setAuto(!auto);});
+  track.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();setAuto(false);goTo(cur+1);}});
+  car.addEventListener('mouseenter',function(){setPaused(true);});car.addEventListener('mouseleave',function(){setPaused(false);});
+  car.addEventListener('focusin',function(){setPaused(true);});car.addEventListener('focusout',function(){setPaused(false);});
+  /* press and hold pauses, a quick tap or a swipe to the left moves on */
+  var sx=null,st=0;
+  track.addEventListener('pointerdown',function(e){sx=e.clientX;st=performance.now();setPaused(true);});
+  function endPress(e){if(sx===null)return;var dx=sx-e.clientX,dt=performance.now()-st;sx=null;setPaused(false);
+    if(e.target.closest&&e.target.closest('a'))return;
+    if(dx>50||(Math.abs(dx)<10&&dt<250&&e.pointerType==='touch')){setAuto(false);goTo(cur+1);}}
+  track.addEventListener('pointerup',endPress);track.addEventListener('pointercancel',function(){sx=null;setPaused(false);});
   slides[0].classList.add('is-on');
-  if('IntersectionObserver' in window)new IntersectionObserver(function(es){inView=es[0].isIntersecting;if(inView)startAuto();else stopTimer();},{threshold:.35}).observe(section);
-  else{inView=true;startAuto();}
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es){inView=es[0].isIntersecting;paintBars();},{threshold:.35}).observe(section);
+  else{inView=true;paintBars();}
+  setUi(0);
 })();

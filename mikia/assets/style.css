@@ -1186,3 +1186,43 @@ html{overflow-x:hidden}
 .hero-3d canvas{filter:brightness(.62) saturate(.8)}
 .hero-bgimg img.bg[data-bg="live"]{filter:saturate(.7) brightness(.55)}
 @media (max-width:860px){.hero-cine{min-height:clamp(380px,54svh,500px)}}
+
+/* ===== SLIM HERO ===== */
+.hero-cine{min-height:clamp(300px,34svh,380px)!important;height:auto}
+.hero-cine .nav .wrap{height:72px}
+.hero-cine .hero-main{padding-top:8px;padding-bottom:clamp(30px,5vh,44px);flex:0 0 auto}
+.hero-cine h1{font-size:clamp(26px,3.2vw,46px)}
+.hero-cine .hero-copy{gap:12px}
+.hero-mini{bottom:12px}
+@media (max-width:860px){.hero-cine{min-height:clamp(340px,46svh,440px)!important}.hero-cine .nav .wrap{height:64px}}
+.hero-cine .hero-main{padding-top:28px!important}
+
+
+/* carousel: slides only move left */
+.car-track{display:flex;gap:0;overflow:hidden;scroll-snap-type:none;will-change:transform;border-radius:0;touch-action:pan-y}
+.car{overflow:hidden;border-radius:clamp(20px,2.4vw,34px)}
+.car-slide{flex:0 0 100%;margin-right:clamp(12px,2vw,24px);scroll-snap-align:none;user-select:none}
+.car-slide.is-leaving .cs-copy>*{opacity:0;transform:translateX(-30px);transition:opacity .45s ease,transform .6s ease}
+.car-ui{margin-top:clamp(14px,2vw,22px)}
+.car-tabs{margin-top:clamp(14px,2vw,22px)}
+
+
+/* ===== STORY-STYLE PROGRESS (like social media stories) ===== */
+.car{overflow:visible;border-radius:0}
+.story-bars{display:flex;gap:6px;margin:0 0 12px}
+.story-bars i{position:relative;flex:1;height:4px;border-radius:99px;background:rgba(18,32,27,.14);overflow:hidden}
+.story-bars b{position:absolute;inset:0 auto 0 0;width:0;border-radius:inherit;background:var(--text)}
+.story-bars i.done b,.story-bars i.full b{width:100%}
+.story-bars i.run b{width:100%;animation:storyfill var(--cyc,6.5s) linear forwards}
+@keyframes storyfill{from{width:0}to{width:100%}}
+.car.held .story-bars i.run b{animation-play-state:paused}
+.story-head{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:14px}
+.story-head .av{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-hi));color:#fff;font:700 15px var(--serif);flex:none;box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--accent)}
+.story-head b{font-weight:600}
+.story-head span:last-child{color:var(--muted);font-size:13px}
+.car-track{border-radius:clamp(20px,2.4vw,34px)}
+.car-tabs{display:none}
+.car-ui{justify-content:space-between}
+.car-slide{cursor:pointer}
+.car-slide a{cursor:pointer}
+@media (prefers-reduced-motion:reduce){.story-bars i.run b{animation:none;width:100%}}

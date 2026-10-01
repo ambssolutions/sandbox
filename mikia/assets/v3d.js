@@ -3,10 +3,11 @@
   var $=function(id){return document.getElementById(id);};
   var api=null,started=false,mode='build';
   var chips=[].slice.call(document.querySelectorAll('#uiBuild .v3d-chip')),play=$('v3dPlay'),fill=$('v3dFill'),label=$('v3dLabel');
-  var tabs=[].slice.call(document.querySelectorAll('.v3d-tab')),uiBuild=$('uiBuild'),uiTour=$('uiTour'),card=$('v3dCard'),dots=$('tDots');
+  var tabs=[].slice.call(document.querySelectorAll('.v3d-tab')),uiBuild=$('uiBuild'),uiTour=$('uiTour'),uiIn=$('uiInside'),card=$('v3dCard'),dots=$('tDots'),iChips=[].slice.call(document.querySelectorAll('#uiInside .v3d-chip')),prevDesign=null,autoModern=false;
+  var MODERN={shape:'single',roof:'skillion',cladding:'boardbatten',wall:'#2f3a3d',roofColor:'#4d5c63',joinery:'#161e1b',door:'timber',windows:'large',veranda:false,bay:false,garage:true,chimney:false,solar:true,deck:true,fence:'none',detail:'none'};
   var names=['Survey the site','Plan and consent','Build','Handover'];
   var ROOF={hip:'hip',gable:'gable',gablefront:'front-gable',skillion:'skillion',flat:'flat'},CLAD={weatherboard:'weatherboard',boardbatten:'board and batten',brick:'brick',plaster:'plaster',metal:'ribbed metal'};
-  function fail(){host.classList.add('failed');var f=document.querySelector('#build3d .v3d-fallback');if(f)f.hidden=false;[uiBuild,uiTour,card].forEach(function(e){if(e)e.hidden=true;});document.querySelector('.v3d-tabs').hidden=true;document.dispatchEvent(new CustomEvent('house-fail'));}
+  function fail(){host.classList.add('failed');var f=document.querySelector('#build3d .v3d-fallback');if(f)f.hidden=false;[uiBuild,uiTour,uiIn,card].forEach(function(e){if(e)e.hidden=true;});document.querySelector('.v3d-tabs').hidden=true;document.dispatchEvent(new CustomEvent('house-fail'));}
   function upd(b){
     var st=Math.min(3,Math.floor(b/4));
     if(fill)fill.style.width=(b/16*100).toFixed(1)+'%';
@@ -30,15 +31,31 @@
     label.textContent='Tour';
     [].forEach.call(dots.children,function(d,k){d.classList.toggle('on',k===i);});
   }
+  function onInside(st,I){
+    if(st<0){return;}
+    var S=window.House3D.INSIDE_STAGES[st];card.hidden=false;
+    $('v3dStep').textContent='STEP '+(st+1)+' OF 5';$('v3dTitle').textContent=S.title;$('v3dText').textContent=S.text;label.textContent='Inside';
+    iChips.forEach(function(c,i){c.setAttribute('aria-pressed',i===st?'true':'false');});
+    var f=$('iFill');if(f)f.style.width=(I/4*100).toFixed(1)+'%';
+  }
+  function leaveInside(){
+    if(api.insideOn)api.stopInside();
+    if(autoModern&&prevDesign){api.setDesign(prevDesign);autoModern=false;prevDesign=null;api.designed=false;}
+  }
   function setMode(m){
-    mode=m;
+    var was=mode;mode=m;
     tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.mode===m?'true':'false');});
-    uiBuild.hidden=m!=='build';uiTour.hidden=m!=='tour';
+    uiBuild.hidden=m!=='build';uiTour.hidden=m!=='tour';uiIn.hidden=m!=='inside';
+    if(was==='inside'&&m!=='inside')leaveInside();
     if(m==='tour'){api.startTour();setPlay($('tAuto'),true,['Auto','Auto']);}
+    else if(m==='inside'){
+      if(!api.designed&&!autoModern){prevDesign=api.getDesign();autoModern=true;api.setDesign(MODERN);}
+      api.startInside();setPlay($('iAuto'),true,['Pause','Auto']);
+    }
     else{api.stopTour();card.hidden=true;upd(api.progress);}
   }
   function init(){
-    try{api=window.House3D&&window.House3D.createHouseScene(host,{onProgress:upd,onTour:onTour});}catch(e){api=null;}
+    try{api=window.House3D&&window.House3D.createHouseScene(host,{onProgress:upd,onTour:onTour,onInside:onInside});}catch(e){api=null;}
     if(!api){fail();return;}
     host.classList.add('ready');
     window.House3D.TOUR_STEPS.forEach(function(){dots.appendChild(document.createElement('i'));});
@@ -49,8 +66,10 @@
     $('tPrev').addEventListener('click',function(){api.tourPrev();setPlay($('tAuto'),false,['Auto','Auto']);});
     $('tAuto').addEventListener('click',function(){var on=$('tAuto').getAttribute('aria-pressed')!=='true';api.tourAutoplay(on);setPlay($('tAuto'),on,['Auto','Auto']);});
     $('tExit').addEventListener('click',function(){setMode('build');});
+    iChips.forEach(function(c){c.addEventListener('click',function(){api.setInsideStage(+c.dataset.s);setPlay($('iAuto'),false,['Pause','Auto']);});});
+    $('iAuto').addEventListener('click',function(){var on=$('iAuto').getAttribute('aria-pressed')!=='true';api.insideAutoplay(on);setPlay($('iAuto'),on,['Pause','Auto']);});
     setPlay(play,api.playing,['Pause','Play']);
-    window.__house={api:api,setMode:setMode,onDesigned:function(){mode='build';tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.mode==='build'?'true':'false');});uiBuild.hidden=false;uiTour.hidden=true;card.hidden=true;setPlay(play,false,['Pause','Play']);}};
+    window.__house={onBuild:function(){setMode('build');setPlay(play,true,['Pause','Play']);},api:api,setMode:setMode,onDesigned:function(){mode='build';tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.mode==='build'?'true':'false');});uiBuild.hidden=false;uiTour.hidden=true;card.hidden=true;setPlay(play,false,['Pause','Play']);}};
     document.dispatchEvent(new CustomEvent('house-ready'));
   }
   window.__h3dLoad=window.__h3dLoad||function(cb,err){

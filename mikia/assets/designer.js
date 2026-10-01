@@ -88,6 +88,11 @@
       try{navigator.clipboard.writeText(txt).then(done,function(){});}catch(e){}
     });
     $('dzRandom').addEventListener('click',function(){var o={};G.forEach(function(g){if(g.k==='tod')return;var l=g.opts||g.sw;o[g.k]=l[Math.floor(Math.random()*l.length)][0];});apply(o);});
+    $('dzBuild').addEventListener('click',function(){
+      if(!api)return;api.designed=true;api.setDesign(Object.assign({},state));api.buildNow();
+      if(window.__house&&window.__house.onBuild)window.__house.onBuild();
+      var c=document.getElementById('v3d');if(c&&c.scrollIntoView&&c.getBoundingClientRect().top<0)c.scrollIntoView({behavior:'smooth',block:'center'});
+    });
     $('dzReset').addEventListener('click',function(){apply(Object.assign({},DEF));});
   }
   [].forEach.call(document.querySelectorAll('#dzIcons [data-ic]'),function(e){ICONS[e.dataset.ic]=e.innerHTML;});
