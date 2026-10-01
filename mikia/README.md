@@ -6,7 +6,7 @@ A static multi-page website. No build step: open `index.html`, or deploy the fol
 `index`, `services`, six service pages, `how-we-work`, `residential`, `commercial`, `about`, `contact`, `privacy`, `404`.
 
 ## Things to finish before launch
-- **Projects:** add real projects to `assets/projects.js`. Only add projects the client has permitted. The two images in `assets/projects/` are illustrative renders, not real projects.
+- **Projects:** add real projects to `assets/projects.js`. Only add projects the client has permitted. The two images in `projects/` are illustrative renders, not real projects.
 - **Enquiry form:** set `FORM_ENDPOINT` in `assets/form.js` (for example a Formspree URL). While empty, the form opens the visitor's email app addressed to info@mikia.co.nz. Designs sent from the design tool arrive pre-filled in the message.
 - **Copy:** service, about and privacy wording is drafted from the homepage text. Have the client check it. The privacy page needs a legal read.
 - **Team:** add Neelam Gandhi's photo and bio, and other team members, to `about.html`.

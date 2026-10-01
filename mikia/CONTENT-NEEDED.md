@@ -11,7 +11,7 @@ Where each item goes:  **content.js** = `assets/content.js` (one file, plain tex
 |---|---|
 | Headline and tagline (confirm current wording) | page: index |
 | 3 to 4 selling points, with real numbers if they have them (years, projects) | page: Why MiKia section |
-| 5 to 8 best project photos | projects.js + `assets/projects/` |
+| 5 to 8 best project photos | projects.js + `projects/` |
 | 2 to 3 client testimonials with name and suburb, and permission | content.js `testimonials` |
 | Logos of accreditations and associations (SVG or PNG) | content.js `accreditations` |
 

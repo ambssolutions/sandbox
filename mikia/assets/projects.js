@@ -8,7 +8,7 @@
      year: "2025",
      summary: "One or two sentences about the project.",
      services: ["Planning", "Land Surveying", "Engineering"],
-     image: "assets/projects/project-name.jpg",
+     image: "projects/project-name.jpg",
      alt: "Describe what the photo shows"
    }
    Only add projects the client has given permission to publish. */
