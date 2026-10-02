@@ -340,9 +340,6 @@
     --emb-photo: 18px 22px 44px -10px rgba(120,104,78,.38), -10px -10px 26px rgba(255,255,255,.9);
   }
   section > .wrap { position: relative; z-index: 1; }
-  .deboss { position: relative; z-index: -1; display: block; width: max-content; max-width: 100%; margin: -.12em 0 clamp(14px, 2.4vh, 28px) auto; font: 600 clamp(4.6rem, 16vw, 13rem)/.82 var(--f); letter-spacing: -.06em; color: var(--sec-bg, var(--bg)); text-shadow: -3px -3px 3px rgba(255,255,255,.95), 3px 3px 5px rgba(140,124,98,.32); pointer-events: none; user-select: none; white-space: nowrap; will-change: transform; }
-  .deboss.l { margin-left: -.04em; margin-right: auto; }
-  .faq-grid .deboss { margin-left: -.04em; font-size: clamp(4.6rem, 12vw, 11rem); }
   .scr .ch { text-align: center; }
   h2 { text-shadow: 0 1px 0 rgba(255,255,255,.9); }
   .contact h2, .numbers * { text-shadow: none; }
@@ -420,7 +417,6 @@
       --emb-in: inset 2px 2px 5px rgba(150,134,108,.2), inset -2px -2px 5px rgba(255,255,255,.9);
       --emb-photo: 6px 8px 18px -6px rgba(120,104,78,.38), -4px -4px 10px rgba(255,255,255,.85);
     }
-    .deboss, .faq-grid .deboss { font-size: 22vw; margin-bottom: 14px; text-shadow: -1.5px -1.5px 1px rgba(255,255,255,.95), 1.5px 1.5px 2px rgba(140,124,98,.3); }
     .pr { padding: 20px 18px; }
     .steps { gap: 14px; }
     .step { padding: 22px 20px; gap: 14px; border-radius: 18px; }
@@ -554,7 +550,6 @@
   <!-- Statement -->
   <section class="statement">
     <div class="wrap">
-      <span class="deboss " aria-hidden="true">2020</span>
       <span class="eyebrow">About MD Projects NZ</span>
       <p class="big" id="statement">Since March 2020 we've built over 1,000 homes across Auckland. *Fixed* *prices.* *No* *surprises.* Structures that last a lifetime, from your first sketch to the final code compliance certificate.</p>
       <div class="principles">
@@ -570,7 +565,6 @@
   <!-- Services -->
   <section class="services" id="services">
     <div class="wrap">
-      <span class="deboss " aria-hidden="true">Build</span>
       <div class="head"><div><span class="eyebrow">Our services</span><h2>Everything, from<br><em>concept to keys.</em></h2></div><p class="lede">One team takes your project from first sketch to final handover, <mark class="hl">with nothing handed off between firms.</mark></p></div>
       <div class="stack">
         <article class="scard" style="--i:0">
@@ -625,7 +619,6 @@
   <!-- Plan vs built -->
   <section id="plan-vs-built">
     <div class="wrap">
-      <span class="deboss l" aria-hidden="true">Plan</span>
       <div class="head"><div><span class="eyebrow">Plan vs built</span><h2>From drawing<br><em>to doorstep.</em></h2></div><p class="lede">Swanson Road, Henderson. Drag across to <mark class="hl">watch the plan become the finished home.</mark></p></div>
       <div class="compare" id="compare">
         <img src="images/built-swanson.webp" alt="Finished Swanson Road home in Henderson" decoding="async" loading="lazy">
@@ -666,7 +659,6 @@
   <!-- Planner -->
   <section class="planner" id="planner">
     <div class="wrap">
-      <span class="deboss " aria-hidden="true">Design</span>
       <div class="head"><div><span class="eyebrow">Plan your home</span><h2>Design it in<br><em>seven taps.</em></h2></div><p class="lede">Answer seven quick questions and <mark class="hl">watch your home go up</mark>, from bare section to finished build. Then send it to us for a fixed-price quote.</p></div>
       <div class="planner-grid">
         <div class="stage">
@@ -683,7 +675,6 @@
   <!-- Process -->
   <section id="process">
     <div class="wrap">
-      <span class="deboss l" aria-hidden="true">Process</span>
       <div class="head"><div><span class="eyebrow">Our process</span><h2>Six steps.<br><em>One team.</em></h2></div><p class="lede">You always know what's happening next, <mark class="hl">what it costs and when it'll be done.</mark></p></div>
       <div class="steps">
         <div class="step"><b>01</b><div><h3>Feasibility study</h3><p>Zoning, services, geotechnical conditions and council rules, checked before you commit.</p></div></div>
@@ -699,7 +690,6 @@
   <!-- Testimonials -->
   <section class="quotes">
     <div class="wrap">
-      <span class="deboss " aria-hidden="true">Trust</span>
       <span class="eyebrow">Testimonials</span>
       <div class="q-slides" id="qSlides" style="margin-top:40px">
         <figure class="q-slide on"><blockquote>We were first-time developers and a bit nervous. Maninder and the team guided us through everything, from feasibility to final CCC.</blockquote><figcaption><span class="stars">★★★★★</span><b>Amit P</b>Blockhouse Bay</figcaption></figure>
@@ -731,7 +721,6 @@
   <!-- Gallery -->
   <section id="gallery" style="padding-top:0">
     <div class="wrap">
-      <span class="deboss l" aria-hidden="true">Homes</span>
       <div class="head"><div><span class="eyebrow">Gallery</span><h2>Inside <em>&amp; out.</em></h2></div><p class="lede">Tap any photo to view it full screen.</p></div>
       <div class="g-grid">
         <figure class="g g-wide"><img src="images/gallery-1-sm.webp" alt="Row of completed two-storey townhouses" loading="lazy" decoding="async"></figure>
@@ -749,7 +738,7 @@
   <!-- FAQs -->
   <section id="faqs" style="background:var(--bg-2)">
     <div class="wrap faq-grid">
-      <div><span class="deboss " aria-hidden="true">FAQ</span><span class="eyebrow">FAQs</span><h2 style="margin-top:22px">Questions,<br><em>answered.</em></h2><p class="lede" style="margin-top:24px">Can't see yours? Call 0210 590 409 or send us a message.</p></div>
+      <div><span class="eyebrow">FAQs</span><h2 style="margin-top:22px">Questions,<br><em>answered.</em></h2><p class="lede" style="margin-top:24px">Can't see yours? Call 0210 590 409 or send us a message.</p></div>
       <div>
         <details open><summary>What types of homes do you build?<i>+</i></summary><p>Standalone houses, duplexes, terrace homes and full subdivisions, for homeowners and developers across the Auckland region.</p></details>
         <details><summary>How much will my build cost?<i>+</i></summary><p>It depends on the design, location, materials and build complexity, so contact us for a detailed cost proposal. Every contract is fixed-price with no hidden costs.</p></details>
@@ -1273,8 +1262,6 @@
     gsap.utils.toArray('.pr h3, .step h3').forEach(t => gsap.fromTo(t, { '--u': 0 }, { '--u': 1, duration: 1.2, ease: 'power3.inOut', scrollTrigger: on(t, 'top 90%') }));
 
     // letterpress words drift slowly behind the content
-    // letterpress words: settle into place and drift a little behind the headings
-    gsap.utils.toArray('.deboss').forEach(d => gsap.fromTo(d, { yPercent: 22, opacity: 0 }, { yPercent: -12, opacity: 1, ease: 'none', scrollTrigger: { trigger: d, start: 'top 98%', end: 'bottom 30%', scrub: true } }));
 
     // ---------- statement ----------
     gsap.to(words, { opacity: 1, ease: 'none', stagger: .05, scrollTrigger: { trigger: st, start: 'top 80%', end: 'bottom 45%', scrub: true } });
