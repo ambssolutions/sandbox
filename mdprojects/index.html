@@ -1122,9 +1122,19 @@
       hWord.style.fontSize = '100px';
       const fs = Math.min(100 * Math.min(innerWidth * .88, 1600) / hWord.offsetWidth, innerHeight * .42 / .74);
       hWord.style.fontSize = fs + 'px';
-      const top = hWord.offsetTop, bot = top + hWord.offsetHeight;
-      document.getElementById('haEb').style.top = Math.max(96, top - 46) + 'px';
-      document.getElementById('haSub').style.top = (bot + fs * .1) + 'px';
+      // equal optical gaps: measure where the ink of each line really starts and ends
+      const ink = (el, txt) => {
+        const cs = getComputedStyle(el), x = document.createElement('canvas').getContext('2d');
+        x.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+        const t = x.measureText(txt), lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize);
+        const half = (lh - (t.fontBoundingBoxAscent + t.fontBoundingBoxDescent)) / 2;
+        return { top: half + t.fontBoundingBoxAscent - t.actualBoundingBoxAscent, bot: half + t.fontBoundingBoxAscent + t.actualBoundingBoxDescent };
+      };
+      const eb = document.getElementById('haEb'), sub = document.getElementById('haSub');
+      const w = ink(hWord, 'HOMES'), e = ink(eb, eb.textContent.toUpperCase()), sb = ink(sub, 'built');
+      const gap = Math.max(22, fs * .2), wTop = hWord.offsetTop + w.top, wBot = hWord.offsetTop + w.bot;
+      eb.style.top = (wTop - gap - e.bot) + 'px';
+      sub.style.top = (wBot + gap - sb.top) + 'px';
       const st = stemOf(), H = hWord.firstElementChild;
       hDive.x = H.offsetLeft + st.c * fs; hDive.y = hWord.offsetHeight * .55;
       hDive.s = 2.4 * Math.hypot(innerWidth, innerHeight) / Math.max(4, st.w * fs);
