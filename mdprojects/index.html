@@ -334,9 +334,9 @@
     --emb-photo: 18px 22px 44px -10px rgba(120,104,78,.38), -10px -10px 26px rgba(255,255,255,.9);
   }
   section > .wrap { position: relative; z-index: 1; }
-  .deboss { position: absolute; z-index: 0; top: clamp(20px, 6vh, 70px); right: -1vw; font: 600 clamp(6rem, 19vw, 20rem)/.8 var(--f); letter-spacing: -.07em; color: var(--sec-bg, var(--bg)); text-shadow: -3px -3px 3px rgba(255,255,255,.95), 3px 3px 5px rgba(140,124,98,.32); pointer-events: none; user-select: none; white-space: nowrap; will-change: transform; }
-  .deboss.l { right: auto; left: -1vw; }
-  section:has(> .deboss) { position: relative; overflow: clip; }
+  .deboss { position: relative; z-index: -1; display: block; width: max-content; max-width: 100%; margin: -.12em 0 clamp(14px, 2.4vh, 28px) auto; font: 600 clamp(4.6rem, 16vw, 13rem)/.82 var(--f); letter-spacing: -.06em; color: var(--sec-bg, var(--bg)); text-shadow: -3px -3px 3px rgba(255,255,255,.95), 3px 3px 5px rgba(140,124,98,.32); pointer-events: none; user-select: none; white-space: nowrap; will-change: transform; }
+  .deboss.l { margin-left: -.04em; margin-right: auto; }
+  .faq-grid .deboss { margin-left: -.04em; font-size: clamp(4.6rem, 12vw, 11rem); }
   .scr .ch { text-align: center; }
   h2 { text-shadow: 0 1px 0 rgba(255,255,255,.9); }
   .contact h2, .numbers * { text-shadow: none; }
@@ -390,6 +390,22 @@
   .ch { display: inline-block; }
   .tw .ch { opacity: 0; }
   .persp { perspective: 900px; }
+  /* scroll text extras */
+  .marquee { overflow: hidden; padding: clamp(18px, 3vh, 40px) 0; background: var(--bg); position: relative; z-index: 1; }
+  .mq-track { display: flex; align-items: center; width: max-content; will-change: transform; }
+  .mq-track span, .mq-track i { font: 600 clamp(3.2rem, 10vw, 9.5rem)/1 var(--f); letter-spacing: -.05em; white-space: nowrap; padding: 0 .28em; color: var(--ink); }
+  .mq-track span.o { color: transparent; -webkit-text-stroke: 1.4px var(--bronze); }
+  .mq-track i { font-style: normal; font-size: clamp(1.4rem, 3.4vw, 3rem); color: var(--bronze); padding: 0; }
+  .mq-b { background: var(--bg-2); }
+  .marquee + section { padding-top: clamp(56px, 8vh, 110px); }
+  section:has(+ .marquee) { padding-bottom: clamp(56px, 8vh, 110px); }
+  .mq-b .mq-track span:not(.o) { color: var(--bg-2); text-shadow: -2px -2px 2px rgba(255,255,255,.95), 2px 2px 4px rgba(140,124,98,.38); }
+  mark.hl { color: inherit; background: linear-gradient(transparent 48%, rgba(185,165,130,.4) 48%, rgba(185,165,130,.4) 84%, transparent 84%) no-repeat 0 0 / var(--hl, 0%) 100%; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .od { display: inline-flex; }
+  .od > span { display: inline-block; height: 1em; overflow: hidden; line-height: 1; }
+  .od > span > span { display: block; }
+  .od > span > span > b { display: block; height: 1em; font-weight: inherit; }
+  @media (max-width: 760px) { .mq-track span.o { -webkit-text-stroke-width: 1px; } .mq-b .mq-track span:not(.o) { text-shadow: -1px -1px 1px rgba(255,255,255,.95), 1.5px 1.5px 2px rgba(140,124,98,.38); } }
   /* touch screens: no sticky "pressed" hover state */
   @media (hover: none) { .step:hover { box-shadow: var(--emb); } .btn-line:hover { box-shadow: var(--emb-sm); } }
   /* phones: tighter, crisper relief that stays inside the narrow gutters */
@@ -400,8 +416,7 @@
       --emb-in: inset 2px 2px 5px rgba(150,134,108,.2), inset -2px -2px 5px rgba(255,255,255,.9);
       --emb-photo: 6px 8px 18px -6px rgba(120,104,78,.38), -4px -4px 10px rgba(255,255,255,.85);
     }
-    .deboss { font-size: 23vw; top: calc(clamp(90px, 14vh, 180px) - 17vw); right: 4vw; letter-spacing: -.05em; text-shadow: -1.5px -1.5px 1px rgba(255,255,255,.95), 1.5px 1.5px 2px rgba(140,124,98,.26); }
-    .deboss.l { left: 4vw; right: auto; }
+    .deboss, .faq-grid .deboss { font-size: 22vw; margin-bottom: 14px; text-shadow: -1.5px -1.5px 1px rgba(255,255,255,.95), 1.5px 1.5px 2px rgba(140,124,98,.3); }
     .pr { padding: 20px 18px; }
     .steps { gap: 14px; }
     .step { padding: 22px 20px; gap: 14px; border-radius: 18px; }
@@ -529,8 +544,8 @@
 
   <!-- Statement -->
   <section class="statement">
-    <span class="deboss " aria-hidden="true">2020</span>
     <div class="wrap">
+      <span class="deboss " aria-hidden="true">2020</span>
       <span class="eyebrow">About MD Projects NZ</span>
       <p class="big" id="statement">Since March 2020 we've built over 1,000 homes across Auckland. *Fixed* *prices.* *No* *surprises.* Structures that last a lifetime, from your first sketch to the final code compliance certificate.</p>
       <div class="principles">
@@ -541,11 +556,13 @@
     </div>
   </section>
 
+  <div class="marquee mq-a" aria-hidden="true"><div class="mq-track"><span class="">Design &amp; Build</span><i>✦</i><span class="o">Terrace Homes</span><i>✦</i><span class="">Duplexes</span><i>✦</i><span class="o">Subdivision</span><i>✦</i><span class="">Project Management</span><i>✦</i><span class="o">Fixed Price</span><i>✦</i><span class="">Design &amp; Build</span><i>✦</i><span class="o">Terrace Homes</span><i>✦</i><span class="">Duplexes</span><i>✦</i><span class="o">Subdivision</span><i>✦</i><span class="">Project Management</span><i>✦</i><span class="o">Fixed Price</span><i>✦</i></div></div>
+
   <!-- Services -->
   <section class="services" id="services">
-    <span class="deboss " aria-hidden="true">Build</span>
     <div class="wrap">
-      <div class="head"><div><span class="eyebrow">Our services</span><h2>Everything, from<br><em>concept to keys.</em></h2></div><p class="lede">One team takes your project from first sketch to final handover, with nothing handed off between firms.</p></div>
+      <span class="deboss " aria-hidden="true">Build</span>
+      <div class="head"><div><span class="eyebrow">Our services</span><h2>Everything, from<br><em>concept to keys.</em></h2></div><p class="lede">One team takes your project from first sketch to final handover, <mark class="hl">with nothing handed off between firms.</mark></p></div>
       <div class="stack">
         <article class="scard" style="--i:0"><div class="im"><img src="images/service-design-build.webp" srcset="images/service-design-build-sm.webp 900w, images/service-design-build.webp 2000w" sizes="(max-width: 1000px) 92vw, 55vw" alt="Two-storey home by MD Projects" loading="lazy" decoding="async"></div><div class="tx"><div><span class="n">01</span><h3>Design &amp; Build</h3><p>A complete custom home solution, taking your vision from concept through to final construction.</p></div><a class="more" href="https://www.mdprojects.co.nz/services/design-build/">Learn more →</a></div></article>
         <article class="scard" style="--i:1"><div class="im"><img src="images/service-build-from-plans.webp" srcset="images/service-build-from-plans-sm.webp 900w, images/service-build-from-plans.webp 2000w" sizes="(max-width: 1000px) 92vw, 55vw" alt="Architectural plans being reviewed" loading="lazy" decoding="async"></div><div class="tx"><div><span class="n">02</span><h3>Build from Plans</h3><p>Already have approved plans? We'll bring them to life with expert craftsmanship and precision.</p></div><a class="more" href="https://www.mdprojects.co.nz/services/">Learn more →</a></div></article>
@@ -578,9 +595,9 @@
 
   <!-- Plan vs built -->
   <section id="plan-vs-built">
-    <span class="deboss l" aria-hidden="true">Plan</span>
     <div class="wrap">
-      <div class="head"><div><span class="eyebrow">Plan vs built</span><h2>From drawing<br><em>to doorstep.</em></h2></div><p class="lede">Swanson Road, Henderson. Drag across to watch the plan become the finished home.</p></div>
+      <span class="deboss l" aria-hidden="true">Plan</span>
+      <div class="head"><div><span class="eyebrow">Plan vs built</span><h2>From drawing<br><em>to doorstep.</em></h2></div><p class="lede">Swanson Road, Henderson. Drag across to <mark class="hl">watch the plan become the finished home.</mark></p></div>
       <div class="compare" id="compare">
         <img src="images/built-swanson.webp" alt="Finished Swanson Road home in Henderson" decoding="async" loading="lazy">
         <img class="cmp-plan" src="images/plan-swanson.webp" alt="Line drawing of the same Swanson Road home" decoding="async" loading="lazy">
@@ -619,9 +636,9 @@
 
   <!-- Planner -->
   <section class="planner" id="planner">
-    <span class="deboss " aria-hidden="true">Design</span>
     <div class="wrap">
-      <div class="head"><div><span class="eyebrow">Plan your home</span><h2>Design it in<br><em>seven taps.</em></h2></div><p class="lede">Answer seven quick questions and watch your home go up, from bare section to finished build. Then send it to us for a fixed-price quote.</p></div>
+      <span class="deboss " aria-hidden="true">Design</span>
+      <div class="head"><div><span class="eyebrow">Plan your home</span><h2>Design it in<br><em>seven taps.</em></h2></div><p class="lede">Answer seven quick questions and <mark class="hl">watch your home go up</mark>, from bare section to finished build. Then send it to us for a fixed-price quote.</p></div>
       <div class="planner-grid">
         <div class="stage">
           <div class="stage-top"><span id="pStatus">Your section is surveyed and ready</span><span class="stage-pct" id="pPct">0%</span></div>
@@ -636,9 +653,9 @@
 
   <!-- Process -->
   <section id="process">
-    <span class="deboss l" aria-hidden="true">Process</span>
     <div class="wrap">
-      <div class="head"><div><span class="eyebrow">Our process</span><h2>Six steps.<br><em>One team.</em></h2></div><p class="lede">You always know what's happening next, what it costs and when it'll be done.</p></div>
+      <span class="deboss l" aria-hidden="true">Process</span>
+      <div class="head"><div><span class="eyebrow">Our process</span><h2>Six steps.<br><em>One team.</em></h2></div><p class="lede">You always know what's happening next, <mark class="hl">what it costs and when it'll be done.</mark></p></div>
       <div class="steps">
         <div class="step"><b>01</b><div><h3>Feasibility study</h3><p>Zoning, services, geotechnical conditions and council rules, checked before you commit.</p></div></div>
         <div class="step"><b>02</b><div><h3>Resource &amp; building consents</h3><p>Applications prepared, lodged and managed with Auckland Council on your behalf.</p></div></div>
@@ -652,8 +669,8 @@
 
   <!-- Testimonials -->
   <section class="quotes">
-    <span class="deboss " aria-hidden="true">Trust</span>
     <div class="wrap">
+      <span class="deboss " aria-hidden="true">Trust</span>
       <span class="eyebrow">Testimonials</span>
       <div class="q-slides" id="qSlides" style="margin-top:40px">
         <figure class="q-slide on"><blockquote>We were first-time developers and a bit nervous. Maninder and the team guided us through everything, from feasibility to final CCC.</blockquote><figcaption><span class="stars">★★★★★</span><b>Amit P</b>Blockhouse Bay</figcaption></figure>
@@ -676,7 +693,7 @@
         <span class="eyebrow">Meet the founder</span>
         <h2 style="margin-top:22px">Maninder <em>Singh.</em></h2>
         <p class="f-quote">"Your dream is our project. From house renovations to over 1,000 builds, delivered to top-tier quality, within budget and on schedule."</p>
-        <p class="lede">Maninder has years of experience in the construction sector, leading residential projects for large companies and private clients. His mission: high-quality, affordable homes delivered with precision, efficiency and excellence.</p>
+        <p class="lede">Maninder has years of experience in the construction sector, leading residential projects for large companies and private clients. His mission: <mark class="hl">high-quality, affordable homes</mark> delivered with precision, efficiency and excellence.</p>
         <ul class="vals"><li>Integrity</li><li>Transparency</li><li>Quality craftsmanship</li><li>Client-focused service</li></ul>
       </div>
     </div>
@@ -684,8 +701,8 @@
 
   <!-- Gallery -->
   <section id="gallery" style="padding-top:0">
-    <span class="deboss l" aria-hidden="true">Homes</span>
     <div class="wrap">
+      <span class="deboss l" aria-hidden="true">Homes</span>
       <div class="head"><div><span class="eyebrow">Gallery</span><h2>Inside <em>&amp; out.</em></h2></div><p class="lede">Tap any photo to view it full screen.</p></div>
       <div class="g-grid">
         <figure class="g g-wide"><img src="images/gallery-1-sm.webp" alt="Row of completed two-storey townhouses" loading="lazy" decoding="async"></figure>
@@ -702,9 +719,8 @@
 
   <!-- FAQs -->
   <section id="faqs" style="background:var(--bg-2)">
-    <span class="deboss " aria-hidden="true">FAQ</span>
     <div class="wrap faq-grid">
-      <div><span class="eyebrow">FAQs</span><h2 style="margin-top:22px">Questions,<br><em>answered.</em></h2><p class="lede" style="margin-top:24px">Can't see yours? Call 0210 590 409 or send us a message.</p></div>
+      <div><span class="deboss " aria-hidden="true">FAQ</span><span class="eyebrow">FAQs</span><h2 style="margin-top:22px">Questions,<br><em>answered.</em></h2><p class="lede" style="margin-top:24px">Can't see yours? Call 0210 590 409 or send us a message.</p></div>
       <div>
         <details open><summary>What types of homes do you build?<i>+</i></summary><p>Standalone houses, duplexes, terrace homes and full subdivisions, for homeowners and developers across the Auckland region.</p></details>
         <details><summary>How much will my build cost?<i>+</i></summary><p>It depends on the design, location, materials and build complexity, so contact us for a detailed cost proposal. Every contract is fixed-price with no hidden costs.</p></details>
@@ -715,6 +731,8 @@
       </div>
     </div>
   </section>
+
+  <div class="marquee mq-b" aria-hidden="true"><div class="mq-track"><span class="">Your dream is our project</span><i>✦</i><span class="o">1,000+ Homes</span><i>✦</i><span class="">Auckland</span><i>✦</i><span class="o">Built to last</span><i>✦</i><span class="">Your dream is our project</span><i>✦</i><span class="o">1,000+ Homes</span><i>✦</i><span class="">Auckland</span><i>✦</i><span class="o">Built to last</span><i>✦</i></div></div>
 
   <!-- Contact -->
   <section class="contact" id="contact">
@@ -1216,7 +1234,8 @@
     gsap.utils.toArray('.pr h3, .step h3').forEach(t => gsap.fromTo(t, { '--u': 0 }, { '--u': 1, duration: 1.2, ease: 'power3.inOut', scrollTrigger: on(t, 'top 90%') }));
 
     // letterpress words drift slowly behind the content
-    gsap.utils.toArray('.deboss').forEach(d => { const m = innerWidth < 760 ? .4 : 1; gsap.fromTo(d, { yPercent: 35 * m, xPercent: (d.classList.contains('l') ? -6 : 6) * m }, { yPercent: -35 * m, xPercent: 0, ease: 'none', scrollTrigger: { trigger: d.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }); });
+    // letterpress words: settle into place and drift a little behind the headings
+    gsap.utils.toArray('.deboss').forEach(d => gsap.fromTo(d, { yPercent: 22, opacity: 0 }, { yPercent: -12, opacity: 1, ease: 'none', scrollTrigger: { trigger: d, start: 'top 98%', end: 'bottom 30%', scrub: true } }));
 
     // ---------- statement ----------
     gsap.to(words, { opacity: 1, ease: 'none', stagger: .05, scrollTrigger: { trigger: st, start: 'top 80%', end: 'bottom 45%', scrub: true } });
@@ -1266,6 +1285,48 @@
     gsap.from('.contact-grid > *', { y: 50, opacity: 0, duration: 1.5, stagger: .15, ease: EASE, scrollTrigger: { trigger: '.contact-grid', start: 'top 86%' } });
     { const { chars } = splitDeep(document.querySelector('.wordmark'));
       gsap.from(chars, { yPercent: 70, opacity: 0, ease: 'none', stagger: .06, scrollTrigger: { trigger: 'footer', start: 'top bottom', end: 'bottom bottom', scrub: true } }); }
+
+    // ---------- more scroll-driven type ----------
+    // marquee bands: drift on their own, speed up and flip direction with your scroll
+    gsap.utils.toArray('.marquee').forEach((m, k) => {
+      const tr = m.querySelector('.mq-track'), dir = k % 2 ? 1 : -1;
+      const loop = gsap.fromTo(tr, { xPercent: dir < 0 ? 0 : -50 }, { xPercent: dir < 0 ? -50 : 0, duration: innerWidth < 760 ? 22 : 34, ease: 'none', repeat: -1 });
+      let base = 1;
+      ScrollTrigger.create({ trigger: m, start: 'top bottom', end: 'bottom top', onToggle: st => st.isActive ? loop.play() : loop.pause(),
+        onUpdate: st => { base = st.direction; const v = Math.min(6, 1 + Math.abs(st.getVelocity()) / 400); gsap.to(loop, { timeScale: base * v, duration: .25, overwrite: true }); gsap.to(loop, { timeScale: base, duration: 1.2, delay: .25, ease: 'power2.out' }); } });
+      gsap.fromTo(m.querySelectorAll('.mq-track span'), { yPercent: 30, rotation: 2 * dir }, { yPercent: -30, rotation: -2 * dir, ease: 'none', scrollTrigger: { trigger: m, start: 'top bottom', end: 'bottom top', scrub: true } });
+    });
+
+    // highlighter pen sweeps across key phrases
+    gsap.utils.toArray('mark.hl').forEach(h => gsap.fromTo(h, { '--hl': '0%' }, { '--hl': '100%', ease: 'none', scrollTrigger: { trigger: h, start: 'top 88%', end: 'top 58%', scrub: .6 } }));
+
+    // read-along: words brighten as the paragraph moves up the screen
+    gsap.utils.toArray('.f-quote, .pr p, .step p').forEach(el => {
+      const { words } = splitDeep(el);
+      gsap.fromTo(words, { opacity: .16 }, { opacity: 1, stagger: .1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 88%', end: 'bottom 52%', scrub: true } });
+    });
+
+    // headings lean with scroll speed and spring back
+    const leaners = gsap.utils.toArray('section h2'), setLean = gsap.quickSetter(leaners, 'skewY', 'deg'), lp = { v: 0 };
+    ScrollTrigger.create({ start: 0, end: 'max', onUpdate: st => {
+      const v = gsap.utils.clamp(-5, 5, st.getVelocity() / -450);
+      if (Math.abs(v) > Math.abs(lp.v)) { lp.v = v; gsap.to(lp, { v: 0, duration: .9, ease: 'power3', overwrite: true, onUpdate: () => setLean(lp.v) }); }
+    } });
+
+    // service numbers roll like an odometer
+    gsap.utils.toArray('.scard .n').forEach(n => {
+      const digits = n.textContent.trim();
+      n.setAttribute('aria-label', digits);
+      n.innerHTML = '<span class="od" aria-hidden="true">' + [...digits].map(() => '<span><span>' + '0123456789'.repeat(2).split('').map(d => '<b>' + d + '</b>').join('') + '</span></span>').join('') + '</span>';
+      const cols = n.querySelectorAll('.od > span > span');
+      gsap.fromTo(cols, { yPercent: 0 }, { yPercent: i => -(10 + +digits[i]) * 5, duration: 2, ease: 'expo.out', stagger: .12, scrollTrigger: { trigger: n, start: 'top 90%' } });
+    });
+
+    // project names slide in letter by letter as each card arrives
+    track.querySelectorAll('.pcard .cap h3').forEach(h => {
+      const { chars } = splitDeep(h);
+      gsap.from(chars, { x: 50, opacity: 0, duration: .9, stagger: .025, ease: EASE, scrollTrigger: { trigger: h.closest('.pcard'), containerAnimation: hTween, start: 'left 85%' } });
+    });
 
     // ---------- magnetic buttons (mouse only) ----------
     if (matchMedia('(pointer: fine)').matches) document.querySelectorAll('.btn, .q-nav .arrow').forEach(b => {
