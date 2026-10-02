@@ -139,7 +139,7 @@
   /* Services: stacking cards */
   .services { background: var(--bg-2); }
   .stack { display: grid; gap: 28px; margin-top: clamp(30px, 5vh, 60px); }
-  .scard { position: sticky; top: calc(96px + var(--i) * 16px); height: min(80vh, 760px); border-radius: var(--r); overflow: hidden; background: #1a1b1f; color: #fff; transform-origin: 50% 0%; will-change: transform, clip-path; }
+  .scard { position: sticky; top: calc(96px + var(--i) * 16px); height: min(80vh, 760px); border-radius: var(--r); overflow: hidden; background: #1a1b1f; color: #fff; transform-origin: 50% 0%; }
   .scard .im { position: absolute; inset: 0; overflow: hidden; }
   .scard .im img { width: 100%; height: 100%; object-fit: cover; will-change: transform; }
   .scard .im::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(14,15,18,.82) 0%, rgba(14,15,18,.5) 38%, rgba(14,15,18,0) 68%), linear-gradient(0deg, rgba(14,15,18,.55) 0%, rgba(14,15,18,0) 45%); }
@@ -276,7 +276,7 @@
   /* Gallery */
   .g-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: clamp(150px, 17vw, 300px); grid-auto-flow: dense; gap: 14px; }
   .g { margin: 0; border-radius: calc(var(--r) * .7); overflow: hidden; position: relative; cursor: zoom-in; }
-  .g img { width: 100%; height: 100%; object-fit: cover; will-change: transform; }
+  .g img { width: 100%; height: 100%; object-fit: cover; }
   .g-wide { grid-column: span 2; } .g-tall { grid-row: span 2; }
   .cover { position: absolute; inset: 0; z-index: 2; background: var(--bg); transform-origin: 50% 0%; pointer-events: none; }
 
@@ -1067,7 +1067,7 @@
     const intro = document.getElementById('intro');
     if (!(window.gsap && window.ScrollTrigger)) { intro && intro.remove(); return; }
     gsap.registerPlugin(ScrollTrigger);
-    gsap.config({ force3D: true });
+    gsap.config({ force3D: 'auto' });  // 3D layers only while tweening; thousands of split letters must not stay as GPU layers
     ScrollTrigger.config({ ignoreMobileResize: true });
     const EASE = 'expo.out';
 
@@ -1165,14 +1165,19 @@
     let counted = false;
     gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: () => '+=' + Math.round(innerHeight * 1.7), pin: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true,
       onUpdate: st => { hB.style.pointerEvents = st.progress > .62 ? 'auto' : 'none'; if (!counted && st.progress > .7) { counted = true; countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2); } } } })
-      .fromTo(hA, { opacity: 1, y: 0 }, { opacity: 0, y: -40, duration: .14, ease: 'none' }, 0)
+      .fromTo(hA, { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -40, duration: .14, ease: 'none' }, 0)
       .fromTo(hWord, { scale: 1 }, { scale: () => hDive.s, duration: .55, ease: 'power4.in' }, 0)
-      .fromTo([hMask, '#heroTint'], { opacity: 1 }, { opacity: 0, duration: .08, ease: 'none' }, .5)
+      .fromTo([hMask, '#heroTint'], { autoAlpha: 1 }, { autoAlpha: 0, duration: .08, ease: 'none' }, .5)
       .fromTo('#heroShade', { opacity: 0 }, { opacity: 1, duration: .2, ease: 'none' }, .5)
       .fromTo(hTitle, { yPercent: 110, rotationX: -85, opacity: 0 }, { yPercent: 0, rotationX: 0, opacity: 1, transformPerspective: 700, transformOrigin: '50% 100%', duration: .2, stagger: .01, ease: 'power3.out' }, .58)
       .fromTo(['.hb-x', '#videoToggle'], { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .18, stagger: .035, ease: 'power3.out' }, .68)
       .to({}, { duration: .1 });
     hB.style.pointerEvents = 'none';
+
+    // only decode the hero film while it can be seen
+    { const v = document.getElementById('heroVideo'); let userPaused = false;
+      document.getElementById('videoToggle').addEventListener('click', () => { userPaused = v.paused; });
+      new IntersectionObserver(es => { if (es[0].isIntersecting) { if (!userPaused) v.play().catch(() => {}); } else v.pause(); }).observe(hero); }
 
     // ---------- text effects: a different one for every section ----------
     const on = (el, start = 'top 86%') => ({ trigger: el, start });
@@ -1271,7 +1276,6 @@
     const cards = gsap.utils.toArray('.scard');
     const mobS = innerWidth < 760;
     cards.forEach((c, i) => {
-      gsap.fromTo(c, { clipPath: mobS ? 'inset(6% 5% 0% 5% round 28px)' : 'inset(10% 9% 0% 9% round 40px)' }, { clipPath: 'inset(0% 0% 0% 0% round 0px)', ease: 'none', scrollTrigger: { trigger: c, start: 'top bottom', end: 'top 45%', scrub: true } });
       gsap.fromTo(c.querySelector('.im img'), { scale: 1.3, yPercent: -4 }, { scale: 1.12, yPercent: 4, ease: 'none', scrollTrigger: { trigger: c, start: 'top bottom', end: 'top 10%', scrub: true } });
       gsap.fromTo(c.querySelector('.sd'), { y: mobS ? 60 : 140, rotation: 6, opacity: 0 }, { y: 0, rotation: -2.5, opacity: 1, ease: 'none', scrollTrigger: { trigger: c, start: 'top 85%', end: 'top 25%', scrub: true } });
       gsap.from(c.querySelectorAll('.tx p, .chips li, .more'), { y: 26, opacity: 0, duration: 1.1, stagger: .07, ease: EASE, scrollTrigger: { trigger: c, start: 'top 55%' } });
@@ -1331,17 +1335,10 @@
     gsap.utils.toArray('mark.hl').forEach(h => gsap.fromTo(h, { '--hl': '0%' }, { '--hl': '100%', ease: 'none', scrollTrigger: { trigger: h, start: 'top 88%', end: 'top 58%', scrub: .6 } }));
 
     // read-along: words brighten as the paragraph moves up the screen
-    gsap.utils.toArray('.f-quote, .pr p, .step p').forEach(el => {
+    gsap.utils.toArray('.f-quote').forEach(el => {
       const { words } = splitDeep(el);
       gsap.fromTo(words, { opacity: .16 }, { opacity: 1, stagger: .1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 88%', end: 'bottom 52%', scrub: true } });
     });
-
-    // headings lean with scroll speed and spring back
-    const leaners = gsap.utils.toArray('section h2'), setLean = gsap.quickSetter(leaners, 'skewY', 'deg'), lp = { v: 0 };
-    ScrollTrigger.create({ start: 0, end: 'max', onUpdate: st => {
-      const v = gsap.utils.clamp(-5, 5, st.getVelocity() / -450);
-      if (Math.abs(v) > Math.abs(lp.v)) { lp.v = v; gsap.to(lp, { v: 0, duration: .9, ease: 'power3', overwrite: true, onUpdate: () => setLean(lp.v) }); }
-    } });
 
     // service numbers roll like an odometer
     gsap.utils.toArray('.scard .n').forEach(n => {
@@ -1376,10 +1373,10 @@
     const fallback = () => sec.classList.add('no-webgl');
     if (!window.THREE) { fallback(); return; }
     let renderer;
-    try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' }); } catch (e) { fallback(); return; }
-    const T = THREE;
     const mobile = innerWidth < 760;
-    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, mobile ? 1.75 : 2));
+    try { renderer = new THREE.WebGLRenderer({ canvas, antialias: !mobile, alpha: true, powerPreference: 'high-performance' }); } catch (e) { fallback(); return; }
+    const T = THREE;
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, mobile ? 1 : 1.5));
     renderer.outputEncoding = T.sRGBEncoding;
     renderer.toneMapping = T.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.0;
@@ -1504,13 +1501,20 @@
       steps.forEach((s, i) => s.classList.toggle('on', i === si));
       if (bar) bar.style.transform = `scaleX(${p})`;
     }
-    const loop = t => { idle = t / 1000; draw(); if (visible) raf = requestAnimationFrame(loop); };
-    new IntersectionObserver(es => { visible = es[0].isIntersecting; cancelAnimationFrame(raf); if (visible) raf = requestAnimationFrame(loop); }).observe(sec);
+    // draw only when something changed: scroll progress, or (desktop) a gentle idle sway at ~30fps
+    let dirty = true, lastT = 0;
+    const loop = t => {
+      if (!visible) return;
+      if (!mobile && t - lastT > 33) { idle = t / 1000; dirty = true; lastT = t; }
+      if (dirty && (!mobile || t - lastT > 33)) { dirty = false; lastT = t; draw(); }
+      raf = requestAnimationFrame(loop);
+    };
+    new IntersectionObserver(es => { visible = es[0].isIntersecting; cancelAnimationFrame(raf); if (visible) { dirty = true; raf = requestAnimationFrame(loop); } }).observe(sec);
     addEventListener('resize', resize); resize();
 
     ScrollTrigger.create({
-      trigger: sec, start: 'top top', end: () => '+=' + Math.round(innerHeight * (mobile ? 3.2 : 3.6)), pin: '.b3-pin', scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
-      onUpdate: self => { state.p = self.progress; tl.progress(self.progress); }
+      trigger: sec, start: 'top top', end: () => '+=' + Math.round(innerHeight * (mobile ? 2.6 : 3.6)), pin: '.b3-pin', scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
+      onUpdate: self => { state.p = self.progress; tl.progress(self.progress); dirty = true; }
     });
     ScrollTrigger.sort(); ScrollTrigger.refresh();
   })();
