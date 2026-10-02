@@ -8,6 +8,10 @@
 <link rel="apple-touch-icon" href="images/logo.png">
 <meta name="description" content="MD Projects NZ: Auckland residential builders. Over 1,000 homes delivered at a fixed price, on time and with complete transparency.">
 <style>
+  @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-300.woff2") format("woff2"); font-weight: 300; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
   /* Concept: "From plan to reality". Dark blueprint bands (plans) alternate with light paper bands (built work).
      Palette from the MD Projects logo: deep navy, royal blue, sky, plus the site's amber. */
   :root {
@@ -17,8 +21,8 @@
     --navy: #202448;
     --blue: #3954a5;
     --sky: #8ecaee;
-    --amber: #ffb703;
-    --amber-2: #f0a500;
+    --amber: #d4b373;
+    --amber-2: #e8d2a2;
     --paper: #eef2f7;
     --white: #ffffff;
     --line: #d4dce7;
@@ -26,35 +30,37 @@
     --grid-2: rgba(142, 202, 238, .045);
     --muted: #5b6479;
     --muted-dk: rgba(255, 255, 255, .62);
-    --display: "Geist", "Helvetica Neue", Arial, sans-serif;
-    --ui: "Geist", "Helvetica Neue", Arial, sans-serif;
-    --body: "Geist", "Helvetica Neue", Arial, sans-serif;
-    --mono: "Geist Mono", ui-monospace, Menlo, monospace;
-    --wrap: 1320px;
+    --display: "Satoshi", "Helvetica Neue", Arial, sans-serif;
+    --ui: "Satoshi", "Helvetica Neue", Arial, sans-serif;
+    --body: "Satoshi", "Helvetica Neue", Arial, sans-serif;
+    --mono: "Satoshi", "Helvetica Neue", Arial, sans-serif;
+    --wrap: 1480px;
+    --gutter: clamp(20px, 4.4vw, 72px);
     --r: 16px;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  html { scroll-behavior: smooth; font-size: clamp(16px, .42vw + 10px, 21px); }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 clamp(16px, .25vw + 14.6px, 18px)/1.65 var(--body); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; overflow-x: hidden; }
   img, video { display: block; max-width: 100%; }
   a { color: inherit; }
   :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
   p { margin: 0; }
   h1, h2, h3 { margin: 0; font-family: var(--ui); text-wrap: balance; }
-  .wrap { max-width: var(--wrap); margin: 0 auto; padding-inline: 28px; }
-  .xl { font-family: var(--display); font-weight: 600; letter-spacing: -.055em; line-height: .94; }
+  .wrap { max-width: calc(var(--wrap) + 2 * var(--gutter)); margin: 0 auto; padding-inline: var(--gutter); }
+  .xl { font-family: var(--display); font-weight: 400; letter-spacing: -.045em; line-height: .98; }
   .xl em, .xl i { font-style: normal; color: var(--blue); }
   .dark .xl em, .dark .xl i { color: var(--sky); }
-  .h2 { font-size: clamp(2.6rem, 6vw, 5.8rem); }
-  .tag { font: 500 .74rem/1.2 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--blue); display: inline-flex; align-items: center; gap: 10px; }
-  .tag::before { content: ""; width: 8px; height: 8px; background: var(--amber); }
-  .dark { background: var(--ink); color: var(--white); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px), linear-gradient(var(--grid-2) 1px, transparent 1px), linear-gradient(90deg, var(--grid-2) 1px, transparent 1px); background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px; }
+  .h2 { font-size: clamp(2.5rem, 5.4vw, 5.6rem); }
+  .tag { font: 500 .72rem/1.2 var(--ui); letter-spacing: .28em; text-transform: uppercase; color: var(--blue); display: inline-flex; align-items: center; gap: 14px; }
+  .tag::before { content: ""; width: 32px; height: 1px; background: var(--amber); }
+  .dark { background: radial-gradient(120% 80% at 80% 0%, #151c4a 0%, var(--ink) 55%); color: var(--white); }
+  .grid-bg { background-color: var(--ink); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px), linear-gradient(var(--grid-2) 1px, transparent 1px), linear-gradient(90deg, var(--grid-2) 1px, transparent 1px); background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px; }
   .dark .tag { color: var(--sky); }
-  .lede { font-size: 1.15rem; color: var(--muted); max-width: 52ch; }
+  .lede { font-size: clamp(1.05rem, .35vw + .95rem, 1.25rem); font-weight: 400; line-height: 1.6; color: var(--muted); max-width: 50ch; }
   .dark .lede { color: var(--muted-dk); }
-  section { padding-block: 130px; position: relative; }
+  section { padding-block: clamp(96px, 15vh, 190px); position: relative; }
 
-  .btn { display: inline-flex; align-items: center; gap: 12px; padding: 17px 28px; border-radius: 100px; font: 600 1rem/1 var(--body); text-decoration: none; border: 1.5px solid transparent; cursor: pointer; transition: background .25s, color .25s, border-color .25s, transform .25s; }
+  .btn { display: inline-flex; align-items: center; gap: 12px; padding: 18px 30px; border-radius: 100px; font: 500 .95rem/1 var(--body); letter-spacing: .02em; text-decoration: none; border: 1.5px solid transparent; cursor: pointer; transition: background .4s, color .4s, border-color .4s; }
   .btn svg { transition: transform .25s; }
   .btn:hover svg { transform: translateX(4px); }
   .btn-amber { background: var(--amber); color: var(--ink); }
@@ -65,8 +71,8 @@
   .btn-ink:hover { background: var(--blue); }
 
   /* Header */
-  .header { position: fixed; inset: 0 0 auto; z-index: 50; padding-top: env(safe-area-inset-top, 0px); color: var(--white); transition: background .35s, backdrop-filter .35s; }
-  .header.solid { background: rgba(11,15,42,.82); backdrop-filter: blur(14px); }
+  .header { position: fixed; inset: 0 0 auto; z-index: 50; padding-top: env(safe-area-inset-top, 0px); color: var(--white); transition: background .6s, box-shadow .6s; transform: translateZ(0); }
+  .header.solid { background: rgba(11,15,42,.96); box-shadow: 0 1px 0 rgba(212,179,115,.18); }
   .header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 92px; }
   .logo { display: block; flex: none; background: var(--white); border-radius: 14px; padding: 6px 14px; }
   .logo img { height: 56px; width: auto; }
@@ -98,34 +104,35 @@
   .hero-real { position: absolute; inset: 0; clip-path: inset(0 calc((1 - var(--p)) * 100%) 0 0); }
   .hero-real video { width: 100%; height: 100%; object-fit: cover; }
   .hero-real::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,15,42,.85), rgba(11,15,42,.2) 70%), linear-gradient(0deg, rgba(11,15,42,.85), transparent 40%); }
-  .scan { position: absolute; top: 0; bottom: 0; left: calc(var(--p) * 100%); width: 2px; background: var(--amber); box-shadow: 0 0 24px 4px rgba(255,183,3,.55); z-index: 3; opacity: calc(min(var(--p) * 30, 1) * min((1 - var(--p)) * 30, 1)); }
+  .scan { position: absolute; top: 0; bottom: 0; left: calc(var(--p) * 100%); width: 2px; background: var(--amber); box-shadow: 0 0 24px 4px rgba(212,179,115,.55); z-index: 3; opacity: calc(min(var(--p) * 30, 1) * min((1 - var(--p)) * 30, 1)); }
   .scan span { position: absolute; top: 172px; left: 10px; white-space: nowrap; background: var(--amber); color: var(--ink); font: 600 .72rem/1 var(--mono); letter-spacing: .1em; padding: 7px 10px; border-radius: 4px; }
   .hero-copy { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 150px; pointer-events: none; }
   .hero-copy .wrap { width: 100%; }
   .hero-copy a, .hero-copy button { pointer-events: auto; }
-  .hero h1 { font-size: clamp(3.4rem, 9.4vw, 10rem); margin-top: 20px; line-height: .92; font-weight: 700; }
-  .hero h1 .l2 { display: block; color: var(--sky); position: relative; z-index: 1; text-shadow: 0 0 22px var(--ink), 0 0 6px var(--ink); transition: color .6s; }
-  .hero.built h1 .l2 { color: var(--amber); text-shadow: 0 2px 24px rgba(11,15,42,.5); }
+  .hero h1 { font-size: clamp(3rem, min(8.6vw, 15vh), 11.5rem); margin-top: 22px; line-height: .96; font-weight: 300; letter-spacing: -.05em; }
+  .hero h1 .l2 { color: var(--sky); transition: color 1.2s cubic-bezier(.2,.8,.2,1); }
+  .hero.built h1 .l2 { color: var(--amber); }
   .hero .lede { color: rgba(255,255,255,.82); margin-top: 26px; max-width: 46ch; }
   .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
-  .hero-bar { position: absolute; z-index: 4; left: 0; right: 0; bottom: 0; border-top: 1px solid rgba(255,255,255,.14); background: rgba(11,15,42,.55); backdrop-filter: blur(10px); }
+  .hero-bar { position: absolute; z-index: 4; left: 0; right: 0; bottom: 0; border-top: 1px solid rgba(255,255,255,.14); background: linear-gradient(180deg, rgba(11,15,42,.55), rgba(11,15,42,.88)); }
   .hero-bar .wrap { display: grid; grid-template-columns: repeat(4, 1fr) auto; align-items: center; height: 96px; gap: 20px; }
   .hb b { display: block; font: 800 1.9rem/1 var(--ui);  color: var(--white); font-variant-numeric: tabular-nums; }
   .hb span { font: 500 .7rem/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sky); }
   .scroll-hint { font: 500 .72rem/1 var(--mono); letter-spacing: .14em; color: var(--white); display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
   .scroll-hint i { width: 1px; height: 34px; background: linear-gradient(var(--amber), transparent); animation: hint 1.8s infinite; }
   @keyframes hint { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
-  .replay { position: absolute; z-index: 5; right: 80px; top: 112px; height: 42px; padding: 0 16px; border-radius: 100px; border: 1px solid rgba(255,255,255,.4); background: rgba(11,15,42,.45); color: var(--white); font: 500 .72rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; opacity: 0; pointer-events: none; transition: opacity .5s, background .25s, color .25s; backdrop-filter: blur(6px); }
+  .replay { position: absolute; z-index: 5; right: 80px; top: 112px; height: 42px; padding: 0 16px; border-radius: 100px; border: 1px solid rgba(255,255,255,.4); background: rgba(11,15,42,.45); color: var(--white); font: 500 .72rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; opacity: 0; pointer-events: none; transition: opacity .5s, background .25s, color .25s; }
   .hero.built .replay { opacity: 1; pointer-events: auto; }
   .replay:hover { background: var(--amber); color: var(--ink); border-color: var(--amber); }
   .video-toggle { position: absolute; z-index: 5; right: 28px; top: 112px; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); background: rgba(11,15,42,.45); color: var(--white); display: grid; place-items: center; cursor: pointer; opacity: calc(min(var(--p) * 4, 1)); }
 
   /* Ticker */
-  .ticker { background: var(--amber); color: var(--ink); overflow: hidden; padding: 22px 0; border-block: 1px solid var(--ink); }
-  .ticker-track { display: flex; width: max-content; animation: tick 40s linear infinite; }
-  .ticker span { font: 800 clamp(1.6rem, 3.4vw, 3rem)/1 var(--ui);  text-transform: uppercase; white-space: nowrap; padding-right: 48px; display: inline-flex; align-items: center; gap: 48px; }
-  .ticker span:nth-child(even) { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
-  .ticker span::after { content: ""; width: 14px; height: 14px; background: var(--ink); transform: rotate(45deg); }
+  .ticker { background: var(--ink); color: var(--white); overflow: hidden; padding: 26px 0; border-block: 1px solid rgba(212,179,115,.25); }
+  .ticker-track { display: flex; width: max-content; animation: tick 80s linear infinite; will-change: transform; }
+  .ticker.off .ticker-track { animation-play-state: paused; }
+  .ticker span { font: 300 clamp(1.5rem, 3vw, 2.8rem)/1 var(--ui); letter-spacing: -.02em; white-space: nowrap; padding-right: 56px; display: inline-flex; align-items: center; gap: 56px; }
+  .ticker span:nth-child(even) { color: var(--amber); }
+  .ticker span::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.35); }
   @keyframes tick { to { transform: translateX(-50%); } }
 
   /* Statement */
@@ -144,7 +151,7 @@
   .svc-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap; margin-bottom: 56px; }
   .svc-list { border-top: 1px solid rgba(255,255,255,.16); }
   .svc { display: grid; grid-template-columns: 1fr minmax(0, 380px) 56px; gap: 32px; align-items: center; padding: 30px 0; border-bottom: 1px solid rgba(255,255,255,.16); text-decoration: none; position: relative; }
-  .svc h3 { font-size: clamp(2rem, 4.4vw, 4.2rem); transition: color .3s, transform .4s cubic-bezier(.2,.8,.2,1); }
+  .svc h3 { font-weight: 300; font-size: clamp(2rem, 4.2vw, 4rem); transition: color .3s, transform .4s cubic-bezier(.2,.8,.2,1); }
   .svc p { color: var(--muted-dk); font-size: 1rem; }
   .svc .arr { width: 56px; height: 56px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); display: grid; place-items: center; transition: background .3s, border-color .3s, transform .3s; }
   .svc:hover h3 { color: var(--amber); transform: translateX(16px); }
@@ -174,7 +181,7 @@
   .pcard.cta::before { display: none; }
   .pcard.cta h3 { font-size: clamp(2.6rem, 5vw, 4.6rem); }
   .proj-bar { height: 3px; background: var(--line); border-radius: 3px; overflow: hidden; }
-  .proj-bar span { display: block; height: 100%; width: 0; background: var(--amber); }
+  .proj-bar span { display: block; height: 100%; width: 100%; background: var(--amber); transform: scaleX(0); transform-origin: 0 50%; }
 
   /* Planner (dark blueprint) */
   .planner-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 28px; align-items: start; margin-top: 56px; }
@@ -197,7 +204,7 @@
   .opt small { display: block; font-weight: 400; color: var(--muted-dk); font-size: .85rem; margin-top: 3px; }
   .opt:hover { border-color: var(--sky); background: rgba(142,202,238,.08); }
   .opt:active { transform: scale(.98); }
-  .opt[aria-pressed="true"] { border-color: var(--amber); background: rgba(255,183,3,.12); }
+  .opt[aria-pressed="true"] { border-color: var(--amber); background: rgba(212,179,115,.12); }
   .opt .sw { width: 30px; height: 30px; border-radius: 8px; flex: none; border: 1px solid rgba(255,255,255,.25); }
   .opt svg { flex: none; color: var(--sky); }
   .answers { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; min-height: 30px; }
@@ -221,7 +228,7 @@
   .process { background: var(--white); }
   .tl { position: relative; margin-top: 70px; }
   .tl-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: var(--line); transform: translateX(-50%); }
-  .tl-line span { display: block; width: 100%; height: 0; background: var(--amber); }
+  .tl-line span { display: block; width: 100%; height: 100%; background: var(--amber); transform: scaleY(0); transform-origin: 50% 0%; }
   .tl-step { display: grid; grid-template-columns: 1fr 120px 1fr; align-items: center; padding: 26px 0; }
   .tl-step .dot { justify-self: center; width: 64px; height: 64px; border-radius: 50%; background: var(--white); border: 2px solid var(--line); display: grid; place-items: center; font: 600 .85rem/1 var(--mono); color: var(--muted); position: relative; z-index: 1; transition: background .4s, border-color .4s, color .4s, transform .4s; }
   .tl-step.on .dot { background: var(--amber); border-color: var(--amber); color: var(--ink); transform: scale(1.08); }
@@ -255,7 +262,8 @@
   .founder-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 96px; align-items: center; }
   .f-photo { position: relative; }
   .f-photo::before { content: ""; position: absolute; inset: 24px -24px -24px 24px; border: 2px solid var(--amber); border-radius: var(--r); }
-  .f-photo img { position: relative; border-radius: var(--r); aspect-ratio: 4/5; object-fit: cover; object-position: center 30%; width: 100%; }
+  .f-img { display: block; position: relative; overflow: hidden; border-radius: var(--r); aspect-ratio: 4/5; }
+  .f-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; }
   .f-name { position: absolute; left: -20px; bottom: 40px; background: var(--ink); color: var(--white); border-radius: 12px; padding: 18px 22px; z-index: 1; }
   .f-name small { display: block; font: 500 .7rem/1 var(--mono); letter-spacing: .14em; color: var(--amber); text-transform: uppercase; margin-bottom: 8px; }
   .f-name b { font: 800 1.4rem/1 var(--ui);  }
@@ -287,7 +295,7 @@
   details p { padding: 0 60px 26px 0; color: var(--muted); }
 
   /* Closing CTA + contact */
-  .cta-big { font-size: clamp(4.2rem, 15vw, 15rem); line-height: .85; font-weight: 700; }
+  .cta-big { font-size: clamp(4.2rem, 14vw, 14rem); line-height: .9; font-weight: 300; letter-spacing: -.055em; }
   .cta-big em, .dark .cta-big em { font-style: normal; color: var(--amber); }
   .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; margin-top: 70px; align-items: start; }
   .details { list-style: none; padding: 0; margin: 0; }
@@ -315,7 +323,7 @@
   footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
   footer a { text-decoration: none; }
   footer a:hover { color: var(--amber); }
-  .wordmark { display: block; width: max-content; font: 700 10vw/.8 var(--display);  text-transform: uppercase; color: rgba(142,202,238,.16); white-space: nowrap; margin: 70px 0 30px; letter-spacing: -.06em; }
+  .wordmark { display: block; width: max-content; font: 300 10vw/.85 var(--display);  text-transform: uppercase; color: rgba(142,202,238,.16); white-space: nowrap; margin: 70px 0 30px; letter-spacing: -.06em; }
   .foot-bottom { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: .85rem; border-top: 1px solid rgba(255,255,255,.1); padding-top: 24px; }
 
   .rv { transition: transform 1s cubic-bezier(.2,.8,.2,1), opacity 1s ease; }
@@ -331,39 +339,56 @@
   .intro-inner { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 26px; text-align: center; padding-inline: 24px; }
   .intro-logo { background: var(--white); border-radius: 16px; padding: 8px 16px; }
   .intro-logo img { height: 76px; width: auto; }
-  .intro-count { font: 600 clamp(4.6rem, 14vw, 11rem)/.85 var(--display); letter-spacing: -.06em;  font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  .intro-count { font: 300 clamp(4.6rem, 14vw, 11rem)/.85 var(--display); letter-spacing: -.05em;  font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
   .intro-count small { font-size: .38em; color: var(--amber); margin-left: .06em; letter-spacing: 0; }
-  .intro-bar { width: min(420px, 70vw); height: 2px; background: rgba(255,255,255,.15); }
-  .intro-bar span { display: block; height: 100%; width: 0; background: var(--amber); }
+  .intro-bar { width: min(420px, 70vw); height: 1px; background: rgba(255,255,255,.15); }
+  .intro-bar span { display: block; height: 100%; width: 100%; background: var(--amber); transform: scaleX(0); transform-origin: 0 50%; }
   .intro-step { font: 500 .78rem/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sky); min-height: 1em; }
   /* split text */
   .ln { display: block; overflow: hidden; padding: .02em .06em .16em 0; margin-bottom: -.16em; }
   .ln > .li { display: block; }
-  .ch { display: inline-block; will-change: transform; }
+  .ch { display: inline-block; }
   html.lenis, html.lenis body { height: auto; }
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
   .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
   .lenis.lenis-stopped { overflow: hidden; }
-  .has-gsap .ticker-track { animation: none; }
   .has-gsap .w { transition: none; }
-  .pcard img, .g img, .f-photo img { will-change: transform; }
+  .pcard img, .g img, .f-photo img, .hero-real, .proj-track { will-change: transform; backface-visibility: hidden; }
 
   /* scroll text effects */
   .wd { display: inline-block; white-space: nowrap; }
   h2.xl .ln { perspective: 600px; }
   .bigtext { background: var(--paper); padding: 40px 0 70px; overflow: hidden; }
-  .bt-row { white-space: nowrap; font: 700 clamp(4rem, 11vw, 11rem)/1 var(--display); letter-spacing: -.06em; will-change: transform; }
+  .bt-row { white-space: nowrap; font: 300 clamp(3.6rem, 10vw, 10rem)/1.02 var(--display); letter-spacing: -.05em; will-change: transform; }
   .bt-row span { color: var(--amber); }
-  .bt-row.r2 { color: transparent; -webkit-text-stroke: 1.5px var(--ink); margin-top: .02em; }
+  .bt-row.r2 { color: transparent; -webkit-text-stroke: 1px var(--ink); margin-top: .02em; }
   .bt-row.r2 span { -webkit-text-stroke-color: var(--blue); }
   .ink .svc h3 { background: linear-gradient(90deg, var(--white) var(--fill, 100%), rgba(255,255,255,.16) var(--fill, 100%)); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .ink .svc:hover h3 { -webkit-text-fill-color: var(--amber); }
   .qw { display: inline-block; }
+  .cover { position: absolute; inset: 0; z-index: 2; background: var(--cover, var(--paper)); transform-origin: 50% 0%; pointer-events: none; }
+  .gallery .cover { --cover: var(--white); }
+  img.ld { opacity: 0; }
+  img { transition: opacity .9s ease; }
+  .magnetic { will-change: transform; }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .ticker-track { animation-duration: 120s; }
     .scroll-hint i { animation: none; }
+  }
+  @media (min-width: 961px) and (max-height: 820px) {
+    .hero-copy { padding-bottom: 118px; }
+    .hero .lede { margin-top: 16px; }
+    .hero-ctas { margin-top: 22px; }
+    .hero-bar .wrap { height: 78px; }
+    .bp-svg { width: min(44vw, 640px); }
+  }
+  @media (min-width: 1800px) {
+    .bp-svg { width: min(46vw, 1100px); }
+    .header .wrap { height: 108px; }
+    .logo img { height: 66px; }
+    .nav { gap: 40px; }
   }
   @media (max-width: 1100px) {
     .nav { gap: 20px; }
@@ -427,9 +452,9 @@
     .f-photo::before { inset: 14px -12px -14px 12px; }
   }
 </style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/satoshi-300.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/satoshi-500.woff2" as="font" type="font/woff2" crossorigin>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
@@ -468,17 +493,15 @@
 
   <!-- Hero: a blueprint that turns into the real thing as you scroll -->
   <section class="hero" id="hero">
-    <div class="hero-pin dark">
+    <div class="hero-pin dark grid-bg">
       <div class="hero-plan"><svg class="bp-svg" id="bpSvg" viewBox="0 0 900 560" aria-hidden="true">
   <g class="bp-lines"><path class="bp-l bp-ground" pathLength="1" d="M40 470H860"/><path class="bp-l" pathLength="1" d="M130 220h210v250h-210z"/><path class="bp-l" pathLength="1" d="M120 220L235.0 142L350 220"/><path class="bp-l bp-thin" pathLength="1" d="M130 345h210"/><path class="bp-l" pathLength="1" d="M160 248h56v70h-56z"/><path class="bp-l" pathLength="1" d="M254 248h56v70h-56z"/><path class="bp-l bp-thin" pathLength="1" d="M188 248v70M282 248v70"/><path class="bp-l" pathLength="1" d="M144 388h92v82h-92z"/><path class="bp-l bp-thin" pathLength="1" d="M144 404h92"/><path class="bp-l bp-thin" pathLength="1" d="M144 420h92"/><path class="bp-l bp-thin" pathLength="1" d="M144 436h92"/><path class="bp-l bp-thin" pathLength="1" d="M144 452h92"/><path class="bp-l" pathLength="1" d="M248 386h34v84h-34z"/><path class="bp-l" pathLength="1" d="M292 396h36v46h-36z"/><path class="bp-l bp-thin" pathLength="1" d="M221.0 180h28v18h-28z"/><path class="bp-l" pathLength="1" d="M340 220h210v250h-210z"/><path class="bp-l" pathLength="1" d="M330 220L445.0 142L560 220"/><path class="bp-l bp-thin" pathLength="1" d="M340 345h210"/><path class="bp-l" pathLength="1" d="M370 248h56v70h-56z"/><path class="bp-l" pathLength="1" d="M464 248h56v70h-56z"/><path class="bp-l bp-thin" pathLength="1" d="M398 248v70M492 248v70"/><path class="bp-l" pathLength="1" d="M354 388h92v82h-92z"/><path class="bp-l bp-thin" pathLength="1" d="M354 404h92"/><path class="bp-l bp-thin" pathLength="1" d="M354 420h92"/><path class="bp-l bp-thin" pathLength="1" d="M354 436h92"/><path class="bp-l bp-thin" pathLength="1" d="M354 452h92"/><path class="bp-l" pathLength="1" d="M458 386h34v84h-34z"/><path class="bp-l" pathLength="1" d="M502 396h36v46h-36z"/><path class="bp-l bp-thin" pathLength="1" d="M431.0 180h28v18h-28z"/><path class="bp-l" pathLength="1" d="M550 220h210v250h-210z"/><path class="bp-l" pathLength="1" d="M540 220L655.0 142L770 220"/><path class="bp-l bp-thin" pathLength="1" d="M550 345h210"/><path class="bp-l" pathLength="1" d="M580 248h56v70h-56z"/><path class="bp-l" pathLength="1" d="M674 248h56v70h-56z"/><path class="bp-l bp-thin" pathLength="1" d="M608 248v70M702 248v70"/><path class="bp-l" pathLength="1" d="M564 388h92v82h-92z"/><path class="bp-l bp-thin" pathLength="1" d="M564 404h92"/><path class="bp-l bp-thin" pathLength="1" d="M564 420h92"/><path class="bp-l bp-thin" pathLength="1" d="M564 436h92"/><path class="bp-l bp-thin" pathLength="1" d="M564 452h92"/><path class="bp-l" pathLength="1" d="M668 386h34v84h-34z"/><path class="bp-l" pathLength="1" d="M712 396h36v46h-36z"/><path class="bp-l bp-thin" pathLength="1" d="M641.0 180h28v18h-28z"/></g>
   <g class="bp-dims"><path class="bp-d" pathLength="1" d="M130 510H760M130 502v16M760 502v16"/><text class="bp-t" x="445.0" y="504" text-anchor="middle">19 800</text><path class="bp-d" pathLength="1" d="M84 220V470M76 220h16M76 470h16"/><text class="bp-t" x="78" y="345.0" text-anchor="middle" transform="rotate(-90 78 345.0)">6 000</text><path class="bp-d" pathLength="1" d="M806 142V470M798 142h16M798 470h16"/><text class="bp-t" x="820" y="306.0" text-anchor="middle" transform="rotate(90 820 306.0)">8 400</text><text class="bp-t bp-unit" x="235.0" y="124" text-anchor="middle">UNIT 01 · 132 m²</text><text class="bp-t bp-unit" x="445.0" y="124" text-anchor="middle">UNIT 02 · 132 m²</text><text class="bp-t bp-unit" x="655.0" y="124" text-anchor="middle">UNIT 03 · 132 m²</text><text class="bp-t" x="130" y="338" >L1</text><text class="bp-t" x="130" y="464">L0</text></g>
   <g class="bp-stamp" transform="translate(690 40)"><path class="bp-d" pathLength="1" d="M0 0h190v62H0z"/><text class="bp-t" x="12" y="22">MD PROJECTS NZ</text><text class="bp-t" x="12" y="40">FRONT ELEVATION</text><text class="bp-t" x="12" y="56">SCALE 1:100 · DWG A-201</text></g>
 </svg></div>
       <div class="hero-real">
-        <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="images/hero.jpg" aria-label="Flyover of completed MD Projects homes in Auckland">
-          <source src="images/hero.webm" type="video/webm">
-          <source src="images/hero.mp4" type="video/mp4">
-        </video>
+        <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="images/hero-poster.webp" aria-label="Flyover of completed MD Projects homes in Auckland"></video>
+        <script>(function(){var v=document.getElementById('heroVideo');var hd=Math.max(screen.width,screen.height)*(window.devicePixelRatio||1)>=1600&&innerWidth>820;v.src=hd?'images/hero-1080.mp4':'images/hero-720.mp4';})();</script>
       </div>
       <div class="scan" aria-hidden="true"><span id="scanLabel">BUILD 0%</span></div>
       <button class="replay" id="replay" aria-label="Replay the build animation"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 8a5.5 5.5 0 105.5-5.5H5M5 .5v4h4" transform="translate(0 1)"/></svg>Replay build</button>
@@ -486,7 +509,7 @@
       <div class="hero-copy">
         <div class="wrap">
           <span class="tag">MD Projects NZ · Residential builders · Auckland</span>
-          <h1 class="xl"><span class="ln l1">From plan</span><span class="ln l2">to reality.</span></h1>
+          <h1 class="xl"><span class="ln"><span class="li l1">From plan</span></span><span class="ln"><span class="li l2">to reality.</span></span></h1>
           <p class="lede">Expert builders. Proven results. Over 1,000 homes delivered at a fixed price, on time and with complete transparency.</p>
           <div class="hero-ctas">
             <a href="#contact" class="btn btn-amber">Get a free quote <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
@@ -541,12 +564,12 @@
         <p class="lede">Our full range of residential construction services takes your project from concept to completion with ease and excellence.</p>
       </div>
       <div class="svc-list" id="svcList">
-        <a class="svc" href="https://www.mdprojects.co.nz/services/design-build/" data-img="images/service-design-build.jpg"><span class="thumb"><img src="images/service-design-build.jpg" alt="" loading="lazy"></span><h3 class="xl">Design &amp; Build</h3><p>A complete custom home solution, taking your vision from concept through to final construction.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc" href="https://www.mdprojects.co.nz/services/" data-img="images/service-build-from-plans.jpg"><span class="thumb"><img src="images/service-build-from-plans.jpg" alt="" loading="lazy"></span><h3 class="xl">Build from Plans</h3><p>Already have approved plans? We'll bring them to life with expert craftsmanship and precision.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc" href="https://www.mdprojects.co.nz/services/" data-img="images/service-terrace-duplex.jpg"><span class="thumb"><img src="images/service-terrace-duplex.jpg" alt="" loading="lazy"></span><h3 class="xl">Terrace &amp; Duplex</h3><p>Efficient, modern multi-unit housing designed to maximise land use and investment return.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc" href="https://www.mdprojects.co.nz/services/subdivision/" data-img="images/service-subdivision.jpg"><span class="thumb"><img src="images/service-subdivision.jpg" alt="" loading="lazy"></span><h3 class="xl">Subdivision</h3><p>Land development managed end to end, from planning through to title.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc" href="https://www.mdprojects.co.nz/services/resource-building-consent/" data-img="images/guide-feasibility.jpg"><span class="thumb"><img src="images/guide-feasibility.jpg" alt="" loading="lazy"></span><h3 class="xl">Consents</h3><p>We take care of all council approvals and compliance to get your project started without delay.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        <a class="svc" href="https://www.mdprojects.co.nz/services/project-management/" data-img="images/guide-project-management.jpg"><span class="thumb"><img src="images/guide-project-management.jpg" alt="" loading="lazy"></span><h3 class="xl">Project Mgmt</h3><p>Every aspect of your build coordinated for on-time and on-budget delivery.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/design-build/" data-img="images/service-design-build-sm.webp"><span class="thumb"><img src="images/service-design-build.webp" srcset="images/service-design-build-sm.webp 900w, images/service-design-build.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="" loading="lazy"></span><h3 class="xl">Design &amp; Build</h3><p>A complete custom home solution, taking your vision from concept through to final construction.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/" data-img="images/service-build-from-plans-sm.webp"><span class="thumb"><img src="images/service-build-from-plans.webp" srcset="images/service-build-from-plans-sm.webp 900w, images/service-build-from-plans.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="" loading="lazy"></span><h3 class="xl">Build from Plans</h3><p>Already have approved plans? We'll bring them to life with expert craftsmanship and precision.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/" data-img="images/service-terrace-duplex-sm.webp"><span class="thumb"><img src="images/service-terrace-duplex.webp" srcset="images/service-terrace-duplex-sm.webp 900w, images/service-terrace-duplex.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="" loading="lazy"></span><h3 class="xl">Terrace &amp; Duplex</h3><p>Efficient, modern multi-unit housing designed to maximise land use and investment return.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/subdivision/" data-img="images/service-subdivision-sm.webp"><span class="thumb"><img src="images/service-subdivision.webp" srcset="images/service-subdivision-sm.webp 900w, images/service-subdivision.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="" loading="lazy"></span><h3 class="xl">Subdivision</h3><p>Land development managed end to end, from planning through to title.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/resource-building-consent/" data-img="images/guide-feasibility-sm.webp"><span class="thumb"><img src="images/guide-feasibility.webp" srcset="images/guide-feasibility-sm.webp 900w, images/guide-feasibility.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="" loading="lazy"></span><h3 class="xl">Consents</h3><p>We take care of all council approvals and compliance to get your project started without delay.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        <a class="svc" href="https://www.mdprojects.co.nz/services/project-management/" data-img="images/guide-project-management-sm.webp"><span class="thumb"><img src="images/guide-project-management.webp" srcset="images/guide-project-management-sm.webp 900w, images/guide-project-management.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="" loading="lazy"></span><h3 class="xl">Project Mgmt</h3><p>Every aspect of your build coordinated for on-time and on-budget delivery.</p><span class="arr"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
       </div>
     </div>
     <div class="float-img" id="floatImg" aria-hidden="true"><img alt="" id="floatImgEl"></div>
@@ -561,23 +584,23 @@
       </div>
       <div class="proj-track" id="projTrack">
         <a class="pcard" href="https://www.mdprojects.co.nz/projects/mt-albert-road-sandringham/">
-          <img src="images/project-mt-albert-road.jpg" alt="Mt Albert Road townhouses, Sandringham" loading="lazy">
+          <img src="images/project-mt-albert-road.webp" srcset="images/project-mt-albert-road-sm.webp 900w, images/project-mt-albert-road.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Mt Albert Road townhouses, Sandringham" loading="lazy">
           <div class="pcard-body"><div><span class="sub">Sandringham · Terrace</span><h3 class="xl">Mt Albert Rd</h3></div><div class="specs"><div><b>5</b>Homes</div><div><b>4</b>Bed</div><div><b>132 m²</b>Built</div><div><b>153 m²</b>Total</div></div></div>
         </a>
         <a class="pcard" href="https://www.mdprojects.co.nz/projects/">
-          <img src="images/tripoli-road-dusk.jpg" alt="Tripoli Road townhouses at dusk, Point England" loading="lazy">
+          <img src="images/tripoli-road-dusk.webp" srcset="images/tripoli-road-dusk-sm.webp 900w, images/tripoli-road-dusk.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Tripoli Road townhouses at dusk, Point England" loading="lazy">
           <div class="pcard-body"><div><span class="sub">Point England · Townhouses</span><h3 class="xl">Tripoli Rd</h3></div></div>
         </a>
         <a class="pcard" href="https://www.mdprojects.co.nz/projects/">
-          <img src="images/project-swanson-road.jpg" alt="Swanson Road townhouses, Henderson" loading="lazy">
+          <img src="images/project-swanson-road.webp" srcset="images/project-swanson-road-sm.webp 900w, images/project-swanson-road.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Swanson Road townhouses, Henderson" loading="lazy">
           <div class="pcard-body"><div><span class="sub">Henderson · Townhouses</span><h3 class="xl">Swanson Rd</h3></div></div>
         </a>
         <a class="pcard" href="https://www.mdprojects.co.nz/projects/luke-street-otahuhu/">
-          <img src="images/project-luke-street.jpg" alt="Luke Street homes, Otahuhu" loading="lazy">
+          <img src="images/project-luke-street.webp" srcset="images/project-luke-street-sm.webp 900w, images/project-luke-street.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Luke Street homes, Otahuhu" loading="lazy">
           <div class="pcard-body"><div><span class="sub">Otahuhu · Homes</span><h3 class="xl">Luke St</h3></div></div>
         </a>
         <a class="pcard" href="https://www.mdprojects.co.nz/projects/">
-          <img src="images/project-weymouth-road.jpg" alt="Weymouth Road duplex, Weymouth" loading="lazy">
+          <img src="images/project-weymouth-road.webp" srcset="images/project-weymouth-road-sm.webp 900w, images/project-weymouth-road.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Weymouth Road duplex, Weymouth" loading="lazy">
           <div class="pcard-body"><div><span class="sub">Weymouth · Duplex</span><h3 class="xl">Weymouth Rd</h3></div></div>
         </a>
         <div class="pcard cta dark">
@@ -653,7 +676,7 @@
   <section id="about">
     <div class="wrap founder-grid">
       <div class="f-photo">
-        <img src="images/team.jpg" alt="The MD Projects team" loading="lazy">
+        <span class="f-img"><img src="images/team.webp" srcset="images/team-sm.webp 900w, images/team.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="The MD Projects team" loading="lazy"></span>
         <div class="f-name"><small>Founder</small><b>Maninder Singh</b></div>
       </div>
       <div>
@@ -676,14 +699,14 @@
       <span class="tag">Gallery</span>
       <h2 class="xl h2" style="margin-top:20px">Inside <em>&amp; out.</em></h2>
       <div class="g-grid">
-        <figure class="g g-wide"><img src="images/gallery-1.jpg" alt="Row of completed two-storey townhouses" loading="lazy"></figure>
-        <figure class="g"><img src="images/gallery-2.jpg" alt="Kitchen with island bench" loading="lazy"></figure>
-        <figure class="g"><img src="images/gallery-3.jpg" alt="New two-storey home with timber deck" loading="lazy"></figure>
-        <figure class="g g-tall"><img src="images/gallery-4.jpg" alt="Bright open-plan living room" loading="lazy"></figure>
-        <figure class="g g-wide"><img src="images/gallery-5.jpg" alt="Townhouse exterior with dark cladding" loading="lazy"></figure>
-        <figure class="g"><img src="images/gallery-6.jpg" alt="Completed duplex homes" loading="lazy"></figure>
-        <figure class="g"><img src="images/gallery-7.jpg" alt="Living area with timber floors" loading="lazy"></figure>
-        <figure class="g g-wide"><img src="images/gallery-8.jpg" alt="Two-storey home with single garage" loading="lazy"></figure>
+        <figure class="g g-wide"><img src="images/gallery-1.webp" srcset="images/gallery-1-sm.webp 900w, images/gallery-1.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Row of completed two-storey townhouses" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-2.webp" srcset="images/gallery-2-sm.webp 900w, images/gallery-2.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Kitchen with island bench" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-3.webp" srcset="images/gallery-3-sm.webp 900w, images/gallery-3.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="New two-storey home with timber deck" loading="lazy"></figure>
+        <figure class="g g-tall"><img src="images/gallery-4.webp" srcset="images/gallery-4-sm.webp 900w, images/gallery-4.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Bright open-plan living room" loading="lazy"></figure>
+        <figure class="g g-wide"><img src="images/gallery-5.webp" srcset="images/gallery-5-sm.webp 900w, images/gallery-5.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Townhouse exterior with dark cladding" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-6.webp" srcset="images/gallery-6-sm.webp 900w, images/gallery-6.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Completed duplex homes" loading="lazy"></figure>
+        <figure class="g"><img src="images/gallery-7.webp" srcset="images/gallery-7-sm.webp 900w, images/gallery-7.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Living area with timber floors" loading="lazy"></figure>
+        <figure class="g g-wide"><img src="images/gallery-8.webp" srcset="images/gallery-8-sm.webp 900w, images/gallery-8.webp 2000w" sizes="(max-width: 960px) 92vw, 60vw" decoding="async" alt="Two-storey home with single garage" loading="lazy"></figure>
       </div>
     </div>
   </section>
@@ -1057,228 +1080,190 @@
   })();
 
 
-  // ===== Motion: cinematic intro, smooth scroll and parallax (GSAP + ScrollTrigger + Lenis) =====
+  // ===== Motion: refined and GPU-only (transform + opacity). GSAP + ScrollTrigger + Lenis =====
   (() => {
-    const fmt = (n, f) => f === 'comma+' ? n.toLocaleString('en-NZ') + '+' : f === '+' ? n + '+' : n + f;
     const intro = document.getElementById('intro');
-    if (!(window.gsap && window.ScrollTrigger)) {
-      // No animation library: show everything as is, and still play the hero build.
-      intro && intro.remove(); runBuild(); return;
-    }
-    gsap.registerPlugin(ScrollTrigger);
+    // Fade images in as they decode, so nothing pops in half-drawn
+    document.querySelectorAll('img').forEach(img => {
+      if (img.closest('.intro')) return;
+      if (!img.complete) { img.classList.add('ld'); img.addEventListener('load', () => img.classList.remove('ld'), { once: true }); img.addEventListener('error', () => img.classList.remove('ld'), { once: true }); }
+    });
+    // Pause the ticker when it is off screen
+    const tk = document.querySelector('.ticker');
+    if (tk) new IntersectionObserver(es => es.forEach(e => tk.classList.toggle('off', !e.isIntersecting))).observe(tk);
 
-    // Smooth, weighted scrolling
+    if (!(window.gsap && window.ScrollTrigger)) { intro && intro.remove(); runBuild(); return; }
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.config({ force3D: true });
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    const EASE = 'expo.out';
+    const finePointer = matchMedia('(pointer: fine)').matches;
+
+    // ---------- Smooth scrolling ----------
     let lenis = null;
     if (window.Lenis) {
-      lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
+      lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true, wheelMultiplier: .9, touchMultiplier: 1.4 });
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add(t => lenis.raf(t * 1000));
       gsap.ticker.lagSmoothing(0);
       document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
         const id = a.getAttribute('href'); const el = id.length > 1 && document.querySelector(id);
-        if (el) { e.preventDefault(); lenis.scrollTo(el, { offset: id === '#top' ? 0 : -70, duration: 1.4 }); }
+        if (el) { e.preventDefault(); lenis.scrollTo(el, { offset: id === '#top' ? 0 : -60, duration: 1.8 }); }
       }));
     }
 
-    // Split helpers
-    const splitChars = el => { el.innerHTML = el.textContent.split('').map(c => c === ' ' ? ' ' : `<span class="ch">${c}</span>`).join(''); return el.querySelectorAll('.ch'); };
+    // ---------- helpers ----------
     const splitLines = el => { el.innerHTML = el.innerHTML.split(/<br\s*\/?>/i).map(l => `<span class="ln"><span class="li">${l.trim()}</span></span>`).join(''); return el.querySelectorAll('.li'); };
-
-    const splitDeep = root => {
-      const walk = node => {
-        [...node.childNodes].forEach(n => {
-          if (n.nodeType === 3) {
-            const frag = document.createDocumentFragment();
-            n.textContent.split(/(\s+)/).forEach(part => {
-              if (!part) return;
-              if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
-              const w = document.createElement('span'); w.className = 'wd';
-              part.split('').forEach(c => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; w.appendChild(s); });
-              frag.appendChild(w);
-            });
-            n.replaceWith(frag);
-          } else if (n.nodeType === 1 && n.tagName !== 'BR') walk(n);
-        });
-      };
-      walk(root); return [...root.querySelectorAll('.ch')];
-    };
-    const rnd = (i, k) => { const x = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453; return x - Math.floor(x); };
-    const h1Chars = [...document.querySelectorAll('.hero h1 .ln')].flatMap(l => [...splitChars(l)]);
+    const fmt = (n, f) => f === 'comma+' ? n.toLocaleString('en-NZ') + '+' : f === '+' ? n + '+' : n + f;
+    const heroLines = document.querySelectorAll('.hero h1 .li');
     const heroBits = ['.hero .tag', '.hero .lede', '.hero-ctas'];
 
     // ---------- Intro ----------
-    const introTl = () => {
+    function introTl() {
       const num = document.getElementById('introNum'), bar = document.getElementById('introBar'), stepEl = document.getElementById('introStep');
       const steps = ['Surveying the section', 'Pouring foundations', 'Framing', 'Roofing', 'Handing over the keys'];
       const c = { v: 0 };
       lenis && lenis.stop();
-      gsap.set(h1Chars, { yPercent: 115 });
-      gsap.set(heroBits, { y: 40, opacity: 0 });
+      gsap.set(heroLines, { yPercent: 110 });
+      gsap.set(heroBits, { y: 30, opacity: 0 });
       gsap.set('.hero-bar', { yPercent: 100 });
-      gsap.set('.hero-real video', { scale: 1.25 });
+      gsap.set('.hero-real video', { scale: 1.12 });
       const t = gsap.timeline({ onComplete: () => { intro.remove(); lenis && lenis.start(); ScrollTrigger.refresh(); } });
-      t.from('#introInner > *', { y: 30, opacity: 0, stagger: .08, duration: .7, ease: 'power3.out' })
-       .to(c, { v: 100, duration: 2.1, ease: 'power2.inOut', onUpdate: () => {
-          const v = Math.round(c.v); num.textContent = v; bar.style.width = v + '%';
+      t.from('#introInner > *', { y: 24, opacity: 0, stagger: .1, duration: 1.1, ease: EASE })
+       .to(c, { v: 100, duration: 2.2, ease: 'power3.inOut', onUpdate: () => {
+          const v = Math.round(c.v); num.textContent = v; bar.style.transform = `scaleX(${v / 100})`;
           stepEl.textContent = steps[Math.min(steps.length - 1, Math.floor(v / 21))];
-        } }, '-=.3')
-       .to('#introInner', { opacity: 0, scale: .96, duration: .45, ease: 'power2.in' })
-       .to('.intro-half.t', { yPercent: -100, duration: 1.1, ease: 'expo.inOut' }, '<.2')
-       .to('.intro-half.b', { yPercent: 100, duration: 1.1, ease: 'expo.inOut' }, '<')
-       .add(heroIn(), '<.35');
+        } }, '-=.6')
+       .to('#introInner', { opacity: 0, y: -16, duration: .7, ease: 'power2.inOut' })
+       .to('.intro-half.t', { yPercent: -100, duration: 1.5, ease: 'expo.inOut' }, '<.1')
+       .to('.intro-half.b', { yPercent: 100, duration: 1.5, ease: 'expo.inOut' }, '<')
+       .add(heroIn(), '<.55');
       return t;
-    };
-
-    // ---------- Hero entrance ----------
+    }
     function heroIn() {
       const t = gsap.timeline();
-      t.to('.hero-real video', { scale: 1, duration: 2.4, ease: 'power3.out' }, 0)
-       .to(h1Chars, { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: .028 }, 0)
-       .to(heroBits, { y: 0, opacity: 1, duration: .9, ease: 'power3.out', stagger: .12 }, .45)
-       .to('.hero-bar', { yPercent: 0, duration: 1, ease: 'power4.out' }, .6)
+      t.to('.hero-real video', { scale: 1, duration: 3.2, ease: 'power3.out' }, 0)
+       .to(heroLines, { yPercent: 0, duration: 1.8, ease: EASE, stagger: .14 }, 0)
+       .to(heroBits, { y: 0, opacity: 1, duration: 1.4, ease: EASE, stagger: .14 }, .5)
+       .to('.hero-bar', { yPercent: 0, duration: 1.6, ease: EASE }, .7)
        .add(() => {
           runBuild();
           document.querySelectorAll('.hb b[data-to]').forEach(b => {
             const o = { v: 0 }, to = +b.dataset.to, f = b.dataset.fmt;
-            gsap.to(o, { v: to, duration: 2, ease: 'power2.out', onUpdate: () => b.textContent = fmt(Math.round(o.v), f) });
+            gsap.to(o, { v: to, duration: 2.6, ease: 'power3.out', onUpdate: () => b.textContent = fmt(Math.round(o.v), f) });
           });
-        }, .6);
+        }, .8);
       return t;
     }
-
-    // Start the intro only once the page is actually on screen, so it is never missed
     let started = false;
     const start = () => { if (started) return; started = true; introTl(); };
-    const vio = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && document.visibilityState === 'visible') { vio.disconnect(); (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => setTimeout(start, 150)); } }, { threshold: .4 });
+    const vio = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && document.visibilityState === 'visible') { vio.disconnect(); (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(() => setTimeout(start, 120))); } }, { threshold: .4 });
     vio.observe(hero);
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && !started) setTimeout(start, 150); });
     setTimeout(() => { if (!started && intro.isConnected) start(); }, 5000);
-    intro.addEventListener('click', () => { gsap.globalTimeline.getChildren(false, true, false).forEach(t => t.progress(1)); });
 
-    // ---------- Hero parallax ----------
+    // ---------- Hero on scroll: one calm move, no per-letter work ----------
     const heroST = { trigger: hero, start: 'top top', end: 'bottom top', scrub: true };
-    gsap.to('.hero-real', { yPercent: 22, ease: 'none', scrollTrigger: heroST });
-    gsap.to(['.hero .tag', '.hero .lede', '.hero-ctas'], { y: -60, opacity: 0, ease: 'none', stagger: .05, scrollTrigger: { ...heroST, end: '45% top' } });
-    h1Chars.forEach((c, i) => {
-      gsap.to(c, { y: () => -120 - rnd(i, 1) * 320, x: () => (rnd(i, 2) - .5) * 260, rotation: (rnd(i, 3) - .5) * 120, scale: .6 + rnd(i, 4) * .8, opacity: 0, ease: 'none',
-        scrollTrigger: { trigger: hero, start: 'top top', end: '70% top', scrub: .6 } });
-    });
-    gsap.to('.bp-svg', { yPercent: -18, xPercent: 6, ease: 'none', scrollTrigger: heroST });
-    gsap.to('.hero-bar', { opacity: 0, ease: 'none', scrollTrigger: { ...heroST, start: '30% top', end: '70% top' } });
+    gsap.to('.hero-real', { yPercent: 16, ease: 'none', scrollTrigger: heroST });
+    gsap.to('.hero-copy .wrap', { y: () => -innerHeight * .18, opacity: 0, ease: 'none', scrollTrigger: { ...heroST, end: '75% top' } });
+    gsap.to('.bp-svg', { yPercent: -10, ease: 'none', scrollTrigger: heroST });
+    gsap.to('.hero-bar', { opacity: 0, ease: 'none', scrollTrigger: { ...heroST, start: '25% top', end: '60% top' } });
 
-    // ---------- Ticker reacts to scroll speed ----------
-    const tt = document.querySelector('.ticker-track');
-    let tx = 0, vel = 0, skew = 0;
-    ScrollTrigger.create({ trigger: '.ticker', start: 'top bottom', end: 'bottom top', onUpdate: self => { vel = self.getVelocity(); } });
-    gsap.ticker.add(() => {
-      const half = tt.scrollWidth / 2;
-      tx -= 1.1 + Math.min(Math.abs(vel) / 120, 18);
-      if (tx <= -half) tx += half;
-      skew += ((Math.max(-14, Math.min(14, vel / 160))) - skew) * .12;
-      vel *= .92;
-      tt.style.transform = `translate3d(${tx}px,0,0) skewX(${-skew}deg)`;
+    // ---------- Headlines rise line by line behind a mask ----------
+    document.querySelectorAll('h2.xl').forEach(h => {
+      const lines = splitLines(h);
+      gsap.from(lines, { yPercent: 112, duration: 1.7, ease: EASE, stagger: .12, scrollTrigger: { trigger: h, start: 'top 86%' } });
     });
-
-    // ---------- Headings rise line by line ----------
-    document.querySelectorAll('h2.xl:not(.cta-big)').forEach(h => {
-      const chars = splitLines(h).length && splitDeep(h);
-      gsap.from(chars, { yPercent: 120, rotationX: -95, opacity: 0, transformOrigin: '50% 100%', duration: 1, ease: 'power4.out', stagger: .022, scrollTrigger: { trigger: h, start: 'top 88%' } });
-    });
-    const GLYPHS = 'ABCDEFGHJKLMNPRSTUVWXYZ0123456789#/+×';
-    const scramble = el => {
-      const final = el.textContent, len = final.length; const o = { p: 0 };
-      gsap.to(o, { p: 1, duration: 1.1, ease: 'none', onUpdate: () => {
-        const done = Math.floor(o.p * len);
-        el.textContent = final.split('').map((c, i) => i < done || c === ' ' || c === '·' ? c : GLYPHS[(Math.random() * GLYPHS.length) | 0]).join('');
-      }, onComplete: () => el.textContent = final });
-    };
     gsap.utils.toArray('.tag').forEach(el => {
       if (el.closest('.hero') || el.closest('.intro')) return;
-      ScrollTrigger.create({ trigger: el, start: 'top 92%', once: true, onEnter: () => scramble(el) });
+      gsap.from(el, { opacity: 0, x: -14, duration: 1.4, ease: EASE, scrollTrigger: { trigger: el, start: 'top 92%' } });
     });
     gsap.utils.toArray('.lede').forEach(el => {
       if (el.closest('.hero')) return;
-      gsap.from(el, { y: 30, opacity: 0, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
+      gsap.from(el, { y: 26, opacity: 0, duration: 1.5, ease: EASE, scrollTrigger: { trigger: el, start: 'top 92%' } });
     });
 
-    // ---------- Giant text bands slide in opposite directions ----------
-    gsap.fromTo('.bt-row.r1', { xPercent: 0 }, { xPercent: -38, ease: 'none', scrollTrigger: { trigger: '.bigtext', start: 'top bottom', end: 'bottom top', scrub: .4 } });
-    gsap.fromTo('.bt-row.r2', { xPercent: -38 }, { xPercent: 0, ease: 'none', scrollTrigger: { trigger: '.bigtext', start: 'top bottom', end: 'bottom top', scrub: .4 } });
+    // ---------- Statement: words brighten as you read ----------
+    gsap.fromTo(words, { opacity: .14 }, { opacity: 1, ease: 'none', stagger: .05, scrollTrigger: { trigger: st, start: 'top 82%', end: 'bottom 45%', scrub: true } });
+    gsap.from('.pr', { y: 50, opacity: 0, duration: 1.5, ease: EASE, stagger: .14, scrollTrigger: { trigger: '.principles', start: 'top 86%' } });
 
-    // ---------- Statement: words light up as you scroll ----------
-    gsap.fromTo(words, { opacity: .1, filter: 'blur(10px)', y: 18 }, { opacity: 1, filter: 'blur(0px)', y: 0, ease: 'none', stagger: .06, scrollTrigger: { trigger: st, start: 'top 85%', end: 'bottom 42%', scrub: .6 } });
-    gsap.from('.pr', { y: 70, opacity: 0, duration: 1, ease: 'power3.out', stagger: .15, scrollTrigger: { trigger: '.principles', start: 'top 85%' } });
+    // ---------- Giant text bands drift in opposite directions ----------
+    gsap.fromTo('.bt-row.r1', { xPercent: 0 }, { xPercent: -30, ease: 'none', scrollTrigger: { trigger: '.bigtext', start: 'top bottom', end: 'bottom top', scrub: true } });
+    gsap.fromTo('.bt-row.r2', { xPercent: -30 }, { xPercent: 0, ease: 'none', scrollTrigger: { trigger: '.bigtext', start: 'top bottom', end: 'bottom top', scrub: true } });
 
-    // ---------- Services rows sweep in ----------
-    gsap.from('.svc', { x: -90, opacity: 0, duration: 1, ease: 'power3.out', stagger: .09, scrollTrigger: { trigger: '#svcList', start: 'top 80%' } });
+    // ---------- Services ----------
+    gsap.from('.svc', { y: 40, opacity: 0, duration: 1.4, ease: EASE, stagger: .08, scrollTrigger: { trigger: '#svcList', start: 'top 82%' } });
     document.documentElement.classList.add('ink');
     gsap.utils.toArray('.svc h3').forEach(h => {
-      gsap.fromTo(h, { '--fill': '0%' }, { '--fill': '100%', ease: 'none', scrollTrigger: { trigger: h, start: 'top 82%', end: 'top 42%', scrub: .5 } });
+      gsap.fromTo(h, { '--fill': '0%' }, { '--fill': '100%', ease: 'none', scrollTrigger: { trigger: h, start: 'top 85%', end: 'top 50%', scrub: true } });
     });
 
-    // ---------- Projects: pinned horizontal scroll with parallax photos (desktop) ----------
+    // ---------- Projects: pinned horizontal scroll (desktop) ----------
     const mm = gsap.matchMedia();
     mm.add('(min-width: 961px)', () => {
       const dist = () => Math.max(0, track.scrollWidth - innerWidth + 80);
       const n = track.children.length;
       const tween = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: {
-        trigger: projSec, start: 'top top', end: () => '+=' + dist(), pin: '.proj-pin', scrub: 1, invalidateOnRefresh: true,
-        onUpdate: self => { projBar.style.width = (self.progress * 100) + '%'; projCount.textContent = String(Math.min(n, 1 + Math.floor(self.progress * n * .999))).padStart(2, '0') + ' / ' + String(n).padStart(2, '0'); }
+        trigger: projSec, start: 'top top', end: () => '+=' + dist(), pin: '.proj-pin', scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
+        onUpdate: self => { projBar.style.transform = `scaleX(${self.progress})`; projCount.textContent = String(Math.min(n, 1 + Math.floor(self.progress * n * .999))).padStart(2, '0') + ' / ' + String(n).padStart(2, '0'); }
       } });
       track.querySelectorAll('.pcard img').forEach(img => {
-        gsap.fromTo(img, { xPercent: -10, scale: 1.25 }, { xPercent: 10, scale: 1.25, ease: 'none', scrollTrigger: { trigger: img.parentElement, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true } });
-      });
-      track.querySelectorAll('.pcard h3').forEach(h => {
-        gsap.from(h, { xPercent: 30, opacity: 0, ease: 'power2.out', scrollTrigger: { trigger: h.closest('.pcard'), containerAnimation: tween, start: 'left 85%', end: 'left 40%', scrub: true } });
+        gsap.fromTo(img, { xPercent: -8, scale: 1.2 }, { xPercent: 8, scale: 1.2, ease: 'none', scrollTrigger: { trigger: img.parentElement, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true } });
       });
     });
     mm.add('(max-width: 960px)', () => {
-      gsap.from('.pcard', { y: 60, opacity: 0, duration: 1, stagger: .1, ease: 'power3.out', scrollTrigger: { trigger: track, start: 'top 85%' } });
+      gsap.from('.pcard', { y: 50, opacity: 0, duration: 1.4, stagger: .1, ease: EASE, scrollTrigger: { trigger: track, start: 'top 88%' } });
     });
 
     // ---------- Planner ----------
-    gsap.from('.stage', { x: -60, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: '.planner-grid', start: 'top 80%' } });
-    gsap.from('.quiz', { x: 60, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: '.planner-grid', start: 'top 80%' } });
+    gsap.from(['.stage', '.quiz'], { y: 60, opacity: 0, duration: 1.6, ease: EASE, stagger: .15, scrollTrigger: { trigger: '.planner-grid', start: 'top 82%' } });
 
-    // ---------- Process timeline ----------
-    gsap.fromTo(tlFill, { height: '0%' }, { height: '100%', ease: 'none', scrollTrigger: { trigger: tl, start: 'top 62%', end: 'bottom 62%', scrub: .5 } });
-    tlSteps.forEach((s, i) => {
-      const card = s.querySelector('.tl-card');
+    // ---------- Process ----------
+    gsap.fromTo(tlFill, { scaleY: 0 }, { scaleY: 1, ease: 'none', transformOrigin: '50% 0%', scrollTrigger: { trigger: tl, start: 'top 62%', end: 'bottom 62%', scrub: true } });
+    tlSteps.forEach(s => {
       ScrollTrigger.create({ trigger: s, start: 'top 62%', onEnter: () => s.classList.add('on'), onLeaveBack: () => s.classList.remove('on') });
-      gsap.from(card, { x: innerWidth > 960 ? (i % 2 ? 80 : -80) : 50, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: s, start: 'top 85%' } });
+      gsap.from(s.querySelector('.tl-card'), { y: 40, opacity: 0, duration: 1.4, ease: EASE, scrollTrigger: { trigger: s, start: 'top 86%' } });
     });
 
     // ---------- Testimonials ----------
-    gsap.from('.q-wrap', { y: 80, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: '.q-wrap', start: 'top 85%' } });
+    gsap.from('.q-wrap', { y: 50, opacity: 0, duration: 1.6, ease: EASE, scrollTrigger: { trigger: '.q-wrap', start: 'top 86%' } });
     document.querySelectorAll('.q-slide blockquote').forEach(bq => { bq.innerHTML = bq.textContent.split(/\s+/).map(w => `<span class="qw">${w}</span>`).join(' '); });
-    const animQuote = () => { const ws = document.querySelectorAll('.q-slide.on .qw'); gsap.fromTo(ws, { opacity: 0, y: 14, filter: 'blur(6px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .6, stagger: .035, ease: 'power2.out' }); };
+    const animQuote = () => gsap.fromTo('.q-slide.on .qw', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1, stagger: .025, ease: EASE });
     ScrollTrigger.create({ trigger: '.q-wrap', start: 'top 80%', once: true, onEnter: animQuote });
-    new MutationObserver(animQuote).observe(document.querySelector('.q-slide'), { attributes: true, attributeFilter: ['class'] });
-    document.querySelectorAll('.q-slide').forEach((sl, k) => k && new MutationObserver(() => sl.classList.contains('on') && animQuote()).observe(sl, { attributes: true, attributeFilter: ['class'] }));
+    document.querySelectorAll('.q-slide').forEach(sl => new MutationObserver(() => sl.classList.contains('on') && animQuote()).observe(sl, { attributes: true, attributeFilter: ['class'] }));
 
-    // ---------- Founder: photo wipes open, then drifts ----------
-    gsap.fromTo('.f-photo img', { clipPath: 'inset(100% 0 0 0)', scale: 1.3 }, { clipPath: 'inset(0% 0 0 0)', scale: 1, duration: 1.6, ease: 'power4.inOut', scrollTrigger: { trigger: '.f-photo', start: 'top 78%' } });
-    gsap.to('.f-photo', { yPercent: -8, ease: 'none', scrollTrigger: { trigger: '#about', start: 'top bottom', end: 'bottom top', scrub: true } });
-    gsap.from('.f-name', { x: -40, opacity: 0, duration: 1, delay: .9, ease: 'power3.out', scrollTrigger: { trigger: '.f-photo', start: 'top 78%' } });
-    gsap.from('.f-list li, .mv > div', { y: 30, opacity: 0, duration: .8, stagger: .08, ease: 'power3.out', scrollTrigger: { trigger: '.f-list', start: 'top 88%' } });
-
-    // ---------- Gallery: staggered wipes + parallax inside each frame ----------
-    gsap.fromTo('.g', { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1.3, ease: 'power4.inOut', stagger: .1, scrollTrigger: { trigger: '.g-grid', start: 'top 82%' } });
-    gsap.utils.toArray('.g img').forEach((img, i) => {
-      gsap.fromTo(img, { yPercent: -10, scale: 1.25 }, { yPercent: 10, scale: 1.25, ease: 'none', scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } });
+    // ---------- Photo reveals: a cover slides away (transform only) ----------
+    const reveal = (box, delay = 0) => {
+      const cover = document.createElement('span'); cover.className = 'cover'; box.appendChild(cover);
+      const img = box.querySelector('img');
+      const t = gsap.timeline({ scrollTrigger: { trigger: box, start: 'top 85%' }, delay });
+      t.to(cover, { scaleY: 0, duration: 1.6, ease: 'expo.inOut' }).from(img, { scale: 1.25, duration: 2.2, ease: EASE }, '<.1');
+    };
+    document.querySelector('.f-img') && reveal(document.querySelector('.f-img'));
+    gsap.utils.toArray('.g').forEach((g, i) => reveal(g, (i % 4) * .08));
+    gsap.to('.f-photo', { yPercent: -6, ease: 'none', scrollTrigger: { trigger: '#about', start: 'top bottom', end: 'bottom top', scrub: true } });
+    gsap.from('.f-name', { x: -30, opacity: 0, duration: 1.4, delay: .8, ease: EASE, scrollTrigger: { trigger: '.f-photo', start: 'top 80%' } });
+    gsap.from('.f-list li, .mv > div', { y: 24, opacity: 0, duration: 1.2, stagger: .07, ease: EASE, scrollTrigger: { trigger: '.f-list', start: 'top 90%' } });
+    gsap.utils.toArray('.g img').forEach(img => {
+      gsap.fromTo(img, { yPercent: -7 }, { yPercent: 7, ease: 'none', scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } });
     });
 
-    // ---------- FAQ, contact, closing ----------
-    gsap.from('details', { y: 40, opacity: 0, duration: .8, stagger: .07, ease: 'power3.out', scrollTrigger: { trigger: '.faq-grid', start: 'top 80%' } });
-    gsap.from('.contact-grid > *', { y: 60, opacity: 0, duration: 1, stagger: .15, ease: 'power3.out', scrollTrigger: { trigger: '.contact-grid', start: 'top 85%' } });
-    const ctaChars = splitDeep(document.querySelector('.cta-big'));
-    const mid = (ctaChars.length - 1) / 2;
-    gsap.fromTo(ctaChars, { x: i => (i - mid) * 110, y: i => (rnd(i, 7) - .5) * 260, opacity: 0, rotation: i => (rnd(i, 8) - .5) * 40 },
-      { x: 0, y: 0, opacity: 1, rotation: 0, ease: 'none', duration: 1, stagger: .04, scrollTrigger: { trigger: '#contact', start: 'top 100%', end: 'top 10%', scrub: .7 } });
-    gsap.from('.cta-big em', { scale: 0, rotate: -90, duration: 1, ease: 'back.out(3)', scrollTrigger: { trigger: '.cta-big', start: 'top 45%' } });
-    const wmChars = splitDeep(document.querySelector('.wordmark'));
-    gsap.fromTo(wmChars, { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, ease: 'power3.out', stagger: .05, scrollTrigger: { trigger: '.wordmark', start: 'top 100%', end: 'bottom 85%', scrub: .6 } });
-    gsap.from('.foot-grid > *', { y: 40, opacity: 0, duration: .9, stagger: .1, ease: 'power3.out', scrollTrigger: { trigger: '.foot-grid', start: 'top 92%' } });
+    // ---------- FAQ, contact, footer ----------
+    gsap.from('details', { y: 30, opacity: 0, duration: 1.2, stagger: .06, ease: EASE, scrollTrigger: { trigger: '.faq-grid', start: 'top 82%' } });
+    gsap.from('.contact-grid > *', { y: 50, opacity: 0, duration: 1.5, stagger: .15, ease: EASE, scrollTrigger: { trigger: '.contact-grid', start: 'top 86%' } });
+    gsap.from('.cta-big em', { scale: 0, duration: 1.2, ease: 'back.out(2.2)', scrollTrigger: { trigger: '.cta-big', start: 'top 70%' } });
+    gsap.from('.wordmark', { yPercent: 35, opacity: 0, ease: 'none', scrollTrigger: { trigger: 'footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+    gsap.from('.foot-grid > *', { y: 30, opacity: 0, duration: 1.2, stagger: .08, ease: EASE, scrollTrigger: { trigger: '.foot-grid', start: 'top 94%' } });
+
+    // ---------- Magnetic buttons (mouse only) ----------
+    if (finePointer) {
+      document.querySelectorAll('.btn, .svc .arr, .q-nav .arrow').forEach(b => {
+        b.classList.add('magnetic');
+        const xTo = gsap.quickTo(b, 'x', { duration: .6, ease: 'power3' }), yTo = gsap.quickTo(b, 'y', { duration: .6, ease: 'power3' });
+        b.addEventListener('mousemove', e => { const r = b.getBoundingClientRect(); xTo((e.clientX - r.left - r.width / 2) * .25); yTo((e.clientY - r.top - r.height / 2) * .3); });
+        b.addEventListener('mouseleave', () => { xTo(0); yTo(0); });
+      });
+    }
 
     addEventListener('load', () => ScrollTrigger.refresh());
   })();
