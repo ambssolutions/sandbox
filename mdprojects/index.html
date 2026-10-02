@@ -51,7 +51,7 @@
   .wrap { max-width: calc(var(--wrap) + 2 * var(--gutter)); margin: 0 auto; padding-inline: var(--gutter); }
   section { padding-block: clamp(90px, 14vh, 180px); position: relative; }
   .eyebrow { display: inline-flex; align-items: center; gap: 14px; font: 500 .72rem/1 var(--f); letter-spacing: .24em; text-transform: uppercase; color: var(--bronze); }
-  .eyebrow::before { content: ""; width: 34px; height: 1px; background: currentColor; }
+  .eyebrow::before { content: ""; width: 34px; height: 1px; background: currentColor; transform: scaleX(var(--eb, 1)); transform-origin: 0 50%; }
   .lede { font-size: clamp(1.02rem, .3vw + .94rem, 1.18rem); color: var(--muted); max-width: 46ch; line-height: 1.7; }
   .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap; margin-bottom: clamp(40px, 6vh, 72px); }
   .head h2 { margin-top: 22px; }
@@ -301,6 +301,78 @@
   .wordmark { display: block; width: max-content; font: 600 10vw/.9 var(--f); letter-spacing: -.06em; color: rgba(255,255,255,.07); white-space: nowrap; margin: 60px 0 20px; }
   .foot-bottom { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: .82rem; }
 
+
+  /* ===== Embossed surfaces ===== */
+  :root {
+    --emb: 14px 14px 32px rgba(150,134,108,.24), -12px -12px 28px rgba(255,255,255,.95);
+    --emb-sm: 6px 6px 14px rgba(150,134,108,.22), -6px -6px 14px rgba(255,255,255,.95);
+    --emb-in: inset 5px 5px 12px rgba(150,134,108,.22), inset -5px -5px 12px rgba(255,255,255,.95);
+    --emb-photo: 18px 22px 44px -10px rgba(120,104,78,.38), -10px -10px 26px rgba(255,255,255,.9);
+  }
+  section > .wrap { position: relative; z-index: 1; }
+  .deboss { position: absolute; z-index: 0; top: clamp(20px, 6vh, 70px); right: -1vw; font: 600 clamp(6rem, 19vw, 20rem)/.8 var(--f); letter-spacing: -.07em; color: var(--sec-bg, var(--bg)); text-shadow: -3px -3px 3px rgba(255,255,255,.95), 3px 3px 5px rgba(140,124,98,.32); pointer-events: none; user-select: none; white-space: nowrap; will-change: transform; }
+  .deboss.l { right: auto; left: -1vw; }
+  section:has(> .deboss) { position: relative; overflow: clip; }
+  .scr .ch { text-align: center; }
+  h2, .hero h1 { text-shadow: 0 1px 0 rgba(255,255,255,.9); }
+  .contact h2, .numbers * { text-shadow: none; }
+  .btn-line { border-color: transparent; background: var(--bg); box-shadow: var(--emb-sm); }
+  .btn-line:hover { border-color: transparent; box-shadow: 9px 9px 20px rgba(150,134,108,.28), -8px -8px 18px #fff; }
+  .btn:active { box-shadow: var(--emb-in); }
+  .btn-ink { box-shadow: 8px 10px 22px -6px rgba(22,23,27,.45), -6px -6px 16px rgba(255,255,255,.85); }
+  .stats-badge { box-shadow: var(--emb); }
+  .services { background: var(--bg); --sec-bg: var(--bg); }
+  .scard { background: var(--bg); box-shadow: var(--emb); }
+  .scard .n { display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; box-shadow: var(--emb-in); letter-spacing: .06em; }
+  .pr { border-top: 0; padding: 26px; border-radius: calc(var(--r) * .8); box-shadow: var(--emb); }
+  .pr h3 { position: relative; padding-bottom: 14px; }
+  .pr h3::after, .step h3::after { content: ""; position: absolute; left: 0; bottom: 0; width: 40px; height: 2px; background: var(--bronze); transform: scaleX(var(--u, 1)); transform-origin: 0 50%; }
+  .compare { box-shadow: var(--emb-photo); }
+  .pcard .ph { box-shadow: var(--emb-photo); }
+  .proj-track { padding-block: 10px 40px; }
+  .planner { background: var(--bg); --sec-bg: var(--bg); }
+  .stage, .quiz { background: var(--bg); box-shadow: var(--emb); }
+  .opt { border-color: transparent; background: var(--bg); box-shadow: var(--emb-sm); }
+  .opt:hover { border-color: transparent; }
+  .opt[aria-pressed="true"] { box-shadow: var(--emb-in); background: var(--bg); border-color: transparent; color: var(--bronze); }
+  .answers button { background: var(--bg); box-shadow: var(--emb-sm); }
+  .steps { gap: 26px; background: none; border: 0; overflow: visible; }
+  .step { border-radius: var(--r); box-shadow: var(--emb); background: var(--bg); }
+  .step:hover { background: var(--bg); box-shadow: var(--emb-in); }
+  .step b { color: var(--bg); text-shadow: -2px -2px 2px rgba(255,255,255,.95), 2px 2px 3px rgba(140,124,98,.45); font-size: 3.4rem; }
+  .step h3 { position: relative; padding-bottom: 12px; }
+  .quotes { background: var(--bg); }
+  .q-nav .arrow { border-color: transparent; background: var(--bg); box-shadow: var(--emb-sm); }
+  .q-nav .arrow:active { box-shadow: var(--emb-in); }
+  .f-img { box-shadow: var(--emb-photo); overflow: visible; }
+  .f-img img { border-radius: var(--r); }
+  .f-img .cover { border-radius: var(--r); }
+  .vals li { border-top: 0; margin: 6px 0; padding: 14px 18px; border-radius: 14px; box-shadow: var(--emb-sm); }
+  .g { box-shadow: 12px 14px 30px -8px rgba(120,104,78,.35), -8px -8px 20px rgba(255,255,255,.9); overflow: visible; }
+  .g img { border-radius: inherit; }
+  .g .cover { border-radius: inherit; }
+  #faqs { --sec-bg: var(--bg); background: var(--bg) !important; }
+  details { border: 0 !important; margin-bottom: 16px; padding: 0 26px; border-radius: 18px; box-shadow: var(--emb-sm); background: var(--bg); }
+  details[open] { box-shadow: var(--emb-in); }
+  summary i { border-color: transparent; box-shadow: var(--emb-sm); }
+  .form { box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
+  .field input, .field select, .field textarea { background: var(--bg); border-color: transparent; box-shadow: var(--emb-in); }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--bronze); }
+  .wordmark { color: #16171b; text-shadow: -2px -2px 2px rgba(255,255,255,.07), 2px 2px 3px rgba(0,0,0,.6); }
+  .shimmer { background: linear-gradient(100deg, var(--bronze-2) 0%, var(--bronze-2) 40%, #fff3d6 50%, var(--bronze-2) 60%, var(--bronze-2) 100%); background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent !important; animation: shimmer 4.5s ease-in-out infinite; }
+  @keyframes shimmer { 0% { background-position: 120% 0; } 60%, 100% { background-position: -20% 0; } }
+  .caret { display: inline-block; width: .06em; height: .9em; background: var(--bronze); margin-left: .04em; vertical-align: -.08em; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .wd { display: inline-block; white-space: nowrap; }
+  .ch { display: inline-block; }
+  .tw .ch { opacity: 0; }
+  .persp { perspective: 900px; }
+  @media (max-width: 600px) {
+    .deboss { font-size: 34vw; top: 10px; }
+    .pr { padding: 20px; }
+    details { padding: 0 18px; }
+  }
+
   img.ld { opacity: 0; } img { transition: opacity .9s ease; }
 
   @media (max-width: 1000px) {
@@ -405,6 +477,7 @@
 
   <!-- Statement -->
   <section class="statement">
+    <span class="deboss " aria-hidden="true">2020</span>
     <div class="wrap">
       <span class="eyebrow">About MD Projects NZ</span>
       <p class="big" id="statement">Since March 2020 we've built over 1,000 homes across Auckland. *Fixed* *prices.* *No* *surprises.* Structures that last a lifetime, from your first sketch to the final code compliance certificate.</p>
@@ -418,6 +491,7 @@
 
   <!-- Services -->
   <section class="services" id="services">
+    <span class="deboss " aria-hidden="true">Build</span>
     <div class="wrap">
       <div class="head"><div><span class="eyebrow">Our services</span><h2>Everything, from<br><em>concept to keys.</em></h2></div><p class="lede">One team takes your project from first sketch to final handover, with nothing handed off between firms.</p></div>
       <div class="stack">
@@ -452,6 +526,7 @@
 
   <!-- Plan vs built -->
   <section id="plan-vs-built">
+    <span class="deboss l" aria-hidden="true">Plan</span>
     <div class="wrap">
       <div class="head"><div><span class="eyebrow">Plan vs built</span><h2>From drawing<br><em>to doorstep.</em></h2></div><p class="lede">Swanson Road, Henderson. Drag across to watch the plan become the finished home.</p></div>
       <div class="compare" id="compare">
@@ -492,6 +567,7 @@
 
   <!-- Planner -->
   <section class="planner" id="planner">
+    <span class="deboss " aria-hidden="true">Design</span>
     <div class="wrap">
       <div class="head"><div><span class="eyebrow">Plan your home</span><h2>Design it in<br><em>seven taps.</em></h2></div><p class="lede">Answer seven quick questions and watch your home go up, from bare section to finished build. Then send it to us for a fixed-price quote.</p></div>
       <div class="planner-grid">
@@ -508,6 +584,7 @@
 
   <!-- Process -->
   <section id="process">
+    <span class="deboss l" aria-hidden="true">Process</span>
     <div class="wrap">
       <div class="head"><div><span class="eyebrow">Our process</span><h2>Six steps.<br><em>One team.</em></h2></div><p class="lede">You always know what's happening next, what it costs and when it'll be done.</p></div>
       <div class="steps">
@@ -523,6 +600,7 @@
 
   <!-- Testimonials -->
   <section class="quotes">
+    <span class="deboss " aria-hidden="true">Trust</span>
     <div class="wrap">
       <span class="eyebrow">Testimonials</span>
       <div class="q-slides" id="qSlides" style="margin-top:40px">
@@ -554,6 +632,7 @@
 
   <!-- Gallery -->
   <section id="gallery" style="padding-top:0">
+    <span class="deboss l" aria-hidden="true">Homes</span>
     <div class="wrap">
       <div class="head"><div><span class="eyebrow">Gallery</span><h2>Inside <em>&amp; out.</em></h2></div><p class="lede">Tap any photo to view it full screen.</p></div>
       <div class="g-grid">
@@ -571,6 +650,7 @@
 
   <!-- FAQs -->
   <section id="faqs" style="background:var(--bg-2)">
+    <span class="deboss " aria-hidden="true">FAQ</span>
     <div class="wrap faq-grid">
       <div><span class="eyebrow">FAQs</span><h2 style="margin-top:22px">Questions,<br><em>answered.</em></h2><p class="lede" style="margin-top:24px">Can't see yours? Call 0210 590 409 or send us a message.</p></div>
       <div>
@@ -588,7 +668,7 @@
   <section class="contact" id="contact">
     <div class="wrap">
       <span class="eyebrow">Start your project today</span>
-      <h2>Let's build something<br><em>beautiful.</em></h2>
+      <h2>Let's build something<br><em class="shimmer">beautiful.</em></h2>
       <div class="contact-grid">
         <div>
           <p class="lede" style="color:rgba(255,255,255,.7);margin-bottom:34px">Tell us what you're planning. We'll come back to you to talk through feasibility, timelines and a fixed-price proposal.</p>
@@ -921,7 +1001,7 @@
 
     // ---------- intro, then the hero arrives ----------
     const heroIn = () => gsap.timeline()
-      .from(heroLines, { yPercent: 110, duration: 1.8, ease: EASE, stagger: .12 }, 0)
+      .from(heroChars, { rotationX: -95, yPercent: 40, opacity: 0, transformPerspective: 700, transformOrigin: '50% 100%', duration: 1.6, ease: EASE, stagger: .045 }, 0)
       .from('.hx', { y: 24, opacity: 0, duration: 1.4, ease: EASE, stagger: .1 }, .35)
       .from('#heroMedia', { y: 80, opacity: 0, duration: 1.8, ease: EASE }, .45)
       .from('#heroVideo', { scale: 1.18, duration: 2.6, ease: 'power3.out' }, .45)
@@ -949,15 +1029,119 @@
     gsap.to('#statsBadge, #videoToggle', { opacity: 0, ease: 'none', scrollTrigger: { trigger: media, start: 'top 55%', end: 'top 30%', scrub: true } });
     gsap.to('#heroVideo', { yPercent: 10, ease: 'none', scrollTrigger: { trigger: media, start: 'top top', end: 'bottom top', scrub: true } });
 
-    // ---------- headings rise line by line ----------
+    // ---------- text effects: a different one for every section ----------
+    // split into words (.wd) holding characters (.ch); keeps <em>/<br>
+    const splitDeep = el => {
+      if (!el.getAttribute('aria-label')) el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+      const walk = node => [...node.childNodes].forEach(c => {
+        if (c.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          c.textContent.split(/(\s+)/).forEach(part => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+            const w = document.createElement('span'); w.className = 'wd'; w.setAttribute('aria-hidden', 'true');
+            [...part].forEach(ch => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = ch; w.appendChild(s); });
+            frag.appendChild(w);
+          });
+          c.replaceWith(frag);
+        } else if (c.nodeType === 1 && c.tagName !== 'BR') walk(c);
+      });
+      walk(el);
+      return { words: el.querySelectorAll('.wd'), chars: el.querySelectorAll('.ch') };
+    };
+    const on = (el, start = 'top 86%') => ({ trigger: el, start });
+    const rnd = gsap.utils.random;
+    const h2 = sel => document.querySelector(sel + ' h2');
+
+    // hero: letters flip up in 3D (played after the intro)
+    const heroChars = [];
+    heroLines.forEach(li => heroChars.push(...splitDeep(li).chars));
+    document.getElementById('h1').setAttribute('aria-label', 'Homes built beautifully.');
+
+    // eyebrows: typed out letter by letter
+    gsap.utils.toArray('.eyebrow').forEach(el => {
+      if (el.classList.contains('hx')) return;
+      const { chars } = splitDeep(el);
+      gsap.timeline({ scrollTrigger: on(el, 'top 92%') })
+        .fromTo(el, { '--eb': 0 }, { '--eb': 1, duration: .7, ease: 'power3.inOut' })
+        .from(chars, { opacity: 0, duration: .01, stagger: .035, ease: 'none' });
+    });
+    // ledes: words drift up one by one
+    gsap.utils.toArray('.lede').forEach(el => {
+      if (el.classList.contains('hx')) return;
+      const { words } = splitDeep(el);
+      gsap.from(words, { y: 16, opacity: 0, duration: 1, stagger: .022, ease: 'power3.out', scrollTrigger: on(el, 'top 92%') });
+    });
+
+    // services: skewed letters slide in from the right
+    { const { chars } = splitDeep(h2('#services'));
+      gsap.from(chars, { x: 70, skewX: -28, opacity: 0, duration: 1.2, stagger: .022, ease: EASE, scrollTrigger: on(h2('#services')) }); }
+    // card titles: wiped in by a mask
+    gsap.utils.toArray('.scard h3').forEach(t => gsap.fromTo(t, { clipPath: 'inset(0 100% 0 0)', x: -20 }, { clipPath: 'inset(0 0% 0 0)', x: 0, duration: 1.4, ease: 'power4.inOut', scrollTrigger: on(t, 'top 88%') }));
+
+    // 3D build: words drop and bounce
+    { const { words } = splitDeep(h2('#build3d'));
+      gsap.from(words, { y: -90, opacity: 0, rotation: () => rnd(-8, 8), duration: 1.3, stagger: .12, ease: 'bounce.out', scrollTrigger: on(h2('#build3d'), 'top 90%') }); }
+
+    // plan vs built: typewriter with a blinking caret
+    { const el = h2('#plan-vs-built'); const { chars } = splitDeep(el);
+      const caret = document.createElement('span'); caret.className = 'caret'; caret.setAttribute('aria-hidden', 'true');
+      gsap.set(chars, { opacity: 0 });
+      ScrollTrigger.create({ ...on(el), once: true, onEnter: () => {
+        chars.forEach((c, i) => gsap.delayedCall(i * .055, () => { c.style.opacity = 1; c.after(caret); }));
+      } }); }
+
+    // projects: letters spin round on their axis
+    { const el = h2('#projects'); const { chars } = splitDeep(el);
+      gsap.from(chars, { rotationY: -100, transformPerspective: 500, transformOrigin: '50% 50% -20px', opacity: 0, duration: 1.4, stagger: .05, ease: EASE, scrollTrigger: on(el, 'top 92%') }); }
+
+    // numbers: labels tighten from wide spacing
+    gsap.from('.num span', { letterSpacing: '.6em', opacity: 0, duration: 1.8, stagger: .1, ease: EASE, scrollTrigger: on('.num-grid', 'top 85%') });
+
+    // planner: words pop
+    { const el = h2('#planner'); const { words } = splitDeep(el);
+      gsap.from(words, { scale: 0, opacity: 0, duration: 1, stagger: .09, ease: 'back.out(2.6)', scrollTrigger: on(el) }); }
+
+    // process: letters ripple up in a wave
+    { const el = h2('#process'); const { chars } = splitDeep(el);
+      gsap.from(chars, { y: '.7em', opacity: 0, duration: .9, stagger: { each: .03 }, ease: 'back.out(3)', scrollTrigger: on(el) }); }
+
+    // founder: letters fly in from all directions
+    { const el = h2('#about'); const { chars } = splitDeep(el);
+      gsap.from(chars, { x: () => rnd(-160, 160), y: () => rnd(-120, 120), rotation: () => rnd(-90, 90), scale: () => rnd(.3, 1.8), opacity: 0, duration: 1.6, stagger: { each: .03, from: 'random' }, ease: EASE, scrollTrigger: on(el) }); }
+
+    // gallery: spacing closes as you scroll
+    { const el = h2('#gallery');
+      gsap.fromTo(el, { letterSpacing: '.45em', opacity: .15 }, { letterSpacing: '-0.035em', opacity: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 98%', end: 'top 55%', scrub: true } }); }
+
+    // FAQs: text decodes from scrambled symbols
+    { const el = h2('#faqs'); el.classList.add('scr'); const { chars } = splitDeep(el);
+      const glyphs = 'ABCDEFGHJKLMNPQRSTUVWXYZ#%&*+=?/<>0123456789';
+      const real = [...chars].map(c => c.textContent);
+      ScrollTrigger.create({ ...on(el), once: true, onEnter: () => {
+        chars.forEach(c => { c.style.width = c.offsetWidth + 'px'; });
+        const o = { p: 0 };
+        gsap.to(o, { p: 1, duration: 1.8, ease: 'power1.inOut', onUpdate: () => {
+          const done = Math.floor(o.p * chars.length);
+          chars.forEach((c, i) => { c.textContent = i < done ? real[i] : glyphs[(Math.random() * glyphs.length) | 0]; c.style.color = i < done ? '' : 'var(--bronze)'; });
+        }, onComplete: () => chars.forEach((c, i) => { c.textContent = real[i]; c.style.width = ''; c.style.color = ''; }) });
+      } }); }
+
+    // contact: lines rise (the last word shimmers in CSS)
+    { const el = document.querySelector('.contact h2'); const lines = splitLines(el);
+      gsap.from(lines, { yPercent: 110, duration: 1.6, ease: EASE, stagger: .12, scrollTrigger: on(el, 'top 88%') }); }
+
+    // every other heading: the classic line rise
     document.querySelectorAll('section h2').forEach(h => {
-      const lines = splitLines(h);
-      gsap.from(lines, { yPercent: 110, duration: 1.6, ease: EASE, stagger: .1, scrollTrigger: { trigger: h, start: 'top 88%' } });
+      if (h.querySelector('.ch, .ln') || h.closest('#gallery')) return;
+      gsap.from(splitLines(h), { yPercent: 110, duration: 1.6, ease: EASE, stagger: .1, scrollTrigger: on(h, 'top 88%') });
     });
-    gsap.utils.toArray('.eyebrow, .lede').forEach(el => {
-      if (el.closest('.hero') || el.classList.contains('hx')) return;
-      gsap.from(el, { y: 22, opacity: 0, duration: 1.4, ease: EASE, scrollTrigger: { trigger: el, start: 'top 92%' } });
-    });
+
+    // underlines draw under principle and step titles
+    gsap.utils.toArray('.pr h3, .step h3').forEach(t => gsap.fromTo(t, { '--u': 0 }, { '--u': 1, duration: 1.2, ease: 'power3.inOut', scrollTrigger: on(t, 'top 90%') }));
+
+    // letterpress words drift slowly behind the content
+    gsap.utils.toArray('.deboss').forEach(d => gsap.fromTo(d, { yPercent: 35, xPercent: d.classList.contains('l') ? -6 : 6 }, { yPercent: -35, xPercent: 0, ease: 'none', scrollTrigger: { trigger: d.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }));
 
     // ---------- statement ----------
     gsap.to(words, { opacity: 1, ease: 'none', stagger: .05, scrollTrigger: { trigger: st, start: 'top 80%', end: 'bottom 45%', scrub: true } });
@@ -986,7 +1170,7 @@
     gsap.from(['.stage', '.quiz'], { y: 60, opacity: 0, duration: 1.6, ease: EASE, stagger: .15, scrollTrigger: { trigger: '.planner-grid', start: 'top 84%' } });
     gsap.from('.step', { y: 40, opacity: 0, duration: 1.3, ease: EASE, stagger: .08, scrollTrigger: { trigger: '.steps', start: 'top 84%' } });
     document.querySelectorAll('.q-slide blockquote').forEach(bq => { bq.innerHTML = bq.textContent.split(/\s+/).map(w => `<span class="qw">${w}</span>`).join(' '); });
-    const animQuote = () => gsap.fromTo('.q-slide.on .qw', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 1, stagger: .025, ease: EASE });
+    const animQuote = () => gsap.fromTo('.q-slide.on .qw', { opacity: .1 }, { opacity: 1, duration: .6, stagger: .06, ease: 'power1.out' });
     ScrollTrigger.create({ trigger: '.q-slides', start: 'top 82%', once: true, onEnter: animQuote });
     document.querySelectorAll('.q-slide').forEach(sl => new MutationObserver(() => sl.classList.contains('on') && animQuote()).observe(sl, { attributes: true, attributeFilter: ['class'] }));
 
@@ -1005,7 +1189,8 @@
     // ---------- FAQ, contact, footer ----------
     gsap.from('details', { y: 30, opacity: 0, duration: 1.2, stagger: .06, ease: EASE, scrollTrigger: { trigger: '.faq-grid', start: 'top 82%' } });
     gsap.from('.contact-grid > *', { y: 50, opacity: 0, duration: 1.5, stagger: .15, ease: EASE, scrollTrigger: { trigger: '.contact-grid', start: 'top 86%' } });
-    gsap.from('.wordmark', { yPercent: 40, opacity: 0, ease: 'none', scrollTrigger: { trigger: 'footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+    { const { chars } = splitDeep(document.querySelector('.wordmark'));
+      gsap.from(chars, { yPercent: 70, opacity: 0, ease: 'none', stagger: .06, scrollTrigger: { trigger: 'footer', start: 'top bottom', end: 'bottom bottom', scrub: true } }); }
 
     // ---------- magnetic buttons (mouse only) ----------
     if (matchMedia('(pointer: fine)').matches) document.querySelectorAll('.btn, .q-nav .arrow').forEach(b => {
