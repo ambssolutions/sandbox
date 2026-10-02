@@ -1,29 +1,9 @@
-/* Enquiry form.
-   Set FORM_ENDPOINT to a form service URL (for example a Formspree endpoint) to send enquiries without an email app.
-   While it is empty, the form opens the visitor's email app with the enquiry filled in. */
-(function(){
-  var FORM_ENDPOINT='';
-  var EMAIL='info@mikia.co.nz';
-  var form=document.getElementById('enquiry'),status=document.getElementById('status');
-  if(!form)return;
-  try{var dz=new URLSearchParams(location.search).get('design');if(dz){form.elements.message.value='I would like to talk about this house design: '+dz+'\n\n';form.elements.type.value='Residential subdivision';}}catch(e){}
-  function say(msg,bad){status.textContent=msg;status.className='status'+(bad?' bad':' ok');}
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    var f=form.elements;
-    if(f.company.value){return;}
-    var name=f.name.value.trim(),email=f.email.value.trim(),msg=f.message.value.trim();
-    if(!name||!msg||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){say('Please add your name, a valid email and a few words about your project.',true);return;}
-    var data={name:name,email:email,phone:f.phone.value.trim(),type:f.type.value,site:f.site.value.trim(),message:msg};
-    if(FORM_ENDPOINT){
-      say('Sending...');
-      fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
-        .then(function(r){if(!r.ok)throw new Error();form.reset();say('Thank you. We have your enquiry and will be in touch soon.');})
-        .catch(function(){say('Sorry, that did not send. Please email '+EMAIL+' or call us.',true);});
-      return;
-    }
-    var body='Name: '+data.name+'\nEmail: '+data.email+'\nPhone: '+data.phone+'\nProject type: '+data.type+'\nSite address: '+data.site+'\n\n'+data.message;
-    window.location.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('Website enquiry from '+data.name)+'&body='+encodeURIComponent(body);
-    say('Your email app should open with your enquiry ready to send. If it does not, email '+EMAIL+'.');
-  });
-})();
+(function(){var s="",i="info@mikia.co.nz",n=document.getElementById("enquiry"),r=document.getElementById("status");if(!n)return;try{var u=new URLSearchParams(location.search).get("design");u&&(n.elements.message.value="I would like to talk about this house design: "+u+`
+
+`,n.elements.type.value="Residential subdivision")}catch{}function a(o,e){r.textContent=o,r.className="status"+(e?" bad":" ok")}n.addEventListener("submit",function(o){o.preventDefault();var e=n.elements;if(!e.company.value){var m=e.name.value.trim(),l=e.email.value.trim(),d=e.message.value.trim();if(!m||!d||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(l)){a("Please add your name, a valid email and a few words about your project.",!0);return}var t={name:m,email:l,phone:e.phone.value.trim(),type:e.type.value,site:e.site.value.trim(),message:d};if(s){a("Sending..."),fetch(s,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(t)}).then(function(y){if(!y.ok)throw new Error;n.reset(),a("Thank you. We have your enquiry and will be in touch soon.")}).catch(function(){a("Sorry, that did not send. Please email "+i+" or call us.",!0)});return}var c="Name: "+t.name+`
+Email: `+t.email+`
+Phone: `+t.phone+`
+Project type: `+t.type+`
+Site address: `+t.site+`
+
+`+t.message;window.location.href="mailto:"+i+"?subject="+encodeURIComponent("Website enquiry from "+t.name)+"&body="+encodeURIComponent(c),a("Your email app should open with your enquiry ready to send. If it does not, email "+i+".")}})})();
