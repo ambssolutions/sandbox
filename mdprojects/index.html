@@ -372,6 +372,58 @@
   img { transition: opacity .9s ease; }
   .magnetic { will-change: transform; }
 
+  /* 3D build */
+  .build3d { padding: 0; }
+  .b3-pin { position: relative; height: 100vh; min-height: 560px; overflow: hidden; background: radial-gradient(90% 70% at 50% 60%, #18205a 0%, var(--ink) 70%); }
+  #b3c { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .b3-ui { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding-block: 120px 44px; pointer-events: none; }
+  .b3-title { font-size: clamp(2.4rem, 5.2vw, 5.2rem); margin-top: 18px; max-width: 12ch; }
+  .b3-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+  .b3-steps li { font: 400 .95rem/1.4 var(--ui); color: rgba(255,255,255,.4); border-top: 1px solid rgba(255,255,255,.18); padding-top: 14px; transition: color .6s, border-color .6s; }
+  .b3-steps li b { display: block; font: 500 .7rem/1 var(--ui); letter-spacing: .24em; color: rgba(212,179,115,.5); margin-bottom: 8px; transition: color .6s; }
+  .b3-steps li.on { color: var(--white); border-color: var(--amber); }
+  .b3-steps li.on b { color: var(--amber); }
+  .b3-prog { height: 1px; background: rgba(255,255,255,.12); margin-top: 18px; }
+  .b3-prog span { display: block; height: 100%; background: var(--amber); transform: scaleX(0); transform-origin: 0 50%; }
+  .no-webgl .b3-pin { background: var(--ink) url("images/hero-poster.webp") center/cover; }
+
+  /* Plan vs built */
+  .compare-sec { background: var(--paper); }
+  .cmp-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; margin-bottom: 44px; }
+  .compare { --x: 50%; position: relative; border-radius: var(--r); overflow: hidden; aspect-ratio: 1500 / 1028; max-height: 82vh; width: 100%; cursor: ew-resize; touch-action: pan-y; user-select: none; box-shadow: 0 40px 80px -40px rgba(11,15,42,.45); }
+  .compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+  .cmp-plan { clip-path: inset(0 calc(100% - var(--x)) 0 0); }
+  .cmp-line { position: absolute; top: 0; bottom: 0; left: var(--x); width: 1px; background: var(--amber); transform: translateX(-.5px); }
+  .cmp-handle { position: absolute; top: 50%; left: var(--x); width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: var(--amber); color: var(--ink); display: grid; place-items: center; box-shadow: 0 10px 30px rgba(0,0,0,.35); font: 500 1.1rem/1 var(--ui); letter-spacing: -.1em; }
+  .cmp-tag { position: absolute; top: 20px; padding: 9px 14px; border-radius: 100px; font: 500 .7rem/1 var(--ui); letter-spacing: .22em; text-transform: uppercase; }
+  .cmp-tag.l { left: 20px; background: rgba(11,16,48,.8); color: var(--sky); }
+  .cmp-tag.r { right: 20px; background: rgba(255,255,255,.9); color: var(--ink); }
+
+  /* Lightbox */
+  .g { cursor: zoom-in; }
+  .lb { position: fixed; inset: 0; z-index: 300; background: rgba(6,8,24,.96); display: grid; place-items: center; padding: 60px 70px; }
+  .lb[hidden] { display: none !important; }
+  .lb img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
+  .lb button { position: absolute; background: none; border: 1px solid rgba(255,255,255,.3); color: var(--white); width: 52px; height: 52px; border-radius: 50%; font: 300 1.8rem/1 var(--ui); cursor: pointer; display: grid; place-items: center; }
+  .lb button:hover { border-color: var(--amber); color: var(--amber); }
+  .lb-x { top: 18px; right: 18px; }
+  .lb-prev { left: 14px; top: 50%; margin-top: -26px; }
+  .lb-next { right: 14px; top: 50%; margin-top: -26px; }
+  .lb-n { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); font: 500 .75rem/1 var(--ui); letter-spacing: .2em; color: rgba(255,255,255,.6); }
+  .lb-open, .lb-open body { overflow: hidden; }
+  @media (max-width: 760px) {
+    .b3-steps { grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+    .b3-steps li { font-size: .82rem; padding-top: 10px; }
+    .b3-steps li:not(.on) { display: none; }
+    .b3-steps li.on { grid-column: 1 / -1; }
+    .b3-ui { padding-block: 100px 30px; }
+    .compare { aspect-ratio: 4 / 5; }
+    .compare img { object-position: 62% 50%; }
+    .cmp-handle { width: 54px; height: 54px; margin: -27px 0 0 -27px; }
+    .lb { padding: 50px 10px; }
+    .lb-prev, .lb-next { display: none; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .ticker-track { animation-duration: 120s; }
@@ -414,12 +466,10 @@
     .svc .arr { display: none; }
     .svc p { grid-column: 2; font-size: .95rem; }
     .float-img { display: none; }
-    .projects { height: auto !important; padding-block: 90px; }
-    .proj-pin { position: static; height: auto; }
-    .proj-track { transform: none !important; overflow-x: auto; scroll-snap-type: x mandatory; padding-right: 28px; padding-bottom: 8px; scrollbar-width: none; }
-    .pcard { width: 84vw; height: 66vh; max-height: 560px; scroll-snap-align: center; }
-    .pcard.cta { width: 84vw; }
-    .proj-bar { display: none; }
+    .proj-pin { padding-top: 84px; gap: 22px; }
+    .proj-track { gap: 14px; }
+    .pcard { width: 82vw; height: 58vh; max-height: 560px; }
+    .pcard.cta { width: 82vw; padding: 32px; }
     .stage { top: calc(92px + env(safe-area-inset-top, 0px)); z-index: 5; background: var(--ink-2); }
     .tl-line { left: 31px; }
     .tl-step { grid-template-columns: 64px 1fr !important; gap: 22px; }
@@ -438,6 +488,7 @@
     .nav { top: calc(78px + env(safe-area-inset-top, 0px)); }
     .hb b { font-size: 1.45rem; }
     .video-toggle { top: 92px; right: 18px; }
+    .replay { display: none; }
     .opts, .f-list, .mv { grid-template-columns: 1fr; }
     .quiz { padding: 22px 18px; }
     .stage { padding: 10px 12px; top: calc(78px + env(safe-area-inset-top, 0px)); }
@@ -455,9 +506,10 @@
 <link rel="preload" href="fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/satoshi-300.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/satoshi-500.woff2" as="font" type="font/woff2" crossorigin>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="js/gsap.min.js"></script>
+<script src="js/ScrollTrigger.min.js"></script>
+<script src="js/lenis.min.js"></script>
+<script src="js/three.min.js" defer></script>
 </head>
 <body>
 <script>if (window.gsap && window.ScrollTrigger) document.documentElement.classList.add('has-gsap', 'has-intro');</script>
@@ -537,6 +589,26 @@
     </div>
   </div>
 
+  <!-- 3D build -->
+  <section class="build3d dark" id="build3d" aria-label="How we build: a 3D model of a terrace being built as you scroll">
+    <div class="b3-pin">
+      <canvas id="b3c" aria-hidden="true"></canvas>
+      <div class="b3-ui wrap">
+        <div><span class="tag">How we build</span><h2 class="xl b3-title">Watch it<br><em>come together.</em></h2></div>
+        <div>
+          <ol class="b3-steps">
+            <li class="on"><b>01</b>Plans &amp; consents</li>
+            <li><b>02</b>Foundations poured</li>
+            <li><b>03</b>Frame &amp; cladding</li>
+            <li><b>04</b>Joinery &amp; roof</li>
+            <li><b>05</b>Landscaping &amp; handover</li>
+          </ol>
+          <div class="b3-prog"><span></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Statement -->
   <section class="statement">
     <div class="wrap">
@@ -573,6 +645,23 @@
       </div>
     </div>
     <div class="float-img" id="floatImg" aria-hidden="true"><img alt="" id="floatImgEl"></div>
+  </section>
+
+  <!-- Plan vs built -->
+  <section class="compare-sec" id="plan-vs-built">
+    <div class="wrap">
+      <div class="cmp-head">
+        <div><span class="tag">Plan vs built</span><h2 class="xl h2" style="margin-top:20px">Drag from<br><em>drawing to door.</em></h2></div>
+        <p class="lede">Swanson Road, Henderson. Slide across to see the plan become the finished home.</p>
+      </div>
+      <div class="compare" id="compare">
+        <img src="images/built-swanson.webp" alt="Finished Swanson Road home in Henderson" decoding="async">
+        <img class="cmp-plan" src="images/plan-swanson.webp" alt="Line drawing of the same Swanson Road home" decoding="async">
+        <span class="cmp-line"></span>
+        <span class="cmp-tag l">Plan</span><span class="cmp-tag r">Built</span>
+        <span class="cmp-handle" role="slider" tabindex="0" aria-label="Compare plan and finished home" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">‹ ›</span>
+      </div>
+    </div>
   </section>
 
   <!-- Projects: horizontal scroll -->
@@ -1102,7 +1191,7 @@
     // ---------- Smooth scrolling ----------
     let lenis = null;
     if (window.Lenis) {
-      lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true, wheelMultiplier: .9, touchMultiplier: 1.4 });
+      lenis = window.__lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true, wheelMultiplier: .9, touchMultiplier: 1.4 });
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add(t => lenis.raf(t * 1000));
       gsap.ticker.lagSmoothing(0);
@@ -1200,8 +1289,8 @@
 
     // ---------- Projects: pinned horizontal scroll (desktop) ----------
     const mm = gsap.matchMedia();
-    mm.add('(min-width: 961px)', () => {
-      const dist = () => Math.max(0, track.scrollWidth - innerWidth + 80);
+    mm.add('all', () => {
+      const dist = () => Math.max(0, track.scrollWidth - innerWidth + (innerWidth < 760 ? 20 : 80));
       const n = track.children.length;
       const tween = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: {
         trigger: projSec, start: 'top top', end: () => '+=' + dist(), pin: '.proj-pin', scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
@@ -1210,9 +1299,6 @@
       track.querySelectorAll('.pcard img').forEach(img => {
         gsap.fromTo(img, { xPercent: -8, scale: 1.2 }, { xPercent: 8, scale: 1.2, ease: 'none', scrollTrigger: { trigger: img.parentElement, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true } });
       });
-    });
-    mm.add('(max-width: 960px)', () => {
-      gsap.from('.pcard', { y: 50, opacity: 0, duration: 1.4, stagger: .1, ease: EASE, scrollTrigger: { trigger: track, start: 'top 88%' } });
     });
 
     // ---------- Planner ----------
@@ -1266,6 +1352,200 @@
     }
 
     addEventListener('load', () => ScrollTrigger.refresh());
+  })();
+
+  // 3D needs three.js, which loads deferred
+  const boot3d = () => {
+  // ===== 3D build: a terrace assembles itself as you scroll (three.js) =====
+  (() => {
+    const sec = document.getElementById('build3d'), canvas = document.getElementById('b3c');
+    if (!sec || !canvas) return;
+    const fallback = () => sec.classList.add('no-webgl');
+    if (!window.THREE) { fallback(); return; }
+    let renderer;
+    try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' }); } catch (e) { fallback(); return; }
+    const T = THREE;
+    const mobile = innerWidth < 760;
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, mobile ? 1.75 : 2));
+    renderer.outputEncoding = T.sRGBEncoding;
+    renderer.toneMapping = T.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+
+    const scene = new T.Scene();
+    scene.fog = new T.Fog(0x0b0f2a, 40, 110);
+    const camera = new T.PerspectiveCamera(32, 1, .1, 200);
+    const target = new T.Vector3(0, 3.6, 0);
+
+    scene.add(new T.HemisphereLight(0xd6e4ff, 0x080b20, .55));
+    const sun = new T.DirectionalLight(0xffe0b8, 2.4); sun.position.set(14, 22, 18); scene.add(sun);
+    const fill = new T.DirectionalLight(0xa9c9ff, .7); fill.position.set(-16, 10, 12); scene.add(fill);
+    const rim = new T.DirectionalLight(0x8ecaee, .9); rim.position.set(-10, 12, -16); scene.add(rim);
+
+    // ground + blueprint grid
+    const groundMat = new T.MeshBasicMaterial({ color: 0x0a0d26 }); groundMat.color.convertSRGBToLinear();
+    const ground = new T.Mesh(new T.PlaneGeometry(240, 240), groundMat);
+    ground.rotation.x = -Math.PI / 2; scene.add(ground);
+    const grid = new T.GridHelper(60, 60, 0xd4b373, 0x8ecaee);
+    grid.material.transparent = true; grid.material.opacity = .16; grid.position.y = .01; scene.add(grid);
+
+    const M = (color, o = {}) => new T.MeshStandardMaterial(Object.assign({ color, roughness: .78, metalness: .05 }, o));
+    const mats = {
+      slab: M(0x9aa1aa, { roughness: .95 }), dark: M(0x2a2f39, { roughness: .7 }), white: M(0xe8e6e0, { roughness: .82 }),
+      roof: M(0x1d2129, { roughness: .55, metalness: .25 }), timber: M(0xae7a4c, { roughness: .9 }), door: M(0x1a1d24, { roughness: .5 }),
+      glass: M(0x1b2638, { roughness: .2, metalness: .4, emissive: new T.Color(0xffc887), emissiveIntensity: 0 }),
+      leaf: M(0x3f6f4c, { roughness: 1 }), trunk: M(0x6b4a33, { roughness: 1 }), path: M(0xbdb8ad, { roughness: 1 })
+    };
+    // hex colours are sRGB; convert so they render true to life
+    Object.values(mats).forEach(m => { m.color.convertSRGBToLinear(); m.emissive && m.emissive.convertSRGBToLinear(); });
+
+    // a box whose origin sits on its base, so it can "rise" with scale.y
+    const box = (w, h, d, mat) => { const g = new T.BoxGeometry(w, h, d); g.translate(0, h / 2, 0); const m = new T.Mesh(g, mat); return m; };
+    const withEdges = mesh => mesh;
+
+    const house = new T.Group(); scene.add(house);
+    const parts = { slab: [], walls: [], joinery: [], roofs: [], land: [] };
+    const UW = 4.4, D = 6.2, H = 3, N = 3;
+    for (let u = 0; u < N; u++) {
+      const x = (u - (N - 1) / 2) * UW;
+      const unit = new T.Group(); unit.position.x = x; house.add(unit);
+      const slab = withEdges(box(UW + .2, .3, D + .4, mats.slab)); unit.add(slab); parts.slab.push(slab);
+      const g = withEdges(box(UW, H, D, mats.dark)); g.position.y = .3; unit.add(g);
+      const up = withEdges(box(UW, H, D, mats.white)); up.position.y = .3 + H; unit.add(up);
+      parts.walls.push(g, up);
+      const fz = D / 2 + .03;
+      const j = [];
+      [[-1.05, 1.15, 1.5], [1.05, 1.15, 1.5]].forEach(([wx, w, h]) => { const m = box(w, h, .08, mats.glass); m.position.set(wx, .3 + H + .75, fz); j.push(m); });
+      const gar = box(2.1, 2.3, .1, mats.door); gar.position.set(-.95, .3, fz); j.push(gar);
+      for (let k = 1; k < 5; k++) { const s = box(2.1, .03, .12, mats.dark); s.position.set(-.95, .3 + k * .46, fz + .01); j.push(s); }
+      const door = box(.95, 2.2, .1, mats.timber); door.position.set(1.15, .3, fz); j.push(door);
+      const side = box(.5, 1.6, .08, mats.glass); side.position.set(1.85, .3 + .5, fz); j.push(side);
+      j.forEach(m => { unit.add(m); parts.joinery.push(m); });
+      // gable roof, ridge front-to-back
+      const sh = new T.Shape(); sh.moveTo(-UW / 2 - .25, 0); sh.lineTo(0, 2.1); sh.lineTo(UW / 2 + .25, 0); sh.lineTo(-UW / 2 - .25, 0);
+      const rg = new T.ExtrudeGeometry(sh, { depth: D + .7, bevelEnabled: false }); rg.translate(0, 0, -(D + .7) / 2);
+      const roof = withEdges(new T.Mesh(rg, mats.roof)); roof.position.y = .3 + 2 * H; unit.add(roof); parts.roofs.push(roof);
+      // landscaping: path, fence, shrub
+      const path = box(1.1, .04, 3.2, mats.path); path.position.set(1.15, 0, D / 2 + 1.9); unit.add(path); parts.land.push(path);
+      const fence = box(UW - 1.5, .9, .07, mats.timber); fence.position.set(-.6, 0, D / 2 + 3.3); unit.add(fence); parts.land.push(fence);
+      const shrub = new T.Mesh(new T.SphereGeometry(.55, 16, 12), mats.leaf); shrub.position.set(2.0, .45, D / 2 + .9); unit.add(shrub); parts.land.push(shrub);
+    }
+    const tree = (x, z, s) => {
+      const t = new T.Group(); t.position.set(x, 0, z);
+      const tr = box(.22, 1.4, .22, mats.trunk); t.add(tr);
+      const c = new T.Mesh(new T.ConeGeometry(1.15, 2.9, 18), mats.leaf); c.position.y = 2.6; t.add(c);
+      t.userData.s = s; scene.add(t); parts.land.push(t); return t;
+    };
+    tree(-9.6, 2.5, 1); tree(9.4, 3.4, .85); tree(-8.2, -3.5, .75);
+
+    // blueprint lines of the finished house, captured before anything is hidden
+    const all = [...parts.slab, ...parts.walls, ...parts.joinery, ...parts.roofs];
+    scene.updateMatrixWorld(true);
+    const ghost = new T.Group(); scene.add(ghost);
+    const ghostMat = new T.LineBasicMaterial({ color: 0xcfe6fa, transparent: true, opacity: .85 });
+    all.forEach(m => { const l = new T.LineSegments(new T.EdgesGeometry(m.geometry), ghostMat); l.matrixAutoUpdate = false; l.matrix.copy(m.matrixWorld); ghost.add(l); });
+    // initial (unbuilt) state
+    parts.slab.forEach(m => m.scale.y = .001);
+    parts.walls.forEach(m => m.scale.y = .001);
+    parts.joinery.forEach(m => m.scale.set(.001, .001, .001));
+    parts.roofs.forEach(m => { m.userData.y = m.position.y; m.position.y += 9; m.visible = false; });
+    parts.land.forEach(m => m.scale.set(.001, .001, .001));
+
+    // ---- scroll-driven build ----
+    const state = { p: 0 };
+    const steps = [...sec.querySelectorAll('.b3-steps li')];
+    const bar = sec.querySelector('.b3-prog span');
+    const tl = gsap.timeline({ paused: true });
+    tl.to(ghostMat, { opacity: .85, duration: .08 }, 0)
+      .to(parts.slab.map(m => m.scale), { y: 1, duration: .1, stagger: .02, ease: 'power2.out' }, .1)
+      .to(parts.walls.map(m => m.scale), { y: 1, duration: .14, stagger: .025, ease: 'power3.out' }, .22)
+      .to(parts.joinery.map(m => m.scale), { x: 1, y: 1, z: 1, duration: .08, stagger: .004, ease: 'back.out(2)' }, .44)
+      .to(mats.glass, { emissiveIntensity: 1.3, duration: .12 }, .56)
+      .add(() => parts.roofs.forEach(m => m.visible = true), .62)
+      .to(parts.roofs.map(m => m.position), { y: i => parts.roofs[i].userData.y, duration: .12, stagger: .03, ease: 'bounce.out' }, .63)
+      .to(ghostMat, { opacity: .12, duration: .14 }, .66)
+      .to(parts.land.map(m => m.scale), { x: i => parts.land[i].userData.s || 1, y: i => parts.land[i].userData.s || 1, z: i => parts.land[i].userData.s || 1, duration: .12, stagger: .012, ease: 'back.out(1.6)' }, .8)
+      .to(grid.material, { opacity: .05, duration: .15 }, .82)
+      .to({}, { duration: .05 }, .95);
+
+    let size = { w: 1, h: 1 };
+    const resize = () => {
+      const r = canvas.getBoundingClientRect(); size = { w: r.width, h: r.height };
+      renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); draw();
+    };
+    let idle = 0, visible = false, raf = 0;
+    function draw() {
+      const p = state.p;
+      const aspect = size.w / size.h;
+      // fit the whole terrace (about 17 units wide, 9 tall) on any screen shape
+      const vf = camera.fov * Math.PI / 180, hf = 2 * Math.atan(Math.tan(vf / 2) * aspect);
+      const fitW = (aspect < 1 ? 9.2 : 11.5) / Math.tan(hf / 2), fitH = 7.5 / Math.tan(vf / 2);
+      const radius = Math.max(fitW, fitH) * (aspect > 1 ? 1.25 - p * .12 : 1.05 - p * .1);
+      target.x = aspect > 1.1 ? -Math.min(5.5, 2.2 * aspect) : 0;
+      scene.fog.near = radius * .9; scene.fog.far = radius * 2.6;
+      const ang = -0.95 + p * 1.25 + Math.sin(idle * .25) * .06;
+      const height = radius * (.42 - p * .16);
+      camera.position.set(Math.sin(ang) * radius, height, Math.cos(ang) * radius);
+      camera.lookAt(target);
+      renderer.render(scene, camera);
+      const si = Math.min(steps.length - 1, Math.floor(p * steps.length * .999));
+      steps.forEach((s, i) => s.classList.toggle('on', i === si));
+      if (bar) bar.style.transform = `scaleX(${p})`;
+    }
+    const loop = t => { idle = t / 1000; draw(); if (visible) raf = requestAnimationFrame(loop); };
+    new IntersectionObserver(es => { visible = es[0].isIntersecting; cancelAnimationFrame(raf); if (visible) raf = requestAnimationFrame(loop); }).observe(sec);
+    addEventListener('resize', resize); resize();
+
+    ScrollTrigger.create({
+      trigger: sec, start: 'top top', end: () => '+=' + Math.round(innerHeight * (mobile ? 3.2 : 3.6)), pin: '.b3-pin', scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
+      onUpdate: self => { state.p = self.progress; tl.progress(self.progress); }
+    });
+    ScrollTrigger.sort(); ScrollTrigger.refresh();
+  })();
+
+  };
+  if (window.THREE) boot3d(); else addEventListener('DOMContentLoaded', boot3d);
+
+  // ===== Plan vs built: drag to compare =====
+  (() => {
+    const cmp = document.getElementById('compare'); if (!cmp) return;
+    const top = cmp.querySelector('.cmp-plan'), handle = cmp.querySelector('.cmp-handle');
+    let pos = .5, dragging = false;
+    const set = p => { pos = Math.max(0, Math.min(1, p)); cmp.style.setProperty('--x', (pos * 100) + '%'); handle.setAttribute('aria-valuenow', Math.round(pos * 100)); };
+    const fromEvent = e => { const r = cmp.getBoundingClientRect(); return ((e.touches ? e.touches[0].clientX : e.clientX) - r.left) / r.width; };
+    cmp.addEventListener('pointerdown', e => { dragging = true; cmp.setPointerCapture(e.pointerId); set(fromEvent(e)); });
+    cmp.addEventListener('pointermove', e => { if (dragging) set(fromEvent(e)); });
+    cmp.addEventListener('pointerup', () => dragging = false);
+    cmp.addEventListener('pointercancel', () => dragging = false);
+    handle.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') set(pos - .05); if (e.key === 'ArrowRight') set(pos + .05); });
+    set(.5);
+    // a gentle sweep the first time it comes into view, so people see it is interactive
+    if (window.gsap && window.ScrollTrigger) {
+      const o = { v: .9 };
+      ScrollTrigger.create({ trigger: cmp, start: 'top 70%', once: true, onEnter: () => gsap.timeline().fromTo(o, { v: .92 }, { v: .12, duration: 1.8, ease: 'power3.inOut', onUpdate: () => set(o.v) }).to(o, { v: .5, duration: 1.4, ease: 'power3.inOut', onUpdate: () => set(o.v) }) });
+    }
+  })();
+
+  // ===== Gallery lightbox with swipe =====
+  (() => {
+    const figs = [...document.querySelectorAll('.g')]; if (!figs.length) return;
+    const lb = document.createElement('div'); lb.className = 'lb'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-label', 'Photo viewer'); lb.hidden = true;
+    lb.innerHTML = '<button class="lb-x" aria-label="Close">×</button><button class="lb-prev" aria-label="Previous photo">‹</button><img alt=""><button class="lb-next" aria-label="Next photo">›</button><span class="lb-n"></span>';
+    document.body.appendChild(lb);
+    const img = lb.querySelector('img'), n = lb.querySelector('.lb-n');
+    let i = 0, x0 = null;
+    const srcOf = f => { const im = f.querySelector('img'); return im.src.replace('-sm.webp', '.webp'); };
+    const show = k => { i = (k + figs.length) % figs.length; img.src = srcOf(figs[i]).replace(/-sm\.webp$/, '.webp'); img.alt = figs[i].querySelector('img').alt; n.textContent = (i + 1) + ' / ' + figs.length;
+      window.gsap && gsap.fromTo(img, { opacity: 0, scale: .96 }, { opacity: 1, scale: 1, duration: .7, ease: 'expo.out' }); };
+    const open = k => { lb.hidden = false; document.documentElement.classList.add('lb-open'); window.__lenis && window.__lenis.stop(); show(k); window.gsap && gsap.fromTo(lb, { opacity: 0 }, { opacity: 1, duration: .5 }); };
+    const close = () => { lb.hidden = true; document.documentElement.classList.remove('lb-open'); window.__lenis && window.__lenis.start(); };
+    figs.forEach((f, k) => { f.tabIndex = 0; f.setAttribute('role', 'button'); f.addEventListener('click', () => open(k)); f.addEventListener('keydown', e => { if (e.key === 'Enter') open(k); }); });
+    lb.querySelector('.lb-x').onclick = close;
+    lb.querySelector('.lb-prev').onclick = e => { e.stopPropagation(); show(i - 1); };
+    lb.querySelector('.lb-next').onclick = e => { e.stopPropagation(); show(i + 1); };
+    lb.addEventListener('click', e => { if (e.target === lb) close(); });
+    addEventListener('keydown', e => { if (lb.hidden) return; if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') show(i - 1); if (e.key === 'ArrowRight') show(i + 1); });
+    lb.addEventListener('touchstart', e => x0 = e.touches[0].clientX, { passive: true });
+    lb.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) show(i + (dx < 0 ? 1 : -1)); x0 = null; });
   })();
 
   // Placeholder submit handler: replace with the site's real form endpoint
