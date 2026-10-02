@@ -8,10 +8,11 @@
 <link rel="apple-touch-icon" href="images/logo.png">
 <meta name="description" content="MD Projects NZ: Auckland residential builders. Over 1,000 homes delivered at a fixed price, on time and with complete transparency.">
 <style>
-  @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-300.woff2") format("woff2"); font-weight: 300; font-style: normal; font-display: swap; }
-  @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
-  @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
-  @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Poppins"; src: url("fonts/poppins-300.woff2") format("woff2"); font-weight: 300; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Poppins"; src: url("fonts/poppins-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Poppins"; src: url("fonts/poppins-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Poppins"; src: url("fonts/poppins-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Poppins"; src: url("fonts/poppins-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
   /* Concept: "From plan to reality". Dark blueprint bands (plans) alternate with light paper bands (built work).
      Palette from the MD Projects logo: deep navy, royal blue, sky, plus the site's amber. */
   :root {
@@ -30,10 +31,10 @@
     --grid-2: rgba(142, 202, 238, .045);
     --muted: #5b6479;
     --muted-dk: rgba(255, 255, 255, .62);
-    --display: "Satoshi", "Helvetica Neue", Arial, sans-serif;
-    --ui: "Satoshi", "Helvetica Neue", Arial, sans-serif;
-    --body: "Satoshi", "Helvetica Neue", Arial, sans-serif;
-    --mono: "Satoshi", "Helvetica Neue", Arial, sans-serif;
+    --display: "Poppins", "Helvetica Neue", Arial, sans-serif;
+    --ui: "Poppins", "Helvetica Neue", Arial, sans-serif;
+    --body: "Poppins", "Helvetica Neue", Arial, sans-serif;
+    --mono: "Poppins", "Helvetica Neue", Arial, sans-serif;
     --wrap: 1480px;
     --gutter: clamp(20px, 4.4vw, 72px);
     --r: 16px;
@@ -47,7 +48,7 @@
   p { margin: 0; }
   h1, h2, h3 { margin: 0; font-family: var(--ui); text-wrap: balance; }
   .wrap { max-width: calc(var(--wrap) + 2 * var(--gutter)); margin: 0 auto; padding-inline: var(--gutter); }
-  .xl { font-family: var(--display); font-weight: 400; letter-spacing: -.045em; line-height: .98; }
+  .xl { font-family: var(--display); font-weight: 600; letter-spacing: -.035em; line-height: 1.04; }
   .xl em, .xl i { font-style: normal; color: var(--blue); }
   .dark .xl em, .dark .xl i { color: var(--sky); }
   .h2 { font-size: clamp(2.5rem, 5.4vw, 5.6rem); }
@@ -56,7 +57,7 @@
   .dark { background: radial-gradient(120% 80% at 80% 0%, #151c4a 0%, var(--ink) 55%); color: var(--white); }
   .grid-bg { background-color: var(--ink); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px), linear-gradient(var(--grid-2) 1px, transparent 1px), linear-gradient(90deg, var(--grid-2) 1px, transparent 1px); background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px; }
   .dark .tag { color: var(--sky); }
-  .lede { font-size: clamp(1.05rem, .35vw + .95rem, 1.25rem); font-weight: 400; line-height: 1.6; color: var(--muted); max-width: 50ch; }
+  .lede { font-size: clamp(1.02rem, .3vw + .94rem, 1.2rem); font-weight: 300; line-height: 1.6; color: var(--muted); max-width: 50ch; }
   .dark .lede { color: var(--muted-dk); }
   section { padding-block: clamp(96px, 15vh, 190px); position: relative; }
 
@@ -109,7 +110,7 @@
   .hero-copy { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 150px; pointer-events: none; }
   .hero-copy .wrap { width: 100%; }
   .hero-copy a, .hero-copy button { pointer-events: auto; }
-  .hero h1 { font-size: clamp(3rem, min(8.6vw, 15vh), 11.5rem); margin-top: 22px; line-height: .96; font-weight: 300; letter-spacing: -.05em; }
+  .hero h1 { font-size: clamp(3rem, min(8.6vw, 15vh), 11.5rem); margin-top: 22px; line-height: 1.02; font-weight: 600; letter-spacing: -.04em; }
   .hero h1 .l2 { color: var(--sky); transition: color 1.2s cubic-bezier(.2,.8,.2,1); }
   .hero.built h1 .l2 { color: var(--amber); }
   .hero .lede { color: rgba(255,255,255,.82); margin-top: 26px; max-width: 46ch; }
@@ -130,14 +131,14 @@
   .ticker { background: var(--ink); color: var(--white); overflow: hidden; padding: 26px 0; border-block: 1px solid rgba(212,179,115,.25); }
   .ticker-track { display: flex; width: max-content; animation: tick 80s linear infinite; will-change: transform; }
   .ticker.off .ticker-track { animation-play-state: paused; }
-  .ticker span { font: 300 clamp(1.5rem, 3vw, 2.8rem)/1 var(--ui); letter-spacing: -.02em; white-space: nowrap; padding-right: 56px; display: inline-flex; align-items: center; gap: 56px; }
+  .ticker span { font: 500 clamp(1.4rem, 2.8vw, 2.6rem)/1 var(--ui); letter-spacing: -.02em; white-space: nowrap; padding-right: 56px; display: inline-flex; align-items: center; gap: 56px; }
   .ticker span:nth-child(even) { color: var(--amber); }
   .ticker span::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.35); }
   @keyframes tick { to { transform: translateX(-50%); } }
 
   /* Statement */
   .statement { background: var(--paper); }
-  .statement p.big { font: 500 clamp(2.1rem, 4.6vw, 4.4rem)/1.06 var(--display); letter-spacing: -.045em; max-width: 22ch; margin-top: 30px; }
+  .statement p.big { font: 500 clamp(1.9rem, 4.2vw, 4rem)/1.18 var(--display); letter-spacing: -.035em; max-width: 22ch; margin-top: 30px; }
   .w { opacity: .14; transition: opacity .25s; }
   .w.on { opacity: 1; }
   .w.hl { color: var(--blue); }
@@ -151,7 +152,7 @@
   .svc-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap; margin-bottom: 56px; }
   .svc-list { border-top: 1px solid rgba(255,255,255,.16); }
   .svc { display: grid; grid-template-columns: 1fr minmax(0, 380px) 56px; gap: 32px; align-items: center; padding: 30px 0; border-bottom: 1px solid rgba(255,255,255,.16); text-decoration: none; position: relative; }
-  .svc h3 { font-weight: 300; font-size: clamp(2rem, 4.2vw, 4rem); transition: color .3s, transform .4s cubic-bezier(.2,.8,.2,1); }
+  .svc h3 { font-weight: 500; font-size: clamp(2rem, 4.2vw, 4rem); transition: color .3s, transform .4s cubic-bezier(.2,.8,.2,1); }
   .svc p { color: var(--muted-dk); font-size: 1rem; }
   .svc .arr { width: 56px; height: 56px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); display: grid; place-items: center; transition: background .3s, border-color .3s, transform .3s; }
   .svc:hover h3 { color: var(--amber); transform: translateX(16px); }
@@ -295,7 +296,7 @@
   details p { padding: 0 60px 26px 0; color: var(--muted); }
 
   /* Closing CTA + contact */
-  .cta-big { font-size: clamp(4.2rem, 14vw, 14rem); line-height: .9; font-weight: 300; letter-spacing: -.055em; }
+  .cta-big { font-size: clamp(4.2rem, 14vw, 14rem); line-height: .95; font-weight: 600; letter-spacing: -.045em; }
   .cta-big em, .dark .cta-big em { font-style: normal; color: var(--amber); }
   .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; margin-top: 70px; align-items: start; }
   .details { list-style: none; padding: 0; margin: 0; }
@@ -323,7 +324,7 @@
   footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
   footer a { text-decoration: none; }
   footer a:hover { color: var(--amber); }
-  .wordmark { display: block; width: max-content; font: 300 10vw/.85 var(--display);  text-transform: uppercase; color: rgba(142,202,238,.16); white-space: nowrap; margin: 70px 0 30px; letter-spacing: -.06em; }
+  .wordmark { display: block; width: max-content; font: 600 10vw/.9 var(--display);  text-transform: uppercase; color: rgba(142,202,238,.16); white-space: nowrap; margin: 70px 0 30px; letter-spacing: -.06em; }
   .foot-bottom { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: .85rem; border-top: 1px solid rgba(255,255,255,.1); padding-top: 24px; }
 
   .rv { transition: transform 1s cubic-bezier(.2,.8,.2,1), opacity 1s ease; }
@@ -339,7 +340,7 @@
   .intro-inner { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 26px; text-align: center; padding-inline: 24px; }
   .intro-logo { background: var(--white); border-radius: 16px; padding: 8px 16px; }
   .intro-logo img { height: 76px; width: auto; }
-  .intro-count { font: 300 clamp(4.6rem, 14vw, 11rem)/.85 var(--display); letter-spacing: -.05em;  font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  .intro-count { font: 600 clamp(4.4rem, 13vw, 10rem)/.9 var(--display); letter-spacing: -.04em;  font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
   .intro-count small { font-size: .38em; color: var(--amber); margin-left: .06em; letter-spacing: 0; }
   .intro-bar { width: min(420px, 70vw); height: 1px; background: rgba(255,255,255,.15); }
   .intro-bar span { display: block; height: 100%; width: 100%; background: var(--amber); transform: scaleX(0); transform-origin: 0 50%; }
@@ -359,7 +360,7 @@
   .wd { display: inline-block; white-space: nowrap; }
   h2.xl .ln { perspective: 600px; }
   .bigtext { background: var(--paper); padding: 40px 0 70px; overflow: hidden; }
-  .bt-row { white-space: nowrap; font: 300 clamp(3.6rem, 10vw, 10rem)/1.02 var(--display); letter-spacing: -.05em; will-change: transform; }
+  .bt-row { white-space: nowrap; font: 600 clamp(3.4rem, 9.4vw, 9.4rem)/1.08 var(--display); letter-spacing: -.04em; will-change: transform; }
   .bt-row span { color: var(--amber); }
   .bt-row.r2 { color: transparent; -webkit-text-stroke: 1px var(--ink); margin-top: .02em; }
   .bt-row.r2 span { -webkit-text-stroke-color: var(--blue); }
@@ -503,9 +504,9 @@
     .f-photo::before { inset: 14px -12px -14px 12px; }
   }
 </style>
-<link rel="preload" href="fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/satoshi-300.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/satoshi-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/poppins-300.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
 <script src="js/lenis.min.js"></script>
