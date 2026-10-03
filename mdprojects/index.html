@@ -447,6 +447,38 @@
   .lite .mq-b .mq-track { animation-direction: reverse; }
   @keyframes mq { to { transform: translateX(-50%); } }
   .lite .scard .im img, .lite .scard { will-change: auto; }
+  /* ===== About MD Projects: bento grid ===== */
+  .bento { display: grid; grid-template-columns: 1.15fr 1fr 1fr; grid-template-rows: auto auto; gap: clamp(16px, 2vw, 26px); margin-top: clamp(50px, 8vh, 96px); perspective: 1200px; }
+  .bt { position: relative; margin: 0; border-radius: var(--r); transform-style: preserve-3d; }
+  .bt-photo { grid-row: 1 / 3; overflow: hidden; min-height: 460px; box-shadow: var(--emb-photo); }
+  .bt-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+  .bt-photo.drift img { animation: drift 14s ease-in-out infinite alternate; animation-play-state: paused; }
+  .bt-photo.drift.vis img { animation-play-state: running; }
+  @keyframes drift { from { transform: scale(1.04) translate3d(-1%, 0, 0); } to { transform: scale(1.12) translate3d(1.5%, -1.5%, 0); } }
+  .bt-chip { position: absolute; left: 18px; bottom: 18px; z-index: 2; display: grid; gap: 4px; padding: 14px 18px; border-radius: 16px; background: rgba(244,246,250,.9); box-shadow: 0 16px 40px -18px rgba(14,19,34,.55), inset 0 1px 0 #fff; }
+  .bt-chip small { font: 500 .66rem/1 var(--f); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+  .bt-chip b { font: 600 1.3rem/1.1 var(--f); letter-spacing: -.03em; color: var(--ink); }
+  .bento .pr { background: var(--bg); overflow: hidden; }
+  .bento .pr::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .4s;
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgba(144,204,240,.28), transparent 70%); }
+  .bento .pr:hover::before { opacity: 1; }
+  .bt-p { grid-column: 2 / 4; }
+  .ic { width: 46px; height: 46px; color: var(--bronze); margin-bottom: 6px; }
+  .ic path, .ic circle { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s cubic-bezier(.65,0,.35,1); }
+  .ic path:nth-child(2), .ic circle + path { transition-delay: .5s; } .ic path:nth-child(3) { transition-delay: .8s; }
+  .bt.in .ic path, .bt.in .ic circle { stroke-dashoffset: 0; }
+  .track { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); margin: 14px 0 0; padding: 18px 0 0; position: relative; }
+  .track::before, .track::after { content: ""; position: absolute; top: 5px; left: 6px; right: 6px; height: 2px; border-radius: 2px; background: var(--line); }
+  .track::after { background: linear-gradient(90deg, var(--bronze), var(--bronze-2)); transform: scaleX(0); transform-origin: 0 50%; transition: transform 1.8s cubic-bezier(.65,0,.35,1) .3s; }
+  .bt.in .track::after { transform: scaleX(1); }
+  .track li { position: relative; font: 500 .74rem/1 var(--f); letter-spacing: .08em; color: var(--muted); }
+  .track li::before { content: ""; position: absolute; top: -18px; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 2px var(--line); transition: box-shadow .4s, transform .4s; }
+  .bt.in .track li::before { box-shadow: inset 0 0 0 6px var(--bronze); transform: scale(1.1); }
+  .bt.in .track li:nth-child(1)::before { transition-delay: .4s; } .bt.in .track li:nth-child(2)::before { transition-delay: .9s; }
+  .bt.in .track li:nth-child(3)::before { transition-delay: 1.4s; } .bt.in .track li:nth-child(4)::before { transition-delay: 1.9s; }
+  .w.hl { background: linear-gradient(100deg, var(--bronze), #5f9fd6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  @media (max-width: 1000px) { .bento { grid-template-columns: 1fr 1fr; } .bt-photo { grid-row: auto; grid-column: 1 / 3; min-height: 360px; } .bt-p { grid-column: 1 / 3; } }
+  @media (max-width: 760px) { .bento { grid-template-columns: 1fr; } .bt-photo, .bt-p { grid-column: auto; } .bt-photo { min-height: 300px; } .track li { font-size: .66rem; letter-spacing: .04em; } }
   /* touch screens: no sticky "pressed" hover state */
   @media (hover: none) { .step:hover { box-shadow: var(--emb); } .btn-line:hover { box-shadow: var(--emb-sm); } }
   /* phones: tighter, crisper relief that stays inside the narrow gutters */
@@ -597,10 +629,12 @@
     <div class="wrap">
       <span class="eyebrow">About MD Projects NZ</span>
       <p class="big" id="statement">Since March 2020 we've built over 1,000 homes across Auckland. *Fixed* *prices.* *No* *surprises.* Structures that last a lifetime, from your first sketch to the final code compliance certificate.</p>
-      <div class="principles">
-        <div class="pr"><small>Quality</small><h3>Best build quality at an affordable price</h3><p>High-quality homes and investment properties, delivered within budget.</p></div>
-        <div class="pr"><small>Time</small><h3>We stick to the project plan</h3><p>Typical terrace builds take 7 to 9 months, with regular updates throughout.</p></div>
-        <div class="pr"><small>Price</small><h3>Fixed price, no variations</h3><p>We agree on a fixed cost before the build begins, so you can plan with confidence.</p></div>
+      <div class="bento">
+        <figure class="bt bt-photo"><img src="images/gallery-8.webp" srcset="images/gallery-8-sm.webp 900w, images/gallery-8.webp 2000w" sizes="(max-width: 760px) 92vw, 44vw" alt="A finished two-storey MD Projects home" loading="lazy" decoding="async"><figcaption class="bt-chip"><small>Building Auckland since</small><b>March 2020</b></figcaption></figure>
+        <div class="pr bt bt-q"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M24 5l15 6v11c0 10-6.5 17.5-15 21C15.5 39.5 9 32 9 22V11z"/><path pathLength="1" d="M17 24l5 5 9-10"/></svg><small>Quality</small><h3>Best build quality at an affordable price</h3><p>High-quality homes and investment properties, delivered within budget.</p></div>
+        <div class="pr bt bt-t"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle pathLength="1" cx="24" cy="25" r="17"/><path pathLength="1" d="M24 15v10l7 5"/><path pathLength="1" d="M19 4h10"/></svg><small>Time</small><h3>We stick to the project plan</h3><p>Typical terrace builds take 7 to 9 months, with regular updates throughout.</p></div>
+        <div class="pr bt bt-p"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M26 5H42v16L22 41 6 25z"/><circle pathLength="1" cx="34" cy="13" r="3"/></svg><small>Price</small><h3>Fixed price, no variations</h3><p>We agree on a fixed cost before the build begins, so you can plan with confidence.</p>
+          <ol class="track" aria-label="Quote, contract, build, keys"><li>Quote</li><li>Contract</li><li>Build</li><li>Keys</li></ol></div>
       </div>
     </div>
   </section>
@@ -1367,7 +1401,26 @@
     // ---------- statement ----------
     if (lite) gsap.to(words, { opacity: 1, duration: .5, stagger: .03, ease: 'power1.out', scrollTrigger: { trigger: st, start: 'top 82%', once: true } });
     else gsap.to(words, { opacity: 1, ease: 'none', stagger: .05, scrollTrigger: { trigger: st, start: 'top 80%', end: 'bottom 45%', scrub: true } });
-    gsap.from('.pr', { y: 50, opacity: 0, duration: 1.5, ease: EASE, stagger: .14, scrollTrigger: { trigger: '.principles', start: 'top 86%' } });
+    // ---------- about: bento tiles tilt up into place, icons and the build track draw in ----------
+    { const tiles = gsap.utils.toArray('.bento .bt'), photo = document.querySelector('.bt-photo'), pImg = photo.querySelector('img');
+      gsap.from(tiles, { y: 80, rotationX: -18, opacity: 0, transformOrigin: '50% 100%', transformPerspective: 1100, duration: 1.5, stagger: .13, ease: EASE, clearProps: 'transform',
+        scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } });
+      ScrollTrigger.create({ trigger: '.bento', start: 'top 72%', once: true, onEnter: () => tiles.forEach((t, i) => setTimeout(() => t.classList.add('in'), 250 + i * 180)) });
+      // photo: a panel slides away, then the picture keeps a slow drift (CSS transform, paused when off screen)
+      const cover = document.createElement('span'); cover.className = 'cover'; photo.appendChild(cover);
+      gsap.timeline({ scrollTrigger: { trigger: photo, start: 'top 82%', once: true } })
+        .to(cover, { scaleY: 0, duration: 1.4, ease: 'expo.inOut' })
+        .fromTo(pImg, { scale: 1.3 }, { scale: 1.04, duration: 2, ease: EASE, onComplete: () => { gsap.set(pImg, { clearProps: 'transform' }); photo.classList.add('drift'); } }, '<.1')
+        .from('.bt-chip', { x: -30, opacity: 0, duration: 1.1, ease: EASE }, '-=1.4');
+      new IntersectionObserver(es => photo.classList.toggle('vis', es[0].isIntersecting)).observe(photo);
+      // laptops: tiles lean toward the cursor with a soft sheen that follows it
+      if (!lite && matchMedia('(pointer: fine)').matches) document.querySelectorAll('.bento .pr').forEach(t => {
+        const rx = gsap.quickTo(t, 'rotationX', { duration: .6, ease: 'power3' }), ry = gsap.quickTo(t, 'rotationY', { duration: .6, ease: 'power3' });
+        t.addEventListener('mouseenter', () => gsap.set(t, { transformPerspective: 900 }));   // re-applied: the entrance clears transforms when it ends
+        t.addEventListener('mousemove', e => { const r = t.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+          rx((.5 - y) * 8); ry((x - .5) * 10); t.style.setProperty('--mx', x * 100 + '%'); t.style.setProperty('--my', y * 100 + '%'); });
+        t.addEventListener('mouseleave', () => { rx(0); ry(0); });
+      }); }
 
     // ---------- services: photo cards open up, stack and settle back ----------
     const cards = gsap.utils.toArray('.scard');
