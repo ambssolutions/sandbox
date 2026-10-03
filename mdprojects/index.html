@@ -87,7 +87,24 @@
   .header.solid { background: rgba(244,246,250,.97); box-shadow: 0 1px 0 var(--line); }
   .header.hide { transform: translateY(-100%); }
   .header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 92px; }
-  .logo img { height: 58px; width: auto; }
+  .logo { position: relative; display: block; }
+  .logo img { height: 58px; width: auto; display: block; transition: opacity .7s cubic-bezier(.22,1,.36,1); }
+  .logo .lw { position: absolute; left: 0; top: 0; opacity: 0; }
+  /* film header: over the hero video it turns light-on-dark with a soft scrim and a sky-blue hairline */
+  .header::before { content: ""; position: absolute; inset: 0 0 -60px; background: linear-gradient(rgba(9,13,26,.62), rgba(9,13,26,.28) 55%, transparent); opacity: 0; transition: opacity .8s cubic-bezier(.22,1,.36,1); pointer-events: none; }
+  .header::after { content: ""; position: absolute; left: var(--gutter); right: var(--gutter); bottom: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(144,204,240,.8), transparent); transform: scaleX(0); transition: transform 1.4s cubic-bezier(.22,1,.36,1); pointer-events: none; }
+  .header > .wrap { position: relative; }
+  .header.on-film:not(.menu-open)::before { opacity: 1; }
+  .header.on-film:not(.menu-open)::after { transform: scaleX(1); }
+  .header.on-film:not(.menu-open) .logo img:not(.lw) { opacity: 0; }
+  .header.on-film:not(.menu-open) .logo .lw { opacity: 1; }
+  .header.on-film:not(.menu-open) .menu-btn { color: #fff; }
+  .header .menu-btn { transition: color .6s; }
+  @media (min-width: 1001px) {
+    .header.on-film .nav a:not(.btn) { color: rgba(255,255,255,.82); }
+    .header.on-film .nav a:not(.btn):hover { color: #fff; }
+    .header.on-film .nav .btn { background: #fff; color: var(--ink); box-shadow: 0 10px 30px -10px rgba(0,0,0,.5); }
+  }
   .nav { display: flex; align-items: center; gap: 36px; }
   .nav a { text-decoration: none; font-size: .9rem; font-weight: 400; color: var(--muted); transition: color .3s; }
   .nav a:hover { color: var(--ink); }
@@ -479,6 +496,9 @@
   .w.hl { background: linear-gradient(100deg, var(--bronze), #5f9fd6); -webkit-background-clip: text; background-clip: text; color: transparent; }
   @media (max-width: 1000px) { .bento { grid-template-columns: 1fr 1fr; } .bt-photo { grid-row: auto; grid-column: 1 / 3; min-height: 360px; } .bt-p { grid-column: 1 / 3; } }
   @media (max-width: 760px) { .bento { grid-template-columns: 1fr; } .bt-photo, .bt-p { grid-column: auto; } .bt-photo { min-height: 300px; } .track li { font-size: .66rem; letter-spacing: .04em; } }
+  /* the About section slides up over the hero video as a rounded sheet */
+  .statement { position: relative; z-index: 3; margin-top: calc(-1 * clamp(26px, 3vw, 44px)); border-radius: clamp(26px, 3vw, 44px) clamp(26px, 3vw, 44px) 0 0; background: var(--bg); box-shadow: 0 -24px 50px -30px rgba(9,13,26,.55); }
+  .statement::before { content: ""; position: absolute; top: 12px; left: 50%; width: 44px; height: 4px; margin-left: -22px; border-radius: 4px; background: var(--line); }
   /* touch screens: no sticky "pressed" hover state */
   @media (hover: none) { .step:hover { box-shadow: var(--emb); } .btn-line:hover { box-shadow: var(--emb-sm); } }
   /* phones: tighter, crisper relief that stays inside the narrow gutters */
@@ -573,7 +593,7 @@
 
 <header class="header" id="header">
   <div class="wrap">
-    <a href="#top" class="logo" aria-label="MD Projects NZ, back to top"><img src="images/logo.png" alt="MD Projects NZ Ltd"></a>
+    <a href="#top" class="logo" aria-label="MD Projects NZ, back to top"><img src="images/logo.png" alt="MD Projects NZ Ltd"><img class="lw" src="images/logo-white.png" alt="" aria-hidden="true"></a>
     <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="nav"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 9h16M4 15h16"/></svg></button>
     <nav class="nav" id="nav">
       <a href="#services">Services</a>
@@ -882,11 +902,16 @@
   let lastY = 0;
   // header hides on a real scroll down and returns on a real scroll up; small wobbles are ignored
   let travel = 0;
+  // film state: set by the hero once its video fills the screen; until = the scroll position where the video leaves the header
+  window.__hdr = { film: false, until: 0 };
+  const syncHeader = () => { const y = scrollY, film = __hdr.film && y < __hdr.until;
+    header.classList.toggle('on-film', film); header.classList.toggle('solid', y > 40 && !film); return film; };
+  __hdr.sync = syncHeader;
   addEventListener('scroll', () => {
     const y = scrollY, d = y - lastY; lastY = y;
-    header.classList.toggle('solid', y > 40);
+    const film = syncHeader();
     travel = Math.sign(d) === Math.sign(travel) ? travel + d : d;
-    if (y < 600 || nav.classList.contains('open')) header.classList.remove('hide');
+    if (y < 600 || film || nav.classList.contains('open')) header.classList.remove('hide');
     else if (travel > 24) header.classList.add('hide');
     else if (travel < -48) header.classList.remove('hide');
   }, { passive: true });
@@ -1181,6 +1206,7 @@
       .from('#heroWord', { scale: .82, opacity: 0, duration: 1.4, ease: EASE }, 0)
       .from(['#haEb', '#haSub'], { y: 18, opacity: 0, duration: 1.1, stagger: .12, ease: EASE }, .35)
       .add(() => { vDived = true; vSync(); }, 1.9)
+      .set('#header .wrap > *', { y: -26, opacity: 0 }, 2.0)
       // HOMES and its lines drop away downward, softly accelerating, as the film fades up behind them
       .to('#haEb', { y: 70, autoAlpha: 0, duration: 1, ease: 'power2.in' }, 2.0)
       .to('#heroWord', { y: () => innerHeight * .32, opacity: 0, duration: 1.25, ease: 'power2.in' }, 2.1)
@@ -1188,6 +1214,8 @@
       .to('#heroMask', { autoAlpha: 0, duration: 1.2, ease: 'power1.inOut' }, 2.65)
       .fromTo('#heroVideo', { scale: 1.18, yPercent: -3 }, { scale: 1, yPercent: 0, duration: 3.2, ease: 'power3.out' }, 2.65)
       // then the next screen falls into place from above, top to bottom, easing to a soft stop
+      .add(() => { __hdr.film = true; __hdr.until = filmEnd(); __hdr.sync(); }, 2.75)
+      .to('#header .wrap > *', { y: 0, opacity: 1, duration: 1.4, stagger: .1, ease: 'power3.out' }, 2.8)
       .fromTo('.hb .eyebrow', { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: 'power2.out' }, 3.0)
       .fromTo('#h1 .li', { yPercent: -115 }, { yPercent: 0, duration: 2.1, stagger: .22, ease: 'power3.out' }, 3.15)
       .fromTo(['.hb-lede', '.hero-ctas', '#statsBadge', '#videoToggle'], { y: -70, opacity: 0 }, { y: 0, opacity: 1, duration: 1.9, stagger: .18, ease: 'power2.out', onStart: () => countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2) }, 3.4)
@@ -1239,6 +1267,8 @@
     };
     // hero film: plays only while visible. On phones it also waits until you have dived through the H:
     // until then the letters show the still poster, so no blend is ever composited over moving video
+    const filmEnd = () => document.querySelector('.statement').getBoundingClientRect().top + scrollY - document.getElementById('header').offsetHeight;
+    ScrollTrigger.addEventListener('refresh', () => { if (__hdr.film) { __hdr.until = filmEnd(); __hdr.sync(); } });
     const vHero = document.getElementById('heroVideo');
     let vUserPaused = false, vInView = true, vDived = !touch;
     const vSync = () => (vInView && vDived && !vUserPaused) ? vHero.play().catch(() => {}) : vHero.pause();
@@ -1289,7 +1319,7 @@
     const hTitle = splitDeep(document.getElementById('h1')).chars;
     let counted = false;
     gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: () => '+=' + Math.round(innerHeight * 1.7), pin: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true,
-      onUpdate: st => { hB.style.pointerEvents = st.progress > .62 ? 'auto' : 'none'; if (touch && (st.progress > .42) !== vDived) { vDived = st.progress > .42; vSync(); } if (!counted && st.progress > .7) { counted = true; countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2); } } } })
+      onUpdate: st => { hB.style.pointerEvents = st.progress > .62 ? 'auto' : 'none'; const f = st.progress > .52; if (f !== __hdr.film) { __hdr.film = f; __hdr.until = filmEnd(); __hdr.sync(); if (f) gsap.fromTo('#nav > a, .logo', { y: -14, opacity: 0 }, { y: 0, opacity: 1, duration: .9, stagger: .05, ease: 'power3.out', overwrite: true }); } if (touch && (st.progress > .42) !== vDived) { vDived = st.progress > .42; vSync(); } if (!counted && st.progress > .7) { counted = true; countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2); } } } })
       .fromTo(hA, { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -40, duration: .14, ease: 'none' }, 0)
       .fromTo(hWord, { scale: 1 }, { scale: () => hDive.s, duration: .55, ease: 'power4.in' }, 0)
       .fromTo([hMask, '#heroTint'], { autoAlpha: 1 }, { autoAlpha: 0, duration: .08, ease: 'none' }, .5)
