@@ -477,9 +477,9 @@
   /* scroll text extras */
   .marquee { overflow: hidden; padding: clamp(14px, 2.4vh, 34px) 0; background: var(--bg); position: relative; z-index: 1; }
   .mq-track { display: flex; align-items: center; width: max-content; will-change: transform; }
-  .mq-track span, .mq-track i { font: 600 clamp(4.6rem, min(12vw, 19vh), 11.5rem)/1 var(--f); letter-spacing: -.05em; white-space: nowrap; padding: 0 .28em; color: var(--ink); }
+  .mq-track span, .mq-track i { font: 600 clamp(1.7rem, min(8vw, 14vh), 8.5rem)/1 var(--f); letter-spacing: -.05em; white-space: nowrap; padding: 0 .28em; color: var(--ink); }
   .mq-track span.o { color: transparent; -webkit-text-stroke: 2px var(--bronze); }
-  .mq-track i { font-style: normal; font-size: clamp(2rem, min(3.6vw, 6vh), 3.6rem); color: var(--bronze); padding: 0 .1em; }
+  .mq-track i { font-style: normal; font-size: clamp(.9rem, min(3vw, 5vh), 3rem); color: var(--bronze); padding: 0 .1em; }
   .mq-b { background: var(--bg-2); }
   .marquee + section { padding-top: clamp(56px, 8vh, 110px); }
   section:has(+ .marquee) { padding-bottom: clamp(56px, 8vh, 110px); }
@@ -489,7 +489,7 @@
   .od > span { display: inline-block; height: 1em; overflow: hidden; line-height: 1; }
   .od > span > span { display: block; }
   .od > span > span > b { display: block; height: 1em; font-weight: inherit; }
-  @media (max-width: 760px) { .mq-track span, .mq-track i { font-size: 3rem; } .mq-track i { font-size: 1.5rem; } .marquee { padding: 6px 0; } .mq-track span.o { -webkit-text-stroke-width: 1.2px; } .mq-b .mq-track span:not(.o) { text-shadow: -1px -1px 1px rgba(255,255,255,.95), 1.5px 1.5px 2px rgba(90,108,148,.38); } }
+  @media (max-width: 760px) { .marquee { padding: 6px 0; } .mq-track span.o { -webkit-text-stroke-width: 1.2px; } .mq-b .mq-track span:not(.o) { text-shadow: -1px -1px 1px rgba(255,255,255,.95), 1.5px 1.5px 2px rgba(90,108,148,.38); } }
   @media (max-width: 760px) {
     .tm-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; margin: 30px calc(-1 * var(--gutter)) 0; padding: 12px var(--gutter) 26px; scrollbar-width: none; overscroll-behavior-x: contain; }
     .tm-grid::-webkit-scrollbar { display: none; }
@@ -889,6 +889,28 @@
   .p-stamp { justify-self: start; margin-top: 6px; font: 700 .64rem/1 var(--f); font-style: normal; letter-spacing: .2em; text-transform: uppercase; color: #3c54a8; padding: 7px 10px; border: 1.5px solid #3c54a8; border-radius: 6px; transform: rotate(-4deg); }
   .bt-q .ic-wrap, .bt-p .ic-wrap { display: none; }
   .t-rest { display: inline-block; background: linear-gradient(100deg, #3c54a8, #2b3f8f); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  /* "About" photo label sits on the centre line */
+  .bt-chip { left: 0 !important; right: 0; margin-inline: auto; width: max-content; max-width: calc(100% - 24px); text-align: center; justify-items: center; }
+  /* highlighted phrases: bold accent text everywhere, no coloured band behind them */
+  mark.hl { background: none !important; color: var(--bronze); font-weight: 500; }
+  /* planner */
+  .q-bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 16px; }
+  .q-bars i { height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; position: relative; }
+  .q-bars i::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, #3c54a8, #90ccf0); transform: scaleX(0); transform-origin: 0 50%; transition: transform .55s cubic-bezier(.2,.8,.2,1); }
+  .q-bars i.on::after { transform: scaleX(1); }
+  .quiz.done .answers { display: none; }
+  .q-actions .btn-ink { padding: 15px 24px; }
+  .opt { transition: border-color .3s, background .3s, transform .2s; }
+  .opt:active { transform: scale(.98); }
+  .stage { overflow: hidden; }
+  .confetti { position: absolute; left: 50%; top: 42%; width: 9px; height: 14px; border-radius: 2px; pointer-events: none; z-index: 5; }
+  @media (max-width: 1000px) {
+    .stage { position: sticky; top: 74px; z-index: 6; padding: 12px 14px 14px; box-shadow: 0 18px 40px -22px rgba(27,33,48,.45); }
+    .stage-note { display: none; }
+    .stage-bar { margin: 8px 0 10px; }
+    .stage-top { font-size: .86rem; }
+  }
+  .answers:empty { display: none; }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -1090,7 +1112,7 @@
           <svg id="pSvg" viewBox="0 0 800 440" role="img" aria-label="An empty section, ready to build"></svg>
           <p class="stage-note">Illustration only. We draw up your actual design with you.</p>
         </div>
-        <div class="quiz"><div class="answers" id="pAnswers" aria-label="Your answers"></div><div id="pCard" aria-live="polite"></div></div>
+        <div class="quiz"><div class="q-bars" id="pBars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="answers" id="pAnswers" aria-label="Your answers"></div><div id="pCard" aria-live="polite"></div></div>
       </div>
     </div>
   </section>
@@ -1307,7 +1329,7 @@
   (() => {
     const svg = document.getElementById('pSvg');
     if (!svg) return;
-    const card = document.getElementById('pCard'), answersEl = document.getElementById('pAnswers');
+    const card = document.getElementById('pCard'), answersEl = document.getElementById('pAnswers'), barsEl = document.getElementById('pBars');
     const statusEl = document.getElementById('pStatus'), pctEl = document.getElementById('pPct'), barEl = document.getElementById('pBar');
     const CLAD = { white: '#f3f2ee', dark: '#30353e', mixed: 'linear-gradient(90deg,#f3f2ee 50%,#30353e 50%)', cedar: '#b98250', brick: '#a65b45' };
     const roofIcon = {
@@ -1477,17 +1499,19 @@
       svg.setAttribute('aria-label', n2 ? 'Your home so far: ' + Q.filter(q => s[q.key]).map(q => label(q.key, s[q.key])).join(', ') : 'An empty section, ready to build');
       const pct = Math.round(n2 / Q.length * 100);
       pctEl.textContent = pct + '%'; barEl.style.width = pct + '%';
+      if (barsEl) [...barsEl.children].forEach((b, i) => b.classList.toggle('on', i < n2));
       const last = [...Q].reverse().find(q => s[q.key]);
       statusEl.textContent = last ? last.status : 'Your section is surveyed and ready';
     }
 
     function renderCard() {
       answersEl.innerHTML = Q.map((q, i) => s[q.key] ? `<button type="button" data-go="${i}" class="${i === step ? 'now' : ''}">${q.label}: ${label(q.key, s[q.key])}</button>` : '').join('');
+      card.parentElement.classList.toggle('done', step >= Q.length);
       if (step >= Q.length) {
         card.innerHTML = `<div class="q-top"><span class="label">Your home</span><button type="button" class="q-link" data-reset>Start over</button></div>
           <h3>Your home is ready for handover.</h3>
           <dl class="sum">${Q.map(q => `<dt>${q.label}</dt><dd>${label(q.key, s[q.key])}</dd>`).join('')}</dl>
-          <div class="q-actions"><a href="#contact" class="btn btn-amber" data-quote>Get a fixed-price quote <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><button type="button" class="q-link" data-go="0">Change answers</button></div>`;
+          <div class="q-actions"><a href="#contact" class="btn btn-ink" data-quote>Get a fixed-price quote <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><button type="button" class="q-link" data-go="0">Change answers</button></div>`;
         return;
       }
       const q = Q[step];
@@ -1497,6 +1521,21 @@
     }
 
     function update() { draw(); renderCard(); anim = -1; }
+    // the home is finished: a short burst of confetti in the logo colours (compositor-only transforms)
+    function confetti() {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const stage = document.querySelector('.stage'), cols = ['#3c54a8', '#90ccf0', '#1b2130', '#f4c64e', '#ffffff'];
+      for (let k = 0; k < 34; k++) {
+        const c = document.createElement('i'); c.className = 'confetti'; c.style.background = cols[k % cols.length];
+        if (k % 5 === 4) c.style.boxShadow = 'inset 0 0 0 1px rgba(27,33,48,.15)';
+        stage.appendChild(c);
+        const a = Math.random() * Math.PI * 2, d = 90 + Math.random() * 150, dx = Math.cos(a) * d, up = -60 - Math.random() * 120, r = (Math.random() - .5) * 900;
+        c.animate([{ transform: 'translate(-50%, 0) rotate(0deg) scale(.6)', opacity: 1 },
+                   { transform: `translate(calc(-50% + ${dx * .7}px), ${up}px) rotate(${r * .5}deg) scale(1)`, opacity: 1, offset: .35 },
+                   { transform: `translate(calc(-50% + ${dx}px), ${up + 260}px) rotate(${r}deg) scale(.9)`, opacity: 0 }],
+                  { duration: 1500 + Math.random() * 700, easing: 'cubic-bezier(.2,.7,.4,1)', delay: Math.random() * 120 }).onfinish = () => c.remove();
+      }
+    }
 
     card.addEventListener('click', e => {
       const opt = e.target.closest('.opt');
@@ -1506,7 +1545,7 @@
         draw(); anim = -1;
         card.querySelectorAll('.opt').forEach(b => b.setAttribute('aria-pressed', b === opt));
         clearTimeout(timer);
-        timer = setTimeout(() => { step = Math.min(step + 1, Q.length); while (step < Q.length && s[Q[step].key]) step++; renderCard(); }, 420);
+        timer = setTimeout(() => { step = Math.min(step + 1, Q.length); while (step < Q.length && s[Q[step].key]) step++; renderCard(); if (step >= Q.length) confetti(); }, 420);
         answersEl.innerHTML = Q.map((qq, i) => s[qq.key] ? `<button type="button" data-go="${i}">${qq.label}: ${label(qq.key, s[qq.key])}</button>` : '').join('');
         return;
       }
