@@ -1751,7 +1751,7 @@
 
     // ---------- statement ----------
     // statement: typed out letter by letter behind a blinking caret; pills pop open as the typing reaches them
-    // (the 1,000+ counts up), and the promise "Fixed prices. No surprises." is written by hand, word by word
+    // (the 1,000+ pops in whole), and the promise "Fixed prices. No surprises." is written by hand, word by word
     { const pills = [...st.querySelectorAll('.pill')], count = st.querySelector('.pill-num b'), units = [], script = [];
       words.forEach(w => {
         if (w.classList.contains('pill')) { units.push(w); return; }
@@ -1786,12 +1786,7 @@
             tl.fromTo(u, { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .5, ease: 'back.out(1.8)', onStart: () => moveCaret(u) }, at);
             const im = u.querySelector('img'); if (im) tl.fromTo(im, { scale: 1.5 }, { scale: 1, duration: .7, ease: 'power3.out' }, at);
             at += .14;
-            if (u === count.parentElement) {   // the typing still waits until the count lands on 1,000+
-              const o = { v: 0 }, to = +count.dataset.to;
-              tl.set(count, { textContent: '0+' }, at - .14);
-              tl.to(o, { v: to, duration: .9, ease: 'power3.out', onUpdate: () => { count.textContent = fmt(Math.round(o.v), count.dataset.fmt); } }, at - .08);
-              at += .85;
-            }
+            if (u === count.parentElement) at += .12;   // 1,000+ simply pops in whole; a short beat, then typing carries on
             return;
           }
           run.push(u);
