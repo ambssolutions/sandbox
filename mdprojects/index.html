@@ -2040,7 +2040,7 @@
     // ---------- fit to screen: on laptops and sideways phones, any section taller than the visible
     // screen is scaled down (CSS zoom on its inner wrap) so it reads in one view without scrolling ----------
     const fitSections = () => {
-      const wide = innerWidth > 1000 || (innerWidth > innerHeight && innerHeight < 561);
+      const wide = false;   // one consistent scale across the site (per-section fitting switched off)
       const hh = document.getElementById('header').offsetHeight, avail = innerHeight - hh;
       document.querySelectorAll('body > section:not(.hero):not(.services):not(.projects), main > section:not(.hero):not(.services):not(.projects)').forEach(sec => {
         const w = sec.id === 'build3d' ? sec.querySelector('.b3-ui') : sec.querySelector(':scope > .wrap');
