@@ -900,8 +900,7 @@
   btn.addEventListener('click', () => setMenu(!nav.classList.contains('open')));
   nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
   let lastY = 0;
-  // header hides on a real scroll down and returns on a real scroll up; small wobbles are ignored
-  let travel = 0;
+  // the header always stays on screen
   // film state: set by the hero once its video fills the screen; until = the scroll position where the video leaves the header
   window.__hdr = { film: false, until: 0 };
   const syncHeader = () => { const y = scrollY, film = __hdr.film && y < __hdr.until;
@@ -910,10 +909,7 @@
   addEventListener('scroll', () => {
     const y = scrollY, d = y - lastY; lastY = y;
     const film = syncHeader();
-    travel = Math.sign(d) === Math.sign(travel) ? travel + d : d;
-    if (y < 600 || film || nav.classList.contains('open')) header.classList.remove('hide');
-    else if (travel > 24) header.classList.add('hide');
-    else if (travel < -48) header.classList.remove('hide');
+
   }, { passive: true });
 
   // statement words
