@@ -1019,6 +1019,9 @@
   [data-theme="dark"] .deck .tm.tm-back { box-shadow: 0 20px 34px -16px rgba(0,0,0,.7); }
   /* second marquee: solid words read clearly (no faint embossed white) */
   .mq-b .mq-track span:not(.o) { color: var(--ink) !important; text-shadow: none !important; }
+  /* dark mode: anything on a white surface keeps dark text */
+  [data-theme="dark"] .btn-white, [data-theme="dark"] .tm-q + * .btn-white { color: #1b2130; }
+  @media (max-width: 1000px) { [data-theme="dark"] .nav .btn { color: #1b2130; } }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
