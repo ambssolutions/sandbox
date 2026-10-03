@@ -838,6 +838,11 @@
   .sec-sky mark.hl, .sec-royal mark.hl, .founder mark.hl { background: none !important; font-weight: 500; }
   .sec-sky mark.hl { color: #1f2f72; }
   .sec-royal mark.hl, .founder mark.hl { color: #fff; }
+  /* hero heading changes with each photo in the background video */
+  .h1-stack { display: grid; justify-items: center; }
+  .h1-stack > * { grid-area: 1 / 1; }
+  .h1-alt { font: 500 clamp(2.9rem, min(5.4vw, 10vh), 6.6rem)/.98 var(--f); letter-spacing: -.05em; margin: 22px 0 0; color: #fff; text-shadow: 0 2px 30px rgba(0,0,0,.25); visibility: hidden; text-wrap: balance; }
+  .h1-alt em { font-style: normal; color: #a8d8f6; }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -889,7 +894,7 @@
         <div class="wrap hb-in">
           <div class="hb-main">
             <span class="eyebrow hb-x">Expert builders · Proven results</span>
-            <h1 id="h1">Homes built<br><em>beautifully.</em></h1>
+            <div class="h1-stack"><h1 id="h1">Homes built<br><em>beautifully.</em></h1><p class="h1-alt" aria-hidden="true"><span class="ln"><span class="li">Modern design,</span></span><span class="ln"><span class="li"><em>built to last.</em></span></span></p><p class="h1-alt" aria-hidden="true"><span class="ln"><span class="li">Whole streets,</span></span><span class="ln"><span class="li"><em>transformed.</em></span></span></p><p class="h1-alt" aria-hidden="true"><span class="ln"><span class="li">Duplexes at a</span></span><span class="ln"><span class="li"><em>fixed price.</em></span></span></p><p class="h1-alt" aria-hidden="true"><span class="ln"><span class="li">Your dream,</span></span><span class="ln"><span class="li"><em>our project.</em></span></span></p></div>
             <p class="hb-lede hb-x">Over 1,000 Auckland homes delivered at a fixed price, on time and with complete transparency.</p>
             <div class="hero-ctas hb-x">
               <a href="#contact" class="btn btn-light">Start your project <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
@@ -2013,6 +2018,27 @@
       gsap.from(q('.fd-vals li'), { y: 18, opacity: 0, duration: .9, stagger: .09, ease: EASE, scrollTrigger: { trigger: '.fd-vals', start: 'top 90%', once: true } });
       gsap.from(q('.fd-vals .fd-ic'), { scale: 0, rotation: -40, duration: .7, stagger: .09, delay: .2, ease: 'back.out(2.5)', scrollTrigger: { trigger: '.fd-vals', start: 'top 90%', once: true } });
       gsap.from(q('.fd-ctas .btn'), { y: 18, opacity: 0, duration: 1, stagger: .1, ease: EASE, scrollTrigger: { trigger: '.fd-ctas', start: 'top 94%', once: true } }); }
+
+    // hero heading follows the video: each photo in the loop gets its own line
+    { const v = document.getElementById('heroVideo'), h1 = document.getElementById('h1'), alts = [...document.querySelectorAll('.h1-alt')];
+      const els = [h1, ...alts], CUTS = [6, 11.8, 17.6, 23.4];
+      let cur = 0;
+      const ready = () => {
+        if (!window.__hdr || !__hdr.film) return false;
+        if (lite) { const li = h1.querySelectorAll('.li'); return li.length && gsap.getProperty(li[li.length - 1], 'yPercent') > -1; }
+        const ch = h1.querySelectorAll('.ch'); return !ch.length || gsap.getProperty(ch[ch.length - 1], 'opacity') > .99;
+      };
+      const parts = el => el === h1 ? [h1] : el.querySelectorAll('.li');
+      const show = k => {
+        if (k === cur) return; const out = els[cur], inn = els[k]; cur = k;
+        gsap.killTweensOf([h1, ...alts.flatMap(a => [...a.querySelectorAll('.li')])]);
+        if (out === h1) gsap.to(h1, { yPercent: -14, opacity: 0, duration: .55, ease: 'power2.in' });
+        else gsap.to(parts(out), { yPercent: -110, duration: .55, stagger: .08, ease: 'power2.in', onComplete: () => { if (els[cur] !== out) out.style.visibility = 'hidden'; } });
+        if (inn === h1) gsap.fromTo(h1, { yPercent: 14, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .9, delay: .45, ease: 'power3.out' });
+        else { inn.style.visibility = 'visible'; gsap.fromTo(parts(inn), { yPercent: 110 }, { yPercent: 0, duration: .9, stagger: .1, delay: .45, ease: 'power3.out' }); }
+      };
+      const reset = () => { if (!cur) return; gsap.killTweensOf([h1, ...alts.flatMap(a => [...a.querySelectorAll('.li')])]); alts.forEach(a => a.style.visibility = 'hidden'); gsap.set(h1, { yPercent: 0, opacity: 1 }); cur = 0; };
+      v.addEventListener('timeupdate', () => { if (!ready()) return reset(); show(CUTS.filter(c => v.currentTime >= c).length); }); }
 
     // ---------- FAQ, contact, footer ----------
     gsap.from('details', { y: 30, opacity: 0, duration: 1.2, stagger: .06, ease: EASE, scrollTrigger: { trigger: '.faq-grid', start: 'top 82%' } });
