@@ -1054,6 +1054,43 @@
   .fd-copy { max-width: 660px; }
   @media (min-width: 1001px) { .fd-vals { flex-wrap: nowrap; gap: 18px; } .fd-vals li { white-space: nowrap; } }
   @media (max-width: 760px) { .fd-role .fd-sep { display: none; } .fd-role .fd-since { display: block; margin-top: 4px; letter-spacing: .1em; font-size: .72rem; } }
+
+  /* ===== phones held sideways: short, wide screens get their own layout ===== */
+  @media (orientation: landscape) and (max-height: 560px) {
+    .header .wrap { height: 60px; } .logo img { height: 38px; } .theme-btn { width: 36px; height: 36px; } .menu-btn { width: 40px; height: 40px; }
+    .hero-pin { min-height: 0; }
+    .hb { padding-bottom: 46px; }
+    .hb .eyebrow { display: none; }
+    .hero h1, .h1-alt { font-size: min(11vh, 5.6vw) !important; margin-top: 0; }
+    .hb-lede { margin: 8px auto 12px; font-size: .88rem; max-width: 62ch; }
+    .hb-in { gap: 10px; } .hero-ctas .btn { padding: 11px 20px; }
+    section { padding-block: 64px; }
+    /* services book: photo left, page right */
+    .pbk-track { height: calc(100svh - 60px + var(--pages) * 85svh); }
+    .pbk-sticky { top: 60px; height: calc(100svh - 60px); padding-bottom: 4px; }
+    .pbk-sticky .pbk { height: calc(100svh - 60px - 72px); }
+    .pbk-sticky .pbk-nav { margin-top: 8px; gap: 16px; } .pbk-nav .arrow { width: 42px; height: 42px; }
+    .pbk-front { grid-template-rows: 1fr; grid-template-columns: 46% 1fr; }
+    .pbk-front .bk-sd { display: none; }
+    .pbk-front .bk-tag { bottom: auto; top: 12px; }
+    .pbk-front .bk-paper { padding: 12px 24px; justify-content: center; }
+    .pbk .bk-no { font-size: 1.7rem; } .pbk .bk-paper h3 { font-size: 1.3rem; margin: 4px 0 6px; } .pbk .bk-paper p { font-size: .84rem; line-height: 1.5; }
+    .pbk .bk-chips { margin: 10px 0 12px; } .pbk .bk-more { padding: 9px 16px; font-size: .82rem; }
+    /* stories: bubbles in a column beside a wider viewer */
+    .stories { grid-template-columns: auto auto; justify-content: center; align-items: center; gap: 20px; }
+    .st-rings { flex-direction: column; gap: 10px; }
+    .st-ring small { display: none; } .st-av { width: 44px; height: 44px; }
+    .st-view { height: calc(100svh - 96px); max-height: none; width: auto; aspect-ratio: 4 / 3.1; margin: 0; }
+    /* planner: picture and questions side by side again */
+    .planner-grid { grid-template-columns: 1.1fr 1fr; }
+    .stage { position: sticky; top: 72px; z-index: 1; }
+    .stage-note { display: none; }
+    /* founder: photo beside the words, sized to the screen height */
+    .fd-grid { grid-template-columns: auto 1fr; }
+    .fd-art { width: calc((100svh - 110px) * .8); margin: 0 0 26px; }
+    /* numbers house fits the height */
+    .house { width: min(860px, 100%, 150vh); }
+  }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
