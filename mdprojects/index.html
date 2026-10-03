@@ -843,6 +843,12 @@
   .h1-stack > * { grid-area: 1 / 1; }
   .h1-alt { font: 500 clamp(2.9rem, min(5.4vw, 10vh), 6.6rem)/.98 var(--f); letter-spacing: -.05em; margin: 22px 0 0; color: #fff; text-shadow: 0 2px 30px rgba(0,0,0,.25); visibility: hidden; text-wrap: balance; }
   .h1-alt em { font-style: normal; color: #a8d8f6; }
+  /* stories: the whole viewer takes taps and sideways swipes, page still scrolls vertically */
+  .st-view { touch-action: pan-y; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  .st-view img { pointer-events: none; -webkit-user-drag: none; }
+  .st-tap { pointer-events: none; }
+  .st-ring { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  .st-view.held .st-cap { opacity: .35; transition: opacity .25s; }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -2155,8 +2161,9 @@
         keys: '<svg class="fx-key" viewBox="0 0 64 64" aria-hidden="true"><circle cx="20" cy="32" r="12" fill="none" stroke="#fff" stroke-width="5"/><path d="M32 32h26M48 32v9M56 32v6" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>' + Array.from({ length: 8 }, () => '<i class="fx-spark"></i>').join('')
       };
       slides.forEach(sl => sl.querySelector('.st-fx').innerHTML = fxHTML[sl.dataset.fx]);
-      const play = sl => {   // the step's own animation
-        const im = sl.querySelector('.st-img'), fx = sl.querySelector('.st-fx'), cap = sl.querySelector('.st-cap'), tl = gsap.timeline();
+      const play = sl => {   // the step's own animation (any earlier run of it is stopped first)
+        if (sl._tl) sl._tl.kill();
+        const im = sl.querySelector('.st-img'), fx = sl.querySelector('.st-fx'), cap = sl.querySelector('.st-cap'), tl = sl._tl = gsap.timeline();
         tl.fromTo(cap.children, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .7, stagger: .08, ease: 'power3.out' }, .35);
         switch (sl.dataset.fx) {
           case 'scan': tl.fromTo(im, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1.6, ease: 'power2.inOut' }, 0).fromTo(fx.firstChild, { xPercent: 0, opacity: 1 }, { x: () => sl.offsetWidth, opacity: 0, duration: 1.6, ease: 'power2.inOut' }, 0); break;
@@ -2176,8 +2183,25 @@
         if (bar) bar.kill();
         bar = gsap.fromTo(bars[k], { scaleX: 0 }, { scaleX: 1, duration: DUR, ease: 'none', paused: !visible, onComplete: () => show(k + 1) });
       };
-      wrap.querySelector('.st-next').addEventListener('click', () => show(cur + 1));
-      wrap.querySelector('.st-prev').addEventListener('click', () => show(cur - 1));
+      // like Instagram: tap the left third to go back, anywhere else to go on, swipe either way, press and hold to pause
+      const view = wrap.querySelector('.st-view');
+      let sx = 0, sy = 0, t0 = 0, held = false, holdT = 0, down = false;
+      view.addEventListener('pointerdown', e => { down = true; sx = e.clientX; sy = e.clientY; t0 = performance.now(); held = false;
+        clearTimeout(holdT); holdT = setTimeout(() => { if (down) { held = true; bar && bar.pause(); view.classList.add('held'); } }, 280); });
+      const end = e => { if (!down) return; down = false; clearTimeout(holdT); view.classList.remove('held');
+        if (held) { if (visible && bar) bar.play(); return; }
+        const dx = e.clientX - sx, dy = e.clientY - sy;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) return show(cur + (dx < 0 ? 1 : -1));
+        if (Math.abs(dx) < 12 && Math.abs(dy) < 12 && performance.now() - t0 < 600) { const r = view.getBoundingClientRect(); show(cur + (e.clientX - r.left < r.width / 3 ? -1 : 1)); } };
+      view.addEventListener('pointermove', e => { if (down && !held && Math.hypot(e.clientX - sx, e.clientY - sy) > 10) clearTimeout(holdT); });
+      view.addEventListener('pointerup', end);
+      view.addEventListener('pointercancel', () => { down = false; clearTimeout(holdT); view.classList.remove('held'); if (held && visible && bar) bar.play(); });
+      // keyboard users still get the two buttons
+      wrap.querySelector('.st-next').addEventListener('click', e => { if (e.detail === 0) show(cur + 1); });
+      wrap.querySelector('.st-prev').addEventListener('click', e => { if (e.detail === 0) show(cur - 1); });
+      // load every story photo before the viewer arrives, so no step ever opens on an empty frame
+      new IntersectionObserver((es, o) => { if (!es[0].isIntersecting) return; o.disconnect();
+        wrap.querySelectorAll('img').forEach(im => { im.loading = 'eager'; if (im.decode) im.decode().catch(() => {}); }); }, { rootMargin: '1200px 0px' }).observe(wrap);
       rings.forEach((r, i) => r.addEventListener('click', () => show(i)));
       new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && cur < 0) show(0); else if (bar) visible ? bar.play() : bar.pause(); }, { threshold: .35 }).observe(wrap.querySelector('.st-view'));
       gsap.from(wrap.querySelectorAll('.st-ring'), { scale: .4, opacity: 0, duration: .7, stagger: .07, ease: 'back.out(2)', scrollTrigger: { trigger: wrap, start: 'top 85%', once: true } });
