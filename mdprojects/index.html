@@ -1022,6 +1022,38 @@
   /* dark mode: anything on a white surface keeps dark text */
   [data-theme="dark"] .btn-white, [data-theme="dark"] .tm-q + * .btn-white { color: #1b2130; }
   @media (max-width: 1000px) { [data-theme="dark"] .nav .btn { color: #1b2130; } }
+  /* ===== founder, clean edition: one calm column, the quote leads ===== */
+  .fd-bg, .fd-arch-line, .fd-qm { display: none !important; }
+  .fd-grid { gap: clamp(44px, 6vw, 110px); }
+  .fd-art { width: min(100%, 420px); }
+  .fd-photo { border-radius: 999px 999px 26px 26px; box-shadow: 0 40px 80px -40px rgba(0,0,0,.8), 0 0 0 1px rgba(144,204,240,.22); }
+  .fd-plaque { right: 50%; transform: translateX(50%); bottom: -26px; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 12px 18px 12px 16px; border-radius: 999px; white-space: nowrap; text-align: left; }
+  .fd-plaque::before { display: none; }
+  .fd-plaque b { margin: 0; font-size: 2rem; }
+  .fd-plaque small { order: -1; display: none; }
+  .fd-plaque span { font-size: .72rem; line-height: 1.25; }
+  .fd-plaque span::before { content: "Success in 2024"; display: block; font: 600 .58rem/1.2 var(--f); letter-spacing: .18em; text-transform: uppercase; color: var(--bronze); margin-bottom: 2px; }
+  .fd-plaque span br { display: none; }
+  .fd-copy { max-width: 600px; margin-inline: auto; }
+  .fd-role { margin-top: 12px; font-size: .82rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+  .fd-quote { margin: 34px 0 0; padding-top: 30px; border-top: 1px solid rgba(144,204,240,.18); }
+  .fd-quote p { font-size: clamp(1.35rem, min(2vw, 3.8vh), 1.95rem); line-height: 1.4; }
+  .fd-sign { margin: 18px 0 0; }
+  .fd-copy .lede { margin-top: 26px; font-size: 1rem; color: rgba(255,255,255,.66); max-width: 48ch; }
+  .fd-copy .lede mark.hl { color: #fff; }
+  .fd-vals { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 22px; margin-top: 26px; }
+  .fd-vals li { padding: 0; border: 0; background: none; border-radius: 0; gap: 7px; font-size: .84rem; color: rgba(255,255,255,.78); }
+  .fd-vals svg { width: 17px; height: 17px; }
+  .fd-ctas { flex-direction: column; align-items: center; gap: 14px; margin-top: 32px; }
+  .fd-ctas .btn { flex: none !important; }
+  .fd-call { font-size: .9rem; color: rgba(255,255,255,.6); text-decoration: none; }
+  .fd-call b { color: #fff; font-weight: 500; border-bottom: 1px solid rgba(144,204,240,.5); padding-bottom: 1px; }
+  @media (max-width: 1000px) { .fd-art { width: min(78%, 380px); margin: 0 auto 26px; } }
+  @media (max-width: 760px) { .fd-art { width: 80%; margin-right: auto; } .fd-plaque { bottom: -22px; } .fd-plaque b { font-size: 1.7rem; } .fd-vals { gap: 10px 18px; } .fd-vals li { font-size: .8rem; } }
+  [data-theme="dark"] .fd-plaque span { color: #5d6677; }
+  .fd-copy { max-width: 660px; }
+  @media (min-width: 1001px) { .fd-vals { flex-wrap: nowrap; gap: 18px; } .fd-vals li { white-space: nowrap; } }
+  @media (max-width: 760px) { .fd-role .fd-sep { display: none; } .fd-role .fd-since { display: block; margin-top: 4px; letter-spacing: .1em; font-size: .72rem; } }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -1300,17 +1332,17 @@
       <div class="fd-art">
         <div class="fd-arch-line" aria-hidden="true"></div>
         <div class="fd-photo"><img src="images/team.webp" srcset="images/team-sm.webp 900w, images/team.webp 1440w" sizes="(max-width: 1000px) 84vw, 470px" alt="Maninder Singh (right) celebrating 98 homes completed in 2024" loading="lazy" decoding="async"></div>
-        <div class="fd-plaque"><small>Success in 2024</small><b data-to="98" data-fmt="">98</b><span>homes completed<br>in one year</span></div>
+        <div class="fd-plaque"><small>Success in 2024</small><b data-to="98" data-fmt="">98</b><span>homes completed in one year</span></div>
       </div>
       <div class="fd-copy">
         <span class="eyebrow">Meet the founder</span>
         <h2 style="margin-top:22px">Maninder <em>Singh.</em></h2>
-        <p class="fd-role">Founder, MD Projects NZ · Building Auckland since 2020</p>
+        <p class="fd-role">Founder &amp; Director<span class="fd-sep"> · </span><span class="fd-since">Building Auckland since 2020</span></p>
         <blockquote class="fd-quote"><svg class="fd-qm" viewBox="0 0 48 36" aria-hidden="true"><path d="M0 36V22C0 9 7 2 19 0l2 5C14 7 11 12 11 18h9v18Z M27 36V22C27 9 34 2 46 0l2 5c-7 2-10 7-10 13h9v18Z"/></svg><p><em><span class="fw">Your</span> <span class="fw">dream</span> <span class="fw">is</span> <span class="fw">our</span> <span class="fw">project.</span></em> <span class="fw">From</span> <span class="fw">house</span> <span class="fw">renovations</span> <span class="fw">to</span> <span class="fw">over</span> <span class="fw">1,000</span> <span class="fw">builds,</span> <span class="fw">delivered</span> <span class="fw">to</span> <span class="fw">top-tier</span> <span class="fw">quality,</span> <span class="fw">within</span> <span class="fw">budget</span> <span class="fw">and</span> <span class="fw">on</span> <span class="fw">schedule.</span></p></blockquote>
         <div class="fd-sign" aria-hidden="true"><span class="fd-sig">Maninder Singh</span><svg viewBox="0 0 320 18" preserveAspectRatio="none"><path pathLength="1" d="M2 13 C60 3 140 2 210 9 S296 16 318 4"/></svg></div>
         <p class="lede">Maninder has years of experience in the construction sector, leading residential projects for large companies and private clients. His mission: <mark class="hl">high-quality, affordable homes</mark> delivered with precision, efficiency and excellence.</p>
         <ul class="fd-vals"><li><span class="fd-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>Integrity</li><li><span class="fd-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>Transparency</li><li><span class="fd-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></span>Quality craftsmanship</li><li><span class="fd-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>Client-focused service</li></ul>
-        <div class="fd-ctas"><a class="btn btn-light btn-live" href="#contact"><span class="shine">Start your project</span> <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a><a class="btn btn-ghost" href="tel:0210590409">Call 021 059 0409</a></div>
+        <div class="fd-ctas"><a class="btn btn-light btn-live" href="#contact"><span class="shine">Start your project</span> <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a><a class="fd-call" href="tel:0210590409">or call <b>021 059 0409</b></a></div>
       </div>
     </div>
   </section>
@@ -2283,19 +2315,17 @@
       gsap.timeline({ scrollTrigger: { trigger: '.fd-art', start: 'top 80%', once: true } })
         .from('.fd-photo', { yPercent: 14, opacity: 0, duration: 1.3, ease: EASE })
         .from('.fd-photo img', { scale: 1.22, duration: 2, ease: EASE }, '<')
-        .from('.fd-arch-line', { x: 0, y: 0, opacity: 0, duration: 1.1, ease: 'power3.out' }, '<.45')
-        .from('.fd-plaque', { y: 46, rotation: -9, scale: .8, opacity: 0, duration: 1, ease: 'back.out(1.8)' }, '<.2')
+        .from('.fd-plaque', { y: 30, scale: .8, opacity: 0, duration: .9, ease: 'back.out(1.8)' }, '<.35')
         .add(() => countUp(q('.fd-plaque b'), 1.6), '<.1');
       gsap.from('.fd-role', { y: 14, opacity: 0, duration: 1, ease: EASE, scrollTrigger: { trigger: '.fd-role', start: 'top 90%', once: true } });
       const words = q('.fd-quote .fw'); gsap.set(words, { opacity: .16 });
       gsap.timeline({ scrollTrigger: { trigger: '.fd-quote', start: 'top 82%', once: true } })
-        .from('.fd-qm', { scale: 0, rotation: -30, transformOrigin: '40% 60%', duration: .9, ease: 'back.out(2)' })
-        .to(words, { opacity: 1, duration: .4, stagger: .06, ease: 'power1.out' }, '<.15')
+        .to(words, { opacity: 1, duration: .4, stagger: .06, ease: 'power1.out' })
         .fromTo('.fd-sig', { clipPath: 'inset(-20% 100% -20% 0)' }, { clipPath: 'inset(-20% 0% -20% 0)', duration: 1.3, ease: 'power1.inOut' }, '-=.2')
         .fromTo('.fd-sign path', { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: .6, ease: 'power2.out' }, '-=.15');
       gsap.from(q('.fd-vals li'), { y: 18, opacity: 0, duration: .9, stagger: .09, ease: EASE, scrollTrigger: { trigger: '.fd-vals', start: 'top 90%', once: true } });
       gsap.from(q('.fd-vals .fd-ic'), { scale: 0, rotation: -40, duration: .7, stagger: .09, delay: .2, ease: 'back.out(2.5)', scrollTrigger: { trigger: '.fd-vals', start: 'top 90%', once: true } });
-      gsap.from(q('.fd-ctas .btn'), { y: 18, opacity: 0, duration: 1, stagger: .1, ease: EASE, scrollTrigger: { trigger: '.fd-ctas', start: 'top 94%', once: true } }); }
+      gsap.from(q('.fd-ctas > *'), { y: 18, opacity: 0, duration: 1, stagger: .1, ease: EASE, scrollTrigger: { trigger: '.fd-ctas', start: 'top 94%', once: true } }); }
 
     // hero heading follows the video: each photo in the loop gets its own line
     { const v = document.getElementById('heroVideo'), h1 = document.getElementById('h1'), alts = [...document.querySelectorAll('.h1-alt')];
