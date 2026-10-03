@@ -2213,13 +2213,14 @@
     // and a ring around the initials counts down to the next one
     { const deck = document.getElementById('tmGrid'), cards = [...deck.querySelectorAll('.tm')], N = cards.length, DUR = 7.5;
       const ctrl = document.getElementById('tmCtrl'), countB = ctrl.querySelector('.tm-count b');
-      cards.forEach(c => { const bq = c.querySelector('blockquote'); bq.innerHTML = bq.textContent.trim().split(/\s+/).map(w => `<span class="tw">${w}</span>`).join(' '); });
+      if (!lite) cards.forEach(c => { const bq = c.querySelector('blockquote'); bq.innerHTML = bq.textContent.trim().split(/\s+/).map(w => `<span class="tw">${w}</span>`).join(' '); });
       const POS = [{ y: 0, scale: 1, opacity: 1, rotation: 0 }, { y: 26, scale: .94, opacity: .7, rotation: 0 }, { y: 50, scale: .88, opacity: .35, rotation: 0 }, { y: 64, scale: .82, opacity: 0, rotation: 0 }];
       let order = cards.map((_, i) => i), ring = null, busy = false, visible = false, held = false, started = false;
       const place = (dur) => order.forEach((ci, p) => { const c = cards[ci]; c.style.zIndex = N - p; c.setAttribute('aria-hidden', p ? 'true' : 'false');
         gsap.to(c, { ...POS[Math.min(p, 3)], x: 0, duration: dur, ease: 'power3.out', overwrite: 'auto' }); });
       const reveal = c => {
-        gsap.fromTo(c.querySelectorAll('.tw'), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .5, stagger: .022, ease: 'power2.out', delay: .15 });
+        if (lite) gsap.fromTo(c.querySelector('blockquote'), { opacity: 0, y: 14, clipPath: 'inset(0 0 100% 0)' }, { opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', duration: .9, ease: 'power2.out', delay: .15 });
+        else gsap.fromTo(c.querySelectorAll('.tw'), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .5, stagger: .022, ease: 'power2.out', delay: .15 });
         gsap.fromTo(c.querySelector('.tm-q'), { scale: 0, rotation: -30 }, { scale: 1, rotation: 0, duration: .7, ease: 'back.out(2.4)', transformOrigin: '50% 70%' });
         gsap.fromTo(c.querySelectorAll('figcaption b, figcaption small'), { opacity: 0, x: 16 }, { opacity: 1, x: 0, duration: .6, stagger: .08, delay: .35, ease: 'power3.out' });
       };
@@ -2228,7 +2229,7 @@
       const go = d => {
         if (busy) return; busy = true;
         if (d > 0) { const out = cards[order[0]]; order.push(order.shift());
-          gsap.to(out, { x: () => -deck.offsetWidth * .9, y: -10, rotation: -9, opacity: 0, duration: .55, ease: 'power2.in', onComplete: () => { gsap.set(out, { x: 0, ...POS[3] }); } });
+          gsap.to(out, { x: () => -deck.offsetWidth * .9, y: -10, rotation: lite ? -4 : -9, opacity: 0, duration: .55, ease: 'power2.in', onComplete: () => { gsap.set(out, { x: 0, ...POS[3] }); } });
           order.forEach((ci, p) => { if (p < N - 1) { const c = cards[ci]; c.style.zIndex = N - p; gsap.to(c, { ...POS[Math.min(p, 3)], x: 0, duration: .75, delay: .12, ease: 'power3.out' }); } });
         } else { order.unshift(order.pop()); const inn = cards[order[0]];
           gsap.set(inn, { x: -deck.offsetWidth * .9, y: -10, rotation: -9, opacity: 0 }); inn.style.zIndex = N + 1;
@@ -2238,7 +2239,7 @@
         countB.textContent = String(order[0] + 1).padStart(2, '0');
         reveal(front); timer(front); gsap.delayedCall(.7, () => { busy = false; });
       };
-      place(0); gsap.set(cards[order[0]].querySelectorAll('.tw'), { opacity: 0 });
+      place(0); gsap.set(lite ? cards[order[0]].querySelector('blockquote') : cards[order[0]].querySelectorAll('.tw'), { opacity: 0 });
       ctrl.addEventListener('click', e => { const b = e.target.closest('.tm-arrow'); if (b) go(+b.dataset.d); });
       // swipe sideways, press and hold (or hover with a mouse) to pause
       let sx = 0, sy = 0, down = false, ht = 0;
