@@ -1091,6 +1091,29 @@
     /* numbers house fits the height */
     .house { width: min(860px, 100%, 150vh); }
   }
+
+  /* ===== buttons: embossed gradients ===== */
+  :root { --btn-hi: linear-gradient(180deg, #6a86dc 0%, #4762bb 48%, #33489a 100%);
+    --btn-emb: inset 0 1px 0 rgba(255,255,255,.45), inset 0 -2px 0 rgba(12,22,66,.35), 0 1px 0 rgba(255,255,255,.4), 0 12px 24px -10px rgba(36,56,130,.65), 0 3px 6px -2px rgba(36,56,130,.4);
+    --btn-press: inset 0 2px 6px rgba(12,22,66,.5), inset 0 -1px 0 rgba(255,255,255,.2), 0 2px 4px -2px rgba(36,56,130,.4);
+    --btn2: linear-gradient(180deg, #ffffff 0%, #eef2f8 55%, #dfe6f1 100%);
+    --btn2-emb: inset 0 1px 0 #fff, inset 0 -2px 0 rgba(90,108,148,.18), 0 10px 22px -12px rgba(27,33,48,.45), 0 2px 5px -2px rgba(27,33,48,.25); }
+  .btn-light, .btn-ink, .nav .btn, .nav .btn-line, .bk-more, .form .btn, .q-actions .btn-ink,
+  .header.on-film .nav .btn, [data-theme="dark"] .btn-ink, [data-theme="dark"] .btn-light, [data-theme="dark"] .bk-more, [data-theme="dark"] .header.on-film .nav .btn {
+    background: var(--btn-hi) !important; color: #fff !important; border: 0 !important; box-shadow: var(--btn-emb) !important;
+    text-shadow: 0 -1px 0 rgba(12,22,66,.35); transition: transform .2s, box-shadow .25s, filter .25s !important; }
+  .btn-light:hover, .btn-ink:hover, .nav .btn:hover, .bk-more:hover, .form .btn:hover { filter: brightness(1.08) saturate(1.05); }
+  .btn-light:active, .btn-ink:active, .nav .btn:active, .bk-more:active, .form .btn:active { transform: translateY(1px); box-shadow: var(--btn-press) !important; filter: none; }
+  .btn-live .shine, [data-theme="dark"] .btn-live .shine, [data-theme="dark"] .btn-light .shine { background-image: linear-gradient(100deg, #fff 0 30%, #dbe8ff 41%, #9fd6ff 50%, #dbe8ff 59%, #fff 70% 100%) !important; text-shadow: none; }
+  .btn-ghost { background: linear-gradient(180deg, rgba(255,255,255,.26), rgba(255,255,255,.06)) !important; border: 1px solid rgba(255,255,255,.4) !important; color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.45), inset 0 -2px 0 rgba(0,0,0,.18), 0 10px 22px -12px rgba(0,0,0,.55) !important; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  .btn-ghost:active { transform: translateY(1px); box-shadow: inset 0 2px 6px rgba(0,0,0,.35) !important; }
+  .tm-arrow, .pbk-nav .arrow, .theme-btn:not(.header.on-film .theme-btn) { background: var(--btn2) !important; color: #1b2130 !important; box-shadow: var(--btn2-emb) !important; }
+  .tm-arrow:active, .pbk-nav .arrow:active { transform: translateY(1px); box-shadow: inset 0 2px 6px rgba(27,33,48,.3) !important; }
+  [data-theme="dark"] .tm-arrow, [data-theme="dark"] .pbk-nav .arrow, [data-theme="dark"] .theme-btn:not(.header.on-film .theme-btn) { background: linear-gradient(180deg, #2a3452, #1a2136) !important; color: #e8edf6 !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 -2px 0 rgba(0,0,0,.4), 0 10px 22px -12px rgba(0,0,0,.8) !important; }
+  .pbk-nav .arrow:disabled { opacity: .4; }
+  .scard .more { color: var(--bronze); }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
