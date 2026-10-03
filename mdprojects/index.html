@@ -9,6 +9,7 @@
 <meta name="description" content="MD Projects NZ: Auckland residential builders. Over 1,000 homes delivered at a fixed price, on time and with complete transparency.">
 <meta name="theme-color" content="#f4f6fa">
 <link rel="preload" href="images/hero-poster.webp" as="image">
+<link rel="preload" href="fonts/caveat-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/poppins-300.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/poppins-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -20,6 +21,7 @@
   @font-face { font-family: "Poppins"; src: url("fonts/poppins-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
   @font-face { font-family: "Poppins"; src: url("fonts/poppins-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
   @font-face { font-family: "Poppins"; src: url("fonts/poppins-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+  @font-face { font-family: "Caveat"; src: url("fonts/caveat-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
   @font-face { font-family: "Poppins"; src: url("fonts/poppins-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
 
   /* Light luxury in the MD Projects logo colours: cool white paper, navy-charcoal ink, royal-blue accent,
@@ -508,7 +510,11 @@
   .pill-img { width: 2.4em; overflow: hidden; box-shadow: 0 10px 22px -10px rgba(14,19,34,.6), inset 0 0 0 1px rgba(255,255,255,.5); background: var(--bg-2); }
   .pill-img img { width: 100%; height: 100%; object-fit: cover; }
   .pill-plan { background: #0b1230; }
+  .stm { position: relative; }
   .stm .w.hl { font-weight: 500; }
+  .stm .c { display: inline; }
+  .stm .w.script { display: inline-block; font: 600 1.3em/1 "Caveat", cursive; letter-spacing: 0; padding-right: .04em; }
+  .stm-caret { position: absolute; left: 0; top: 0; width: 3px; height: 1em; margin-left: 3px; border-radius: 2px; background: var(--bronze); pointer-events: none; animation: blink 1s steps(1) infinite; }
   /* touch screens: no sticky "pressed" hover state */
   @media (hover: none) { .step:hover { box-shadow: var(--emb); } .btn-line:hover { box-shadow: var(--emb-sm); } }
   /* phones: tighter, crisper relief that stays inside the narrow gutters */
@@ -1442,19 +1448,42 @@
     // letterpress words drift slowly behind the content
 
     // ---------- statement ----------
-    // statement: words ink in; pills pop open (scale + photo zoom), the count rolls up when it appears
-    { const pills = [...st.querySelectorAll('.pill')], count = st.querySelector('.pill-num b');
-      gsap.set(pills, { opacity: 0, scale: .55 });
-      const tl = gsap.timeline(lite ? { scrollTrigger: { trigger: st, start: 'top 82%', once: true } } : { scrollTrigger: { trigger: st, start: 'top 85%', end: 'bottom 62%', scrub: .6 } });
-      let at = 0, counted = false;
+    // statement: typed out letter by letter behind a blinking caret; pills pop open as the typing reaches them
+    // (the 1,000+ counts up), and the promise "Fixed prices. No surprises." is written by hand, word by word
+    { const pills = [...st.querySelectorAll('.pill')], count = st.querySelector('.pill-num b'), units = [], script = [];
       words.forEach(w => {
-        if (w.classList.contains('pill')) {
-          tl.to(w, { opacity: 1, scale: 1, duration: lite ? .9 : .4, ease: 'back.out(1.8)' }, at);
-          const im = w.querySelector('img'); if (im) tl.fromTo(im, { scale: 1.6 }, { scale: 1, duration: lite ? 1.2 : .5, ease: 'power3.out' }, at);
-          if (w === count.parentElement) tl.add(() => { if (!counted) { counted = true; countUp([count], 1.8); } }, at);
-        } else tl.to(w, { opacity: 1, duration: lite ? .5 : .3, ease: 'power1.out' }, at);
-        at += lite ? .045 : .07;
-      }); }
+        if (w.classList.contains('pill')) { units.push(w); return; }
+        if (w.classList.contains('hl')) { w.classList.add('script'); units.push(w); script.push(w); return; }
+        const t = w.textContent; w.textContent = '';
+        [...t].forEach(ch => { const c = document.createElement('span'); c.className = 'c'; c.textContent = ch; w.appendChild(c); units.push(c); });
+      });
+      gsap.set(words, { opacity: 1 }); gsap.set(units, { opacity: 0 });
+      gsap.set(script, { opacity: 1, clipPath: 'inset(-40% 100% -40% -6%)' });
+      const caret = document.createElement('i'); caret.className = 'stm-caret'; caret.setAttribute('aria-hidden', 'true'); st.appendChild(caret);
+      const write = () => {
+        const P = st.getBoundingClientRect(), pos = el => { const r = el.getBoundingClientRect(); return { x: r.right - P.left, y: r.top - P.top, h: r.height }; };
+        const tl = gsap.timeline(); let at = 0, counted = false;
+        units.forEach(u => {
+          if (script.includes(u)) {   // handwriting: a wipe across each word, paced by its length
+            tl.set(caret, { opacity: 0 }, at); const d = .25 + u.textContent.length * .07;
+            tl.to(u, { clipPath: 'inset(-40% -6% -40% -6%)', duration: d, ease: 'power1.inOut' }, at); at += d + .06;
+            if (u === script[script.length - 1]) { at += .15; tl.set(caret, { opacity: 1 }, at); }
+            return;
+          }
+          if (u.classList.contains('pill')) {
+            tl.fromTo(u, { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .6, ease: 'back.out(1.8)' }, at);
+            const im = u.querySelector('img'); if (im) tl.fromTo(im, { scale: 1.6 }, { scale: 1, duration: .9, ease: 'power3.out' }, at);
+            if (u === count.parentElement) tl.add(() => { if (!counted) { counted = true; countUp([count], 1.8); } }, at);
+            at += .24;
+          } else { tl.set(u, { opacity: 1 }, at); at += /[.,]/.test(u.textContent) ? .1 : .02; }
+          const p = pos(u); tl.set(caret, { x: p.x, y: p.y, height: p.h }, at);
+        });
+        tl.to(caret, { opacity: 0, duration: .5 }, at + 1.6);
+      };
+      ScrollTrigger.create({ trigger: st, start: 'top 80%', once: true, onEnter: write });
+      // the handwriting font changes line heights: re-measure every scroll position once it is in
+      document.fonts && document.fonts.load('600 1em Caveat').then(() => ScrollTrigger.refresh());
+    }
     // ---------- about: bento tiles tilt up into place, icons and the build track draw in ----------
     { const tiles = gsap.utils.toArray('.bento .bt'), photo = document.querySelector('.bt-photo'), pImg = photo.querySelector('img');
       gsap.from(tiles, { y: 70, rotationX: 14, opacity: 0, transformOrigin: '50% 100%', transformPerspective: 1100, duration: 1.5, stagger: .13, ease: EASE, clearProps: 'transform',
@@ -1462,7 +1491,7 @@
       ScrollTrigger.create({ trigger: '.bento', start: 'top 72%', once: true, onEnter: () => tiles.forEach((t, i) => setTimeout(() => t.classList.add('in'), 250 + i * 180)) });
       // photo: a panel slides away, then the picture keeps a slow drift (CSS transform, paused when off screen)
       const cover = document.createElement('span'); cover.className = 'cover'; photo.appendChild(cover);
-      gsap.timeline({ scrollTrigger: { trigger: photo, start: 'top 82%', once: true } })
+      gsap.timeline({ scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } })
         .to(cover, { scaleY: 0, duration: 1.4, ease: 'expo.inOut' })
         .fromTo(pImg, { scale: 1.3 }, { scale: 1.04, duration: 2, ease: EASE, onComplete: () => { gsap.set(pImg, { clearProps: 'transform' }); photo.classList.add('drift'); } }, '<.1')
         .from('.bt-chip', { x: -30, opacity: 0, duration: 1.1, ease: EASE }, '-=1.4');
@@ -1576,7 +1605,8 @@
     ScrollTrigger.create({ trigger: projSec, start: 'top 60%', end: 'bottom top', onUpdate: projCheck, onEnter: projCheck });
 
     // ---------- text in every section: one-shot effects that switch themselves off after playing ----------
-    const once = (el, start = 'top 90%') => ({ trigger: el, start, once: true });
+    // inside the bento grid the tiles carry an entrance offset, so time their contents from the (static) grid itself
+    const once = (el, start = 'top 90%') => el.closest && el.closest('.bento') ? { trigger: el.closest('.bento'), start: 'top 72%', once: true } : { trigger: el, start, once: true };
     const typeIn = el => { const { chars } = splitDeep(el); gsap.from(chars, { opacity: 0, duration: .01, stagger: .045, ease: 'none', scrollTrigger: once(el, 'top 94%') }); };
     // small caps labels: typed out
     gsap.utils.toArray('.pr small, .contact .details small, .tm figcaption small').forEach(typeIn);
