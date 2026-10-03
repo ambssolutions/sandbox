@@ -1252,6 +1252,22 @@
   .answers button, [data-theme="dark"] .answers button { background: var(--bg-2) !important; box-shadow: none !important; border: 1px solid var(--line) !important; color: var(--ink) !important; }
   .answers button.now, .answers button:hover { background: var(--bronze) !important; border-color: var(--bronze) !important; color: #fff !important; box-shadow: none !important; }
   .stage, .quiz { box-shadow: 0 20px 50px -34px rgba(27,33,48,.35) !important; }
+  /* founder fits one laptop screen: everything scales with the screen height */
+  @media (min-width: 1001px) and (min-height: 561px) {
+    #about.founder { padding-block: clamp(28px, 4.5vh, 64px); }
+    .fd-grid { align-items: center; }
+    .fd-art { width: min(100%, 540px, calc((100vh - 200px) * .74)); }
+    #about h2 { font-size: clamp(2.2rem, 6.4vh, 4rem); margin-top: 12px !important; }
+    #about .eyebrow { font-size: clamp(.62rem, 1.4vh, .72rem); }
+    .fd-role { margin-top: 8px; font-size: clamp(.66rem, 1.5vh, .82rem); }
+    .fd-quote { margin-top: clamp(14px, 2.6vh, 30px); padding-top: clamp(12px, 2.4vh, 28px); }
+    .fd-quote p { font-size: clamp(1.05rem, 2.9vh, 1.7rem); line-height: 1.35; }
+    .fd-sign { margin-top: clamp(6px, 1.4vh, 16px); } .fd-sig { font-size: clamp(1.8rem, 5vh, 3rem); }
+    .fd-copy .lede { margin-top: clamp(10px, 2vh, 22px); font-size: clamp(.84rem, 1.95vh, 1rem); line-height: 1.6; }
+    .fd-vals { margin-top: clamp(10px, 2vh, 22px); } .fd-vals li { font-size: clamp(.74rem, 1.7vh, .84rem); }
+    .fd-ctas { margin-top: clamp(14px, 2.6vh, 30px); gap: clamp(12px, 2vh, 22px) !important; }
+    .fd-ctas .btn { padding: clamp(11px, 1.8vh, 17px) 28px; }
+  }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
