@@ -478,9 +478,9 @@
   /* scroll text extras */
   .marquee { overflow: hidden; padding: clamp(14px, 2.4vh, 34px) 0; background: var(--bg); position: relative; z-index: 1; }
   .mq-track { display: flex; align-items: center; width: max-content; will-change: transform; }
-  .mq-track span, .mq-track i { font: 600 clamp(1.7rem, min(8vw, 14vh), 8.5rem)/1 var(--f); letter-spacing: -.05em; white-space: nowrap; padding: 0 .28em; color: var(--ink); }
+  .mq-track span, .mq-track i { font: 600 clamp(1.75rem, min(6.4vw, 8.5vh), 4.75rem)/1 var(--f); letter-spacing: -.05em; white-space: nowrap; padding: 0 .28em; color: var(--ink); }
   .mq-track span.o { color: transparent; -webkit-text-stroke: 2px var(--bronze); }
-  .mq-track i { font-style: normal; font-size: clamp(.9rem, min(3vw, 5vh), 3rem); color: var(--bronze); padding: 0 .1em; }
+  .mq-track i { font-style: normal; font-size: clamp(.85rem, min(2.4vw, 3.4vh), 1.8rem); color: var(--bronze); padding: 0 .1em; }
   .mq-b { background: var(--bg-2); }
   .marquee + section { padding-top: clamp(56px, 8vh, 110px); }
   section:has(+ .marquee) { padding-bottom: clamp(56px, 8vh, 110px); }
@@ -1186,6 +1186,32 @@
     .g-grid > .g { grid-column: auto; grid-row: auto; }
     .g-grid > .g:nth-child(1) { grid-area: a; } .g-grid > .g:nth-child(2) { grid-area: b; } .g-grid > .g:nth-child(3) { grid-area: c; } .g-grid > .g:nth-child(4) { grid-area: d; }
     .g-grid > .g:nth-child(5) { grid-area: e; } .g-grid > .g:nth-child(6) { grid-area: f; } .g-grid > .g:nth-child(7) { grid-area: g; } .g-grid > .g:nth-child(8) { grid-area: h; }
+  }
+  /* founder, phone held sideways: photo stays beside the words while they scroll; everything sized for a short screen */
+  @media (orientation: landscape) and (max-height: 560px) {
+    .fd-grid { grid-template-columns: auto 1fr; align-items: start; gap: 40px; }
+    .fd-art { position: sticky; top: 76px; width: calc((100svh - 120px) * .74); margin: 0 0 22px; }
+    .fd-plaque { bottom: -14px; padding: 7px 12px 7px 10px; gap: 8px; }
+    .fd-plaque b { font-size: 1.35rem; } .fd-plaque span { font-size: .62rem; } .fd-plaque span::before { font-size: .5rem; }
+    .fd-copy { max-width: none; }
+    #about h2 { font-size: 2.1rem; }
+    .fd-role { font-size: .7rem; margin-top: 8px; }
+    .fd-quote { margin-top: 20px; padding-top: 18px; } .fd-quote p { font-size: 1.12rem; }
+    .fd-sig { font-size: 2rem; } .fd-sign { margin-top: 10px; }
+    .fd-copy .lede { font-size: .88rem; margin-top: 16px; line-height: 1.6; }
+    .fd-vals { margin-top: 16px; gap: 6px 16px; } .fd-vals li { font-size: .76rem; }
+    .fd-ctas { margin-top: 20px; gap: 16px !important; } .fd-ctas .btn { padding: 12px 24px; } .fd-call { font-size: .82rem; }
+  }
+  @media (orientation: landscape) and (max-height: 560px) {
+    #about.founder { overflow: clip; }
+    /* services book on a short screen: compact page so everything fits */
+    .pbk .bk-no, .pbk .bk-chips { display: none; }
+    .pbk .bk-paper h3 { font-size: 1.15rem; margin: 0 0 6px; }
+    .pbk .bk-paper p { font-size: .8rem; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .pbk .bk-more { margin-top: 12px; padding: 8px 16px; font-size: .78rem; }
+    .pbk-front .bk-paper { padding: 10px 20px; }
+    .pbk-sticky .pbk { height: calc(100svh - 60px - 60px); }
+    .pbk-sticky .pbk-nav { margin-top: 6px; } .pbk-nav .arrow { width: 38px; height: 38px; } .pbk-count { font-size: .72rem; }
   }
 </style>
 <script src="js/gsap.min.js"></script>
