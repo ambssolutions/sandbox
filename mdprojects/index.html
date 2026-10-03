@@ -1008,6 +1008,17 @@
   .tm-count { font: 500 .8rem/1 var(--f); letter-spacing: .2em; color: var(--muted); min-width: 70px; text-align: center; }
   .tm-count b { color: var(--ink); font-weight: 600; }
   @media (max-width: 760px) { .tm-grid.deck { padding-bottom: 38px !important; } .deck .tm { padding: 26px 22px; } }
+  /* cards waiting in the deck are plain shadow layers: no text, just depth */
+  .deck .tm.tm-back > * { visibility: hidden; }
+  .deck .tm::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .45s; background: rgba(27,33,48,.05); }
+  .deck .tm.tm-back::after { opacity: 1; }
+  .deck .tm[data-depth="2"]::after { background: rgba(27,33,48,.1); }
+  .deck .tm.tm-back { box-shadow: 0 18px 30px -18px rgba(27,33,48,.35); }
+  [data-theme="dark"] .deck .tm::after { background: rgba(0,0,0,.28); }
+  [data-theme="dark"] .deck .tm[data-depth="2"]::after { background: rgba(0,0,0,.48); }
+  [data-theme="dark"] .deck .tm.tm-back { box-shadow: 0 20px 34px -16px rgba(0,0,0,.7); }
+  /* second marquee: solid words read clearly (no faint embossed white) */
+  .mq-b .mq-track span:not(.o) { color: var(--ink) !important; text-shadow: none !important; }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -2214,9 +2225,9 @@
     { const deck = document.getElementById('tmGrid'), cards = [...deck.querySelectorAll('.tm')], N = cards.length, DUR = 7.5;
       const ctrl = document.getElementById('tmCtrl'), countB = ctrl.querySelector('.tm-count b');
       if (!lite) cards.forEach(c => { const bq = c.querySelector('blockquote'); bq.innerHTML = bq.textContent.trim().split(/\s+/).map(w => `<span class="tw">${w}</span>`).join(' '); });
-      const POS = [{ y: 0, scale: 1, opacity: 1, rotation: 0 }, { y: 26, scale: .94, opacity: .7, rotation: 0 }, { y: 50, scale: .88, opacity: .35, rotation: 0 }, { y: 64, scale: .82, opacity: 0, rotation: 0 }];
+      const POS = [{ y: 0, scale: 1, opacity: 1, rotation: 0 }, { y: 22, scale: .94, opacity: 1, rotation: 0 }, { y: 42, scale: .88, opacity: 1, rotation: 0 }, { y: 54, scale: .82, opacity: 0, rotation: 0 }];
       let order = cards.map((_, i) => i), ring = null, busy = false, visible = false, held = false, started = false;
-      const place = (dur) => order.forEach((ci, p) => { const c = cards[ci]; c.style.zIndex = N - p; c.setAttribute('aria-hidden', p ? 'true' : 'false');
+      const place = (dur) => order.forEach((ci, p) => { const c = cards[ci]; c.style.zIndex = N - p; c.setAttribute('aria-hidden', p ? 'true' : 'false'); c.classList.toggle('tm-back', p > 0); c.dataset.depth = Math.min(p, 3);
         gsap.to(c, { ...POS[Math.min(p, 3)], x: 0, duration: dur, ease: 'power3.out', overwrite: 'auto' }); });
       const reveal = c => {
         if (lite) gsap.fromTo(c.querySelector('blockquote'), { opacity: 0, y: 14, clipPath: 'inset(0 0 100% 0)' }, { opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', duration: .9, ease: 'power2.out', delay: .15 });
@@ -2229,13 +2240,14 @@
       const go = d => {
         if (busy) return; busy = true;
         if (d > 0) { const out = cards[order[0]]; order.push(order.shift());
-          gsap.to(out, { x: () => -deck.offsetWidth * .9, y: -10, rotation: lite ? -4 : -9, opacity: 0, duration: .55, ease: 'power2.in', onComplete: () => { gsap.set(out, { x: 0, ...POS[3] }); } });
+          gsap.to(out, { x: () => -deck.offsetWidth * .9, y: -10, rotation: lite ? -4 : -9, opacity: 0, duration: .55, ease: 'power2.in', onComplete: () => { out.classList.add('tm-back'); out.dataset.depth = 3; gsap.set(out, { x: 0, ...POS[3] }); } });
           order.forEach((ci, p) => { if (p < N - 1) { const c = cards[ci]; c.style.zIndex = N - p; gsap.to(c, { ...POS[Math.min(p, 3)], x: 0, duration: .75, delay: .12, ease: 'power3.out' }); } });
         } else { order.unshift(order.pop()); const inn = cards[order[0]];
           gsap.set(inn, { x: -deck.offsetWidth * .9, y: -10, rotation: -9, opacity: 0 }); inn.style.zIndex = N + 1;
           gsap.to(inn, { ...POS[0], x: 0, duration: .7, ease: 'power3.out' });
           order.forEach((ci, p) => { if (p) { const c = cards[ci]; c.style.zIndex = N - p; gsap.to(c, { ...POS[Math.min(p, 3)], x: 0, duration: .6, ease: 'power3.out' }); } }); }
-        const front = cards[order[0]]; cards.forEach((c, i) => c.setAttribute('aria-hidden', c === front ? 'false' : 'true'));
+        const front = cards[order[0]]; cards.forEach(c => c.setAttribute('aria-hidden', c === front ? 'false' : 'true'));
+        order.forEach((ci, p) => { const c = cards[ci]; if (p === 0) { c.classList.remove('tm-back'); c.dataset.depth = 0; } else if (!(d > 0 && p === N - 1)) { c.classList.add('tm-back'); c.dataset.depth = Math.min(p, 3); } });
         countB.textContent = String(order[0] + 1).padStart(2, '0');
         reveal(front); timer(front); gsap.delayedCall(.7, () => { busy = false; });
       };
