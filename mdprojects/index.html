@@ -1337,6 +1337,7 @@
     .mq-track span { font-size: clamp(1.3rem, 7vh, 1.9rem); }
     .stm { font-size: clamp(1rem, 5.4vh, 1.4rem) !important; }
   }
+  .bt-photo img, .bt-photo.drift img { animation: none !important; transform: none; }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -2379,13 +2380,12 @@
       if (lite) {
         // phones: one light reveal (the tile's own rise), the photo settles from a slight zoom, the badge slides in; no endless drift
         gsap.timeline({ scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } })
-          .fromTo(pImg, { scale: 1.08 }, { scale: 1, duration: 1.6, ease: 'power2.out', clearProps: 'transform' }, .1)
+          .fromTo(pImg, { opacity: 0 }, { opacity: 1, duration: 1, ease: 'power1.out' }, .1)
           .from('.bt-chip', { y: 16, opacity: 0, duration: .9, ease: EASE }, .5);
       } else {
         const cover = document.createElement('span'); cover.className = 'cover'; photo.appendChild(cover);
         gsap.timeline({ scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } })
           .to(cover, { scaleY: 0, duration: 1.4, ease: 'expo.inOut' })
-          .fromTo(pImg, { scale: 1.3 }, { scale: 1.04, duration: 2, ease: EASE, onComplete: () => { gsap.set(pImg, { clearProps: 'transform' }); photo.classList.add('drift'); } }, '<.1')
           .from('.bt-chip', { x: -30, opacity: 0, duration: 1.1, ease: EASE }, '-=1.4');
       }
       new IntersectionObserver(es => photo.classList.toggle('vis', es[0].isIntersecting)).observe(photo);
