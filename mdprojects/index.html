@@ -1306,6 +1306,37 @@
     .field textarea { min-height: 90px; }
     .g-grid { grid-auto-rows: clamp(150px, 15vw, 240px); }
   }
+  /* ===== wide screens, one step further out: see more at once ===== */
+  @media (min-width: 1001px) {
+    html { font-size: 13.5px; }
+    h2 { font-size: clamp(1.8rem, min(2.9vw, 5vh), 3.1rem); }
+    section { padding-block: clamp(36px, 5.5vh, 72px); }
+    .hero h1, .h1-alt { font-size: clamp(2.4rem, min(4.4vw, 8vh), 5.2rem) !important; }
+    .stm { font-size: clamp(1.15rem, min(1.75vw, 3.1vh), 1.85rem) !important; }
+    .pr-fig b { font-size: clamp(2rem, 4.4vh, 2.7rem); }
+    .num b { font-size: clamp(2rem, min(4vw, 6.4vh), 3.8rem); }
+    .house { width: min(700px, 100%, calc((100vh - 170px) * .98)); }
+    .bk { height: min(calc(100vh - 250px), 520px); }
+    .pcard .ph { height: min(calc(100vh - 380px), 460px); }
+    .pcard { width: min(48vw, 760px); }
+    .st-view { height: min(calc(100vh - 360px), 500px) !important; }
+    .fd-art { width: min(100%, 500px, calc((100vh - 220px) * .7)); }
+    #about h2 { font-size: clamp(2rem, 5.6vh, 3.5rem); }
+    .fd-quote p { font-size: clamp(1rem, 2.6vh, 1.5rem); }
+    .mq-track span, .mq-track i:not(:empty) { }
+    .mq-track span { font-size: clamp(1.5rem, min(3.2vw, 5vh), 2.9rem); }
+    .contact h2 { font-size: clamp(2.2rem, min(3.8vw, 6.6vh), 4.2rem); }
+    .tm-grid.deck { max-width: 680px; }
+    .deck .tm blockquote { font-size: clamp(1rem, 2.2vh, 1.25rem); }
+    .header .wrap { height: 80px; } .logo img { height: 50px; }
+  }
+  /* phones held sideways: smaller base so more fits in the short screen */
+  @media (orientation: landscape) and (max-height: 560px) {
+    html { font-size: 13px; }
+    h2 { font-size: clamp(1.5rem, 9vh, 2.2rem); }
+    .mq-track span { font-size: clamp(1.3rem, 7vh, 1.9rem); }
+    .stm { font-size: clamp(1rem, 5.4vh, 1.4rem) !important; }
+  }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
