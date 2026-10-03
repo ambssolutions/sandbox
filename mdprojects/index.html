@@ -1338,6 +1338,9 @@
     .stm { font-size: clamp(1rem, 5.4vh, 1.4rem) !important; }
   }
   .bt-photo img, .bt-photo.drift img { animation: none !important; transform: none; }
+  /* About photo: flat and steady (no 3D layer, no load fade) */
+  .bt-photo { transform-style: flat; isolation: isolate; }
+  .bt-photo img, .bt-photo img.ld { opacity: 1 !important; transition: none !important; }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -2034,6 +2037,25 @@
       if (el) { e.preventDefault(); scrollToEl(el, id === '#top' ? 0 : -40); }
     }));
 
+    // ---------- fit to screen: on laptops and sideways phones, any section taller than the visible
+    // screen is scaled down (CSS zoom on its inner wrap) so it reads in one view without scrolling ----------
+    const fitSections = () => {
+      const wide = innerWidth > 1000 || (innerWidth > innerHeight && innerHeight < 561);
+      const hh = document.getElementById('header').offsetHeight, avail = innerHeight - hh;
+      document.querySelectorAll('body > section:not(.hero):not(.services):not(.projects), main > section:not(.hero):not(.services):not(.projects)').forEach(sec => {
+        const w = sec.id === 'build3d' ? sec.querySelector('.b3-ui') : sec.querySelector(':scope > .wrap');
+        if (!w) return; w.style.zoom = '';
+        if (!wide) return;
+        const cs = getComputedStyle(sec), pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom), h = w.offsetHeight;
+        const room = avail - Math.min(pad, avail * .14);
+        if (h > room) w.style.zoom = Math.max(.58, room / h).toFixed(3);
+        if (h > room) { sec.style.paddingTop = sec.style.paddingBottom = Math.round(Math.min(pad, avail * .14) / 2) + 'px'; } else { sec.style.paddingTop = sec.style.paddingBottom = ''; }
+      });
+    };
+    fitSections(); document.fonts && document.fonts.ready.then(() => { fitSections(); window.ScrollTrigger && ScrollTrigger.refresh(); });
+    { let ft = 0; addEventListener('resize', () => { clearTimeout(ft); ft = setTimeout(() => { fitSections(); ScrollTrigger.refresh(); }, 200); }); }
+    addEventListener('load', () => { fitSections(); ScrollTrigger.refresh(); });
+
     const splitLines = el => { el.innerHTML = el.innerHTML.split(/<br\s*\/?>/i).map(l => `<span class="ln"><span class="li">${l.trim()}</span></span>`).join(''); return el.querySelectorAll('.li'); };
     // ---------- intro, then HOMES rises with the video playing inside it ----------
     // phones: HOMES (photo in the letters) -> zooms away -> the film plays full screen -> headline rises.
@@ -2327,7 +2349,7 @@
       document.fonts && document.fonts.load('600 1em Caveat').then(() => ScrollTrigger.refresh());
     }
     // ---------- about: bento tiles tilt up into place, icons and the build track draw in ----------
-    { const tiles = gsap.utils.toArray('.bento .bt'), photo = document.querySelector('.bt-photo'), pImg = photo.querySelector('img');
+    { const tiles = gsap.utils.toArray('.bento .bt:not(.bt-photo)'), photo = document.querySelector('.bt-photo'), pImg = photo.querySelector('img');
       gsap.from(tiles, { y: lite ? 40 : 70, rotationX: lite ? 0 : 14, opacity: 0, transformOrigin: '50% 100%', transformPerspective: 1100, duration: 1.5, stagger: .13, ease: EASE, clearProps: 'transform',
         scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } });
       tiles.forEach(t => ScrollTrigger.create({ trigger: t, start: 'top 85%', once: true, onEnter: () => setTimeout(() => t.classList.add('in'), 250) }));
@@ -2377,18 +2399,11 @@
       // photo: a panel slides away, then the picture keeps a slow drift (CSS transform, paused when off screen)
       // decode the photo well before it scrolls in, so it never decodes mid-scroll
       new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); pImg.loading = 'eager'; pImg.decode && pImg.decode().catch(() => {}); } }, { rootMargin: '1400px 0px' }).observe(photo);
-      if (lite) {
-        // phones: one light reveal (the tile's own rise), the photo settles from a slight zoom, the badge slides in; no endless drift
-        gsap.timeline({ scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } })
-          .fromTo(pImg, { opacity: 0 }, { opacity: 1, duration: 1, ease: 'power1.out' }, .1)
-          .from('.bt-chip', { y: 16, opacity: 0, duration: .9, ease: EASE }, .5);
-      } else {
-        const cover = document.createElement('span'); cover.className = 'cover'; photo.appendChild(cover);
-        gsap.timeline({ scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } })
-          .to(cover, { scaleY: 0, duration: 1.4, ease: 'expo.inOut' })
-          .from('.bt-chip', { x: -30, opacity: 0, duration: 1.1, ease: EASE }, '-=1.4');
-      }
-      new IntersectionObserver(es => photo.classList.toggle('vis', es[0].isIntersecting)).observe(photo);
+      // the photo tile: one flat fade-up, nothing 3D, no cover, no image tween (so nothing can flicker while scrolling)
+      gsap.timeline({ scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } })
+        .fromTo(photo, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out', clearProps: 'transform,opacity' })
+        .from('.bt-chip', { y: 14, opacity: 0, duration: .8, ease: EASE }, .4);
+
       // laptops: tiles lean toward the cursor with a soft sheen that follows it
       if (!lite && matchMedia('(pointer: fine)').matches) document.querySelectorAll('.bento .pr').forEach(t => {
         const rx = gsap.quickTo(t, 'rotationX', { duration: .6, ease: 'power3' }), ry = gsap.quickTo(t, 'rotationY', { duration: .6, ease: 'power3' });
