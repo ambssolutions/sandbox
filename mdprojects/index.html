@@ -1136,7 +1136,7 @@
     const splitLines = el => { el.innerHTML = el.innerHTML.split(/<br\s*\/?>/i).map(l => `<span class="ln"><span class="li">${l.trim()}</span></span>`).join(''); return el.querySelectorAll('.li'); };
     // ---------- intro, then HOMES rises with the video playing inside it ----------
     const heroIn = () => lite ? gsap.timeline()
-      .fromTo('#h1 .ch', { yPercent: 110, rotationX: -85, opacity: 0 }, { yPercent: 0, rotationX: 0, opacity: 1, transformPerspective: 700, transformOrigin: '50% 100%', duration: 1.3, stagger: .03, ease: EASE }, 0)
+      .fromTo('#h1 .li', { yPercent: 110 }, { yPercent: 0, duration: 1.5, stagger: .12, ease: EASE }, 0)
       .from('#heroVideo', { scale: 1.2, duration: 2.6, ease: 'power3.out' }, 0)
       .from(['.hb-x', '#videoToggle'], { y: 30, opacity: 0, duration: 1.2, stagger: .1, ease: EASE, onStart: () => countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2) }, .4)
       : gsap.timeline()
@@ -1167,6 +1167,7 @@
 
     // split into words (.wd) holding characters (.ch); keeps <em>/<br>
     const splitDeep = el => {
+      if (lite) { el.dataset.fx = 1; return { words: [el], chars: [el] }; }
       if (!el.getAttribute('aria-label')) el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
       const walk = node => [...node.childNodes].forEach(c => {
         if (c.nodeType === 3) {
@@ -1192,7 +1193,7 @@
     document.getElementById('videoToggle').addEventListener('click', () => { vUserPaused = vHero.paused; });
 
     if (lite) {
-      splitDeep(document.getElementById('h1'));
+      splitLines(document.getElementById('h1'));
       new IntersectionObserver(es => { vInView = es[0].isIntersecting; vSync(); }).observe(hero);
     } else {
     // ---------- hero: dive through the H into the film ----------
@@ -1273,7 +1274,7 @@
     { const { chars } = splitDeep(h2('#services'));
       gsap.from(chars, { x: 70, skewX: -28, opacity: 0, duration: 1.2, stagger: .022, ease: EASE, scrollTrigger: on(h2('#services')) }); }
     // card titles: wiped in by a mask
-    gsap.utils.toArray('.scard h3').forEach(t => gsap.fromTo(t, { clipPath: 'inset(0 100% 0 0)', x: -20 }, { clipPath: 'inset(0 0% 0 0)', x: 0, duration: 1.4, ease: 'power4.inOut', scrollTrigger: on(t, 'top 88%') }));
+    gsap.utils.toArray('.scard h3').forEach(t => lite ? gsap.from(t, { x: -40, opacity: 0, duration: 1.2, ease: EASE, scrollTrigger: { trigger: t, start: 'top 88%', once: true } }) : gsap.fromTo(t, { clipPath: 'inset(0 100% 0 0)', x: -20 }, { clipPath: 'inset(0 0% 0 0)', x: 0, duration: 1.4, ease: 'power4.inOut', scrollTrigger: on(t, 'top 88%') }));
 
     // 3D build: words drop and bounce
     { const { words } = splitDeep(h2('#build3d'));
@@ -1284,7 +1285,7 @@
       const caret = document.createElement('span'); caret.className = 'caret'; caret.setAttribute('aria-hidden', 'true');
       gsap.set(chars, { opacity: 0 });
       ScrollTrigger.create({ ...on(el), once: true, onEnter: () => {
-        chars.forEach((c, i) => gsap.delayedCall(i * .055, () => { c.style.opacity = 1; c.after(caret); }));
+        if (lite) gsap.to(chars, { opacity: 1, duration: 1.2, ease: 'power2.out' }); else chars.forEach((c, i) => gsap.delayedCall(i * .055, () => { c.style.opacity = 1; c.after(caret); }));
       } }); }
 
     // projects: letters spin round on their axis
@@ -1308,10 +1309,11 @@
 
     // gallery: spacing closes as you scroll
     { const el = h2('#gallery');
-      gsap.fromTo(el, { letterSpacing: '.45em', opacity: .15 }, lite ? { letterSpacing: '-0.035em', opacity: 1, duration: 1.6, ease: EASE, scrollTrigger: { trigger: el, start: 'top 90%', once: true } } : { letterSpacing: '-0.035em', opacity: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 98%', end: 'top 55%', scrub: true } }); }
+      (lite ? gsap.fromTo(el, { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 1.4, ease: EASE, scrollTrigger: { trigger: el, start: 'top 90%', once: true } }) : gsap.fromTo(el, { letterSpacing: '.45em', opacity: .15 }, { letterSpacing: '-0.035em', opacity: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 98%', end: 'top 55%', scrub: true } })); }
 
     // FAQs: text decodes from scrambled symbols
-    { const el = h2('#faqs'); el.classList.add('scr'); const { chars } = splitDeep(el);
+    if (lite) { const el = h2('#faqs'); el.dataset.fx = 1; gsap.from(splitLines(el), { yPercent: 110, duration: 1.4, stagger: .12, ease: EASE, scrollTrigger: { ...on(el), once: true } }); }
+    else { const el = h2('#faqs'); el.classList.add('scr'); const { chars } = splitDeep(el);
       const glyphs = 'ABCDEFGHJKLMNPQRSTUVWXYZ#%&*+=?/<>0123456789';
       const real = [...chars].map(c => c.textContent);
       ScrollTrigger.create({ ...on(el), once: true, onEnter: () => {
@@ -1329,7 +1331,7 @@
 
     // every other heading: the classic line rise
     document.querySelectorAll('section h2').forEach(h => {
-      if (h.querySelector('.ch, .ln') || h.closest('#gallery')) return;
+      if (h.dataset.fx || h.querySelector('.ch, .ln') || h.closest('#gallery')) return;
       gsap.from(splitLines(h), { yPercent: 110, duration: 1.6, ease: EASE, stagger: .1, scrollTrigger: on(h, 'top 88%') });
     });
 
@@ -1448,7 +1450,7 @@
     // small caps labels: typed out
     gsap.utils.toArray('.pr small, .contact .details small, .tm figcaption small').forEach(typeIn);
     // card titles: wiped up into view
-    gsap.utils.toArray('.pr h3, .step h3').forEach(h => gsap.fromTo(h, { clipPath: 'inset(0 0 100% 0)', y: 18 }, { clipPath: 'inset(0 0 0% 0)', y: 0, duration: 1, ease: 'power4.out', scrollTrigger: once(h) }));
+    gsap.utils.toArray('.pr h3, .step h3').forEach(h => lite ? gsap.from(h, { y: 22, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: once(h) }) : gsap.fromTo(h, { clipPath: 'inset(0 0 100% 0)', y: 18 }, { clipPath: 'inset(0 0 0% 0)', y: 0, duration: 1, ease: 'power4.out', scrollTrigger: once(h) }));
     // card paragraphs: drift up
     gsap.utils.toArray('.pr p, .step p, .foot-grid > div > p').forEach(el => gsap.from(el, { y: 22, opacity: 0, duration: 1.1, delay: .15, ease: 'power3.out', scrollTrigger: once(el) }));
     // reviews: ink in from faint, names slide in from the side
@@ -1459,7 +1461,7 @@
     // FAQ questions: each slides in from the left
     gsap.utils.toArray('#faqs summary').forEach((sm, i) => gsap.from(sm, { x: -30, opacity: 0, duration: 1, delay: (i % 6) * .06, ease: EASE, scrollTrigger: once(sm, 'top 95%') }));
     // contact details: values wipe in left to right
-    gsap.utils.toArray('.contact .details a, .contact .details address').forEach(el => gsap.fromTo(el, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1.1, ease: 'power3.inOut', scrollTrigger: once(el) }));
+    gsap.utils.toArray('.contact .details a, .contact .details address').forEach(el => lite ? gsap.from(el, { x: -24, opacity: 0, duration: 1, ease: EASE, scrollTrigger: once(el) }) : gsap.fromTo(el, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1.1, ease: 'power3.inOut', scrollTrigger: once(el) }));
     // quote form: title waves in, field labels follow
     { const h = document.querySelector('.form h3'); if (h) { const { chars } = splitDeep(h);
         gsap.from(chars, { y: '.6em', opacity: 0, duration: .7, stagger: .03, ease: 'back.out(3)', scrollTrigger: once(h) }); }
