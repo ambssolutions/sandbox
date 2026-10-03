@@ -1160,6 +1160,22 @@
   @media (max-width: 760px) { .foot-bottom { flex-direction: column; align-items: center; text-align: center; gap: 6px; } }
   .foot-bottom { margin-top: clamp(40px, 6vh, 64px); padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); }
   html.hero-hold, html.hero-hold body { overflow: hidden !important; overscroll-behavior: none; touch-action: none; }
+  /* tighter rhythm between sections */
+  section { padding-block: clamp(60px, 9vh, 112px); }
+  .marquee + section { padding-top: clamp(40px, 5.5vh, 72px); }
+  section:has(+ .marquee) { padding-bottom: clamp(40px, 5.5vh, 72px); }
+  .head { margin-bottom: clamp(28px, 4vh, 52px); }
+  .lite .b3-ui { padding-block: 60px 40px; }
+  .lite .proj-pin { padding-block: 60px 36px; }
+  .tm-grid.deck { margin-top: clamp(24px, 4vh, 44px) !important; }
+  @media (max-width: 760px) {
+    section { padding-block: 52px; }
+    .marquee + section { padding-top: 36px; }
+    section:has(+ .marquee) { padding-bottom: 36px; }
+    .head { margin-bottom: 26px; }
+    .statement { padding-top: 64px; }
+  }
+  @media (orientation: landscape) and (max-height: 560px) { section { padding-block: 44px; } }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
