@@ -751,7 +751,7 @@
     <div class="hero-pin" id="heroPin">
       <div class="hv" id="heroV">
         <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="images/hero-poster.webp" aria-label="Completed MD Projects homes in Auckland"></video>
-        <script>(function(){var v=document.getElementById('heroVideo');if(matchMedia('(pointer: coarse)').matches){v.removeAttribute('autoplay');v.preload='none';}var hd=Math.max(screen.width,screen.height)*(window.devicePixelRatio||1)>=1600&&innerWidth>820;v.src=hd?'images/hero-1080.mp4':'images/hero-720.mp4';})();</script>
+        <script>(function(){var v=document.getElementById('heroVideo');var touch=matchMedia('(pointer: coarse)').matches;if(touch){v.removeAttribute('autoplay');v.preload='none';}var portrait=innerHeight>innerWidth&&innerWidth<820;if(portrait){v.poster='images/hero-poster-portrait.webp';v.src='images/hero-portrait.mp4';return;}var hd=Math.max(screen.width,screen.height)*(window.devicePixelRatio||1)>=1280&&innerWidth>820;v.src=hd?'images/hero-1080.mp4':'images/hero-720.mp4';})();</script>
         <div class="hv-shade" id="heroShade"></div>
       </div>
       <div class="hm" id="heroMask" aria-hidden="true"><div class="hm-word" id="heroWord"><span>M</span><span>D</span><span class="sp">&nbsp;</span><span>P</span><span>R</span><span>O</span><span>J</span><span>E</span><span>C</span><span>T</span><span>S</span></div></div>
