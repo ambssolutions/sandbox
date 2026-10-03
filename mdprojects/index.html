@@ -125,6 +125,7 @@
   .hm { position: absolute; inset: 0; background: #fff; mix-blend-mode: screen; display: grid; place-items: center; will-change: opacity; }
   .hm-word { font: 700 100px/.8 var(--f); letter-spacing: -.055em; color: #000; white-space: nowrap; will-change: transform; padding-bottom: .02em; }
   .hm-word span { display: inline-block; }
+  .hm-word .sp { width: .22em; }
   .hm::after { content: none; }
   .hm-tint { position: absolute; inset: 0; background: var(--bg); mix-blend-mode: multiply; pointer-events: none; z-index: 1; }
   .ha { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
@@ -503,7 +504,9 @@
   .statement { position: relative; z-index: 3; margin-top: calc(-1 * clamp(26px, 3vw, 44px)); border-radius: clamp(26px, 3vw, 44px) clamp(26px, 3vw, 44px) 0 0; background: var(--bg); box-shadow: 0 -24px 50px -30px rgba(9,13,26,.55); }
   .statement::before { content: ""; position: absolute; top: 12px; left: 50%; width: 44px; height: 4px; margin-left: -22px; border-radius: 4px; background: var(--line); }
   /* ===== About statement: big type with inline pills (date, live count, photos) ===== */
-  .statement p.stm { font: 400 clamp(1.9rem, min(3.1vw, 5.6vh), 3.3rem)/1.36 var(--f); letter-spacing: -.035em; max-width: 30ch; margin-top: 30px; color: var(--ink); }
+  .statement p.stm { font: 400 clamp(1.45rem, min(2.4vw, 4.4vh), 2.5rem)/1.42 var(--f); letter-spacing: -.03em; max-width: 34ch; margin: 26px auto 0; text-align: center; color: var(--ink); }
+  .statement > .wrap > .eyebrow { display: flex; justify-content: center; }
+  .statement > .wrap > .eyebrow::after { content: ""; width: 34px; height: 1px; background: currentColor; }
   .pill { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; position: relative; top: -.07em; height: 1.08em; border-radius: 999px; margin: 0 .06em; white-space: nowrap; }
   .pill-date { padding: 0 .55em; font-size: .62em; height: 1.75em; font-weight: 500; letter-spacing: 0; color: #fff; background: linear-gradient(100deg, var(--bronze), #5f86d6); box-shadow: 0 10px 24px -10px rgba(60,84,168,.7); }
   .pill-num { padding: 0 .5em; font-size: .62em; height: 1.75em; gap: .4em; font-weight: 500; letter-spacing: 0; color: rgba(255,255,255,.75); background: var(--ink); box-shadow: 0 10px 24px -10px rgba(14,19,34,.7); }
@@ -513,7 +516,7 @@
   .pill-plan { background: #0b1230; }
   .stm { position: relative; }
   .stm .w.hl { font-weight: 500; }
-  .stm .c { display: inline; }
+  .stm .c { display: inline; } .stm .w { display: inline-block; }
   .stm .w.script { display: inline-block; font: 600 1.3em/1 "Caveat", cursive; letter-spacing: 0; padding-right: .04em; }
   .stm-caret { position: absolute; left: 0; top: 0; width: 3px; height: 1em; margin-left: 3px; border-radius: 2px; background: var(--bronze); pointer-events: none; animation: blink 1s steps(1) infinite; }
   /* ===== services as a book ===== */
@@ -560,7 +563,7 @@
   .pbk-front .bk-paper { position: relative; inset: auto; padding: 20px 22px 44px; justify-content: flex-start; background: #fbfcfe; }
   .pbk-front::after { display: none; }
   .pbk .bk-no { font-size: 2.6rem; } .pbk .bk-paper h3 { font-size: 1.7rem; margin: 10px 0 10px; } .pbk .bk-paper p { font-size: .95rem; }
-  .pbk .bk-chips { margin: 14px 0 16px; } .pbk .bk-chips li { padding: 7px 11px; font-size: .64rem; } .pbk .bk-folio { bottom: 16px; }
+  .pbk .bk-chips { margin: 14px 0 16px; } .pbk .bk-chips li { padding: 7px 11px; font-size: .64rem; } .pbk .bk-folio { display: none; }
   .pbk-back { display: grid; place-items: center; background: repeating-linear-gradient(90deg, #f4f6fa 0 14px, #eef2f8 14px 15px) !important; }
   .pbk-back span:first-child { font: 600 1rem/1 var(--f); letter-spacing: .3em; text-transform: uppercase; color: #b9c3d3; }
   .pbk-nav { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 30px; }
@@ -715,11 +718,11 @@
         <script>(function(){var v=document.getElementById('heroVideo');if(matchMedia('(pointer: coarse)').matches){v.removeAttribute('autoplay');v.preload='none';}var hd=Math.max(screen.width,screen.height)*(window.devicePixelRatio||1)>=1600&&innerWidth>820;v.src=hd?'images/hero-1080.mp4':'images/hero-720.mp4';})();</script>
         <div class="hv-shade" id="heroShade"></div>
       </div>
-      <div class="hm" id="heroMask" aria-hidden="true"><div class="hm-word" id="heroWord"><span>H</span><span>O</span><span>M</span><span>E</span><span>S</span></div></div>
+      <div class="hm" id="heroMask" aria-hidden="true"><div class="hm-word" id="heroWord"><span>M</span><span>D</span><span class="sp">&nbsp;</span><span>P</span><span>R</span><span>O</span><span>J</span><span>E</span><span>C</span><span>T</span><span>S</span></div></div>
       <div class="hm-tint" id="heroTint" aria-hidden="true"></div>
       <div class="ha" id="heroA" aria-hidden="true">
-        <span class="eyebrow ha-eb" id="haEb">MD Projects NZ · Auckland</span>
-        <span class="ha-sub" id="haSub">built <em>beautifully.</em></span>
+        <span class="eyebrow ha-eb" id="haEb">Auckland residential builders</span>
+        <span class="ha-sub" id="haSub">Homes built <em>beautifully.</em></span>
         <span class="ha-cue" id="haCue"><i></i>Scroll to step inside</span>
       </div>
       <div class="hb" id="heroB">
@@ -732,11 +735,6 @@
               <a href="#contact" class="btn btn-light">Start your project <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
               <a href="#projects" class="btn btn-ghost">View our homes</a>
             </div>
-          </div>
-          <div class="stats-badge hb-x" id="statsBadge">
-            <div><b data-to="1000" data-fmt="comma+">1,000+</b>Homes built</div>
-            <div><b>Fixed</b>Price contracts</div>
-            <div><b data-to="10" data-fmt=" yr">10 yr</b>Guarantee</div>
           </div>
         </div>
         <button class="vt" id="videoToggle" aria-label="Pause background video"><svg id="vtIcon" width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg></button>
@@ -1326,7 +1324,7 @@
       .add(() => { __hdr.film = true; __hdr.until = filmEnd(); __hdr.sync(); }, 2.75)
       .fromTo('.hb .eyebrow', { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: 'power2.out' }, 3.0)
       .fromTo('#h1 .li', { yPercent: -115 }, { yPercent: 0, duration: 2.1, stagger: .22, ease: 'power3.out' }, 3.15)
-      .fromTo(['.hb-lede', '.hero-ctas', '#statsBadge', '#videoToggle'], { y: -70, opacity: 0 }, { y: 0, opacity: 1, duration: 1.9, stagger: .18, ease: 'power2.out', onStart: () => countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2) }, 3.4)
+      .fromTo(['.hb-lede', '.hero-ctas', '#videoToggle'], { y: -70, opacity: 0 }, { y: 0, opacity: 1, duration: 1.9, stagger: .18, ease: 'power2.out' }, 3.4)
       : gsap.timeline()
       .from('#heroWord span', { yPercent: 115, opacity: 0, duration: 1.7, ease: EASE, stagger: .08 }, 0)
       .from('#heroVideo', { scale: 1.3, duration: 3, ease: 'power3.out' }, 0)
@@ -1387,7 +1385,7 @@
     // find the centre of the H's left stem by drawing it once on a canvas
     const stemOf = () => {
       const c = document.createElement('canvas'), F = 200; c.width = 260; c.height = 260;
-      const x = c.getContext('2d', { willReadFrequently: true }); x.font = getComputedStyle(hWord).fontWeight + ' ' + F + 'px ' + getComputedStyle(hWord).fontFamily; x.fillText('H', 20, 230);
+      const x = c.getContext('2d', { willReadFrequently: true }); x.font = getComputedStyle(hWord).fontWeight + ' ' + F + 'px ' + getComputedStyle(hWord).fontFamily; x.fillText(hWord.firstElementChild.textContent, 20, 230);
       const row = x.getImageData(0, Math.round(230 - F * .5), 260, 1).data; let x0 = -1, x1 = -1;
       for (let i = 0; i < 260; i++) { const on = row[i * 4 + 3] > 128; if (on && x0 < 0) x0 = i; if (!on && x0 >= 0) { x1 = i; break; } }
       return x0 < 0 ? { c: .2, w: .14 } : { c: ((x0 + x1) / 2 - 20) / F, w: (x1 - x0) / F };
@@ -1405,7 +1403,7 @@
         return { top: half + t.fontBoundingBoxAscent - t.actualBoundingBoxAscent, bot: half + t.fontBoundingBoxAscent + t.actualBoundingBoxDescent };
       };
       const eb = document.getElementById('haEb'), sub = document.getElementById('haSub');
-      const w = ink(hWord, 'HOMES'), e = ink(eb, eb.textContent.toUpperCase()), sb = ink(sub, 'built');
+      const w = ink(hWord, hWord.textContent.replace(/\s+/g, ' ')), e = ink(eb, eb.textContent.toUpperCase()), sb = ink(sub, 'Homes built');
       const gap = Math.max(22, fs * .2), wTop = hWord.offsetTop + w.top, wBot = hWord.offsetTop + w.bot;
       eb.style.top = (wTop - gap - e.bot) + 'px';
       sub.style.top = (wBot + gap - sb.top) + 'px';
@@ -1426,7 +1424,7 @@
     const hTitle = splitDeep(document.getElementById('h1')).chars;
     let counted = false;
     gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: () => '+=' + Math.round(innerHeight * 1.7), pin: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true,
-      onUpdate: st => { hB.style.pointerEvents = st.progress > .62 ? 'auto' : 'none'; const f = st.progress > .52; if (f !== __hdr.film) { __hdr.film = f; __hdr.until = filmEnd(); __hdr.sync(); if (f) gsap.fromTo('#nav > a, .logo', { y: -14, opacity: 0 }, { y: 0, opacity: 1, duration: .9, stagger: .05, ease: 'power3.out', overwrite: true }); } if (touch && (st.progress > .42) !== vDived) { vDived = st.progress > .42; vSync(); } if (!counted && st.progress > .7) { counted = true; countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2); } } } })
+      onUpdate: st => { hB.style.pointerEvents = st.progress > .62 ? 'auto' : 'none'; const f = st.progress > .52; if (f !== __hdr.film) { __hdr.film = f; __hdr.until = filmEnd(); __hdr.sync(); if (f) gsap.fromTo('#nav > a, .logo', { y: -14, opacity: 0 }, { y: 0, opacity: 1, duration: .9, stagger: .05, ease: 'power3.out', overwrite: true }); } if (touch && (st.progress > .42) !== vDived) { vDived = st.progress > .42; vSync(); }  } } })
       .fromTo(hA, { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -40, duration: .14, ease: 'none' }, 0)
       .fromTo(hWord, { scale: 1 }, { scale: () => hDive.s, duration: .55, ease: 'power4.in' }, 0)
       .fromTo([hMask, '#heroTint'], { autoAlpha: 1 }, { autoAlpha: 0, duration: .08, ease: 'none' }, .5)
@@ -1549,42 +1547,25 @@
       gsap.set(script, { opacity: 1, clipPath: 'inset(-40% 100% -40% -6%)' });
       const caret = document.createElement('i'); caret.className = 'stm-caret'; caret.setAttribute('aria-hidden', 'true'); st.appendChild(caret);
       const write = () => {
-        // measure every caret stop once (one layout pass), then drive the typing with a few counters
-        const P = st.getBoundingClientRect(), stops = new Map();
-        units.forEach(u => { if (!script.includes(u)) { const r = u.getBoundingClientRect(); stops.set(u, [r.right - P.left, r.top - P.top, r.height]); } });
-        const moveCaret = u => { const s2 = stops.get(u); if (s2) { caret.style.transform = `translate3d(${s2[0]}px, ${s2[1]}px, 0)`; caret.style.height = s2[2] + 'px'; } };
-        const CH = .011, tl = gsap.timeline(); let at = 0, run = [];
-        const flush = () => {   // a run of plain letters: one tween reveals them in order
-          if (!run.length) return; const r = run, o = { i: 0 }; let shown = 0; run = [];
-          tl.to(o, { i: r.length, duration: r.length * CH, ease: 'none', onUpdate: () => { const k = Math.floor(o.i); while (shown < k) { r[shown].style.opacity = 1; shown++; } if (shown) moveCaret(r[shown - 1]); },
-            onComplete: () => { while (shown < r.length) { r[shown].style.opacity = 1; shown++; } moveCaret(r[r.length - 1]); } }, at);
-          at += r.length * CH;
-        };
-        units.forEach(u => {
-          if (script.includes(u)) {   // handwriting: a quick wipe across each word
-            flush(); tl.set(caret, { opacity: 0 }, at); const d = .16 + u.textContent.length * .035;
-            tl.to(u, { clipPath: 'inset(-40% -6% -40% -6%)', duration: d, ease: 'power1.inOut' }, at); at += d + .03;
-            if (u === script[script.length - 1]) { at += .08; tl.set(caret, { opacity: 1 }, at); }
+        // words fall into place one after another; pills pop as they arrive, the count lands on 1,000+ before the text goes on,
+        // and the promise is still written by hand
+        caret.remove();
+        const words2 = []; units.forEach(u => { const w = u.classList.contains('c') ? u.parentElement : u; if (words2[words2.length - 1] !== w) words2.push(w); });
+        units.forEach(u => { if (u.classList.contains('c')) u.style.opacity = 1; });
+        const tl = gsap.timeline(); let at = 0;
+        words2.forEach(w => {
+          if (script.includes(w)) { const d = .16 + w.textContent.length * .035; tl.to(w, { clipPath: 'inset(-40% -6% -40% -6%)', duration: d, ease: 'power1.inOut' }, at); at += d + .03; return; }
+          if (w.classList.contains('pill')) {
+            tl.fromTo(w, { opacity: 0, y: -40, scale: .7 }, { opacity: 1, y: 0, scale: 1, duration: .7, ease: 'back.out(1.6)' }, at);
+            const im = w.querySelector('img'); if (im) tl.fromTo(im, { scale: 1.5 }, { scale: 1, duration: .8, ease: 'power3.out' }, at);
+            at += .12;
+            if (w === count.parentElement) { const o = { v: 0 }, to = +count.dataset.to; tl.set(count, { textContent: '0+' }, at - .12);
+              tl.to(o, { v: to, duration: .9, ease: 'power3.out', onUpdate: () => { count.textContent = fmt(Math.round(o.v), count.dataset.fmt); } }, at - .05); at += .8; }
             return;
           }
-          if (u.classList.contains('pill')) {
-            flush();
-            tl.fromTo(u, { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .5, ease: 'back.out(1.8)', onStart: () => moveCaret(u) }, at);
-            const im = u.querySelector('img'); if (im) tl.fromTo(im, { scale: 1.5 }, { scale: 1, duration: .7, ease: 'power3.out' }, at);
-            at += .14;
-            if (u === count.parentElement) {   // the typing still waits until the count lands on 1,000+
-              const o = { v: 0 }, to = +count.dataset.to;
-              tl.set(count, { textContent: '0+' }, at - .14);
-              tl.to(o, { v: to, duration: .9, ease: 'power3.out', onUpdate: () => { count.textContent = fmt(Math.round(o.v), count.dataset.fmt); } }, at - .08);
-              at += .85;
-            }
-            return;
-          }
-          run.push(u);
-          if (/[.,]/.test(u.textContent)) { flush(); at += .06; }   // a breath at punctuation
+          tl.fromTo(w, { opacity: 0, y: -34 }, { opacity: 1, y: 0, duration: .65, ease: 'bounce.out' }, at);
+          at += /[.,]$/.test(w.textContent) ? .14 : .07;
         });
-        flush();
-        tl.to(caret, { opacity: 0, duration: .4 }, at + 1.2);
       };
       ScrollTrigger.create({ trigger: st, start: 'top 80%', once: true, onEnter: write });
       // the handwriting font changes line heights: re-measure every scroll position once it is in
