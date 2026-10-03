@@ -1232,6 +1232,26 @@
     .foot-grid > div:nth-child(2) { order: 3; } .foot-grid > div:nth-child(3) { order: 4; }
   }
   .ha-cue { display: none !important; }
+  /* How we build: the stories viewer on every screen (laptops match phones) */
+  .stories-on .b3-pin { height: auto; min-height: 0; background: var(--bg); }
+  .stories-on #b3c, .stories-on .b3-prog { display: none; }
+  .stories-on .b3-ui { height: auto; padding-block: clamp(60px, 9vh, 112px) clamp(48px, 7vh, 90px); pointer-events: auto; gap: 30px; justify-content: flex-start; }
+  @media (min-width: 761px) and (min-height: 561px) {
+    .stories { width: 100%; max-width: 900px; margin: 0 auto; }
+    .st-view { width: auto; height: min(calc(100vh - 390px), 540px); min-height: 300px; max-height: none; aspect-ratio: 4 / 3; }
+    .st-rings { justify-content: center; gap: 26px; }
+    .b3-ui > div:first-child h2 { max-width: none; }
+    .b3-ui > div:first-child h2 br { display: inline; }
+  }
+  /* numbers house fits a laptop screen below the header */
+  @media (min-width: 1001px) { .house { width: min(780px, 100%, calc((100vh - 150px) * 1.05)); } }
+  /* planner: flat, clean options and answer chips (no shadows) */
+  .opt, [data-theme="dark"] .opt { background: var(--card) !important; border: 1px solid var(--line) !important; box-shadow: none !important; }
+  .opt:hover { border-color: var(--bronze) !important; }
+  .opt[aria-pressed="true"], [data-theme="dark"] .opt[aria-pressed="true"] { background: rgba(60,84,168,.08) !important; border-color: var(--bronze) !important; box-shadow: none !important; color: var(--bronze); }
+  .answers button, [data-theme="dark"] .answers button { background: var(--bg-2) !important; box-shadow: none !important; border: 1px solid var(--line) !important; color: var(--ink) !important; }
+  .answers button.now, .answers button:hover { background: var(--bronze) !important; border-color: var(--bronze) !important; color: #fff !important; box-shadow: none !important; }
+  .stage, .quiz { box-shadow: 0 20px 50px -34px rgba(27,33,48,.35) !important; }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -1240,7 +1260,7 @@
   // smooth phone mode: touch screens get native scrolling and no WebGL
   (function () { var lite = matchMedia('(pointer: coarse)').matches || !matchMedia('(hover: hover)').matches;
     if (lite) document.documentElement.classList.add('lite');
-    else document.write('<script src="js/three.min.js" defer><\/script>'); })();
+    document.documentElement.classList.add('stories-on'); })();   // How we build is the stories viewer everywhere, so three.js is never needed
 </script>
 </head>
 <body>
@@ -2491,7 +2511,6 @@
         if (held) { held = false; if (visible && ring) ring.play(); return; }
         if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) go(dx < 0 ? 1 : -1); };
       deck.addEventListener('pointerup', up); deck.addEventListener('pointercancel', () => { down = false; clearTimeout(ht); if (held) { held = false; visible && ring && ring.play(); } });
-      if (matchMedia('(hover: hover)').matches) { deck.addEventListener('mouseenter', () => ring && ring.pause()); deck.addEventListener('mouseleave', () => visible && ring && ring.play()); }
       new IntersectionObserver(es => { visible = es[0].isIntersecting;
         if (visible && !started) { started = true; gsap.from(deck, { y: 50, opacity: 0, duration: 1.1, ease: EASE }); reveal(cards[order[0]]); timer(cards[order[0]]); }
         else if (ring) visible && !held ? ring.play() : ring.pause(); }, { threshold: .4 }).observe(deck); }
@@ -2624,9 +2643,9 @@
         gsap.from(card.querySelectorAll('.opt, .q-top, .q-actions'), { y: 16, opacity: 0, duration: .6, stagger: .05, delay: .1, ease: 'power3.out' }); };
       if (card) { ScrollTrigger.create({ ...once(card, 'top 85%'), onEnter: playQ }); new MutationObserver(() => card.getBoundingClientRect().top < innerHeight && playQ()).observe(card, { childList: true }); } }
 
-    // phones: "How we build" as social-media stories. Bubbles on top, a story viewer with progress bars below;
+    // phones and laptops: "How we build" as social-media stories. Bubbles on top, a story viewer with progress bars below;
     // every step has its own animation. Runs on timers and taps only (never tied to scrolling)
-    if (lite) (() => {
+    (() => {
       const ui = document.querySelector('.b3-ui'); if (!ui) return;
       const ST = [
         { s: 'Plans', t: 'Plans & consents', d: 'Feasibility, design and council consents, sorted before a single dig.', img: 'images/plan-swanson.webp', fx: 'scan' },
@@ -2719,7 +2738,7 @@
   // ===== 3D build: a terrace assembles itself as you scroll (three.js) =====
   (() => {
     const sec = document.getElementById('build3d'), canvas = document.getElementById('b3c');
-    if (!sec || !canvas) return;
+    if (!sec || !canvas || document.documentElement.classList.contains('stories-on')) return;
     const fallback = () => sec.classList.add('no-webgl');
     if (!window.THREE) { fallback(); return; }
     let renderer;
