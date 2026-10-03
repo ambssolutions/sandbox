@@ -775,6 +775,45 @@
     .lb { padding: 60px 10px; } .lb-prev, .lb-next { display: none; }
     .g-grid { gap: 10px; }
   }
+
+  /* ===== centred layout: every section's heading, intro and copy sit on the centre line ===== */
+  .head { flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 18px; }
+  .head > div { display: flex; flex-direction: column; align-items: center; }
+  .head .lede { margin-inline: auto; }
+  .head .eyebrow::after, .proj-head .eyebrow::after, .b3-ui .eyebrow::after, .faq-grid .eyebrow::after, .contact .wrap > .eyebrow::after, .fd-copy .eyebrow::after, .hb .eyebrow::after { content: ""; width: 34px; height: 1px; background: currentColor; transform: scaleX(var(--eb, 1)); transform-origin: 100% 50%; }
+  .proj-head { flex-direction: column; align-items: center; text-align: center; gap: 14px; }
+  .proj-head > div { display: flex; flex-direction: column; align-items: center; }
+  .b3-ui > div:first-child { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .hb-in { justify-content: center; }
+  .hb-main { text-align: center; display: flex; flex-direction: column; align-items: center; margin-inline: auto; }
+  .hb-lede { margin-inline: auto; }
+  .hero-ctas { justify-content: center; }
+  .step { text-align: center; align-items: center; }
+  .step-top { justify-content: center; gap: 28px; }
+  .step h3::after { left: 50%; margin-left: -20px; }
+  .tm { text-align: center; align-items: center; }
+  .tm figcaption { justify-content: center; align-self: stretch; text-align: left; }
+  .fd-copy { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .fd-copy .lede { margin-inline: auto; }
+  .fd-qm { left: 50%; margin-left: clamp(-38px, -3vw, -29px); }
+  .fd-vals { width: 100%; }
+  .fd-vals li { justify-content: center; text-align: left; }
+  .fd-ctas { justify-content: center; }
+  .faq-grid { grid-template-columns: 1fr; max-width: 880px; margin-inline: auto; gap: clamp(36px, 5vh, 60px); }
+  .faq-grid > div:first-child { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .faq-grid > div:first-child .lede { margin-inline: auto; }
+  .contact .wrap > .eyebrow, .contact .wrap > h2 { text-align: center; }
+  .contact .wrap > .eyebrow { display: flex; justify-content: center; }
+  .contact-grid > div:first-child { text-align: center; }
+  .contact-grid > div:first-child .lede { margin-inline: auto; }
+  .details li { grid-template-columns: 1fr; gap: 4px; justify-items: center; }
+  .bk-paper { align-items: center; text-align: center; }
+  .bk-paper p { margin-inline: auto; }
+  .bk-chips { justify-content: center; }
+  .bk-more { align-self: center; }
+  .pcard .cap { flex-direction: column; align-items: center; text-align: center; gap: 4px; }
+  .fd-qm { top: -60px; }
+  @media (max-width: 760px) { .hb .eyebrow::before, .hb .eyebrow::after { display: none; } .fd-qm { top: -50px; } }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
