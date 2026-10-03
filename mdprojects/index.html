@@ -1213,6 +1213,24 @@
     .pbk-sticky .pbk { height: calc(100svh - 60px - 60px); }
     .pbk-sticky .pbk-nav { margin-top: 6px; } .pbk-nav .arrow { width: 38px; height: 38px; } .pbk-count { font-size: .72rem; }
   }
+  /* founder photo: bigger on laptops and large screens */
+  @media (min-width: 1001px) and (min-height: 561px) {
+    .fd-grid { grid-template-columns: 1fr 1.05fr; }
+    .fd-art { width: min(100%, 580px, calc((100vh - 170px) * .8)); }
+  }
+  /* sideways phones: a squarer arch that uses the full screen height */
+  @media (orientation: landscape) and (max-height: 560px) {
+    .fd-art { width: min(44vw, calc((100svh - 100px) * .95)); top: 70px; }
+    .fd-photo { aspect-ratio: 1 / 1.05; }
+    .fd-photo img { object-position: 50% 45%; }
+  }
+  /* footer, sideways phones / tablets: logo | contact, then services | company */
+  @media (max-width: 1000px) and (min-width: 761px), (orientation: landscape) and (max-height: 560px) {
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+    .foot-grid > div { grid-column: auto !important; justify-self: start !important; }
+    .foot-grid > div:nth-child(1) { order: 1; } .foot-grid > div:nth-child(4) { order: 2; }
+    .foot-grid > div:nth-child(2) { order: 3; } .foot-grid > div:nth-child(3) { order: 4; }
+  }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
