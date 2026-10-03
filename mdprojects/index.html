@@ -2311,7 +2311,8 @@
       bk.innerHTML = h + '<span class="bk-spine" aria-hidden="true"></span><span class="bk-cast" aria-hidden="true"></span>';
       stack.after(bk); stack.style.display = 'none';
       const leaves = [...bk.querySelectorAll('.bk-leaf')], cast = bk.querySelector('.bk-cast');
-      gsap.from(bk, { y: 60, opacity: 0, duration: 1.4, ease: EASE, scrollTrigger: { trigger: bk, start: 'top 85%', once: true } });
+      // fade only: moving the book would shift where the pin measures it, and the header would cover its top
+      gsap.from(bk, { opacity: 0, scale: .97, transformOrigin: '50% 0%', duration: 1.2, ease: EASE, clearProps: 'transform', scrollTrigger: { trigger: bk, start: 'top 85%', once: true } });
       const turn = gsap.timeline({ scrollTrigger: { trigger: bk, start: () => 'top ' + (document.getElementById('header').offsetHeight + 28), end: () => '+=' + Math.round(innerHeight * .95 * N), pin: '#services', scrub: .7, anticipatePin: 1, invalidateOnRefresh: true } });
       leaves.forEach((lf, k) => {
         const front = lf.querySelector('.bk-front .bk-sh'), back = lf.querySelector('.bk-back .bk-sh'), at = k;
