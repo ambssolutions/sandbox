@@ -547,7 +547,11 @@
   .pbk { position: relative; height: min(84svh, 760px); margin-top: 30px; perspective: 1800px; }
   .pbk::before, .pbk::after { content: ""; position: absolute; left: 8px; right: -5px; top: 6px; bottom: -6px; border-radius: var(--r); background: #dbe2ee; }
   .pbk::after { left: 16px; right: -10px; top: 12px; bottom: -12px; background: #c9d2e1; z-index: -1; }
-  .pbk-leaf { position: absolute; inset: 0; z-index: 1; transform-origin: 0% 50%; transform-style: preserve-3d; }
+  .pbk-leaf { position: absolute; inset: 0; z-index: 1; transform-origin: 0% 50%; display: none; }
+  /* only the visible page and the one beneath exist; 3D is switched on just while a page is turning */
+  .pbk-leaf.cur, .pbk-leaf.under { display: block; }
+  .pbk-leaf.turning { transform-style: preserve-3d; }
+  .pbk-leaf:not(.turning) .pbk-back { display: none; }
   .pbk .bk-face { border-radius: var(--r); background: #fbfcfe; box-shadow: 0 24px 50px -30px rgba(9,13,26,.6); }
   .pbk-front { display: grid; grid-template-rows: 46% 1fr; }
   .pbk-front .bk-img { position: relative; inset: auto; height: 100%; }
@@ -1617,15 +1621,18 @@
       const leaves = [...pb.querySelectorAll('.pbk-leaf')], count = nav.querySelector('.pbk-count'), [prevB, nextB] = nav.querySelectorAll('button');
       let cur = 0, busy = false, auto = null, touched = false;
       let lastScroll = 0; addEventListener('scroll', () => { lastScroll = performance.now(); }, { passive: true });   // never turn a page mid-scroll
-      const show = () => { count.textContent = String(cur + 1).padStart(2, '0') + ' / ' + String(N).padStart(2, '0'); prevB.disabled = cur === 0; nextB.disabled = cur === N - 1; };
+      const mark = () => leaves.forEach((l, k) => { l.classList.toggle('cur', k === cur); l.classList.toggle('under', k === cur + 1); });
+      const show = () => { mark(); count.textContent = String(cur + 1).padStart(2, '0') + ' / ' + String(N).padStart(2, '0'); prevB.disabled = cur === 0; nextB.disabled = cur === N - 1; };
       const flip = dir => {
         if (busy) return; const k = dir > 0 ? cur : cur - 1; if (k < 0 || k >= N - 1) return;
         busy = true; const lf = leaves[k], f = lf.querySelector('.bk-front .bk-sh'), bsh = lf.querySelector('.bk-back .bk-sh');
-        gsap.set(lf, { visibility: 'visible', zIndex: 50 });
-        const tl = gsap.timeline({ onComplete: () => { busy = false; if (dir > 0) gsap.set(lf, { visibility: 'hidden' }); gsap.set(lf, { zIndex: N - k }); } });
+        // during the turn: the turning page (3D on) over the page it reveals
+        leaves.forEach((l, j) => { l.classList.toggle('cur', j === k); l.classList.toggle('under', j === k + 1); });
+        lf.classList.add('turning'); gsap.set(lf, { zIndex: 50 });
+        const tl = gsap.timeline({ onComplete: () => { busy = false; lf.classList.remove('turning'); gsap.set(lf, { zIndex: N - k, clearProps: 'transform' }); mark(); } });
         if (dir > 0) tl.fromTo(lf, { rotationY: 0 }, { rotationY: -180, duration: 1.1, ease: 'power2.inOut' }).fromTo(f, { opacity: 0 }, { opacity: .55, duration: .55, ease: 'power1.in' }, 0).fromTo(bsh, { opacity: .5 }, { opacity: 0, duration: .55 }, .55);
         else tl.fromTo(lf, { rotationY: -180 }, { rotationY: 0, duration: 1.1, ease: 'power2.inOut' }).fromTo(bsh, { opacity: 0 }, { opacity: .5, duration: .55 }, 0).fromTo(f, { opacity: .55 }, { opacity: 0, duration: .55, ease: 'power1.out' }, .55);
-        cur += dir; show();
+        cur += dir; count.textContent = String(cur + 1).padStart(2, '0') + ' / ' + String(N).padStart(2, '0'); prevB.disabled = cur === 0; nextB.disabled = cur === N - 1;
       };
       const stopAuto = () => { touched = true; clearInterval(auto); auto = null; };
       prevB.addEventListener('click', () => { stopAuto(); flip(-1); }); nextB.addEventListener('click', () => { stopAuto(); flip(1); });
