@@ -1152,10 +1152,12 @@
   .fd-call { display: inline-block; padding-top: 2px; line-height: 1.6; }
   /* footer on phones: Services and Company side by side (Company on the right, left-aligned) */
   @media (max-width: 760px) {
-    .foot-grid { grid-template-columns: 1fr 1fr; column-gap: 24px; row-gap: 34px; text-align: left; }
+    .foot-grid { grid-template-columns: max-content max-content; column-gap: clamp(40px, 14vw, 64px); row-gap: 34px; text-align: left; }
     .foot-grid > div:first-child, .foot-grid > div:last-child { grid-column: 1 / -1; }
-    .foot-grid > div:nth-child(3) { justify-self: end; min-width: 0; }
+    .foot-grid > div:nth-child(3) { justify-self: start; min-width: 0; }
   }
+  .foot-bottom .credit b { font-weight: 500; color: rgba(255,255,255,.85); }
+  @media (max-width: 760px) { .foot-bottom { flex-direction: column; align-items: center; text-align: center; gap: 6px; } }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -1523,7 +1525,7 @@
       <div><h4>Contact</h4><ul><li><a href="tel:0210590409">0210 590 409</a></li><li><a href="mailto:info@mdprojects.co.nz">info@mdprojects.co.nz</a></li><li>409 Bucklands Beach Road, Auckland 2012</li></ul></div>
     </div>
     <div class="wordmark" aria-hidden="true">MD Projects</div>
-    <div class="foot-bottom"><span>© <span id="year">2026</span> MD Projects NZ Ltd. All rights reserved.</span><span>Auckland, New Zealand</span></div>
+    <div class="foot-bottom"><span>© <span id="year">2026</span> MD Projects NZ Ltd. All rights reserved.</span><span>Auckland, New Zealand</span><span class="credit">Proudly designed by <b>AMBS Solutions</b></span></div>
   </div>
 </footer>
 
