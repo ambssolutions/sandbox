@@ -428,7 +428,7 @@
   .od > span { display: inline-block; height: 1em; overflow: hidden; line-height: 1; }
   .od > span > span { display: block; }
   .od > span > span > b { display: block; height: 1em; font-weight: inherit; }
-  @media (max-width: 760px) { .mq-track span.o { -webkit-text-stroke-width: 1.5px; } .mq-b .mq-track span:not(.o) { text-shadow: -1px -1px 1px rgba(255,255,255,.95), 1.5px 1.5px 2px rgba(90,108,148,.38); } }
+  @media (max-width: 760px) { .mq-track span, .mq-track i { font-size: 3rem; } .mq-track i { font-size: 1.5rem; } .marquee { padding: 6px 0; } .mq-track span.o { -webkit-text-stroke-width: 1.2px; } .mq-b .mq-track span:not(.o) { text-shadow: -1px -1px 1px rgba(255,255,255,.95), 1.5px 1.5px 2px rgba(90,108,148,.38); } }
   @media (max-width: 760px) {
     .tm-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; margin: 30px calc(-1 * var(--gutter)) 0; padding: 12px var(--gutter) 26px; scrollbar-width: none; overscroll-behavior-x: contain; }
     .tm-grid::-webkit-scrollbar { display: none; }
@@ -608,10 +608,11 @@
     .nav .btn { margin-top: 26px; justify-content: center; background: #fff; color: var(--ink); box-shadow: 0 16px 34px -14px rgba(0,0,0,.6); font-size: 1rem; padding: 17px 22px; }
     .nav-foot { display: grid; gap: 8px; margin-top: auto; padding-top: 30px; }
     .nav-foot a { color: rgba(255,255,255,.7); font-size: .95rem; text-decoration: none; }
-    .menu-btn { display: grid; place-items: center; gap: 7px; width: 44px; height: 44px; padding: 10px; }
-    .menu-btn i { display: block; width: 24px; height: 2px; border-radius: 2px; background: currentColor; transition: transform .5s cubic-bezier(.76,0,.24,1); }
-    .header.menu-open .menu-btn i:first-child { transform: translateY(4.5px) rotate(45deg); }
-    .header.menu-open .menu-btn i:last-child { transform: translateY(-4.5px) rotate(-45deg); }
+    .menu-btn { display: block; position: relative; width: 44px; height: 44px; padding: 0; margin-right: -8px; }
+    .menu-btn i { position: absolute; left: 10px; top: 21px; width: 24px; height: 2px; border-radius: 2px; background: currentColor; transition: transform .5s cubic-bezier(.76,0,.24,1); }
+    .menu-btn i:first-child { transform: translateY(-4.5px); } .menu-btn i:last-child { transform: translateY(4.5px); }
+    .header.menu-open .menu-btn i:first-child { transform: rotate(45deg); }
+    .header.menu-open .menu-btn i:last-child { transform: rotate(-45deg); }
     .header .wrap { height: 76px; }
     .header.menu-open { background: transparent; box-shadow: none; }
     .header.menu-open::before, .header.menu-open::after { opacity: 0; transform: scaleX(0); }
@@ -1532,29 +1533,42 @@
       gsap.set(script, { opacity: 1, clipPath: 'inset(-40% 100% -40% -6%)' });
       const caret = document.createElement('i'); caret.className = 'stm-caret'; caret.setAttribute('aria-hidden', 'true'); st.appendChild(caret);
       const write = () => {
-        const P = st.getBoundingClientRect(), pos = el => { const r = el.getBoundingClientRect(); return { x: r.right - P.left, y: r.top - P.top, h: r.height }; };
-        const tl = gsap.timeline(); let at = 0;
+        // measure every caret stop once (one layout pass), then drive the typing with a few counters
+        const P = st.getBoundingClientRect(), stops = new Map();
+        units.forEach(u => { if (!script.includes(u)) { const r = u.getBoundingClientRect(); stops.set(u, [r.right - P.left, r.top - P.top, r.height]); } });
+        const moveCaret = u => { const s2 = stops.get(u); if (s2) { caret.style.transform = `translate3d(${s2[0]}px, ${s2[1]}px, 0)`; caret.style.height = s2[2] + 'px'; } };
+        const CH = .011, tl = gsap.timeline(); let at = 0, run = [];
+        const flush = () => {   // a run of plain letters: one tween reveals them in order
+          if (!run.length) return; const r = run, o = { i: 0 }; let shown = 0; run = [];
+          tl.to(o, { i: r.length, duration: r.length * CH, ease: 'none', onUpdate: () => { const k = Math.floor(o.i); while (shown < k) { r[shown].style.opacity = 1; shown++; } if (shown) moveCaret(r[shown - 1]); },
+            onComplete: () => { while (shown < r.length) { r[shown].style.opacity = 1; shown++; } moveCaret(r[r.length - 1]); } }, at);
+          at += r.length * CH;
+        };
         units.forEach(u => {
-          if (script.includes(u)) {   // handwriting: a wipe across each word, paced by its length
-            tl.set(caret, { opacity: 0 }, at); const d = .25 + u.textContent.length * .07;
-            tl.to(u, { clipPath: 'inset(-40% -6% -40% -6%)', duration: d, ease: 'power1.inOut' }, at); at += d + .06;
-            if (u === script[script.length - 1]) { at += .15; tl.set(caret, { opacity: 1 }, at); }
+          if (script.includes(u)) {   // handwriting: a quick wipe across each word
+            flush(); tl.set(caret, { opacity: 0 }, at); const d = .16 + u.textContent.length * .035;
+            tl.to(u, { clipPath: 'inset(-40% -6% -40% -6%)', duration: d, ease: 'power1.inOut' }, at); at += d + .03;
+            if (u === script[script.length - 1]) { at += .08; tl.set(caret, { opacity: 1 }, at); }
             return;
           }
           if (u.classList.contains('pill')) {
-            tl.fromTo(u, { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .6, ease: 'back.out(1.8)' }, at);
-            const im = u.querySelector('img'); if (im) tl.fromTo(im, { scale: 1.6 }, { scale: 1, duration: .9, ease: 'power3.out' }, at);
-            at += .24;
-            if (u === count.parentElement) {   // the count runs inside the timeline, and the typing waits until it lands on 1,000+
+            flush();
+            tl.fromTo(u, { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .5, ease: 'back.out(1.8)', onStart: () => moveCaret(u) }, at);
+            const im = u.querySelector('img'); if (im) tl.fromTo(im, { scale: 1.5 }, { scale: 1, duration: .7, ease: 'power3.out' }, at);
+            at += .14;
+            if (u === count.parentElement) {   // the typing still waits until the count lands on 1,000+
               const o = { v: 0 }, to = +count.dataset.to;
-              tl.set(count, { textContent: '0+' }, at - .24);
-              tl.to(o, { v: to, duration: 1.5, ease: 'power3.out', onUpdate: () => { count.textContent = fmt(Math.round(o.v), count.dataset.fmt); } }, at - .1);
-              at += 1.5;
+              tl.set(count, { textContent: '0+' }, at - .14);
+              tl.to(o, { v: to, duration: .9, ease: 'power3.out', onUpdate: () => { count.textContent = fmt(Math.round(o.v), count.dataset.fmt); } }, at - .08);
+              at += .85;
             }
-          } else { tl.set(u, { opacity: 1 }, at); at += /[.,]/.test(u.textContent) ? .1 : .02; }
-          const p = pos(u); tl.set(caret, { x: p.x, y: p.y, height: p.h }, at);
+            return;
+          }
+          run.push(u);
+          if (/[.,]/.test(u.textContent)) { flush(); at += .06; }   // a breath at punctuation
         });
-        tl.to(caret, { opacity: 0, duration: .5 }, at + 1.6);
+        flush();
+        tl.to(caret, { opacity: 0, duration: .4 }, at + 1.2);
       };
       ScrollTrigger.create({ trigger: st, start: 'top 80%', once: true, onEnter: write });
       // the handwriting font changes line heights: re-measure every scroll position once it is in
