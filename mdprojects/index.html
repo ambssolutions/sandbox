@@ -590,6 +590,42 @@
   .bento .pr h3 { font-size: clamp(1.15rem, 1.5vw, 1.35rem); margin-top: 14px; }
   .bento .pr p { margin-top: 10px; }
   @media (max-width: 760px) { .pr-fig b { font-size: 2.9rem; } .bento .pr { padding: 24px 22px; } }
+  /* ===== How we build as stories (phones) ===== */
+  .stories { display: grid; gap: 18px; }
+  .st-rings { display: flex; gap: 12px; justify-content: space-between; }
+  .st-ring { display: grid; justify-items: center; gap: 6px; background: none; border: 0; padding: 0; cursor: pointer; color: var(--ink); font: inherit; flex: 1; min-width: 0; }
+  .st-av { width: 58px; height: 58px; border-radius: 50%; padding: 3px; background: conic-gradient(from 210deg, #90ccf0, #3c54a8, #5f86d6, #90ccf0); display: block; }
+  .st-av img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--bg); display: block; }
+  .st-ring.seen .st-av { background: #c9d2e1; }
+  .st-ring.on .st-av { transform: scale(1.08); box-shadow: 0 8px 20px -8px rgba(60,84,168,.6); }
+  .st-ring small { font: 500 .66rem/1.1 var(--f); color: var(--muted); max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .st-ring.on small { color: var(--ink); font-weight: 600; }
+  .st-view { position: relative; aspect-ratio: 9 / 13.5; max-height: calc(100svh - 230px); width: 100%; margin: 0 auto; border-radius: 24px; overflow: hidden; background: #0e1322; box-shadow: 0 30px 60px -30px rgba(9,13,26,.7); }
+  .st-bars { position: absolute; z-index: 5; top: 10px; left: 12px; right: 12px; display: flex; gap: 5px; }
+  .st-bars i { flex: 1; height: 3px; border-radius: 3px; background: rgba(255,255,255,.35); overflow: hidden; }
+  .st-bars b { display: block; height: 100%; background: #fff; transform: scaleX(0); transform-origin: 0 50%; }
+  .st-head { position: absolute; z-index: 5; top: 24px; left: 12px; display: flex; align-items: center; gap: 10px; color: #fff; }
+  .st-head img { width: 34px; height: 34px; border-radius: 50%; object-fit: contain; background: rgba(255,255,255,.15); padding: 4px; }
+  .st-head b { display: block; font: 600 .82rem/1.2 var(--f); } .st-head small { font: 400 .7rem/1.2 var(--f); opacity: .8; } .st-head em { font-style: normal; }
+  .st-slide { position: absolute; inset: 0; visibility: hidden; }
+  .st-slide.on { visibility: visible; }
+  .st-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .st-slide::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9,13,26,.5) 0%, rgba(9,13,26,0) 22%, rgba(9,13,26,0) 45%, rgba(9,13,26,.88) 100%); pointer-events: none; }
+  .st-slide[data-fx="scan"] { background: #0b1230; } .st-slide[data-fx="scan"] .st-img { object-fit: contain; }
+  .st-fx { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .st-cap { position: absolute; z-index: 3; left: 18px; right: 18px; bottom: 20px; color: #fff; }
+  .st-cap span { font: 600 .74rem/1 var(--f); letter-spacing: .2em; color: var(--bronze-2); }
+  .st-cap h4 { margin: 8px 0 6px; font: 600 1.5rem/1.1 var(--f); letter-spacing: -.03em; }
+  .st-cap p { margin: 0; font-size: .92rem; color: rgba(255,255,255,.82); }
+  .st-tap { position: absolute; z-index: 4; top: 60px; bottom: 0; width: 40%; background: none; border: 0; cursor: pointer; }
+  .st-prev { left: 0; } .st-next { right: 0; width: 60%; }
+  .fx-scan { position: absolute; top: 0; bottom: 0; left: 0; width: 3px; background: #90ccf0; box-shadow: 0 0 18px 6px rgba(144,204,240,.6); }
+  .fx-level { position: absolute; left: 10%; right: 10%; top: 54%; height: 3px; border-radius: 3px; background: #90ccf0; box-shadow: 0 0 12px rgba(144,204,240,.8); transform-origin: 50% 50%; }
+  .fx-slat { display: inline-block; width: calc(100% / 6); height: 100%; background: #0e1322; transform-origin: 50% 0; vertical-align: top; }
+  .st-fx:has(.fx-slat) { font-size: 0; }
+  .fx-roof { position: absolute; left: 12%; width: 76%; top: 16%; filter: drop-shadow(0 6px 12px rgba(0,0,0,.5)); }
+  .fx-key { position: absolute; left: 50%; top: 34%; width: 84px; height: 84px; margin-left: -42px; filter: drop-shadow(0 6px 14px rgba(0,0,0,.5)); }
+  .fx-spark { position: absolute; left: 50%; top: calc(34% + 40px); width: 10px; height: 10px; margin: -5px; border-radius: 50%; background: #90ccf0; }
   /* touch screens: no sticky "pressed" hover state */
   @media (hover: none) { .step:hover { box-shadow: var(--emb); } .btn-line:hover { box-shadow: var(--emb-sm); } }
   /* phones: tighter, crisper relief that stays inside the narrow gutters */
@@ -1801,8 +1837,64 @@
         gsap.from(card.querySelectorAll('.opt, .q-top, .q-actions'), { y: 16, opacity: 0, duration: .6, stagger: .05, delay: .1, ease: 'power3.out' }); };
       if (card) { ScrollTrigger.create({ ...once(card, 'top 85%'), onEnter: playQ }); new MutationObserver(() => card.getBoundingClientRect().top < innerHeight && playQ()).observe(card, { childList: true }); } }
 
-    // phones: build steps rise in as a list (the 3D model only runs on laptops)
-    if (lite) gsap.fromTo('.b3-img, .b3-steps li', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: .09, ease: EASE, scrollTrigger: { trigger: '.b3-ui', start: 'top 70%', once: true } });
+    // phones: "How we build" as social-media stories. Bubbles on top, a story viewer with progress bars below;
+    // every step has its own animation. Runs on timers and taps only (never tied to scrolling)
+    if (lite) (() => {
+      const ui = document.querySelector('.b3-ui'); if (!ui) return;
+      const ST = [
+        { s: 'Plans', t: 'Plans & consents', d: 'Feasibility, design and council consents, sorted before a single dig.', img: 'images/plan-swanson.webp', fx: 'scan' },
+        { s: 'Slab', t: 'Foundations poured', d: 'Site works and a level, engineered slab: the base everything stands on.', img: 'images/guide-feasibility-sm.webp', fx: 'rise' },
+        { s: 'Frame', t: 'Frame & cladding', d: 'The frame goes up, then weathertight cladding wraps the home.', img: 'images/intro-townhouses-sm.webp', fx: 'slats' },
+        { s: 'Roof', t: 'Joinery & roof', d: 'Windows, doors and the roof go on. The home is closed in.', img: 'images/project-swanson-road-sm.webp', fx: 'roof' },
+        { s: 'Keys', t: 'Landscaping & handover', d: 'Paths, fences and planting, final checks, then the keys are yours.', img: 'images/gallery-5-sm.webp', fx: 'keys' }
+      ], N = ST.length, DUR = 4.6;
+      const wrap = document.createElement('div'); wrap.className = 'stories';
+      wrap.innerHTML = `<div class="st-rings">${ST.map((x, i) => `<button class="st-ring" aria-label="Step ${i + 1}: ${x.t}"><span class="st-av"><img src="${x.img}" alt="" loading="lazy" decoding="async"></span><small>${x.s}</small></button>`).join('')}</div>
+        <div class="st-view" role="group" aria-label="How we build, step by step">
+          <div class="st-bars">${ST.map(() => '<i><b></b></i>').join('')}</div>
+          <div class="st-head"><img src="images/logo-white.png" alt=""><span><b>MD Projects NZ</b><small>Step <em>1</em> of ${N}</small></span></div>
+          ${ST.map((x, i) => `<div class="st-slide" data-fx="${x.fx}"><img class="st-img" src="${x.img}" alt="${x.t}" loading="lazy" decoding="async"><div class="st-fx"></div><div class="st-cap"><span>0${i + 1}</span><h4>${x.t}</h4><p>${x.d}</p></div></div>`).join('')}
+          <button class="st-tap st-prev" aria-label="Previous step"></button><button class="st-tap st-next" aria-label="Next step"></button>
+        </div>`;
+      ui.querySelector('.b3-img').replaceWith(wrap);
+      ui.querySelector('.b3-steps').parentElement.style.display = 'none';
+      const slides = [...wrap.querySelectorAll('.st-slide')], bars = [...wrap.querySelectorAll('.st-bars b')], rings = [...wrap.querySelectorAll('.st-ring')], stepNo = wrap.querySelector('.st-head em');
+      // per-step overlay art
+      const fxHTML = {
+        scan: '<span class="fx-scan"></span>',
+        rise: '<span class="fx-level"></span>',
+        slats: Array.from({ length: 6 }, () => '<span class="fx-slat"></span>').join(''),
+        roof: '<svg class="fx-roof" viewBox="0 0 200 80" aria-hidden="true"><path d="M8 76 L100 8 L192 76" fill="none" stroke="#fff" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/></svg>',
+        keys: '<svg class="fx-key" viewBox="0 0 64 64" aria-hidden="true"><circle cx="20" cy="32" r="12" fill="none" stroke="#fff" stroke-width="5"/><path d="M32 32h26M48 32v9M56 32v6" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>' + Array.from({ length: 8 }, () => '<i class="fx-spark"></i>').join('')
+      };
+      slides.forEach(sl => sl.querySelector('.st-fx').innerHTML = fxHTML[sl.dataset.fx]);
+      const play = sl => {   // the step's own animation
+        const im = sl.querySelector('.st-img'), fx = sl.querySelector('.st-fx'), cap = sl.querySelector('.st-cap'), tl = gsap.timeline();
+        tl.fromTo(cap.children, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .7, stagger: .08, ease: 'power3.out' }, .35);
+        switch (sl.dataset.fx) {
+          case 'scan': tl.fromTo(im, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1.6, ease: 'power2.inOut' }, 0).fromTo(fx.firstChild, { xPercent: 0, opacity: 1 }, { x: () => sl.offsetWidth, opacity: 0, duration: 1.6, ease: 'power2.inOut' }, 0); break;
+          case 'rise': tl.fromTo(im, { yPercent: 40, scale: 1.15 }, { yPercent: 0, scale: 1, duration: 1.4, ease: 'power3.out' }, 0).fromTo(fx.firstChild, { scaleX: 0 }, { scaleX: 1, duration: 1, ease: 'power2.inOut' }, .6); break;
+          case 'slats': tl.fromTo(fx.children, { scaleY: 1 }, { scaleY: 0, duration: .8, stagger: .1, ease: 'power3.inOut' }, 0).fromTo(im, { scale: 1.12 }, { scale: 1, duration: 1.6, ease: 'power2.out' }, 0); break;
+          case 'roof': tl.fromTo(fx.firstChild, { y: -160, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: 'bounce.out' }, .15).fromTo(im, { scale: 1.08 }, { scale: 1, duration: 1.4, ease: 'power2.out' }, 0); break;
+          case 'keys': tl.fromTo(im, { scale: 1.2 }, { scale: 1, duration: 1.6, ease: 'power3.out' }, 0).fromTo(fx.querySelector('.fx-key'), { scale: 0, rotation: -60 }, { scale: 1, rotation: 0, duration: .9, ease: 'back.out(2.4)' }, .4)
+            .fromTo(fx.querySelectorAll('.fx-spark'), { scale: 0, opacity: 1, x: 0, y: 0 }, { scale: 1, opacity: 0, x: i => Math.cos(i / 8 * 6.28) * 90, y: i => Math.sin(i / 8 * 6.28) * 90, duration: 1, ease: 'power2.out' }, .7); break;
+        }
+      };
+      let cur = -1, bar = null, visible = false;
+      const show = k => {
+        k = (k + N) % N; cur = k; stepNo.textContent = k + 1;
+        slides.forEach((sl, i) => sl.classList.toggle('on', i === k)); rings.forEach((r, i) => { r.classList.toggle('on', i === k); r.classList.toggle('seen', i < k); });
+        bars.forEach((b, i) => gsap.set(b, { scaleX: i < k ? 1 : 0 }));
+        play(slides[k]);
+        if (bar) bar.kill();
+        bar = gsap.fromTo(bars[k], { scaleX: 0 }, { scaleX: 1, duration: DUR, ease: 'none', paused: !visible, onComplete: () => show(k + 1) });
+      };
+      wrap.querySelector('.st-next').addEventListener('click', () => show(cur + 1));
+      wrap.querySelector('.st-prev').addEventListener('click', () => show(cur - 1));
+      rings.forEach((r, i) => r.addEventListener('click', () => show(i)));
+      new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && cur < 0) show(0); else if (bar) visible ? bar.play() : bar.pause(); }, { threshold: .35 }).observe(wrap.querySelector('.st-view'));
+      gsap.from(wrap.querySelectorAll('.st-ring'), { scale: .4, opacity: 0, duration: .7, stagger: .07, ease: 'back.out(2)', scrollTrigger: { trigger: wrap, start: 'top 85%', once: true } });
+    })();
 
     // the shimmer animates background-position (main thread), so it only runs while on screen
     document.querySelectorAll('.shimmer').forEach(el => new IntersectionObserver(es => el.classList.toggle('on', es[0].isIntersecting)).observe(el));
