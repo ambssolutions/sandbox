@@ -1178,6 +1178,15 @@
   @media (orientation: landscape) and (max-height: 560px) { section { padding-block: 44px; } }
   .bt-photo img { object-position: 56% 55%; }
   @media (max-width: 760px) { .bt-photo { aspect-ratio: 4 / 3.4; } }
+  /* gallery: wide tiles get two rows so photos keep their natural shape instead of a zoomed strip */
+  .g-grid .g-wide { grid-row: span 2; }
+  .g img { object-position: 50% 50%; }
+  @media (min-width: 1001px) {
+    .g-grid { grid-template-columns: repeat(3, 1fr); grid-auto-rows: clamp(180px, 19vw, 300px); grid-template-areas: "a a b" "a a c" "d e e" "d e e" "f h h" "g h h"; }
+    .g-grid > .g { grid-column: auto; grid-row: auto; }
+    .g-grid > .g:nth-child(1) { grid-area: a; } .g-grid > .g:nth-child(2) { grid-area: b; } .g-grid > .g:nth-child(3) { grid-area: c; } .g-grid > .g:nth-child(4) { grid-area: d; }
+    .g-grid > .g:nth-child(5) { grid-area: e; } .g-grid > .g:nth-child(6) { grid-area: f; } .g-grid > .g:nth-child(7) { grid-area: g; } .g-grid > .g:nth-child(8) { grid-area: h; }
+  }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
