@@ -44,7 +44,7 @@
     --r: clamp(18px, 2vw, 30px);
   }
   * { box-sizing: border-box; }
-  html { font-size: clamp(16px, .4vw + 10.4px, 20px); }
+  html { font-size: clamp(16px, .4vw + 10.4px, 20px); overflow-x: clip; }   /* nothing may widen the page beyond the screen (phones would zoom the layout out) */
   body { margin: 0; background: var(--bg); color: var(--ink); font: 300 1rem/1.7 var(--f); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; }
   html.lenis, html.lenis body { height: auto; }
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
@@ -112,6 +112,7 @@
   .nav a:hover { color: var(--ink); }
   .nav .btn { color: var(--ink); padding: 12px 22px; }
   .menu-btn { display: none; background: none; border: 0; padding: 8px; cursor: pointer; color: var(--ink); }
+  .nav-foot { display: none; }
 
   /* Hero */
   .hero { padding: 0; }
@@ -388,11 +389,11 @@
   .step:hover { background: var(--bg); box-shadow: var(--emb-in); }
   .step b { color: var(--bg); text-shadow: -2px -2px 2px rgba(255,255,255,.95), 2px 2px 3px rgba(90,108,148,.45); font-size: 3.4rem; }
   .step h3 { position: relative; padding-bottom: 12px; }
-  .f-img { box-shadow: var(--emb-photo); overflow: visible; }
+  .f-img { box-shadow: var(--emb-photo); overflow: clip; }
   .f-img img { border-radius: var(--r); }
   .f-img .cover { border-radius: var(--r); }
   .vals li { border-top: 0; margin: 6px 0; padding: 14px 18px; border-radius: 14px; box-shadow: var(--emb-sm); }
-  .g { box-shadow: 12px 14px 30px -8px rgba(70,90,135,.35), -8px -8px 20px rgba(255,255,255,.9); overflow: visible; }
+  .g { box-shadow: 12px 14px 30px -8px rgba(70,90,135,.35), -8px -8px 20px rgba(255,255,255,.9); overflow: clip; }
   .g img { border-radius: inherit; }
   .g .cover { border-radius: inherit; }
   #faqs { --sec-bg: var(--bg); background: var(--bg) !important; }
@@ -522,6 +523,7 @@
   .stack.book .scard { position: absolute; inset: 0; top: 0; height: 100%; box-shadow: 0 30px 60px -36px rgba(9,13,26,.55); }
   .stack.book::before, .stack.book::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: -10px; height: 40px; border-radius: 0 0 var(--r) var(--r); background: #d7deea; box-shadow: 0 10px 24px -14px rgba(9,13,26,.4); }
   .stack.book::after { left: 28px; right: 28px; bottom: -20px; background: #c6cfdf; z-index: -1; }
+  .contact { overflow-x: clip; }
   /* touch screens: no sticky "pressed" hover state */
   @media (hover: none) { .step:hover { box-shadow: var(--emb); } .btn-line:hover { box-shadow: var(--emb-sm); } }
   /* phones: tighter, crisper relief that stays inside the narrow gutters */
@@ -549,13 +551,25 @@
   img.ld { opacity: 0; } img { transition: opacity .35s ease; }
 
   @media (max-width: 1000px) {
-    .nav { position: fixed; top: calc(76px + env(safe-area-inset-top, 0px)); left: 0; right: 0; background: var(--bg); flex-direction: column; align-items: stretch; gap: 0; padding: 8px var(--gutter) 28px; display: none; box-shadow: 0 30px 40px -30px rgba(0,0,0,.2); }
-    .nav.open { display: flex; }
-    .nav a { padding: 16px 0; border-bottom: 1px solid var(--line); font-size: 1.05rem; color: var(--ink); }
-    .nav .btn { margin-top: 18px; justify-content: center; }
-    .menu-btn { display: block; }
+    /* phone menu: a full-screen navy panel slides down, big numbered links fall in one by one */
+    .nav { position: fixed; inset: 0; z-index: -1; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding: calc(100px + env(safe-area-inset-top, 0px)) var(--gutter) calc(28px + env(safe-area-inset-bottom, 0px)); background: radial-gradient(120% 70% at 100% 0%, #26315a 0%, #141a2b 60%); counter-reset: nav;
+      visibility: hidden; transform: translate3d(0, -100%, 0); transition: transform .7s cubic-bezier(.76,0,.24,1), visibility 0s linear .7s; overflow-y: auto; }
+    .nav.open { visibility: visible; transform: none; transition: transform .7s cubic-bezier(.76,0,.24,1), visibility 0s; }
+    .nav > a:not(.btn) { display: flex; align-items: baseline; gap: 16px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.1); font: 500 clamp(1.7rem, 7.6vw, 2.3rem)/1.15 var(--f); letter-spacing: -.03em; color: #fff; counter-increment: nav; }
+    .nav > a:not(.btn)::before { content: "0" counter(nav); font: 500 .72rem/1 var(--f); letter-spacing: .14em; color: var(--bronze-2); transform: translateY(-.9em); }
+    .nav > a:not(.btn):active { color: var(--bronze-2); }
+    .nav .btn { margin-top: 26px; justify-content: center; background: #fff; color: var(--ink); box-shadow: 0 16px 34px -14px rgba(0,0,0,.6); font-size: 1rem; padding: 17px 22px; }
+    .nav-foot { display: grid; gap: 8px; margin-top: auto; padding-top: 30px; }
+    .nav-foot a { color: rgba(255,255,255,.7); font-size: .95rem; text-decoration: none; }
+    .menu-btn { display: grid; place-items: center; gap: 7px; width: 44px; height: 44px; padding: 10px; }
+    .menu-btn i { display: block; width: 24px; height: 2px; border-radius: 2px; background: currentColor; transition: transform .5s cubic-bezier(.76,0,.24,1); }
+    .header.menu-open .menu-btn i:first-child { transform: translateY(4.5px) rotate(45deg); }
+    .header.menu-open .menu-btn i:last-child { transform: translateY(-4.5px) rotate(-45deg); }
     .header .wrap { height: 76px; }
-    .header.menu-open { background: var(--bg); }
+    .header.menu-open { background: transparent; box-shadow: none; }
+    .header.menu-open::before, .header.menu-open::after { opacity: 0; transform: scaleX(0); }
+    .header.menu-open .logo img:not(.lw) { opacity: 0; } .header.menu-open .logo .lw { opacity: 1; }
+    .header.menu-open .menu-btn { color: #fff; }
     .logo img { height: 48px; }
     .principles, .founder-grid, .faq-grid, .contact-grid, .planner-grid { grid-template-columns: 1fr; }
     .scard { height: min(82svh, 720px); top: calc(84px + var(--i) * 10px); }
@@ -615,7 +629,7 @@
 <header class="header" id="header">
   <div class="wrap">
     <a href="#top" class="logo" aria-label="MD Projects NZ, back to top"><img src="images/logo.png" alt="MD Projects NZ Ltd"><img class="lw" src="images/logo-white.png" alt="" aria-hidden="true"></a>
-    <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="nav"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 9h16M4 15h16"/></svg></button>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="nav"><i></i><i></i></button>
     <nav class="nav" id="nav">
       <a href="#services">Services</a>
       <a href="#build3d">How we build</a>
@@ -623,6 +637,7 @@
       <a href="#planner">Plan your home</a>
       <a href="#about">About</a>
       <a href="#contact" class="btn btn-line">Get a quote</a>
+      <div class="nav-foot"><a href="tel:0210590409">0210 590 409</a><a href="mailto:info@mdprojects.co.nz">info@mdprojects.co.nz</a></div>
     </nav>
   </div>
 </header>
@@ -917,7 +932,14 @@
 <script>
   const header = document.getElementById('header');
   const btn = document.getElementById('menuBtn'), nav = document.getElementById('nav');
-  const setMenu = open => { nav.classList.toggle('open', open); header.classList.toggle('menu-open', open); btn.setAttribute('aria-expanded', open); };
+  const setMenu = open => {
+    if (open === nav.classList.contains('open')) return;
+    nav.classList.toggle('open', open); header.classList.toggle('menu-open', open); btn.setAttribute('aria-expanded', open);
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Menu');
+    if (window.__scrollLock) open ? __scrollLock.stop() : __scrollLock.start();
+    if (open && window.gsap && innerWidth <= 1000) gsap.fromTo(nav.querySelectorAll(':scope > a, .nav-foot'), { y: -28, opacity: 0 }, { y: 0, opacity: 1, duration: .8, stagger: .06, delay: .25, ease: 'power3.out', overwrite: true });
+  };
+  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
   btn.addEventListener('click', () => setMenu(!nav.classList.contains('open')));
   nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
   let lastY = 0;
