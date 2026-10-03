@@ -849,15 +849,11 @@
   .st-tap { pointer-events: none; }
   .st-ring { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   .st-view.held .st-cap { opacity: .35; transition: opacity .25s; }
-  /* "Start your project": a spinning spark and a light sweep, like Claude while it works */
-  .btn-live { gap: 10px; }
-  .btn-live .spark { display: inline-grid; width: 17px; height: 17px; margin-left: -4px; color: var(--bronze); animation: spark 2.6s cubic-bezier(.55,.1,.45,.9) infinite paused; }
-  .btn-live .spark svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; }
+  /* "Start your project": a light sweep across the words, like Claude while it works */
   .btn-live .shine { background: linear-gradient(100deg, var(--ink) 0 38%, #3c54a8 45%, #90ccf0 50%, #3c54a8 55%, var(--ink) 62% 100%) 100% 0 / 260% 100% no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 2.4s linear infinite paused; }
-  .btn-live.on .spark, .btn-live.on .shine { animation-play-state: running; }
-  @keyframes spark { 0% { transform: rotate(0) scale(1); } 50% { transform: rotate(180deg) scale(.72); } 100% { transform: rotate(360deg) scale(1); } }
+  .btn-live.on .shine { animation-play-state: running; }
   @keyframes shine { 0% { background-position: 100% 0; } 70%, 100% { background-position: 0% 0; } }
-  @media (prefers-reduced-motion: reduce) { .btn-live .spark, .btn-live .shine { animation: none; } .btn-live .shine { background: none; color: inherit; } }
+  @media (prefers-reduced-motion: reduce) { .btn-live .shine { animation: none; } .btn-live .shine { background: none; color: inherit; } }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -912,7 +908,7 @@
             <div class="h1-stack"><h1 id="h1">Homes built<br><em>beautifully.</em></h1><p class="h1-alt" aria-hidden="true"><span class="ln"><span class="li">Modern design,</span></span><span class="ln"><span class="li"><em>built to last.</em></span></span></p><p class="h1-alt" aria-hidden="true"><span class="ln"><span class="li">Whole streets,</span></span><span class="ln"><span class="li"><em>transformed.</em></span></span></p><p class="h1-alt" aria-hidden="true"><span class="ln"><span class="li">Duplexes at a</span></span><span class="ln"><span class="li"><em>fixed price.</em></span></span></p><p class="h1-alt" aria-hidden="true"><span class="ln"><span class="li">Your dream,</span></span><span class="ln"><span class="li"><em>our project.</em></span></span></p></div>
             <p class="hb-lede hb-x">Over 1,000 Auckland homes delivered at a fixed price, on time and with complete transparency.</p>
             <div class="hero-ctas hb-x">
-              <a href="#contact" class="btn btn-light btn-live"><span class="spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.5v19M3.8 7.25l16.4 9.5M3.8 16.75l16.4-9.5"/></svg></span><span class="shine">Start your project</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+              <a href="#contact" class="btn btn-light btn-live"><span class="shine">Start your project</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
               <a href="#projects" class="btn btn-ghost">View our homes</a>
             </div>
           </div>
@@ -1135,7 +1131,7 @@
         <div class="fd-sign" aria-hidden="true"><span class="fd-sig">Maninder Singh</span><svg viewBox="0 0 320 18" preserveAspectRatio="none"><path pathLength="1" d="M2 13 C60 3 140 2 210 9 S296 16 318 4"/></svg></div>
         <p class="lede">Maninder has years of experience in the construction sector, leading residential projects for large companies and private clients. His mission: <mark class="hl">high-quality, affordable homes</mark> delivered with precision, efficiency and excellence.</p>
         <ul class="fd-vals"><li><span class="fd-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>Integrity</li><li><span class="fd-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>Transparency</li><li><span class="fd-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></span>Quality craftsmanship</li><li><span class="fd-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>Client-focused service</li></ul>
-        <div class="fd-ctas"><a class="btn btn-light btn-live" href="#contact"><span class="spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.5v19M3.8 7.25l16.4 9.5M3.8 16.75l16.4-9.5"/></svg></span><span class="shine">Start your project</span> <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a><a class="btn btn-ghost" href="tel:0210590409">Call 021 059 0409</a></div>
+        <div class="fd-ctas"><a class="btn btn-light btn-live" href="#contact"><span class="shine">Start your project</span> <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a><a class="btn btn-ghost" href="tel:0210590409">Call 021 059 0409</a></div>
       </div>
     </div>
   </section>
