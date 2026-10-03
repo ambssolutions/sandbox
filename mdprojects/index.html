@@ -498,7 +498,7 @@
   .bt.in .track li:nth-child(3)::before { transition-delay: 1.4s; } .bt.in .track li:nth-child(4)::before { transition-delay: 1.9s; }
   .w.hl { background: linear-gradient(100deg, var(--bronze), #5f9fd6); -webkit-background-clip: text; background-clip: text; color: transparent; }
   @media (max-width: 1000px) { .bento { grid-template-columns: 1fr 1fr; } .bt-photo { grid-row: auto; grid-column: 1 / 3; min-height: 360px; } .bt-p { grid-column: 1 / 3; } }
-  @media (max-width: 760px) { .bento { grid-template-columns: 1fr; } .bt-photo, .bt-p { grid-column: auto; } .bt-photo { min-height: 0; aspect-ratio: 1004 / 1028; } .bt-chip { left: 12px; bottom: 12px; padding: 10px 14px; border-radius: 13px; } .bt-chip small { font-size: .56rem; } .bt-chip b { font-size: 1.05rem; } .track li { font-size: .66rem; letter-spacing: .04em; } }
+  @media (max-width: 760px) { .bento { grid-template-columns: 1fr; } .bt-photo, .bt-p { grid-column: auto; } .bt-photo { min-height: 0; aspect-ratio: 1004 / 1028; } .bt-chip { background: rgba(244,246,250,.96); } .bt-chip { left: 12px; bottom: 12px; padding: 10px 14px; border-radius: 13px; } .bt-chip small { font-size: .56rem; } .bt-chip b { font-size: 1.05rem; } .track li { font-size: .66rem; letter-spacing: .04em; } }
   /* the About section slides up over the hero video as a rounded sheet */
   .statement { position: relative; z-index: 3; margin-top: calc(-1 * clamp(26px, 3vw, 44px)); border-radius: clamp(26px, 3vw, 44px) clamp(26px, 3vw, 44px) 0 0; background: var(--bg); box-shadow: 0 -24px 50px -30px rgba(9,13,26,.55); }
   .statement::before { content: ""; position: absolute; top: 12px; left: 50%; width: 44px; height: 4px; margin-left: -22px; border-radius: 4px; background: var(--line); }
@@ -571,6 +571,22 @@
   .pbk-sticky { position: sticky; top: 76px; height: calc(100svh - 76px); display: flex; flex-direction: column; justify-content: center; padding-bottom: 8px; }
   .pbk-sticky .pbk { margin-top: 0; height: min(calc(100svh - 76px - 104px), 700px); }
   .pbk-sticky .pbk-nav { margin-top: 18px; }
+  /* Quality / Time / Price tiles */
+  .bento .pr { padding: clamp(24px, 2.6vw, 34px); gap: 0; display: flex; flex-direction: column; }
+  .bento .pr::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: var(--r) var(--r) 0 0; background: linear-gradient(90deg, var(--bronze), var(--bronze-2)); transform: scaleX(0); transform-origin: 0 50%; transition: transform 1.2s cubic-bezier(.65,0,.35,1) .2s; }
+  .bento .bt.in.pr::after { transform: scaleX(1); }
+  .pr-top { display: flex; align-items: center; gap: 14px; }
+  .ic-wrap { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; background: linear-gradient(135deg, rgba(144,204,240,.32), rgba(60,84,168,.14)); box-shadow: inset 0 0 0 1px rgba(60,84,168,.12); flex: none; }
+  .ic-wrap .ic { width: 30px; height: 30px; margin: 0; }
+  .pr-lbl { font: 600 .72rem/1 var(--f) !important; letter-spacing: .24em; text-transform: uppercase; color: var(--bronze); }
+  .pr-fig { margin: 22px 0 6px; display: grid; gap: 6px; }
+  .pr-fig b { font: 600 clamp(2.6rem, 4vw, 3.6rem)/1 var(--f); letter-spacing: -.05em; background: linear-gradient(100deg, var(--ink) 30%, var(--bronze)); -webkit-background-clip: text; background-clip: text; color: transparent; font-variant-numeric: tabular-nums; }
+  .pr-fig b small { font: 500 .42em/1 var(--f) !important; letter-spacing: -.01em !important; text-transform: none !important; color: var(--muted) !important; -webkit-text-fill-color: var(--muted); margin-left: .1em; }
+  .pr-fig b i { font-style: normal; }
+  .pr-fig span { font: 500 .78rem/1.3 var(--f); color: var(--muted); }
+  .bento .pr h3 { font-size: clamp(1.15rem, 1.5vw, 1.35rem); margin-top: 14px; }
+  .bento .pr p { margin-top: 10px; }
+  @media (max-width: 760px) { .pr-fig b { font-size: 2.9rem; } .bento .pr { padding: 24px 22px; } }
   /* touch screens: no sticky "pressed" hover state */
   @media (hover: none) { .step:hover { box-shadow: var(--emb); } .btn-line:hover { box-shadow: var(--emb-sm); } }
   /* phones: tighter, crisper relief that stays inside the narrow gutters */
@@ -735,9 +751,9 @@
       <p class="big stm" id="statement" aria-label="Since March 2020 we've built over 1,000 homes across Auckland. Fixed prices. No surprises. Structures that last a lifetime, from your first sketch to the final code compliance certificate.">Since <span class="pill pill-date">March 2020</span> we've built <span class="pill pill-num"><b data-to="1000" data-fmt="comma+">1,000+</b> homes</span> across <span class="pill pill-img"><img src="images/tripoli-road-dusk-sm.webp" alt="" loading="lazy" decoding="async"></span> Auckland. <em>Fixed prices. No surprises.</em> Structures that last a lifetime, from your first <span class="pill pill-img pill-plan"><img src="images/plan-swanson.webp" alt="" loading="lazy" decoding="async"></span> sketch to the final <span class="pill pill-img"><img src="images/project-swanson-road-sm.webp" alt="" loading="lazy" decoding="async"></span> code compliance certificate.</p>
       <div class="bento">
         <figure class="bt bt-photo"><img src="images/gallery-8.webp" srcset="images/gallery-8-sm.webp 879w, images/gallery-8.webp 1004w" sizes="(max-width: 760px) 92vw, 44vw" alt="A finished two-storey MD Projects home" loading="lazy" decoding="async"><figcaption class="bt-chip"><small>Building Auckland since</small><b>March 2020</b></figcaption></figure>
-        <div class="pr bt bt-q"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M24 5l15 6v11c0 10-6.5 17.5-15 21C15.5 39.5 9 32 9 22V11z"/><path pathLength="1" d="M17 24l5 5 9-10"/></svg><small>Quality</small><h3>Best build quality at an affordable price</h3><p>High-quality homes and investment properties, delivered within budget.</p></div>
-        <div class="pr bt bt-t"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle pathLength="1" cx="24" cy="25" r="17"/><path pathLength="1" d="M24 15v10l7 5"/><path pathLength="1" d="M19 4h10"/></svg><small>Time</small><h3>We stick to the project plan</h3><p>Typical terrace builds take 7 to 9 months, with regular updates throughout.</p></div>
-        <div class="pr bt bt-p"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M26 5H42v16L22 41 6 25z"/><circle pathLength="1" cx="34" cy="13" r="3"/></svg><small>Price</small><h3>Fixed price, no variations</h3><p>We agree on a fixed cost before the build begins, so you can plan with confidence.</p>
+        <div class="pr bt bt-q"><div class="pr-top"><span class="ic-wrap"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M24 5l15 6v11c0 10-6.5 17.5-15 21C15.5 39.5 9 32 9 22V11z"/><path pathLength="1" d="M17 24l5 5 9-10"/></svg></span><small class="pr-lbl">Quality</small></div><div class="pr-fig"><b data-to="10" data-fmt=" yr">10 yr</b><span>Stamford insurance guarantee</span></div><h3>Best build quality at an affordable price</h3><p>High-quality homes and investment properties, delivered within budget.</p></div>
+        <div class="pr bt bt-t"><div class="pr-top"><span class="ic-wrap"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle pathLength="1" cx="24" cy="25" r="17"/><path pathLength="1" d="M24 15v10l7 5"/><path pathLength="1" d="M19 4h10"/></svg></span><small class="pr-lbl">Time</small></div><div class="pr-fig"><b><i data-to="7" data-fmt="">7</i>–<i data-to="9" data-fmt="">9</i> <small>months</small></b><span>Typical terrace build</span></div><h3>We stick to the project plan</h3><p>Typical terrace builds take 7 to 9 months, with regular updates throughout.</p></div>
+        <div class="pr bt bt-p"><div class="pr-top"><span class="ic-wrap"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M26 5H42v16L22 41 6 25z"/><circle pathLength="1" cx="34" cy="13" r="3"/></svg></span><small class="pr-lbl">Price</small></div><div class="pr-fig"><b data-to="0" data-fmt="">0</b><span>Variations after you sign</span></div><h3>Fixed price, no variations</h3><p>We agree on a fixed cost before the build begins, so you can plan with confidence.</p>
           <ol class="track" aria-label="Quote, contract, build, keys"><li>Quote</li><li>Contract</li><li>Build</li><li>Keys</li></ol></div>
       </div>
     </div>
@@ -1576,15 +1592,28 @@
     }
     // ---------- about: bento tiles tilt up into place, icons and the build track draw in ----------
     { const tiles = gsap.utils.toArray('.bento .bt'), photo = document.querySelector('.bt-photo'), pImg = photo.querySelector('img');
-      gsap.from(tiles, { y: 70, rotationX: 14, opacity: 0, transformOrigin: '50% 100%', transformPerspective: 1100, duration: 1.5, stagger: .13, ease: EASE, clearProps: 'transform',
+      gsap.from(tiles, { y: lite ? 40 : 70, rotationX: lite ? 0 : 14, opacity: 0, transformOrigin: '50% 100%', transformPerspective: 1100, duration: 1.5, stagger: .13, ease: EASE, clearProps: 'transform',
         scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } });
       ScrollTrigger.create({ trigger: '.bento', start: 'top 72%', once: true, onEnter: () => tiles.forEach((t, i) => setTimeout(() => t.classList.add('in'), 250 + i * 180)) });
+      // each tile's headline figure counts up as the tile settles
+      gsap.utils.toArray('.bento .pr').forEach((t, i) => ScrollTrigger.create({ trigger: '.bento', start: 'top 72%', once: true, onEnter: () => setTimeout(() => {
+        t.querySelectorAll('[data-to]').forEach(el => { const to = +el.dataset.to, f = el.dataset.fmt; if (!to) return; const o = { v: 0 }; gsap.to(o, { v: to, duration: 1.4, ease: 'power3.out', onUpdate: () => { el.textContent = fmt(Math.round(o.v), f); } }); });
+      }, 400 + i * 180) }));
       // photo: a panel slides away, then the picture keeps a slow drift (CSS transform, paused when off screen)
-      const cover = document.createElement('span'); cover.className = 'cover'; photo.appendChild(cover);
-      gsap.timeline({ scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } })
-        .to(cover, { scaleY: 0, duration: 1.4, ease: 'expo.inOut' })
-        .fromTo(pImg, { scale: 1.3 }, { scale: 1.04, duration: 2, ease: EASE, onComplete: () => { gsap.set(pImg, { clearProps: 'transform' }); photo.classList.add('drift'); } }, '<.1')
-        .from('.bt-chip', { x: -30, opacity: 0, duration: 1.1, ease: EASE }, '-=1.4');
+      // decode the photo well before it scrolls in, so it never decodes mid-scroll
+      new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); pImg.loading = 'eager'; pImg.decode && pImg.decode().catch(() => {}); } }, { rootMargin: '1400px 0px' }).observe(photo);
+      if (lite) {
+        // phones: one light reveal (the tile's own rise), the photo settles from a slight zoom, the badge slides in; no endless drift
+        gsap.timeline({ scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } })
+          .fromTo(pImg, { scale: 1.08 }, { scale: 1, duration: 1.6, ease: 'power2.out', clearProps: 'transform' }, .1)
+          .from('.bt-chip', { y: 16, opacity: 0, duration: .9, ease: EASE }, .5);
+      } else {
+        const cover = document.createElement('span'); cover.className = 'cover'; photo.appendChild(cover);
+        gsap.timeline({ scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } })
+          .to(cover, { scaleY: 0, duration: 1.4, ease: 'expo.inOut' })
+          .fromTo(pImg, { scale: 1.3 }, { scale: 1.04, duration: 2, ease: EASE, onComplete: () => { gsap.set(pImg, { clearProps: 'transform' }); photo.classList.add('drift'); } }, '<.1')
+          .from('.bt-chip', { x: -30, opacity: 0, duration: 1.1, ease: EASE }, '-=1.4');
+      }
       new IntersectionObserver(es => photo.classList.toggle('vis', es[0].isIntersecting)).observe(photo);
       // laptops: tiles lean toward the cursor with a soft sheen that follows it
       if (!lite && matchMedia('(pointer: fine)').matches) document.querySelectorAll('.bento .pr').forEach(t => {
