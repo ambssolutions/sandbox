@@ -8,6 +8,7 @@
 <link rel="apple-touch-icon" href="images/logo.png">
 <meta name="description" content="MD Projects NZ: Auckland residential builders. Over 1,000 homes delivered at a fixed price, on time and with complete transparency.">
 <meta name="theme-color" content="#f4f6fa">
+<link rel="preload" href="images/hero-poster.webp" as="image">
 <link rel="preload" href="fonts/poppins-300.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/poppins-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -423,7 +424,11 @@
   @keyframes faqIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
   /* ===== smooth phone mode ===== */
   .b3-img { display: none; }
-  .lite .hm, .lite .hm-tint, .lite .ha { display: none; }
+  /* phones: HOMES is filled with the poster photo (background-clip: text, no blend over video); it zooms away on a timer */
+  .lite .hm { mix-blend-mode: normal; background: var(--bg); }
+  .lite .hm-tint, .lite .ha-cue { display: none; }
+  .lite .hm-word { color: transparent; background: #3c54a8 url("images/hero-poster.webp") center 40% / cover; -webkit-background-clip: text; background-clip: text; }
+  .lite .hm-word span { display: inline; }
   .lite .hv-shade { opacity: 1; }
   .lite .b3-pin { height: auto; min-height: 0; background: var(--bg); }
   .lite #b3c { display: none; }
@@ -1136,10 +1141,18 @@
 
     const splitLines = el => { el.innerHTML = el.innerHTML.split(/<br\s*\/?>/i).map(l => `<span class="ln"><span class="li">${l.trim()}</span></span>`).join(''); return el.querySelectorAll('.li'); };
     // ---------- intro, then HOMES rises with the video playing inside it ----------
+    // phones: HOMES (photo in the letters) -> zooms away -> the film plays full screen -> headline rises.
+    // Only transform and opacity, on a timer, so it costs nothing while scrolling
     const heroIn = () => lite ? gsap.timeline()
-      .fromTo('#h1 .li', { yPercent: 110 }, { yPercent: 0, duration: 1.5, stagger: .12, ease: EASE }, 0)
-      .from('#heroVideo', { scale: 1.2, duration: 2.6, ease: 'power3.out' }, 0)
-      .from(['.hb-x', '#videoToggle'], { y: 30, opacity: 0, duration: 1.2, stagger: .1, ease: EASE, onStart: () => countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2) }, .4)
+      .from('#heroWord', { scale: .82, opacity: 0, duration: 1.4, ease: EASE }, 0)
+      .from(['#haEb', '#haSub'], { y: 18, opacity: 0, duration: 1.1, stagger: .12, ease: EASE }, .35)
+      .add(() => { vDived = true; vSync(); }, 1.9)
+      .to('#heroA', { autoAlpha: 0, y: -24, duration: .6, ease: 'power2.in' }, 2.1)
+      .to('#heroWord', { scale: 7, opacity: 0, duration: 1.5, ease: 'power3.in' }, 2.1)
+      .to('#heroMask', { autoAlpha: 0, duration: 1.1, ease: 'power2.inOut' }, 2.6)
+      .fromTo('#heroVideo', { scale: 1.25 }, { scale: 1, duration: 3, ease: 'power3.out' }, 2.6)
+      .fromTo('#h1 .li', { yPercent: 110 }, { yPercent: 0, duration: 1.4, stagger: .12, ease: EASE }, 3.1)
+      .fromTo(['.hb-x', '#videoToggle'], { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, stagger: .1, ease: EASE, onStart: () => countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2) }, 3.4)
       : gsap.timeline()
       .from('#heroWord span', { yPercent: 115, opacity: 0, duration: 1.7, ease: EASE, stagger: .08 }, 0)
       .from('#heroVideo', { scale: 1.3, duration: 3, ease: 'power3.out' }, 0)
@@ -1189,15 +1202,11 @@
     // hero film: plays only while visible. On phones it also waits until you have dived through the H:
     // until then the letters show the still poster, so no blend is ever composited over moving video
     const vHero = document.getElementById('heroVideo');
-    let vUserPaused = false, vInView = true, vDived = !touch || lite;
+    let vUserPaused = false, vInView = true, vDived = !touch;
     const vSync = () => (vInView && vDived && !vUserPaused) ? vHero.play().catch(() => {}) : vHero.pause();
     document.getElementById('videoToggle').addEventListener('click', () => { vUserPaused = vHero.paused; });
 
-    if (lite) {
-      splitLines(document.getElementById('h1'));
-      new IntersectionObserver(es => { vInView = es[0].isIntersecting; vSync(); }).observe(hero);
-    } else {
-    // ---------- hero: dive through the H into the film ----------
+    // ---------- hero: HOMES sized to the screen (shared by phones and laptops) ----------
     const hWord = document.getElementById('heroWord'), hMask = document.getElementById('heroMask'), hA = document.getElementById('heroA'), hB = document.getElementById('heroB');
     const hDive = { x: 0, y: 0, s: 60 };
     // find the centre of the H's left stem by drawing it once on a canvas
@@ -1233,6 +1242,12 @@
     fitHero();
     document.fonts && document.fonts.ready.then(() => { fitHero(); ScrollTrigger.refresh(); });
     ScrollTrigger.addEventListener('refreshInit', fitHero);
+    if (lite) {
+      // phones: the HOMES-then-film moment plays on a timer when the page opens (see heroIn), never tied to scrolling
+      splitLines(document.getElementById('h1'));
+      let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(fitHero, 150); });
+      new IntersectionObserver(es => { vInView = es[0].isIntersecting; vSync(); }).observe(hero);
+    } else {
     const hTitle = splitDeep(document.getElementById('h1')).chars;
     let counted = false;
     gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: () => '+=' + Math.round(innerHeight * 1.7), pin: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true,
@@ -1328,7 +1343,11 @@
 
     // contact: lines rise (the last word shimmers in CSS)
     { const el = document.querySelector('.contact h2'); const lines = splitLines(el);
-      gsap.from(lines, { yPercent: 110, duration: 1.6, ease: EASE, stagger: .12, scrollTrigger: on(el, 'top 88%') }); }
+      if (lite) gsap.from([...lines].map(l => l.parentElement), { x: i => i % 2 ? 90 : -90, opacity: 0, duration: 1.4, stagger: .14, ease: EASE, scrollTrigger: { ...on(el, 'top 88%'), once: true } });
+      else gsap.from(lines, { yPercent: 110, duration: 1.6, ease: EASE, stagger: .12, scrollTrigger: on(el, 'top 88%') }); }
+
+    // testimonials on phones: the heading zooms in and settles
+    if (lite) { const el = h2('#testimonials'); el.dataset.fx = 1; gsap.from(el, { scale: 1.18, opacity: 0, transformOrigin: '0% 50%', duration: 1.4, ease: EASE, scrollTrigger: { ...on(el), once: true } }); }
 
     // every other heading: the classic line rise
     document.querySelectorAll('section h2').forEach(h => {
