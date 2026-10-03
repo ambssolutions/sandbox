@@ -1220,8 +1220,8 @@
     // phones: HOMES (photo in the letters) -> zooms away -> the film plays full screen -> headline rises.
     // Only transform and opacity, on a timer, so it costs nothing while scrolling
     const heroIn = () => lite ? gsap.timeline()
-      .from('#heroWord', { scale: .82, opacity: 0, duration: 1.4, ease: EASE }, 0)
-      .from(['#haEb', '#haSub'], { y: 18, opacity: 0, duration: 1.1, stagger: .12, ease: EASE }, .35)
+      .fromTo('#heroWord', { y: 34, scale: .96, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 1.7, ease: 'power3.out' }, .15)
+      .fromTo(['#haEb', '#haSub'], { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3, stagger: .14, ease: 'power3.out' }, .55)
       .add(() => { vDived = true; vSync(); }, 1.9)
       // HOMES and its lines drop away downward, softly accelerating, as the film fades up behind them
       .to('#haEb', { y: 70, autoAlpha: 0, duration: 1, ease: 'power2.in' }, 2.0)
@@ -1248,11 +1248,14 @@
         if (location.hash.length > 1 && document.querySelector(location.hash)) scrollToEl(document.querySelector(location.hash)); };
       // no logo screen: the page opens straight on HOMES / built beautifully, rising into place
       gsap.timeline()
-        .to(intro, { opacity: 0, duration: .45, ease: 'power1.out', onComplete: release }, 0)
+        .to(intro, { opacity: 0, duration: .6, ease: 'power1.inOut', onComplete: release }, 0)
         .add(heroIn(), 0);
     };
-    const ready = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 1200))]);
-    const go = () => ready.then(() => requestAnimationFrame(() => { window.scrollTo(0, 0); ScrollTrigger.refresh(); requestAnimationFrame(start); }));
+    const heroAssets = [];
+    if (document.fonts) ['700 100px Poppins', '500 16px Poppins', '400 16px Poppins', '300 16px Poppins'].forEach(f => heroAssets.push(document.fonts.load(f)));
+    if (lite) heroAssets.push(new Promise(r => { const im = new Image(); im.onload = im.onerror = r; im.src = 'images/hero-poster.webp'; if (im.decode) im.decode().then(r, r); }));
+    const ready = Promise.race([Promise.all(heroAssets), new Promise(r => setTimeout(r, 2200))]);
+    const go = () => ready.then(() => requestAnimationFrame(() => { window.scrollTo(0, 0); window.__fitHero && window.__fitHero(); ScrollTrigger.refresh(); requestAnimationFrame(start); }));
     if (document.visibilityState === 'visible') go();
     else document.addEventListener('visibilitychange', function v() { if (document.visibilityState === 'visible') { document.removeEventListener('visibilitychange', v); go(); } });
 
@@ -1298,7 +1301,7 @@
     };
     const fitHero = () => {
       hWord.style.fontSize = '100px';
-      const fs = Math.min(100 * Math.min(innerWidth * .88, 1600) / hWord.offsetWidth, innerHeight * .42 / .74);
+      const fs = Math.min(100 * Math.min(innerWidth * (innerWidth < 760 ? .82 : .88), 1600) / hWord.offsetWidth, innerHeight * .42 / .74);
       hWord.style.fontSize = fs + 'px';
       // equal optical gaps: measure where the ink of each line really starts and ends
       const ink = (el, txt) => {
@@ -1318,7 +1321,7 @@
       hDive.s = 2.4 * Math.hypot(innerWidth, innerHeight) / Math.max(4, st.w * fs);
       gsap.set(hWord, { transformOrigin: `${hDive.x}px ${hDive.y}px` });
     };
-    fitHero();
+    fitHero(); window.__fitHero = fitHero;
     document.fonts && document.fonts.ready.then(() => { fitHero(); ScrollTrigger.refresh(); });
     ScrollTrigger.addEventListener('refreshInit', fitHero);
     if (lite) {
