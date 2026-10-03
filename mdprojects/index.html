@@ -499,6 +499,16 @@
   /* the About section slides up over the hero video as a rounded sheet */
   .statement { position: relative; z-index: 3; margin-top: calc(-1 * clamp(26px, 3vw, 44px)); border-radius: clamp(26px, 3vw, 44px) clamp(26px, 3vw, 44px) 0 0; background: var(--bg); box-shadow: 0 -24px 50px -30px rgba(9,13,26,.55); }
   .statement::before { content: ""; position: absolute; top: 12px; left: 50%; width: 44px; height: 4px; margin-left: -22px; border-radius: 4px; background: var(--line); }
+  /* ===== About statement: big type with inline pills (date, live count, photos) ===== */
+  .statement p.stm { font: 400 clamp(1.9rem, min(3.1vw, 5.6vh), 3.3rem)/1.36 var(--f); letter-spacing: -.035em; max-width: 30ch; margin-top: 30px; color: var(--ink); }
+  .pill { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; position: relative; top: -.07em; height: 1.08em; border-radius: 999px; margin: 0 .06em; white-space: nowrap; }
+  .pill-date { padding: 0 .55em; font-size: .62em; height: 1.75em; font-weight: 500; letter-spacing: 0; color: #fff; background: linear-gradient(100deg, var(--bronze), #5f86d6); box-shadow: 0 10px 24px -10px rgba(60,84,168,.7); }
+  .pill-num { padding: 0 .5em; font-size: .62em; height: 1.75em; gap: .4em; font-weight: 500; letter-spacing: 0; color: rgba(255,255,255,.75); background: var(--ink); box-shadow: 0 10px 24px -10px rgba(14,19,34,.7); }
+  .pill-num b { font-weight: 600; color: var(--bronze-2); font-variant-numeric: tabular-nums; }
+  .pill-img { width: 2.4em; overflow: hidden; box-shadow: 0 10px 22px -10px rgba(14,19,34,.6), inset 0 0 0 1px rgba(255,255,255,.5); background: var(--bg-2); }
+  .pill-img img { width: 100%; height: 100%; object-fit: cover; }
+  .pill-plan { background: #0b1230; }
+  .stm .w.hl { font-weight: 500; }
   /* touch screens: no sticky "pressed" hover state */
   @media (hover: none) { .step:hover { box-shadow: var(--emb); } .btn-line:hover { box-shadow: var(--emb-sm); } }
   /* phones: tighter, crisper relief that stays inside the narrow gutters */
@@ -648,7 +658,7 @@
   <section class="statement">
     <div class="wrap">
       <span class="eyebrow">About MD Projects NZ</span>
-      <p class="big" id="statement">Since March 2020 we've built over 1,000 homes across Auckland. *Fixed* *prices.* *No* *surprises.* Structures that last a lifetime, from your first sketch to the final code compliance certificate.</p>
+      <p class="big stm" id="statement" aria-label="Since March 2020 we've built over 1,000 homes across Auckland. Fixed prices. No surprises. Structures that last a lifetime, from your first sketch to the final code compliance certificate.">Since <span class="pill pill-date">March 2020</span> we've built <span class="pill pill-num"><b data-to="1000" data-fmt="comma+">1,000+</b> homes</span> across <span class="pill pill-img"><img src="images/tripoli-road-dusk-sm.webp" alt="" loading="lazy" decoding="async"></span> Auckland. <em>Fixed prices. No surprises.</em> Structures that last a lifetime, from your first <span class="pill pill-img pill-plan"><img src="images/plan-swanson.webp" alt="" loading="lazy" decoding="async"></span> sketch to the final <span class="pill pill-img"><img src="images/project-swanson-road-sm.webp" alt="" loading="lazy" decoding="async"></span> code compliance certificate.</p>
       <div class="bento">
         <figure class="bt bt-photo"><img src="images/gallery-8.webp" srcset="images/gallery-8-sm.webp 900w, images/gallery-8.webp 2000w" sizes="(max-width: 760px) 92vw, 44vw" alt="A finished two-storey MD Projects home" loading="lazy" decoding="async"><figcaption class="bt-chip"><small>Building Auckland since</small><b>March 2020</b></figcaption></figure>
         <div class="pr bt bt-q"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M24 5l15 6v11c0 10-6.5 17.5-15 21C15.5 39.5 9 32 9 22V11z"/><path pathLength="1" d="M17 24l5 5 9-10"/></svg><small>Quality</small><h3>Best build quality at an affordable price</h3><p>High-quality homes and investment properties, delivered within budget.</p></div>
@@ -914,7 +924,14 @@
 
   // statement words
   const st = document.getElementById('statement');
-  st.innerHTML = st.textContent.trim().split(/\s+/).map(w => w.startsWith('*') ? `<span class="w hl">${w.replace(/\*/g, '')}</span>` : `<span class="w">${w}</span>`).join(' ');
+  // wrap each word for the reveal; the inline pills (date, count, photos) reveal as single pieces
+  [...st.childNodes].forEach(n => {
+    const words = (t, hl) => t.split(/(\s+)/).map(w => !w ? '' : /^\s+$/.test(w) ? ' ' : `<span class="w${hl ? ' hl' : ''}">${w}</span>`).join('');
+    if (n.nodeType === 3) { const sp = document.createElement('span'); sp.innerHTML = words(n.textContent); n.replaceWith(...sp.childNodes); }
+    else if (n.tagName === 'EM') { const sp = document.createElement('span'); sp.innerHTML = words(n.textContent, true); n.replaceWith(...sp.childNodes); }
+    else n.classList.add('w');
+  });
+  [...st.childNodes].forEach(n => n.nodeType === 1 && n.setAttribute('aria-hidden', 'true'));
   const words = [...st.querySelectorAll('.w')];
 
   // testimonials: swipe dots on phones
@@ -1425,11 +1442,22 @@
     // letterpress words drift slowly behind the content
 
     // ---------- statement ----------
-    if (lite) gsap.to(words, { opacity: 1, duration: .5, stagger: .03, ease: 'power1.out', scrollTrigger: { trigger: st, start: 'top 82%', once: true } });
-    else gsap.to(words, { opacity: 1, ease: 'none', stagger: .05, scrollTrigger: { trigger: st, start: 'top 80%', end: 'bottom 45%', scrub: true } });
+    // statement: words ink in; pills pop open (scale + photo zoom), the count rolls up when it appears
+    { const pills = [...st.querySelectorAll('.pill')], count = st.querySelector('.pill-num b');
+      gsap.set(pills, { opacity: 0, scale: .55 });
+      const tl = gsap.timeline(lite ? { scrollTrigger: { trigger: st, start: 'top 82%', once: true } } : { scrollTrigger: { trigger: st, start: 'top 85%', end: 'bottom 62%', scrub: .6 } });
+      let at = 0, counted = false;
+      words.forEach(w => {
+        if (w.classList.contains('pill')) {
+          tl.to(w, { opacity: 1, scale: 1, duration: lite ? .9 : .4, ease: 'back.out(1.8)' }, at);
+          const im = w.querySelector('img'); if (im) tl.fromTo(im, { scale: 1.6 }, { scale: 1, duration: lite ? 1.2 : .5, ease: 'power3.out' }, at);
+          if (w === count.parentElement) tl.add(() => { if (!counted) { counted = true; countUp([count], 1.8); } }, at);
+        } else tl.to(w, { opacity: 1, duration: lite ? .5 : .3, ease: 'power1.out' }, at);
+        at += lite ? .045 : .07;
+      }); }
     // ---------- about: bento tiles tilt up into place, icons and the build track draw in ----------
     { const tiles = gsap.utils.toArray('.bento .bt'), photo = document.querySelector('.bt-photo'), pImg = photo.querySelector('img');
-      gsap.from(tiles, { y: 80, rotationX: -18, opacity: 0, transformOrigin: '50% 100%', transformPerspective: 1100, duration: 1.5, stagger: .13, ease: EASE, clearProps: 'transform',
+      gsap.from(tiles, { y: 70, rotationX: 14, opacity: 0, transformOrigin: '50% 100%', transformPerspective: 1100, duration: 1.5, stagger: .13, ease: EASE, clearProps: 'transform',
         scrollTrigger: { trigger: '.bento', start: 'top 82%', once: true } });
       ScrollTrigger.create({ trigger: '.bento', start: 'top 72%', once: true, onEnter: () => tiles.forEach((t, i) => setTimeout(() => t.classList.add('in'), 250 + i * 180)) });
       // photo: a panel slides away, then the picture keeps a slow drift (CSS transform, paused when off screen)
