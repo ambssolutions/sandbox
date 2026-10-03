@@ -436,7 +436,7 @@
     .wordmark { text-shadow: -1px -1px 1px rgba(255,255,255,.07), 1px 1px 2px rgba(0,0,0,.6); }
   }
 
-  img.ld { opacity: 0; } img { transition: opacity .9s ease; }
+  img.ld { opacity: 0; } img { transition: opacity .35s ease; }
 
   @media (max-width: 1000px) {
     .nav { position: fixed; top: calc(76px + env(safe-area-inset-top, 0px)); left: 0; right: 0; background: var(--bg); flex-direction: column; align-items: stretch; gap: 0; padding: 8px var(--gutter) 28px; display: none; box-shadow: 0 30px 40px -30px rgba(0,0,0,.2); }
@@ -520,7 +520,7 @@
     <div class="hero-pin" id="heroPin">
       <div class="hv" id="heroV">
         <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="images/hero-poster.webp" aria-label="Completed MD Projects homes in Auckland"></video>
-        <script>(function(){var v=document.getElementById('heroVideo');var hd=Math.max(screen.width,screen.height)*(window.devicePixelRatio||1)>=1600&&innerWidth>820;v.src=hd?'images/hero-1080.mp4':'images/hero-720.mp4';})();</script>
+        <script>(function(){var v=document.getElementById('heroVideo');if(matchMedia('(pointer: coarse)').matches){v.removeAttribute('autoplay');v.preload='none';}var hd=Math.max(screen.width,screen.height)*(window.devicePixelRatio||1)>=1600&&innerWidth>820;v.src=hd?'images/hero-1080.mp4':'images/hero-720.mp4';})();</script>
         <div class="hv-shade" id="heroShade"></div>
       </div>
       <div class="hm" id="heroMask" aria-hidden="true"><div class="hm-word" id="heroWord"><span>H</span><span>O</span><span>M</span><span>E</span><span>S</span></div></div>
@@ -1146,6 +1146,13 @@
       walk(el);
       return { words: el.querySelectorAll('.wd'), chars: el.querySelectorAll('.ch') };
     };
+    // hero film: plays only while visible. On phones it also waits until you have dived through the H:
+    // until then the letters show the still poster, so no blend is ever composited over moving video
+    const vHero = document.getElementById('heroVideo');
+    let vUserPaused = false, vInView = true, vDived = !touch;
+    const vSync = () => (vInView && vDived && !vUserPaused) ? vHero.play().catch(() => {}) : vHero.pause();
+    document.getElementById('videoToggle').addEventListener('click', () => { vUserPaused = vHero.paused; });
+
     // ---------- hero: dive through the H into the film ----------
     const hWord = document.getElementById('heroWord'), hMask = document.getElementById('heroMask'), hA = document.getElementById('heroA'), hB = document.getElementById('heroB');
     const hDive = { x: 0, y: 0, s: 60 };
@@ -1185,7 +1192,7 @@
     const hTitle = splitDeep(document.getElementById('h1')).chars;
     let counted = false;
     gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: () => '+=' + Math.round(innerHeight * 1.7), pin: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true,
-      onUpdate: st => { hB.style.pointerEvents = st.progress > .62 ? 'auto' : 'none'; if (!counted && st.progress > .7) { counted = true; countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2); } } } })
+      onUpdate: st => { hB.style.pointerEvents = st.progress > .62 ? 'auto' : 'none'; if (touch && (st.progress > .42) !== vDived) { vDived = st.progress > .42; vSync(); } if (!counted && st.progress > .7) { counted = true; countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2); } } } })
       .fromTo(hA, { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -40, duration: .14, ease: 'none' }, 0)
       .fromTo(hWord, { scale: 1 }, { scale: () => hDive.s, duration: .55, ease: 'power4.in' }, 0)
       .fromTo([hMask, '#heroTint'], { autoAlpha: 1 }, { autoAlpha: 0, duration: .08, ease: 'none' }, .5)
@@ -1194,11 +1201,10 @@
       .fromTo(['.hb-x', '#videoToggle'], { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .18, stagger: .035, ease: 'power3.out' }, .68)
       .to({}, { duration: .1 });
     hB.style.pointerEvents = 'none';
+    // the film is "in view" until the pinned hero has fully scrolled away
+    { const heroST = ScrollTrigger.getAll().find(t => t.pin === hero);
+      ScrollTrigger.create({ start: 0, end: 'max', onUpdate: () => { const v = scrollY < heroST.end + innerHeight * .9; if (v !== vInView) { vInView = v; vSync(); } } }); }
 
-    // only decode the hero film while it can be seen
-    { const v = document.getElementById('heroVideo'); let userPaused = false;
-      document.getElementById('videoToggle').addEventListener('click', () => { userPaused = v.paused; });
-      new IntersectionObserver(es => { if (es[0].isIntersecting) { if (!userPaused) v.play().catch(() => {}); } else v.pause(); }).observe(hero); }
 
     // ---------- text effects: a different one for every section ----------
     const on = (el, start = 'top 86%') => ({ trigger: el, start });
