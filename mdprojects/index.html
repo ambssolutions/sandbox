@@ -994,6 +994,20 @@
   [data-theme="dark"] .fd-plaque span { color: #5d6677; }
   [data-theme="dark"] .cmp-tag { color: #1b2130; }
   [data-theme="dark"] .vt { color: #1b2130; }
+  /* testimonials: one review at a time, a deck that deals the next card forward */
+  .tm-grid.deck { display: grid !important; grid-template-columns: 1fr; max-width: 760px; margin: clamp(30px, 5vh, 56px) auto 0 !important; padding: 0 0 60px !important; overflow: visible !important; perspective: 1400px; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+  .deck .tm { grid-area: 1 / 1; margin: 0 !important; min-height: 0; flex: none !important; width: auto; transform-origin: 50% 100%; will-change: transform; }
+  .deck .tm blockquote { font-size: clamp(1.1rem, min(1.7vw, 3vh), 1.45rem); }
+  .tm .av { position: relative; }
+  .tm-ring { position: absolute; inset: -5px; width: calc(100% + 10px); height: calc(100% + 10px); transform: rotate(-90deg); pointer-events: none; }
+  .tm-ring circle { fill: none; stroke: var(--bronze); stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 150.8; stroke-dashoffset: 150.8; }
+  .tw { display: inline-block; }
+  .tm-ctrl { display: flex !important; justify-content: center; align-items: center; gap: 22px; margin-top: 4px; }
+  .tm-arrow { width: 52px; height: 52px; border-radius: 50%; border: 0; display: grid; place-items: center; color: var(--ink); background: var(--bg); box-shadow: var(--emb-sm); cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  .tm-arrow:active { box-shadow: var(--emb-in); }
+  .tm-count { font: 500 .8rem/1 var(--f); letter-spacing: .2em; color: var(--muted); min-width: 70px; text-align: center; }
+  .tm-count b { color: var(--ink); font-weight: 600; }
+  @media (max-width: 760px) { .tm-grid.deck { padding-bottom: 38px !important; } .deck .tm { padding: 26px 22px; } }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -1255,13 +1269,13 @@
   <section class="quotes" id="testimonials">
     <div class="wrap">
       <div class="head"><div><span class="eyebrow">Testimonials</span><h2>What people are<br><em>saying about us.</em></h2></div><p class="lede">Homeowners, investors and first-time developers across Auckland on building with MD Projects.</p></div>
-      <div class="tm-grid" id="tmGrid">
-        <figure class="tm"><span class="tm-q" aria-hidden="true">“</span><blockquote>MD Projects turned our vision into reality. The entire process was seamless, and the team delivered our dream home on time and within budget. Truly professional from start to finish.</blockquote><figcaption><span class="av" aria-hidden="true">ST</span><span><b>Sarah T</b><small>Papatoetoe</small></span></figcaption></figure>
-        <figure class="tm"><span class="tm-q" aria-hidden="true">“</span><blockquote>We were first-time developers and a bit nervous about the process. Maninder and the team guided us through everything – from feasibility to final CCC. Couldn’t be happier with the results!</blockquote><figcaption><span class="av" aria-hidden="true">AP</span><span><b>Amit P</b><small>Blockhouse Bay</small></span></figcaption></figure>
-        <figure class="tm"><span class="tm-q" aria-hidden="true">“</span><blockquote>What impressed us most was the clear communication and fixed-price contract. No hidden surprises, and the build quality exceeded our expectations.</blockquote><figcaption><span class="av" aria-hidden="true">LJ</span><span><b>Lisa &amp; James R</b><small>Weymouth</small></span></figcaption></figure>
-        <figure class="tm"><span class="tm-q" aria-hidden="true">“</span><blockquote>MD Projects managed our duplex development with great efficiency. The workmanship, coordination, and timely updates made us feel confident every step of the way.</blockquote><figcaption><span class="av" aria-hidden="true">DM</span><span><b>Deepak M</b><small>Flat Bush</small></span></figcaption></figure>
+      <div class="tm-grid deck" id="tmGrid" role="region" aria-roledescription="carousel" aria-label="Client reviews" aria-live="polite">
+        <figure class="tm"><span class="tm-q" aria-hidden="true">“</span><blockquote>MD Projects turned our vision into reality. The entire process was seamless, and the team delivered our dream home on time and within budget. Truly professional from start to finish.</blockquote><figcaption><span class="av" aria-hidden="true">ST<svg class="tm-ring" viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/></svg></span><span><b>Sarah T</b><small>Papatoetoe</small></span></figcaption></figure>
+        <figure class="tm"><span class="tm-q" aria-hidden="true">“</span><blockquote>We were first-time developers and a bit nervous about the process. Maninder and the team guided us through everything – from feasibility to final CCC. Couldn’t be happier with the results!</blockquote><figcaption><span class="av" aria-hidden="true">AP<svg class="tm-ring" viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/></svg></span><span><b>Amit P</b><small>Blockhouse Bay</small></span></figcaption></figure>
+        <figure class="tm"><span class="tm-q" aria-hidden="true">“</span><blockquote>What impressed us most was the clear communication and fixed-price contract. No hidden surprises, and the build quality exceeded our expectations.</blockquote><figcaption><span class="av" aria-hidden="true">LJ<svg class="tm-ring" viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/></svg></span><span><b>Lisa &amp; James R</b><small>Weymouth</small></span></figcaption></figure>
+        <figure class="tm"><span class="tm-q" aria-hidden="true">“</span><blockquote>MD Projects managed our duplex development with great efficiency. The workmanship, coordination, and timely updates made us feel confident every step of the way.</blockquote><figcaption><span class="av" aria-hidden="true">DM<svg class="tm-ring" viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/></svg></span><span><b>Deepak M</b><small>Flat Bush</small></span></figcaption></figure>
       </div>
-      <div class="tm-dots" id="tmDots" aria-hidden="true"></div>
+      <div class="tm-ctrl" id="tmCtrl"><button type="button" class="tm-arrow" data-d="-1" aria-label="Previous review"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 8H3M7 4L3 8l4 4"/></svg></button><span class="tm-count"><b>01</b> / 04</span><button type="button" class="tm-arrow" data-d="1" aria-label="Next review"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button></div>
     </div>
   </section>
 
@@ -1402,12 +1416,6 @@
   });
   [...st.childNodes].forEach(n => n.nodeType === 1 && n.setAttribute('aria-hidden', 'true'));
   const words = [...st.querySelectorAll('.w')];
-
-  // testimonials: swipe dots on phones
-  const tmGrid = document.getElementById('tmGrid'), tmDots = document.getElementById('tmDots'), tms = [...tmGrid.children];
-  tmDots.innerHTML = tms.map(() => '<i></i>').join('');
-  const syncTm = () => { const c = tmGrid.scrollLeft + tmGrid.clientWidth / 2; let k = 0, best = 1e9; tms.forEach((t, i) => { const d = Math.abs(t.offsetLeft + t.offsetWidth / 2 - c); if (d < best) { best = d; k = i; } }); [...tmDots.children].forEach((d, i) => d.classList.toggle('on', i === k)); };
-  tmGrid.addEventListener('scroll', syncTm, { passive: true }); syncTm();
 
   // hero video control
   const vid = document.getElementById('heroVideo'), vt = document.getElementById('videoToggle'), vtIcon = document.getElementById('vtIcon');
@@ -2200,8 +2208,50 @@
         svg.closest('.step').addEventListener(touch ? 'click' : 'pointerenter', () => tl.progress() > 0 && play());
       }); }
     // testimonials: cards rise in a staggered wave, quote marks swing in
-    gsap.from('.tm', { y: 70, opacity: 0, duration: 1.4, stagger: .14, ease: EASE, scrollTrigger: { trigger: '.tm-grid', start: 'top 85%' } });
-    gsap.from('.tm-q', { scale: 0, rotation: -40, transformOrigin: '30% 70%', duration: 1.2, stagger: .14, delay: .35, ease: 'back.out(2.2)', scrollTrigger: { trigger: '.tm-grid', start: 'top 85%' } });
+
+    // testimonials: a deck. The front review swings away, the next is dealt forward, its words rise in
+    // and a ring around the initials counts down to the next one
+    { const deck = document.getElementById('tmGrid'), cards = [...deck.querySelectorAll('.tm')], N = cards.length, DUR = 7.5;
+      const ctrl = document.getElementById('tmCtrl'), countB = ctrl.querySelector('.tm-count b');
+      cards.forEach(c => { const bq = c.querySelector('blockquote'); bq.innerHTML = bq.textContent.trim().split(/\s+/).map(w => `<span class="tw">${w}</span>`).join(' '); });
+      const POS = [{ y: 0, scale: 1, opacity: 1, rotation: 0 }, { y: 26, scale: .94, opacity: .7, rotation: 0 }, { y: 50, scale: .88, opacity: .35, rotation: 0 }, { y: 64, scale: .82, opacity: 0, rotation: 0 }];
+      let order = cards.map((_, i) => i), ring = null, busy = false, visible = false, held = false, started = false;
+      const place = (dur) => order.forEach((ci, p) => { const c = cards[ci]; c.style.zIndex = N - p; c.setAttribute('aria-hidden', p ? 'true' : 'false');
+        gsap.to(c, { ...POS[Math.min(p, 3)], x: 0, duration: dur, ease: 'power3.out', overwrite: 'auto' }); });
+      const reveal = c => {
+        gsap.fromTo(c.querySelectorAll('.tw'), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .5, stagger: .022, ease: 'power2.out', delay: .15 });
+        gsap.fromTo(c.querySelector('.tm-q'), { scale: 0, rotation: -30 }, { scale: 1, rotation: 0, duration: .7, ease: 'back.out(2.4)', transformOrigin: '50% 70%' });
+        gsap.fromTo(c.querySelectorAll('figcaption b, figcaption small'), { opacity: 0, x: 16 }, { opacity: 1, x: 0, duration: .6, stagger: .08, delay: .35, ease: 'power3.out' });
+      };
+      const timer = c => { if (ring) ring.kill(); cards.forEach(k => gsap.set(k.querySelector('.tm-ring circle'), { strokeDashoffset: 150.8 }));
+        ring = gsap.to(c.querySelector('.tm-ring circle'), { strokeDashoffset: 0, duration: DUR, ease: 'none', paused: !visible || held, onComplete: () => go(1) }); };
+      const go = d => {
+        if (busy) return; busy = true;
+        if (d > 0) { const out = cards[order[0]]; order.push(order.shift());
+          gsap.to(out, { x: () => -deck.offsetWidth * .9, y: -10, rotation: -9, opacity: 0, duration: .55, ease: 'power2.in', onComplete: () => { gsap.set(out, { x: 0, ...POS[3] }); } });
+          order.forEach((ci, p) => { if (p < N - 1) { const c = cards[ci]; c.style.zIndex = N - p; gsap.to(c, { ...POS[Math.min(p, 3)], x: 0, duration: .75, delay: .12, ease: 'power3.out' }); } });
+        } else { order.unshift(order.pop()); const inn = cards[order[0]];
+          gsap.set(inn, { x: -deck.offsetWidth * .9, y: -10, rotation: -9, opacity: 0 }); inn.style.zIndex = N + 1;
+          gsap.to(inn, { ...POS[0], x: 0, duration: .7, ease: 'power3.out' });
+          order.forEach((ci, p) => { if (p) { const c = cards[ci]; c.style.zIndex = N - p; gsap.to(c, { ...POS[Math.min(p, 3)], x: 0, duration: .6, ease: 'power3.out' }); } }); }
+        const front = cards[order[0]]; cards.forEach((c, i) => c.setAttribute('aria-hidden', c === front ? 'false' : 'true'));
+        countB.textContent = String(order[0] + 1).padStart(2, '0');
+        reveal(front); timer(front); gsap.delayedCall(.7, () => { busy = false; });
+      };
+      place(0); gsap.set(cards[order[0]].querySelectorAll('.tw'), { opacity: 0 });
+      ctrl.addEventListener('click', e => { const b = e.target.closest('.tm-arrow'); if (b) go(+b.dataset.d); });
+      // swipe sideways, press and hold (or hover with a mouse) to pause
+      let sx = 0, sy = 0, down = false, ht = 0;
+      deck.addEventListener('pointerdown', e => { down = true; sx = e.clientX; sy = e.clientY; clearTimeout(ht); ht = setTimeout(() => { if (down) { held = true; ring && ring.pause(); } }, 300); });
+      deck.addEventListener('pointermove', e => { if (down && Math.hypot(e.clientX - sx, e.clientY - sy) > 10) clearTimeout(ht); });
+      const up = e => { if (!down) return; down = false; clearTimeout(ht); const dx = e.clientX - sx, dy = e.clientY - sy;
+        if (held) { held = false; if (visible && ring) ring.play(); return; }
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) go(dx < 0 ? 1 : -1); };
+      deck.addEventListener('pointerup', up); deck.addEventListener('pointercancel', () => { down = false; clearTimeout(ht); if (held) { held = false; visible && ring && ring.play(); } });
+      if (matchMedia('(hover: hover)').matches) { deck.addEventListener('mouseenter', () => ring && ring.pause()); deck.addEventListener('mouseleave', () => visible && ring && ring.play()); }
+      new IntersectionObserver(es => { visible = es[0].isIntersecting;
+        if (visible && !started) { started = true; gsap.from(deck, { y: 50, opacity: 0, duration: 1.1, ease: EASE }); reveal(cards[order[0]]); timer(cards[order[0]]); }
+        else if (ring) visible && !held ? ring.play() : ring.pause(); }, { threshold: .4 }).observe(deck); }
 
     // ---------- photo reveals (a cover slides away) ----------
     const reveal = (box, delay = 0) => {
@@ -2308,14 +2358,12 @@
     const once = (el, start = 'top 90%') => el.closest && el.closest('.bento') ? { trigger: el.closest('.bento'), start: 'top 72%', once: true } : { trigger: el, start, once: true };
     const typeIn = el => { const { chars } = splitDeep(el); gsap.from(chars, { opacity: 0, duration: .01, stagger: .045, ease: 'none', scrollTrigger: once(el, 'top 94%') }); };
     // small caps labels: typed out
-    gsap.utils.toArray('.pr small, .contact .details small, .tm figcaption small').forEach(typeIn);
+    gsap.utils.toArray('.pr small, .contact .details small').forEach(typeIn);
     // card titles: wiped up into view
     gsap.utils.toArray('.pr h3, .step h3').forEach(h => lite ? gsap.from(h, { y: 22, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: once(h) }) : gsap.fromTo(h, { clipPath: 'inset(0 0 100% 0)', y: 18 }, { clipPath: 'inset(0 0 0% 0)', y: 0, duration: 1, ease: 'power4.out', scrollTrigger: once(h) }));
     // card paragraphs: drift up
     gsap.utils.toArray('.pr p, .step p, .foot-grid > div > p').forEach(el => gsap.from(el, { y: 22, opacity: 0, duration: 1.1, delay: .15, ease: 'power3.out', scrollTrigger: once(el) }));
     // reviews: ink in from faint, names slide in from the side
-    gsap.utils.toArray('.tm blockquote').forEach(el => gsap.fromTo(el, { opacity: .1, y: 12 }, { opacity: 1, y: 0, duration: 1.6, delay: .3, ease: 'power2.out', scrollTrigger: once(el, 'top 88%') }));
-    gsap.utils.toArray('.tm figcaption b').forEach(el => gsap.from(el, { x: 34, opacity: 0, duration: 1, ease: EASE, scrollTrigger: once(el) }));
     // plan / built tags pop
     gsap.from('.cmp-tag', { scale: 0, opacity: 0, duration: .9, stagger: .15, ease: 'back.out(2.4)', scrollTrigger: once('.compare', 'top 80%') });
     // FAQ questions: each slides in from the left
