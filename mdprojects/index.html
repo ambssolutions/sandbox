@@ -1616,6 +1616,7 @@
       stack.after(pb); pb.after(nav); stack.style.display = 'none';
       const leaves = [...pb.querySelectorAll('.pbk-leaf')], count = nav.querySelector('.pbk-count'), [prevB, nextB] = nav.querySelectorAll('button');
       let cur = 0, busy = false, auto = null, touched = false;
+      let lastScroll = 0; addEventListener('scroll', () => { lastScroll = performance.now(); }, { passive: true });   // never turn a page mid-scroll
       const show = () => { count.textContent = String(cur + 1).padStart(2, '0') + ' / ' + String(N).padStart(2, '0'); prevB.disabled = cur === 0; nextB.disabled = cur === N - 1; };
       const flip = dir => {
         if (busy) return; const k = dir > 0 ? cur : cur - 1; if (k < 0 || k >= N - 1) return;
@@ -1632,7 +1633,7 @@
       pb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
       pb.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) { stopAuto(); flip(dx < 0 ? 1 : -1); } }, { passive: true });
       new IntersectionObserver(es => { const v = es[0].isIntersecting && es[0].intersectionRatio > .55;
-        if (v && !auto && !touched) auto = setInterval(() => { if (cur < N - 1) flip(1); else { clearInterval(auto); auto = null; } }, 4200);
+        if (v && !auto && !touched) auto = setInterval(() => { if (performance.now() - lastScroll < 1500) return; if (cur < N - 1) flip(1); else { clearInterval(auto); auto = null; } }, 4200);
         if (!v && auto) { clearInterval(auto); auto = null; } }, { threshold: [0, .55, 1] }).observe(pb);
       gsap.from(pb, { y: 50, opacity: 0, duration: 1.2, ease: EASE, scrollTrigger: { trigger: pb, start: 'top 85%', once: true } });
       show();
