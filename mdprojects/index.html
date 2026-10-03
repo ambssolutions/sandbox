@@ -2048,7 +2048,7 @@
         if (!wide) return;
         const cs = getComputedStyle(sec), pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom), h = w.offsetHeight;
         const room = avail - Math.min(pad, avail * .14);
-        if (h > room) w.style.zoom = Math.max(.58, room / h).toFixed(3);
+        if (h > room) w.style.zoom = Math.max(.82, room / h).toFixed(3);
         if (h > room) { sec.style.paddingTop = sec.style.paddingBottom = Math.round(Math.min(pad, avail * .14) / 2) + 'px'; } else { sec.style.paddingTop = sec.style.paddingBottom = ''; }
       });
     };
