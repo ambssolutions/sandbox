@@ -1158,6 +1158,7 @@
   }
   .foot-bottom .credit b { font-weight: 500; color: rgba(255,255,255,.85); }
   @media (max-width: 760px) { .foot-bottom { flex-direction: column; align-items: center; text-align: center; gap: 6px; } }
+  .foot-bottom { margin-top: clamp(40px, 6vh, 64px); padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -1524,7 +1525,6 @@
       <div><h4>Company</h4><ul><li><a href="#about">About</a></li><li><a href="#projects">Projects</a></li><li><a href="#faqs">FAQs</a></li><li><a href="https://www.facebook.com/p/MD-Projects-NZ-Limited-100063621871436/">Facebook</a></li></ul></div>
       <div><h4>Contact</h4><ul><li><a href="tel:0210590409">0210 590 409</a></li><li><a href="mailto:info@mdprojects.co.nz">info@mdprojects.co.nz</a></li><li>409 Bucklands Beach Road, Auckland 2012</li></ul></div>
     </div>
-    <div class="wordmark" aria-hidden="true">MD Projects</div>
     <div class="foot-bottom"><span>© <span id="year">2026</span> MD Projects NZ Ltd. All rights reserved.</span><span>Auckland, New Zealand</span><span class="credit">Proudly designed by <b>AMBS Solutions</b></span></div>
   </div>
 </footer>
@@ -2456,8 +2456,6 @@
     // ---------- FAQ, contact, footer ----------
     gsap.from('details', { y: 30, opacity: 0, duration: 1.2, stagger: .06, ease: EASE, scrollTrigger: { trigger: '.faq-grid', start: 'top 82%' } });
     gsap.from('.contact-grid > *', { y: 50, opacity: 0, duration: 1.5, stagger: .15, ease: EASE, scrollTrigger: { trigger: '.contact-grid', start: 'top 86%' } });
-    { const { chars } = splitDeep(document.querySelector('.wordmark'));
-      gsap.from(chars, lite ? { yPercent: 70, opacity: 0, duration: 1.1, stagger: .05, ease: EASE, scrollTrigger: { trigger: 'footer', start: 'top 70%', once: true } } : { yPercent: 70, opacity: 0, ease: 'none', stagger: .06, scrollTrigger: { trigger: 'footer', start: 'top bottom', end: 'bottom bottom', scrub: true } }); }
 
     // ---------- more scroll-driven type ----------
     // marquee bands: drift on their own, speed up and flip direction with your scroll
