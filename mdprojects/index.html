@@ -516,14 +516,54 @@
   .stm .c { display: inline; }
   .stm .w.script { display: inline-block; font: 600 1.3em/1 "Caveat", cursive; letter-spacing: 0; padding-right: .04em; }
   .stm-caret { position: absolute; left: 0; top: 0; width: 3px; height: 1em; margin-left: 3px; border-radius: 2px; background: var(--bronze); pointer-events: none; animation: blink 1s steps(1) infinite; }
-  /* services as a book: pages turn on their left edge */
-  .pg-shade { position: absolute; inset: 0; z-index: 4; border-radius: inherit; pointer-events: none; opacity: 0; background: linear-gradient(90deg, rgba(9,13,26,.7), rgba(9,13,26,.15) 55%, rgba(9,13,26,.35)); }
-  .scard { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-  .stack.book { display: block; position: relative; height: min(76vh, 700px); margin-bottom: 26px; }
-  .stack.book .scard { position: absolute; inset: 0; top: 0; height: 100%; box-shadow: 0 30px 60px -36px rgba(9,13,26,.55); }
-  .stack.book::before, .stack.book::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: -10px; height: 40px; border-radius: 0 0 var(--r) var(--r); background: #d7deea; box-shadow: 0 10px 24px -14px rgba(9,13,26,.4); }
-  .stack.book::after { left: 28px; right: 28px; bottom: -20px; background: #c6cfdf; z-index: -1; }
-  .contact { overflow-x: clip; }
+  /* ===== services as a book ===== */
+  .bk { position: relative; height: min(72vh, 640px); margin-top: clamp(30px, 5vh, 56px); perspective: 2600px; perspective-origin: 50% 40%; }
+  .bk-page, .bk-leaf { position: absolute; top: 0; bottom: 0; width: 50%; }
+  .bk-left { left: 0; border-radius: var(--r) 0 0 var(--r); overflow: hidden; }
+  .bk-right { left: 50%; border-radius: 0 var(--r) var(--r) 0; overflow: hidden; }
+  .bk-leaf { left: 50%; transform-origin: 0% 50%; transform-style: preserve-3d; will-change: transform; }
+  .bk-face { position: absolute; inset: 0; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 0 var(--r) var(--r) 0; }
+  .bk-back { transform: rotateY(180deg); }
+  .bk-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .bk-right::after, .bk-front::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(9,13,26,.42), rgba(9,13,26,0) 9%), linear-gradient(0deg, rgba(9,13,26,.35), transparent 40%); }
+  .bk-sd { position: absolute; right: 22px; bottom: 22px; width: 34%; aspect-ratio: 4 / 5; margin: 0; padding: 6px; background: #f4f6fa; border-radius: 16px; box-shadow: 0 20px 40px -16px rgba(0,0,0,.55); transform: rotate(-2.5deg); z-index: 2; }
+  .bk-sd img { width: 100%; height: 100%; object-fit: cover; border-radius: 11px; }
+  .bk-tag { position: absolute; left: 20px; top: 18px; z-index: 2; font: 600 .78rem/1 var(--f); letter-spacing: .12em; color: #fff; padding: 8px 12px; border-radius: 99px; background: rgba(9,13,26,.45); }
+  .bk-paper { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 0; padding: clamp(28px, 4vw, 64px); background: linear-gradient(90deg, #fbfcfe 0%, #f2f5fa 86%, #e3e9f2 100%); color: var(--ink); }
+  .bk-left .bk-paper { background: linear-gradient(90deg, #fbfcfe 0%, #f2f5fa 86%, #dfe6f0 100%); }
+  .bk-back .bk-paper { background: linear-gradient(270deg, #fbfcfe 0%, #f2f5fa 86%, #dfe6f0 100%); }
+  .bk-no { font: 600 clamp(3rem, 6vw, 5.6rem)/1 var(--f); letter-spacing: -.06em; color: transparent; -webkit-text-stroke: 1.5px var(--bronze); }
+  .bk-paper h3 { font-size: clamp(1.7rem, 2.6vw, 2.6rem); line-height: 1.05; letter-spacing: -.04em; margin: 18px 0 14px; }
+  .bk-paper p { color: var(--muted); max-width: 36ch; margin: 0; }
+  .bk-chips { margin: 22px 0 26px; } .bk-chips li { color: var(--bronze); border-color: rgba(60,84,168,.35); }
+  .bk-more { align-self: flex-start; display: inline-flex; gap: 10px; align-items: center; padding: 13px 22px; border-radius: 100px; background: var(--ink); color: #fff; text-decoration: none; font-weight: 500; font-size: .9rem; }
+  .bk-folio { position: absolute; bottom: 22px; left: 0; right: 0; text-align: center; font: 500 .7rem/1 var(--f); letter-spacing: .24em; color: #9aa3b2; }
+  .bk-sh { position: absolute; inset: 0; z-index: 5; pointer-events: none; opacity: 0; background: linear-gradient(90deg, rgba(9,13,26,.75), rgba(9,13,26,.2)); }
+  .bk-back .bk-sh { background: linear-gradient(270deg, rgba(9,13,26,.6), rgba(9,13,26,.1)); }
+  .bk-spine { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; z-index: 60; background: linear-gradient(rgba(9,13,26,.15), rgba(9,13,26,.35), rgba(9,13,26,.15)); pointer-events: none; }
+  .bk-cast { position: absolute; top: 0; bottom: 0; left: 50%; width: 50%; z-index: 9; pointer-events: none; opacity: 0; border-radius: 0 var(--r) var(--r) 0; background: linear-gradient(90deg, rgba(9,13,26,.6), rgba(9,13,26,0) 70%); }
+  .bk::before { content: ""; position: absolute; inset: 8px -6px -12px; border-radius: calc(var(--r) + 6px); background: #cfd8e6; z-index: 0; box-shadow: 0 40px 70px -40px rgba(9,13,26,.6); }
+  /* phones: single-page book */
+  .pbk { position: relative; height: min(84svh, 760px); margin-top: 30px; perspective: 1800px; }
+  .pbk::before, .pbk::after { content: ""; position: absolute; left: 8px; right: -5px; top: 6px; bottom: -6px; border-radius: var(--r); background: #dbe2ee; }
+  .pbk::after { left: 16px; right: -10px; top: 12px; bottom: -12px; background: #c9d2e1; z-index: -1; }
+  .pbk-leaf { position: absolute; inset: 0; z-index: 1; transform-origin: 0% 50%; transform-style: preserve-3d; }
+  .pbk .bk-face { border-radius: var(--r); background: #fbfcfe; box-shadow: 0 24px 50px -30px rgba(9,13,26,.6); }
+  .pbk-front { display: grid; grid-template-rows: 46% 1fr; }
+  .pbk-front .bk-img { position: relative; inset: auto; height: 100%; }
+  .pbk-front .bk-sd { right: 16px; top: 16px; bottom: auto; width: 30%; }
+  .pbk-front .bk-tag { top: auto; bottom: calc(54% + 14px); }
+  .pbk-front .bk-paper { position: relative; inset: auto; padding: 20px 22px 44px; justify-content: flex-start; background: #fbfcfe; }
+  .pbk-front::after { display: none; }
+  .pbk .bk-no { font-size: 2.6rem; } .pbk .bk-paper h3 { font-size: 1.7rem; margin: 10px 0 10px; } .pbk .bk-paper p { font-size: .95rem; }
+  .pbk .bk-chips { margin: 14px 0 16px; } .pbk .bk-chips li { padding: 7px 11px; font-size: .64rem; } .pbk .bk-folio { bottom: 16px; }
+  .pbk-back { display: grid; place-items: center; background: repeating-linear-gradient(90deg, #f4f6fa 0 14px, #eef2f8 14px 15px) !important; }
+  .pbk-back span:first-child { font: 600 1rem/1 var(--f); letter-spacing: .3em; text-transform: uppercase; color: #b9c3d3; }
+  .pbk-nav { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 30px; }
+  .pbk-nav .arrow { width: 52px; height: 52px; border-radius: 50%; border: 0; display: grid; place-items: center; color: var(--ink); background: var(--bg); box-shadow: var(--emb-sm); cursor: pointer; }
+  .pbk-nav .arrow:disabled { opacity: .35; }
+  .pbk-count { font: 500 .8rem/1 var(--f); letter-spacing: .2em; color: var(--muted); min-width: 70px; text-align: center; }
+  .pbk { touch-action: pan-y; }
   /* touch screens: no sticky "pressed" hover state */
   @media (hover: none) { .step:hover { box-shadow: var(--emb); } .btn-line:hover { box-shadow: var(--emb-sm); } }
   /* phones: tighter, crisper relief that stays inside the narrow gutters */
@@ -1534,37 +1574,68 @@
         t.addEventListener('mouseleave', () => { rx(0); ry(0); });
       }); }
 
-    // ---------- services: a book whose pages turn ----------
-    const cards = gsap.utils.toArray('.scard');
-    cards.forEach(c => { const sh = document.createElement('span'); sh.className = 'pg-shade'; sh.setAttribute('aria-hidden', 'true'); c.appendChild(sh); });
-    if (lite) {
-      // phones: the cards stack as you scroll; each new one swings in on its left edge and lands like a turned page
-      cards.forEach((c, i) => {
-        const sh = c.querySelector('.pg-shade');
-        if (i) gsap.timeline({ scrollTrigger: { trigger: c, start: 'top 78%', once: true } })
-          .fromTo(c, { rotationY: -88, transformOrigin: '0% 50%', transformPerspective: 1400 }, { rotationY: 0, duration: 1.3, ease: 'power3.out', clearProps: 'transform' })
-          .fromTo(sh, { opacity: .55 }, { opacity: 0, duration: 1, ease: 'power2.out' }, 0);
-        gsap.from(c.querySelector('.sd'), { y: 40, rotation: 6, opacity: 0, duration: 1.2, ease: EASE, scrollTrigger: { trigger: c, start: 'top 70%', once: true } });
-        gsap.from(c.querySelectorAll('.tx p, .chips li, .more'), { y: 22, opacity: 0, duration: 1, stagger: .07, ease: EASE, scrollTrigger: { trigger: c, start: 'top 60%', once: true } });
+    // ---------- services: a real book ----------
+    const cards = gsap.utils.toArray('.scard'), stack = document.querySelector('#services .stack'), N = cards.length;
+    const svc = cards.map((c, i) => { const im = c.querySelector('.im img'), sd = c.querySelector('.sd img');
+      return { n: String(i + 1).padStart(2, '0'), img: im.getAttribute('src'), srcset: im.getAttribute('srcset'), pos: im.style.objectPosition, alt: im.alt, sd: sd.getAttribute('src'), sdSet: sd.getAttribute('srcset'), sdAlt: sd.alt,
+        title: c.querySelector('h3').innerHTML, p: c.querySelector('.tx p').innerHTML, chips: c.querySelector('.chips').innerHTML, href: c.querySelector('.more').getAttribute('href') }; });
+    const photoHTML = k => { const d = svc[k]; return `<img class="bk-img" src="${d.img}" srcset="${d.srcset}" sizes="(max-width: 760px) 92vw, 46vw" alt="${d.alt}" style="object-position:${d.pos}" loading="lazy" decoding="async"><figure class="bk-sd"><img src="${d.sd}" srcset="${d.sdSet}" sizes="20vw" alt="${d.sdAlt}" loading="lazy" decoding="async"></figure><span class="bk-tag">${d.n}</span>`; };
+    const textHTML = k => { const d = svc[k]; return `<div class="bk-paper"><span class="bk-no">${d.n}</span><h3>${d.title}</h3><p>${d.p}</p><ul class="chips bk-chips">${d.chips}</ul><a class="bk-more" href="${d.href}">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><span class="bk-folio">${d.n} / ${String(N).padStart(2, '0')}</span></div>`; };
+    const shade = '<span class="bk-sh" aria-hidden="true"></span>';
+
+    if (!lite) {
+      // laptops: an open book. Left page = the service's words, right page = its photo.
+      // Scrolling turns the right page over the spine; its back lands on the left as the next service's words.
+      const bk = document.createElement('div'); bk.className = 'bk'; bk.setAttribute('aria-label', 'Our services, as a book');
+      let h = `<div class="bk-page bk-left" style="z-index:1">${textHTML(0)}</div><div class="bk-page bk-right" style="z-index:1">${photoHTML(N - 1)}</div>`;
+      for (let k = 0; k < N - 1; k++) h += `<div class="bk-leaf" style="z-index:${N - k + 1}"><div class="bk-face bk-front">${photoHTML(k)}${shade}</div><div class="bk-face bk-back">${textHTML(k + 1)}${shade}</div></div>`;
+      bk.innerHTML = h + '<span class="bk-spine" aria-hidden="true"></span><span class="bk-cast" aria-hidden="true"></span>';
+      stack.after(bk); stack.style.display = 'none';
+      const leaves = [...bk.querySelectorAll('.bk-leaf')], cast = bk.querySelector('.bk-cast');
+      gsap.from(bk, { y: 60, opacity: 0, duration: 1.4, ease: EASE, scrollTrigger: { trigger: bk, start: 'top 85%', once: true } });
+      const turn = gsap.timeline({ scrollTrigger: { trigger: bk, start: () => 'top ' + (document.getElementById('header').offsetHeight + 28), end: () => '+=' + Math.round(innerHeight * .95 * (N - 1)), pin: '#services', scrub: .7, anticipatePin: 1, invalidateOnRefresh: true } });
+      leaves.forEach((lf, k) => {
+        const front = lf.querySelector('.bk-front .bk-sh'), back = lf.querySelector('.bk-back .bk-sh'), at = k;
+        turn.fromTo(lf, { rotationY: 0 }, { rotationY: -180, duration: 1, ease: 'power2.inOut' }, at)
+            .set(lf, { zIndex: 20 + k }, at + .5)                                        // once past the spine it lies on the left pile
+            .fromTo(front, { opacity: 0 }, { opacity: .55, duration: .5, ease: 'power1.in' }, at)   // the lifting page darkens as it turns away
+            .fromTo(back, { opacity: .5 }, { opacity: 0, duration: .5, ease: 'power1.out' }, at + .5)
+            .fromTo(cast, { opacity: 0 }, { opacity: .5, duration: .5, ease: 'power1.in' }, at)    // its shadow falls across the page below
+            .to(cast, { opacity: 0, duration: .5, ease: 'power1.out' }, at + .5)
+            .fromTo(lf.nextElementSibling && lf.nextElementSibling.classList.contains('bk-leaf') ? lf.nextElementSibling.querySelector('.bk-front .bk-img') : bk.querySelector('.bk-right .bk-img'), { scale: 1.1 }, { scale: 1, duration: 1, ease: 'power2.out' }, at);
       });
+      turn.to({}, { duration: .35 });
     } else {
-      // laptops: the book holds in place and each page turns over on its spine (left edge) as you scroll
-      const stack = document.querySelector('#services .stack'); stack.classList.add('book');
-      gsap.set(cards, { zIndex: i => cards.length - i, transformOrigin: '0% 50%', transformPerspective: 2400 });
-      gsap.from(cards[0].querySelectorAll('.tx p, .chips li, .more'), { y: 26, opacity: 0, duration: 1.1, stagger: .07, ease: EASE, scrollTrigger: { trigger: stack, start: 'top 60%', once: true } });
-      const book = gsap.timeline({ scrollTrigger: { trigger: stack, start: () => 'top ' + (document.getElementById('header').offsetHeight + 24), end: () => '+=' + Math.round(innerHeight * .85 * (cards.length - 1)), pin: '#services', scrub: .6, anticipatePin: 1, invalidateOnRefresh: true } });
-      cards.forEach((c, i) => {
-        if (i === cards.length - 1) return;
-        const next = cards[i + 1], at = i;
-        book.to(c, { rotationY: -100, duration: 1, ease: 'power2.in' }, at)
-            .fromTo(c.querySelector('.pg-shade'), { opacity: 0 }, { opacity: .6, duration: 1, ease: 'power1.in' }, at)
-            .fromTo(next, { scale: .965 }, { scale: 1, duration: 1, ease: 'power2.out' }, at)
-            .fromTo(next.querySelector('.pg-shade'), { opacity: .45 }, { opacity: 0, duration: 1, ease: 'power2.out' }, at)
-            .fromTo(next.querySelector('.im img'), { scale: 1.12 }, { scale: 1, duration: 1, ease: 'power2.out' }, at)
-            .fromTo(next.querySelector('.sd'), { y: 90, rotation: 7, opacity: 0 }, { y: 0, rotation: -2.5, opacity: 1, duration: .7, ease: 'power2.out' }, at + .35)
-            .fromTo(next.querySelectorAll('.tx p, .chips li, .more'), { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .5, stagger: .05, ease: 'power2.out' }, at + .45);
-      });
-      book.to({}, { duration: .3 });
+      // phones: a single-page book. Swipe or tap to turn a page; it turns on its own while you look at it, until you touch it
+      const pb = document.createElement('div'); pb.className = 'pbk';
+      let h = '';
+      for (let k = 0; k < N; k++) h += `<div class="pbk-leaf" style="z-index:${N - k}"><div class="bk-face bk-front pbk-front">${photoHTML(k)}${textHTML(k)}${shade}</div><div class="bk-face bk-back pbk-back"><span>MD Projects NZ</span>${shade}</div></div>`;
+      pb.innerHTML = h;
+      const nav = document.createElement('div'); nav.className = 'pbk-nav';
+      nav.innerHTML = `<button class="arrow" aria-label="Previous service"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 8H3M7 4L3 8l4 4"/></svg></button><span class="pbk-count">01 / ${String(N).padStart(2, '0')}</span><button class="arrow" aria-label="Next service"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>`;
+      stack.after(pb); pb.after(nav); stack.style.display = 'none';
+      const leaves = [...pb.querySelectorAll('.pbk-leaf')], count = nav.querySelector('.pbk-count'), [prevB, nextB] = nav.querySelectorAll('button');
+      let cur = 0, busy = false, auto = null, touched = false;
+      const show = () => { count.textContent = String(cur + 1).padStart(2, '0') + ' / ' + String(N).padStart(2, '0'); prevB.disabled = cur === 0; nextB.disabled = cur === N - 1; };
+      const flip = dir => {
+        if (busy) return; const k = dir > 0 ? cur : cur - 1; if (k < 0 || k >= N - 1) return;
+        busy = true; const lf = leaves[k], f = lf.querySelector('.bk-front .bk-sh'), bsh = lf.querySelector('.bk-back .bk-sh');
+        gsap.set(lf, { visibility: 'visible', zIndex: 50 });
+        const tl = gsap.timeline({ onComplete: () => { busy = false; if (dir > 0) gsap.set(lf, { visibility: 'hidden' }); gsap.set(lf, { zIndex: N - k }); } });
+        if (dir > 0) tl.fromTo(lf, { rotationY: 0 }, { rotationY: -180, duration: 1.1, ease: 'power2.inOut' }).fromTo(f, { opacity: 0 }, { opacity: .55, duration: .55, ease: 'power1.in' }, 0).fromTo(bsh, { opacity: .5 }, { opacity: 0, duration: .55 }, .55);
+        else tl.fromTo(lf, { rotationY: -180 }, { rotationY: 0, duration: 1.1, ease: 'power2.inOut' }).fromTo(bsh, { opacity: 0 }, { opacity: .5, duration: .55 }, 0).fromTo(f, { opacity: .55 }, { opacity: 0, duration: .55, ease: 'power1.out' }, .55);
+        cur += dir; show();
+      };
+      const stopAuto = () => { touched = true; clearInterval(auto); auto = null; };
+      prevB.addEventListener('click', () => { stopAuto(); flip(-1); }); nextB.addEventListener('click', () => { stopAuto(); flip(1); });
+      let sx = 0, sy = 0;
+      pb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+      pb.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) { stopAuto(); flip(dx < 0 ? 1 : -1); } }, { passive: true });
+      new IntersectionObserver(es => { const v = es[0].isIntersecting && es[0].intersectionRatio > .55;
+        if (v && !auto && !touched) auto = setInterval(() => { if (cur < N - 1) flip(1); else { clearInterval(auto); auto = null; } }, 4200);
+        if (!v && auto) { clearInterval(auto); auto = null; } }, { threshold: [0, .55, 1] }).observe(pb);
+      gsap.from(pb, { y: 50, opacity: 0, duration: 1.2, ease: EASE, scrollTrigger: { trigger: pb, start: 'top 85%', once: true } });
+      show();
     }
 
     // ---------- projects: pinned horizontal scroll (all screens) ----------
