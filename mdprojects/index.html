@@ -603,9 +603,7 @@
 </head>
 <body>
 <script>if (window.gsap && window.ScrollTrigger) document.documentElement.classList.add('has-gsap', 'has-intro');</script>
-<div class="intro" id="intro" aria-hidden="true">
-  <div class="intro-in"><img src="images/logo.png" alt=""><div class="intro-line"><span id="introLine"></span></div><small>Homes built beautifully</small></div>
-</div>
+<div class="intro" id="intro" aria-hidden="true"></div>
 
 <header class="header" id="header">
   <div class="wrap">
@@ -1225,7 +1223,6 @@
       .from('#heroWord', { scale: .82, opacity: 0, duration: 1.4, ease: EASE }, 0)
       .from(['#haEb', '#haSub'], { y: 18, opacity: 0, duration: 1.1, stagger: .12, ease: EASE }, .35)
       .add(() => { vDived = true; vSync(); }, 1.9)
-      .set('#header .wrap > *', { y: -26, opacity: 0 }, 2.0)
       // HOMES and its lines drop away downward, softly accelerating, as the film fades up behind them
       .to('#haEb', { y: 70, autoAlpha: 0, duration: 1, ease: 'power2.in' }, 2.0)
       .to('#heroWord', { y: () => innerHeight * .32, opacity: 0, duration: 1.25, ease: 'power2.in' }, 2.1)
@@ -1234,7 +1231,6 @@
       .fromTo('#heroVideo', { scale: 1.18, yPercent: -3 }, { scale: 1, yPercent: 0, duration: 3.2, ease: 'power3.out' }, 2.65)
       // then the next screen falls into place from above, top to bottom, easing to a soft stop
       .add(() => { __hdr.film = true; __hdr.until = filmEnd(); __hdr.sync(); }, 2.75)
-      .to('#header .wrap > *', { y: 0, opacity: 1, duration: 1.4, stagger: .1, ease: 'power3.out' }, 2.8)
       .fromTo('.hb .eyebrow', { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: 'power2.out' }, 3.0)
       .fromTo('#h1 .li', { yPercent: -115 }, { yPercent: 0, duration: 2.1, stagger: .22, ease: 'power3.out' }, 3.15)
       .fromTo(['.hb-lede', '.hero-ctas', '#statsBadge', '#videoToggle'], { y: -70, opacity: 0 }, { y: 0, opacity: 1, duration: 1.9, stagger: .18, ease: 'power2.out', onStart: () => countUp(document.querySelectorAll('#statsBadge b[data-to]'), 2) }, 3.4)
@@ -1248,18 +1244,14 @@
     const start = () => {
       if (started) return; started = true;
       window.__scrollLock.stop();
-      const line = document.getElementById('introLine');
-      gsap.timeline({ onComplete: () => {
-          intro.remove(); window.__scrollLock.start();
-          if (location.hash.length > 1 && document.querySelector(location.hash)) scrollToEl(document.querySelector(location.hash));
-        } })
-        .from('.intro-in > *', { y: 16, opacity: 0, duration: .8, ease: EASE, stagger: .1 })
-        .to(line, { scaleX: 1, duration: .9, ease: 'power3.inOut' }, '-=.45')
-        .to('.intro-in', { opacity: 0, y: -12, duration: .45, ease: 'power2.in' })
-        .to(intro, { yPercent: -100, duration: 1, ease: 'expo.inOut' }, '-=.1')
-        .add(heroIn(), '-=.7');
+      const release = () => { if (!intro.isConnected) return; intro.remove(); window.__scrollLock.start();
+        if (location.hash.length > 1 && document.querySelector(location.hash)) scrollToEl(document.querySelector(location.hash)); };
+      // no logo screen: the page opens straight on HOMES / built beautifully, rising into place
+      gsap.timeline()
+        .to(intro, { opacity: 0, duration: .45, ease: 'power1.out', onComplete: release }, 0)
+        .add(heroIn(), 0);
     };
-    const ready = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 1800))]);
+    const ready = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 1200))]);
     const go = () => ready.then(() => requestAnimationFrame(() => { window.scrollTo(0, 0); ScrollTrigger.refresh(); requestAnimationFrame(start); }));
     if (document.visibilityState === 'visible') go();
     else document.addEventListener('visibilitychange', function v() { if (document.visibilityState === 'visible') { document.removeEventListener('visibilitychange', v); go(); } });
