@@ -1454,7 +1454,7 @@
       const caret = document.createElement('i'); caret.className = 'stm-caret'; caret.setAttribute('aria-hidden', 'true'); st.appendChild(caret);
       const write = () => {
         const P = st.getBoundingClientRect(), pos = el => { const r = el.getBoundingClientRect(); return { x: r.right - P.left, y: r.top - P.top, h: r.height }; };
-        const tl = gsap.timeline(); let at = 0, counted = false;
+        const tl = gsap.timeline(); let at = 0;
         units.forEach(u => {
           if (script.includes(u)) {   // handwriting: a wipe across each word, paced by its length
             tl.set(caret, { opacity: 0 }, at); const d = .25 + u.textContent.length * .07;
@@ -1465,8 +1465,13 @@
           if (u.classList.contains('pill')) {
             tl.fromTo(u, { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .6, ease: 'back.out(1.8)' }, at);
             const im = u.querySelector('img'); if (im) tl.fromTo(im, { scale: 1.6 }, { scale: 1, duration: .9, ease: 'power3.out' }, at);
-            if (u === count.parentElement) tl.add(() => { if (!counted) { counted = true; countUp([count], 1.8); } }, at);
             at += .24;
+            if (u === count.parentElement) {   // the count runs inside the timeline, and the typing waits until it lands on 1,000+
+              const o = { v: 0 }, to = +count.dataset.to;
+              tl.set(count, { textContent: '0+' }, at - .24);
+              tl.to(o, { v: to, duration: 1.5, ease: 'power3.out', onUpdate: () => { count.textContent = fmt(Math.round(o.v), count.dataset.fmt); } }, at - .1);
+              at += 1.5;
+            }
           } else { tl.set(u, { opacity: 1 }, at); at += /[.,]/.test(u.textContent) ? .1 : .02; }
           const p = pos(u); tl.set(caret, { x: p.x, y: p.y, height: p.h }, at);
         });
