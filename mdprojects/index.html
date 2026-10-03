@@ -854,6 +854,11 @@
   .btn-live.on .shine { animation-play-state: running; }
   @keyframes shine { 0% { background-position: 100% 0; } 70%, 100% { background-position: 0% 0; } }
   @media (prefers-reduced-motion: reduce) { .btn-live .shine { animation: none; } .btn-live .shine { background: none; color: inherit; } }
+  /* hero button: one sweep each time the heading changes, in step with the new words */
+  .hero .btn-live .shine { animation: none; }
+  .hero .btn-live.sweep .shine { animation: shine1 1.3s cubic-bezier(.45,.05,.35,1) 1 both; }
+  @keyframes shine1 { from { background-position: 100% 0; } to { background-position: 0% 0; } }
+  @media (prefers-reduced-motion: reduce) { .hero .btn-live.sweep .shine { animation: none; } }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -924,7 +929,7 @@
       <span class="eyebrow">About MD Projects NZ</span>
       <p class="big stm" id="statement" aria-label="Since March 2020 we've built over 1,000 homes across Auckland. Fixed prices. No surprises. Structures that last a lifetime, from your first sketch to the final code compliance certificate.">Since <span class="pill pill-date">March 2020</span> we've built <span class="pill pill-num"><b data-to="1000" data-fmt="comma+">1,000+</b> homes</span> across <span class="pill pill-img"><img src="images/tripoli-road-dusk-sm.webp" alt="" loading="lazy" decoding="async"></span> Auckland. <em>Fixed prices. No surprises.</em> Structures that last a lifetime, from your first <span class="pill pill-img pill-plan"><img src="images/plan-swanson.webp" alt="" loading="lazy" decoding="async"></span> sketch to the final <span class="pill pill-img"><img src="images/project-swanson-road-sm.webp" alt="" loading="lazy" decoding="async"></span> code compliance certificate.</p>
       <div class="bento">
-        <figure class="bt bt-photo"><img src="images/gallery-8.webp" srcset="images/gallery-8-sm.webp 879w, images/gallery-8.webp 1004w" sizes="(max-width: 760px) 92vw, 44vw" alt="A finished two-storey MD Projects home" loading="lazy" decoding="async"><figcaption class="bt-chip"><small>Building Auckland since</small><b>March 2020</b></figcaption></figure>
+        <figure class="bt bt-photo"><img src="images/gallery-8.webp" srcset="images/gallery-8-sm.webp 900w, images/gallery-8.webp 1500w" sizes="(max-width: 760px) 92vw, 44vw" alt="A finished two-storey MD Projects home" loading="lazy" decoding="async"><figcaption class="bt-chip"><small>Building Auckland since</small><b>March 2020</b></figcaption></figure>
         <div class="pr bt bt-q"><div class="pr-top"><span class="ic-wrap"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M24 5l15 6v11c0 10-6.5 17.5-15 21C15.5 39.5 9 32 9 22V11z"/><path pathLength="1" d="M17 24l5 5 9-10"/></svg></span><small class="pr-lbl">Quality</small></div><div class="pr-fig"><b data-to="10" data-fmt=" yr">10 yr</b><span>Stamford insurance guarantee</span></div><h3>Best build quality at an affordable price</h3><p>High-quality homes and investment properties, delivered within budget.</p></div>
         <div class="pr bt bt-t"><div class="pr-top"><span class="ic-wrap"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle pathLength="1" cx="24" cy="25" r="17"/><path pathLength="1" d="M24 15v10l7 5"/><path pathLength="1" d="M19 4h10"/></svg></span><small class="pr-lbl">Time</small></div><div class="pr-fig"><b><i data-to="7" data-fmt="">7</i>–<i data-to="9" data-fmt="">9</i> <small>months</small></b><span>Typical terrace build</span></div><h3>We stick to the project plan</h3><p>Typical terrace builds take 7 to 9 months, with regular updates throughout.</p></div>
         <div class="pr bt bt-p"><div class="pr-top"><span class="ic-wrap"><svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M26 5H42v16L22 41 6 25z"/><circle pathLength="1" cx="34" cy="13" r="3"/></svg></span><small class="pr-lbl">Price</small></div><div class="pr-fig"><b data-to="0" data-fmt="">0</b><span>Variations after you sign</span></div><h3>Fixed price, no variations</h3><p>We agree on a fixed cost before the build begins, so you can plan with confidence.</p>
@@ -941,27 +946,27 @@
       <div class="head"><div><span class="eyebrow">Our services</span><h2>Everything, from<br><em>concept to keys.</em></h2></div><p class="lede">One team takes your project from first sketch to final handover, <mark class="hl">with nothing handed off between firms.</mark></p></div>
       <div class="stack">
         <article class="scard" style="--i:0">
-          <div class="im"><img style="object-position:50% 60%" src="images/service-design-build.webp" srcset="images/service-design-build-sm.webp 900w, images/service-design-build.webp 2000w" sizes="100vw" alt="Two-storey home by MD Projects" loading="lazy" decoding="async"></div>
-          <figure class="sd"><img src="images/intro-living.webp" srcset="images/intro-living-sm.webp 900w, images/intro-living.webp 2000w" sizes="(max-width: 760px) 40vw, 24vw" alt="Bright open-plan living room" loading="lazy" decoding="async"></figure>
+          <div class="im"><img style="object-position:50% 60%" src="images/service-design-build.webp" srcset="images/service-design-build-sm.webp 900w, images/service-design-build.webp 1800w" sizes="100vw" alt="Two-storey home by MD Projects" loading="lazy" decoding="async"></div>
+          <figure class="sd"><img src="images/intro-living.webp" srcset="images/intro-living-sm.webp 900w, images/intro-living.webp 1200w" sizes="(max-width: 760px) 40vw, 24vw" alt="Bright open-plan living room" loading="lazy" decoding="async"></figure>
           <div class="tx"><span class="n">01</span><h3>Design &amp; Build</h3><p>A complete custom home solution, taking your vision from concept through to final construction.</p><ul class="chips"><li>Concept</li><li>Design</li><li>Construction</li></ul><a class="more" href="https://www.mdprojects.co.nz/services/design-build/">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
         </article>
         <article class="scard" style="--i:1">
-          <div class="im"><img style="object-position:50% 55%" src="images/intro-townhouses.webp" srcset="images/intro-townhouses-sm.webp 900w, images/intro-townhouses.webp 2000w" sizes="100vw" alt="New townhouses built from approved plans" loading="lazy" decoding="async"></div>
+          <div class="im"><img style="object-position:50% 55%" src="images/intro-townhouses.webp" srcset="images/intro-townhouses-sm.webp 900w, images/intro-townhouses.webp 1800w" sizes="100vw" alt="New townhouses built from approved plans" loading="lazy" decoding="async"></div>
           <figure class="sd"><img src="images/service-build-from-plans.webp" srcset="images/service-build-from-plans-sm.webp 900w, images/service-build-from-plans.webp 2000w" sizes="(max-width: 760px) 40vw, 24vw" alt="Architectural plans being reviewed" loading="lazy" decoding="async"></figure>
           <div class="tx"><span class="n">02</span><h3>Build from Plans</h3><p>Already have approved plans? We'll bring them to life with expert craftsmanship and precision.</p><ul class="chips"><li>Your plans</li><li>Our craft</li><li>On schedule</li></ul><a class="more" href="https://www.mdprojects.co.nz/services/">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
         </article>
         <article class="scard" style="--i:2">
-          <div class="im"><img style="object-position:50% 55%" src="images/tripoli-road-dusk.webp" srcset="images/tripoli-road-dusk-sm.webp 900w, images/tripoli-road-dusk.webp 2000w" sizes="100vw" alt="Tripoli Road terrace homes at dusk" loading="lazy" decoding="async"></div>
-          <figure class="sd"><img src="images/service-terrace-duplex.webp" srcset="images/service-terrace-duplex-sm.webp 900w, images/service-terrace-duplex.webp 2000w" sizes="(max-width: 760px) 40vw, 24vw" alt="Duplex homes at sunset" loading="lazy" decoding="async"></figure>
+          <div class="im"><img style="object-position:50% 55%" src="images/tripoli-road-dusk.webp" srcset="images/tripoli-road-dusk-sm.webp 900w, images/tripoli-road-dusk.webp 1800w" sizes="100vw" alt="Tripoli Road terrace homes at dusk" loading="lazy" decoding="async"></div>
+          <figure class="sd"><img src="images/service-terrace-duplex.webp" srcset="images/service-terrace-duplex-sm.webp 900w, images/service-terrace-duplex.webp 1600w" sizes="(max-width: 760px) 40vw, 24vw" alt="Duplex homes at sunset" loading="lazy" decoding="async"></figure>
           <div class="tx"><span class="n">03</span><h3>Terrace Homes &amp; Duplexes</h3><p>Efficient, modern multi-unit housing designed to maximise land use and investment return.</p><ul class="chips"><li>Terraces</li><li>Duplexes</li><li>Investment</li></ul><a class="more" href="https://www.mdprojects.co.nz/services/">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
         </article>
         <article class="scard" style="--i:3">
-          <div class="im"><img style="object-position:50% 60%" src="images/gallery-1.webp" srcset="images/gallery-1-sm.webp 900w, images/gallery-1.webp 2000w" sizes="100vw" alt="Aerial view of a new MD Projects development" loading="lazy" decoding="async"></div>
-          <figure class="sd"><img src="images/service-subdivision.webp" srcset="images/service-subdivision-sm.webp 900w, images/service-subdivision.webp 2000w" sizes="(max-width: 760px) 40vw, 24vw" alt="New subdivision of two-storey homes" loading="lazy" decoding="async"></figure>
+          <div class="im"><img style="object-position:50% 60%" src="images/gallery-1.webp" srcset="images/gallery-1-sm.webp 900w, images/gallery-1.webp 1800w" sizes="100vw" alt="Aerial view of a new MD Projects development" loading="lazy" decoding="async"></div>
+          <figure class="sd"><img src="images/service-subdivision.webp" srcset="images/service-subdivision-sm.webp 900w, images/service-subdivision.webp 1600w" sizes="(max-width: 760px) 40vw, 24vw" alt="New subdivision of two-storey homes" loading="lazy" decoding="async"></figure>
           <div class="tx"><span class="n">04</span><h3>Subdivision &amp; Consents</h3><p>Land development managed end to end: feasibility, resource and building consents, through to title.</p><ul class="chips"><li>Feasibility</li><li>Consents</li><li>Title</li></ul><a class="more" href="https://www.mdprojects.co.nz/services/subdivision/">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
         </article>
         <article class="scard" style="--i:4">
-          <div class="im"><img style="object-position:50% 55%" src="images/gallery-5.webp" srcset="images/gallery-5-sm.webp 900w, images/gallery-5.webp 2000w" sizes="100vw" alt="Completed townhouses on a quiet street" loading="lazy" decoding="async"></div>
+          <div class="im"><img style="object-position:50% 55%" src="images/gallery-5.webp" srcset="images/gallery-5-sm.webp 900w, images/gallery-5.webp 1800w" sizes="100vw" alt="Completed townhouses on a quiet street" loading="lazy" decoding="async"></div>
           <figure class="sd"><img src="images/guide-project-management.webp" srcset="images/guide-project-management-sm.webp 900w, images/guide-project-management.webp 2000w" sizes="(max-width: 760px) 40vw, 24vw" alt="Project planning at a desk" loading="lazy" decoding="async"></figure>
           <div class="tx"><span class="n">05</span><h3>Project Management</h3><p>Every aspect of your build coordinated by one team, for on-time and on-budget delivery.</p><ul class="chips"><li>One team</li><li>On time</li><li>On budget</li></ul><a class="more" href="https://www.mdprojects.co.nz/services/project-management/">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
         </article>
@@ -1009,12 +1014,12 @@
     <div class="proj-pin">
       <div class="wrap proj-head"><div><span class="eyebrow">Our projects</span><h2 style="margin-top:20px">Recent <em>homes.</em></h2></div><span class="proj-count" id="projCount">01 / 06</span></div>
       <div class="proj-track" id="projTrack">
-        <a class="pcard" href="https://www.mdprojects.co.nz/projects/mt-albert-road-sandringham/"><div class="ph"><img src="images/project-mt-albert-road.webp" srcset="images/project-mt-albert-road-sm.webp 900w, images/project-mt-albert-road.webp 2000w" sizes="(max-width: 1000px) 80vw, 56vw" alt="Mt Albert Road townhouses, Sandringham" loading="lazy" decoding="async"></div><div class="cap"><h3>Mt Albert Road</h3><span>Sandringham · 5 townhouses · 4 bed</span></div></a>
-        <a class="pcard" href="https://www.mdprojects.co.nz/projects/"><div class="ph"><img src="images/tripoli-road-dusk.webp" srcset="images/tripoli-road-dusk-sm.webp 900w, images/tripoli-road-dusk.webp 2000w" sizes="(max-width: 1000px) 80vw, 56vw" alt="Tripoli Road townhouses at dusk" loading="lazy" decoding="async"></div><div class="cap"><h3>Tripoli Road</h3><span>Point England · Townhouses</span></div></a>
-        <a class="pcard" href="https://www.mdprojects.co.nz/projects/"><div class="ph"><img src="images/project-swanson-road.webp" srcset="images/project-swanson-road-sm.webp 900w, images/project-swanson-road.webp 2000w" sizes="(max-width: 1000px) 80vw, 56vw" alt="Swanson Road townhouses, Henderson" loading="lazy" decoding="async"></div><div class="cap"><h3>Swanson Road</h3><span>Henderson · Townhouses</span></div></a>
-        <a class="pcard" href="https://www.mdprojects.co.nz/projects/luke-street-otahuhu/"><div class="ph"><img src="images/project-luke-street.webp" srcset="images/project-luke-street-sm.webp 900w, images/project-luke-street.webp 2000w" sizes="(max-width: 1000px) 80vw, 56vw" alt="Luke Street homes, Otahuhu" loading="lazy" decoding="async"></div><div class="cap"><h3>Luke Street</h3><span>Otahuhu · Homes</span></div></a>
-        <a class="pcard" href="https://www.mdprojects.co.nz/projects/"><div class="ph"><img src="images/project-weymouth-road.webp" srcset="images/project-weymouth-road-sm.webp 900w, images/project-weymouth-road.webp 2000w" sizes="(max-width: 1000px) 80vw, 56vw" alt="Weymouth Road duplex" loading="lazy" decoding="async"></div><div class="cap"><h3>Weymouth Road</h3><span>Weymouth · Duplex</span></div></a>
-        <a class="pcard" href="https://www.mdprojects.co.nz/projects/"><div class="ph"><img src="images/gallery-1.webp" srcset="images/gallery-1-sm.webp 900w, images/gallery-1.webp 2000w" sizes="(max-width: 1000px) 80vw, 56vw" alt="Row of completed townhouses" loading="lazy" decoding="async"></div><div class="cap"><h3>View all projects</h3><span>Papakura · Papatoetoe · Manurewa · more →</span></div></a>
+        <a class="pcard" href="https://www.mdprojects.co.nz/projects/mt-albert-road-sandringham/"><div class="ph"><img src="images/project-mt-albert-road.webp" srcset="images/project-mt-albert-road-sm.webp 900w, images/project-mt-albert-road.webp 1700w" sizes="(max-width: 1000px) 170vw, 60vw" alt="Mt Albert Road townhouses, Sandringham" loading="lazy" decoding="async"></div><div class="cap"><h3>Mt Albert Road</h3><span>Sandringham · 5 townhouses · 4 bed</span></div></a>
+        <a class="pcard" href="https://www.mdprojects.co.nz/projects/"><div class="ph"><img src="images/tripoli-road-dusk.webp" srcset="images/tripoli-road-dusk-sm.webp 900w, images/tripoli-road-dusk.webp 1800w" sizes="(max-width: 1000px) 170vw, 60vw" alt="Tripoli Road townhouses at dusk" loading="lazy" decoding="async"></div><div class="cap"><h3>Tripoli Road</h3><span>Point England · Townhouses</span></div></a>
+        <a class="pcard" href="https://www.mdprojects.co.nz/projects/"><div class="ph"><img src="images/project-swanson-road.webp" srcset="images/project-swanson-road-sm.webp 900w, images/project-swanson-road.webp 1800w" sizes="(max-width: 1000px) 170vw, 60vw" alt="Swanson Road townhouses, Henderson" loading="lazy" decoding="async"></div><div class="cap"><h3>Swanson Road</h3><span>Henderson · Townhouses</span></div></a>
+        <a class="pcard" href="https://www.mdprojects.co.nz/projects/luke-street-otahuhu/"><div class="ph"><img src="images/project-luke-street.webp" srcset="images/project-luke-street-sm.webp 900w, images/project-luke-street.webp 1800w" sizes="(max-width: 1000px) 170vw, 60vw" alt="Luke Street homes, Otahuhu" loading="lazy" decoding="async"></div><div class="cap"><h3>Luke Street</h3><span>Otahuhu · Homes</span></div></a>
+        <a class="pcard" href="https://www.mdprojects.co.nz/projects/"><div class="ph"><img src="images/project-weymouth-road.webp" srcset="images/project-weymouth-road-sm.webp 900w, images/project-weymouth-road.webp 1800w" sizes="(max-width: 1000px) 170vw, 60vw" alt="Weymouth Road duplex" loading="lazy" decoding="async"></div><div class="cap"><h3>Weymouth Road</h3><span>Weymouth · Duplex</span></div></a>
+        <a class="pcard" href="https://www.mdprojects.co.nz/projects/"><div class="ph"><img src="images/gallery-1.webp" srcset="images/gallery-1-sm.webp 900w, images/gallery-1.webp 1800w" sizes="(max-width: 1000px) 170vw, 60vw" alt="Row of completed townhouses" loading="lazy" decoding="async"></div><div class="cap"><h3>View all projects</h3><span>Papakura · Papatoetoe · Manurewa · more →</span></div></a>
       </div>
       <div class="wrap"><div class="proj-bar"><span id="projBar"></span></div></div>
     </div>
@@ -1141,14 +1146,14 @@
     <div class="wrap">
       <div class="head"><div><span class="eyebrow">Gallery</span><h2>Inside <em>&amp; out.</em></h2></div><p class="lede">Tap any photo to view it full screen.</p></div>
       <div class="g-grid">
-        <figure class="g g-wide"><img src="images/gallery-1-sm.webp" alt="Row of completed two-storey townhouses" loading="lazy" decoding="async"></figure>
+        <figure class="g g-wide"><img src="images/gallery-1.webp" alt="Row of completed two-storey townhouses" loading="lazy" decoding="async"></figure>
         <figure class="g"><img src="images/gallery-2-sm.webp" alt="Kitchen with island bench" loading="lazy" decoding="async"></figure>
         <figure class="g"><img src="images/gallery-3-sm.webp" alt="New two-storey home with timber deck" loading="lazy" decoding="async"></figure>
-        <figure class="g g-tall"><img src="images/gallery-4-sm.webp" alt="Bright open-plan living room" loading="lazy" decoding="async"></figure>
-        <figure class="g g-wide"><img src="images/gallery-5-sm.webp" alt="Townhouse exterior with dark cladding" loading="lazy" decoding="async"></figure>
+        <figure class="g g-tall"><img src="images/gallery-4.webp" alt="Bright open-plan living room" loading="lazy" decoding="async"></figure>
+        <figure class="g g-wide"><img src="images/gallery-5.webp" alt="Townhouse exterior with dark cladding" loading="lazy" decoding="async"></figure>
         <figure class="g"><img src="images/gallery-6-sm.webp" alt="Completed duplex homes" loading="lazy" decoding="async"></figure>
         <figure class="g"><img src="images/gallery-7-sm.webp" alt="Living area with timber floors" loading="lazy" decoding="async"></figure>
-        <figure class="g g-wide"><img src="images/gallery-8-sm.webp" alt="Two-storey home with single garage" loading="lazy" decoding="async"></figure>
+        <figure class="g g-wide"><img src="images/gallery-8.webp" alt="Two-storey home with single garage" loading="lazy" decoding="async"></figure>
       </div>
     </div>
   </section>
@@ -2027,7 +2032,7 @@
 
     // hero heading follows the video: each photo in the loop gets its own line
     { const v = document.getElementById('heroVideo'), h1 = document.getElementById('h1'), alts = [...document.querySelectorAll('.h1-alt')];
-      const els = [h1, ...alts], CUTS = [6, 11.8, 17.6, 23.4];
+      const els = [h1, ...alts], CUTS = [6, 11.8, 17.6, 23.4], heroBtn = document.querySelector('.hero .btn-live');
       let cur = 0;
       const ready = () => {
         if (!window.__hdr || !__hdr.film) return false;
@@ -2040,6 +2045,7 @@
         gsap.killTweensOf([h1, ...alts.flatMap(a => [...a.querySelectorAll('.li')])]);
         if (out === h1) gsap.to(h1, { yPercent: -14, opacity: 0, duration: .55, ease: 'power2.in' });
         else gsap.to(parts(out), { yPercent: -110, duration: .55, stagger: .08, ease: 'power2.in', onComplete: () => { if (els[cur] !== out) out.style.visibility = 'hidden'; } });
+        if (heroBtn) gsap.delayedCall(.5, () => { heroBtn.classList.remove('sweep'); void heroBtn.offsetWidth; heroBtn.classList.add('sweep'); });
         if (inn === h1) gsap.fromTo(h1, { yPercent: 14, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .9, delay: .45, ease: 'power3.out' });
         else { inn.style.visibility = 'visible'; gsap.fromTo(parts(inn), { yPercent: 110 }, { yPercent: 0, duration: .9, stagger: .1, delay: .45, ease: 'power3.out' }); }
       };
@@ -2146,7 +2152,7 @@
         <div class="st-view" role="group" aria-label="How we build, step by step">
           <div class="st-bars">${ST.map(() => '<i><b></b></i>').join('')}</div>
           <div class="st-head"><img src="images/logo-white.svg" alt=""><span><b>MD Projects NZ</b><small>Step <em>1</em> of ${N}</small></span></div>
-          ${ST.map((x, i) => `<div class="st-slide" data-fx="${x.fx}"><img class="st-img" src="${x.img}" alt="${x.t}" loading="lazy" decoding="async"><div class="st-fx"></div><div class="st-cap"><span>0${i + 1}</span><h4>${x.t}</h4><p>${x.d}</p></div></div>`).join('')}
+          ${ST.map((x, i) => `<div class="st-slide" data-fx="${x.fx}"><img class="st-img" src="${x.img.replace('-sm.webp', '.webp')}" alt="${x.t}" loading="lazy" decoding="async"><div class="st-fx"></div><div class="st-cap"><span>0${i + 1}</span><h4>${x.t}</h4><p>${x.d}</p></div></div>`).join('')}
           <button class="st-tap st-prev" aria-label="Previous step"></button><button class="st-tap st-next" aria-label="Next step"></button>
         </div>`;
       ui.querySelector('.b3-img').replaceWith(wrap);
@@ -2208,7 +2214,7 @@
     })();
 
     // "Start your project" spark and sweep only run while the button is on screen
-    document.querySelectorAll('.btn-live').forEach(el => new IntersectionObserver(es => el.classList.toggle('on', es[0].isIntersecting)).observe(el));
+    document.querySelectorAll('.btn-live:not(.hero .btn-live)').forEach(el => new IntersectionObserver(es => el.classList.toggle('on', es[0].isIntersecting)).observe(el));
     // the shimmer animates background-position (main thread), so it only runs while on screen
     document.querySelectorAll('.shimmer').forEach(el => new IntersectionObserver(es => el.classList.toggle('on', es[0].isIntersecting)).observe(el));
 
