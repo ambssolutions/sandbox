@@ -478,9 +478,9 @@
   /* scroll text extras */
   .marquee { overflow: hidden; padding: clamp(14px, 2.4vh, 34px) 0; background: var(--bg); position: relative; z-index: 1; }
   .mq-track { display: flex; align-items: center; width: max-content; will-change: transform; }
-  .mq-track span, .mq-track i { font: 600 clamp(1.75rem, min(6.4vw, 8.5vh), 4.75rem)/1 var(--f); letter-spacing: -.05em; white-space: nowrap; padding: 0 .28em; color: var(--ink); }
+  .mq-track span, .mq-track i { font: 600 clamp(1.6rem, min(3.8vw, 5.8vh), 3.4rem)/1 var(--f); letter-spacing: -.05em; white-space: nowrap; padding: 0 .28em; color: var(--ink); }
   .mq-track span.o { color: transparent; -webkit-text-stroke: 2px var(--bronze); }
-  .mq-track i { font-style: normal; font-size: clamp(.85rem, min(2.4vw, 3.4vh), 1.8rem); color: var(--bronze); padding: 0 .1em; }
+  .mq-track i { font-style: normal; font-size: clamp(.8rem, min(1.6vw, 2.4vh), 1.3rem); color: var(--bronze); padding: 0 .1em; }
   .mq-b { background: var(--bg-2); }
   .marquee + section { padding-top: clamp(56px, 8vh, 110px); }
   section:has(+ .marquee) { padding-bottom: clamp(56px, 8vh, 110px); }
@@ -1936,7 +1936,10 @@
     const heroIn = () => heroTimed ? gsap.timeline()
       .fromTo('#heroWord', { y: 34, scale: .96, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 1.7, ease: 'power3.out' }, .15)
       .fromTo(['#haEb', '#haSub'], { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3, stagger: .14, ease: 'power3.out' }, .55)
-      .add(() => { vDived = true; vSync(); }, 1.9)
+      .add(() => {   // the film starts 1.5s in, so the first heading change follows soon after the heading settles
+        const skip = () => { if (vHero.currentTime < 1) try { vHero.currentTime = 1.5; } catch (e) {} };
+        if (vHero.readyState >= 1) skip(); else vHero.addEventListener('loadedmetadata', skip, { once: true });
+        vDived = true; vSync(); }, 1.9)
       // HOMES and its lines drop away downward, softly accelerating, as the film fades up behind them
       .to('#haEb', { y: 70, autoAlpha: 0, duration: 1, ease: 'power2.in' }, 2.0)
       .to('#heroWord', { y: () => innerHeight * .32, opacity: 0, duration: 1.25, ease: 'power2.in' }, 2.1)
