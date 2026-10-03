@@ -834,6 +834,10 @@
   .sec-sky .step { background: #f4f6fa; }
   .sec-sky .step b, .step b { color: #3c54a8; text-shadow: none; font-weight: 600; -webkit-text-stroke: 0; }
   #faqs.sec-royal { --sec-bg: #3c54a8; background: #3c54a8 !important; }
+  /* on coloured sections the highlighter becomes emphasis, not a patch of background */
+  .sec-sky mark.hl, .sec-royal mark.hl, .founder mark.hl { background: none !important; font-weight: 500; }
+  .sec-sky mark.hl { color: #1f2f72; }
+  .sec-royal mark.hl, .founder mark.hl { color: #fff; }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
