@@ -45,7 +45,7 @@
   }
   * { box-sizing: border-box; }
   html { font-size: clamp(16px, .4vw + 10.4px, 20px); overflow-x: clip; }   /* nothing may widen the page beyond the screen (phones would zoom the layout out) */
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 300 1rem/1.7 var(--f); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 300 1rem/1.7 var(--f); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: clip; }
   html.lenis, html.lenis body { height: auto; }
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
   .lenis.lenis-stopped { overflow: hidden; }
@@ -567,7 +567,10 @@
   .pbk-nav .arrow { width: 52px; height: 52px; border-radius: 50%; border: 0; display: grid; place-items: center; color: var(--ink); background: var(--bg); box-shadow: var(--emb-sm); cursor: pointer; }
   .pbk-nav .arrow:disabled { opacity: .35; }
   .pbk-count { font: 500 .8rem/1 var(--f); letter-spacing: .2em; color: var(--muted); min-width: 70px; text-align: center; }
-  .pbk { touch-action: pan-y; }
+  .pbk-track { position: relative; height: calc(100svh - 76px + (var(--pages) - 1) * 62svh); margin-top: 24px; }
+  .pbk-sticky { position: sticky; top: 76px; height: calc(100svh - 76px); display: flex; flex-direction: column; justify-content: center; padding-bottom: 8px; }
+  .pbk-sticky .pbk { margin-top: 0; height: min(calc(100svh - 76px - 104px), 700px); }
+  .pbk-sticky .pbk-nav { margin-top: 18px; }
   /* touch screens: no sticky "pressed" hover state */
   @media (hover: none) { .step:hover { box-shadow: var(--emb); } .btn-line:hover { box-shadow: var(--emb-sm); } }
   /* phones: tighter, crisper relief that stays inside the narrow gutters */
@@ -1610,17 +1613,19 @@
       });
       turn.to({}, { duration: .35 });
     } else {
-      // phones: a single-page book. Swipe or tap to turn a page; it turns on its own while you look at it, until you touch it
+      // phones: a single-page book whose pages turn as you scroll (and with the arrows)
       const pb = document.createElement('div'); pb.className = 'pbk';
       let h = '';
       for (let k = 0; k < N; k++) h += `<div class="pbk-leaf" style="z-index:${N - k}"><div class="bk-face bk-front pbk-front">${photoHTML(k)}${textHTML(k)}${shade}</div><div class="bk-face bk-back pbk-back"><span>MD Projects NZ</span>${shade}</div></div>`;
       pb.innerHTML = h;
       const nav = document.createElement('div'); nav.className = 'pbk-nav';
       nav.innerHTML = `<button class="arrow" aria-label="Previous service"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 8H3M7 4L3 8l4 4"/></svg></button><span class="pbk-count">01 / ${String(N).padStart(2, '0')}</span><button class="arrow" aria-label="Next service"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>`;
-      stack.after(pb); pb.after(nav); stack.style.display = 'none';
+      // the book sits in a tall track and stays on screen (CSS sticky, native scrolling) while each stretch of scroll turns a page
+      const track = document.createElement('div'); track.className = 'pbk-track'; track.style.setProperty('--pages', N);
+      const sticky = document.createElement('div'); sticky.className = 'pbk-sticky';
+      stack.after(track); track.appendChild(sticky); sticky.append(pb, nav); stack.style.display = 'none';
       const leaves = [...pb.querySelectorAll('.pbk-leaf')], count = nav.querySelector('.pbk-count'), [prevB, nextB] = nav.querySelectorAll('button');
-      let cur = 0, busy = false, auto = null, touched = false;
-      let lastScroll = 0; addEventListener('scroll', () => { lastScroll = performance.now(); }, { passive: true });   // never turn a page mid-scroll
+      let cur = 0, busy = false;
       const mark = () => leaves.forEach((l, k) => { l.classList.toggle('cur', k === cur); l.classList.toggle('under', k === cur + 1); });
       const show = () => { mark(); count.textContent = String(cur + 1).padStart(2, '0') + ' / ' + String(N).padStart(2, '0'); prevB.disabled = cur === 0; nextB.disabled = cur === N - 1; };
       const flip = dir => {
@@ -1634,14 +1639,16 @@
         else tl.fromTo(lf, { rotationY: -180 }, { rotationY: 0, duration: 1.1, ease: 'power2.inOut' }).fromTo(bsh, { opacity: 0 }, { opacity: .5, duration: .55 }, 0).fromTo(f, { opacity: .55 }, { opacity: 0, duration: .55, ease: 'power1.out' }, .55);
         cur += dir; count.textContent = String(cur + 1).padStart(2, '0') + ' / ' + String(N).padStart(2, '0'); prevB.disabled = cur === 0; nextB.disabled = cur === N - 1;
       };
-      const stopAuto = () => { touched = true; clearInterval(auto); auto = null; };
-      prevB.addEventListener('click', () => { stopAuto(); flip(-1); }); nextB.addEventListener('click', () => { stopAuto(); flip(1); });
-      let sx = 0, sy = 0;
-      pb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
-      pb.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) { stopAuto(); flip(dx < 0 ? 1 : -1); } }, { passive: true });
-      new IntersectionObserver(es => { const v = es[0].isIntersecting && es[0].intersectionRatio > .55;
-        if (v && !auto && !touched) auto = setInterval(() => { if (performance.now() - lastScroll < 1500) return; if (cur < N - 1) flip(1); else { clearInterval(auto); auto = null; } }, 4200);
-        if (!v && auto) { clearInterval(auto); auto = null; } }, { threshold: [0, .55, 1] }).observe(pb);
+      // scroll position -> target page; turns run one after another until the book shows the target
+      let target = 0;
+      const step = () => { if (busy || cur === target) return; flip(target > cur ? 1 : -1); };
+      const pageAt = () => { const r = track.getBoundingClientRect(), span = track.offsetHeight - sticky.offsetHeight; const prog = span > 0 ? (-r.top + 10) / span : 0;
+        return Math.max(0, Math.min(N - 1, Math.floor(prog * (N - .001) + .35))); };
+      ScrollTrigger.create({ trigger: track, start: 'top bottom', end: 'bottom top', onUpdate: () => { const t = pageAt(); if (t !== target) { target = t; step(); } } });
+      gsap.ticker.add(() => { if (!busy && cur !== target) step(); });
+      // the arrows scroll to the page's stretch, so scrolling and the arrows always agree
+      const goTo = k => { const span = track.offsetHeight - sticky.offsetHeight, y = track.getBoundingClientRect().top + scrollY + span * (Math.max(0, k - .35) + .5) / N; window.scrollTo({ top: y, behavior: 'smooth' }); };
+      prevB.addEventListener('click', () => goTo(cur - 1)); nextB.addEventListener('click', () => goTo(cur + 1));
       gsap.from(pb, { y: 50, opacity: 0, duration: 1.2, ease: EASE, scrollTrigger: { trigger: pb, start: 'top 85%', once: true } });
       show();
     }
