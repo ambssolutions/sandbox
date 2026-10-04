@@ -1380,6 +1380,12 @@
   @media (min-width: 1001px) { .mq-track span { font-size: clamp(1.05rem, min(1.6vw, 2.7vh), 1.5rem) !important; } .mq-track i { font-size: .8rem !important; } .marquee { padding: 10px 0 !important; } }
   @media (orientation: landscape) and (max-height: 560px) { .mq-track span { font-size: 1.15rem !important; } }
   .mq-track span.o { -webkit-text-stroke-width: 1px !important; }
+  /* marquee: solid, readable words and centred stars */
+  .mq-track { display: flex !important; align-items: center !important; }
+  .mq-track span, .mq-track i { line-height: 1 !important; display: inline-flex; align-items: center; }
+  .mq-track span.o, .mq-b .mq-track span.o { color: var(--bronze) !important; -webkit-text-stroke: 0 !important; -webkit-text-fill-color: currentColor; text-shadow: none !important; }
+  .mq-track i { transform: translateY(-.06em); }
+  [data-theme="dark"] .mq-track span.o { color: #8ea8f4 !important; }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
