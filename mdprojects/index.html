@@ -1390,9 +1390,13 @@
   .mq-track i { font-size: 0 !important; color: transparent !important; flex: none; width: var(--mqs, 12px); height: var(--mqs, 12px); margin: 0 .55em; padding: 0 !important; display: block !important;
     background: var(--bronze); clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%); transform: translateY(.04em) !important; align-self: center; }
   .mq-track span { margin: 0 .1em; }
-  @media (min-width: 1001px) { .mq-track { --mqs: 11px; } .mq-track i { margin: 0 12px; transform: translateY(-2.6px) !important; } }
+  @media (min-width: 1001px) { .mq-track { --mqs: 11px; } .mq-track i { margin: 0 12px; transform: translateY(.5px) !important; } }
   @media (max-width: 1000px) { .mq-track { --mqs: 10px; } .mq-track i { margin: 0 10px; } }
   [data-theme="dark"] .mq-track i { background: #8ea8f4; }
+
+  /* dark mode: the page edges stacked behind the phone/tablet book */
+  [data-theme="dark"] .pbk::before { background: #222c47; }
+  [data-theme="dark"] .pbk::after { background: #1a2238; }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
