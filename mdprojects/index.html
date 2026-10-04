@@ -1343,6 +1343,25 @@
   /* About photo: flat and steady (no 3D layer, no load fade) */
   .bt-photo { transform-style: flat; isolation: isolate; }
   .bt-photo img, .bt-photo img.ld { opacity: 1 !important; transition: none !important; }
+  /* laptops: wide, cinema-shaped stories viewer */
+  @media (min-width: 1001px) and (min-height: 561px) {
+    .stories { max-width: 1120px !important; }
+    .st-view { aspect-ratio: 16 / 9 !important; height: auto !important; min-height: 0 !important; width: min(100%, 1120px, calc((100vh - 300px) * 16 / 9)) !important; margin: 0 auto !important; }
+    .st-cap { left: 28px; right: 28px; bottom: 26px; max-width: 640px; }
+    .st-cap h4 { font-size: 1.9rem; } .st-cap p { font-size: 1rem; }
+    .st-slide[data-fx="scan"] .st-img { object-fit: contain; }
+  }
+  /* About tiles: small labels readable on laptops */
+  @media (min-width: 1001px) {
+    .pr-lbl { font-size: .8rem !important; }
+    .pr-fig span { font-size: .9rem !important; }
+    .bento .pr h3 { font-size: clamp(1.15rem, 1.4vw, 1.35rem) !important; }
+    .bento .pr p { font-size: 1rem !important; line-height: 1.55; }
+    .track li { font-size: .82rem !important; }
+    .p-stamp { font-size: .72rem !important; }
+    .bt-chip small { font-size: .7rem !important; } .bt-chip b { font-size: 1.35rem !important; }
+    .t-lb { font-size: 10px; } .t-keys { font-size: 10px; }
+  }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
