@@ -1362,6 +1362,18 @@
     .bt-chip small { font-size: .7rem !important; } .bt-chip b { font-size: 1.35rem !important; }
     .t-lb { font-size: 10px; } .t-keys { font-size: 10px; }
   }
+  /* About MD Projects on laptops: balanced, a step larger than the rest of the compact scale */
+  @media (min-width: 1001px) {
+    .stm { font-size: clamp(1.5rem, min(2.2vw, 4vh), 2.3rem) !important; max-width: 36ch; }
+    .pr-lbl { font-size: .86rem !important; }
+    .pr-fig b { font-size: clamp(2.6rem, 5.4vh, 3.3rem) !important; }
+    .pr-fig span { font-size: .98rem !important; }
+    .bento .pr h3 { font-size: clamp(1.3rem, 1.6vw, 1.55rem) !important; }
+    .bento .pr p { font-size: 1.08rem !important; }
+    .track li { font-size: .88rem !important; }
+    .bt-chip small { font-size: .75rem !important; } .bt-chip b { font-size: 1.5rem !important; }
+    .bento { gap: 16px; }
+  }
 </style>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
