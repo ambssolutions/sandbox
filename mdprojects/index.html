@@ -672,7 +672,7 @@
   .st-slide.on { visibility: visible; }
   .st-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .st-slide::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9,13,26,.5) 0%, rgba(9,13,26,0) 22%, rgba(9,13,26,0) 45%, rgba(9,13,26,.88) 100%); pointer-events: none; }
-  .st-slide[data-fx="scan"] { background: #0b1230; } .st-slide[data-fx="scan"] .st-img { object-fit: contain; }
+  .st-slide[data-fx="scan"] { background: #0b1230; } .st-slide[data-fx="scan"] .st-img { object-fit: cover; }
   .st-fx { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
   .st-cap { position: absolute; z-index: 3; left: 18px; right: 18px; bottom: 20px; color: #fff; }
   .st-cap span { font: 600 .74rem/1 var(--f); letter-spacing: .2em; color: var(--bronze-2); }
@@ -1349,7 +1349,7 @@
     .st-view { aspect-ratio: 16 / 9 !important; height: auto !important; min-height: 0 !important; width: min(100%, 1120px, calc((100vh - 300px) * 16 / 9)) !important; margin: 0 auto !important; }
     .st-cap { left: 28px; right: 28px; bottom: 26px; max-width: 640px; }
     .st-cap h4 { font-size: 1.9rem; } .st-cap p { font-size: 1rem; }
-    .st-slide[data-fx="scan"] .st-img { object-fit: contain; }
+    .st-slide[data-fx="scan"] .st-img { object-fit: cover; }
   }
   /* About tiles: small labels readable on laptops */
   @media (min-width: 1001px) {
@@ -2815,7 +2815,7 @@
     (() => {
       const ui = document.querySelector('.b3-ui'); if (!ui) return;
       const ST = [
-        { s: 'Plans', t: 'Plans & consents', d: 'Feasibility, design and council consents, sorted before a single dig.', img: 'images/plans-consents-sm.webp', fx: 'scan' },
+        { s: 'Plans', t: 'Plans & consents', d: 'Feasibility, design and council consents, sorted before a single dig.', img: 'images/plans-consents.webp', fx: 'scan' },
         { s: 'Slab', t: 'Foundations poured', d: 'Site works and a level, engineered slab: the base everything stands on.', img: 'images/guide-feasibility-sm.webp', fx: 'rise' },
         { s: 'Frame', t: 'Frame & cladding', d: 'The frame goes up, then weathertight cladding wraps the home.', img: 'images/intro-townhouses-sm.webp', fx: 'slats' },
         { s: 'Roof', t: 'Joinery & roof', d: 'Windows, doors and the roof go on. The home is closed in.', img: 'images/project-swanson-road-sm.webp', fx: 'roof' },
