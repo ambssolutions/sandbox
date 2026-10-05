@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — CRM (leads)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  #inbox { left: 22px; top: 222px; width: 496px; height: 236px; }
+  .mail { display: flex; align-items: center; gap: 10px; padding: 0 14px; height: 40px;
+    border-bottom: 1px solid var(--win-line); font-size: 12.5px; }
+  .mail .u { width: 8px; height: 8px; border-radius: 50%; background: #2563eb; flex: none; }
+  .mail b { width: 92px; flex: none; }
+  .mail span { color: var(--win-muted); white-space: nowrap; overflow: hidden; }
+  .mail em { margin-left: auto; font-style: normal; color: var(--win-muted); font-size: 11px; flex: none; }
+  #leads { left: 140px; top: 420px; width: 378px; height: 150px; }
+  #sticky { left: 30px; top: 520px; width: 150px; height: 120px; background: #fde047; color: #3f3a06;
+    padding: 14px; font: 700 17px/1.25 "Inter"; border-radius: 4px; box-shadow: 0 14px 30px rgba(0,0,0,.4); rotate: -6deg; }
+  #cold { left: 22px; top: 690px; }
+
+  #crm { left: 22px; top: 222px; width: 496px; height: 440px; }
+  #crm .cols { position: absolute; left: 0; right: 0; top: 30px; bottom: 0; display: flex; gap: 6px; padding: 8px; background: #f3f4f6; }
+  #crm .col { flex: 1; background: #e9ebf0; border-radius: 10px; padding: 8px; font-size: 11px; font-weight: 800;
+    color: var(--win-muted); letter-spacing: .06em; }
+  #crm .col.won { background: #dcfce7; color: #15803d; }
+  #crm .col small { display: block; font-weight: 700; letter-spacing: 0; margin-top: 2px; font-size: 11px; }
+  .card { position: absolute; width: 108px; height: 60px; background: #fff; color: var(--win-ink);
+    border-radius: 9px; padding: 7px 9px; box-shadow: 0 2px 6px rgba(0,0,0,.12); border-left: 4px solid #6366f1; z-index: 3; }
+  .card .n { font-size: 12.5px; font-weight: 800; }
+  .card .j { font-size: 10.5px; color: var(--win-muted); margin-top: 1px; }
+  .card .v { font-size: 11.5px; font-weight: 800; margin-top: 2px; }
+  .card.won { border-left-color: var(--good); }
+  .card .src { position: absolute; right: 6px; top: 6px; font-size: 11px; }
+  .toast { top: 684px; }
+  #s1 { left: 22px; top: 684px; width: 240px; }
+  #s2 { left: 278px; top: 684px; width: 240px; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div class="win" id="inbox">
+    <div class="bar"><b></b><b></b><b></b>Inbox (47 unread)</div>
+  </div>
+  <div class="win" id="leads">
+    <div class="bar green"><b></b><b></b><b></b>Leads_MASTER_v2.xlsx</div>
+    <table class="sheet">
+      <colgroup><col style="width:26px"><col style="width:90px"><col style="width:120px"><col></colgroup>
+      <tr><td class="rn">41</td><td>Kerry L.</td><td>Retaining wall</td><td>called?? </td></tr>
+      <tr><td class="rn">42</td><td>Sam W.</td><td>Garage</td><td>sent email?</td></tr>
+      <tr><td class="rn">43</td><td id="m1"></td><td id="m2"></td><td id="m3"></td></tr>
+      <tr><td class="rn">44</td><td></td><td></td><td></td></tr>
+    </table>
+  </div>
+  <div class="abs" id="sticky">Call Dave back about deck?? <span class="emoji">😬</span></div>
+  <div class="chip bad" id="cold"><span class="emoji">🥶</span> Leads gone cold this month: <span class="big" id="coldn">0</span></div>
+
+  <div class="win" id="crm">
+    <div class="bar dark"><b></b><b></b><b></b>CRM · Sales pipeline</div>
+    <div class="cols">
+      <div class="col">NEW<small id="c0"></small></div>
+      <div class="col">CONTACTED<small id="c1"></small></div>
+      <div class="col">QUOTED<small id="c2"></small></div>
+      <div class="col won">WON<small id="c3"></small></div>
+    </div>
+  </div>
+
+  <div class="stat" id="s1"><div class="l">Reply time to new leads</div><div class="v"><s>2 days</s> → 2 min</div></div>
+  <div class="stat" id="s2"><div class="l">Leads forgotten</div><div class="v">0 <span class="emoji" style="font-size:26px">🙌</span></div></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis, type, count, p, ease, lerp, clamp } = E;
+const MAILS = [["Dave R.", "Quote for a new deck?", "9:12"], ["Aroha T.", "Kitchen reno enquiry", "8:40"],
+  ["Mike B.", "Fence – are you free next wk", "Yest"], ["Priya S.", "Bathroom quote please", "Yest"], ["Tom H.", "Re: Re: roof leak", "Mon"]];
+MAILS.forEach((m) => $("#inbox").insertAdjacentHTML("beforeend",
+  `<div class="mail"><div class="u"></div><b>${m[0]}</b><span>${m[1]}</span><em>${m[2]}</em></div>`));
+const firstMail = $$(".mail")[0];
+
+// Pipeline cards: [name, job, value, appearAt, [[t, col], ...]]
+const CARDS = [
+  ["Dave R.", "New deck", 8400, 3.4, [[4.6, 1], [7.0, 2], [10.2, 3]]],
+  ["Aroha T.", "Kitchen reno", 14200, 5.0, [[5.9, 1], [8.2, 2], [14.6, 3]]],
+  ["Mike B.", "Fence", 3100, 6.2, [[7.2, 1], [9.4, 2], [13.0, 3]]],
+  ["Priya S.", "Bathroom", 11500, 7.6, [[8.6, 1], [10.6, 2]]],
+  ["Tom H.", "Roof repair", 6800, 9.0, [[9.9, 1], [13.8, 2]]],
+];
+const crm = $("#crm");
+CARDS.forEach((c) => crm.insertAdjacentHTML("beforeend",
+  `<div class="card"><span class="src emoji">🌐</span><div class="n">${c[0]}</div><div class="j">${c[1]}</div><div class="v">$${c[2].toLocaleString("en-NZ")}</div></div>`));
+const cards = $$(".card");
+const colX = (c) => 13 + c * 120.5;
+function colAt(c, t) { // fractional column at time t
+  let col = 0;
+  for (const [tt, to] of c[4]) col = lerp(col, to, p(t, tt, tt + 0.5, ease.inOut));
+  return col;
+}
+
+const TOASTS = [
+  [4.6, 7.0, "#16a34a", "💬", "Auto-reply sent to Dave", "“Thanks Dave! Book a site visit here →”"],
+  [7.0, 9.4, "#7c3aed", "🔁", "Follow-up sent — Aroha T.", "No reply in 2 days, so we nudged"],
+  [10.2, 12, "#ca8a04", "🎉", "Deal won — Dave R.", "New deck · $8,400"],
+];
+TOASTS.forEach((x) => $("#frame").insertAdjacentHTML("beforeend",
+  `<div class="toast"><div class="ic" style="background:${x[2]}"><span class="emoji">${x[3]}</span></div><div><div class="tt">${x[4]}</div><div class="ts">${x[5]}</div></div><div class="when">now</div></div>`));
+const toasts = $$(".toast");
+const cur = E.cursor($("#frame"));
+window.COVER_AT = 1.7;
+
+E.setup({
+  duration: 22,
+  keyword: "CRM",
+  captions: [
+    { a: 0, b: 3.0, html: `This business was losing leads in a <mark>messy inbox</mark> EVERY&nbsp;DAY…` },
+    { a: 3.0, b: 12, html: `Now every enquiry lands in a <span class="cyan">CRM</span> and gets a reply in minutes.` },
+    { a: 12, b: 18, html: `Follow-ups happen <mark>automatically.</mark>` },
+  ],
+  phases: [
+    { a: 0.15, b: 3.0, label: "MANUAL", kind: "bad" },
+    { a: 3.1, b: 18, label: "AUTOMATED", kind: "good" },
+  ],
+  end: { at: 18, title: "Want this for your business?", sub: "I'll show you exactly how it's set up." },
+});
+
+E.use((t) => {
+  // --- manual
+  vis("#inbox", t, 0, 3.0, { y: 30 });
+  vis("#leads", t, 0.2, 3.0, { y: 40 });
+  vis("#sticky", t, 0.45, 3.0, { y: -20, scale: 0.7 });
+  vis("#cold", t, 0.6, 3.0);
+  count("#coldn", t, 0.8, 2.8, 0, 9);
+  firstMail.style.background = t > 0.65 ? "#eff6ff" : "";
+  type("#m1", "Dave R.", t, 1.25, 1.6);
+  type("#m2", "deck?? (check email)", t, 1.7, 2.4);
+  type("#m3", "call back", t, 2.45, 2.9);
+  cur(t, [{ t: 0.2, x: 360, y: 640 }, { t: 0.65, x: 120, y: 272, click: true }, { t: 1.2, x: 220, y: 510, click: true }, { t: 2.9, x: 260, y: 530 }], 0.2, 3.0);
+
+  // --- automated
+  vis("#crm", t, 3.05, null, { y: 30 });
+  const won = [0, 0, 0, 0], n = [0, 0, 0, 0];
+  CARDS.forEach((c, i) => {
+    const el = cards[i];
+    const col = colAt(c, t);
+    const a = vis(el, t, c[3], null, { x: -30, y: 0, scale: 0.8 });
+    el.style.left = colX(col) + "px";
+    el.style.top = 30 + 34 + i * 72 + "px";
+    const isWon = col > 2.95;
+    el.classList.toggle("won", isWon);
+    // glow while brand new
+    el.style.boxShadow = t > c[3] && t < c[3] + 0.8 ? "0 0 0 3px rgba(99,102,241,.45), 0 6px 16px rgba(0,0,0,.2)" : "";
+    if (a > 0.5) { const k = Math.round(col); n[k]++; if (isWon) won[3] += c[2]; }
+  });
+  $("#c0").textContent = `${n[0]} lead${n[0] === 1 ? "" : "s"}`;
+  $("#c1").textContent = `${n[1]} lead${n[1] === 1 ? "" : "s"}`;
+  $("#c2").textContent = `${n[2]} lead${n[2] === 1 ? "" : "s"}`;
+  $("#c3").textContent = "$" + won[3].toLocaleString("en-NZ");
+  TOASTS.forEach((x, i) => vis(toasts[i], t, x[0], x[1], { y: 26, dur: 0.3, outDur: 0.12 }));
+
+  // --- results
+  vis("#s1", t, 12.2, null, { y: 30 });
+  vis("#s2", t, 12.45, null, { y: 30 });
+});
+</script>
+</body>
+</html>

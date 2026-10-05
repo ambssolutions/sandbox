@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — AUTO (invoices)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  #sheet { left: 22px; top: 222px; width: 496px; height: 282px; }
+  #doc { left: 196px; top: 418px; width: 322px; height: 236px; }
+  #doc .body { padding: 16px 18px; font-size: 13px; line-height: 1.9; }
+  #doc h4 { font-size: 18px; letter-spacing: .08em; margin-bottom: 4px; }
+  #doc .k { color: var(--win-muted); display: inline-block; width: 64px; }
+  #doc .line { border-bottom: 1px dashed var(--win-line); }
+  #clock { left: 22px; top: 690px; }
+  #wf { left: 22px; top: 522px; width: 496px; height: 158px; }
+  .toast { top: 700px; }
+  #s1 { left: 22px; top: 700px; width: 240px; }
+  #s2 { left: 278px; top: 700px; width: 240px; }
+  td.flash { background: #dcfce7; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <!-- Manual: spreadsheet + invoice template -->
+  <div class="win" id="sheet">
+    <div class="bar green"><b></b><b></b><b></b>Jobs_October.xlsx</div>
+    <table class="sheet">
+      <colgroup><col style="width:26px"><col style="width:132px"><col style="width:138px"><col style="width:92px"><col></colgroup>
+      <tr><th class="rn"></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+      <tr><td class="rn">1</td><td><b>Client</b></td><td><b>Job</b></td><td class="num"><b>Amount</b></td><td><b>Invoiced?</b></td></tr>
+    </table>
+  </div>
+
+  <div class="win" id="doc">
+    <div class="bar blue"><b></b><b></b><b></b>Invoice_template.docx</div>
+    <div class="body">
+      <h4>INVOICE #____</h4>
+      <div class="line"><span class="k">Bill to:</span> <span id="d1"></span></div>
+      <div class="line"><span class="k">Job:</span> <span id="d2"></span></div>
+      <div class="line"><span class="k">Amount:</span> <span id="d3"></span></div>
+    </div>
+  </div>
+
+  <div class="chip bad" id="clock"><span class="emoji">⏰</span> Still doing invoices at <span class="big" id="clk">5:12pm</span></div>
+
+  <!-- Automated -->
+  <div class="panel" id="wf">
+    <div class="ttl"><span class="live">●</span> AMBS AUTOMATION · RUNNING</div>
+  </div>
+
+  <div class="stat" id="s1"><div class="l">Time on invoices / day</div><div class="v"><s>2 hrs</s> → 0 min</div></div>
+  <div class="stat" id="s2"><div class="l">Invoices sent today</div><div class="v"><span id="sent">0</span> / 7 ✓</div></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis, type, count, p, ease, lerp } = E;
+const ROWS = [
+  ["Smith Plumbing", "Hot water cylinder", 480],
+  ["Kauri Builders", "Deck repair", 1250],
+  ["Te Aro Café", "Electrical check", 320],
+  ["J. Patel", "Bathroom reno", 4800],
+  ["Harbour Dental", "Aircon service", 690],
+  ["M. Wilson", "Fence install", 2150],
+  ["Coastline Motors", "Wiring fault", 410],
+];
+const money = (v) => "$" + v.toLocaleString("en-NZ", { minimumFractionDigits: 2 });
+const tbl = $(".sheet");
+ROWS.forEach((r, i) => tbl.insertAdjacentHTML("beforeend",
+  `<tr><td class="rn">${i + 2}</td><td>${r[0]}</td><td>${r[1]}</td><td class="num">${money(r[2])}</td><td class="st"></td></tr>`));
+const st = $$("td.st");
+const firstCell = $$(".sheet tr")[2].children[1];
+
+$("#wf").insertAdjacentHTML("beforeend", E.flowHTML([
+  ["📋", "Job marked<br>done"], ["🧾", "Invoice<br>created"], ["📧", "Emailed to<br>client"], ["🔔", "Reminder if<br>unpaid"],
+], 496, 42));
+const RUNS = [[3.5, 5.6], [5.9, 6.8], [7.0, 7.8], [8.0, 8.7], [8.9, 9.5], [9.7, 10.3], [10.5, 11.1]];
+const flow = E.flow($("#wf"), RUNS);
+
+// One toast per automated invoice.
+RUNS.forEach((r, i) => $("#frame").insertAdjacentHTML("beforeend",
+  `<div class="toast" data-t="${i}"><div class="ic" style="background:#2563eb"><span class="emoji">📧</span></div>
+   <div><div class="tt">Invoice #${1047 + i} sent</div><div class="ts">${ROWS[i][0]} · ${money(ROWS[i][2])}</div></div><div class="when">now</div></div>`));
+const toasts = $$(".toast");
+
+const cur = E.cursor($("#frame"));
+window.COVER_AT = 1.6;
+
+E.setup({
+  duration: 22,
+  keyword: "AUTO",
+  captions: [
+    { a: 0, b: 3.0, html: `A business owner was doing this <mark>manually</mark> EVERY&nbsp;DAY…` },
+    { a: 3.0, b: 12, html: `So we hooked it up to <span class="cyan">an&nbsp;automation.</span>` },
+    { a: 12, b: 18, html: `Now it happens <mark>automatically.</mark>` },
+  ],
+  phases: [
+    { a: 0.15, b: 3.0, label: "MANUAL", kind: "bad" },
+    { a: 3.1, b: 18, label: "AUTOMATED", kind: "good" },
+  ],
+  end: { at: 18, title: "Want to know how?", sub: "I'll send you the exact setup we used." },
+});
+
+E.use((t) => {
+  // --- manual
+  vis("#sheet", t, 0, null, { y: 30 });
+  vis("#doc", t, 0.25, 3.0, { y: 40 });
+  vis("#clock", t, 0.4, 3.0, { y: 20 });
+  const mins = Math.round(lerp(5 * 60 + 12, 7 * 60 + 48, p(t, 0.4, 3.0, ease.linear)));
+  $("#clk").textContent = `${Math.floor(mins / 60)}:${String(mins % 60).padStart(2, "0")}pm`;
+  firstCell.classList.toggle("hl", t > 0.7 && t < 3.0);
+  type("#d1", "Smith Plumbing", t, 1.25, 1.95);
+  type("#d2", "Hot water cylinder", t, 2.0, 2.55);
+  type("#d3", "$480.00", t, 2.6, 2.95);
+  cur(t, [
+    { t: 0.2, x: 330, y: 620 },
+    { t: 0.7, x: 100, y: 320, click: true },
+    { t: 1.2, x: 330, y: 520, click: true },
+    { t: 2.9, x: 360, y: 560 },
+  ], 0.2, 3.0);
+
+  // --- automated
+  vis("#wf", t, 3.2, null, { y: 30 });
+  flow(t);
+  st.forEach((c, i) => {
+    const done = t >= RUNS[i][1];
+    c.innerHTML = done ? `<span class="pill yes">Sent ✓</span>` : t > 3 ? `<span class="pill wait">Queued</span>` : `<span class="pill no">Not yet</span>`;
+    c.parentElement.querySelectorAll("td:not(.rn)").forEach((td) => td.classList.toggle("flash", done && t < RUNS[i][1] + 0.5));
+  });
+  toasts.forEach((el, i) => vis(el, t, RUNS[i][1], i < RUNS.length - 1 ? RUNS[i + 1][1] : 12, { y: 26, dur: 0.3, outDur: 0.12 }));
+
+  // --- results
+  vis("#s1", t, 12.2, null, { y: 30 });
+  vis("#s2", t, 12.45, null, { y: 30 });
+  count("#sent", t, 12.5, 13.6, 0, 7);
+});
+</script>
+</body>
+</html>
