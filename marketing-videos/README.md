@@ -22,7 +22,9 @@ Each video also has a `-cover.jpg` thumbnail in `out/`.
 | 12–18 s | *"Now it happens **automatically.**"* plus the result (for example 2 hrs → 0 min). |
 | 18–22 s | *"Want to know how?"*, then **Comment `AUTO` 👇**, with the keyword being typed into a comment box. |
 
-The video has no voice-over and every line is on screen, so it works with the sound off. A silent audio track is included so every platform accepts the upload. **Add a trending sound inside the app when you post.** That helps reach.
+**Voice-over:** every video has a narrator explaining the before, the after, the result and the call to action. The on-screen captions carry the same message, so it still works with the sound off. You can add quiet background music in the app when you post; keep it low under the voice.
+
+**Branding:** the AMBS logo (from the AMBS website repo, `assets/ambs-logo.png`) sits top-left throughout and large on the end card, with `ambs.co.nz` underneath.
 
 ## Posting kit
 
@@ -76,6 +78,7 @@ Each video is a self-contained HTML page in `videos/`, animated as a pure functi
 ```bash
 cd marketing-videos
 npm install                      # Playwright (Chromium) — ffmpeg must be on PATH
+pip install kokoro-onnx soundfile  # voice-over (model ~200 MB downloads to .tts/ on first render)
 npx http-server . -p 8080        # preview at http://localhost:8080/videos/01-auto-invoices.html
                                  # (space = pause, ←/→ = jump 1 s)
 node render.mjs                  # render all → out/*.mp4 + covers
@@ -83,6 +86,9 @@ node render.mjs 03               # render just one
 ```
 
 - **Text, keyword, timings:** edit the `E.setup({...})` block at the bottom of each video (`captions`, `keyword`, `end.title`, `end.sub`).
+- **Voice-over script:** the `voice` lines in the same block. Each line plays from `a` and is sped up slightly if needed to finish by `b`; the render log shows how each line fits. Spell out acronyms you want read as letters (`C R M`), and use a comma to add a pause (`Comment, auto`).
+- **Voice:** `VOICE=am_michael node render.mjs` switches narrator (default `af_heart`, a natural US female voice; others: `af_bella`, `am_michael`, `bf_emma`, `bm_george`). `voice.py` uses Kokoro, an open-source TTS model that runs locally. To use your own recorded voice instead, put the recording in place of the generated track at the mux step in `render.mjs`.
+- **Logo:** replace `assets/ambs-logo.png` (transparent PNG).
 - **Brand colours:** change the CSS variables at the top of `engine/base.css`. Every video picks them up.
 - **New video:** copy the closest one in `videos/`, change the scene, then run `node render.mjs <name>`.
-- Font: Inter (SIL Open Font License), bundled in `assets/`.
+- Font: Inter (SIL Open Font License), bundled in `assets/`. Voice: Kokoro-82M (Apache-2.0).

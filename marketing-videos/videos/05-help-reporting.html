@@ -107,6 +107,13 @@ window.COVER_AT = 1.7;
 E.setup({
   duration: 22,
   keyword: "HELP",
+  // Voice-over: each line is fitted inside [a, b] seconds (sped up slightly if needed).
+  voice: [
+    { a: 0.15, b: 3.25, text: "Every Monday, this owner spent three hours copying numbers." },
+    { a: 3.3, b: 11.9, text: "Now it's one live dashboard. Revenue, jobs, and overdue invoices, all updating by themselves. No more spreadsheets." },
+    { a: 12.1, b: 17.9, text: "And the weekly report emails itself, every Monday at eight." },
+    { a: 18.2, b: 21.9, text: "Not sure what to automate first? Comment, help." },
+  ],
   captions: [
     { a: 0, b: 3.0, html: `Every Monday this owner spent <mark>3 hours</mark> copying numbers…` },
     { a: 3.0, b: 12, html: `Now it's one <span class="cyan">live dashboard</span> that updates itself.` },

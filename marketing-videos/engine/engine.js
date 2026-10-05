@@ -155,17 +155,18 @@
     const D = cfg.duration;
     f.insertAdjacentHTML("beforeend", `
       <div class="progress"><i></i></div>
-      <div class="brand"><div class="logo">A</div>AMBS <small>Solutions</small></div>
+      <img class="brand" src="../assets/ambs-logo.png" alt="AMBS">
       ${cfg.captions.map((c, i) => `<div class="caption" data-c="${i}">${c.html}</div>`).join("")}
       ${cfg.phases.map((ph, i) => `<div class="badge ${ph.kind}" data-b="${i}"><span class="dot"></span>${ph.label}</div>`).join("")}
       <div class="end">
+        <img class="elogo" src="../assets/ambs-logo.png" alt="AMBS">
         <h2>${cfg.end.title}</h2>
         <div class="sub">${cfg.end.sub}</div>
         <div class="cmt">Comment</div>
         <div class="kw${cfg.keyword.length > 4 ? " long" : ""}">${[...cfg.keyword].map((ch) => `<span>${ch}</span>`).join("")}</div>
         <div class="arrow emoji">👇</div>
         <div class="reply"><div class="av"></div><div class="in ph">Add a comment…</div><div class="send">Post</div></div>
-        <div class="foot"><b>AMBS Solutions</b> · ${cfg.end.foot ?? "Automation &amp; websites for NZ businesses"}</div>
+        <div class="foot"><b>ambs.co.nz</b> · ${cfg.end.foot ?? "AI automation &amp; websites for NZ businesses"}</div>
       </div>`);
     const bar = $(".progress i", f);
     const caps = $$(".caption", f);
@@ -183,7 +184,8 @@
       const eo = p(t, E0, E0 + 0.35, ease.out);
       end.style.opacity = eo;
       end.style.visibility = eo > 0 ? "visible" : "hidden";
-      vis($("h2", end), t, E0 + 0.05, null, { y: 30 });
+      vis($(".elogo", end), t, E0 + 0.0, null, { y: 0, scale: 0.6, dur: 0.45 });
+      vis($("h2", end), t, E0 + 0.1, null, { y: 30 });
       vis($(".sub", end), t, E0 + 0.25, null, { y: 20 });
       vis($(".cmt", end), t, E0 + 0.45, null, { y: 20 });
       letters.forEach((l, i) => {
@@ -215,7 +217,7 @@
     clamp, lerp, ease, p, vis, type, count, path, cursor, flow, flowHTML, $, $$,
     duration: 22,
     use(fn) { renderers.push(fn); },
-    setup(cfg) { E.duration = cfg.duration; renderers.unshift(chrome(cfg)); },
+    setup(cfg) { E.duration = cfg.duration; E.voice = cfg.voice ?? []; renderers.unshift(chrome(cfg)); },
   };
   window.E = E;
   window.__seek = (t) => { for (const r of renderers) r(t); };

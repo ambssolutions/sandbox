@@ -104,6 +104,13 @@ window.COVER_AT = 1.7;
 E.setup({
   duration: 22,
   keyword: "DEMO",
+  // Voice-over: each line is fitted inside [a, b] seconds (sped up slightly if needed).
+  voice: [
+    { a: 0.15, b: 3.25, text: "This owner wrote every quote by hand, late at night." },
+    { a: 3.3, b: 11.9, text: "Now the customer fills in a quick form, and the quote builds itself. It's emailed out, accepted with one tap, and the job gets booked." },
+    { a: 12.1, b: 17.9, text: "Sent, accepted, and booked, automatically. Three days, down to two minutes." },
+    { a: 18.2, b: 21.9, text: "Want to see it live? Comment, demo." },
+  ],
   captions: [
     { a: 0, b: 3.0, html: `This owner was writing every quote <mark>by hand</mark>… at&nbsp;night.` },
     { a: 3.0, b: 12, html: `Now the customer fills a form and <span class="cyan">the quote builds itself.</span>` },

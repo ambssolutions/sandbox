@@ -109,6 +109,13 @@ window.COVER_AT = 1.7;
 E.setup({
   duration: 22,
   keyword: "CRM",
+  // Voice-over: each line is fitted inside [a, b] seconds (sped up slightly if needed).
+  voice: [
+    { a: 0.15, b: 3.25, text: "This business was losing leads in a messy inbox." },
+    { a: 3.3, b: 11.9, text: "Now every enquiry goes straight into a C R M. The customer gets a reply within minutes, and follow-ups go out on their own until the job is won." },
+    { a: 12.1, b: 17.9, text: "Reply time went from two days to two minutes. And not one lead gets forgotten." },
+    { a: 18.2, b: 21.9, text: "Want this for your business? Comment, C R M." },
+  ],
   captions: [
     { a: 0, b: 3.0, html: `This business was losing leads in a <mark>messy inbox</mark> EVERY&nbsp;DAY…` },
     { a: 3.0, b: 12, html: `Now every enquiry lands in a <span class="cyan">CRM</span> and gets a reply in minutes.` },

@@ -89,6 +89,13 @@ window.COVER_AT = 1.6;
 E.setup({
   duration: 22,
   keyword: "AUTO",
+  // Voice-over: each line is fitted inside [a, b] seconds (sped up slightly if needed).
+  voice: [
+    { a: 0.15, b: 3.25, text: "This owner typed every invoice by hand. Every day." },
+    { a: 3.3, b: 11.9, text: "So we hooked their job sheet up to an automation. When a job's marked done, the invoice is created, emailed to the client, and chased if it isn't paid." },
+    { a: 12.1, b: 17.9, text: "Now it all happens automatically. Two hours of admin a day, gone." },
+    { a: 18.2, b: 21.9, text: "Want to know how? Comment, auto, and I'll send you the setup." },
+  ],
   captions: [
     { a: 0, b: 3.0, html: `A business owner was doing this <mark>manually</mark> EVERY&nbsp;DAY…` },
     { a: 3.0, b: 12, html: `So we hooked it up to <span class="cyan">an&nbsp;automation.</span>` },

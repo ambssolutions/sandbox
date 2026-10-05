@@ -142,6 +142,13 @@ window.COVER_AT = 1.8;
 E.setup({
   duration: 22,
   keyword: "WEBSITE",
+  // Voice-over: each line is fitted inside [a, b] seconds (sped up slightly if needed).
+  voice: [
+    { a: 0.15, b: 3.25, text: "This business was stuck playing phone tag for bookings." },
+    { a: 3.3, b: 11.9, text: "So we built them a website that takes bookings by itself. Customers pick a time, get confirmed instantly, and it lands straight in the calendar." },
+    { a: 12.1, b: 17.9, text: "Now customers book automatically. Even at two in the morning." },
+    { a: 18.2, b: 21.9, text: "Want a website like this? Comment, website." },
+  ],
   captions: [
     { a: 0, b: 3.0, html: `This business was playing <mark>phone tag</mark> for bookings EVERY&nbsp;DAY…` },
     { a: 3.0, b: 12, html: `So we built a website that <span class="cyan">takes bookings by itself.</span>` },

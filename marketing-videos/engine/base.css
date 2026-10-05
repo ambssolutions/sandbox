@@ -60,12 +60,8 @@ html, body {
   background: rgba(255,255,255,.18); border-radius: 4px; overflow: hidden; z-index: 50; }
 .progress i { display: block; height: 100%; width: 0; background: #fff; border-radius: 4px; }
 
-.brand { position: absolute; left: 20px; top: 30px; display: flex; align-items: center; gap: 8px;
-  font-weight: 800; font-size: 14px; letter-spacing: .06em; z-index: 40; }
-.brand .logo { width: 24px; height: 24px; border-radius: 7px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  display: grid; place-items: center; font-size: 14px; font-weight: 900; color: #fff; }
-.brand small { font-weight: 600; color: var(--muted); letter-spacing: .02em; font-size: 12px; }
+.brand { position: absolute; left: 16px; top: 22px; height: 42px; width: auto; z-index: 40;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
 
 .caption { position: absolute; left: 22px; right: 22px; top: 70px; min-height: 92px;
   font-size: 31px; line-height: 1.12; font-weight: 850; letter-spacing: -.01em; z-index: 40;
@@ -162,9 +158,11 @@ html, body {
 
 /* ---------- end card ---------- */
 .end { position: absolute; inset: 0; z-index: 80; display: flex; flex-direction: column;
-  align-items: center; padding-top: 150px; text-align: center;
+  align-items: center; padding-top: 168px; text-align: center;
   background: radial-gradient(80% 50% at 50% 35%, rgba(34,211,238,.25), transparent 70%),
               rgba(6,10,24,.96); backdrop-filter: blur(8px); }
+.end .elogo { position: absolute; left: 50%; top: 52px; width: 270px; margin-left: -135px;
+  filter: drop-shadow(0 6px 24px rgba(0,0,0,.5)); }
 .end h2 { font-size: 42px; font-weight: 900; line-height: 1.05; letter-spacing: -.02em; padding: 0 30px; }
 .end .sub { margin-top: 14px; font-size: 18px; color: var(--muted); font-weight: 600; padding: 0 40px; line-height: 1.35; }
 .end .cmt { margin-top: 38px; font-size: 26px; font-weight: 800; }
