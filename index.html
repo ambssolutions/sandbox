@@ -32,6 +32,15 @@
   .go{margin-top:12px;align-self:flex-start;display:inline-flex;gap:8px;align-items:center;background:var(--navy);color:#fff;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:.9rem;font-weight:500}
   .go:hover{background:var(--blue)}
   a:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+  .filters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 32px}
+  .filters button{font:inherit;font-size:.88rem;border:1px solid var(--line);background:#fff;color:var(--navy);padding:8px 16px;border-radius:999px;cursor:pointer}
+  .filters button[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .filters button:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+  .dash{color:var(--cyan);font-weight:300}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 4px}
+  .tag{font-size:.72rem;font-weight:500;padding:3px 10px;border-radius:999px;background:#EAF6FD;color:var(--blue)}
+  .tag.motion{background:#F1F3F6;color:var(--grey)}
+  .card[hidden]{display:none}
   footer{text-align:center;color:var(--grey);font-size:.85rem;padding:0 20px 48px}
   footer img{height:22px;width:auto;vertical-align:middle;margin-left:6px}
   @media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
@@ -41,33 +50,43 @@
 <header>
   <img src="assets/img/logo-white.png" alt="Team K" width="800" height="153">
   <h1>Homepage concepts for Team Karl Vermeulen</h1>
-  <p>Ten design directions, all built with the Team K brand, the real team and real client reviews. Open each one, and let us know which direction feels most like you. Elements can be mixed and matched.</p>
+  <p>Ten design directions in ten different styles, all built with the Team K brand, the real team and real client reviews. Open each one, and let us know which direction feels most like you. Elements can be mixed and matched.</p>
 </header>
 <main>
+  <div class="filters" id="filters" role="group" aria-label="Filter by style"></div>
   <div class="grid" id="grid"></div>
 </main>
 <footer>Prepared for Team Karl Vermeulen · Harcourts Howick <img src="assets/img/harcourts-logo.png" alt="Harcourts" width="350" height="42"></footer>
 <script>
 const concepts = [
-  ['01-classic-harcourts','Classic Harcourts','Polished and conventional. White and navy with cyan accents, a sunset hero and a clear, familiar layout. The safe choice, closest to the current site.'],
-  ['02-editorial-luxury','Editorial Luxury','A high-end magazine feel. Elegant serif headings, warm off-white backdrop and generous whitespace. Quiet, premium and understated.'],
-  ['03-coastal-eastern-beaches','Coastal Eastern Beaches','Lifestyle-led, celebrating the local coast. Rangitoto sunset hero, warm sand tones and soft curves. Relaxed but professional.'],
-  ['04-bold-navy','Bold Navy Statement','Confident and high-contrast. Deep navy, big headlines, and the Harcourts tie stripe as a motif behind Karl.'],
-  ['05-personal-karl','Personal — Meet Karl','Karl-first and warm. A personal letter from Karl, his story and signature, and the people behind every sale.'],
-  ['06-results-data','Results & Proof','Numbers-led for sellers who want evidence. $845M sold, awards, and a visual 10-day sale timeline.'],
-  ['07-minimal-swiss','Minimal Swiss','Architectural and precise. A strict grid, thin lines, light typography and lots of calm white space.'],
-  ['08-warm-community','Friendly Local Team','Team-forward and approachable. Rounded, light-blue tones, big tap targets and easy click-to-call for every team member.'],
-  ['09-split-sell-buy','Choose Your Path','Task-oriented. The homepage opens with a split screen: "I\'m selling" or "I\'m buying", each leading to its own section.'],
-  ['10-bento-modern','Modern Bento','Contemporary tile layout. Stats, Karl, reviews, the timeline and listings in a tidy grid of cards.']
+  ['01-classic-harcourts','Classic','Corporate','Static','Polished and conventional. White and navy with cyan accents, a sunset hero and a clear, familiar layout. The safe choice, closest to the current site.'],
+  ['02-editorial-luxury','Luxury','Editorial','Subtle motion','A high-end magazine feel. Elegant serif headings, a warm off-white backdrop and generous whitespace. Quiet, premium and understated.'],
+  ['03-coastal-eastern-beaches','Lifestyle','Coastal','Subtle motion','Celebrates the local coast. Rangitoto sunset hero, warm sand tones and soft wave dividers. Relaxed but professional.'],
+  ['04-bold-navy','Bold','Dark Premium','Subtle motion','Confident and high-contrast. Deep navy, big headlines, and the Harcourts tie stripe as a motif behind Karl.'],
+  ['05-personal-karl','Personal','Storytelling','Subtle motion','Karl-first and warm. A personal letter from Karl, his story and signature, and the people behind every sale.'],
+  ['06-results-data','Results','Data-driven','Animated','Numbers-led for sellers who want evidence. Count-up stats, awards, and a 10-day sale timeline that fills as you scroll.'],
+  ['07-minimal-swiss','Minimal','Swiss Grid','Static','Architectural and precise. A strict grid, thin lines, light typography and lots of calm white space.'],
+  ['08-warm-community','Friendly','Community','Subtle motion','Team-forward and approachable. Rounded, light-blue tones, big tap targets and click-to-call for every team member.'],
+  ['09-split-sell-buy','Interactive','Split Screen','Interactive','Task-oriented. Opens on a split screen, "I\'m selling" or "I\'m buying", and each half expands as you hover.'],
+  ['10-bento-modern','Modern','Bento Grid','Animated','Contemporary tile layout. Stats, Karl, reviews, the timeline and listings in a tidy grid of cards.']
 ];
-document.getElementById('grid').innerHTML = concepts.map(([slug,name,desc],i)=>`
-  <article class="card">
-    <a class="thumb" href="designs/${slug}/index.html" aria-label="Open concept ${i+1}: ${name}">
+const types = ['All', ...new Set(concepts.map(c => c[1]))];
+const filters = document.getElementById('filters');
+filters.innerHTML = types.map((t,i) => `<button type="button" aria-pressed="${i===0}" data-t="${t}">${t}</button>`).join('');
+filters.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  filters.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  document.querySelectorAll('.card').forEach(c => c.hidden = b.dataset.t !== 'All' && c.dataset.t !== b.dataset.t);
+});
+document.getElementById('grid').innerHTML = concepts.map(([slug,type,style,motion,desc],i)=>`
+  <article class="card" data-t="${type}">
+    <a class="thumb" href="designs/${slug}/index.html" aria-label="Open concept ${i+1}: ${type} — ${style}">
       <img src="designs/${slug}/thumb.jpg" alt="" width="720" height="450" loading="${i<3?'eager':'lazy'}" decoding="async">
     </a>
     <div class="body">
       <span class="num">Concept ${String(i+1).padStart(2,'0')}</span>
-      <h2>${name}</h2>
+      <h2>${type} <span class="dash">—</span> ${style}</h2>
+      <div class="tags"><span class="tag">${type}</span><span class="tag motion">${motion}</span></div>
       <p>${desc}</p>
       <a class="go" href="designs/${slug}/index.html">View concept <span aria-hidden="true">→</span></a>
     </div>
