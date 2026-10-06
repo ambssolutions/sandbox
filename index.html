@@ -21,16 +21,19 @@
   main{max-width:1240px;margin:0 auto;padding:48px 20px 72px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:28px}
   @media (max-width:400px){.grid{grid-template-columns:1fr}}
-  .card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s}
+  .card{position:relative;cursor:pointer;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s}
   .card:hover{box-shadow:0 18px 40px -22px rgba(11,31,58,.35);transform:translateY(-2px)}
-  .card a.thumb{display:block;aspect-ratio:16/10;background:var(--line);overflow:hidden;border-bottom:1px solid var(--line)}
+  .card .thumb{display:block;aspect-ratio:16/10;background:var(--line);overflow:hidden;border-bottom:1px solid var(--line)}
   .card img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
   .body{padding:18px 20px 22px;display:flex;flex-direction:column;gap:6px;flex:1}
   .num{font-size:.75rem;font-weight:600;letter-spacing:.14em;color:var(--blue);text-transform:uppercase}
   h2{margin:0;font-size:1.15rem;font-weight:600}
   .body p{margin:0;color:var(--grey);font-size:.93rem;flex:1}
   .go{margin-top:12px;align-self:flex-start;display:inline-flex;gap:8px;align-items:center;background:var(--navy);color:#fff;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:.9rem;font-weight:500}
-  .go:hover{background:var(--blue)}
+  .go::after{content:"";position:absolute;inset:0;border-radius:14px}
+  .card:hover .go{background:var(--blue)}
+  .card:hover img{transform:scale(1.03)}
+  .card img{transition:transform .5s}
   a:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
   .filters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 32px}
   .filters button{font:inherit;font-size:.88rem;border:1px solid var(--line);background:#fff;color:var(--navy);padding:8px 16px;border-radius:999px;cursor:pointer}
@@ -43,14 +46,14 @@
   .card[hidden]{display:none}
   footer{text-align:center;color:var(--grey);font-size:.85rem;padding:0 20px 48px}
   footer img{height:22px;width:auto;vertical-align:middle;margin-left:6px}
-  @media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
+  @media (prefers-reduced-motion:reduce){.card,.card img{transition:none}.card:hover,.card:hover img{transform:none}}
 </style>
 </head>
 <body>
 <header>
   <img src="assets/img/logo-white.png" alt="Team K" width="800" height="153">
   <h1>Homepage concepts for Team Karl Vermeulen</h1>
-  <p>Ten design directions in ten different styles, all built with the Team K brand, the real team and real client reviews. Open each one, and let us know which direction feels most like you. Elements can be mixed and matched.</p>
+  <p>Ten design directions in ten different styles, all built with the Team K brand, the real team and real client reviews. Choose a style below to see the full design. You can switch between styles at any time using the bar at the bottom of each page.</p>
 </header>
 <main>
   <div class="filters" id="filters" role="group" aria-label="Filter by style"></div>
@@ -80,15 +83,15 @@ filters.addEventListener('click', e => {
 });
 document.getElementById('grid').innerHTML = concepts.map(([slug,type,style,motion,desc],i)=>`
   <article class="card" data-t="${type}">
-    <a class="thumb" href="designs/${slug}/index.html" aria-label="Open concept ${i+1}: ${type} — ${style}">
+    <div class="thumb">
       <img src="designs/${slug}/thumb.jpg" alt="" width="720" height="450" loading="${i<3?'eager':'lazy'}" decoding="async">
-    </a>
+    </div>
     <div class="body">
       <span class="num">Concept ${String(i+1).padStart(2,'0')}</span>
       <h2>${type} <span class="dash">—</span> ${style}</h2>
       <div class="tags"><span class="tag">${type}</span><span class="tag motion">${motion}</span></div>
       <p>${desc}</p>
-      <a class="go" href="designs/${slug}/index.html">View concept <span aria-hidden="true">→</span></a>
+      <a class="go" href="designs/${slug}/" aria-label="Choose concept ${i+1}: ${type} — ${style}">Choose ${type} <span aria-hidden="true">→</span></a>
     </div>
   </article>`).join('');
 </script>
