@@ -11,7 +11,7 @@ Nobody appears on camera. Each one is an animated screen recording of a real kin
 | 4 | `out/04-demo-quotes.mp4` | Quotes typed in Word at night → form builds the quote, customer accepts in one tap, job booked | **DEMO** |
 | 5 | `out/05-help-reporting.mp4` | Monday copy-paste reporting → live dashboard and an auto-emailed weekly report | **HELP** |
 
-Each video also has a `-cover.jpg` thumbnail in `out/`.
+Each video also has a `-cover.jpg` frame grab in `out/`. Videos 2 and 3 also have a designed thumbnail (`out/02-crm-leads-thumbnail.jpg`, `out/03-website-bookings-thumbnail.jpg`) with a bold headline and a before/after visual. Its sources are in `thumbnails/`, and `node thumbnails/render.mjs` re-renders it. Upload it as the custom cover when you post.
 
 ## Structure (same in every video)
 

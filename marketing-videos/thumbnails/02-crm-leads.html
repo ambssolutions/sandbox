@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Thumbnail — CRM</title>
+<link rel="stylesheet" href="../engine/base.css"><link rel="stylesheet" href="thumbs.css">
+<style>
+  .ml { display: flex; align-items: center; gap: 6px; padding: 7px 9px; border-bottom: 1px solid var(--win-line); font-size: 11px; }
+  .ml u { width: 7px; height: 7px; border-radius: 50%; background: #2563eb; flex: none; }
+  .ml b { flex: none; } .ml em { font-style: normal; color: var(--win-muted); white-space: nowrap; overflow: hidden; }
+  .count { position: absolute; right: -8px; top: 14px; background: var(--bad); color: #fff; font-weight: 900; font-size: 15px;
+    padding: 3px 9px; border-radius: 999px; box-shadow: 0 4px 12px rgba(0,0,0,.4); }
+  .sticky { position: absolute; left: -16px; bottom: -22px; width: 112px; background: #fde047; color: #3f3a06; font-weight: 800;
+    font-size: 13px; line-height: 1.2; padding: 9px; border-radius: 3px; rotate: -8deg; box-shadow: 0 8px 18px rgba(0,0,0,.4); text-align: left; }
+  .kb { display: flex; gap: 4px; padding: 6px; background: #f3f4f6; }
+  .kb div { flex: 1; min-width: 0; background: #e5e7eb; border-radius: 6px; padding: 4px; min-height: 120px; }
+  .kb div.won { background: #dcfce7; }
+  .kb h6 { font-size: 7.5px; letter-spacing: .05em; color: var(--win-muted); margin-bottom: 4px; }
+  .kb .won h6 { color: #15803d; }
+  .kb p { background: #fff; border-radius: 4px; border-left: 3px solid #6366f1; font-size: 8.5px; font-weight: 800; padding: 3px 4px; margin-bottom: 4px; }
+  .kb .won p { border-left-color: var(--good); }
+  .ping { margin-top: 8px; background: #fff; color: var(--win-ink); border-radius: 10px; padding: 7px 8px; font-size: 10.5px; text-align: left;
+    display: flex; gap: 6px; align-items: center; font-weight: 700; }
+</style></head><body>
+<div id="frame">
+  <img class="tlogo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="kicker">LEADS · AUTOMATION</div>
+  <h1>Stop losing<br><mark>leads</mark> in your inbox</h1>
+  <div class="ba">
+    <div class="side bad"><div class="tag">BEFORE</div>
+      <div class="mini"><div class="bar"><i></i><i></i><i></i></div>
+        <div class="ml"><u></u><b>Dave R.</b><em>Quote for a deck?</em></div>
+        <div class="ml"><u></u><b>Aroha T.</b><em>Kitchen reno…</em></div>
+        <div class="ml"><u></u><b>Mike B.</b><em>Fence – free next…</em></div>
+        <div class="ml"><u></u><b>Priya S.</b><em>Bathroom quote</em></div>
+        <div class="ml"><u></u><b>Tom H.</b><em>Re: Re: roof</em></div>
+      </div>
+      <div class="count">47 unread</div>
+      <div class="sticky">Call Dave back?? <span class="emoji">😬</span></div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="side good"><div class="tag">AFTER</div>
+      <div class="mini"><div class="bar"><i></i><i></i><i></i></div>
+        <div class="kb">
+          <div><h6>NEW</h6><p>Tom</p></div>
+          <div><h6>REPLIED</h6><p>Priya</p></div>
+          <div><h6>QUOTED</h6><p>Mike</p></div>
+          <div class="won"><h6>WON</h6><p>Dave</p><p>Aroha</p></div>
+        </div>
+      </div>
+      <div class="ping"><span class="emoji">💬</span> Auto-reply sent in 2 min</div>
+    </div>
+  </div>
+  <div class="stat2">Reply time: <s>2 days</s> → <b>2 min</b></div>
+  <div class="cta">Comment <span>CRM</span> for the setup</div>
+</div></body></html>
