@@ -60,3 +60,21 @@ text), NZBN and company number (content.js `nzbn`, `companyNumber`), social link
 Logo in vector format (SVG or AI) and colour codes, brand fonts (the site uses Fraunces, IBM Plex Sans and
 IBM Plex Mono), domain registrar details and any existing hosting, Google Analytics and Business Profile
 access, and the existing website URL if this is a rebuild.
+
+## Version 2 (client feedback, Website design specs V1.0)
+
+Pages built with the client's copy: Three Waters, Earthwork / Retaining Wall / Erosion Sediment Control, Flood and Overland Flow Path, Tank Mitigation Design, Parking / Driveway / Manoeuvring, Stormwater Design (Version 2, with rain garden and wetland), On-site Wastewater Treatment Design.
+
+Service pages still showing "details coming soon" (final copy needed, one page each):
+- Civil: Detailed Feasibility Study, Public Road, Coastal Inundation
+- Planning: Complimentary Online Meeting, Development Feasibility Report, Subdivision Assessment, Land Use Consent Assessment, Boundary Adjustment, Special Character Zone
+- Survey: Topo, 223, Faulty Title, Boundary Adjustment
+- Traffic: Traffic Report, PC79
+- Project Management: Complete Subdivision Design (RC, BC, EPA), Construction Management, Stakeholder Consultation Management, Contract Management, Tender Design Management, Engineer's Representation Service, Construction, COA (Certificate of Acceptance), Neighbour Consent
+
+Other content still needed:
+- Our Team: names, roles, bios and photos (assets/content.js, `team`).
+- Client testimonials (assets/content.js, `testimonials`).
+- Real project details and images (assets/projects.js).
+- The service copy says "MIKIA Design and Construction Group"; the rest of the site says "MiKia Consulting Group". Confirm which name to use.
+- Enquiry form emails info@mikia.co.nz for now; a shared Google Sheet / form service can replace it later (FORM_ENDPOINT in assets/form.js).
