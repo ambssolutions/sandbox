@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta name="md-version" content="10|Horizontal Journey|Pinned sideways scroll / street walk|Scroll down and walk sideways along a street of finished homes, with a house-number address counter ticking up to 1,000.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MD Projects NZ · Homes built beautifully</title>
+<meta name="description" content="MD Projects NZ: Auckland residential builders. Over 1,000 homes delivered at a fixed price, on time and with complete transparency.">
+<link rel="icon" href="../../images/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cool:#F4F6FA; --paper:#fff; --ink:#1B2130; --ink2:#3B4254; --muted:#5D6578; --line:#DFE3EC;
+  --blue:#3C54A8; --blue-d:#2D428C; --sky:#90CCF0; --skyL:#DCEFFB; --asphalt:#2A2F3B; --grass:#7FB77E;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --hdr:76px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cool);color:var(--ink);font:400 17px/1.6 Archivo,system-ui,sans-serif;font-stretch:100%;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,h4{margin:0;font-weight:800;letter-spacing:-.02em;line-height:1;font-stretch:112%}
+p{margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:12px;font:700 15px/1 Archivo,sans-serif;font-stretch:105%;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .3s var(--ease),background .2s,color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-b{background:var(--blue);color:#fff}
+.btn-b:hover{background:var(--blue-d)}
+.btn-w{background:#fff;color:var(--blue)}
+.btn-o{border-color:rgba(255,255,255,.7);color:#fff}
+.btn-o:hover{background:rgba(255,255,255,.12)}
+.btn-l{border-color:var(--blue);color:var(--blue)}
+.btn svg{width:16px;height:16px}
+
+/* header */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:80;height:var(--hdr);display:flex;align-items:center;transition:background .3s,box-shadow .3s}
+.hdr.solid{background:rgba(244,246,250,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line)}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;max-width:none;padding:0 32px}
+.logo img{height:52px;width:auto}
+.logo .w{display:block}.logo .c{display:none}
+.hdr.solid .logo .w{display:none}.hdr.solid .logo .c{display:block}
+.nav{display:flex;gap:2px}
+.nav a{font-weight:600;font-size:15px;text-decoration:none;padding:0 14px;min-height:44px;display:inline-flex;align-items:center;border-radius:10px;color:#fff;transition:background .2s,color .2s}
+.hdr.solid .nav a{color:var(--ink)}
+.nav a:hover{background:rgba(255,255,255,.14)}
+.hdr.solid .nav a:hover{background:rgba(27,33,48,.06)}
+.hdr .btn{min-height:46px}
+.menu-btn{display:none;width:48px;height:48px;border-radius:12px;border:0;background:rgba(255,255,255,.16);color:#fff;cursor:pointer;place-items:center}
+.hdr.solid .menu-btn{background:rgba(27,33,48,.06);color:var(--ink)}
+.menu-btn svg{width:22px;height:22px}
+.sheet{position:fixed;inset:0;z-index:79;background:var(--blue);color:#fff;padding:96px 24px 32px;display:flex;flex-direction:column;gap:4px;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.menu-open .sheet{opacity:1;visibility:visible}
+.menu-open .hdr{background:transparent;box-shadow:none}
+.menu-open .hdr .logo .w{display:block}.menu-open .hdr .logo .c{display:none}
+.menu-open .hdr .menu-btn{background:rgba(255,255,255,.16);color:#fff}
+.sheet a.it{display:flex;justify-content:space-between;align-items:center;min-height:60px;border-bottom:1px solid rgba(255,255,255,.18);text-decoration:none;font:800 30px/1 Archivo,sans-serif;font-stretch:115%}
+.sheet a.it small{font:600 13px/1 Archivo,sans-serif;color:var(--sky)}
+.sheet .btn{margin-top:24px}
+
+/* hero */
+.hero{position:relative;height:100vh;height:100svh;min-height:600px;color:#fff;overflow:hidden;display:flex;align-items:flex-end}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,24,48,.55) 0%,rgba(17,24,48,.1) 35%,rgba(17,24,48,.75) 100%)}
+.hero .wrap{position:relative;z-index:2;width:100%;max-width:none;padding:0 48px 64px;display:grid;grid-template-columns:1.3fr .7fr;gap:40px;align-items:end}
+.plate{display:inline-flex;align-items:center;gap:10px;background:var(--blue);border:2px solid #fff;border-radius:8px;padding:8px 14px;font:700 13px/1 Archivo,sans-serif;letter-spacing:.06em;text-transform:uppercase;font-stretch:110%}
+.hero h1{font-size:clamp(56px,9vw,148px);line-height:.88;letter-spacing:-.035em;margin:22px 0 0;font-stretch:118%}
+.hero h1 span{color:var(--sky)}
+.hero .side p{font-size:19px;color:rgba(255,255,255,.88)}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.walk{display:flex;align-items:center;gap:14px;margin-top:30px;font-weight:600;font-size:14px;letter-spacing:.04em;color:rgba(255,255,255,.85)}
+.walk i{position:relative;width:64px;height:2px;background:rgba(255,255,255,.35);overflow:hidden}
+.walk i::after{content:"";position:absolute;inset:0;background:#fff;transform:translateX(-100%);animation:walk 1.8s var(--ease) infinite}
+@keyframes walk{to{transform:translateX(100%)}}
+
+/* ===== the street ===== */
+.street{position:relative;background:var(--cool)}
+.stage{position:relative}
+.track{position:relative}
+.sign{color:var(--ink)}
+.sign .plate{font-size:12.5px}
+.sign h2{font-size:clamp(40px,4.2vw,64px);margin:20px 0 16px;font-stretch:115%}
+.sign h2 span{color:var(--blue)}
+.sign p{color:var(--ink2);max-width:400px}
+.card{background:var(--paper);border-radius:22px;overflow:hidden;box-shadow:0 30px 50px -34px rgba(27,33,48,.35),0 0 0 1px rgba(27,33,48,.05);display:flex;flex-direction:column;position:relative}
+.ctr{display:none}
+
+/* about: house-shaped stat cards */
+.house{background:var(--blue);color:#fff;border-radius:0 0 18px 18px;clip-path:polygon(50% 0,100% 26%,100% 100%,0 100%,0 26%);padding:120px 26px 26px;justify-content:flex-end;box-shadow:none}
+.house:nth-child(2){background:var(--sky);color:var(--ink)}
+.house:nth-child(3){background:var(--asphalt)}
+.house:nth-child(4){background:#fff;color:var(--ink)}
+.house .win{position:absolute;left:50%;top:44px;width:40px;height:40px;margin-left:-20px;border-radius:4px;background:rgba(255,255,255,.22);display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:3px}
+.house:nth-child(4) .win,.house:nth-child(2) .win{background:rgba(27,33,48,.12)}
+.house b{font:800 clamp(44px,4vw,60px)/1 Archivo,sans-serif;letter-spacing:-.04em;font-stretch:110%;display:block}
+.house span{display:block;margin-top:8px;font-weight:600;font-size:15px;opacity:.85}
+.pillar{padding:30px 28px;justify-content:flex-start}
+.pillar .k{font:700 13px/1 Archivo,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
+.pillar .v{font:800 40px/1 Archivo,sans-serif;letter-spacing:-.03em;margin:22px 0 6px;font-stretch:112%}
+.pillar .s{font-weight:600;font-size:14.5px;color:var(--muted)}
+.pillar p{color:var(--ink2);margin-top:auto;padding-top:18px;font-size:15.5px}
+
+/* services */
+.svc figure{margin:0;flex:1;min-height:0;overflow:hidden;position:relative}
+.svc figure img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.svc:hover figure img{transform:scale(1.05)}
+.svc .b{padding:22px 24px 24px;flex:none}
+.svc .n{font:700 13px/1 Archivo,sans-serif;color:var(--blue);letter-spacing:.08em}
+.svc h3{font-size:25px;margin:10px 0 8px;font-stretch:108%}
+.svc p{color:var(--ink2);font-size:15px;line-height:1.5}
+
+/* process */
+.step{padding:30px 28px;background:#fff}
+.step .no{font:800 84px/.8 Archivo,sans-serif;letter-spacing:-.05em;color:var(--skyL);-webkit-text-stroke:0;font-stretch:120%}
+.step h3{font-size:24px;margin:auto 0 10px;padding-top:24px;font-stretch:108%}
+.step p{color:var(--ink2);font-size:15.5px}
+.step .post{position:absolute;right:22px;top:26px;width:12px;height:12px;border-radius:50%;background:var(--sky);box-shadow:0 0 0 6px rgba(144,204,240,.25)}
+
+/* projects */
+.pj{color:#fff;text-decoration:none;background:var(--asphalt)}
+.pj .ph{position:absolute;inset:0;overflow:hidden}
+.pj .ph img{position:absolute;top:0;left:-8%;width:116%;max-width:none;height:100%;object-fit:cover;will-change:transform}
+.pj::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,24,48,0) 50%,rgba(17,24,48,.82) 100%)}
+.pj .cap{position:relative;z-index:2;margin-top:auto;padding:26px 28px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.pj .cap h3{font-size:32px;font-stretch:112%}
+.pj .cap span{display:block;margin-top:6px;font-size:15px;opacity:.9}
+.pj .num{position:absolute;z-index:2;left:20px;top:20px;background:var(--blue);border:2px solid #fff;border-radius:8px;padding:8px 12px;font:800 15px/1 Archivo,sans-serif;font-stretch:115%}
+
+/* founder */
+.fd{display:grid;grid-template-columns:.85fr 1fr;flex-direction:row}
+.fd figure{margin:0;position:relative;min-height:100%}
+.fd figure img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% 28%}
+.fd .tx{padding:34px 34px 30px;display:flex;flex-direction:column;overflow:auto}
+.fd blockquote{margin:0;font:800 34px/1.02 Archivo,sans-serif;letter-spacing:-.02em;font-stretch:112%}
+.fd blockquote span{color:var(--blue)}
+.fd .nm{margin-top:16px;font-weight:700}
+.fd .nm span{display:block;font-weight:400;color:var(--muted);font-size:14.5px}
+.fd p{color:var(--ink2);font-size:15px;margin-top:12px;line-height:1.55}
+.fd .vals{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.fd .vals span{font-size:13px;font-weight:600;padding:7px 11px;border-radius:8px;background:var(--cool)}
+.fd .yr{margin-top:auto;padding-top:16px;display:flex;align-items:center;gap:14px}
+.fd .yr b{font:800 44px/1 Archivo,sans-serif;color:var(--blue);letter-spacing:-.04em}
+.fd .yr span{font-size:14px;color:var(--muted);line-height:1.35}
+
+/* testimonials */
+.tq{padding:32px 30px 28px;justify-content:space-between}
+.tq .q{font:800 90px/.6 Archivo,sans-serif;color:var(--sky);height:40px}
+.tq blockquote{margin:0;font-size:19px;line-height:1.5;color:var(--ink)}
+.tq figcaption{display:flex;align-items:center;gap:12px;margin-top:20px;font-size:14.5px;color:var(--muted)}
+.tq figcaption b{display:block;color:var(--ink)}
+.tq .av{width:46px;height:46px;border-radius:12px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;flex:none}
+.tq:nth-child(even) .av{background:var(--sky);color:var(--ink)}
+
+/* end of street */
+.endcard{background:var(--blue);color:#fff;padding:40px 38px;justify-content:center}
+.endcard h3{font-size:46px;font-stretch:115%;line-height:.95}
+.endcard h3 span{color:var(--sky)}
+.endcard p{color:rgba(255,255,255,.85);margin:16px 0 24px}
+
+/* road + address counter */
+.road{display:none}
+.addr{display:none}
+
+/* blog */
+.blog{padding:120px 0 40px}
+.sechead{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:40px}
+.sechead h2{font-size:clamp(40px,5vw,72px);margin-top:18px;font-stretch:115%}
+.sechead h2 span{color:var(--blue)}
+.sechead p{color:var(--ink2);max-width:380px}
+.b-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.post{display:flex;flex-direction:column;text-decoration:none;color:var(--ink);background:#fff;border-radius:20px;overflow:hidden;min-height:44px;box-shadow:0 0 0 1px rgba(27,33,48,.06);transition:transform .4s var(--ease),box-shadow .4s}
+.post:hover{transform:translateY(-5px);box-shadow:0 0 0 2px var(--blue),0 26px 40px -26px rgba(27,33,48,.4)}
+.post:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.post figure{margin:0;aspect-ratio:16/10;overflow:hidden}
+.post figure img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.post:hover figure img{transform:scale(1.05)}
+.post .pb{padding:22px 24px 24px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;flex:1}
+.post .cat{font:700 12px/1 Archivo,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-radius:6px;background:var(--blue);color:#fff}
+.post .meta{font-size:.8rem;color:#596175}
+.post h3{font:600 1.25rem/1.25 Archivo,sans-serif;letter-spacing:-.01em;font-stretch:100%}
+.post p{font-size:.97rem;line-height:1.6;color:#4A5165;max-width:65ch;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.post .more{margin-top:auto;padding-top:4px;font-weight:700;font-size:15px;color:var(--blue);display:inline-flex;gap:6px;transition:gap .3s}
+.post:hover .more{gap:10px}
+.b-all{margin-top:30px;display:flex;justify-content:center}
+
+/* contact */
+.contact{padding:80px 0 100px}
+.cbox{display:grid;grid-template-columns:1fr 1.15fr;border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 30px 60px -40px rgba(27,33,48,.4)}
+.cl{background:var(--blue);color:#fff;padding:52px 46px;display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden}
+.cl h2{font-size:clamp(38px,4vw,58px);font-stretch:115%;line-height:.95}
+.cl h2 span{color:var(--sky)}
+.cl > p{color:rgba(255,255,255,.85)}
+.cl ul{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.cl li a,.cl li div{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);text-decoration:none;min-height:44px}
+.cl li a:hover{background:rgba(255,255,255,.18)}
+.cl small{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sky)}
+.cl b{font-weight:600}
+form{padding:46px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+form h3{grid-column:1/-1;font-size:30px;font-stretch:110%}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+label{font-weight:600;font-size:13.5px;color:var(--ink2)}
+input,select,textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--cool);border:2px solid transparent;border-radius:12px;padding:12px 14px;min-height:50px;transition:border-color .2s,background .2s}
+textarea{min-height:120px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);background:#fff}
+form .btn{grid-column:1/-1;justify-self:start}
+.fnote{grid-column:1/-1;font-size:13px;color:var(--muted)}
+
+footer{background:var(--asphalt);color:rgba(255,255,255,.75);padding:56px 0 36px;font-size:14.5px;position:relative}
+footer::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(90deg,#F4D35E 0 60px,transparent 60px 110px);opacity:.85}
+.fg{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:30px}
+.fg img{height:62px;width:auto;margin-bottom:12px}
+.fg h4{font:700 13px/1 Archivo,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--sky);margin-bottom:8px}
+.fg ul{list-style:none;margin:0;padding:0}
+.fg li a{display:inline-flex;align-items:center;min-height:44px;text-decoration:none}
+.fg li a:hover{color:#fff}
+.fb{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;border-top:1px solid rgba(255,255,255,.12);margin-top:26px;padding-top:20px;font-size:13.5px}
+
+.back-pill{position:fixed;left:16px;bottom:16px;z-index:999;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:10px;background:rgba(27,33,48,.85);color:#fff;font:700 13px/1 Archivo,sans-serif;text-decoration:none;opacity:.9}
+.back-pill:hover{opacity:1}
+
+/* ===== laptops: pinned horizontal street ===== */
+@media (min-width:1024px) and (prefers-reduced-motion:no-preference){
+  .stage{height:100vh;overflow:hidden}
+  .track{display:flex;align-items:stretch;height:100%;width:max-content;padding:calc(var(--hdr) + 34px) 0 150px 72px;will-change:transform}
+  .ch{display:flex;align-items:stretch;gap:24px;padding-right:140px;flex:none}
+  .sign{width:400px;flex:none;align-self:center;padding-right:20px}
+  .row{display:flex;gap:24px;align-items:stretch}
+  .card{flex:none;height:100%}
+  .house{width:250px;align-self:flex-end;height:82%}
+  .pillar{width:330px;height:80%!important;align-self:flex-end}
+  .svc{width:360px}
+  .step{width:290px;height:70%!important;align-self:flex-end}
+  .step:nth-child(even){height:80%!important}
+  .pj{width:min(560px,44vw)}
+  .pj.wide{width:min(760px,56vw)}
+  .fd{width:min(900px,66vw)}
+  .tq{width:400px;height:84%!important;align-self:flex-end}
+  .endcard{width:520px}
+  /* the road runs along the bottom of the track */
+  .road{display:block;position:absolute;left:0;right:0;bottom:0;height:150px;pointer-events:none}
+  .road .verge{position:absolute;left:0;right:0;top:0;height:30px;background:linear-gradient(180deg,#B9DDB0,#9CCB92)}
+  .road .tar{position:absolute;left:0;right:0;top:30px;bottom:0;background:var(--asphalt)}
+  .road .tar::before{content:"";position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;background:repeating-linear-gradient(90deg,#F4D35E 0 70px,transparent 70px 140px)}
+  .road .tar::after{content:"";position:absolute;left:0;right:0;top:8px;height:2px;background:rgba(255,255,255,.25)}
+  .road .fence{position:absolute;left:0;right:0;top:-36px;height:36px;background:repeating-linear-gradient(90deg,rgba(27,33,48,.12) 0 3px,transparent 3px 28px);mask-image:linear-gradient(180deg,#000,transparent);-webkit-mask-image:linear-gradient(180deg,#000,transparent)}
+  /* address counter, fixed to the stage */
+  .addr{display:flex;position:absolute;left:170px;bottom:34px;z-index:5;align-items:center;gap:16px;color:#fff}
+  .addr .no{background:var(--blue);border:3px solid #fff;border-radius:10px;padding:10px 16px;font:800 30px/1 Archivo,sans-serif;font-stretch:118%;letter-spacing:-.01em;min-width:190px;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
+  .addr .no small{font-size:15px;font-weight:700;opacity:.8;margin-right:6px}
+  .addr .st{font:700 15px/1.2 Archivo,sans-serif;letter-spacing:.06em;text-transform:uppercase;background:var(--asphalt);padding:6px 10px;border-radius:8px}
+  .addr .st small{display:block;font-size:12px;letter-spacing:.08em;opacity:.65;margin-bottom:4px}
+  .addr .bar{position:absolute;left:0;bottom:-16px;width:340px;height:3px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden}
+  .addr .bar i{display:block;height:100%;background:#F4D35E;transform-origin:0 50%;transform:scaleX(0)}
+  .chips{position:absolute;right:32px;bottom:38px;z-index:5;display:flex;gap:4px;background:var(--asphalt);border-radius:10px;padding:2px}
+  .chips a{min-height:44px;display:inline-flex;align-items:center;padding:0 12px;border-radius:8px;font:700 12.5px/1 Archivo,sans-serif;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;color:rgba(255,255,255,.6);transition:color .2s,background .2s}
+  .chips a.on{color:#fff;background:rgba(255,255,255,.12)}
+  .chips a:hover{color:#fff}
+}
+@media (max-height:760px) and (min-width:1024px) and (prefers-reduced-motion:no-preference){
+  .track{padding-bottom:128px}
+  .road{height:128px}
+  .svc h3{font-size:22px}.svc p{font-size:14px}
+  .step .no{font-size:64px}
+}
+.chips{display:none}
+@media (min-width:1024px) and (prefers-reduced-motion:no-preference){ .chips{display:flex} }
+
+/* ===== phones / reduced motion: chapters with native swipe rows ===== */
+@media (max-width:1023px), (prefers-reduced-motion:reduce){
+  .ch{padding:72px 0 8px}
+  .sign{padding:0 20px;margin-bottom:24px}
+  .row{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 20px 24px;scroll-padding:0 20px;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .row::-webkit-scrollbar{display:none}
+  .row > *{flex:0 0 min(82vw,380px);scroll-snap-align:start}
+  .row > .house{flex-basis:min(62vw,250px);min-height:300px}
+  .pillar{min-height:280px}
+  .svc{height:460px}
+  .step{min-height:290px}
+  .pj{height:min(118vw,480px)}
+  .fd{grid-template-columns:1fr;flex-basis:min(88vw,420px)!important}
+  .fd figure{min-height:300px;aspect-ratio:4/3.6}
+  .tq{min-height:340px}
+  .endcard{min-height:340px}
+  .ctr{display:flex;align-items:center;gap:10px;padding:0 20px;font:700 13px/1 Archivo,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .ctr b{background:var(--blue);color:#fff;border-radius:6px;padding:6px 8px;font-stretch:112%}
+  .ctr i{flex:1;height:2px;background:var(--line);position:relative;overflow:hidden;border-radius:2px}
+  .ctr i::after{content:"";position:absolute;inset:0;background:var(--blue);transform-origin:0 50%;transform:scaleX(var(--p,0))}
+}
+@media (max-width:1023px){
+  .nav,.hdr .btn.q{display:none}
+  .menu-btn{display:grid}
+  .hdr .wrap{padding:0 12px 0 16px}
+  :root{--hdr:68px}
+  .logo img{height:44px}
+  .wrap{padding:0 20px}
+  .hero{min-height:640px}
+  .hero .wrap{grid-template-columns:1fr;padding:0 20px 44px;gap:18px}
+  .hero h1{font-size:clamp(48px,14vw,96px);margin-top:16px;font-stretch:104%}
+  .hero .side p{font-size:17px}
+  .hero .ctas .btn{flex:1 1 auto}
+  .walk{display:none}
+  .sechead{display:block}
+  .sechead p{margin-top:12px}
+  .blog{padding:80px 0 20px}
+  .b-grid{grid-template-columns:1fr;gap:20px}
+  .post .pb{padding:20px 20px 22px}
+  .contact{padding:50px 0 80px}
+  .cbox{grid-template-columns:1fr}
+  .cl,form{padding:32px 22px}
+  form{grid-template-columns:1fr}
+  form .btn{justify-self:stretch}
+  .fg{grid-template-columns:1fr 1fr}
+  .fg > div:first-child{grid-column:1/-1}
+  footer{padding-bottom:90px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="MD Projects NZ home"><img class="w" src="../../images/logo-white.svg" alt="MD Projects NZ Ltd" width="85" height="52"><img class="c" src="../../images/logo.svg" alt="" width="85" height="52"></a>
+    <nav class="nav" aria-label="Main"><a href="#services" data-go>Services</a><a href="#projects" data-go>Projects</a><a href="#about" data-go>About</a><a href="#contact">Contact</a></nav>
+    <a class="btn btn-b q" href="#contact">Get a quote</a>
+    <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="sheet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+  </div>
+</header>
+<nav class="sheet" id="sheet" aria-label="Mobile">
+  <a class="it" href="#services" data-go>Services <small>Services St</small></a>
+  <a class="it" href="#projects" data-go>Projects <small>Projects Rd</small></a>
+  <a class="it" href="#about" data-go>About <small>About Ave</small></a>
+  <a class="it" href="#contact">Contact <small>No. 409</small></a>
+  <a class="btn btn-w" href="#contact">Get a quote</a>
+</nav>
+
+<main id="top">
+<section class="hero">
+  <video id="heroVid" muted autoplay loop playsinline preload="metadata" aria-label="Aerial view of finished MD Projects townhouses"></video>
+  <div class="wrap">
+    <div>
+      <span class="plate">Auckland residential builders</span>
+      <h1>Homes built <span>beautifully.</span></h1>
+    </div>
+    <div class="side">
+      <p>Over 1,000 Auckland homes delivered at a fixed price, on time and with complete transparency.</p>
+      <div class="ctas"><a class="btn btn-w" href="#contact">Start your project</a><a class="btn btn-o" href="#projects" data-go>View our homes</a></div>
+      <div class="walk" aria-hidden="true"><i></i>Scroll to walk the street</div>
+    </div>
+  </div>
+</section>
+
+<section class="street" aria-label="A walk down our street">
+  <div class="stage" id="stage">
+    <div class="track" id="track">
+      <div class="road" aria-hidden="true"><div class="fence"></div><div class="verge"></div><div class="tar"></div></div>
+
+      <div class="ch" id="about" data-street="About Avenue">
+        <div class="sign"><span class="plate">01 · About Ave</span><h2>Building Auckland <span>since March 2020.</span></h2><p>Since March 2020 we've built 1,000+ homes across Auckland. Fixed prices. No surprises. Structures that last a lifetime, from your first sketch to the final code compliance certificate.</p></div>
+        <div class="ctr" aria-hidden="true"><b>1 / 7</b><i></i>Swipe</div>
+        <div class="row">
+          <div class="card house"><span class="win" aria-hidden="true"></span><b data-count="1000" data-suffix="+">1,000+</b><span>Homes built</span></div>
+          <div class="card house"><span class="win" aria-hidden="true"></span><b data-count="500" data-suffix="+">500+</b><span>Happy clients</span></div>
+          <div class="card house"><span class="win" aria-hidden="true"></span><b data-count="100" data-suffix="+">100+</b><span>Trusted contractors</span></div>
+          <div class="card house"><span class="win" aria-hidden="true"></span><b>10 yr</b><span>Stamford insurance guarantee</span></div>
+          <article class="card pillar"><div class="k">Quality</div><div class="v">10 yr</div><div class="s">Stamford insurance guarantee</div><p>Best build quality at an affordable price. High-quality homes and investment properties, delivered within budget.</p></article>
+          <article class="card pillar"><div class="k">Time</div><div class="v">7 – 9 months</div><div class="s">Typical terrace build</div><p>We stick to the project plan. Typical terrace builds take 7 to 9 months, with regular updates throughout.</p></article>
+          <article class="card pillar"><div class="k">Price</div><div class="v">0 variations</div><div class="s">Fixed price, no variations</div><p>We agree on a fixed cost before the build begins, so you can plan with confidence.</p></article>
+        </div>
+      </div>
+
+      <div class="ch" id="services" data-street="Services Street">
+        <div class="sign"><span class="plate">02 · Services St</span><h2>Everything, from <span>concept to keys.</span></h2><p>One team takes your project from first sketch to final handover, with nothing handed off between firms.</p></div>
+        <div class="ctr" aria-hidden="true"><b>1 / 5</b><i></i>Swipe</div>
+        <div class="row">
+          <article class="card svc"><figure><img loading="lazy" src="../../images/service-design-build-sm.webp" alt="Modern two storey home designed and built by MD Projects"></figure><div class="b"><span class="n">01</span><h3>Design &amp; Build</h3><p>A complete custom home solution, taking your vision from concept through to final construction.</p></div></article>
+          <article class="card svc"><figure><img loading="lazy" src="../../images/service-build-from-plans-sm.webp" alt="Builders reviewing approved plans"></figure><div class="b"><span class="n">02</span><h3>Build from Plans</h3><p>Already have approved plans? We'll bring them to life with expert craftsmanship and precision.</p></div></article>
+          <article class="card svc"><figure><img loading="lazy" src="../../images/service-terrace-duplex-sm.webp" alt="Terrace homes lit up at dusk"></figure><div class="b"><span class="n">03</span><h3>Terrace Homes &amp; Duplexes</h3><p>Efficient, modern multi-unit housing designed to maximise land use and investment return.</p></div></article>
+          <article class="card svc"><figure><img loading="lazy" src="../../images/service-subdivision-sm.webp" alt="New homes across a subdivided site"></figure><div class="b"><span class="n">04</span><h3>Subdivision &amp; Consents</h3><p>Land development managed end to end: feasibility, resource and building consents, through to title.</p></div></article>
+          <article class="card svc"><figure><img loading="lazy" src="../../images/guide-project-management-sm.webp" alt="Project manager working through plans"></figure><div class="b"><span class="n">05</span><h3>Project Management</h3><p>Every aspect of your build coordinated by one team, for on-time and on-budget delivery.</p></div></article>
+        </div>
+      </div>
+
+      <div class="ch" id="process" data-street="Process Lane">
+        <div class="sign"><span class="plate">03 · Process Lane</span><h2>Six steps. <span>One team.</span></h2><p>You always know what's happening next, what it costs and when it'll be done. Typical terrace builds take 7 to 9 months.</p></div>
+        <div class="ctr" aria-hidden="true"><b>1 / 6</b><i></i>Swipe</div>
+        <ol class="row" style="list-style:none;margin:0">
+          <li class="card step"><span class="post" aria-hidden="true"></span><span class="no">01</span><h3>Feasibility study</h3><p>Zoning, services, geotechnical conditions and council rules, checked before you commit.</p></li>
+          <li class="card step"><span class="post" aria-hidden="true"></span><span class="no">02</span><h3>Resource &amp; building consents</h3><p>Applications prepared, lodged and managed with Auckland Council on your behalf.</p></li>
+          <li class="card step"><span class="post" aria-hidden="true"></span><span class="no">03</span><h3>Engineering &amp; infrastructure</h3><p>Roads, stormwater, power, water and telecommunications planned with our consultants.</p></li>
+          <li class="card step"><span class="post" aria-hidden="true"></span><span class="no">04</span><h3>Construction</h3><p>Our network of 100+ trusted contractors builds to plan, managed day to day.</p></li>
+          <li class="card step"><span class="post" aria-hidden="true"></span><span class="no">05</span><h3>Compliance &amp; certification</h3><p>Inspections and sign-offs through to your Code Compliance Certificate.</p></li>
+          <li class="card step"><span class="post" aria-hidden="true"></span><span class="no">06</span><h3>Handover or sale</h3><p>Keys in hand, ready to move in, rent or sell, backed by our guarantees.</p></li>
+        </ol>
+      </div>
+
+      <div class="ch" id="projects" data-street="Projects Road">
+        <div class="sign"><span class="plate">04 · Projects Rd</span><h2>Recent <span>homes.</span></h2><p>A few of the streets we've helped build, from Sandringham to Weymouth. Also building in Papakura, Papatoetoe, Manurewa and more.</p></div>
+        <div class="ctr" aria-hidden="true"><b>1 / 5</b><i></i>Swipe</div>
+        <div class="row">
+          <a class="card pj wide" href="#contact"><span class="ph"><img loading="lazy" src="../../images/project-mt-albert-road-sm.webp" srcset="../../images/project-mt-albert-road-sm.webp 900w, ../../images/project-mt-albert-road.webp 1800w" sizes="(max-width:1023px) 90vw, 900px" alt="Mt Albert Road townhouses, Sandringham"></span><span class="num">No. 1</span><div class="cap"><div><h3>Mt Albert Road</h3><span>Sandringham · 5 townhouses · 4 bed</span></div></div></a>
+          <a class="card pj" href="#contact"><span class="ph"><img loading="lazy" src="../../images/tripoli-road-dusk-sm.webp" alt="Tripoli Road townhouses at dusk"></span><span class="num">No. 2</span><div class="cap"><div><h3>Tripoli Road</h3><span>Point England · Townhouses</span></div></div></a>
+          <a class="card pj" href="#contact"><span class="ph"><img loading="lazy" src="../../images/project-swanson-road-sm.webp" alt="Swanson Road townhouses, Henderson"></span><span class="num">No. 3</span><div class="cap"><div><h3>Swanson Road</h3><span>Henderson · Townhouses</span></div></div></a>
+          <a class="card pj" href="#contact"><span class="ph"><img loading="lazy" src="../../images/project-luke-street-sm.webp" alt="Luke Street homes, Otahuhu"></span><span class="num">No. 4</span><div class="cap"><div><h3>Luke Street</h3><span>Otahuhu · Homes</span></div></div></a>
+          <a class="card pj" href="#contact"><span class="ph"><img loading="lazy" src="../../images/project-weymouth-road-sm.webp" alt="Weymouth Road duplex, Weymouth"></span><span class="num">No. 5</span><div class="cap"><div><h3>Weymouth Road</h3><span>Weymouth · Duplex</span></div></div></a>
+        </div>
+      </div>
+
+      <div class="ch" id="founder" data-street="Founder's Way">
+        <div class="sign"><span class="plate">05 · Founder's Way</span><h2>Meet the <span>founder.</span></h2><p>Maninder Singh, Founder &amp; Director. Building Auckland since 2020.</p></div>
+        <div class="row">
+          <article class="card fd">
+            <figure><img loading="lazy" src="../../images/team-sm.webp" srcset="../../images/team-sm.webp 900w, ../../images/team.webp 1440w" sizes="(max-width:1023px) 90vw, 420px" alt="Maninder Singh, founder of MD Projects NZ, holding an award"></figure>
+            <div class="tx">
+              <blockquote>“Your dream is <span>our project.</span>”</blockquote>
+              <div class="nm">Maninder Singh<span>Founder &amp; Director · Building Auckland since 2020</span></div>
+              <p>From house renovations to over 1,000 builds, delivered to top-tier quality, within budget and on schedule. Maninder has years of experience in the construction sector, leading residential projects for large companies and private clients. His mission: high-quality, affordable homes delivered with precision, efficiency and excellence.</p>
+              <div class="vals"><span>Integrity</span><span>Transparency</span><span>Quality craftsmanship</span><span>Client-focused service</span></div>
+              <div class="yr"><b data-count="98">98</b><span>homes completed in 2024,<br>our most successful year</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="ch" id="testimonials" data-street="Testimonial Terrace">
+        <div class="sign"><span class="plate">06 · Testimonial Tce</span><h2>What the <span>neighbours say.</span></h2><p>Homeowners, investors and first-time developers across Auckland on building with MD Projects.</p></div>
+        <div class="ctr" aria-hidden="true"><b>1 / 5</b><i></i>Swipe</div>
+        <div class="row">
+          <figure class="card tq" style="margin:0"><div><div class="q" aria-hidden="true">“</div><blockquote>MD Projects turned our vision into reality. The entire process was seamless, and the team delivered our dream home on time and within budget. Truly professional from start to finish.</blockquote></div><figcaption><span class="av">ST</span><span><b>Sarah T</b>Papatoetoe</span></figcaption></figure>
+          <figure class="card tq" style="margin:0"><div><div class="q" aria-hidden="true">“</div><blockquote>We were first-time developers and a bit nervous about the process. Maninder and the team guided us through everything – from feasibility to final CCC. Couldn’t be happier with the results!</blockquote></div><figcaption><span class="av">AP</span><span><b>Amit P</b>Blockhouse Bay</span></figcaption></figure>
+          <figure class="card tq" style="margin:0"><div><div class="q" aria-hidden="true">“</div><blockquote>What impressed us most was the clear communication and fixed-price contract. No hidden surprises, and the build quality exceeded our expectations.</blockquote></div><figcaption><span class="av">LJ</span><span><b>Lisa &amp; James R</b>Weymouth</span></figcaption></figure>
+          <figure class="card tq" style="margin:0"><div><div class="q" aria-hidden="true">“</div><blockquote>MD Projects managed our duplex development with great efficiency. The workmanship, coordination, and timely updates made us feel confident every step of the way.</blockquote></div><figcaption><span class="av">DM</span><span><b>Deepak M</b>Flat Bush</span></figcaption></figure>
+          <div class="card endcard"><span class="plate" style="align-self:flex-start;background:#fff;color:var(--blue);border-color:#fff">No. 1,000+</span><h3 style="margin-top:20px">Your home <span>could be next.</span></h3><p>Tell us about your section and we'll come back with feasibility, timelines and a fixed-price proposal.</p><div style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn btn-w" href="#contact">Start your project</a><a class="btn btn-o" href="tel:0210590409">0210 590 409</a></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="addr" aria-hidden="true"><div class="no"><small>No.</small><span id="addrNo">1</span></div><div class="st"><small>You are on</small><span id="addrSt">About Avenue</span></div><div class="bar"><i id="addrBar"></i></div></div>
+    <nav class="chips" aria-label="Jump along the street"><a href="#about" data-go>About</a><a href="#services" data-go>Services</a><a href="#process" data-go>Process</a><a href="#projects" data-go>Projects</a><a href="#founder" data-go>Founder</a><a href="#testimonials" data-go>Reviews</a></nav>
+  </div>
+</section>
+
+<section class="blog" id="blog">
+  <div class="wrap">
+    <div class="sechead"><div><span class="plate" style="color:#fff">07 · News St</span><h2>Latest <span>news.</span></h2></div><p>Plain-English guides from the team: feasibility, timelines and the guarantees behind every home.</p></div>
+    <div class="b-grid">
+      <a class="post" href="#"><figure><img loading="lazy" src="../../images/guide-feasibility-sm.webp" alt="Two people reviewing a site plan" width="900" height="563"></figure><div class="pb"><span class="cat">Feasibility</span><span class="meta"><time datetime="2026-10-04">4 Oct 2026</time> · 5 min read</span><h3>First-time developer? Start with a feasibility study</h3><p>Zoning, services, slope and council rules: what we check before you commit a dollar to design.</p><span class="more">Read more <span aria-hidden="true">→</span></span></div></a>
+      <a class="post" href="#"><figure><img loading="lazy" src="../../images/gallery-3-sm.webp" alt="New white weatherboard terrace homes" width="900" height="563"></figure><div class="pb"><span class="cat">Process</span><span class="meta"><time datetime="2026-10-03">3 Oct 2026</time> · 6 min read</span><h3>From bare section to keys in 9 months</h3><p>A month-by-month walk through a typical terrace build, from first site visit to handover day.</p><span class="more">Read more <span aria-hidden="true">→</span></span></div></a>
+      <a class="post" href="#"><figure><img loading="lazy" src="../../images/gallery-7-sm.webp" alt="Bright living room in a finished home" width="900" height="563"></figure><div class="pb"><span class="cat">Guarantees</span><span class="meta"><time datetime="2026-09-30">30 Sep 2026</time> · 4 min read</span><h3>How a 10-year Stamford guarantee protects your home</h3><p>What the guarantee covers, how long it lasts and how it works alongside our 12-month workmanship warranty.</p><span class="more">Read more <span aria-hidden="true">→</span></span></div></a>
+    </div>
+    <div class="b-all"><a class="btn btn-l" href="#">View all articles →</a></div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="cbox">
+      <div class="cl">
+        <span class="plate" style="align-self:flex-start">No. 409 · Bucklands Beach Rd</span>
+        <h2>Let's build something <span>beautiful.</span></h2>
+        <p>Tell us what you're planning. We'll come back to you to talk through feasibility, timelines and a fixed-price proposal.</p>
+        <ul>
+          <li><a href="tel:0210590409"><small>Phone</small><b>0210 590 409</b></a></li>
+          <li><a href="mailto:info@mdprojects.co.nz"><small>Email</small><b>info@mdprojects.co.nz</b></a></li>
+          <li><div><small>Office</small><b>409 Bucklands Beach Road, Bucklands Beach, Auckland 2012</b></div></li>
+        </ul>
+      </div>
+      <form id="quote" novalidate>
+        <h3>Get a free quote</h3>
+        <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name"></div>
+        <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
+        <div class="field full"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email"></div>
+        <div class="field full"><label for="f-svc">I'm interested in</label><select id="f-svc" name="service"><option>Design &amp; Build</option><option>Build from Plans</option><option>Terrace Homes &amp; Duplexes</option><option>Subdivision</option><option>Resource &amp; Building Consent</option><option>Project Management</option><option>Something else</option></select></div>
+        <div class="field full"><label for="f-msg">About your project</label><textarea id="f-msg" name="message" placeholder="Site address, what you'd like to build, timing…"></textarea></div>
+        <button class="btn btn-b" type="submit">Send enquiry <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+        <p class="fnote">Opens your email app with your details filled in, addressed to info@mdprojects.co.nz.</p>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div><img src="../../images/logo-white.svg" alt="MD Projects NZ Ltd" width="101" height="62"><p style="max-width:300px">Quality developments with expert project management, innovative design and a commitment to excellence in every build.</p></div>
+      <div><h4>Services</h4><ul><li><a href="#services" data-go>Design &amp; Build</a></li><li><a href="#services" data-go>Terrace &amp; Duplex</a></li><li><a href="#services" data-go>Subdivision</a></li><li><a href="#services" data-go>Project Management</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#about" data-go>About</a></li><li><a href="#projects" data-go>Projects</a></li><li><a href="#blog">Latest news</a></li><li><a href="#contact">Contact</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="tel:0210590409">0210 590 409</a></li><li><a href="mailto:info@mdprojects.co.nz">info@mdprojects.co.nz</a></li><li><a href="#contact">409 Bucklands Beach Road, Auckland 2012</a></li></ul></div>
+    </div>
+    <div class="fb"><span>© 2026 MD Projects NZ Ltd. All rights reserved.</span><span>Proudly designed by AMBS Solutions</span></div>
+  </div>
+</footer>
+<a class="back-pill" href="../">← All versions</a>
+
+<script src="../../js/gsap.min.js"></script>
+<script src="../../js/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var small = matchMedia('(max-width: 1023px)').matches;
+  var v = document.getElementById('heroVid');
+  v.poster = small ? '../../images/hero-poster-portrait.webp' : '../../images/hero-poster.webp';
+  v.src = small ? '../../images/hero-portrait.mp4' : '../../images/hero-1080.mp4';
+  if (reduce) v.removeAttribute('autoplay'); else { var pr = v.play(); if (pr && pr.catch) pr.catch(function(){}); }
+
+  // header state
+  var hdr = document.getElementById('hdr'), hero = document.querySelector('.hero');
+  function hdrState(){ hdr.classList.toggle('solid', scrollY > hero.offsetHeight - 80); }
+  addEventListener('scroll', hdrState, { passive: true }); hdrState();
+
+  // menu
+  var mb = document.querySelector('.menu-btn');
+  function setMenu(o){ document.body.classList.toggle('menu-open', o); mb.setAttribute('aria-expanded', o); mb.setAttribute('aria-label', o ? 'Close menu' : 'Open menu'); document.documentElement.style.overflow = o ? 'hidden' : ''; }
+  mb.addEventListener('click', function(){ setMenu(!document.body.classList.contains('menu-open')); });
+  document.querySelectorAll('#sheet a').forEach(function(a){ a.addEventListener('click', function(){ setMenu(false); }); });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') setMenu(false); });
+
+  // counters
+  function countUp(el){ if (reduce || el.dataset.done) return; el.dataset.done = 1; var to = +el.dataset.count, suf = el.dataset.suffix || '', t0; (function f(t){ t0 = t0 || t; var p = Math.min(1, (t - t0) / 1400), k = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * k).toLocaleString('en-NZ') + suf; if (p < 1) requestAnimationFrame(f); })(performance.now()); }
+
+  var chapters = [].slice.call(document.querySelectorAll('.ch'));
+  var track = document.getElementById('track'), stage = document.getElementById('stage');
+  var horizontal = null; // the ScrollTrigger when the street is pinned
+
+  // smooth link handling: in street mode, anchors map to a vertical scroll position
+  document.querySelectorAll('a[data-go]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href').slice(1), ch = document.getElementById(id);
+      if (!ch) return;
+      e.preventDefault();
+      var y;
+      if (horizontal) y = horizontal.start + Math.max(0, ch.offsetLeft - 40);
+      else y = ch.getBoundingClientRect().top + scrollY - 70;
+      window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  });
+
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    var mm = gsap.matchMedia();
+    mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', function(){
+      var addrNo = document.getElementById('addrNo'), addrSt = document.getElementById('addrSt'), addrBar = document.getElementById('addrBar');
+      var chips = [].slice.call(document.querySelectorAll('.chips a'));
+      var dist = function(){ return track.scrollWidth - innerWidth; };
+      var lastSt = '';
+      var tween = gsap.to(track, {
+        x: function(){ return -dist(); }, ease: 'none',
+        scrollTrigger: {
+          trigger: stage, pin: true, scrub: .8, start: 'top top',
+          end: function(){ return '+=' + dist(); }, invalidateOnRefresh: true, anticipatePin: 1,
+          onUpdate: function(self){
+            var p = self.progress, x = p * dist() + innerWidth * .45, cur = 0;
+            addrNo.textContent = Math.round(1 + p * 999).toLocaleString('en-NZ');
+            addrBar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+            chapters.forEach(function(c, i){ if (c.offsetLeft <= x) cur = i; });
+            var st = chapters[cur].dataset.street;
+            if (st !== lastSt) { lastSt = st; addrSt.textContent = st; chips.forEach(function(c, i){ c.classList.toggle('on', i === cur); }); }
+          }
+        }
+      });
+      horizontal = tween.scrollTrigger;
+      // cards rise onto the street as they come into view
+      gsap.utils.toArray('.track .card').forEach(function(card){
+        gsap.from(card, { y: 70, opacity: 0, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: card, containerAnimation: tween, start: 'left 96%', toggleActions: 'play none none reverse', onEnter: function(){ card.querySelectorAll('[data-count]').forEach(countUp); } } });
+      });
+      // photos drift inside their frames
+      gsap.utils.toArray('.pj .ph img').forEach(function(img){
+        gsap.fromTo(img, { xPercent: 5 }, { xPercent: -5, ease: 'none', scrollTrigger: { trigger: img.closest('.pj'), containerAnimation: tween, start: 'left right', end: 'right left', scrub: true } });
+      });
+      return function(){ horizontal = null; };
+    });
+    addEventListener('load', function(){ ScrollTrigger.refresh(); });
+  }
+
+  // phones / reduced motion: per-chapter swipe counters
+  document.querySelectorAll('.ch').forEach(function(ch){
+    var row = ch.querySelector('.row'), ctr = ch.querySelector('.ctr');
+    if (!ctr) return;
+    var b = ctr.querySelector('b'), bar = ctr.querySelector('i'), n = row.children.length;
+    function upd(){
+      var max = row.scrollWidth - row.clientWidth, p = max > 0 ? row.scrollLeft / max : 0;
+      var idx = Math.round(p * (n - 1)) + 1;
+      b.textContent = idx + ' / ' + n; bar.style.setProperty('--p', Math.max(1 / n, p).toFixed(3));
+    }
+    row.addEventListener('scroll', function(){ requestAnimationFrame(upd); }, { passive: true }); upd();
+  });
+  if (!horizontal && 'IntersectionObserver' in window) {
+    var co = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ countUp(e.target); co.unobserve(e.target); } }); }, { threshold: .5 });
+    document.querySelectorAll('[data-count]').forEach(function(e){ co.observe(e); });
+  }
+
+  document.getElementById('quote').addEventListener('submit', function(e){
+    e.preventDefault(); var el = e.target.elements, g = function(n){ return el[n].value; };
+    var body = 'Name: ' + g('name') + '\nPhone: ' + g('phone') + '\nEmail: ' + g('email') + '\nInterested in: ' + g('service') + '\n\n' + g('message');
+    location.href = 'mailto:info@mdprojects.co.nz?subject=' + encodeURIComponent('Quote request: ' + g('service') + (g('name') ? ' (' + g('name') + ')' : '')) + '&body=' + encodeURIComponent(body);
+  });
+})();
+</script>
+</body>
+</html>

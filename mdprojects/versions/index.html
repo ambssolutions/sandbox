@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MD Projects · Design Directions</title>
+<meta name="description" content="Twenty website design directions for MD Projects NZ. Browse, shortlist and choose.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../images/logo.svg">
+<style>
+@font-face { font-family: Poppins; src: url(../fonts/poppins-300.woff2) format("woff2"); font-weight: 300; font-display: swap; }
+@font-face { font-family: Poppins; src: url(../fonts/poppins-400.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: Poppins; src: url(../fonts/poppins-500.woff2) format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: Poppins; src: url(../fonts/poppins-600.woff2) format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: Poppins; src: url(../fonts/poppins-700.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+:root {
+  --navy: #1B2130; --royal: #3C54A8; --sky: #90CCF0; --white: #F4F6FA; --card: #fff; --line: rgba(27,33,48,.1);
+  --muted: #5d6578; --gold: #c9a24a; --heart: #e0455b; --r: 22px;
+  --shadow: 0 1px 2px rgba(27,33,48,.06), 0 18px 40px -22px rgba(27,33,48,.35);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; font: 400 15px/1.55 Poppins, system-ui, sans-serif; color: var(--navy); background: var(--white); }
+a { color: inherit; }
+button { font: inherit; color: inherit; cursor: pointer; }
+img { display: block; max-width: 100%; }
+
+/* top */
+.top { position: sticky; top: 0; z-index: 30; background: rgba(244,246,250,.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.top-in { max-width: 1320px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 16px; }
+.top img { height: 40px; width: auto; }
+.top .live { margin-left: auto; font-weight: 500; font-size: .85rem; text-decoration: none; padding: 10px 16px; border-radius: 99px; border: 1px solid var(--line); background: #fff; }
+
+.hero { max-width: 1320px; margin: 0 auto; padding: clamp(36px, 7vw, 84px) 20px 20px; text-align: center; }
+.eyebrow { display: inline-block; font-size: .72rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--royal); }
+.hero h1 { font-size: clamp(2.1rem, 5.4vw, 4.2rem); line-height: 1.04; letter-spacing: -.04em; font-weight: 600; margin: 12px auto 14px; max-width: 16ch; }
+.hero h1 em { font-style: normal; color: var(--royal); }
+.hero p { color: var(--muted); max-width: 60ch; margin: 0 auto; }
+.how { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 22px 0 0; padding: 0; list-style: none; font-size: .85rem; }
+.how li { background: #fff; border: 1px solid var(--line); border-radius: 99px; padding: 8px 14px; display: flex; gap: 8px; align-items: center; }
+.how b { color: var(--royal); }
+
+/* toolbar */
+.bar { position: sticky; top: 65px; z-index: 20; max-width: 1320px; margin: 18px auto 0; padding: 10px 20px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.bar::-webkit-scrollbar { display: none; }
+.chip { flex: none; border: 1px solid var(--line); background: #fff; border-radius: 99px; padding: 10px 16px; min-height: 44px; font-size: .86rem; font-weight: 500; display: inline-flex; align-items: center; gap: 7px; transition: background .2s, color .2s, border-color .2s; }
+.chip[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+.chip .n { font-size: .72rem; background: rgba(60,84,168,.12); color: var(--royal); border-radius: 99px; padding: 1px 7px; }
+.chip[aria-pressed="true"] .n { background: rgba(255,255,255,.18); color: #fff; }
+
+/* grid */
+.grid { max-width: 1320px; margin: 0 auto; padding: 14px 20px 120px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 22px; }
+.card { position: relative; background: var(--card); border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
+@media (hover: hover) { .card:hover { transform: translateY(-4px); box-shadow: 0 1px 2px rgba(27,33,48,.06), 0 30px 60px -28px rgba(27,33,48,.45); } }
+.card.is-final { outline: 3px solid var(--gold); outline-offset: -3px; }
+.shot { position: relative; aspect-ratio: 16 / 10.5; background: linear-gradient(135deg, #e6ebf3, #d6deeb); overflow: hidden; border: 0; padding: 0; width: 100%; display: block; }
+.shot .d { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.shot .m { position: absolute; right: 14px; bottom: -18px; width: 22%; aspect-ratio: 390 / 760; object-fit: cover; object-position: top; border-radius: 14px; border: 4px solid var(--navy); box-shadow: 0 16px 30px -12px rgba(0,0,0,.5); background: #fff; transition: transform .4s cubic-bezier(.2,.7,.2,1); }
+@media (hover: hover) { .card:hover .shot .m { transform: translateY(-12px); } }
+.shot .ph { position: absolute; inset: 0; display: grid; place-items: center; font-size: 3rem; font-weight: 600; color: rgba(27,33,48,.18); letter-spacing: -.04em; }
+.shot .view { position: absolute; left: 14px; bottom: 14px; background: rgba(27,33,48,.82); color: #fff; font-size: .75rem; font-weight: 500; padding: 7px 12px; border-radius: 99px; opacity: 0; transform: translateY(6px); transition: .3s; }
+@media (hover: hover) { .card:hover .view { opacity: 1; transform: none; } }
+.tags { position: absolute; left: 12px; top: 12px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 2; }
+.tag { font-size: .68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 6px 10px; border-radius: 99px; background: rgba(255,255,255,.92); color: var(--navy); box-shadow: 0 4px 12px -6px rgba(0,0,0,.4); }
+.tag.rec { background: var(--royal); color: #fff; }
+.tag.top1 { background: linear-gradient(135deg, #e3c27a, #b8872e); color: #1b2130; }
+.tag.fin { background: var(--gold); color: #1b2130; }
+.body { padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.ttl { display: flex; align-items: baseline; gap: 10px; }
+.num { font-size: .8rem; font-weight: 600; color: var(--royal); letter-spacing: .06em; }
+.ttl h2 { margin: 0; font-size: 1.22rem; letter-spacing: -.02em; font-weight: 600; }
+.type { font-size: .78rem; color: var(--muted); }
+.pitch { margin: 2px 0 8px; font-size: .9rem; color: #3b4356; }
+.why { font-size: .82rem; color: var(--royal); background: rgba(60,84,168,.07); border-radius: 12px; padding: 8px 11px; margin: 0 0 8px; }
+.acts { margin-top: auto; display: flex; gap: 8px; align-items: center; }
+.btn { min-height: 44px; border-radius: 99px; padding: 0 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-size: .86rem; font-weight: 500; text-decoration: none; border: 1px solid var(--line); background: #fff; }
+.btn.pri { background: var(--navy); color: #fff; border-color: var(--navy); }
+.ic { width: 44px; padding: 0; }
+.heart svg { width: 20px; height: 20px; transition: transform .3s cubic-bezier(.3,1.6,.5,1); }
+.heart[aria-pressed="true"] { border-color: rgba(224,69,91,.35); background: #fff1f3; color: var(--heart); }
+.heart[aria-pressed="true"] svg { fill: currentColor; transform: scale(1.12); }
+.crown[aria-pressed="true"] { background: #fbf3df; border-color: rgba(201,162,74,.5); color: #8a6417; }
+.empty { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--muted); }
+
+/* shortlist dock */
+.dock { position: fixed; z-index: 40; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translate(-50%, 140%); transition: transform .45s cubic-bezier(.2,.8,.2,1); background: var(--navy); color: #fff; border-radius: 99px; padding: 8px 8px 8px 20px; display: flex; align-items: center; gap: 12px; box-shadow: 0 24px 50px -18px rgba(0,0,0,.55); max-width: calc(100% - 24px); }
+.dock.on { transform: translate(-50%, 0); }
+.dock .t { font-size: .88rem; white-space: nowrap; }
+.dock .btn { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.18); }
+.dock .btn.pri { background: #fff; color: var(--navy); }
+@media (max-width: 520px) { .dock { padding-left: 14px; gap: 6px; } .dock .t { font-size: .8rem; } .dock .btn { padding: 0 12px; font-size: .8rem; } .dock .hide-s { display: none; } }
+
+/* preview modal */
+.pv { position: fixed; inset: 0; z-index: 60; background: #0e1220; display: none; flex-direction: column; }
+.pv.open { display: flex; }
+.pv-top { display: flex; align-items: center; gap: 10px; padding: 10px 14px; color: #fff; border-bottom: 1px solid rgba(255,255,255,.08); }
+.pv-top .name { font-weight: 600; font-size: .95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; }
+.pv-top .name small { font-weight: 400; color: rgba(255,255,255,.55); margin-left: 8px; }
+.pv-top .btn { background: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.14); }
+.pv-top .btn[aria-pressed="true"] { background: #fff; color: var(--navy); }
+.pv-top .heart[aria-pressed="true"] { background: #fff1f3; color: var(--heart); }
+.seg { display: inline-flex; background: rgba(255,255,255,.08); border-radius: 99px; padding: 3px; }
+.seg button { border: 0; background: none; color: rgba(255,255,255,.7); min-height: 38px; padding: 0 14px; border-radius: 99px; font-size: .82rem; }
+.seg button[aria-pressed="true"] { background: #fff; color: var(--navy); }
+.pv-stage { flex: 1; display: grid; place-items: center; overflow: hidden; padding: 16px; }
+.frame { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 30px 80px -30px rgba(0,0,0,.8); width: 100%; height: 100%; }
+.frame.phone { width: 390px; max-width: 100%; height: min(844px, 100%); border-radius: 38px; border: 10px solid #000; }
+.frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+@media (max-width: 760px) { .pv .seg, .pv .hide-s { display: none; } .pv-stage { padding: 0; } .frame { border-radius: 0; } }
+
+/* compare */
+.cmp { position: fixed; inset: 0; z-index: 70; background: #0e1220; display: none; flex-direction: column; }
+.cmp.open { display: flex; }
+.cmp-grid { flex: 1; display: grid; gap: 10px; padding: 10px; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+.cmp-col { display: flex; flex-direction: column; min-width: 0; }
+.cmp-col .h { color: #fff; font-size: .82rem; padding: 4px 6px 8px; display: flex; justify-content: space-between; gap: 8px; }
+.cmp-col .h a { color: var(--sky); text-decoration: none; white-space: nowrap; }
+.cmp-col iframe { flex: 1; width: 100%; border: 0; border-radius: 12px; background: #fff; }
+@media (max-width: 760px) { .cmp-grid { grid-auto-flow: row; grid-auto-rows: minmax(0, 1fr); grid-auto-columns: auto; } }
+
+.toast { position: fixed; z-index: 90; left: 50%; top: 18px; transform: translate(-50%, -160%); background: var(--navy); color: #fff; padding: 12px 18px; border-radius: 99px; font-size: .88rem; transition: transform .4s cubic-bezier(.2,.8,.2,1); box-shadow: 0 20px 40px -18px rgba(0,0,0,.5); max-width: calc(100% - 24px); text-align: center; }
+.toast.on { transform: translate(-50%, 0); }
+.banner { max-width: 1320px; margin: 10px auto 0; padding: 0 20px; display: none; }
+.banner.on { display: block; }
+.banner div { background: #fbf3df; border: 1px solid rgba(201,162,74,.45); color: #6b4e12; border-radius: 16px; padding: 12px 16px; font-size: .9rem; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.banner .btn { min-height: 38px; }
+footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 0 20px 40px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <img src="../images/logo.svg" alt="MD Projects NZ" width="120" height="40">
+  <a class="live" href="../">View current site</a>
+</div></header>
+
+<section class="hero">
+  <span class="eyebrow">Design directions · 20 concepts</span>
+  <h1>Twenty ways to show <em>MD Projects.</em></h1>
+  <p>Each version is a complete homepage with your real homes, words and contact details, built in a different style. Open any of them on your phone or laptop, heart the ones you like, then pick your favourite.</p>
+  <ul class="how"><li><b>1</b> Tap a version to preview it</li><li><b>2</b> ♥ to shortlist</li><li><b>3</b> ♛ to choose your favourite</li><li><b>4</b> Send us your picks</li></ul>
+</section>
+
+<div class="banner" id="shared"><div><span id="sharedText"></span><button class="btn" id="adopt">Use these picks</button></div></div>
+
+<nav class="bar" id="bar" aria-label="Filter versions"></nav>
+<main class="grid" id="grid" aria-live="polite"></main>
+
+<div class="dock" id="dock" role="region" aria-label="Your shortlist">
+  <span class="t" id="dockText"></span>
+  <button class="btn hide-s" id="cmpBtn">Compare</button>
+  <button class="btn pri" id="shareBtn">Send picks</button>
+</div>
+
+<div class="pv" id="pv" role="dialog" aria-modal="true" aria-label="Preview">
+  <div class="pv-top">
+    <button class="btn ic" id="pvClose" aria-label="Close preview"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+    <div class="name" id="pvName"></div>
+    <div class="seg" id="pvSeg"><button aria-pressed="true" data-d="lap">Laptop</button><button aria-pressed="false" data-d="phone">Phone</button></div>
+    <button class="btn ic heart" id="pvHeart" aria-label="Shortlist" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-9.2-8.6C1.3 8.4 3 5 6.4 5c2 0 3.3 1.1 4.1 2.3h3C14.3 6.1 15.6 5 17.6 5 21 5 22.7 8.4 21.2 11.4 19 15.6 12 20 12 20z"/></svg></button>
+    <button class="btn ic hide-s" id="pvPrev" aria-label="Previous version"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3L5 8l5 5"/></svg></button>
+    <button class="btn ic" id="pvNext" aria-label="Next version"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3l5 5-5 5"/></svg></button>
+    <a class="btn hide-s" id="pvOpen" target="_blank" rel="noopener">Open ↗</a>
+  </div>
+  <div class="pv-stage"><div class="frame" id="pvFrame"><iframe id="pvIf" title="Version preview" loading="lazy"></iframe></div></div>
+</div>
+
+<div class="cmp" id="cmp" role="dialog" aria-modal="true" aria-label="Compare shortlisted versions">
+  <div class="pv-top"><button class="btn ic" id="cmpClose" aria-label="Close compare"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3L3 13"/></svg></button><div class="name">Side by side <small>first three on your shortlist</small></div></div>
+  <div class="cmp-grid" id="cmpGrid"></div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<footer>Concepts for MD Projects NZ Ltd · Proudly designed by AMBS Solutions</footer>
+
+<script>
+// ---------- the twenty versions ----------
+// rec: our recommended picks (rank 1 = top pick); why: the reason shown on the card
+const V = [
+  { n: '01', name: 'Editorial Luxury', type: 'Premium', pitch: 'A print-magazine feature: elegant serif headlines, chapters and slow cinematic photo reveals.' },
+  { n: '02', name: 'Swiss Minimal', type: 'Minimal', pitch: 'Strict grid, giant numbers, one colour. Nothing extra, everything precise.' },
+  { n: '03', name: 'Dark Cinematic', type: 'Premium', pitch: 'Full-screen film: night palette, grain and project scenes that play like a trailer.' },
+  { n: '04', name: 'Bold Brutalist', type: 'Bold', pitch: 'Huge condensed type, thick lines and solid colour blocks. Impossible to ignore.' },
+  { n: '05', name: "Architect's Blueprint", type: 'Bold', pitch: 'Blueprint paper and technical drawings. The plan draws itself, then the house appears.' },
+  { n: '06', name: 'Scandinavian Calm', type: 'Warm', pitch: 'Soft, airy and natural with rounded shapes and a calm, unhurried feel.' },
+  { n: '07', name: 'Sky Glass', type: 'Interactive', pitch: 'Sky-blue gradients and frosted glass cards that tilt toward your pointer.' },
+  { n: '08', name: 'Bento Grid', type: 'Minimal', pitch: 'Apple-style tiles of every size. Everything at a glance, tap to expand.' },
+  { n: '09', name: 'Split Screen', type: 'Interactive', pitch: 'A fixed royal-blue panel names each section while the content scrolls beside it.' },
+  { n: '10', name: 'Horizontal Journey', type: 'Interactive', pitch: 'Scroll down to walk sideways along a street of finished MD homes.' },
+  { n: '11', name: 'Trusted Builder', type: 'Conversion', pitch: 'Built to win enquiries: instant-quote wizard, trust bar, reviews and call buttons.' },
+  { n: '12', name: 'Warm Modern Serif', type: 'Warm', pitch: 'Terracotta and sand with arched photo windows that open as you scroll.' },
+  { n: '13', name: 'Kinetic Typography', type: 'Bold', pitch: 'Words are the hero: giant moving type with the homes playing inside the letters.' },
+  { n: '14', name: 'Monochrome Gallery', type: 'Premium', pitch: 'An exhibition of your homes: black-and-white photos bloom into colour.' },
+  { n: '15', name: 'Developer & Investor', type: 'Conversion', pitch: 'Data-led for investors with an interactive development snapshot.' },
+  { n: '16', name: 'Story Timeline', type: 'Warm', pitch: 'The MD story from March 2020 to 1,000+ homes, on a glowing line that draws as you scroll.' },
+  { n: '17', name: 'App-like Mobile', type: 'Interactive', pitch: 'Feels like a native app: tab bar, cards and project sheets that slide up.' },
+  { n: '18', name: 'Art Deco Prestige', type: 'Premium', pitch: 'Navy and brass with geometric deco frames that draw themselves around each photo.' },
+  { n: '19', name: 'Green & Sustainable', type: 'Warm', pitch: 'Fresh sage and sky, focused on quality, durability and long-term value.' },
+  { n: '20', name: 'Immersive 3D Depth', type: 'Interactive', pitch: 'Layered parallax depth and a 3D ring of projects you can spin.' }
+];
+const REC = {
+  '03': { rank: 1, why: 'Our top pick: the most luxurious and memorable, and it builds on the video-led direction you already like.' },
+  '01': { rank: 2, why: 'The most elegant and premium. Feels like a high-end magazine feature on MD Projects.' },
+  '11': { rank: 3, why: 'Best for winning enquiries: quote wizard in the hero, trust bar and call buttons on phones.' },
+  '08': { rank: 4, why: 'The clearest at a glance, especially on phones. Modern, tidy and easy to keep up to date.' }
+};
+
+// ---------- state: shortlist + favourite (this browser), and picks shared by link ----------
+const store = { get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+                set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+let liked = new Set(store.get('mdv-liked', [])), fav = store.get('mdv-fav', null), filter = 'all';
+const save = () => { store.set('mdv-liked', [...liked]); store.set('mdv-fav', fav); };
+
+const $ = s => document.querySelector(s), grid = $('#grid'), bar = $('#bar');
+const heartSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-9.2-8.6C1.3 8.4 3 5 6.4 5c2 0 3.3 1.1 4.1 2.3h3C14.3 6.1 15.6 5 17.6 5 21 5 22.7 8.4 21.2 11.4 19 15.6 12 20 12 20z"/></svg>';
+const url = v => `v${v.n}/`;
+const types = [...new Set(V.map(v => v.type))];
+
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2600); }
+
+function renderBar() {
+  const recN = Object.keys(REC).length;
+  const chips = [['all', 'All', V.length], ...(recN ? [['rec', '★ Recommended', recN]] : []), ['liked', '♥ Shortlist', liked.size], ...types.map(t => [t, t, V.filter(v => v.type === t).length])];
+  bar.innerHTML = chips.map(([k, l, n]) => `<button class="chip" data-f="${k}" aria-pressed="${filter === k}">${l} <span class="n">${n}</span></button>`).join('');
+}
+function visible() {
+  let list = V.filter(v => filter === 'all' ? true : filter === 'rec' ? REC[v.n] : filter === 'liked' ? liked.has(v.n) : v.type === filter);
+  if (filter === 'rec') list.sort((a, b) => REC[a.n].rank - REC[b.n].rank);
+  return list;
+}
+function renderGrid() {
+  const list = visible();
+  grid.innerHTML = list.length ? list.map(v => {
+    const r = REC[v.n];
+    return `<article class="card${fav === v.n ? ' is-final' : ''}" data-n="${v.n}">
+      <button class="shot" data-act="preview" aria-label="Preview ${v.name}">
+        <img class="d" src="thumbs/v${v.n}-d.webp" alt="" loading="lazy" onerror="this.remove()">
+        <img class="m" src="thumbs/v${v.n}-m.webp" alt="" loading="lazy" onerror="this.remove()">
+        <span class="view">Preview</span>
+      </button>
+      <div class="tags">${fav === v.n ? '<span class="tag fin">♛ Your favourite</span>' : ''}${r ? `<span class="tag ${r.rank === 1 ? 'top1' : 'rec'}">${r.rank === 1 ? '★ Top pick' : '★ Recommended'}</span>` : ''}</div>
+      <div class="body">
+        <div class="ttl"><span class="num">${v.n}</span><h2>${v.name}</h2></div>
+        <div class="type">${v.type}</div>
+        <p class="pitch">${v.pitch}</p>
+        ${r ? `<p class="why">${r.why}</p>` : ''}
+        <div class="acts">
+          <button class="btn pri" data-act="preview">Preview</button>
+          <a class="btn" href="${url(v)}" target="_blank" rel="noopener">Open ↗</a>
+          <span style="flex:1"></span>
+          <button class="btn ic crown" data-act="fav" aria-pressed="${fav === v.n}" aria-label="Choose ${v.name} as your favourite" title="Choose as favourite">♛</button>
+          <button class="btn ic heart" data-act="like" aria-pressed="${liked.has(v.n)}" aria-label="Shortlist ${v.name}" title="Shortlist">${heartSVG}</button>
+        </div>
+      </div></article>`;
+  }).join('') : `<p class="empty">${filter === 'liked' ? 'Nothing shortlisted yet. Tap ♥ on the versions you like.' : 'No versions here.'}</p>`;
+}
+function renderDock() {
+  const d = $('#dock'), n = liked.size;
+  d.classList.toggle('on', n > 0 || !!fav);
+  const f = fav ? V.find(v => v.n === fav) : null;
+  $('#dockText').textContent = `${n} shortlisted` + (f ? ` · ♛ ${f.n} ${f.name}` : '');
+  $('#cmpBtn').hidden = n < 2;
+}
+function render() { renderBar(); renderGrid(); renderDock(); }
+
+function toggleLike(n) { liked.has(n) ? liked.delete(n) : liked.add(n); save(); render(); syncPv(); toast(liked.has(n) ? `Added ${n} to your shortlist` : `Removed ${n} from your shortlist`); }
+function toggleFav(n) { fav = fav === n ? null : n; if (fav) liked.add(n); save(); render(); toast(fav ? `${n} ${V.find(v => v.n === n).name} is your favourite` : 'Favourite cleared'); }
+
+bar.addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; filter = b.dataset.f; render(); });
+grid.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return; const n = b.closest('.card').dataset.n;
+  if (b.dataset.act === 'like') toggleLike(n); else if (b.dataset.act === 'fav') toggleFav(n); else openPv(n);
+});
+
+// ---------- preview ----------
+let cur = null, dev = innerWidth < 760 ? 'phone' : 'lap';
+const pv = $('#pv'), ifr = $('#pvIf');
+function syncPv() { if (!cur) return; $('#pvHeart').setAttribute('aria-pressed', liked.has(cur)); }
+function openPv(n) {
+  cur = n; const v = V.find(x => x.n === n);
+  $('#pvName').innerHTML = `${v.n} · ${v.name}<small>${v.type}</small>`;
+  $('#pvOpen').href = url(v); ifr.src = url(v);
+  $('#pvFrame').classList.toggle('phone', dev === 'phone');
+  $('#pvSeg').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.d === dev));
+  syncPv(); pv.classList.add('open'); document.body.style.overflow = 'hidden';
+}
+function closePv() { pv.classList.remove('open'); ifr.src = 'about:blank'; cur = null; document.body.style.overflow = ''; }
+function step(d) { const list = visible(); let i = list.findIndex(v => v.n === cur); if (i < 0) i = 0; openPv(list[(i + d + list.length) % list.length].n); }
+$('#pvClose').onclick = closePv; $('#pvNext').onclick = () => step(1); $('#pvPrev').onclick = () => step(-1);
+$('#pvHeart').onclick = () => toggleLike(cur);
+$('#pvSeg').onclick = e => { const b = e.target.closest('button'); if (!b) return; dev = b.dataset.d; openPv(cur); };
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closePv(); closeCmp(); }
+  if (!cur) return; if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1);
+});
+
+// ---------- compare ----------
+const cmp = $('#cmp');
+function closeCmp() { cmp.classList.remove('open'); $('#cmpGrid').innerHTML = ''; document.body.style.overflow = ''; }
+$('#cmpBtn').onclick = () => {
+  const ids = V.filter(v => liked.has(v.n)).slice(0, 3);
+  $('#cmpGrid').innerHTML = ids.map(v => `<div class="cmp-col"><div class="h"><span>${v.n} · ${v.name}</span><a href="${url(v)}" target="_blank" rel="noopener">Open ↗</a></div><iframe src="${url(v)}" title="${v.name}"></iframe></div>`).join('');
+  cmp.classList.add('open'); document.body.style.overflow = 'hidden';
+};
+$('#cmpClose').onclick = closeCmp;
+
+// ---------- share picks by link ----------
+function shareURL() { const p = new URLSearchParams(); if (liked.size) p.set('s', [...liked].sort().join('.')); if (fav) p.set('f', fav); return location.origin + location.pathname + '?' + p; }
+$('#shareBtn').onclick = async () => {
+  const u = shareURL(), f = fav ? V.find(v => v.n === fav) : null;
+  const text = `My picks for the MD Projects website: ${[...liked].sort().map(n => n + ' ' + V.find(v => v.n === n).name).join(', ')}${f ? `. Favourite: ${f.n} ${f.name}` : ''}.`;
+  if (navigator.share) { try { await navigator.share({ title: 'MD Projects website picks', text, url: u }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(text + '\n' + u); toast('Link to your picks copied. Paste it in a message to us.'); }
+  catch { prompt('Copy this link and send it to us:', u); }
+};
+// someone opened a shared link: show their picks without overwriting this browser's own
+(() => {
+  const p = new URLSearchParams(location.search), s = (p.get('s') || '').split('.').filter(n => V.some(v => v.n === n)), f = p.get('f');
+  if (!s.length && !f) return;
+  const names = s.map(n => `${n} ${V.find(v => v.n === n).name}`).join(', ');
+  const fv = V.find(v => v.n === f);
+  $('#sharedText').textContent = `Shared picks: ${names || 'none'}${fv ? ` · Favourite: ${fv.n} ${fv.name}` : ''}`;
+  $('#shared').classList.add('on');
+  $('#adopt').onclick = () => { liked = new Set(s); fav = fv ? f : null; save(); filter = 'liked'; render(); $('#shared').classList.remove('on'); history.replaceState(null, '', location.pathname); toast('Picks loaded into your shortlist'); };
+})();
+
+render();
+</script>
+</body>
+</html>
