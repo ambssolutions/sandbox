@@ -177,6 +177,7 @@ footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 0 2
 // ---------- the twenty versions ----------
 // rec: our recommended picks (rank 1 = top pick); why: the reason shown on the card
 const V = [
+  { n: '00', name: 'Current Site', type: 'Original', pitch: 'The site we built together: video hero, turning service book, build stories, home planner and more.', href: '../' },
   { n: '01', name: 'Editorial Luxury', type: 'Premium', pitch: 'A print-magazine feature: elegant serif headlines, chapters and slow cinematic photo reveals.' },
   { n: '02', name: 'Swiss Minimal', type: 'Minimal', pitch: 'Strict grid, giant numbers, one colour. Nothing extra, everything precise.' },
   { n: '03', name: 'Dark Cinematic', type: 'Premium', pitch: 'Full-screen film: night palette, grain and project scenes that play like a trailer.' },
@@ -213,7 +214,7 @@ const save = () => { store.set('mdv-liked', [...liked]); store.set('mdv-fav', fa
 
 const $ = s => document.querySelector(s), grid = $('#grid'), bar = $('#bar');
 const heartSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-9.2-8.6C1.3 8.4 3 5 6.4 5c2 0 3.3 1.1 4.1 2.3h3C14.3 6.1 15.6 5 17.6 5 21 5 22.7 8.4 21.2 11.4 19 15.6 12 20 12 20z"/></svg>';
-const url = v => `v${v.n}/`;
+const url = v => v.href || `v${v.n}/`;
 const types = [...new Set(V.map(v => v.type))];
 
 function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2600); }
