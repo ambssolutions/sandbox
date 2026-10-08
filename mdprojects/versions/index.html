@@ -131,7 +131,7 @@ footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 0 2
 <body>
 <header class="top"><div class="top-in">
   <img src="../images/logo.svg" alt="MD Projects NZ" width="120" height="40">
-  <a class="live" href="../">View current site</a>
+  <a class="live" href="../">View first preference</a>
 </div></header>
 
 <section class="hero">
@@ -177,7 +177,7 @@ footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 0 2
 // ---------- the twenty versions ----------
 // rec: our recommended picks (rank 1 = top pick); why: the reason shown on the card
 const V = [
-  { n: '00', name: 'Current Site', type: 'Original', pitch: 'The site we built together: video hero, turning service book, build stories, home planner and more.', href: '../' },
+  { n: '00', name: 'Signature Edition', type: 'First preference', pitch: 'Our first preference: video hero, a service book that turns as you scroll, build stories, a home planner, light and dark modes, and more.', href: '../' },
   { n: '01', name: 'Editorial Luxury', type: 'Premium', pitch: 'A print-magazine feature: elegant serif headlines, chapters and slow cinematic photo reveals.' },
   { n: '02', name: 'Swiss Minimal', type: 'Minimal', pitch: 'Strict grid, giant numbers, one colour. Nothing extra, everything precise.' },
   { n: '03', name: 'Dark Cinematic', type: 'Premium', pitch: 'Full-screen film: night palette, grain and project scenes that play like a trailer.' },
@@ -200,10 +200,11 @@ const V = [
   { n: '20', name: 'Immersive 3D Depth', type: 'Interactive', pitch: 'Layered parallax depth and a 3D ring of projects you can spin.' }
 ];
 const REC = {
-  '03': { rank: 1, why: 'Our top pick: the most luxurious and memorable, and it builds on the video-led direction you already like.' },
-  '01': { rank: 2, why: 'The most elegant and premium. Feels like a high-end magazine feature on MD Projects.' },
-  '11': { rank: 3, why: 'Best for winning enquiries: quote wizard in the hero, trust bar and call buttons on phones.' },
-  '08': { rank: 4, why: 'The clearest at a glance, especially on phones. Modern, tidy and easy to keep up to date.' }
+  '00': { rank: 1, why: 'First preference: the most complete and polished design, refined in detail for phones and laptops.' },
+  '03': { rank: 2, why: 'The most luxurious of the new styles, and it builds on the same video-led feel.' },
+  '01': { rank: 3, why: 'The most elegant and premium. Feels like a high-end magazine feature on MD Projects.' },
+  '11': { rank: 4, why: 'Best for winning enquiries: quote wizard in the hero, trust bar and call buttons on phones.' },
+  '08': { rank: 5, why: 'The clearest at a glance, especially on phones. Modern, tidy and easy to keep up to date.' }
 };
 
 // ---------- state: shortlist + favourite (this browser), and picks shared by link ----------
@@ -239,7 +240,7 @@ function renderGrid() {
         <img class="m" src="thumbs/v${v.n}-m.webp" alt="" loading="lazy" onerror="this.remove()">
         <span class="view">Preview</span>
       </button>
-      <div class="tags">${fav === v.n ? '<span class="tag fin">♛ Your favourite</span>' : ''}${r ? `<span class="tag ${r.rank === 1 ? 'top1' : 'rec'}">${r.rank === 1 ? '★ Top pick' : '★ Recommended'}</span>` : ''}</div>
+      <div class="tags">${fav === v.n ? '<span class="tag fin">♛ Your favourite</span>' : ''}${r ? `<span class="tag ${r.rank === 1 ? 'top1' : 'rec'}">${r.rank === 1 ? '★ First preference' : '★ Recommended'}</span>` : ''}</div>
       <div class="body">
         <div class="ttl"><span class="num">${v.n}</span><h2>${v.name}</h2></div>
         <div class="type">${v.type}</div>
