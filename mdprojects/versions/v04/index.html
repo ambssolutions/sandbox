@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta name="md-version" content="04|Bold Brutalist|Neo-brutalist poster|Oversized condensed type, thick borders, raw royal and sky blocks, marquee bands and services as giant clickable slabs.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MD Projects NZ — Homes built beautifully</title>
+<meta name="description" content="MD Projects NZ: Auckland residential builders. Over 1,000 homes delivered at a fixed price, on time and with complete transparency.">
+<link rel="icon" href="../../images/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#111318;--paper:#F3F1EC;--white:#fff;--royal:#3C54A8;--sky:#90CCF0;--b:3px solid var(--ink);--disp:"Bebas Neue",Impact,"Arial Narrow",sans-serif;--txt:Archivo,system-ui,sans-serif;--pad:clamp(16px,3vw,40px)}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:500 16px/1.55 var(--txt);overflow-x:hidden}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4,p{margin:0}
+:focus-visible{outline:3px solid var(--royal);outline-offset:3px}
+.skip{position:absolute;left:-999px;top:0;z-index:300;background:var(--ink);color:#fff;padding:12px 16px}.skip:focus{left:0}
+.disp{font-family:var(--disp);font-weight:400;line-height:.86;letter-spacing:.005em;text-transform:uppercase}
+.tag{display:inline-block;font:800 12px/1 var(--txt);letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:#fff;padding:7px 10px}
+.tag.sky{background:var(--sky);color:var(--ink)}
+.tag.roy{background:var(--royal)}
+.frame{border:var(--b)}
+.wrap{padding:0 var(--pad)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:56px;padding:0 24px;border:var(--b);background:var(--sky);color:var(--ink);font:800 15px var(--txt);letter-spacing:.04em;text-transform:uppercase;cursor:pointer;box-shadow:5px 5px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+.btn:active{transform:translate(5px,5px);box-shadow:0 0 0 var(--ink)}
+.btn.w{background:#fff}.btn.k{background:var(--ink);color:#fff;box-shadow:5px 5px 0 var(--sky)}
+.btn.k:hover{box-shadow:7px 7px 0 var(--sky)}
+
+/* header */
+header.top{position:sticky;top:0;z-index:100;background:var(--paper);border-bottom:var(--b)}
+.hd{display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;height:76px}
+.logo{display:flex;align-items:center;padding:0 var(--pad);border-right:var(--b);background:#fff}
+.logo img{height:58px;width:auto}
+nav.main{display:flex}
+nav.main a{flex:1;display:flex;align-items:center;justify-content:center;border-right:var(--b);font:800 15px var(--txt);text-transform:uppercase;letter-spacing:.06em;position:relative;overflow:hidden;z-index:0}
+nav.main a::before{content:"";position:absolute;inset:0;background:var(--royal);transform:translateY(101%);transition:transform .25s;z-index:-1}
+nav.main a:hover{color:#fff}
+nav.main a:hover::before{transform:none}
+.hd .quote{display:flex;align-items:center;gap:10px;padding:0 28px;background:var(--sky);font:900 15px var(--txt);text-transform:uppercase;letter-spacing:.04em;transition:background .2s}
+.hd .quote:hover{background:var(--ink);color:#fff}
+.menu-btn{display:none;border:0;border-left:var(--b);background:var(--sky);font:900 15px var(--txt);text-transform:uppercase;padding:0 20px;min-width:56px;cursor:pointer;color:var(--ink)}
+.mm{position:fixed;inset:0;z-index:150;visibility:hidden;background:var(--royal);color:#fff;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.7,0,.3,1),visibility .35s}
+.mm.open{transform:none;visibility:visible}
+.mm .mt{display:flex;justify-content:space-between;align-items:stretch;height:68px;border-bottom:3px solid #fff}
+.mm .mt img{height:48px;margin:10px var(--pad)}
+.mm .mt button{border:0;border-left:3px solid #fff;background:var(--ink);color:#fff;font:900 15px var(--txt);text-transform:uppercase;padding:0 20px;cursor:pointer}
+.mm a.l{display:block;font:400 64px/1 var(--disp);padding:14px var(--pad) 8px;border-bottom:3px solid #fff;transition:background .2s,color .2s}
+.mm a.l:hover{background:var(--sky);color:var(--ink)}
+.mm .mf{margin-top:auto;padding:20px var(--pad) 84px;display:grid;font-weight:700}
+.mm .mf a{padding:10px 0}
+
+/* hero */
+.hero{border-bottom:var(--b);overflow:hidden}
+.h-words{padding:clamp(16px,2vw,28px) var(--pad) 0;font-size:clamp(84px,19.5vw,330px)}
+.h-words .ln{display:block;white-space:nowrap;will-change:transform;line-height:.9}
+.h-words .ln+.ln{margin-top:.04em}
+.h-words .ln:nth-child(2){color:var(--royal);text-align:right}
+.h-words .ln:nth-child(3){-webkit-text-stroke:0;color:var(--ink)}
+.h-words .ln .hi{background:var(--sky);padding:.04em .06em 0;display:inline-block;line-height:.86}
+.h-grid{display:grid;grid-template-columns:1.25fr 1fr;border-top:var(--b);margin-top:clamp(14px,2vw,24px)}
+.h-media{position:relative;border-right:var(--b);aspect-ratio:16/10;overflow:hidden;background:var(--ink)}
+.h-media video{width:100%;height:100%;object-fit:cover}
+.h-media .tag{position:absolute;left:16px;top:16px}
+.h-media .rec{position:absolute;right:16px;bottom:16px;background:#fff;border:var(--b);font:800 12px var(--txt);padding:6px 10px;text-transform:uppercase}
+.h-copy{display:flex;flex-direction:column;justify-content:space-between;background:var(--royal);color:#fff}
+.h-copy .top{padding:clamp(22px,3vw,40px)}
+.h-copy p.sub{font:700 clamp(22px,2.2vw,32px)/1.2 var(--txt);letter-spacing:-.01em;margin-top:18px}
+.h-copy .ctas{display:grid;grid-template-columns:1fr 1fr;border-top:3px solid var(--ink)}
+.h-copy .ctas a{min-height:84px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,2vw,28px);font:900 16px var(--txt);text-transform:uppercase;letter-spacing:.03em;transition:background .2s,color .2s}
+.h-copy .ctas a:first-child{background:var(--sky);color:var(--ink);border-right:3px solid var(--ink)}
+.h-copy .ctas a:last-child{background:#fff;color:var(--ink)}
+.h-copy .ctas a:hover{background:var(--ink);color:#fff}
+.h-copy .ctas a span{font-size:26px;transition:transform .2s}
+.h-copy .ctas a:hover span{transform:translateX(6px)}
+
+/* marquee */
+.marq{overflow:hidden;border-bottom:var(--b);background:var(--ink);color:#fff;white-space:nowrap}
+.marq.sky{background:var(--sky);color:var(--ink)}
+.marq .tr{display:inline-flex;animation:mq 26s linear infinite;padding:14px 0}
+.marq.rev .tr{animation-direction:reverse}
+.marq span{font:400 clamp(30px,4vw,54px)/1 var(--disp);padding:0 22px;display:inline-flex;align-items:center;gap:44px}
+.marq span::after{content:"";width:18px;height:18px;background:currentColor;transform:rotate(45deg)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* section heads w/ sliding words */
+.sh{display:grid;grid-template-columns:auto 1fr;border-bottom:var(--b)}
+.sh .num{font:400 clamp(60px,8vw,130px)/.8 var(--disp);padding:20px var(--pad) 10px;border-right:var(--b);background:var(--sky);display:flex;align-items:flex-end}
+.sh h2{font-size:clamp(56px,9vw,150px);padding:18px var(--pad) 8px;overflow:hidden}
+.sh h2 .w{display:inline-block}
+.js .sh h2 .w{transform:translateX(var(--from,-110%));opacity:0;transition:transform .8s cubic-bezier(.2,.9,.2,1),opacity .4s}
+.js .sh.in h2 .w{transform:none;opacity:1}
+.sh .aside{grid-column:1/-1;border-top:var(--b);padding:16px var(--pad);font:600 17px/1.5 var(--txt);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;background:#fff}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:var(--b)}
+.st{padding:clamp(20px,2.4vw,36px) var(--pad);border-right:var(--b);position:relative}
+.st:last-child{border-right:0}
+.st:nth-child(1){background:var(--royal);color:#fff}
+.st:nth-child(3){background:var(--sky)}
+.st .n{font:400 clamp(64px,7.4vw,136px)/.82 var(--disp);white-space:nowrap}
+.stats,.about,.qtp{overflow:hidden}
+.st .l{font:800 14px var(--txt);text-transform:uppercase;letter-spacing:.06em;margin-top:12px}
+.about{display:grid;grid-template-columns:1fr 1fr;border-bottom:var(--b)}
+.about .txt{padding:clamp(24px,3vw,48px) var(--pad);border-right:var(--b);font:700 clamp(22px,2.2vw,34px)/1.25 var(--txt);letter-spacing:-.015em}
+.about .txt mark{background:var(--sky);color:var(--ink);padding:0 4px}
+.about .ph{position:relative;overflow:hidden;min-height:360px}
+.about .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.about .ph .tag{position:absolute;left:16px;bottom:16px}
+.qtp{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:var(--b)}
+.qtp>div{padding:clamp(22px,2.6vw,40px) var(--pad);border-right:var(--b);background:#fff;transition:background .2s}
+.qtp>div:last-child{border-right:0}
+.qtp>div:hover{background:var(--sky)}
+.qtp .big{font:400 clamp(64px,7vw,120px)/.85 var(--disp);margin:16px 0 10px}
+.qtp .big small{font-size:.38em;margin-left:6px}
+.qtp h3{font:900 20px/1.2 var(--txt);text-transform:uppercase;margin-bottom:6px}
+.qtp p{font-weight:500;color:#2c2f38}
+
+/* service slabs */
+.slab{display:grid;grid-template-columns:clamp(80px,9vw,140px) 1fr minmax(0,34%);border-bottom:var(--b);position:relative;overflow:hidden;min-height:clamp(140px,14vw,220px);z-index:0}
+.slab::before{content:"";position:absolute;inset:0;background:var(--royal);transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.7,0,.3,1);z-index:-1}
+.slab:hover::before,.slab:focus-visible::before{transform:none}
+.slab:hover,.slab:focus-visible{color:#fff}
+.slab .no{border-right:var(--b);display:flex;align-items:center;justify-content:center;font:400 clamp(44px,5vw,80px)/1 var(--disp);background:#fff;color:var(--ink);transition:background .2s}
+.slab:hover .no{background:var(--sky)}
+.slab .tx{padding:18px var(--pad);display:flex;flex-direction:column;justify-content:center;gap:10px}
+.slab h3{font:400 clamp(48px,7vw,116px)/.85 var(--disp);text-transform:uppercase}
+.slab p{font:600 16px/1.45 var(--txt);max-width:560px}
+.slab .im{border-left:var(--b);position:relative;overflow:hidden}
+.slab .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1);transform:scale(1.08);transition:transform .5s,filter .3s}
+.slab:hover .im img{filter:none;transform:scale(1)}
+.slab .arr{position:absolute;right:18px;top:18px;width:56px;height:56px;border:var(--b);background:var(--sky);display:grid;place-items:center;font:900 26px var(--txt);color:var(--ink);transform:rotate(-45deg);transition:transform .3s}
+.slab:hover .arr{transform:none}
+
+/* projects */
+.proj{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border-bottom:var(--b);background-image:linear-gradient(var(--ink) 0 0);}
+.pj{position:relative;border-right:var(--b);border-bottom:var(--b);background:#fff;display:flex;flex-direction:column}
+.pj:nth-child(1){grid-column:span 4}.pj:nth-child(2){grid-column:span 2;border-right:0}
+.pj:nth-child(3),.pj:nth-child(4),.pj:nth-child(5){grid-column:span 2;border-bottom:0}
+.pj:nth-child(5){border-right:0}
+.pj .ph{position:relative;overflow:hidden;aspect-ratio:4/3;border-bottom:var(--b)}
+.pj:nth-child(1) .ph{aspect-ratio:auto;flex:1;min-height:420px}
+.pj .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.pj:hover .ph img{transform:scale(1.06)}
+.pj .ph .tag{position:absolute;left:14px;top:14px;z-index:1}
+.pj .cap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;transition:background .2s}
+.pj:hover .cap{background:var(--sky)}
+.pj h3{font:400 clamp(34px,3.4vw,54px)/.9 var(--disp)}
+.pj .cap p{font:700 13px var(--txt);text-transform:uppercase;letter-spacing:.04em;text-align:right}
+.proj-more{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px var(--pad);border-bottom:var(--b);flex-wrap:wrap;background:var(--paper)}
+.proj-more p{font:700 18px var(--txt)}
+
+/* process */
+.proc{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:var(--b)}
+.pc{padding:clamp(22px,2.6vw,36px) var(--pad);border-right:var(--b);border-bottom:var(--b);background:#fff;position:relative;overflow:hidden}
+.pc:nth-child(3n){border-right:0}
+.pc:nth-child(n+4){border-bottom:0}
+.pc .n{font:400 clamp(90px,10vw,160px)/.8 var(--disp);color:var(--paper);-webkit-text-stroke:3px var(--ink);margin-bottom:14px}
+.pc:nth-child(2) .n,.pc:nth-child(4) .n,.pc:nth-child(6) .n{color:var(--sky)}
+.pc h3{font:900 21px/1.15 var(--txt);text-transform:uppercase;margin-bottom:8px}
+.pc p{color:#2c2f38}
+
+/* testimonials */
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.4vw,32px);padding:clamp(24px,3vw,48px) var(--pad);border-bottom:var(--b);background:var(--sky)}
+.tq{background:#fff;border:var(--b);box-shadow:8px 8px 0 var(--ink);padding:clamp(22px,2.6vw,36px);display:flex;flex-direction:column;margin:0}
+.tq:nth-child(2),.tq:nth-child(3){background:var(--paper)}
+.tq .qm{font:400 110px/.6 var(--disp);color:var(--royal);height:48px}
+.tq blockquote{margin:0;font:700 clamp(18px,1.5vw,21px)/1.45 var(--txt)}
+.tq figcaption{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:auto;padding-top:22px;border-top:3px solid var(--ink);margin-top:22px}
+.tq figcaption b{font:400 30px/1 var(--disp)}
+.tq figcaption .tag{background:var(--royal)}
+
+/* founder */
+.fd{display:grid;grid-template-columns:1fr 1.1fr;border-bottom:var(--b)}
+.fd .ph{border-right:var(--b);position:relative;overflow:hidden;min-height:560px;background:var(--ink)}
+.fd .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:65% 25%}
+.fd .tx{display:flex;flex-direction:column}
+.fd .name{font:400 clamp(72px,9vw,150px)/.82 var(--disp);padding:clamp(22px,3vw,40px) var(--pad) 12px}
+.fd .role{padding:0 var(--pad) 20px;font:800 14px var(--txt);text-transform:uppercase;letter-spacing:.06em}
+.fd .q{border-top:var(--b);padding:22px var(--pad);font:800 clamp(20px,1.8vw,26px)/1.3 var(--txt);background:#fff}
+.fd .bio{border-top:var(--b);padding:22px var(--pad)}
+.fd .row{display:grid;grid-template-columns:auto 1fr;border-top:var(--b);margin-top:auto}
+.fd .row .n98{background:var(--royal);color:#fff;font:400 clamp(90px,9vw,150px)/.8 var(--disp);padding:20px var(--pad) 8px;border-right:var(--b)}
+.fd .row .lab{padding:18px var(--pad);display:flex;flex-direction:column;justify-content:center;font:800 16px var(--txt);text-transform:uppercase}
+.fd .vals{display:flex;flex-wrap:wrap;gap:8px;padding:18px var(--pad);border-top:var(--b);background:var(--sky)}
+.fd .vals span{border:var(--b);background:#fff;padding:6px 12px;font:800 13px var(--txt);text-transform:uppercase}
+
+/* blog */
+.blog{padding:clamp(24px,3vw,48px) var(--pad);border-bottom:var(--b)}
+.posts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,2.4vw,32px)}
+.card{display:flex;flex-direction:column;height:100%;background:#fff;border:var(--b);box-shadow:6px 6px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+.card:hover,.card:focus-visible{transform:translate(-3px,-3px);box-shadow:10px 10px 0 var(--royal)}
+.card .ph{display:block;aspect-ratio:16/10;overflow:hidden;border-bottom:var(--b)}
+.card .ph img{width:100%;height:100%;object-fit:cover}
+.card .body{display:flex;flex-direction:column;flex:1;padding:22px 22px 24px}
+.card .ctag{align-self:flex-start;font:800 .78rem/1 var(--txt);letter-spacing:.06em;text-transform:uppercase;background:var(--sky);border:2px solid var(--ink);padding:6px 9px}
+.card .meta{font:600 .8rem/1.4 var(--txt);color:#3a3e48;margin-top:12px}
+.card h3{font:700 1.3rem/1.25 var(--txt);letter-spacing:-.01em;margin:10px 0 10px;max-width:32ch;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card p{font:500 1rem/1.6 var(--txt);color:#3a3e48;margin:0 0 18px;max-width:60ch;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card .more{margin-top:auto;font:800 .95rem var(--txt);color:var(--royal);display:inline-flex;gap:8px}
+.card:hover .more{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.allp{margin-top:36px}
+
+/* contact */
+.contact{background:var(--ink);color:#fff}
+.contact .sh{border-color:#fff;border-bottom:3px solid #fff}
+.contact .sh .num{border-right:3px solid #fff;color:var(--ink)}
+.contact .sh .aside{background:var(--ink);border-top:3px solid #fff;color:#d9dde6}
+.cg{display:grid;grid-template-columns:1fr 1.3fr}
+.ci{border-right:3px solid #fff}
+.ci a,.ci address{display:block;padding:22px var(--pad);border-bottom:3px solid #fff;font-style:normal;transition:background .2s,color .2s}
+.ci a:hover{background:var(--sky);color:var(--ink)}
+.ci small{display:block;font:800 12px var(--txt);text-transform:uppercase;letter-spacing:.08em;color:var(--sky);margin-bottom:4px}
+.ci a:hover small{color:var(--ink)}
+.ci .v{font:400 clamp(30px,3vw,46px)/1 var(--disp)}
+form.q{padding:clamp(22px,3vw,40px) var(--pad);display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fld{display:flex;flex-direction:column;gap:6px}
+.fld.full{grid-column:1/-1}
+.fld label{font:800 12px var(--txt);text-transform:uppercase;letter-spacing:.08em;color:var(--sky)}
+.fld input,.fld select,.fld textarea{border:3px solid #fff;background:var(--ink);color:#fff;font:600 17px var(--txt);padding:12px 14px;min-height:54px;border-radius:0;outline:none;width:100%;transition:box-shadow .15s,transform .15s}
+.fld select{appearance:none;-webkit-appearance:none;cursor:pointer;background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%2390CCF0' stroke-width='2.5'/%3E%3C/svg%3E") no-repeat right 14px center}
+.fld textarea{min-height:120px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{box-shadow:5px 5px 0 var(--sky);transform:translate(-2px,-2px)}
+.fsub{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.fsub p{color:#b9bfcc;font-size:14px}
+
+/* footer */
+footer{background:var(--royal);color:#fff;border-top:3px solid #fff}
+.fbig{font:400 clamp(90px,14vw,250px)/.8 var(--disp);padding:28px 0 12px;white-space:nowrap;overflow:hidden;border-bottom:var(--b)}
+.ftr{display:inline-flex;animation:mq 30s linear infinite}
+.ftr span{padding-right:.4em}
+.ftr span::after{content:"\2726";color:var(--sky);margin-left:.4em}
+.fcols{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:var(--b)}
+.fcols>div{padding:22px var(--pad);border-right:var(--b)}
+.fcols>div:last-child{border-right:0}
+.fcols h4{font:400 30px/1 var(--disp);margin-bottom:10px;color:var(--sky)}
+.fcols a,.fcols span{display:block;padding:9px 0;font-weight:600}
+.fcols a:hover{text-decoration:underline;text-decoration-thickness:2px}
+.legal{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:18px var(--pad) 80px;font:700 13px var(--txt);background:var(--ink)}
+
+.back-pill{position:fixed;left:16px;bottom:16px;z-index:9999;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:3px solid var(--ink);background:#fff;color:var(--ink);font:800 13px var(--txt);text-transform:uppercase;box-shadow:4px 4px 0 var(--ink);opacity:.92}
+.back-pill:hover{opacity:1;background:var(--sky)}
+
+@media (max-width:1000px){
+  .hd{grid-template-columns:auto 1fr auto;height:66px}
+  nav.main,.hd .quote{display:none}
+  .menu-btn{display:block;grid-column:3}
+  .logo{border-right:var(--b)}
+  .logo img{height:48px}
+  .h-grid,.about,.cg,.fd{grid-template-columns:minmax(0,1fr)}
+  .h-media{border-right:0;border-bottom:var(--b);aspect-ratio:4/5}
+  .stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .st:nth-child(2){border-right:0}
+  .st:nth-child(-n+2){border-bottom:var(--b)}
+  .about .txt{border-right:0;border-bottom:var(--b)}
+  .qtp,.proc{grid-template-columns:minmax(0,1fr)}
+  .qtp>div,.pc{border-right:0!important;border-bottom:var(--b)!important}
+  .qtp>div:last-child,.pc:last-child{border-bottom:0!important}
+  .slab{grid-template-columns:64px minmax(0,1fr)}
+  .slab .im{grid-column:1/-1;border-left:0;border-top:var(--b);aspect-ratio:16/8}
+  .slab .im img{filter:none}
+  .slab .arr{width:48px;height:48px;top:12px;right:12px}
+  .slab h3{padding-right:56px}
+  .proj{grid-template-columns:minmax(0,1fr)}
+  .pj,.pj:nth-child(n){grid-column:auto;border-right:0;border-bottom:var(--b)}
+  .pj:nth-child(5){border-bottom:0}
+  .pj:nth-child(1) .ph{min-height:0;aspect-ratio:4/3;flex:none}
+  .tgrid{grid-template-columns:minmax(0,1fr)}
+  .fd .ph{border-right:0;border-bottom:var(--b);min-height:0;aspect-ratio:4/5}
+  .posts{grid-template-columns:minmax(0,1fr)}
+  .ci{border-right:0;border-bottom:3px solid #fff}
+  .fcols{grid-template-columns:1fr 1fr}
+  .fcols>div:nth-child(2){border-right:0}
+  .fcols>div:nth-child(-n+2){border-bottom:var(--b)}
+}
+@media (max-width:640px){
+  .sh{grid-template-columns:minmax(0,1fr)}
+  .sh .num{border-right:0;border-bottom:var(--b);padding:12px var(--pad) 6px;font-size:56px}
+  .contact .sh .num{border-bottom:3px solid #fff}
+  .sh h2{font-size:clamp(52px,16vw,80px)}
+  .h-copy .ctas{grid-template-columns:minmax(0,1fr)}
+  .h-copy .ctas a:first-child{border-right:0;border-bottom:3px solid var(--ink)}
+  form.q{grid-template-columns:minmax(0,1fr)}
+  .fsub .btn{width:100%}
+  .fd .row .n98{font-size:96px}
+  .tq{box-shadow:6px 6px 0 var(--ink)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+  .js .sh h2 .w{transform:none;opacity:1}
+  .h-words .ln{transform:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="hd">
+    <a class="logo" href="#top" aria-label="MD Projects NZ, home"><img src="../../images/logo.svg" alt="MD Projects NZ" width="94" height="58"></a>
+    <nav class="main" aria-label="Primary"><a href="#services">Services</a><a href="#projects">Projects</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
+    <a class="quote" href="#contact">Get a quote <span aria-hidden="true">&rarr;</span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mm">Menu</button>
+  </div>
+</header>
+<div class="mm" id="mm" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="mt"><img src="../../images/logo-white.svg" alt="MD Projects NZ"><button id="mmClose">Close &times;</button></div>
+  <a class="l" href="#services">Services</a><a class="l" href="#projects">Projects</a><a class="l" href="#about">About</a><a class="l" href="#news">News</a><a class="l" href="#contact">Get a quote</a>
+  <div class="mf"><a href="tel:0210590409">0210 590 409</a><a href="mailto:info@mdprojects.co.nz">info@mdprojects.co.nz</a></div>
+</div>
+
+<main id="main">
+<section class="hero" id="top">
+  <h1 class="h-words disp" aria-label="Homes built beautifully.">
+    <span class="ln" data-dir="-1" aria-hidden="true">Homes</span>
+    <span class="ln" data-dir="1" aria-hidden="true">Built</span>
+    <span class="ln" data-dir="-1" aria-hidden="true"><span class="hi">Beautifully.</span></span>
+  </h1>
+  <div class="h-grid">
+    <div class="h-media">
+      <video id="heroVideo" muted autoplay loop playsinline preload="metadata" poster="../../images/hero-poster.webp" aria-label="Aerial footage of new MD Projects townhouses"></video>
+      <span class="tag sky">Auckland residential builders</span>
+      <span class="rec">Since March 2020</span>
+    </div>
+    <div class="h-copy">
+      <div class="top"><span class="tag">Your dream is our project</span><p class="sub">Over 1,000 Auckland homes delivered at a fixed price, on time and with complete transparency.</p></div>
+      <div class="ctas"><a href="#contact">Start your project <span aria-hidden="true">&rarr;</span></a><a href="#projects">View our homes <span aria-hidden="true">&darr;</span></a></div>
+    </div>
+  </div>
+</section>
+
+<div class="marq" aria-hidden="true"><div class="tr"><span>Design &amp; Build</span><span>Terrace Homes</span><span>Duplexes</span><span>Subdivision</span><span>Project Management</span><span>Fixed Price</span><span>Design &amp; Build</span><span>Terrace Homes</span><span>Duplexes</span><span>Subdivision</span><span>Project Management</span><span>Fixed Price</span></div></div>
+
+<section id="about">
+  <div class="sh"><div class="num">01</div><h2 class="disp">Built since 2020.</h2></div>
+  <div class="stats" id="stats">
+    <div class="st"><div class="n"><span data-n="1000">1,000</span>+</div><div class="l">Homes built</div></div>
+    <div class="st"><div class="n"><span data-n="500">500</span>+</div><div class="l">Happy clients</div></div>
+    <div class="st"><div class="n"><span data-n="100">100</span>+</div><div class="l">Trusted contractors</div></div>
+    <div class="st"><div class="n"><span data-n="10">10</span> YR</div><div class="l">Stamford insurance guarantee</div></div>
+  </div>
+  <div class="about">
+    <p class="txt">Since March 2020 we've built <mark>1,000+ homes</mark> across Auckland. Fixed prices. No surprises. Structures that last a lifetime, from your first sketch to the final code compliance certificate.</p>
+    <div class="ph"><img src="../../images/about-2020.webp" srcset="../../images/about-2020-sm.webp 900w, ../../images/about-2020.webp 1800w" sizes="(max-width:1000px) 100vw, 50vw" alt="A finished MD Projects home with a black fence" loading="lazy"><span class="tag">Est. March 2020</span></div>
+  </div>
+  <div class="qtp">
+    <div><span class="tag roy">Quality</span><div class="big disp">10<small>yr</small></div><h3>Stamford insurance guarantee</h3><p>Best build quality at an affordable price: high-quality homes and investment properties, delivered within budget.</p></div>
+    <div><span class="tag roy">Time</span><div class="big disp">7–9<small>months</small></div><h3>Typical terrace build</h3><p>We stick to the project plan, with regular updates throughout.</p></div>
+    <div><span class="tag roy">Price</span><div class="big disp">0<small>variations</small></div><h3>Fixed price, no variations</h3><p>We agree on a fixed cost before the build begins, so you can plan with confidence.</p></div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="sh"><div class="num">02</div><h2 class="disp">Concept to keys.</h2><div class="aside"><span>One team takes your project from first sketch to final handover, with nothing handed off between firms.</span><span class="tag">5 services</span></div></div>
+  <a class="slab" href="#contact"><span class="no">01</span><span class="tx"><h3>Design &amp; Build</h3><p>A complete custom home solution, taking your vision from concept through to final construction.</p></span><span class="im"><img src="../../images/service-design-build-sm.webp" alt="" loading="lazy"></span><span class="arr" aria-hidden="true">&rarr;</span></a>
+  <a class="slab" href="#contact"><span class="no">02</span><span class="tx"><h3>Build from Plans</h3><p>Already have approved plans? We'll bring them to life with expert craftsmanship and precision.</p></span><span class="im"><img src="../../images/service-build-from-plans-sm.webp" alt="" loading="lazy"></span><span class="arr" aria-hidden="true">&rarr;</span></a>
+  <a class="slab" href="#contact"><span class="no">03</span><span class="tx"><h3>Terraces &amp; Duplexes</h3><p>Efficient, modern multi-unit housing designed to maximise land use and investment return.</p></span><span class="im"><img src="../../images/service-terrace-duplex-sm.webp" alt="" loading="lazy"></span><span class="arr" aria-hidden="true">&rarr;</span></a>
+  <a class="slab" href="#contact"><span class="no">04</span><span class="tx"><h3>Subdivision &amp; Consents</h3><p>Land development managed end to end: feasibility, resource and building consents, through to title.</p></span><span class="im"><img src="../../images/service-subdivision-sm.webp" alt="" loading="lazy"></span><span class="arr" aria-hidden="true">&rarr;</span></a>
+  <a class="slab" href="#contact"><span class="no">05</span><span class="tx"><h3>Project Management</h3><p>Every aspect of your build coordinated by one team, for on-time and on-budget delivery.</p></span><span class="im"><img src="../../images/guide-project-management-sm.webp" alt="" loading="lazy"></span><span class="arr" aria-hidden="true">&rarr;</span></a>
+</section>
+
+<div class="marq sky rev" aria-hidden="true"><div class="tr"><span>1,000+ Homes</span><span>Fixed price</span><span>On time</span><span>Auckland</span><span>Built to last</span><span>1,000+ Homes</span><span>Fixed price</span><span>On time</span><span>Auckland</span><span>Built to last</span></div></div>
+
+<section id="projects">
+  <div class="sh"><div class="num">03</div><h2 class="disp">Recent homes.</h2></div>
+  <div class="proj">
+    <a class="pj" href="#contact"><div class="ph"><img src="../../images/project-mt-albert-road.webp" srcset="../../images/project-mt-albert-road-sm.webp 900w, ../../images/project-mt-albert-road.webp 1800w" sizes="(max-width:1000px) 100vw, 66vw" alt="Mt Albert Road townhouses, Sandringham" loading="lazy"><span class="tag sky">5 townhouses · 4 bed</span></div><div class="cap"><h3>Mt Albert Road</h3><p>Sandringham</p></div></a>
+    <a class="pj" href="#contact"><div class="ph"><img src="../../images/tripoli-road-dusk-sm.webp" alt="Tripoli Road townhouses at dusk, Point England" loading="lazy"><span class="tag">Townhouses</span></div><div class="cap"><h3>Tripoli Road</h3><p>Point England</p></div></a>
+    <a class="pj" href="#contact"><div class="ph"><img src="../../images/project-swanson-road-sm.webp" alt="Swanson Road townhouses, Henderson" loading="lazy"><span class="tag">Townhouses</span></div><div class="cap"><h3>Swanson Road</h3><p>Henderson</p></div></a>
+    <a class="pj" href="#contact"><div class="ph"><img src="../../images/project-luke-street-sm.webp" alt="Luke Street homes, Otahuhu" loading="lazy"><span class="tag">Homes</span></div><div class="cap"><h3>Luke Street</h3><p>Otahuhu</p></div></a>
+    <a class="pj" href="#contact"><div class="ph"><img src="../../images/project-weymouth-road-sm.webp" alt="Weymouth Road duplex, Weymouth" loading="lazy"><span class="tag">Duplex</span></div><div class="cap"><h3>Weymouth Road</h3><p>Weymouth</p></div></a>
+  </div>
+  <div class="proj-more"><p>Also building in Papakura, Papatoetoe, Manurewa and more.</p><a class="btn k" href="#contact">Discuss your site &rarr;</a></div>
+</section>
+
+<section id="process">
+  <div class="sh"><div class="num">04</div><h2 class="disp">Six steps. One team.</h2><div class="aside"><span>You always know what's happening next, what it costs and when it'll be done.</span></div></div>
+  <div class="proc">
+    <div class="pc"><div class="n">01</div><h3>Feasibility study</h3><p>Zoning, services, geotechnical conditions and council rules, checked before you commit.</p></div>
+    <div class="pc"><div class="n">02</div><h3>Resource &amp; building consents</h3><p>Applications prepared, lodged and managed with Auckland Council on your behalf.</p></div>
+    <div class="pc"><div class="n">03</div><h3>Engineering &amp; infrastructure</h3><p>Roads, stormwater, power, water and telecommunications planned with our consultants.</p></div>
+    <div class="pc"><div class="n">04</div><h3>Construction</h3><p>Our network of 100+ trusted contractors builds to plan, managed day to day.</p></div>
+    <div class="pc"><div class="n">05</div><h3>Compliance &amp; certification</h3><p>Inspections and sign-offs through to your Code Compliance Certificate.</p></div>
+    <div class="pc"><div class="n">06</div><h3>Handover or sale</h3><p>Keys in hand, ready to move in, rent or sell, backed by our guarantees.</p></div>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="sh"><div class="num">05</div><h2 class="disp">What people say.</h2></div>
+  <div class="tgrid">
+    <figure class="tq"><div class="qm" aria-hidden="true">&ldquo;</div><blockquote>MD Projects turned our vision into reality. The entire process was seamless, and the team delivered our dream home on time and within budget. Truly professional from start to finish.</blockquote><figcaption><b>Sarah T</b><span class="tag">Papatoetoe</span></figcaption></figure>
+    <figure class="tq"><div class="qm" aria-hidden="true">&ldquo;</div><blockquote>We were first-time developers and a bit nervous about the process. Maninder and the team guided us through everything – from feasibility to final CCC. Couldn&rsquo;t be happier with the results!</blockquote><figcaption><b>Amit P</b><span class="tag">Blockhouse Bay</span></figcaption></figure>
+    <figure class="tq"><div class="qm" aria-hidden="true">&ldquo;</div><blockquote>What impressed us most was the clear communication and fixed-price contract. No hidden surprises, and the build quality exceeded our expectations.</blockquote><figcaption><b>Lisa &amp; James R</b><span class="tag">Weymouth</span></figcaption></figure>
+    <figure class="tq"><div class="qm" aria-hidden="true">&ldquo;</div><blockquote>MD Projects managed our duplex development with great efficiency. The workmanship, coordination, and timely updates made us feel confident every step of the way.</blockquote><figcaption><b>Deepak M</b><span class="tag">Flat Bush</span></figcaption></figure>
+  </div>
+</section>
+
+<section id="founder">
+  <div class="sh"><div class="num">06</div><h2 class="disp">Meet the founder.</h2></div>
+  <div class="fd">
+    <div class="ph"><img src="../../images/team.webp" srcset="../../images/team-sm.webp 900w, ../../images/team.webp 1440w" sizes="(max-width:1000px) 100vw, 48vw" alt="Maninder Singh, founder of MD Projects NZ, holding an award" loading="lazy"></div>
+    <div class="tx">
+      <div class="name">Maninder Singh.</div>
+      <div class="role">Founder &amp; Director · Building Auckland since 2020</div>
+      <p class="q">&ldquo;Your dream is our project. From house renovations to over 1,000 builds, delivered to top-tier quality, within budget and on schedule.&rdquo;</p>
+      <p class="bio">Maninder has years of experience in the construction sector, leading residential projects for large companies and private clients. His mission: high-quality, affordable homes delivered with precision, efficiency and excellence.</p>
+      <div class="vals"><span>Integrity</span><span>Transparency</span><span>Quality craftsmanship</span><span>Client-focused service</span></div>
+      <div class="row"><div class="n98">98</div><div class="lab">Success in 2024<span style="font-weight:600;text-transform:none">homes completed in one year</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sh"><div class="num">07</div><h2 class="disp">Latest news.</h2><div class="aside"><span>Guides and project stories from the MD Projects team.</span></div></div>
+  <div class="blog">
+    <div class="posts">
+      <article><a class="card" href="#"><span class="ph"><img src="../../images/service-terrace-duplex-sm.webp" alt="" loading="lazy"></span><span class="body"><span class="ctag">Guides</span><span class="meta"><time datetime="2026-10-03">3 Oct 2026</time> · 6 min read</span><h3>Terrace homes vs duplexes: which suits your section?</h3><p>Section size, zoning and budget compared side by side, so you can choose with confidence.</p><span class="more">Read more <span aria-hidden="true">&rarr;</span></span></span></a></article>
+      <article><a class="card" href="#"><span class="ph"><img src="../../images/tripoli-road-dusk-sm.webp" alt="" loading="lazy"></span><span class="body"><span class="ctag">Projects</span><span class="meta"><time datetime="2026-09-27">27 Sep 2026</time> · 5 min read</span><h3>Tripoli Road at dusk: a project story</h3><p>How a row of Point England townhouses went from bare section to a lit-up street in under a year.</p><span class="more">Read more <span aria-hidden="true">&rarr;</span></span></span></a></article>
+      <article><a class="card" href="#"><span class="ph"><img src="../../images/project-mt-albert-road-sm.webp" alt="" loading="lazy"></span><span class="body"><span class="ctag">Projects</span><span class="meta"><time datetime="2026-09-22">22 Sep 2026</time> · 4 min read</span><h3>Inside Mt Albert Road: five townhouses, one team</h3><p>Five four-bedroom homes in Sandringham, delivered by one team at a fixed price.</p><span class="more">Read more <span aria-hidden="true">&rarr;</span></span></span></a></article>
+    </div>
+    <div class="allp"><a class="btn w" href="#">View all articles &rarr;</a></div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="sh"><div class="num">08</div><h2 class="disp">Let's build something beautiful.</h2><div class="aside"><span>Tell us what you're planning. We'll come back to you to talk through feasibility, timelines and a fixed-price proposal.</span></div></div>
+  <div class="cg">
+    <div class="ci">
+      <a href="tel:0210590409"><small>Phone</small><span class="v">0210 590 409</span></a>
+      <a href="mailto:info@mdprojects.co.nz"><small>Email</small><span class="v">info@mdprojects.co.nz</span></a>
+      <address><small>Office</small><span class="v">409 Bucklands Beach Road, Bucklands Beach, Auckland 2012</span></address>
+    </div>
+    <form class="q" id="quote" novalidate>
+      <div class="fld"><label for="f1">Name</label><input id="f1" name="name" autocomplete="name"></div>
+      <div class="fld"><label for="f2">Phone</label><input id="f2" name="phone" type="tel" autocomplete="tel"></div>
+      <div class="fld"><label for="f3">Email</label><input id="f3" name="email" type="email" autocomplete="email"></div>
+      <div class="fld"><label for="f4">I'm interested in</label><select id="f4" name="service"><option>Design &amp; Build</option><option>Build from Plans</option><option>Terrace Homes &amp; Duplexes</option><option>Subdivision</option><option>Resource &amp; Building Consent</option><option>Project Management</option><option>Something else</option></select></div>
+      <div class="fld full"><label for="f5">About your project</label><textarea id="f5" name="message"></textarea></div>
+      <div class="fsub"><p>Opens your email app with the details filled in.</p><button class="btn" type="submit">Send enquiry &rarr;</button></div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="fbig" aria-hidden="true"><div class="ftr"><span>Your dream is our project</span><span>Your dream is our project</span></div></div>
+  <div class="fcols">
+    <div><h4>Services</h4><a href="#services">Design &amp; Build</a><a href="#services">Terrace &amp; Duplex</a><a href="#services">Subdivision</a><a href="#services">Project Management</a></div>
+    <div><h4>Company</h4><a href="#about">About</a><a href="#projects">Projects</a><a href="#news">News</a></div>
+    <div><h4>Contact</h4><a href="tel:0210590409">0210 590 409</a><a href="mailto:info@mdprojects.co.nz">info@mdprojects.co.nz</a></div>
+    <div><h4>Office</h4><span>409 Bucklands Beach Road, Bucklands Beach, Auckland 2012</span></div>
+  </div>
+  <div class="legal"><span>&copy; 2026 MD Projects NZ Ltd. All rights reserved.</span><span>Proudly designed by AMBS Solutions</span></div>
+</footer>
+
+<a class="back-pill" href="../">&larr; All versions</a>
+
+<script>
+(function(){
+  var d=document,root=d.documentElement;root.classList.add('js');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,small=matchMedia('(max-width:1000px)').matches;
+  var v=d.getElementById('heroVideo');if(small)v.poster='../../images/hero-poster-portrait.webp';
+  var s=d.createElement('source');s.src=small?'../../images/hero-portrait.mp4':'../../images/hero-1080.mp4';s.type='video/mp4';v.appendChild(s);
+  if(reduce)v.removeAttribute('autoplay');else v.play&&v.play().catch(function(){});
+
+  // menu
+  var mb=d.getElementById('menuBtn'),mm=d.getElementById('mm');
+  function close(){mm.classList.remove('open');mb.setAttribute('aria-expanded','false');d.body.style.overflow=''}
+  mb.addEventListener('click',function(){mm.classList.add('open');mb.setAttribute('aria-expanded','true');d.body.style.overflow='hidden'});
+  d.getElementById('mmClose').addEventListener('click',close);mm.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close)});
+  d.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+
+  // section headings: split words, alternate slide direction
+  d.querySelectorAll('.sh h2').forEach(function(h){var words=h.textContent.trim().split(/\s+/);h.setAttribute('aria-label',h.textContent.trim());
+    h.innerHTML=words.map(function(w,i){return '<span class="w" aria-hidden="true" style="--from:'+(i%2?'110%':'-110%')+';transition-delay:'+(i*.09)+'s">'+w+'</span>'}).join(' ')});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -12% 0px'});
+  d.querySelectorAll('.sh').forEach(function(el){io.observe(el)});
+
+  // signature: hero words slide apart / stack on scroll
+  var lines=d.querySelectorAll('.h-words .ln'),hero=d.querySelector('.hero');
+  var hw=d.querySelector('.h-words');
+  function fit(){hw.style.fontSize='';var avail=hw.clientWidth-parseFloat(getComputedStyle(hw).paddingLeft)*2,max=0;
+    lines.forEach(function(l){var t=l.style.transform;l.style.transform='none';var r=d.createRange();r.selectNodeContents(l);max=Math.max(max,r.getBoundingClientRect().width);l.style.transform=t});
+    if(max>avail){hw.style.fontSize=(parseFloat(getComputedStyle(hw).fontSize)*avail/max*.98)+'px'}}
+  fit();if(d.fonts&&d.fonts.ready)d.fonts.ready.then(fit);addEventListener('resize',fit);
+  var intro=reduce?1:0,t0=null;
+  function place(){var p=Math.min(1,Math.max(0,scrollY/(hero.offsetHeight*.8)));
+    lines.forEach(function(l,i){var dir=+l.dataset.dir,off=(1-intro)*dir*60+p*dir*-(10+i*5);l.style.transform='translate3d('+off+'vw,0,0)'})}
+  function introAnim(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/1100);intro=1-Math.pow(1-k,4);place();if(k<1)requestAnimationFrame(introAnim)}
+  if(!reduce)requestAnimationFrame(introAnim);else place();
+  var tk=false;addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(function(){tk=false;place()})}},{passive:true});
+
+  // counters
+  var cio=new IntersectionObserver(function(es){if(!es[0].isIntersecting)return;cio.disconnect();if(reduce)return;
+    d.querySelectorAll('[data-n]').forEach(function(el){var to=+el.dataset.n,st=0;function f(t){if(!st)st=t;var p=Math.min(1,(t-st)/1300);el.textContent=Math.round(to*(1-Math.pow(1-p,3))).toLocaleString('en-NZ');if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)})},{threshold:.4});
+  cio.observe(d.getElementById('stats'));
+
+  // form
+  d.getElementById('quote').addEventListener('submit',function(e){e.preventDefault();var f=new FormData(this);
+    var body='Name: '+f.get('name')+'\nPhone: '+f.get('phone')+'\nEmail: '+f.get('email')+'\nInterested in: '+f.get('service')+'\n\n'+f.get('message');
+    location.href='mailto:info@mdprojects.co.nz?subject='+encodeURIComponent('Quote enquiry: '+f.get('service'))+'&body='+encodeURIComponent(body)});
+})();
+</script>
+</body>
+</html>
