@@ -63,14 +63,16 @@ access, and the existing website URL if this is a rebuild.
 
 ## Version 2 (client feedback, Website design specs V1.0)
 
-Pages built with the client's copy: Three Waters, Earthwork / Retaining Wall / Erosion Sediment Control, Flood and Overland Flow Path, Tank Mitigation Design, Parking / Driveway / Manoeuvring, Stormwater Design (Version 2, with rain garden and wetland), On-site Wastewater Treatment Design.
+Everything is on one Our services page (no sub-pages). Services built with the client's copy: Three Waters, Earthwork / Retaining Wall / Erosion Sediment Control, Flood and Overland Flow Path, Tank Mitigation Design, Parking / Driveway / Manoeuvring, Stormwater Design (Version 2, with rain garden and wetland), On-site Wastewater Treatment Design.
 
-Service pages still showing "details coming soon" (final copy needed, one page each):
+Services still showing "details coming soon" (final copy needed for each):
 - Civil: Detailed Feasibility Study, Public Road, Coastal Inundation
 - Planning: Complimentary Online Meeting, Development Feasibility Report, Subdivision Assessment, Land Use Consent Assessment, Boundary Adjustment, Special Character Zone
 - Survey: Topo, 223, Faulty Title, Boundary Adjustment
 - Traffic: Traffic Report, PC79
-- Project Management: Complete Subdivision Design (RC, BC, EPA), Construction Management, Stakeholder Consultation Management, Contract Management, Tender Design Management, Engineer's Representation Service, Construction, COA (Certificate of Acceptance), Neighbour Consent
+- Project Management: Complete Subdivision Design (RC, BC, EPA), Construction Management, Stakeholder Consultation Management, Contract Management, Tender Design Management, Engineer's Representation Service
+- Construction, COA (Certificate of Acceptance) and Neighbour's Consent (whole sections)
+- About: Knowledge sharing
 
 Other content still needed:
 - Our Team: names, roles, bios and photos (assets/content.js, `team`).
