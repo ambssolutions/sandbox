@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — brand (what we do)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* Hook: admin pile */
+  .note { position: absolute; width: 200px; padding: 12px 14px; border-radius: 10px; background: #fff; color: var(--win-ink);
+    font-size: 15px; font-weight: 800; box-shadow: 0 12px 28px rgba(0,0,0,.45); display: flex; gap: 9px; align-items: center; }
+  .note.y { background: #fde047; color: #3f3a06; }
+  .note.r { border-left: 5px solid var(--bad); }
+  #late { left: 22px; top: 690px; }
+
+  /* Services */
+  .sec { position: absolute; left: 22px; right: 22px; font-size: 12px; font-weight: 900; letter-spacing: .14em; color: var(--accent); }
+  .tile { position: absolute; width: 154px; height: 84px; border-radius: 16px; padding: 10px 12px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); }
+  .tile .e { font-size: 24px; }
+  .tile b { display: block; margin-top: 4px; font-size: 14px; line-height: 1.15; font-weight: 800; }
+  .tile.d { background: rgba(99,102,241,.16); border-color: rgba(129,140,248,.5); }
+
+  /* Steps */
+  .step { position: absolute; left: 22px; right: 22px; height: 104px; border-radius: 20px; display: flex; align-items: center; gap: 14px;
+    padding: 0 18px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16); }
+  .step .n { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #062f38; font-size: 22px; font-weight: 900;
+    display: grid; place-items: center; flex: none; }
+  .step .e { font-size: 32px; flex: none; }
+  .step b { display: block; font-size: 20px; font-weight: 850; }
+  .step span { display: block; font-size: 14px; color: var(--muted); font-weight: 600; margin-top: 3px; line-height: 1.3; }
+  .step.hot { border-color: rgba(34,197,94,.6); background: rgba(34,197,94,.12); }
+  .step.hot .n { background: var(--good); color: #052e12; }
+  #p1 { top: 226px; } #p2 { top: 344px; } #p3 { top: 462px; }
+  #own { left: 22px; right: 22px; top: 590px; position: absolute; text-align: center; font-size: 15px; font-weight: 700; color: #bbf7d0; }
+
+  /* Trust */
+  .tool { position: absolute; padding: 9px 14px; border-radius: 999px; background: #fff; color: #111827; font-size: 14px; font-weight: 800;
+    box-shadow: 0 8px 18px rgba(0,0,0,.35); white-space: nowrap; }
+  .trust { position: absolute; left: 22px; right: 22px; height: 58px; border-radius: 16px; display: flex; align-items: center; gap: 12px;
+    padding: 0 16px; background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.45); font-size: 17px; font-weight: 800; }
+  .trust .e { font-size: 24px; }
+  .disc { position: absolute; left: 22px; right: 22px; top: 400px; text-align: center; font-size: 10.5px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div id="frame">
+  <!-- 0–3.2 hook -->
+  <div class="note r" id="n1" style="left:40px;top:250px;rotate:-6deg"><span class="emoji">🧾</span>Invoice #1042 overdue</div>
+  <div class="note y" id="n2" style="left:290px;top:268px;rotate:5deg;width:200px"><span class="emoji">📞</span>Call back Priya!!</div>
+  <div class="note" id="n3" style="left:70px;top:358px;rotate:4deg"><span class="emoji">📝</span>Quote for Dave's deck</div>
+  <div class="note r" id="n4" style="left:280px;top:392px;rotate:-4deg;width:210px"><span class="emoji">📵</span>3 missed calls</div>
+  <div class="note y" id="n5" style="left:50px;top:480px;rotate:-3deg"><span class="emoji">📊</span>Monday report…</div>
+  <div class="note" id="n6" style="left:270px;top:520px;rotate:6deg;width:220px"><span class="emoji">⭐</span>Reply to Google review</div>
+  <div class="chip bad" id="late"><span class="emoji">🕙</span> Still going at <span class="big" id="clk">9:12pm</span></div>
+
+  <!-- 3.2–11 services -->
+  <div class="sec" id="sa" style="top:226px">AI AUTOMATION · RUNS IN THE BACKGROUND</div>
+  <div class="tile" id="t1" style="left:22px;top:250px"><div class="e emoji">🧾</div><b>Quotes &amp; invoices</b></div>
+  <div class="tile" id="t2" style="left:193px;top:250px"><div class="e emoji">💬</div><b>Customer replies</b></div>
+  <div class="tile" id="t3" style="left:364px;top:250px"><div class="e emoji">📅</div><b>Bookings &amp; reminders</b></div>
+  <div class="tile" id="t4" style="left:22px;top:346px"><div class="e emoji">🔄</div><b>Data between apps</b></div>
+  <div class="tile" id="t5" style="left:193px;top:346px"><div class="e emoji">📈</div><b>Your numbers, weekly</b></div>
+  <div class="tile" id="t6" style="left:364px;top:346px"><div class="e emoji">🗂️</div><b>Records you can show</b></div>
+  <div class="sec" id="sb" style="top:458px;color:#a5b4fc">DIGITAL SOLUTIONS · BUILT FOR YOU</div>
+  <div class="tile d" id="t7" style="left:22px;top:482px"><div class="e emoji">🌐</div><b>Websites that win trust</b></div>
+  <div class="tile d" id="t8" style="left:193px;top:482px"><div class="e emoji">📱</div><b>Staff &amp; customer portals</b></div>
+  <div class="tile d" id="t9" style="left:364px;top:482px"><div class="e emoji">📊</div><b>Live dashboards</b></div>
+
+  <!-- 11–19 how it works -->
+  <div class="step" id="p1"><div class="n">1</div><div class="e emoji">👀</div><div><b>We watch the work</b><span>You get a written plan + hours estimate. Free.</span></div></div>
+  <div class="step" id="p2"><div class="n">2</div><div class="e emoji">⚙️</div><div><b>We build one automation first</b><span>See it run on your real jobs before it goes live</span></div></div>
+  <div class="step hot" id="p3"><div class="n">3</div><div class="e emoji">🔑</div><div><b>You own it</b><span>Your accounts, your logins. 30 days of free fixes.</span></div></div>
+  <div id="own">No rip and replace. No ticket queue.</div>
+
+  <!-- 19–22.2 trust -->
+  <div id="tools"></div>
+  <div class="disc" id="disc">Works alongside the tools you already use. Product names belong to their owners.</div>
+  <div class="trust" id="r1" style="top:440px"><span class="e emoji">📍</span>Auckland-based, working nationwide</div>
+  <div class="trust" id="r2" style="top:510px"><span class="e emoji">🙋</span>A real person answers, NZ hours</div>
+  <div class="trust" id="r3" style="top:580px"><span class="e emoji">🔒</span>Your data stays yours</div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis, p, ease, lerp } = E;
+const TOOLS = [["Xero", 30, 236], ["Microsoft 365", 120, 236], ["Google Workspace", 290, 236], ["Excel", 40, 290], ["Gmail", 130, 290],
+  ["Outlook", 225, 290], ["Google Sheets", 330, 290], ["Teams", 70, 344], ["Google Calendar", 170, 344], ["OneDrive", 360, 344]];
+TOOLS.forEach(([n, x, y]) => $("#tools").insertAdjacentHTML("beforeend", `<div class="tool" style="left:${x}px;top:${y}px">${n}</div>`));
+const tools = $$(".tool");
+window.COVER_AT = 8.2;
+
+E.setup({
+  duration: 26,
+  keyword: "HELP",
+  voice: [
+    { a: 0.15, b: 3.2, text: "Still doing admin at ten p.m.?" },
+    { a: 3.3, b: 10.9, text: "At A M B S, we solve your operational headaches with easy-to-use A I. Quotes, invoices, bookings, websites and dashboards." },
+    { a: 11.1, b: 18.9, text: "Here's how it works. We watch how you work, build one automation first, and then you own it, with thirty days of free fixes." },
+    { a: 19.1, b: 22.1, text: "It works with your tools. And a real person answers." },
+    { a: 22.4, b: 25.9, text: "Want your hours back? Comment, help, for a free session." },
+  ],
+  captions: [
+    { a: 0, b: 3.2, html: `Still doing admin at <mark>10pm?</mark>` },
+    { a: 3.2, b: 11, html: `We solve your operational headaches with <span class="cyan">easy-to-use AI.</span>` },
+    { a: 11, b: 19, html: `How it works, in <mark>3 simple steps.</mark>` },
+    { a: 19, b: 22.2, html: `Works with the tools <span class="cyan">you already use.</span>` },
+  ],
+  phases: [
+    { a: 0.15, b: 3.2, label: "SOUND FAMILIAR?", kind: "bad" },
+    { a: 3.3, b: 22.2, label: "AMBS SOLUTIONS", kind: "good" },
+  ],
+  end: { at: 22.2, title: "Want your hours back?", sub: "Free session: we map your week and give you a plan + hours estimate. Yours to keep." },
+});
+
+E.use((t) => {
+  // hook: notes drop in, then get swept away
+  ["#n1", "#n2", "#n3", "#n4", "#n5", "#n6"].forEach((s, i) =>
+    vis(s, t, 0.1 + i * 0.28, 3.2, { y: -60, scale: 1.25, dur: 0.3, yOut: -30 }));
+  vis("#late", t, 0.5, 3.2, { y: 20 });
+  const m = Math.round(lerp(21 * 60 + 12, 22 * 60 + 3, p(t, 0.5, 3.0, ease.linear)));
+  $("#clk").textContent = `${Math.floor(m / 60) - 12}:${String(m % 60).padStart(2, "0")}pm`;
+
+  // services
+  vis("#sa", t, 3.4, 11, { y: 10 });
+  for (let i = 1; i <= 6; i++) vis("#t" + i, t, 3.6 + (i - 1) * 0.35, 11, { scale: 0.6, y: 10 });
+  vis("#sb", t, 6.6, 11, { y: 10 });
+  for (let i = 7; i <= 9; i++) vis("#t" + i, t, 6.9 + (i - 7) * 0.4, 11, { scale: 0.6, y: 10 });
+
+  // how it works
+  vis("#p1", t, 11.6, 19, { x: -40, y: 0 });
+  vis("#p2", t, 13.6, 19, { x: -40, y: 0 });
+  vis("#p3", t, 15.8, 19, { x: -40, y: 0, scale: 0.92 });
+  vis("#own", t, 17.4, 19, { y: 10 });
+
+  // trust
+  tools.forEach((el, i) => vis(el, t, 19.2 + i * 0.1, 22.2, { scale: 0.4, y: 0, dur: 0.3 }));
+  vis("#disc", t, 19.8, 22.2, { y: 6 });
+  vis("#r1", t, 20.2, 22.2, { x: -30, y: 0 });
+  vis("#r2", t, 20.5, 22.2, { x: -30, y: 0 });
+  vis("#r3", t, 20.8, 22.2, { x: -30, y: 0 });
+});
+</script>
+</body>
+</html>

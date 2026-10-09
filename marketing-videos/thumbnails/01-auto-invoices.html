@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Thumbnail — AUTO</title>
+<link rel="stylesheet" href="../engine/base.css"><link rel="stylesheet" href="thumbs.css">
+<style>
+  .xl .bar { background: #107c41; } .xl .bar i { background: rgba(255,255,255,.5); }
+  .xl table { width: 100%; border-collapse: collapse; font-size: 9.5px; }
+  .xl td { border: 1px solid var(--win-line); padding: 4px 5px; white-space: nowrap; }
+  .xl td.no { color: #b91c1c; font-weight: 800; } .xl td.hl { outline: 2px solid #107c41; outline-offset: -2px; background: #ecfdf3; }
+  .doc { margin-top: -20px; margin-left: 40px; width: 160px; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,.4); }
+  .doc .bar { background: #2b579a; }
+  .doc .b { padding: 8px 9px; font: 10.5px/1.6 "Liberation Serif", serif; }
+  .clock { position: absolute; right: -14px; bottom: -18px; background: var(--bad); color: #fff; font-weight: 900; font-size: 14px;
+    padding: 6px 11px; border-radius: 999px; box-shadow: 0 6px 14px rgba(0,0,0,.4); z-index: 3; }
+  .chain { display: grid; gap: 6px; }
+  .chain div { display: flex; align-items: center; gap: 8px; background: #fff; color: var(--win-ink); border-radius: 10px; padding: 7px 9px;
+    font-size: 11.5px; font-weight: 800; text-align: left; }
+  .chain div .ok { margin-left: auto; width: 18px; height: 18px; border-radius: 50%; background: var(--good); color: #052e12; font-size: 11px;
+    display: grid; place-items: center; font-weight: 900; flex: none; }
+  .chain .ar { text-align: center; color: #4ade80; font-weight: 900; font-size: 13px; line-height: .6; background: none; padding: 0; justify-content: center; }
+  .badge2 { position: absolute; right: -14px; bottom: -18px; background: var(--good); color: #052e12; font-weight: 900; font-size: 14px;
+    padding: 6px 11px; border-radius: 999px; box-shadow: 0 6px 14px rgba(0,0,0,.4); }
+</style></head><body>
+<div id="frame">
+  <img class="tlogo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="kicker">INVOICING · AUTOMATION</div>
+  <h1 style="font-size:52px">Invoices that<br><mark>send themselves</mark></h1>
+  <div class="ba">
+    <div class="side bad"><div class="tag">BEFORE</div>
+      <div class="mini xl"><div class="bar"><i></i><i></i><i></i></div>
+        <table><tr><td class="hl">Smith Plumbing</td><td>$480</td><td class="no">Not yet</td></tr>
+          <tr><td>Kauri Builders</td><td>$1,250</td><td class="no">Not yet</td></tr>
+          <tr><td>Te Aro Café</td><td>$320</td><td class="no">Not yet</td></tr>
+          <tr><td>J. Patel</td><td>$4,800</td><td class="no">Not yet</td></tr></table></div>
+      <div class="mini doc"><div class="bar"><i></i><i></i><i></i></div><div class="b"><b>INVOICE #____</b><br>Bill to: Smith P|</div></div>
+      <div class="clock"><span class="emoji">⏰</span> 7:48pm</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="side good"><div class="tag">AFTER</div>
+      <div class="chain">
+        <div><span class="emoji">📋</span>Job marked done<span class="ok">✓</span></div><div class="ar">↓</div>
+        <div><span class="emoji">🧾</span>Invoice created<span class="ok">✓</span></div><div class="ar">↓</div>
+        <div><span class="emoji">📧</span>Emailed to client<span class="ok">✓</span></div><div class="ar">↓</div>
+        <div><span class="emoji">🔔</span>Reminder if unpaid<span class="ok">✓</span></div>
+      </div>
+      <div class="badge2"><span class="emoji">⚡</span> 0 min</div>
+    </div>
+  </div>
+  <div class="stat2">Time on invoices: <s>2 hrs/day</s> → <b>0 min</b></div>
+  <div class="cta">Comment <span>AUTO</span> for the setup</div>
+</div></body></html>

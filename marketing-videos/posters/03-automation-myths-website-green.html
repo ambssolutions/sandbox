@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Poster — Automation myths</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* 4:5 feed poster: 540x675 CSS => 1080x1350 */
+  #frame { height: 675px; margin-top: -337px; display: flex; flex-direction: column; align-items: center; text-align: center;
+    background: radial-gradient(90% 50% at 50% 0%, #1e3a5f 0%, transparent 60%),
+                radial-gradient(80% 50% at 0% 100%, #14532d 0%, transparent 60%),
+                linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); }
+  .logo { margin-top: 26px; width: 136px; position: relative; filter: drop-shadow(0 6px 18px rgba(0,0,0,.5)); }
+  .kicker { position: relative; margin-top: 10px; font-size: 14px; font-weight: 800; letter-spacing: .16em; color: var(--accent); }
+  h1 { position: relative; margin-top: 6px; font-size: 37px; line-height: 1.04; font-weight: 900; letter-spacing: -.03em; padding: 0 30px; }
+  h1 mark { background: var(--mark); color: #111; padding: 0 8px; border-radius: 8px; }
+  .list { position: relative; margin-top: 18px; width: 484px; display: grid; gap: 9px; }
+  .row { display: grid; grid-template-columns: 1fr 1.25fr; border-radius: 16px; overflow: hidden; text-align: left;
+    border: 1px solid rgba(255,255,255,.14); }
+  .myth { background: rgba(239,68,68,.13); padding: 10px 12px; border-right: 1px solid rgba(255,255,255,.1); }
+  .truth { background: rgba(34,197,94,.12); padding: 10px 12px; }
+  .lab { font-size: 10px; font-weight: 900; letter-spacing: .14em; }
+  .myth .lab { color: #fca5a5; } .truth .lab { color: #86efac; }
+  .myth p { margin-top: 4px; font-size: 16px; font-weight: 800; font-style: italic; line-height: 1.2; color: #fecaca; 
+    }
+  .truth p { margin-top: 4px; font-size: 13px; font-weight: 650; line-height: 1.3; color: #e7fbe9; }
+  .foot { position: relative; margin-top: 16px; display: flex; align-items: center; gap: 12px; }
+  .free { background: var(--good); color: #052e12; font-weight: 900; font-size: 15px; padding: 8px 14px; border-radius: 999px; }
+  .cta { font-size: 17px; font-weight: 800; color: var(--muted); }
+  .cta span { background: var(--mark); color: #111; padding: 3px 9px; border-radius: 7px; box-shadow: 0 3px 0 #b45309; margin-left: 3px; }
+  .url { position: relative; margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .04em; }
+  .url b { color: #fff; }
+
+  #frame::before { background-image: linear-gradient(rgba(16,19,33,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(16,19,33,.045) 1px, transparent 1px); }
+  #frame { color: var(--t-ink); background: var(--t-bg); }
+  .logo { filter: none; }
+  .kicker { color: var(--t-kick); }
+  h1 mark { background: var(--t-mark); color: var(--t-markink); }
+  .row { border-color: var(--t-line); box-shadow: 0 6px 18px rgba(16,19,33,.08); }
+  .myth { background: var(--t-myth); border-right-color: var(--t-line); }
+  .truth { background: var(--t-truth); }
+  .myth .lab { color: var(--t-mythlab); } .truth .lab { color: var(--t-truthlab); }
+  .myth p { color: var(--t-mythink); } .truth p { color: var(--t-truthink); }
+  .free { background: var(--t-free); color: var(--t-freeink); }
+  .cta { color: var(--t-muted); }
+  .url { color: var(--t-muted); } .url b { color: var(--t-ink); }
+
+  :root { --t-bg: #EFF3F9; --t-ink: #101321; --t-kick: #2E9418; --t-mark: #2E9418; --t-markink: #fff; --t-line: #dfe5ee;
+    --t-myth: #fff1f1; --t-truth: #ffffff; --t-mythlab: #c2410c; --t-truthlab: #2E9418; --t-mythink: #7f1d1d; --t-truthink: #1f2937;
+    --t-free: #2E9418; --t-freeink: #fff; --t-muted: #5B6B84; }
+  #frame { background: radial-gradient(80% 40% at 50% 0%, #D3EFB9 0%, transparent 70%), #EFF3F9; }
+</style></head><body>
+<div id="frame">
+  <img class="logo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="kicker">MYTH vs TRUTH</div>
+  <h1>4 automation myths<br>holding <mark>you</mark> back</h1>
+  <div class="list">
+    <div class="row"><div class="myth"><div class="lab">✕ MYTH</div><p>"It'll replace my staff"</p></div>
+      <div class="truth"><div class="lab">✓ TRUTH</div><p>It clears the repetitive work so your people do the parts that need judgement.</p></div></div>
+    <div class="row"><div class="myth"><div class="lab">✕ MYTH</div><p>"I'm not technical enough"</p></div>
+      <div class="truth"><div class="lab">✓ TRUTH</div><p>If you can show how the job gets done today, that's all we need.</p></div></div>
+    <div class="row"><div class="myth"><div class="lab">✕ MYTH</div><p>"My business is too small"</p></div>
+      <div class="truth"><div class="lab">✓ TRUTH</div><p>3+ hours a week on the same task? Worth a look, one van or forty staff.</p></div></div>
+    <div class="row"><div class="myth"><div class="lab">✕ MYTH</div><p>"I'll be locked in"</p></div>
+      <div class="truth"><div class="lab">✓ TRUTH</div><p>It's set up in your own accounts. You keep it, even if you leave us.</p></div></div>
+  </div>
+  <div class="foot"><div class="free">Free first session</div><div class="cta">Comment <span>HELP</span> <span class="emoji" style="background:none;box-shadow:none;padding:0">👇</span></div></div>
+  <div class="url"><b>ambs.co.nz</b> · AI automation &amp; websites for NZ businesses</div>
+</div></body></html>
