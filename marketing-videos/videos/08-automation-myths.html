@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — automation myths (HELP)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<link rel="stylesheet" href="../engine/theme-website.css">
+<style>
+  .bub { position: absolute; padding: 12px 16px; border-radius: 20px; background: #fff; color: #7f1d1d; font-size: 17px; font-weight: 800;
+    font-style: italic; box-shadow: 0 10px 26px rgba(16,19,33,.12); border: 1px solid #fecaca; white-space: nowrap; }
+  .bub::after { content: ""; position: absolute; left: 22px; bottom: -8px; width: 16px; height: 16px; background: #fff;
+    border-right: 1px solid #fecaca; border-bottom: 1px solid #fecaca; transform: rotate(45deg); }
+  .count { position: absolute; left: 22px; top: 226px; padding: 6px 12px; border-radius: 999px; background: #fff; border: 1px solid #dfe5ee;
+    font-size: 13px; font-weight: 900; letter-spacing: .1em; color: var(--muted); }
+  .myth { position: absolute; left: 22px; right: 22px; top: 270px; border-radius: 22px; padding: 18px 20px 22px; background: #fff1f1;
+    border: 2px solid #fca5a5; }
+  .myth .lab, .truth .lab { font-size: 13px; font-weight: 900; letter-spacing: .14em; }
+  .myth .lab { color: #c2410c; }
+  .myth p { margin-top: 8px; font-size: 31px; line-height: 1.12; font-weight: 900; font-style: italic; color: #7f1d1d; }
+  .stamp { position: absolute; right: 18px; top: -16px; padding: 6px 14px; border: 3px solid #dc2626; color: #dc2626; background: #fff;
+    border-radius: 10px; font-size: 20px; font-weight: 900; letter-spacing: .1em; rotate: 8deg; }
+  .truth { position: absolute; left: 22px; right: 22px; top: 452px; border-radius: 22px; padding: 18px 20px 22px; background: #fff;
+    border: 2px solid var(--accent); box-shadow: 0 16px 40px rgba(46,148,24,.18); }
+  .truth .lab { color: var(--accent); }
+  .truth p { margin-top: 8px; font-size: 24px; line-height: 1.25; font-weight: 750; color: var(--ink); }
+  #free { position: absolute; left: 22px; right: 22px; top: 300px; text-align: center; }
+  #free .pill { display: inline-block; background: var(--accent); color: #fff; font-size: 36px; font-weight: 900; padding: 18px 30px;
+    border-radius: 999px; box-shadow: 0 16px 40px rgba(46,148,24,.3); }
+  #free p { margin-top: 26px; font-size: 21px; font-weight: 700; color: var(--muted); line-height: 1.4; }
+  #free p b { color: var(--ink); }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div class="bub" id="q1" style="left:40px;top:270px">"It'll replace my staff"</div>
+  <div class="bub" id="q2" style="left:230px;top:360px">"I'm not technical"</div>
+  <div class="bub" id="q3" style="left:60px;top:450px">"I'm too small for this"</div>
+  <div class="bub" id="q4" style="left:250px;top:540px">"I'll be locked in"</div>
+
+  <div class="count" id="cnt">MYTH 1 / 4</div>
+  <div id="cards"></div>
+
+  <div id="free"><div class="pill">Free first session</div>
+    <p>We map your week and give you<br>a <b>plan + hours estimate</b>.<br>Yours to keep, even if you don't hire us.</p></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis } = E;
+const MYTHS = [
+  ["It'll replace my staff", "It clears the repetitive work so your people do the parts that need judgement."],
+  ["I'm not technical enough", "If you can show us how the job gets done today, that's all we need."],
+  ["My business is too small", "3+ hours a week on the same task? Worth a look, one van or forty staff."],
+  ["I'll be locked in", "It's set up in your own accounts. You keep it, even if you leave us."],
+];
+const S0 = 3.2, D = 4.2;
+MYTHS.forEach(([m, t], i) => $("#cards").insertAdjacentHTML("beforeend",
+  `<div class="myth" data-m="${i}"><div class="lab">✕ MYTH</div><p>"${m}"</p><div class="stamp">MYTH</div></div>
+   <div class="truth" data-t="${i}"><div class="lab">✓ TRUTH</div><p>${t}</p></div>`));
+window.COVER_AT = 5.6;
+
+E.setup({
+  duration: 26,
+  keyword: "HELP",
+  voice: [
+    { a: 0.15, b: 3.1, text: "Think automation isn't for a business like yours?" },
+    { a: 3.3, b: 7.3, text: "Myth: it'll replace my staff. Truth: it frees them up for the real work." },
+    { a: 7.5, b: 11.5, text: "Myth: I'm not technical. Truth: just show us how the job's done." },
+    { a: 11.7, b: 15.7, text: "Myth: I'm too small. Truth: one van or forty staff, it's worth a look." },
+    { a: 15.9, b: 19.9, text: "Myth: I'll be locked in. Truth: it's in your own accounts. You own it." },
+    { a: 20.1, b: 22.1, text: "And your first session is free." },
+    { a: 22.4, b: 25.9, text: "Not sure where to start? Comment, help." },
+  ],
+  captions: [
+    { a: 0, b: 3.2, html: `Think automation <mark>isn't for you?</mark>` },
+    { a: 3.2, b: 20, html: `4 myths holding <mark>NZ businesses</mark> back.` },
+    { a: 20, b: 22.2, html: `Not sure where to start? <span class="cyan">Start here.</span>` },
+  ],
+  phases: [],
+  end: { at: 22.2, title: "Not sure where to start?", sub: "Tell us what eats your week. We'll point out the biggest time-saver." },
+});
+
+E.use((t) => {
+  ["#q1", "#q2", "#q3", "#q4"].forEach((s, i) => vis(s, t, 0.3 + i * 0.5, 3.2, { y: 20, scale: 0.7 }));
+  vis("#cnt", t, S0, 20, { y: 0, scale: 0.8 });
+  const k = Math.min(3, Math.max(0, Math.floor((t - S0) / D)));
+  $("#cnt").textContent = `MYTH ${k + 1} / 4`;
+  MYTHS.forEach((_, i) => {
+    const s = S0 + i * D;
+    vis(`[data-m="${i}"]`, t, s + 0.05, s + D, { x: -40, y: 0, outDur: 0.2 });
+    vis(`[data-m="${i}"] .stamp`, t, s + 1.2, null, { scale: 2.4, y: 0, dur: 0.25 });
+    vis(`[data-t="${i}"]`, t, s + 1.7, s + D, { y: 40, outDur: 0.2 });
+  });
+  vis("#free", t, 20.1, 22.2, { y: 0, scale: 0.7, dur: 0.45 });
+});
+</script>
+</body>
+</html>
