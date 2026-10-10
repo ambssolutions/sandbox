@@ -11,9 +11,10 @@
 <script>(function(){var r=document.documentElement,w0=0,vh0=0;function vn(){var v=window.visualViewport?visualViewport.height:innerHeight;return Math.round(Math.min(v,innerHeight,r.clientHeight||innerHeight));}function sv(f){var h=vn();if(f||innerWidth!==w0||!vh0||h<vh0-4){w0=innerWidth;vh0=h;var w=innerWidth,z=w>=3600?1.9:w>=3000?1.6:w>=2400?1.3:w>=1900?1.1:1;r.style.setProperty('--appvh',(h/z)+'px');}}sv(true);addEventListener('resize',function(){sv(false);});if(window.visualViewport)visualViewport.addEventListener('resize',function(){sv(false);});addEventListener('load',function(){setTimeout(function(){sv(false);},150);setTimeout(function(){sv(false);},900);});addEventListener('orientationchange',function(){w0=0;vh0=0;setTimeout(function(){sv(true);},300);});if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){r.classList.add('motion');setTimeout(function(){if(!window.__mr)r.classList.remove('motion')},4000)}})()</script>
 <script>(function(){try{var t=localStorage.getItem('mk-theme');if(t!=='dark'&&t!=='light')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;}catch(e){}})();</script>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="assets/style.css?v=712b650f">
+<link rel="preload" href="assets/fonts/newsreader-normal-300-500-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/ibm-plex-mono-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/style.css?v=d2f9faab">
 
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.mikia.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "About", "item": "https://www.mikia.co.nz/about"}]}</script>
 </head>
@@ -59,9 +60,9 @@
   </div>
   <div class="foot-base"><span>&copy; <span id="yr">2026</span> MiKia Consulting Group Limited</span><span class="foot-loc">Auckland, New Zealand</span><a href="privacy.html">Privacy</a></div><p class="foot-fine">Some images on this website may be stock images or illustrative renders and do not show MiKia projects. Proudly designed by <a href="https://ambs.co.nz" target="_blank" rel="noopener">AMBS Solutions</a>.</p></div>
 </footer>
-<script defer src="assets/site.js?v=712b650f"></script>
-<script defer src="assets/content.js?v=712b650f"></script><script defer src="assets/site-content.js?v=712b650f"></script>
-<script defer src="assets/fx.js?v=712b650f"></script><script defer src="assets/motion.js?v=712b650f"></script>
-<script defer src="assets/blog.js?v=712b650f"></script><script defer src="assets/blog-render.js?v=712b650f"></script>
+<script defer src="assets/site.js?v=d2f9faab"></script>
+<script defer src="assets/content.js?v=d2f9faab"></script><script defer src="assets/site-content.js?v=d2f9faab"></script>
+<script defer src="assets/fx.js?v=d2f9faab"></script><script defer src="assets/motion.js?v=d2f9faab"></script>
+<script defer src="assets/blog.js?v=d2f9faab"></script><script defer src="assets/blog-render.js?v=d2f9faab"></script>
 </body>
 </html>
