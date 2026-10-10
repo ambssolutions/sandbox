@@ -13,7 +13,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="assets/style.css?v=d78e48f9">
+<link rel="stylesheet" href="assets/style.css?v=9f4576f8">
 
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.mikia.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Our services", "item": "https://www.mikia.co.nz/services"}]}</script>
 </head>
@@ -48,14 +48,17 @@
   </div>
   <div class="foot-base"><span>&copy; <span id="yr">2026</span> MiKia Consulting Group Limited</span><span class="foot-loc">Auckland, New Zealand</span><a href="privacy.html">Privacy</a></div><p class="foot-fine">Some images on this website may be stock images or illustrative renders and do not show MiKia projects. Proudly designed by <a href="https://ambs.co.nz" target="_blank" rel="noopener">AMBS Solutions</a>.</p></div>
 </footer>
-<script defer src="assets/site.js?v=d78e48f9"></script>
-<script defer src="assets/content.js?v=d78e48f9"></script><script defer src="assets/site-content.js?v=d78e48f9"></script>
-<script defer src="assets/fx.js?v=d78e48f9"></script><script defer src="assets/motion.js?v=d78e48f9"></script>
+<script defer src="assets/site.js?v=9f4576f8"></script>
+<script defer src="assets/content.js?v=9f4576f8"></script><script defer src="assets/site-content.js?v=9f4576f8"></script>
+<script defer src="assets/fx.js?v=9f4576f8"></script><script defer src="assets/motion.js?v=9f4576f8"></script>
 <script>(function(){var A=[].slice.call(document.querySelectorAll('.sa'));if(!A.length)return;
 function set(a,on){a.classList.toggle('open',on);var b=a.querySelector('.sa-h');if(b)b.setAttribute('aria-expanded',on?'true':'false');}
-A.forEach(function(a){a.querySelector('.sa-h').addEventListener('click',function(){set(a,!a.classList.contains('open'));});});
+var hold=0;function stay(btn,t0){cancelAnimationFrame(hold);var end=performance.now()+1050;(function f(){var d=btn.getBoundingClientRect().top-t0;if(Math.abs(d)>.5)window.scrollBy({top:d,left:0,behavior:'instant'});if(performance.now()<end)hold=requestAnimationFrame(f);})();}
+['wheel','touchstart','keydown'].forEach(function(ev){addEventListener(ev,function(){cancelAnimationFrame(hold);},{passive:true});});
+function openOnly(a){var btn=a.querySelector('.sa-h'),t0=btn.getBoundingClientRect().top,was=a.classList.contains('open');if(!was)A.forEach(function(x){if(x!==a&&x.classList.contains('open'))set(x,false);});set(a,!was);stay(btn,t0);}
+A.forEach(function(a){a.querySelector('.sa-h').addEventListener('click',function(){openOnly(a);});});
 function go(){var h=decodeURIComponent(location.hash.replace('#','')),el=h&&document.getElementById(h);if(!el)return;
-if(el.classList.contains('sa')){set(el,true);setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'center'});},60);}}
+if(el.classList.contains('sa')){A.forEach(function(x){if(x!==el&&x.classList.contains('open'))set(x,false);});set(el,true);setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'center'});},60);}}
 var cur=null,tk=0;
 function mark(){tk=0;var sn=document.querySelector('.sticky-nav'),line=innerHeight*.5,best=null;for(var i=0;i<A.length;i++){var r=A[i].getBoundingClientRect();if(r.top<=line)best=A[i];else break;}
 var cats=document.querySelectorAll('.svc-cat'),atl=null;for(var k=0;k<cats.length;k++){var cr=cats[k].getBoundingClientRect();if(cr.top<=line&&cr.bottom>line){atl=cats[k];break;}}
