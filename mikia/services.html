@@ -14,7 +14,7 @@
 <link rel="preload" href="assets/fonts/newsreader-normal-300-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/ibm-plex-mono-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/style.css?v=d2f9faab">
+<link rel="stylesheet" href="assets/style.css?v=186b0d7d">
 
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.mikia.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Our services", "item": "https://www.mikia.co.nz/services"}]}</script>
 </head>
@@ -49,17 +49,21 @@
   </div>
   <div class="foot-base"><span>&copy; <span id="yr">2026</span> MiKia Consulting Group Limited</span><span class="foot-loc">Auckland, New Zealand</span><a href="privacy.html">Privacy</a></div><p class="foot-fine">Some images on this website may be stock images or illustrative renders and do not show MiKia projects. Proudly designed by <a href="https://ambs.co.nz" target="_blank" rel="noopener">AMBS Solutions</a>.</p></div>
 </footer>
-<script defer src="assets/site.js?v=d2f9faab"></script>
-<script defer src="assets/content.js?v=d2f9faab"></script><script defer src="assets/site-content.js?v=d2f9faab"></script>
-<script defer src="assets/fx.js?v=d2f9faab"></script><script defer src="assets/motion.js?v=d2f9faab"></script>
+<script defer src="assets/site.js?v=186b0d7d"></script>
+<script defer src="assets/content.js?v=186b0d7d"></script><script defer src="assets/site-content.js?v=186b0d7d"></script>
+<script defer src="assets/fx.js?v=186b0d7d"></script><script defer src="assets/motion.js?v=186b0d7d"></script>
 <script>(function(){var A=[].slice.call(document.querySelectorAll('.sa'));if(!A.length)return;
+if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('js-sa');
+var rio=new IntersectionObserver(function(es){var v=es.filter(function(e){return e.isIntersecting}).sort(function(x,y){return x.boundingClientRect.top-y.boundingClientRect.top});v.forEach(function(e,i){e.target.style.setProperty('--d',Math.min(i,7)*70+'ms');e.target.classList.add('in');rio.unobserve(e.target);});},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+A.forEach(function(x){rio.observe(x);});
+setTimeout(function(){A.forEach(function(x){x.classList.add('in');});},6000);}
 function set(a,on){a.classList.toggle('open',on);var b=a.querySelector('.sa-h');if(b)b.setAttribute('aria-expanded',on?'true':'false');}
 var hold=0;function stay(btn,t0){cancelAnimationFrame(hold);var end=performance.now()+1050;(function f(){var d=btn.getBoundingClientRect().top-t0;if(Math.abs(d)>.5)window.scrollBy({top:d,left:0,behavior:'instant'});if(performance.now()<end)hold=requestAnimationFrame(f);})();}
 ['wheel','touchstart','keydown'].forEach(function(ev){addEventListener(ev,function(){cancelAnimationFrame(hold);},{passive:true});});
 function openOnly(a){var btn=a.querySelector('.sa-h'),t0=btn.getBoundingClientRect().top,was=a.classList.contains('open');if(!was)A.forEach(function(x){if(x!==a&&x.classList.contains('open'))set(x,false);});set(a,!was);stay(btn,t0);}
 A.forEach(function(a){a.querySelector('.sa-h').addEventListener('click',function(){openOnly(a);});});
 function go(){var h=decodeURIComponent(location.hash.replace('#','')),el=h&&document.getElementById(h);if(!el)return;
-if(el.classList.contains('sa')){A.forEach(function(x){if(x!==el&&x.classList.contains('open'))set(x,false);});set(el,true);setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'center'});},60);}}
+if(el.classList.contains('sa')){el.classList.add('in');A.forEach(function(x){if(x!==el&&x.classList.contains('open'))set(x,false);});set(el,true);setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'center'});},60);}}
 var cur=null,tk=0;
 function mark(){tk=0;var sn=document.querySelector('.sticky-nav'),line=innerHeight*.5,best=null;for(var i=0;i<A.length;i++){var r=A[i].getBoundingClientRect();if(r.top<=line)best=A[i];else break;}
 var cats=document.querySelectorAll('.svc-cat'),atl=null;for(var k=0;k<cats.length;k++){var cr=cats[k].getBoundingClientRect();if(cr.top<=line&&cr.bottom>line){atl=cats[k];break;}}
