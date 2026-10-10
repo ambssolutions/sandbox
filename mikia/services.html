@@ -57,7 +57,9 @@ A.forEach(function(a){a.querySelector('.sa-h').addEventListener('click',function
 function go(){var h=decodeURIComponent(location.hash.replace('#','')),el=h&&document.getElementById(h);if(!el)return;
 if(el.classList.contains('sa')){set(el,true);setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},60);}}
 var cur=null,tk=0;
-function mark(){tk=0;var line=innerHeight*.42,best=null;for(var i=0;i<A.length;i++){var r=A[i].getBoundingClientRect();if(r.top<=line)best=A[i];else break;}
+function mark(){tk=0;var sn=document.querySelector('.sticky-nav'),line=(sn?sn.getBoundingClientRect().bottom:60)+125,best=null;for(var i=0;i<A.length;i++){var r=A[i].getBoundingClientRect();if(r.top<=line)best=A[i];else break;}
+var cats=document.querySelectorAll('.svc-cat'),atl=null;for(var k=0;k<cats.length;k++){var cr=cats[k].getBoundingClientRect();if(cr.top<=line&&cr.bottom>line){atl=cats[k];break;}}
+if(best&&atl&&best.closest('.svc-cat')!==atl)best=null;
 if(best!==cur){if(cur)cur.classList.remove('is-current');cur=best;if(cur)cur.classList.add('is-current');}}
 function req(){if(!tk)tk=requestAnimationFrame(mark);}
 addEventListener('scroll',req,{passive:true});addEventListener('resize',req);mark();
