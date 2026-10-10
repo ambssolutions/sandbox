@@ -80,3 +80,8 @@ Other content still needed:
 - Real project details and images (assets/projects.js).
 - The service copy says "MIKIA Design and Construction Group"; the rest of the site says "MiKia Consulting Group". Confirm which name to use.
 - Enquiry form emails info@mikia.co.nz for now; a shared Google Sheet / form service can replace it later (FORM_ENDPOINT in assets/form.js).
+
+## Open questions for the client
+- Our team: Neelam Gandhi was removed from the site copy and the team card; send the people to show (names, roles, photos).
+- Blog: the page exists and is empty (posts go in assets/blog.js); it is not linked from the footer. Keep the About page "Visit the blog" link?
+- QR code: not received yet; recommended placement is the Contact page only, pointing to the new site's contact page.
