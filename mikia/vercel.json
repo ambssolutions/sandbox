@@ -1,20 +1,20 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/residential",
+      "destination": "/projects#residential",
+      "permanent": false
+    },
+    {
+      "source": "/commercial",
+      "destination": "/projects#commercial",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
-      "redirects": [
-        {
-          "source": "/residential",
-          "destination": "/projects#residential",
-          "permanent": false
-        },
-        {
-          "source": "/commercial",
-          "destination": "/projects#commercial",
-          "permanent": false
-        }
-      ],
       "headers": [
         {
           "key": "X-Content-Type-Options",
