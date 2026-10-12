@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Thumbnail — voice memo to quote</title>
+<link rel="stylesheet" href="../engine/base.css"><link rel="stylesheet" href="thumbs.css">
+<link rel="stylesheet" href="../engine/theme-website.css">
+<style>
+  .tlogo { filter: none; }
+  h1 { text-shadow: none; font-size: 54px; }
+  h1 mark { background: var(--accent); color: #fff; }
+  .side.bad { background: #fff1f1; border-color: #fca5a5; }
+  .bad .tag { background: #dc2626; color: #fff; }
+  .side.good { background: #fff; border-color: rgba(46,148,24,.6); box-shadow: 0 16px 40px rgba(46,148,24,.18); }
+  .good .tag { background: var(--accent); color: #fff; }
+  .arrow { box-shadow: 0 8px 24px rgba(16,19,33,.18); }
+  .ph { width: 150px; height: 250px; margin: 6px auto 0; border-radius: 26px; background: #0b0b0f; padding: 7px; }
+  .ph .s { height: 100%; border-radius: 20px; background: #fff; color: var(--ink); padding: 26px 10px 10px; text-align: center; position: relative; }
+  .ph .s::before { content: ""; position: absolute; left: 50%; top: 6px; width: 46px; height: 12px; margin-left: -23px; background: #0b0b0f; border-radius: 8px; }
+  .ph .t { font-size: 30px; font-weight: 900; margin-top: 6px; }
+  .ph .l { font-size: 8.5px; font-weight: 800; color: var(--muted); letter-spacing: .06em; }
+  .wave { margin: 10px auto 0; height: 50px; display: flex; align-items: center; justify-content: center; gap: 3px; }
+  .wave i { width: 4px; border-radius: 2px; background: var(--accent); }
+  .rec { width: 44px; height: 44px; margin: 22px auto 0; border-radius: 50%; border: 3px solid #fecaca; display: grid; place-items: center; }
+  .rec i { width: 18px; height: 18px; border-radius: 5px; background: #dc2626; }
+  .q { background: #fff; color: var(--ink); border-radius: 12px; border: 1px solid #e5e9f0; padding: 10px 11px; font-size: 10.5px; text-align: left; }
+  .q .hd { font-weight: 900; font-size: 12.5px; }
+  .q .ai { display: inline-block; margin: 5px 0 4px; background: #D3EFB9; color: #1f6b10; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 999px; }
+  .q .li { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #eef1f5; }
+  .q .tot { display: flex; justify-content: space-between; font-weight: 900; font-size: 13px; padding-top: 5px; }
+  .q .ok { margin-top: 8px; background: var(--accent); color: #fff; font-weight: 900; text-align: center; border-radius: 8px; padding: 6px; font-size: 12px; }
+  .stat2 { background: #fff; border-color: #dfe5ee; color: var(--ink); box-shadow: 0 8px 22px rgba(16,19,33,.08); }
+  .stat2 b { color: var(--accent); }
+  .cta { color: var(--muted); }
+  .cta span { background: var(--accent); color: #fff; box-shadow: 0 4px 0 #1f6b10; }
+</style></head><body>
+<div id="frame">
+  <img class="tlogo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="kicker">QUOTES · AI AUTOMATION</div>
+  <h1>Talk.<br><mark>Quote sent.</mark></h1>
+  <div class="ba">
+    <div class="side bad" style="transform:rotate(-2deg)"><div class="tag" style="background:#dc2626">YOU SAY</div>
+      <div class="ph"><div class="s"><div class="l">● VOICE MEMO</div><div class="t">0:42</div>
+        <div class="wave" id="w"></div><div class="rec"><i></i></div></div></div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="side good"><div class="tag">AI DRAFTS</div>
+      <div class="q"><div class="hd">Deck, 14 Rata St</div><div class="ai">✨ FROM YOUR VOICE MEMO</div>
+        <div class="li"><span>Kwila decking</span><span>$6,400</span></div>
+        <div class="li"><span>Steps × 2</span><span>$780</span></div>
+        <div class="li"><span>Labour, 3 days</span><span>$2,880</span></div>
+        <div class="tot"><span>Total</span><span>$11,569</span></div>
+        <div class="ok">Approve &amp; send ✓</div></div>
+    </div>
+  </div>
+  <div class="stat2">No typing. No templates. <b>Just talk.</b></div>
+  <div class="cta">Comment <span>DEMO</span> to see it live</div>
+</div>
+<script>
+  const H=[14,28,40,22,46,30,18,38,50,26,34,44,20,36,28,16];
+  document.getElementById('w').innerHTML=H.map(h=>`<i style="height:${h}px"></i>`).join('');
+</script>
+</body></html>
