@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Poster — Typed once</title>
+<link rel="stylesheet" href="../engine/base.css">
+<link rel="stylesheet" href="../engine/theme-website.css">
+<style>
+  /* 4:5 feed poster: 540x675 CSS => 1080x1350 */
+  #frame { height: 675px; margin-top: -337px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .logo { margin-top: 24px; width: 130px; position: relative; }
+  .kicker { position: relative; margin-top: 8px; font-size: 14px; font-weight: 800; letter-spacing: .16em; color: var(--accent); }
+  h1 { position: relative; margin-top: 4px; font-size: 36px; line-height: 1.05; font-weight: 900; letter-spacing: -.03em; padding: 0 30px; }
+  h1 mark { background: var(--accent); color: #fff; padding: 0 8px; border-radius: 8px; }
+  .dia { position: relative; margin-top: 16px; width: 490px; height: 272px; }
+  .src { position: absolute; left: 50%; top: 0; width: 250px; margin-left: -125px; background: #fff; border: 2px solid var(--accent);
+    border-radius: 16px; padding: 10px 14px; text-align: left; box-shadow: 0 12px 30px rgba(46,148,24,.18); }
+  .src .l { font-size: 10px; font-weight: 900; letter-spacing: .12em; color: var(--accent); }
+  .src b { display: block; font-size: 17px; margin-top: 3px; }
+  .src span { display: block; font-size: 12px; color: var(--muted); font-weight: 600; margin-top: 1px; }
+  .once { position: absolute; right: -10px; top: -12px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 900;
+    padding: 4px 9px; border-radius: 999px; letter-spacing: .06em; }
+  svg { position: absolute; left: 0; top: 0; }
+  .app { position: absolute; top: 158px; width: 150px; background: #fff; border: 1px solid #e5e9f0; border-radius: 16px; padding: 12px 10px;
+    box-shadow: 0 8px 20px rgba(16,19,33,.07); }
+  .app .e { font-size: 28px; } .app b { display: block; font-size: 14.5px; margin-top: 4px; }
+  .app span { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 900; color: var(--accent); background: #D3EFB9;
+    padding: 3px 8px; border-radius: 999px; }
+  .pts { position: relative; margin-top: 12px; width: 470px; display: grid; gap: 7px; text-align: left; }
+  .pts div { font-size: 14.5px; font-weight: 750; display: flex; gap: 9px; align-items: center; }
+  .pts i { font-style: normal; flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 12px;
+    font-weight: 900; display: grid; place-items: center; }
+  .foot { position: relative; margin-top: 14px; display: flex; align-items: center; gap: 12px; }
+  .free { background: var(--accent); color: #fff; font-weight: 900; font-size: 15px; padding: 8px 14px; border-radius: 999px; }
+  .cta { font-size: 17px; font-weight: 800; color: var(--muted); }
+  .cta span { background: var(--mark); color: #fff; padding: 3px 9px; border-radius: 7px; box-shadow: 0 3px 0 #1f6b10; margin-left: 3px; }
+  .url { position: relative; margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .04em; }
+  .url b { color: var(--ink); }
+</style></head><body>
+<div id="frame">
+  <img class="logo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="kicker">MOVING DATA BETWEEN APPS</div>
+  <h1>Still typing the same job<br><mark>into 3 different apps?</mark></h1>
+  <div class="dia">
+    <svg width="490" height="170" viewBox="0 0 490 170">
+      <path d="M245 70 C245 110, 85 110, 85 158" fill="none" stroke="#2E9418" stroke-width="3" stroke-dasharray="6 6"/>
+      <path d="M245 70 L245 158" fill="none" stroke="#2E9418" stroke-width="3" stroke-dasharray="6 6"/>
+      <path d="M245 70 C245 110, 405 110, 405 158" fill="none" stroke="#2E9418" stroke-width="3" stroke-dasharray="6 6"/>
+    </svg>
+    <div class="src"><div class="once">TYPED ONCE</div><div class="l">NEW CUSTOMER</div><b>Aroha T. · Kitchen reno</b><span>021 555 0192 · aroha@email.co.nz</span></div>
+    <div class="app" style="left:10px"><div class="e emoji">🧾</div><b>Accounting app</b><span>✓ Added</span></div>
+    <div class="app" style="left:170px"><div class="e emoji">📋</div><b>Job tracker</b><span>✓ Added</span></div>
+    <div class="app" style="left:330px"><div class="e emoji">📅</div><b>Email &amp; calendar</b><span>✓ Added</span></div>
+  </div>
+  <div class="pts">
+    <div><i>✓</i>New customers added to every app at once</div>
+    <div><i>✓</i>Contact details kept the same everywhere</div>
+    <div><i>✓</i>Set up and tested by us, then left to run</div>
+  </div>
+  <div class="foot"><div class="free">Free first session</div><div class="cta">Comment <span>AUTO</span> <span class="emoji" style="background:none;box-shadow:none;padding:0">👇</span></div></div>
+  <div class="url"><b>ambs.co.nz</b> · AI automation &amp; websites for NZ businesses</div>
+</div></body></html>
