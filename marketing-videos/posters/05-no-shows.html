@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Poster — No-shows</title>
+<link rel="stylesheet" href="../engine/base.css">
+<link rel="stylesheet" href="../engine/theme-website.css">
+<style>
+  /* 4:5 feed poster: 540x675 CSS => 1080x1350 */
+  #frame { height: 675px; margin-top: -337px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .logo { margin-top: 24px; width: 130px; position: relative; }
+  .kicker { position: relative; margin-top: 8px; font-size: 14px; font-weight: 800; letter-spacing: .16em; color: var(--accent); }
+  h1 { position: relative; margin-top: 4px; font-size: 36px; line-height: 1.03; font-weight: 900; letter-spacing: -.03em; padding: 0 30px; }
+  h1 mark { background: var(--accent); color: #fff; padding: 0 8px; border-radius: 8px; }
+  .main { position: relative; margin-top: 16px; width: 490px; display: flex; gap: 14px; align-items: flex-start; }
+  .phone { width: 220px; height: 352px; border-radius: 30px; background: #0b0b0f; padding: 8px; flex: none;
+    box-shadow: 0 18px 40px rgba(16,19,33,.25); }
+  .phone .s { position: relative; height: 100%; border-radius: 23px; background: #f2f3f7; padding: 34px 9px 9px; overflow: hidden; text-align: left; }
+  .phone .s::before { content: ""; position: absolute; left: 50%; top: 6px; width: 60px; height: 15px; margin-left: -30px; background: #0b0b0f; border-radius: 9px; }
+  .who { position: absolute; left: 0; right: 0; top: 23px; text-align: center; font-size: 9.5px; font-weight: 800; color: #6b7280; }
+  .sms { position: relative; background: #fff; color: #111827; border-radius: 14px; border-bottom-left-radius: 5px; padding: 6px 9px; font-size: 10px;
+    line-height: 1.35; margin-top: 10px; max-width: 92%; box-shadow: 0 2px 6px rgba(16,19,33,.06); }
+  .sms .n { position: absolute; left: -7px; top: -7px; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); color: #fff;
+    font-size: 10px; font-weight: 900; display: grid; place-items: center; }
+  .me { margin-left: auto; background: #2563eb; color: #fff; border-radius: 14px; border-bottom-right-radius: 5px; padding: 6px 9px; font-size: 10.5px;
+    margin-top: 8px; width: fit-content; }
+  .pts { flex: 1; display: grid; gap: 8px; text-align: left; }
+  .pt { background: #fff; border: 1px solid #e5e9f0; border-radius: 14px; padding: 10px 12px; box-shadow: 0 6px 16px rgba(16,19,33,.06); }
+  .pt .n { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff;
+    font-size: 12px; font-weight: 900; vertical-align: -4px; margin-right: 6px; }
+  .pt b { font-size: 15px; font-weight: 850; }
+  .pt span { display: block; margin-top: 4px; font-size: 12px; color: var(--muted); font-weight: 600; line-height: 1.3; }
+  .works { position: relative; margin-top: 14px; font-size: 14.5px; font-weight: 800; }
+  .works span { color: var(--accent); }
+  .foot { position: relative; margin-top: 10px; display: flex; align-items: center; gap: 12px; }
+  .free { background: var(--accent); color: #fff; font-weight: 900; font-size: 15px; padding: 8px 14px; border-radius: 999px; }
+  .cta { font-size: 17px; font-weight: 800; color: var(--muted); }
+  .cta span { background: var(--mark); color: #fff; padding: 3px 9px; border-radius: 7px; box-shadow: 0 3px 0 #1f6b10; margin-left: 3px; }
+  .url { position: relative; margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .04em; }
+  .url b { color: var(--ink); }
+</style></head><body>
+<div id="frame">
+  <img class="logo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="kicker">BOOKINGS &amp; REMINDERS</div>
+  <h1>No-shows<br><mark>costing you money?</mark></h1>
+  <div class="main">
+    <div class="phone"><div class="s"><div class="who">Your business · automated texts</div>
+      <div class="sms"><span class="n">1</span>Hi Sarah, you're booked for Tue 10:30am ✓</div>
+      <div class="sms"><span class="n">2</span>Reminder: see you tomorrow at 10:30am. Reply C to change.</div>
+      <div class="me">C, sorry something came up</div>
+      <div class="sms"><span class="n">3</span>Hi Tom, a 10:30am spot just opened tomorrow. Want it? Reply YES</div>
+      <div class="me">YES! <span class="emoji">🙌</span></div>
+      <div class="sms"><span class="n">4</span>Thanks for coming in, Tom! Mind leaving us a quick Google review? <span class="emoji">⭐</span></div>
+    </div></div>
+    <div class="pts">
+      <div class="pt"><span class="n">1</span><b>Instant confirmation</b><span>Every booking confirmed straight away</span></div>
+      <div class="pt"><span class="n">2</span><b>Reminders</b><span>Sent before the visit, no one chasing</span></div>
+      <div class="pt"><span class="n">3</span><b>Gaps filled</b><span>Cancelled spots offered to your waitlist</span></div>
+      <div class="pt"><span class="n">4</span><b>More reviews</b><span>Follow-up text asking for a review</span></div>
+    </div>
+  </div>
+  <div class="works">Works with the <span>booking system you already use.</span></div>
+  <div class="foot"><div class="free">Free first session</div><div class="cta">Comment <span>AUTO</span> <span class="emoji" style="background:none;box-shadow:none;padding:0">👇</span></div></div>
+  <div class="url"><b>ambs.co.nz</b> · AI automation &amp; websites for NZ businesses</div>
+</div></body></html>

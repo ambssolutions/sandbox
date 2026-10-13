@@ -1,0 +1,26 @@
+/* "Website green" theme — matches ambs.co.nz (paper #EFF3F9, ink #101321, green #2E9418).
+   Load after base.css: <link rel="stylesheet" href="../engine/theme-website.css"> */
+:root {
+  --bg: #EFF3F9; --bg2: #E6ECF5; --ink: #101321; --muted: #5B6B84;
+  --accent: #2E9418; --accent-2: #2E9418; --mark: #2E9418; --soft: #D3EFB9;
+}
+#frame { color: var(--ink);
+  background: radial-gradient(90% 40% at 50% 0%, #D3EFB9 0%, transparent 65%),
+              radial-gradient(70% 40% at 100% 100%, #dbe7f7 0%, transparent 70%), #EFF3F9; }
+#frame::before { background-image: linear-gradient(rgba(16,19,33,.045) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(16,19,33,.045) 1px, transparent 1px); }
+.progress { background: rgba(16,19,33,.12); } .progress i { background: var(--accent); }
+.brand { filter: none; }
+.caption { text-shadow: none; }
+.caption mark { background: var(--mark); color: #fff; }
+.caption .cyan { color: var(--accent); }
+.badge.good { background: var(--accent); color: #fff; }
+.chip { background: #fff; border-color: #dfe5ee; box-shadow: 0 8px 22px rgba(16,19,33,.08); }
+.stat { background: #fff; border-color: rgba(46,148,24,.45); box-shadow: 0 8px 22px rgba(16,19,33,.08); }
+.stat .l { color: var(--accent); }
+.toast { box-shadow: 0 14px 34px rgba(16,19,33,.18); border: 1px solid #e5e9f0; }
+.end { background: radial-gradient(80% 50% at 50% 35%, rgba(46,148,24,.18), transparent 70%), rgba(239,243,249,.97); }
+.end .elogo { filter: none; }
+.end .sub, .end .foot { color: var(--muted); } .end .foot b { color: var(--ink); }
+.end .kw span { background: var(--accent); color: #fff; box-shadow: 0 10px 0 #1f6b10, 0 18px 40px rgba(46,148,24,.35); }
+.end .reply { box-shadow: 0 10px 28px rgba(16,19,33,.15); border: 1px solid #e5e9f0; }

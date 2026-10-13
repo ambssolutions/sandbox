@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — voice memo to quote (DEMO)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<link rel="stylesheet" href="../engine/theme-website.css">
+<style>
+  /* hook */
+  #word { left: 40px; top: 250px; width: 460px; height: 300px; }
+  #word .b { padding: 18px 22px; font: 15px/1.9 "Liberation Serif", serif; color: #9ca3af; }
+  #word h4 { font: 700 18px "Liberation Serif", serif; color: var(--win-ink); }
+  #night { left: 40px; top: 590px; }
+  /* phone */
+  .phone { position: absolute; left: 134px; top: 226px; width: 272px; height: 470px; border-radius: 36px; background: #0b0b0f;
+    padding: 10px; box-shadow: 0 24px 60px rgba(16,19,33,.35); }
+  .phone .scr { position: relative; width: 100%; height: 100%; border-radius: 28px; overflow: hidden; background: #fff; color: var(--win-ink);
+    padding: 54px 18px 18px; text-align: center; }
+  .phone .notch { position: absolute; left: 50%; top: 8px; width: 80px; height: 20px; margin-left: -40px; background: #0b0b0f; border-radius: 12px; z-index: 5; }
+  .rec-lab { font-size: 13px; font-weight: 800; color: var(--muted); letter-spacing: .08em; }
+  .timer { margin-top: 6px; font-size: 44px; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .wave { margin: 14px auto 0; height: 70px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .wave i { width: 5px; border-radius: 3px; background: var(--accent); }
+  .tr { margin-top: 16px; text-align: left; font-size: 14px; line-height: 1.5; color: #374151; min-height: 130px; background: #f6f8fb;
+    border-radius: 14px; padding: 12px; }
+  .recbtn { position: absolute; left: 50%; bottom: 22px; width: 64px; height: 64px; margin-left: -32px; border-radius: 50%;
+    border: 4px solid #fecaca; display: grid; place-items: center; }
+  .recbtn i { width: 26px; height: 26px; border-radius: 7px; background: #dc2626; display: block; }
+  /* quote */
+  #quote { left: 22px; top: 230px; width: 496px; height: 400px; }
+  #quote .b { padding: 16px 20px; font-size: 14px; }
+  #quote .hd { display: flex; justify-content: space-between; align-items: baseline; }
+  #quote .hd b { font-size: 18px; } #quote .hd span { font-size: 12px; color: var(--win-muted); }
+  .ai { display: inline-block; margin: 8px 0 10px; background: #D3EFB9; color: #1f6b10; font-size: 11.5px; font-weight: 900; letter-spacing: .06em;
+    padding: 4px 10px; border-radius: 999px; }
+  .li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--win-line); }
+  .li.sub { color: var(--win-muted); }
+  .li.tot { border: 0; font-weight: 900; font-size: 18px; padding-top: 10px; }
+  #approve { position: absolute; right: 20px; bottom: 18px; padding: 12px 22px; border-radius: 12px; background: var(--accent); color: #fff;
+    font-weight: 900; font-size: 15px; }
+  #edit { position: absolute; left: 20px; bottom: 18px; padding: 12px 18px; border-radius: 12px; background: #f3f4f6; color: #374151; font-weight: 800; font-size: 15px; }
+  .toast { top: 650px; }
+  #no { position: absolute; left: 22px; right: 22px; top: 300px; text-align: center; }
+  #no div { display: inline-block; margin: 8px; padding: 16px 26px; border-radius: 999px; font-size: 30px; font-weight: 900; background: #fff;
+    border: 2px solid #e5e9f0; box-shadow: 0 10px 26px rgba(16,19,33,.1); }
+  #no div s { text-decoration-color: #dc2626; text-decoration-thickness: 4px; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div class="win" id="word"><div class="bar blue"><b></b><b></b><b></b>Quote_template.docx</div>
+    <div class="b"><h4>QUOTATION</h4>Client: <span id="wc"></span><br>Job: ________________<br>Price: ______</div></div>
+  <div class="chip bad" id="night"><span class="emoji">🕘</span> Still quoting at <span class="big">9:40pm</span></div>
+
+  <div class="phone" id="phone"><div class="notch"></div><div class="scr">
+    <div class="rec-lab">● VOICE MEMO · SITE VISIT</div>
+    <div class="timer" id="tm">0:00</div>
+    <div class="wave" id="wave"></div>
+    <div class="tr" id="tr"></div>
+    <div class="recbtn"><i></i></div>
+  </div></div>
+
+  <div class="win" id="quote"><div class="bar"><b></b><b></b><b></b>Draft quote · Q-3107</div>
+    <div class="b">
+      <div class="hd"><b>Deck, 14 Rata St</b><span>for Mere W.</span></div>
+      <div class="ai">✨ DRAFTED FROM YOUR VOICE MEMO</div>
+      <div class="li" data-l><span>Kwila decking, 20 m²</span><span>$6,400.00</span></div>
+      <div class="li" data-l><span>Steps × 2</span><span>$780.00</span></div>
+      <div class="li" data-l><span>Labour, 3 days</span><span>$2,880.00</span></div>
+      <div class="li sub" data-l><span>GST (15%)</span><span>$1,509.00</span></div>
+      <div class="li tot" data-l><span>Total</span><span>$11,569.00</span></div>
+    </div>
+    <div id="edit">Edit</div><div id="approve">Approve &amp; send ✓</div>
+  </div>
+
+  <div id="no"><div><s>No typing</s></div><div><s>No templates</s></div><div><span class="emoji">🎙️</span> Just talk</div></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis, type, p, ease, lerp } = E;
+for (let i = 0; i < 26; i++) $("#wave").insertAdjacentHTML("beforeend", "<i></i>");
+const bars = $$("#wave i");
+const lines = $$("[data-l]");
+const TOASTS = [
+  [14.4, 16.2, "#2E9418", "📧", "Quote sent to Mere W.", "Q-3107 · $11,569.00"],
+  [16.2, 19.7, "#2563eb", "🧾", "Job done → invoice ready", "Waiting in your accounting app to check & send"],
+];
+TOASTS.forEach((x) => $("#frame").insertAdjacentHTML("beforeend",
+  `<div class="toast"><div class="ic" style="background:${x[2]}"><span class="emoji">${x[3]}</span></div><div><div class="tt">${x[4]}</div><div class="ts">${x[5]}</div></div><div class="when">now</div></div>`));
+const toasts = $$(".toast");
+const cur = E.cursor($("#frame"));
+window.COVER_AT = 5.8;
+
+E.setup({
+  duration: 23,
+  keyword: "DEMO",
+  voice: [
+    { a: 0.15, b: 3.1, text: "Still typing up quotes at night?" },
+    { a: 3.3, b: 7.9, text: "Just talk. Record a quick voice memo on site, like you normally would." },
+    { a: 8.1, b: 12.9, text: "A I turns it into a draft quote, with your prices and your wording." },
+    { a: 13.1, b: 17.9, text: "You check it, tap approve, and it's sent. When the job's done, the invoice is ready too." },
+    { a: 18.0, b: 19.6, text: "No typing. No templates." },
+    { a: 19.9, b: 22.9, text: "Want to see it live? Comment, demo." },
+  ],
+  captions: [
+    { a: 0, b: 3.2, html: `Still typing quotes <mark>at night?</mark>` },
+    { a: 3.2, b: 8, html: `Just <mark>talk.</mark> Record a voice memo on site.` },
+    { a: 8, b: 13, html: `AI drafts the quote with <span class="cyan">your prices &amp; wording.</span>` },
+    { a: 13, b: 17.9, html: `Check it. <mark>Approve.</mark> Sent.` },
+    { a: 17.9, b: 19.8, html: `From voice memo to quote, <span class="cyan">automatically.</span>` },
+  ],
+  phases: [],
+  end: { at: 19.7, title: "Want to see it live?", sub: "I'll send you a 2-minute demo of voice memo → quote." },
+});
+
+E.use((t) => {
+  // hook
+  vis("#word", t, 0, 3.2, { y: 30 });
+  vis("#night", t, 0.4, 3.2);
+  type("#wc", "Mere W", t, 0.8, 1.6);
+  // voice memo
+  vis("#phone", t, 3.2, 8.1, { y: 30 });
+  const rec = p(t, 3.5, 7.8, ease.linear);
+  const secs = Math.round(rec * 42);
+  $("#tm").textContent = `0:${String(secs).padStart(2, "0")}`;
+  bars.forEach((b, i) => {
+    const on = t > 3.5 && t < 7.9;
+    const h = on ? 10 + 50 * Math.abs(Math.sin(t * 9 + i * 0.7) * Math.sin(t * 3.3 + i * 1.3)) : 6;
+    b.style.height = h + "px";
+  });
+  type("#tr", "\"Deck at 14 Rata St for Mere. About 20 square metres of kwila, two steps down to the lawn. Three days' labour…\"", t, 4.0, 7.6, false);
+  // quote
+  vis("#quote", t, 8.1, 17.9, { y: 30 });
+  lines.forEach((l, i) => vis(l, t, 8.6 + i * 0.45, null, { x: -20, y: 0 }));
+  vis("#edit", t, 11.2, null, { y: 10 });
+  vis("#approve", t, 11.2, null, { y: 10 });
+  const ap = $("#approve");
+  ap.style.transform += ` scale(${t > 13.9 && t < 14.2 ? 0.93 : 1})`;
+  ap.textContent = t > 14.1 ? "Sent ✓" : "Approve & send ✓";
+  cur(t, [{ t: 12.6, x: 300, y: 720 }, { t: 13.9, x: 440, y: 610, click: true }, { t: 15, x: 470, y: 660 }], 12.6, 15);
+  TOASTS.forEach((x, i) => vis(toasts[i], t, x[0], x[1], { y: 26, dur: 0.3, outDur: 0.12 }));
+  // no typing
+  vis("#no", t, 17.9, 19.7, { y: 0, scale: 0.7 });
+});
+</script>
+</body>
+</html>

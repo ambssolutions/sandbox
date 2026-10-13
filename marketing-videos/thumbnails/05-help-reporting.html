@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Thumbnail — HELP</title>
+<link rel="stylesheet" href="../engine/base.css"><link rel="stylesheet" href="thumbs.css">
+<style>
+  .stack { position: relative; height: 196px; }
+  .stack .mini { position: absolute; width: 170px; box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+  .stack .bar.g { background: #107c41; } .stack .bar.b { background: #2b579a; }
+  .stack table { width: 100%; border-collapse: collapse; font-size: 9.5px; }
+  .stack td { border: 1px solid var(--win-line); padding: 3px 5px; }
+  .stack .rep { padding: 8px; font: 10.5px/1.7 "Liberation Serif", serif; }
+  .clock { position: absolute; right: -14px; bottom: -18px; background: var(--bad); color: #fff; font-weight: 900; font-size: 14px;
+    padding: 6px 11px; border-radius: 999px; box-shadow: 0 6px 14px rgba(0,0,0,.4); z-index: 3; }
+  .dash { background: #0f172a; color: #e2e8f0; border-radius: 12px; overflow: hidden; text-align: left; }
+  .dash .bar { height: 20px; background: #111827; display: flex; align-items: center; gap: 4px; padding: 0 7px; font-size: 8.5px; color: #4ade80; font-weight: 800; }
+  .kp { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; padding: 7px; }
+  .kp div { background: #1e293b; border-radius: 7px; padding: 5px 6px; }
+  .kp small { display: block; font-size: 7.5px; color: #94a3b8; font-weight: 700; }
+  .kp b { font-size: 14px; font-weight: 900; } .kp .w b { color: #fbbf24; }
+  .bars { display: flex; align-items: flex-end; gap: 4px; height: 70px; margin: 0 7px; padding: 6px; background: #1e293b; border-radius: 7px; }
+  .bars i { flex: 1; border-radius: 3px 3px 1px 1px; background: linear-gradient(180deg, #22d3ee, #6366f1); }
+  .bars i:last-child { background: linear-gradient(180deg, #4ade80, #16a34a); }
+  .mail { margin: 7px; background: #fff; color: var(--win-ink); border-radius: 7px; padding: 5px 7px; font-size: 9px; font-weight: 800; }
+  .badge2 { position: absolute; right: -14px; bottom: -18px; background: var(--good); color: #052e12; font-weight: 900; font-size: 14px;
+    padding: 6px 11px; border-radius: 999px; box-shadow: 0 6px 14px rgba(0,0,0,.4); }
+</style></head><body>
+<div id="frame">
+  <img class="tlogo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="kicker">REPORTING · DASHBOARDS</div>
+  <h1>Kill the<br><mark>Monday report</mark></h1>
+  <div class="ba">
+    <div class="side bad"><div class="tag">BEFORE</div>
+      <div class="stack">
+        <div class="mini" style="left:0;top:0"><div class="bar g"><i></i><i></i><i></i></div>
+          <table><tr><td>WK 40</td><td>$40,920</td></tr><tr><td>WK 41</td><td>$42,380</td></tr><tr><td>Jobs</td><td>37</td></tr></table></div>
+        <div class="mini" style="left:22px;top:66px"><div class="bar g"><i></i><i></i><i></i></div>
+          <table><tr><td>Overdue</td><td>=COUNTIF(…</td></tr><tr><td>In progress</td><td>12</td></tr></table></div>
+        <div class="mini" style="left:12px;top:118px"><div class="bar b"><i></i><i></i><i></i></div>
+          <div class="rep">Revenue: $42,3|<br>Overdue: ?? check</div></div>
+      </div>
+      <div class="clock"><span class="emoji">📅</span> 3 hrs</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="side good"><div class="tag">AFTER</div>
+      <div class="dash"><div class="bar">● LIVE</div>
+        <div class="kp"><div><small>REVENUE</small><b>$42,380</b></div><div class="w"><small>OVERDUE</small><b>3</b></div></div>
+        <div class="bars"><i style="height:62%"></i><i style="height:70%"></i><i style="height:68%"></i><i style="height:76%"></i><i style="height:74%"></i><i style="height:84%"></i><i style="height:92%"></i><i style="height:100%"></i></div>
+        <div class="mail"><span class="emoji">📧</span> Report sent · Mon 8:00am</div>
+      </div>
+      <div class="badge2"><span class="emoji">⚡</span> 0 min</div>
+    </div>
+  </div>
+  <div class="stat2">Monday reporting: <s>3 hrs</s> → <b>0 min</b></div>
+  <div class="cta">Comment <span>HELP</span> for a free look</div>
+</div></body></html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Thumbnail — DEMO</title>
+<link rel="stylesheet" href="../engine/base.css"><link rel="stylesheet" href="thumbs.css">
+<style>
+  .doc { padding: 12px 12px 16px; font: 12px/1.7 "Liberation Serif", serif; min-height: 190px; }
+  .doc h5 { font: 700 14px "Liberation Serif", serif; }
+  .doc .scr { color: #b91c1c; text-decoration: line-through; }
+  .clock { position: absolute; right: -14px; bottom: -18px; background: var(--bad); color: #fff; font-weight: 900; font-size: 14px;
+    padding: 6px 11px; border-radius: 999px; box-shadow: 0 6px 14px rgba(0,0,0,.4); }
+  .q { padding: 10px 11px 12px; font-size: 10.5px; }
+  .q .hd { font-weight: 900; font-size: 12px; margin-bottom: 4px; }
+  .q .li { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid var(--win-line); }
+  .q .tot { display: flex; justify-content: space-between; font-weight: 900; font-size: 13px; padding-top: 5px; }
+  .q .acc { margin-top: 8px; background: #16a34a; color: #fff; font-weight: 900; text-align: center; border-radius: 8px; padding: 6px; font-size: 12px; }
+  .badge2 { position: absolute; right: -14px; bottom: -18px; background: var(--good); color: #052e12; font-weight: 900; font-size: 14px;
+    padding: 6px 11px; border-radius: 999px; box-shadow: 0 6px 14px rgba(0,0,0,.4); }
+</style></head><body>
+<div id="frame">
+  <img class="tlogo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="kicker">QUOTES · AUTOMATION</div>
+  <h1 style="font-size:50px">Quotes that<br><mark>write themselves</mark></h1>
+  <div class="ba">
+    <div class="side bad"><div class="tag">BEFORE</div>
+      <div class="mini"><div class="bar"><i></i><i></i><i></i></div>
+        <div class="doc"><h5>QUOTATION</h5>To: Aroha T<br>Re: Kitchen <span class="scr">renovaiton</span><br>Cabinetry ...... $8,4|<br>Benchtop ...... ??<br>GST ...... <span class="emoji">🤔</span></div>
+      </div>
+      <div class="clock"><span class="emoji">⏳</span> 3 days</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="side good"><div class="tag">AFTER</div>
+      <div class="mini"><div class="bar"><i></i><i></i><i></i></div>
+        <div class="q"><div class="hd">QUOTE #Q-2231</div>
+          <div class="li"><span>Cabinetry</span><span>$8,400</span></div>
+          <div class="li"><span>Benchtop</span><span>$3,240</span></div>
+          <div class="li"><span>Plumbing</span><span>$1,560</span></div>
+          <div class="tot"><span>Total</span><span>$15,180</span></div>
+          <div class="acc">Accepted ✓</div></div>
+      </div>
+      <div class="badge2"><span class="emoji">⚡</span> 2 min</div>
+    </div>
+  </div>
+  <div class="stat2">Time to quote: <s>3 days</s> → <b>2 min</b></div>
+  <div class="cta">Comment <span>DEMO</span> to see it live</div>
+</div></body></html>

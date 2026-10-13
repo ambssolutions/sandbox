@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — WEBSITE (bookings)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  .phone { position: absolute; width: 232px; height: 450px; border-radius: 34px; background: #0b0b0f;
+    padding: 10px; box-shadow: 0 24px 60px rgba(0,0,0,.55), 0 0 0 2px #2a2f3d; }
+  .phone .scr { position: relative; width: 100%; height: 100%; border-radius: 26px; overflow: hidden; background: #fff; color: var(--win-ink); }
+  .phone .notch { position: absolute; left: 50%; top: 8px; width: 70px; height: 18px; margin-left: -35px; background: #0b0b0f; border-radius: 12px; z-index: 5; }
+  #oldphone { left: 154px; top: 226px; }
+  #oldphone .scr { background: #ecedf1; padding: 38px 10px 10px; }
+  .call { background: #fff; border-radius: 12px; padding: 8px 10px; font-size: 12px; margin-bottom: 6px; display: flex; gap: 8px; align-items: center; }
+  .call .r { color: #dc2626; font-weight: 800; }
+  .bub { max-width: 82%; padding: 7px 10px; border-radius: 14px; font-size: 12px; margin: 6px 0; line-height: 1.3; }
+  .bub.in { background: #fff; }
+  .bub.out { background: #2563eb; color: #fff; margin-left: auto; }
+  #missed { left: 22px; top: 700px; }
+
+  #site { left: 22px; top: 226px; }
+  .pg { position: absolute; inset: 0; padding: 36px 14px 14px; }
+  .pg1 { background: linear-gradient(170deg, #0f766e, #134e4a); color: #fff; }
+  .pg1 .nav { font-size: 12px; font-weight: 800; letter-spacing: .04em; display: flex; justify-content: space-between; opacity: .9; }
+  .pg1 h3 { font-size: 22px; line-height: 1.08; margin-top: 46px; font-weight: 900; }
+  .pg1 p { font-size: 12.5px; opacity: .85; margin-top: 10px; line-height: 1.4; }
+  .pg1 .btn { margin-top: 22px; background: #fde047; color: #111; font-weight: 900; font-size: 15px; text-align: center; padding: 13px; border-radius: 12px; }
+  .pg1 .stars { margin-top: 16px; font-size: 12px; opacity: .9; }
+  .pg2 h4 { font-size: 16px; font-weight: 900; }
+  .pg2 .lbl { font-size: 11px; color: var(--win-muted); font-weight: 700; margin: 12px 0 6px; letter-spacing: .05em; }
+  .days, .slots { display: grid; gap: 6px; }
+  .days { grid-template-columns: repeat(4, 1fr); }
+  .slots { grid-template-columns: repeat(2, 1fr); }
+  .days div, .slots div { border: 1.5px solid var(--win-line); border-radius: 10px; text-align: center; font-size: 12px; font-weight: 700; padding: 7px 0; }
+  .days div small { display: block; font-size: 15px; font-weight: 900; }
+  .sel { background: #0f766e; color: #fff; border-color: #0f766e !important; }
+  .slots .gone { color: #c7c9d1; text-decoration: line-through; }
+  .pg3 { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .pg3 .big { width: 74px; height: 74px; border-radius: 50%; background: #16a34a; color: #fff; font-size: 40px; display: grid; place-items: center; font-weight: 900; }
+  .pg3 h4 { font-size: 20px; margin-top: 16px; font-weight: 900; }
+  .pg3 p { font-size: 12.5px; color: var(--win-muted); margin-top: 8px; line-height: 1.45; }
+
+  #cal { left: 270px; top: 226px; width: 248px; height: 450px; }
+  #cal .grid { position: absolute; left: 0; right: 0; top: 30px; bottom: 0; }
+  #cal .hd { display: grid; grid-template-columns: 34px repeat(5, 1fr); font-size: 10.5px; font-weight: 800; color: var(--win-muted); height: 24px; align-items: center; text-align: center; border-bottom: 1px solid var(--win-line); }
+  #cal .hr { position: absolute; left: 0; right: 0; height: 1px; background: #f1f2f5; }
+  #cal .hr span { position: absolute; left: 4px; top: 2px; font-size: 9.5px; color: var(--win-muted); }
+  .bk { position: absolute; border-radius: 6px; font-size: 9.5px; font-weight: 800; padding: 3px 4px; color: #fff; line-height: 1.15; overflow: hidden; }
+  .toast { top: 700px; }
+  #s1 { left: 22px; top: 694px; width: 240px; }
+  #s2 { left: 278px; top: 694px; width: 240px; }
+  #night { top: 776px; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <!-- Manual: phone tag -->
+  <div class="phone" id="oldphone"><div class="notch"></div><div class="scr">
+    <div class="call"><span class="emoji">📞</span><div><div class="r">Missed call (3)</div>021 555 0192</div></div>
+    <div class="call"><span class="emoji">📞</span><div><div class="r">Missed call</div>027 448 1170</div></div>
+    <div class="bub in" id="b1">Hi! Are you free Tuesday?</div>
+    <div class="bub out" id="b2">Sorry, full. Thursday 3pm?</div>
+    <div class="bub in" id="b3">Can't do Thurs… Friday? 🙏</div>
+    <div class="bub out" id="b4">Let me check the diary…</div>
+  </div></div>
+  <div class="chip bad" id="missed"><span class="emoji">📵</span> Missed calls today: <span class="big" id="mc">0</span></div>
+
+  <!-- Automated: booking website + calendar -->
+  <div class="phone" id="site"><div class="notch"></div><div class="scr">
+    <div class="pg pg1">
+      <div class="nav"><span>KAURI PHYSIO</span><span>☰</span></div>
+      <h3>Book your appointment in 30&nbsp;seconds.</h3>
+      <p>Pick a time that suits you. Instant confirmation, reminder by text.</p>
+      <div class="btn" id="bookbtn">Book now →</div>
+      <div class="stars"><span class="emoji">⭐⭐⭐⭐⭐</span> 4.9 · 212 reviews</div>
+    </div>
+    <div class="pg pg2">
+      <h4>Choose a time</h4>
+      <div class="lbl">DAY</div>
+      <div class="days"><div>Mon<small>13</small></div><div id="dTue">Tue<small>14</small></div><div>Wed<small>15</small></div><div>Thu<small>16</small></div></div>
+      <div class="lbl">TIME</div>
+      <div class="slots"><div class="gone">8:30am</div><div>9:15am</div><div id="sl">10:30am</div><div class="gone">11:15am</div><div>1:00pm</div><div>2:45pm</div><div>4:00pm</div><div class="gone">5:30pm</div></div>
+    </div>
+    <div class="pg pg3">
+      <div class="big">✓</div>
+      <h4>You're booked!</h4>
+      <p>Tue 14 Oct · 10:30am<br>Reminder text the day before.</p>
+    </div>
+  </div></div>
+
+  <div class="win" id="cal">
+    <div class="bar"><b></b><b></b><b></b>Calendar</div>
+    <div class="grid">
+      <div class="hd"><span></span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span></div>
+    </div>
+  </div>
+
+  <div class="stat" id="s1"><div class="l">Booked online this week</div><div class="v" id="bw">0</div></div>
+  <div class="stat" id="s2"><div class="l">Phone tag</div><div class="v"><s>Daily</s> → Gone</div></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis, type, count, p, ease, lerp, clamp } = E;
+// Calendar: 8am–6pm, rows of 40px per hour across ~396px.
+const grid = $("#cal .grid");
+const H0 = 8, PX = 38.5, TOP = 30;
+for (let h = 0; h <= 10; h++) grid.insertAdjacentHTML("beforeend",
+  `<div class="hr" style="top:${TOP + h * PX}px"><span>${((H0 + h - 1) % 12) + 1}</span></div>`);
+// [day 0-4, start hour, length h, name, color, appearAt]
+const BOOK = [
+  [1, 10.5, 0.75, "Sarah K.", "#0f766e", 7.9],
+  [0, 9.25, 0.75, "Hemi P.", "#2563eb", 8.6],
+  [3, 14, 0.75, "Lucy M.", "#7c3aed", 9.1],
+  [2, 8.5, 1, "Ana R.", "#db2777", 9.6],
+  [4, 11, 0.75, "Josh T.", "#ea580c", 10.0],
+  [1, 15, 0.75, "Mere W.", "#2563eb", 10.4],
+  [3, 9.5, 1, "Ben C.", "#0f766e", 10.8],
+  [0, 13, 0.75, "Kim L.", "#7c3aed", 11.2],
+  [2, 15.5, 0.75, "Raj P.", "#ea580c", 13.0],
+  [4, 8.25, 0.75, "Tia N.", "#db2777", 14.0],
+  [0, 16, 0.75, "Sam B.", "#0f766e", 15.0],
+  [2, 12, 0.75, "Olly D.", "#2563eb", 16.0],
+];
+const colW = (248 - 34) / 5;
+BOOK.forEach((b) => grid.insertAdjacentHTML("beforeend",
+  `<div class="bk" style="left:${34 + b[0] * colW + 2}px;width:${colW - 4}px;top:${TOP + (b[1] - H0) * PX + 1}px;height:${b[2] * PX - 2}px;background:${b[4]}">${b[3]}</div>`));
+const bks = $$(".bk");
+
+const TOASTS = [
+  [7.9, 9.9, "#0f766e", "📅", "New booking — Sarah K.", "Tue 14 Oct · 10:30am"],
+  [9.9, 12, "#16a34a", "💬", "Reminder text scheduled", "Sent automatically the day before"],
+];
+TOASTS.forEach((x) => $("#frame").insertAdjacentHTML("beforeend",
+  `<div class="toast"><div class="ic" style="background:${x[2]}"><span class="emoji">${x[3]}</span></div><div><div class="tt">${x[4]}</div><div class="ts">${x[5]}</div></div><div class="when">now</div></div>`));
+$("#frame").insertAdjacentHTML("beforeend",
+  `<div class="toast" id="night"><div class="ic" style="background:#312e81"><span class="emoji">🌙</span></div><div><div class="tt">New booking at 2:14am</div><div class="ts">…while you were asleep</div></div><div class="when">Sun</div></div>`);
+const toasts = $$(".toast");
+const cur = E.cursor($("#frame"));
+window.COVER_AT = 1.8;
+
+E.setup({
+  duration: 22,
+  keyword: "WEBSITE",
+  // Voice-over: each line is fitted inside [a, b] seconds (sped up slightly if needed).
+  voice: [
+    { a: 0.15, b: 3.25, text: "This business was stuck playing phone tag for bookings." },
+    { a: 3.3, b: 11.9, text: "So we built them a website that takes bookings by itself. Customers pick a time, get confirmed instantly, and it lands straight in the calendar." },
+    { a: 12.1, b: 17.9, text: "Now customers book automatically. Even at two in the morning." },
+    { a: 18.2, b: 21.9, text: "Want a website like this? Comment, website." },
+  ],
+  captions: [
+    { a: 0, b: 3.0, html: `This business was playing <mark>phone tag</mark> for bookings EVERY&nbsp;DAY…` },
+    { a: 3.0, b: 12, html: `So we built a website that <span class="cyan">takes bookings by itself.</span>` },
+    { a: 12, b: 18, html: `Now customers book <mark>automatically.</mark>` },
+  ],
+  phases: [
+    { a: 0.15, b: 3.0, label: "MANUAL", kind: "bad" },
+    { a: 3.1, b: 18, label: "AUTOMATED", kind: "good" },
+  ],
+  end: { at: 18, title: "Want a website like this?", sub: "I'll send you a few examples & what it costs." },
+});
+
+E.use((t) => {
+  // --- manual: phone buzzing
+  const op = vis("#oldphone", t, 0, 3.0, { y: 30 });
+  if (op > 0 && t < 2.8) $("#oldphone").style.transform += ` rotate(${Math.sin(t * 60) * (Math.sin(t * 3) > 0.2 ? 1.6 : 0)}deg)`;
+  ["#b1", "#b2", "#b3", "#b4"].forEach((s, i) => vis(s, t, 0.5 + i * 0.55, null, { y: 12, scale: 0.85 }));
+  vis("#missed", t, 0.5, 3.0);
+  count("#mc", t, 0.6, 2.8, 0, 6);
+
+  // --- automated: booking flow on the phone
+  vis("#site", t, 3.1, null, { y: 30 });
+  vis("#cal", t, 3.35, null, { y: 30 });
+  const sw = (a) => p(t, a, a + 0.35, ease.inOut);
+  $(".pg1").style.transform = `translateX(${-100 * sw(5.0)}%)`;
+  $(".pg2").style.transform = `translateX(${100 - 100 * sw(5.0) - 100 * sw(7.2)}%)`;
+  $(".pg3").style.transform = `translateX(${100 - 100 * sw(7.2)}%)`;
+  $("#bookbtn").style.transform = `scale(${t > 4.6 && t < 4.9 ? 0.94 : 1})`;
+  $("#dTue").classList.toggle("sel", t > 5.85);
+  $("#sl").classList.toggle("sel", t > 6.75);
+  const pop = p(t, 7.4, 7.8, ease.back);
+  $(".pg3 .big").style.transform = `scale(${pop})`;
+  cur(t, [
+    { t: 3.8, x: 200, y: 640 }, { t: 4.6, x: 140, y: 508, click: true },
+    { t: 5.6, x: 110, y: 345, click: true }, { t: 6.5, x: 86, y: 455, click: true }, { t: 7.4, x: 200, y: 560 },
+  ], 3.8, 7.5);
+
+  bks.forEach((el, i) => {
+    vis(el, t, BOOK[i][5], null, { y: 0, scale: 0.3, dur: 0.4 });
+    el.style.boxShadow = t > BOOK[i][5] && t < BOOK[i][5] + 0.8 ? "0 0 0 3px rgba(250,204,21,.9)" : "";
+  });
+  TOASTS.forEach((x, i) => vis(toasts[i], t, x[0], x[1], { y: 26, dur: 0.3, outDur: 0.12 }));
+
+  // --- results
+  vis("#s1", t, 12.2, null, { y: 30 });
+  vis("#s2", t, 12.45, null, { y: 30 });
+  count("#bw", t, 12.3, 15.5, 8, 23);
+  vis("#night", t, 14.2, 17.9, { y: 26 });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — HELP (reporting)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  .mini { width: 330px; height: 190px; }
+  #w1 { left: 22px; top: 222px; }
+  #w2 { left: 100px; top: 300px; }
+  #w3 { left: 188px; top: 404px; width: 330px; height: 236px; }
+  #w3 .body { padding: 16px 20px; font: 14px/1.9 "Liberation Serif", serif; }
+  #w3 h4 { font: 700 17px "Liberation Serif", serif; }
+  #monday { left: 22px; top: 694px; }
+
+  #dash { left: 22px; top: 222px; width: 496px; height: 424px; background: #0f172a; color: #e2e8f0; }
+  #dash .bar { background: #111827; color: #94a3b8; border-color: #1e293b; }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 14px 14px 0; }
+  .kpi { background: #1e293b; border-radius: 12px; padding: 10px 12px; }
+  .kpi .l { font-size: 10.5px; font-weight: 700; color: #94a3b8; letter-spacing: .04em; }
+  .kpi .v { font-size: 22px; font-weight: 900; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .kpi .d { font-size: 11px; font-weight: 800; color: #4ade80; margin-top: 1px; }
+  .kpi.warn .v { color: #fbbf24; } .kpi.warn .d { color: #fbbf24; }
+  .card2 { margin: 12px 14px 0; background: #1e293b; border-radius: 12px; padding: 10px 12px; position: relative; }
+  .card2 .l { font-size: 10.5px; font-weight: 700; color: #94a3b8; letter-spacing: .04em; }
+  .bars { display: flex; align-items: flex-end; gap: 10px; height: 118px; margin-top: 8px; }
+  .bars div { flex: 1; background: linear-gradient(180deg, #22d3ee, #6366f1); border-radius: 6px 6px 2px 2px; height: 0; position: relative; }
+  .bars div:last-child { background: linear-gradient(180deg, #4ade80, #16a34a); }
+  .wk { display: flex; gap: 10px; font-size: 9.5px; color: #64748b; margin-top: 4px; }
+  .wk span { flex: 1; text-align: center; }
+  #line svg { display: block; margin-top: 6px; }
+  .toast { top: 694px; }
+  #s1 { left: 22px; top: 694px; width: 240px; }
+  #s2 { left: 278px; top: 694px; width: 240px; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <!-- Manual: copy-paste between files -->
+  <div class="win mini" id="w1"><div class="bar green"><b></b><b></b><b></b>Sales_export.csv</div>
+    <table class="sheet"><colgroup><col style="width:26px"><col><col style="width:100px"></colgroup>
+      <tr><td class="rn">1</td><td><b>Week</b></td><td class="num"><b>Revenue</b></td></tr>
+      <tr><td class="rn">2</td><td>WK 39</td><td class="num">$38,150</td></tr>
+      <tr><td class="rn">3</td><td>WK 40</td><td class="num">$40,920</td></tr>
+      <tr><td class="rn">4</td><td>WK 41</td><td class="num" id="rev">$42,380</td></tr>
+    </table></div>
+  <div class="win mini" id="w2"><div class="bar green"><b></b><b></b><b></b>Jobs_tracker_2025.xlsx</div>
+    <table class="sheet"><colgroup><col style="width:26px"><col><col style="width:80px"></colgroup>
+      <tr><td class="rn">1</td><td><b>Status</b></td><td class="num"><b>Count</b></td></tr>
+      <tr><td class="rn">2</td><td>Completed</td><td class="num" id="jobs">37</td></tr>
+      <tr><td class="rn">3</td><td>In progress</td><td class="num">12</td></tr>
+      <tr><td class="rn">4</td><td>Overdue invoices</td><td class="num">=COUNTIF(…</td></tr>
+    </table></div>
+  <div class="win" id="w3"><div class="bar blue"><b></b><b></b><b></b>Weekly_Report_WK41.docx</div>
+    <div class="body"><h4>Weekly report — WK 41</h4>
+      <div>Revenue: <span id="r1"></span></div>
+      <div>Jobs completed: <span id="r2"></span></div>
+      <div>Overdue: <span id="r3"></span></div>
+    </div></div>
+  <div class="chip bad" id="monday"><span class="emoji">📅</span> Every Monday morning: <span class="big">3 hrs</span></div>
+
+  <!-- Automated: live dashboard -->
+  <div class="win" id="dash">
+    <div class="bar"><b></b><b></b><b></b>Business dashboard · <span style="color:#4ade80">● live</span></div>
+    <div class="kpis">
+      <div class="kpi"><div class="l">REVENUE (WK)</div><div class="v" id="k1">$0</div><div class="d">▲ 3.6%</div></div>
+      <div class="kpi"><div class="l">JOBS DONE</div><div class="v" id="k2">0</div><div class="d">▲ 5 vs last wk</div></div>
+      <div class="kpi warn"><div class="l">OVERDUE INV.</div><div class="v" id="k3">0</div><div class="d">needs chasing</div></div>
+    </div>
+    <div class="card2"><div class="l">REVENUE · LAST 8 WEEKS</div>
+      <div class="bars"></div>
+      <div class="wk"><span>34</span><span>35</span><span>36</span><span>37</span><span>38</span><span>39</span><span>40</span><span>41</span></div>
+    </div>
+    <div class="card2" id="line"><div class="l">NEW LEADS · DAILY</div>
+      <svg width="440" height="70" viewBox="0 0 440 70"><path id="lp" d="" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+
+  <div class="stat" id="s1"><div class="l">Monday reporting</div><div class="v"><s>3 hrs</s> → 0 min</div></div>
+  <div class="stat" id="s2"><div class="l">Your numbers</div><div class="v">Live 24/7</div></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis, type, count, p, ease, lerp } = E;
+const REV = [31, 34, 33, 36, 35.5, 38.2, 40.9, 42.4];
+const barsEl = $(".bars");
+REV.forEach(() => barsEl.insertAdjacentHTML("beforeend", "<div></div>"));
+const bars = $$(".bars div");
+const LEADS = [4, 6, 5, 8, 7, 9, 6, 10, 9, 12, 11, 13, 12, 15];
+const pts = LEADS.map((v, i) => [10 + i * (420 / (LEADS.length - 1)), 64 - v * 4]);
+const lp = $("#lp");
+lp.setAttribute("d", "M" + pts.map((q) => q.join(",")).join(" L"));
+const LEN = lp.getTotalLength();
+lp.style.strokeDasharray = LEN;
+
+const TOASTS = [
+  [8.6, 10.3, "#2563eb", "📧", "Weekly report emailed to you", "Every Monday, 8:00am — automatically"],
+  [10.3, 12, "#d97706", "⚠️", "Heads up: 3 invoices overdue", "Reminders already sent to clients"],
+];
+TOASTS.forEach((x) => $("#frame").insertAdjacentHTML("beforeend",
+  `<div class="toast"><div class="ic" style="background:${x[2]}"><span class="emoji">${x[3]}</span></div><div><div class="tt">${x[4]}</div><div class="ts">${x[5]}</div></div><div class="when">Mon</div></div>`));
+const toasts = $$(".toast");
+const cur = E.cursor($("#frame"));
+window.COVER_AT = 1.7;
+
+E.setup({
+  duration: 22,
+  keyword: "HELP",
+  // Voice-over: each line is fitted inside [a, b] seconds (sped up slightly if needed).
+  voice: [
+    { a: 0.15, b: 3.25, text: "Every Monday, this owner spent three hours copying numbers." },
+    { a: 3.3, b: 11.9, text: "Now it's one live dashboard. Revenue, jobs, and overdue invoices, all updating by themselves. No more spreadsheets." },
+    { a: 12.1, b: 17.9, text: "And the weekly report emails itself, every Monday at eight." },
+    { a: 18.2, b: 21.9, text: "Not sure what to automate first? Comment, help." },
+  ],
+  captions: [
+    { a: 0, b: 3.0, html: `Every Monday this owner spent <mark>3 hours</mark> copying numbers…` },
+    { a: 3.0, b: 12, html: `Now it's one <span class="cyan">live dashboard</span> that updates itself.` },
+    { a: 12, b: 18, html: `The report sends itself <mark>automatically.</mark>` },
+  ],
+  phases: [
+    { a: 0.15, b: 3.0, label: "MANUAL", kind: "bad" },
+    { a: 3.1, b: 18, label: "AUTOMATED", kind: "good" },
+  ],
+  end: { at: 18, title: "Not sure what to automate first?", sub: "We'll look at your week and point out the biggest time-saver." },
+});
+
+E.use((t) => {
+  // --- manual
+  vis("#w1", t, 0, 3.0, { y: 30 });
+  vis("#w2", t, 0.15, 3.0, { y: 30 });
+  vis("#w3", t, 0.3, 3.0, { y: 30 });
+  vis("#monday", t, 0.5, 3.0);
+  $("#rev").classList.toggle("hl", t > 0.75 && t < 1.5);
+  $("#jobs").classList.toggle("hl", t > 1.75 && t < 2.4);
+  type("#r1", "$42,380", t, 1.15, 1.6);
+  type("#r2", "37", t, 2.1, 2.3);
+  type("#r3", "?? check accounts", t, 2.45, 2.95);
+  cur(t, [{ t: 0.2, x: 300, y: 650 }, { t: 0.75, x: 300, y: 340, click: true }, { t: 1.1, x: 380, y: 515, click: true },
+    { t: 1.75, x: 370, y: 380, click: true }, { t: 2.05, x: 420, y: 545, click: true }, { t: 2.9, x: 440, y: 580 }], 0.2, 3.0);
+
+  // --- automated
+  vis("#dash", t, 3.1, null, { y: 30 });
+  count("#k1", t, 3.6, 5.2, 0, 42380, (v) => "$" + Math.round(v).toLocaleString("en-NZ"));
+  count("#k2", t, 3.8, 5.2, 0, 37);
+  count("#k3", t, 4.0, 5.0, 0, 3);
+  bars.forEach((b, i) => (b.style.height = (REV[i] / 43) * 100 * p(t, 4.2 + i * 0.12, 4.9 + i * 0.12, ease.back) + "%"));
+  lp.style.strokeDashoffset = LEN * (1 - p(t, 5.4, 7.6, ease.inOut));
+  TOASTS.forEach((x, i) => vis(toasts[i], t, x[0], x[1], { y: 26, dur: 0.3, outDur: 0.12 }));
+
+  // --- results
+  vis("#s1", t, 12.2, null, { y: 30 });
+  vis("#s2", t, 12.45, null, { y: 30 });
+});
+</script>
+</body>
+</html>
