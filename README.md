@@ -13,6 +13,16 @@ The concept is built around Jot as a content creator. The site works like his ch
 - **Enquiry:** a DM-style appraisal form.
 - **Footer:** a "That's a wrap." credits roll.
 
+## Branding
+
+The site is co-branded with Barfoot & Thompson, using their brand tokens from barfoot.co.nz:
+
+- **Colours:** BT blue `#003572`, BT yellow `#F8C00B` and brand light blue `#47A9D8`.
+- **Headings:** Montserrat, a free stand-in for Barfoot's licensed Nexa.
+- **Logo:** in the nav and footer.
+
+Get Barfoot's sign-off before launch (see `CONTENT-NEEDED.md`).
+
 ## Files
 
 - `index.html`: the whole site (inline CSS and JS, no build step)
