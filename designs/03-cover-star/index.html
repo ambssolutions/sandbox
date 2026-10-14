@@ -175,7 +175,8 @@ h2.big{font-size:clamp(36px,6.2vw,92px);font-stretch:118%;letter-spacing:-.035em
 .byline img{width:114px;height:auto;background:var(--blue)}
 .byline p{font:700 13px/1.4 var(--mono);letter-spacing:.02em}
 .byline .greet{margin-left:auto;font:400 italic 22px/1 var(--serif)}
-.s1{left:29%;top:2%;--r:-12deg}
+.s1{left:31%;top:-150px;--r:-12deg}
+@media (min-width:1000px){.star-jp{bottom:auto;top:56%}}
 .s2{left:50%;top:70%;--r:8deg}
 .s3{left:30%;top:80%;--r:-5deg}
 .s4{right:3%;top:calc(min(1320px,100vw - var(--g)*2) * -.2)}
@@ -209,8 +210,8 @@ h2.big{font-size:clamp(36px,6.2vw,92px);font-stretch:118%;letter-spacing:-.035em
 .t1{background:var(--yellow);transform:translateY(-50%) rotate(-3deg);box-shadow:0 6px 0 rgba(0,36,79,.25)}
 .t2{background:var(--white);transform:translateY(-50%) rotate(2.4deg)}
 .t2.b{background:var(--blue);color:var(--white);border-color:var(--yellow)}
-.track{display:flex;width:max-content;animation:mq 46s linear infinite}
-.track span{padding-right:.4em}
+.track{display:flex;width:max-content;background:inherit;animation:mq 46s linear infinite}
+.track span{padding-right:.4em;background:inherit}
 .t2 .track{animation-direction:reverse;animation-duration:56s}
 @keyframes mq{to{transform:translateX(-50%)}}
 .paused .track{animation-play-state:paused}
@@ -348,7 +349,7 @@ h2.big{font-size:clamp(36px,6.2vw,92px);font-stretch:118%;letter-spacing:-.035em
 .letter-w{grid-column:6/13;position:relative;filter:drop-shadow(12px 12px 0 var(--blue))}
 .letter{position:relative;background-color:var(--white);background-image:linear-gradient(90deg,transparent 54px,rgba(71,169,216,.7) 54px,rgba(71,169,216,.7) 56px,transparent 56px),repeating-linear-gradient(transparent 0 37px,rgba(71,169,216,.35) 37px 38px);padding:clamp(28px,4vw,52px) clamp(24px,4vw,56px) clamp(32px,4vw,52px) clamp(76px,7vw,96px);border:4px solid var(--blue);clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
 .letter .from{font:700 13px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding-right:120px}
-.letter blockquote{margin-top:20px;font:400 italic clamp(26px,2.7vw,38px)/1.18 var(--serif);color:var(--blue)}
+.letter blockquote{margin-top:56px;font:400 italic clamp(26px,2.7vw,38px)/1.18 var(--serif);color:var(--blue)}
 .stamp{position:absolute;right:clamp(16px,3vw,32px);top:clamp(16px,3vw,28px);width:96px;height:112px;background:var(--yellow);display:grid;place-items:center;text-align:center;rotate:6deg;-webkit-mask:linear-gradient(#000 0 0) center/calc(100% - 12px) calc(100% - 12px) no-repeat,radial-gradient(circle 5px,#0000 96%,#000) -7px -7px/14px 14px;mask:linear-gradient(#000 0 0) center/calc(100% - 12px) calc(100% - 12px) no-repeat,radial-gradient(circle 5px,#0000 96%,#000) -7px -7px/14px 14px;padding:10px}
 .stamp span{display:grid;place-items:center;width:100%;height:100%;border:2px solid var(--blue);font:900 30px/.9 var(--disp);font-stretch:125%;letter-spacing:-.05em}
 .stamp small{display:block;font:700 9px/1.1 var(--mono);letter-spacing:.1em;margin-top:4px}

@@ -213,9 +213,9 @@ main{display:block}
 .cover{position:absolute;inset:0;background:var(--navy);overflow:hidden}
 .cover .mono{position:absolute;right:-6%;bottom:44%;font:800 calc(var(--fw) * .78)/.8 var(--display);font-stretch:75%;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.22);letter-spacing:-.04em}
 .cover::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,transparent 1px 44px)}
-.prof{display:flex;align-items:flex-end;gap:14px;margin-top:-58px;margin-bottom:14px}
-.jp{width:86px;height:86px;flex:none;border-radius:50%;background:var(--navy);color:var(--sun);display:grid;place-items:center;font:800 34px/1 var(--display);font-stretch:80%;box-shadow:0 0 0 4px var(--sun),0 0 0 6px var(--navy);position:relative}
-.jp::after{content:"";position:absolute;inset:-12px;border-radius:50%;border:2px dashed rgba(0,53,114,.6)}
+.prof{display:flex;align-items:center;gap:16px;margin:4px 0 16px}
+.jp{width:66px;height:66px;flex:none;border-radius:50%;background:var(--navy);color:var(--sun);display:grid;place-items:center;font:800 28px/1 var(--display);font-stretch:80%;position:relative;margin-left:8px}
+.jp::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px dashed rgba(0,53,114,.6)}
 .anim .jp::after{animation:spin 18s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center;flex:1}
@@ -381,6 +381,15 @@ main{display:block}
 .legal2 a{font-weight:700}
 .linkbtn{background:none;border:0;padding:0;font-weight:700;text-decoration:underline;color:var(--navy);min-height:24px}
 
+.end .btn-line{border-color:var(--navy);color:var(--navy)}
+.reel .panel.sheet{--pbg:#fff}
+.reel[data-tone=sun] .panel.sheet{--pbg:var(--sun)}
+.rnd:disabled{opacity:.35}
+@media (min-width:761px){
+  .deep .mega.front{display:none}
+  .deep .mega .w{top:52%}
+  html[data-end] .rail{opacity:0;visibility:hidden}
+}
 /* ================= medium: header row above the frame ================= */
 @media (max-width:1179px){
   :root{--tb:72px}
@@ -401,16 +410,16 @@ main{display:block}
   .frame{top:0;left:0;width:100%;height:100%;margin:0;border-radius:0;box-shadow:none!important}
   .mega.back{display:none}
   .mega.front{clip-path:none}
-  .mega .w{top:var(--mym,30%)}
+  .mega .w{top:calc(122px + env(safe-area-inset-top,0px) + var(--ms) * .4)}
   .mega.front .w{color:var(--sun);-webkit-text-stroke:0;text-shadow:0 6px 30px rgba(0,10,30,.35)}
   .fhead{top:calc(60px + env(safe-area-inset-top,0px));padding-top:16px}
   .prog{top:4px}
   .pbody{max-height:calc(var(--sv) * .64);padding:18px 16px calc(116px + var(--safe-b))}
   .reel:not([data-rail=off]) .pbody{padding-right:84px}
-  .sheet .pbody{max-height:calc(var(--sv) * .74)}
+  .sheet .pbody{max-height:calc(var(--sv) * .68)}
   .r4 .fhead{padding-top:28px}
   .segs{top:calc(58px + env(safe-area-inset-top,0px))}
-  .notif{top:calc(122px + env(safe-area-inset-top,0px))}
+  .notif{display:none}
   .rail{top:auto;height:auto;left:auto;right:8px;bottom:calc(66px + var(--safe-b) + 40px);width:auto}
   .rail .nav .rnd{display:none}
   .rail .nav .count{display:none}
@@ -530,7 +539,7 @@ main{display:block}
 
 <!-- ============ 01 HOOK ============ -->
 <section class="reel r1" id="reel-1" data-tone="blue" style="--i:1" aria-labelledby="h-1">
-  <div class="reel-in" style="--my:31%;--mym:22%">
+  <div class="reel-in" style="--my:29%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>No waffle.</span></div></div>
     <div class="frame">
       <div class="media"><img src="../../assets/img/hero-home-1400.webp" srcset="../../assets/img/hero-home-800.webp 800w, ../../assets/img/hero-home-1400.webp 1400w" sizes="(max-width:760px) 100vw, 520px" width="1400" height="933" alt="Illustrative photo of a modern family home at golden hour" fetchpriority="high"></div>
@@ -556,7 +565,7 @@ main{display:block}
 </section>
 
 <!-- ============ 02 WHO IS JOT ============ -->
-<section class="reel r2" id="reel-2" data-tone="sun" style="--i:2" aria-labelledby="h-2">
+<section class="reel r2 deep" id="reel-2" data-tone="sun" style="--i:2" aria-labelledby="h-2">
   <div class="reel-in" style="--my:24%;--mym:22%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>40+ years.</span></div></div>
     <div class="frame">
@@ -595,7 +604,7 @@ main{display:block}
 
 <!-- ============ 03 MARKETING ============ -->
 <section class="reel r3" id="reel-3" data-tone="blue" style="--i:3" aria-labelledby="h-3">
-  <div class="reel-in" style="--my:24%;--mym:23%">
+  <div class="reel-in" style="--my:28%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>Launch.</span></div></div>
     <div class="frame">
       <div class="media"><img src="../../assets/img/living-1400.webp" srcset="../../assets/img/living-800.webp 800w, ../../assets/img/living-1400.webp 1400w" sizes="(max-width:760px) 100vw, 520px" width="1400" height="952" alt="Illustrative photo of a bright, styled living room" loading="lazy"></div>
@@ -624,7 +633,7 @@ main{display:block}
 
 <!-- ============ 04 THE SALE ============ -->
 <section class="reel r4" id="reel-4" data-tone="sun" data-rail="off" style="--i:4" aria-labelledby="h-4">
-  <div class="reel-in" style="--my:22%;--mym:21%">
+  <div class="reel-in" style="--my:29%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>4 steps.</span></div></div>
     <div class="frame steps" id="steps">
       <div class="media"><img src="../../assets/img/cedar-home-1400.webp" srcset="../../assets/img/cedar-home-800.webp 800w, ../../assets/img/cedar-home-1400.webp 1400w" sizes="(max-width:760px) 100vw, 520px" width="1400" height="933" alt="Illustrative photo of a cedar-clad home" loading="lazy"></div>
@@ -678,7 +687,7 @@ main{display:block}
 
 <!-- ============ 05 BUYERS ============ -->
 <section class="reel r5" id="reel-5" data-tone="blue" style="--i:5" aria-labelledby="h-5">
-  <div class="reel-in" style="--my:31%;--mym:33%">
+  <div class="reel-in" style="--my:29%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>Buyers.</span></div></div>
     <div class="frame">
       <div class="media"><img src="../../assets/img/modern-home-1400.webp" srcset="../../assets/img/modern-home-800.webp 800w, ../../assets/img/modern-home-1400.webp 1400w" sizes="(max-width:760px) 100vw, 520px" width="1400" height="1174" alt="Illustrative photo of a contemporary home" loading="lazy"></div>
@@ -706,7 +715,7 @@ main{display:block}
 </section>
 
 <!-- ============ 06 SUBURBS ============ -->
-<section class="reel r6" id="reel-6" data-tone="sun" data-rail="off" style="--i:6" aria-labelledby="h-6">
+<section class="reel r6 deep" id="reel-6" data-tone="sun" data-rail="off" style="--i:6" aria-labelledby="h-6">
   <div class="reel-in" style="--my:21%;--mym:20%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>Local.</span></div></div>
     <div class="frame">
@@ -742,7 +751,7 @@ main{display:block}
 </section>
 
 <!-- ============ 07 REVIEW ============ -->
-<section class="reel r7" id="reel-7" data-tone="blue" data-rail="off" style="--i:7" aria-labelledby="h-7">
+<section class="reel r7 deep" id="reel-7" data-tone="blue" data-rail="off" style="--i:7" aria-labelledby="h-7">
   <div class="reel-in" style="--my:25%;--mym:25%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>Honest.</span></div></div>
     <div class="frame">
@@ -779,7 +788,7 @@ main{display:block}
 </section>
 
 <!-- ============ 08 FAQ ============ -->
-<section class="reel r8" id="reel-8" data-tone="sun" data-rail="off" style="--i:8" aria-labelledby="h-8">
+<section class="reel r8 deep" id="reel-8" data-tone="sun" data-rail="off" style="--i:8" aria-labelledby="h-8">
   <div class="reel-in" style="--my:15%;--mym:17%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>Ask me.</span></div></div>
     <div class="frame">
@@ -811,7 +820,7 @@ main{display:block}
 </section>
 
 <!-- ============ 09 APPRAISAL ============ -->
-<section class="reel r9" id="reel-9" data-tone="blue" data-rail="off" style="--i:9" aria-labelledby="h-9">
+<section class="reel r9 deep" id="reel-9" data-tone="blue" data-rail="off" style="--i:9" aria-labelledby="h-9">
   <div class="reel-in" style="--my:14%;--mym:17%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>Free.</span></div></div>
     <div class="frame">
@@ -930,8 +939,9 @@ const FORM_KEY='';
       const ri=$('.reel-in',r), w=$(phone?'.mega.front .w':'.mega.back .w',r);
       if(!w) return;
       w.style.fontSize='100px'; const width=w.offsetWidth||1; w.style.fontSize='';
-      const target=phone?W*.94:W*.92;
-      const max=phone?H*.2:H*.4;
+      const deep=r.classList.contains('deep');
+      const target=phone?W*.94:(deep?W*.98:W*.92);
+      const max=phone?H*.115:(deep?H*.92:H*.34);
       ri.style.setProperty('--ms',Math.min(100*target/width,max).toFixed(1)+'px');
     });
   }
@@ -960,6 +970,7 @@ const FORM_KEY='';
     const n=String(Math.min(i+1,9)).padStart(2,'0');
     $('#cNow').textContent=i>=reels.length?'End':n;
     idxLinks.forEach((a,k)=>a.setAttribute('aria-current',k===i?'true':'false'));
+    if(i>=reels.length)html.dataset.end='';else delete html.dataset.end;
     html.dataset.rail=(el.dataset.rail==='off'||i>=reels.length)?'off':'on';
     $('#prevReel').disabled=i===0; $('#nextReel').disabled=i===items.length-1;
     if(i>0) hideHint();
