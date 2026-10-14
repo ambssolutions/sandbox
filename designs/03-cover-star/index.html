@@ -128,7 +128,7 @@ h2.big{font-size:clamp(36px,6.2vw,92px);font-stretch:118%;letter-spacing:-.035em
 .fit-in{display:inline-block}
 .mast{position:relative;font-size:24vw;margin:.07em 0 .02em;color:var(--blue)}
 .mast .l{display:inline-block;transform-origin:50% 100%}
-.mast .dot{color:var(--sky)}
+.mast .dot{color:var(--blue)}
 .cover-grid{position:relative}
 .cl-left{grid-column:1/5;padding-top:clamp(16px,2vw,28px);position:relative;z-index:3}
 .cl-right{grid-column:9/13;padding-left:clamp(0px,1.5vw,20px);padding-top:clamp(16px,2vw,28px);display:flex;flex-direction:column;gap:22px;position:relative;z-index:3}
@@ -177,7 +177,7 @@ h2.big{font-size:clamp(36px,6.2vw,92px);font-stretch:118%;letter-spacing:-.035em
 .byline .greet{margin-left:auto;font:400 italic 22px/1 var(--serif)}
 .s1{left:31%;top:-150px;--r:-12deg}
 @media (min-width:1000px){.star-jp{bottom:auto;top:56%}}
-.s2{left:50%;top:70%;--r:8deg}
+.s2{left:1%;top:calc(min(1320px,100vw - var(--g)*2) * -.24);--r:-7deg}
 .s3{left:30%;top:80%;--r:-5deg}
 .s4{right:3%;top:calc(min(1320px,100vw - var(--g)*2) * -.2)}
 
@@ -229,36 +229,44 @@ h2.big{font-size:clamp(36px,6.2vw,92px);font-stretch:118%;letter-spacing:-.035em
 @media (max-width:899px){.fhead > div,.fhead .deck{grid-column:1/-1}}
 
 /* interview */
-.int-side{grid-column:1/5;position:relative}
-.int-main{grid-column:6/13}
-.portrait{position:relative;aspect-ratio:4/4.6;background:var(--blue);border:4px solid var(--blue);box-shadow:12px 12px 0 var(--yellow);overflow:hidden;display:grid;place-items:center}
-.portrait .halftone{color:var(--yellow);background-size:11px 11px;-webkit-mask:radial-gradient(circle at 75% 20%,#000,transparent 65%);mask:radial-gradient(circle at 75% 20%,#000,transparent 65%)}
-.portrait b{position:relative;font:900 clamp(150px,17vw,250px)/.8 var(--disp);font-stretch:125%;letter-spacing:-.07em;color:var(--yellow);text-shadow:.04em .04em 0 var(--sky)}
-.portrait p{position:absolute;left:12px;bottom:12px;right:12px;color:var(--white)}
-.stats{display:grid;grid-template-columns:1fr 1fr;border:3px solid var(--blue);margin-top:36px;background:var(--white)}
-.stats li{padding:16px;border:1.5px solid var(--blue)}
-.stats b{display:block;font:900 clamp(34px,3.4vw,48px)/.9 var(--disp);font-stretch:125%;letter-spacing:-.04em}
-.stats span{display:block;font-size:14px;line-height:1.35;margin-top:8px}
-.qa{columns:2 300px;column-gap:clamp(24px,3vw,44px)}
+.int-side{grid-column:1/6;position:relative;align-self:start}
+.int-main{grid-column:7/13}
+.factfile{background:var(--white);border:4px solid var(--blue);box-shadow:12px 12px 0 var(--yellow),12px 12px 0 4px var(--blue)}
+.ff-head{display:flex;justify-content:space-between;background:var(--blue);color:var(--yellow);font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;padding:12px 16px 10px}
+.portrait{position:relative;aspect-ratio:4/3.1;background:var(--blue);overflow:hidden;display:grid;place-items:center;border-top:2px solid var(--yellow)}
+.portrait .halftone{color:var(--yellow);background-size:11px 11px;-webkit-mask:radial-gradient(circle at 80% 15%,#000,transparent 65%);mask:radial-gradient(circle at 80% 15%,#000,transparent 65%)}
+.portrait b{position:relative;font:900 clamp(140px,15vw,230px)/.8 var(--disp);font-stretch:125%;letter-spacing:-.07em;color:var(--yellow);text-shadow:.04em .04em 0 var(--sky);translate:0 .06em}
+.portrait p{position:absolute;left:0;bottom:0;background:var(--yellow);color:var(--blue);padding:8px 12px 7px}
+.stats{display:grid;grid-template-columns:1fr 1fr;border-top:4px solid var(--blue)}
+.stats li{padding:18px 18px 16px;border-bottom:2px solid var(--blue)}
+.stats li:nth-child(odd){border-right:2px solid var(--blue)}
+.stats b{display:block;font:900 clamp(38px,3.6vw,52px)/.85 var(--disp);font-stretch:125%;letter-spacing:-.045em}
+.stats span{display:block;font:700 11.5px/1.35 var(--mono);letter-spacing:.06em;text-transform:uppercase;margin-top:10px}
+.follow li + li a{border-top:2px solid var(--blue)}
+.follow a{display:grid;grid-template-columns:96px 1fr 20px;align-items:center;gap:10px;min-height:56px;padding:8px 18px;text-decoration:none;font:800 16px/1.2 var(--disp);font-stretch:105%;overflow-wrap:anywhere}
+.follow a span{font:700 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.follow a svg{width:18px;height:18px}
+.follow a:hover{background:var(--yellow)}
+.qa{columns:2 280px;column-gap:clamp(24px,3vw,44px)}
 .qa .q{break-after:avoid;font:700 13px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;margin:0 0 8px;display:flex;gap:10px}
 .qa .q::before{content:"Q.";background:var(--yellow);padding:0 6px;border:2px solid var(--blue);height:fit-content}
 .qa .a{font-size:19px;line-height:1.55;margin-bottom:28px;break-inside:avoid-column}
 .qa .a.first::first-letter{float:left;font:900 86px/.78 var(--disp);font-stretch:125%;margin:6px 10px 0 0;color:var(--blue)}
-.pull{position:relative;margin:clamp(40px,5vw,64px) 0 0;padding:28px 0 0;border-top:6px solid var(--blue)}
-.pull blockquote{font:400 italic clamp(30px,3.6vw,52px)/1.08 var(--serif);letter-spacing:-.01em}
+.pull{position:relative;margin:clamp(24px,3vw,40px) 0 0;padding:28px 0 0;border-top:6px solid var(--blue)}
+.pull blockquote{font:400 italic clamp(30px,3.4vw,50px)/1.08 var(--serif);letter-spacing:-.01em}
 .pull blockquote mark{background:linear-gradient(transparent 55%,var(--yellow) 55%);color:inherit;padding:0 .08em}
 .pull figcaption{margin-top:16px;font:700 12px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase}
-.values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap);margin-top:clamp(48px,6vw,80px)}
-.values li{background:var(--white);border:3px solid var(--blue);box-shadow:7px 7px 0 var(--blue);padding:20px 20px 22px}
-.values li:nth-child(2){background:var(--yellow);rotate:1deg}
-.values li:nth-child(1){rotate:-1deg}
-.values h3{font-size:24px;font-stretch:118%;letter-spacing:-.03em}
-.values p{margin-top:10px;font-size:16px;line-height:1.5}
-.follow{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-.follow a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:2px solid var(--blue);font:700 13px/1 var(--mono);text-decoration:none;background:var(--white)}
-.follow a:hover{background:var(--yellow)}
-.i1{right:-10px;top:-26px;--r:9deg}.i2{left:-14px;top:42%;--r:-10deg}.i3{right:14%;top:58%;--r:4deg}
-@media (max-width:899px){.int-side,.int-main{grid-column:1/-1}.int-side{max-width:520px}.values{grid-template-columns:1fr}.values li{rotate:0deg!important}}
+.values{counter-reset:v;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.4vw,32px);margin-top:clamp(56px,6vw,88px)}
+.values li{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;align-items:baseline;background:var(--white);border:3px solid var(--blue);box-shadow:7px 7px 0 var(--blue);padding:22px 24px}
+.values li{counter-increment:v}
+.values li::before{content:"0" counter(v);grid-row:span 2;font:900 44px/.8 var(--disp);font-stretch:125%;letter-spacing:-.05em;color:var(--yellow);-webkit-text-stroke:2px var(--blue)}
+.values li:nth-child(2){background:var(--yellow)}
+.values li:nth-child(2)::before{color:var(--white)}
+.values h3{font-size:26px;font-stretch:118%;letter-spacing:-.03em}
+.values p{font-size:17px;line-height:1.45}
+.i1{right:-26px;top:64px;--r:9deg}
+@media (max-width:560px){.follow a{grid-template-columns:1fr 20px;gap:2px 10px;padding:10px 16px}.follow a span{grid-column:1/-1}.follow a svg{grid-row:2;grid-column:2}.spread .sp-l{flex-direction:column;align-items:flex-start;gap:6px;padding-left:clamp(24px,6vw,52px)!important}.sp-num{margin:0 0 0 -.12em!important}.fin{font-size:11px;letter-spacing:.06em}.fin span:first-child{display:none}}
+@media (max-width:999px){.int-side{grid-column:1/-1;max-width:560px}.int-main{grid-column:1/-1;margin-top:28px}.values{grid-template-columns:1fr}}
 
 /* launch */
 .launch-body{grid-column:1/7;font-size:19px;line-height:1.55}
@@ -279,17 +287,18 @@ h2.big{font-size:clamp(36px,6.2vw,92px);font-stretch:118%;letter-spacing:-.035em
 
 /* method */
 .spreads{display:grid;gap:clamp(36px,4vw,56px)}
-.spread{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--white);color:var(--blue);border:4px solid var(--blue);min-height:330px}
-.spread::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:70px;translate:-50% 0;background:linear-gradient(90deg,transparent,rgba(0,30,70,.09) 48%,rgba(0,30,70,.16) 50%,rgba(0,30,70,.09) 52%,transparent);pointer-events:none}
+.spread{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);background:var(--white);color:var(--blue);border:4px solid var(--blue);overflow:hidden}
+.spread::before{content:"";position:absolute;left:52.4%;top:0;bottom:0;width:70px;translate:-50% 0;background:linear-gradient(90deg,transparent,rgba(0,30,70,.09) 48%,rgba(0,30,70,.16) 50%,rgba(0,30,70,.09) 52%,transparent);pointer-events:none}
 .sp-l,.sp-r{position:relative;padding:clamp(24px,3vw,44px) clamp(28px,3.4vw,52px)}
-.sp-l{display:flex;flex-direction:column;justify-content:space-between;gap:20px}
-.sp-num{font:900 clamp(110px,14vw,210px)/.76 var(--disp);font-stretch:125%;letter-spacing:-.07em;color:transparent;-webkit-text-stroke:3px var(--blue)}
+.sp-l{display:flex;align-items:center;gap:clamp(16px,2vw,28px);padding-left:0!important}
+.sp-l > div{position:relative;z-index:1;min-width:0}
+.sp-num{flex:none;margin:-.08em 0 -.14em -.1em;font:900 clamp(120px,15vw,230px)/.76 var(--disp);font-stretch:125%;letter-spacing:-.07em;color:transparent;-webkit-text-stroke:3px var(--blue)}
 .sp-lab{font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
-.spread h3{font-size:clamp(32px,3.6vw,54px);font-stretch:118%;letter-spacing:-.035em;line-height:.95;margin-top:10px}
-.sp-r{display:flex;flex-direction:column;justify-content:center;gap:18px;font-size:19px;line-height:1.55}
+.spread h3{font-size:clamp(34px,4vw,60px);font-stretch:118%;letter-spacing:-.035em;line-height:.95;margin-top:10px}
+.sp-r{display:flex;flex-direction:column;justify-content:center;gap:20px;font-size:clamp(19px,1.6vw,22px);line-height:1.5}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chips li{font:700 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;border:2px solid currentColor;padding:8px 10px 7px}
-.note{border:3px solid var(--blue);background:var(--yellow);padding:14px 16px;font-size:17px;line-height:1.45;box-shadow:5px 5px 0 var(--blue)}
+.note{border:3px solid var(--blue);background:var(--yellow);padding:14px 18px;font-size:17px;max-width:46ch;line-height:1.45;box-shadow:5px 5px 0 var(--blue)}
 .spread.y{background:var(--yellow)}
 .spread.y .sp-num{color:var(--blue);-webkit-text-stroke:0}
 .spread.b{background:var(--blue);color:var(--white);border-color:var(--blue)}
@@ -300,7 +309,7 @@ h2.big{font-size:clamp(36px,6.2vw,92px);font-stretch:118%;letter-spacing:-.035em
 .sp-wrap:nth-child(even){margin-left:clamp(0px,4vw,64px)}
 .sp-wrap:nth-child(odd){margin-right:clamp(0px,4vw,64px)}
 .method-cta{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:clamp(40px,5vw,64px)}
-@media (max-width:760px){.spread{grid-template-columns:1fr}.spread::before{display:none}.sp-l{padding-bottom:0}.sp-num{font-size:110px}}
+@media (max-width:899px){.spread{grid-template-columns:1fr}.spread::before{display:none}.sp-l{padding-bottom:0!important;padding-top:20px!important}.sp-num{font-size:clamp(96px,26vw,150px)}.sp-r{padding-top:18px!important}}
 
 /* buyers */
 .b-list{grid-column:1/7;counter-reset:b}
@@ -422,8 +431,9 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 @media (max-width:640px){.coupon{grid-template-columns:1fr}.stub{order:-1;border-left:0;border-bottom:3px dashed var(--blue);flex-direction:row;padding:14px 18px}.stub .vert{writing-mode:horizontal-tb;rotate:0deg;font-size:22px}.stub .barcode,.stub .scissor{display:none}.row{grid-template-columns:1fr}}
 
 /* footer */
-.foot{position:relative;background:var(--blue);color:var(--white);padding:clamp(56px,7vw,96px) 0 clamp(110px,10vw,72px);overflow:clip;--focus:var(--yellow)}
-.foot .fit{color:var(--yellow);font-size:24vw;margin-bottom:24px}
+.foot{position:relative;background:var(--blue);color:var(--white);padding:clamp(56px,7vw,96px) 0 clamp(36px,4vw,56px);overflow:clip;--focus:var(--yellow)}
+.foot .fit{color:var(--yellow);font-size:24vw;margin-top:14px;padding-bottom:.02em}
+.fin{display:flex;justify-content:space-between;gap:12px;margin-top:clamp(48px,6vw,80px);padding-top:12px;border-top:3px solid var(--yellow);font:700 12px/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--yellow)}
 .foot h2{font-size:clamp(30px,4vw,56px);font-stretch:118%;letter-spacing:-.035em}
 .f-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gap);margin-top:36px;padding-top:28px;border-top:3px solid var(--yellow)}
 .f-col{grid-column:span 3}
@@ -582,17 +592,23 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
       <p class="deck">Four questions for the South Auckland agent who was raised at the kitchen table of a property family.</p>
     </div>
     <div class="grid">
-      <div class="int-side">
-        <div class="portrait"><div class="halftone" aria-hidden="true"></div><b aria-hidden="true">JP</b><p class="ill">Portrait shoot coming soon. For now, the initials.</p></div>
+      <aside class="int-side" aria-label="Fact file">
+        <div class="factfile">
+          <p class="ff-head"><span>Fact file</span><span>No. 01</span></p>
+          <div class="portrait"><div class="halftone" aria-hidden="true"></div><b aria-hidden="true">JP</b><p class="ill">Cover star · Issue 01</p></div>
+          <ul class="stats">
+            <li><b>40+</b><span>years of property in the family</span></li>
+            <li><b>15+</b><span>years in Aotearoa</span></li>
+            <li><b>12K+</b><span>following along on Instagram</span></li>
+            <li><b>1</b><span>goal, said out loud</span></li>
+          </ul>
+          <ul class="follow">
+            <li><a href="https://www.instagram.com/jot_punia_real_estate/" target="_blank" rel="noopener"><span>Instagram</span>@jot_punia_real_estate<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+            <li><a href="https://www.tiktok.com/@jotsinghpunia" target="_blank" rel="noopener"><span>TikTok</span>@jotsinghpunia<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+          </ul>
+        </div>
         <div class="stk i1" style="--r:9deg" aria-hidden="true"><div class="stk-face f-star y">Raised in it</div></div>
-        <ul class="stats" aria-label="Jot in numbers">
-          <li><b>40+</b><span>years of property in the family</span></li>
-          <li><b>15+</b><span>years in Aotearoa</span></li>
-          <li><b>12K+</b><span>following along on Instagram</span></li>
-          <li><b>1</b><span>goal. See the pull quote.</span></li>
-        </ul>
-        <div class="follow"><a href="https://www.instagram.com/jot_punia_real_estate/" target="_blank" rel="noopener">IG @jot_punia_real_estate</a><a href="https://www.tiktok.com/@jotsinghpunia" target="_blank" rel="noopener">TikTok @jotsinghpunia</a></div>
-      </div>
+      </aside>
       <div class="int-main">
         <div class="qa">
           <p class="q">So, did you choose real estate?</p>
@@ -608,13 +624,13 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
           <blockquote><p>"My goal is simple. Become <mark>Barfoot &amp; Thompson's number one</mark>, one honest deal at a time."</p></blockquote>
           <figcaption>Jot Punia · A goal, not a ranking</figcaption>
         </figure>
-        <ul class="values">
+      </div>
+    </div>
+    <ul class="values">
           <li><h3>Straight talk.</h3><p>If your price is dreaming, I'll tell you. Nicely.</p></li>
           <li><h3>Quick replies.</h3><p>Text me. I'm probably already holding my phone.</p></li>
           <li><h3>Local first.</h3><p>This is my neighbourhood, not my patch.</p></li>
         </ul>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -659,7 +675,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
       </article></li>
       <li class="sp-wrap"><article class="spread ticket y">
         <div class="sp-l"><span class="sp-num" aria-hidden="true">02</span><div><p class="sp-lab">Step 02 · Plan and prepare</p><h3>Plan it like a premiere.</h3></div></div>
-        <div class="sp-r"><p>Method of sale, a simple styling game plan and a marketing budget with every cost up front.</p><p class="note"><strong>Before you sign:</strong> Before you sign the agency agreement, I'll recommend you get legal advice.</p></div>
+        <div class="sp-r"><p>Method of sale, a simple styling game plan and a marketing budget with every cost up front.</p><p class="note"><strong>Heads up.</strong> Before you sign the agency agreement, I'll recommend you get legal advice.</p></div>
       </article></li>
       <li class="sp-wrap"><article class="spread ticket b">
         <div class="sp-l"><span class="sp-num" aria-hidden="true">03</span><div><p class="sp-lab">Step 03 · Launch</p><h3>Drop day.</h3></div></div>
@@ -853,7 +869,6 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 
 <footer class="foot">
   <div class="wrap">
-    <div class="fit" aria-hidden="true"><span class="fit-in">JOT.</span></div>
     <h2>That's a wrap. Now hit follow.</h2>
     <div class="f-grid">
       <div class="f-col"><p class="lab">Starring</p><p>Jot Punia<br>Residential Sales<br>Barfoot &amp; Thompson Manukau</p><p style="margin-top:16px"><img src="../../assets/img/barfoot-logo.svg" width="228" height="83" alt="Barfoot &amp; Thompson"></p></div>
@@ -868,6 +883,8 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
       <p>Proudly designed by <a href="https://ambs.co.nz" target="_blank" rel="noopener">AMBS Solutions</a></p>
       <button class="pause" id="pause2" type="button" aria-pressed="false"><svg aria-hidden="true"><use href="#i-pause"/></svg>Pause animations</button>
     </div>
+    <p class="fin" aria-hidden="true"><span>Jot. · Issue 01</span><span>The end. See you next issue.</span></p>
+    <div class="fit" aria-hidden="true"><span class="fit-in">JOT.</span></div>
   </div>
 </footer>
 
