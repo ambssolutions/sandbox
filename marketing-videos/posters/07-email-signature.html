@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Poster — Email signatures</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* 4:5 feed poster: 540x675 CSS => 1080x1350. Plum + coral palette. */
+  :root { --plum: #2a0f3a; --plum2: #3d1550; --coral: #ff6b6b; --peach: #ffb38a; --cream: #fff4ec; --lav: #d8c4e8; }
+  #frame { height: 675px; margin-top: -337px; display: flex; flex-direction: column; align-items: center; text-align: center; color: var(--cream);
+    background: radial-gradient(70% 45% at 85% 5%, rgba(255,107,107,.35), transparent 70%),
+                radial-gradient(60% 40% at 0% 100%, rgba(255,179,138,.25), transparent 70%),
+                linear-gradient(170deg, var(--plum2) 0%, var(--plum) 70%); }
+  #frame::before { background-image: radial-gradient(rgba(255,244,236,.08) 1px, transparent 1.4px); background-size: 18px 18px; }
+  .logo { margin-top: 24px; width: 120px; position: relative; filter: drop-shadow(0 4px 14px rgba(0,0,0,.4)); }
+  .kicker { position: relative; margin-top: 8px; font-size: 13px; font-weight: 800; letter-spacing: .18em; color: var(--peach); }
+  h1 { position: relative; margin-top: 4px; font-size: 38px; line-height: 1.04; font-weight: 900; letter-spacing: -.03em; padding: 0 28px; }
+  h1 mark { background: linear-gradient(90deg, var(--coral), var(--peach)); color: var(--plum); padding: 0 8px; border-radius: 8px; }
+  .sub { position: relative; margin-top: 6px; font-size: 16px; font-weight: 600; color: var(--lav); }
+  .cmp { position: relative; margin-top: 16px; width: 488px; display: grid; gap: 10px; }
+  .tag { display: inline-block; font-size: 10.5px; font-weight: 900; letter-spacing: .14em; padding: 4px 10px; border-radius: 999px; margin-bottom: 6px; }
+  .before { text-align: left; background: rgba(255,244,236,.07); border: 1px dashed rgba(255,244,236,.3); border-radius: 16px; padding: 10px 14px;
+    display: flex; gap: 14px; align-items: center; }
+  .before .tag { background: rgba(255,244,236,.15); color: var(--lav); margin: 0; }
+  .before p { font-size: 13px; line-height: 1.45; color: rgba(255,244,236,.6); font-family: "Liberation Sans", sans-serif; }
+  .after { text-align: left; background: #fff; color: #1f1430; border-radius: 18px; padding: 14px 16px 16px; position: relative;
+    box-shadow: 0 18px 44px rgba(0,0,0,.4), 0 0 0 3px rgba(255,107,107,.5); }
+  .after .tag { background: var(--coral); color: #fff; position: absolute; top: -12px; left: 16px; }
+  .sig { display: flex; gap: 14px; align-items: center; }
+  .mono { width: 70px; height: 70px; border-radius: 18px; flex: none; display: grid; place-items: center; font-size: 26px; font-weight: 900; color: #fff;
+    background: linear-gradient(135deg, #2563eb, #06b6d4); }
+  .who b { display: block; font-size: 19px; font-weight: 900; }
+  .who .role { font-size: 12.5px; font-weight: 700; color: #7c6a8a; }
+  .who .ln { margin-top: 5px; font-size: 12px; font-weight: 600; color: #3b2a4d; line-height: 1.55; }
+  .who .ln a { color: #2563eb; text-decoration: none; font-weight: 700; }
+  .bar { margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0e8f4; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .btn { background: var(--coral); color: #fff; font-size: 12px; font-weight: 900; padding: 6px 12px; border-radius: 999px; }
+  .rev { background: #fff7ed; color: #9a3412; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 999px; }
+  .soc { margin-left: auto; display: flex; gap: 5px; }
+  .soc i { width: 24px; height: 24px; border-radius: 50%; background: #f3eef7; color: #3d1550; font-style: normal; font-size: 10.5px; font-weight: 900;
+    display: grid; place-items: center; }
+  .perks { position: relative; margin-top: 14px; width: 488px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: left; }
+  .perks div { background: rgba(255,244,236,.08); border: 1px solid rgba(255,244,236,.16); border-radius: 12px; padding: 8px 10px;
+    font-size: 13px; font-weight: 750; display: flex; gap: 8px; align-items: center; }
+  .perks i { font-style: normal; flex: none; width: 20px; height: 20px; border-radius: 50%; background: var(--peach); color: var(--plum);
+    font-size: 11px; font-weight: 900; display: grid; place-items: center; }
+  .cta { position: relative; margin-top: 14px; font-size: 18px; font-weight: 800; color: var(--lav); }
+  .cta span.k { background: linear-gradient(90deg, var(--coral), var(--peach)); color: var(--plum); padding: 3px 10px; border-radius: 8px; margin: 0 3px;
+    box-shadow: 0 3px 0 #b4475a; }
+  .url { position: relative; margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--lav); letter-spacing: .04em; }
+  .url b { color: var(--cream); }
+</style></head><body>
+<div id="frame">
+  <img class="logo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="kicker">EMAIL SIGNATURES</div>
+  <h1>Every email you send<br>is <mark>a free ad.</mark></h1>
+  <div class="sub">Is yours selling, or saying "Sent from my iPhone"?</div>
+  <div class="cmp">
+    <div class="before"><span class="tag">BEFORE</span><p>Thanks,<br>Sam<br><i>Sent from my iPhone</i></p></div>
+    <div class="after"><span class="tag">AFTER</span>
+      <div class="sig"><div class="mono">PP</div>
+        <div class="who"><b>Sam Patel</b><div class="role">Director · Patel Plumbing Ltd</div>
+          <div class="ln"><span class="emoji">📞</span> <a>021 555 0192</a> &nbsp;·&nbsp; <span class="emoji">🌐</span> <a>patelplumbing.co.nz</a><br>
+          <span class="emoji">✉️</span> <a>sam@patelplumbing.co.nz</a> &nbsp;·&nbsp; Auckland</div></div></div>
+      <div class="bar"><span class="btn"><span class="emoji">📅</span> Book a job</span><span class="rev"><span class="emoji">⭐</span> 4.9 on Google</span>
+        <div class="soc"><i>f</i><i>in</i><i>ig</i></div></div>
+    </div>
+  </div>
+  <div class="perks">
+    <div><i>✓</i>Tap-to-call &amp; clickable links</div>
+    <div><i>✓</i>"Book a job" button</div>
+    <div><i>✓</i>Same look for your whole team</div>
+    <div><i>✓</i>Works in Gmail &amp; Outlook</div>
+  </div>
+  <div class="cta">Want one? Comment <span class="k">SIGN</span> <span class="emoji">👇</span></div>
+  <div class="url"><b>ambs.co.nz</b> · AI automation &amp; websites for NZ businesses</div>
+</div></body></html>
