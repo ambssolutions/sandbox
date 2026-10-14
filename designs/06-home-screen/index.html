@@ -1169,7 +1169,7 @@ const AGENT_EMAIL='j.punia@barfoot.co.nz';
     if(!r.width||r.bottom<0||r.top>innerHeight)return null;return r;}
   function detach(){if(cur&&slot){slot.appendChild(cur);leave(cur.dataset.body);}cur=null;slot=null;}
   function openApp(id,from,focusSel){
-    const body=$(`[data-body="${id}"]`); if(!body)return;
+    const body=$(`[data-body="${id}"]`); if(!body||closing)return;
     const src=rectOf(from);
     if(dlg.open){detach();} else opener=from||document.activeElement;
     slot=body.parentElement; cur=body; scroller.appendChild(body); scroller.scrollTop=0;
@@ -1188,7 +1188,7 @@ const AGENT_EMAIL='j.punia@barfoot.co.nz';
     if(reduce)return;
     const fr=panel.getBoundingClientRect();
     if(phone()&&!src){panel.animate([{transform:'translateY(100%)'},{transform:'translateY(0)'}],{duration:520,easing:EASE});return;}
-    if(!src){panel.animate([{opacity:0,transform:'scale(.94)'},{opacity:1,transform:'none'}],{duration:340,easing:EASE});return;}
+    if(!src){panel.style.transformOrigin='50% 50%';panel.animate([{opacity:0,transform:'scale(.94)'},{opacity:1,transform:'none'}],{duration:340,easing:EASE});return;}
     const from=`translate(${src.left-fr.left}px,${src.top-fr.top}px) scale(${src.width/fr.width},${src.height/fr.height})`;
     panel.style.transformOrigin='0 0';
     panel.animate([{transform:from,borderRadius:'60px'},{transform:'none'}],{duration:620,easing:EASE});

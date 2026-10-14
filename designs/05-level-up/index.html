@@ -183,12 +183,13 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-l
 .motion .bdg:hover .ico{animation:wiggle .55s var(--ease)}
 .bdg .ico{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--sun);color:var(--navy);font-size:22px;box-shadow:0 3px 0 var(--sun-d)}
 .bdg b{display:block;margin-top:22px;font:900 clamp(34px,3.6vw,46px)/1 var(--display);letter-spacing:-.04em;color:var(--navy)}
-.bdg span{display:block;margin-top:8px;font-size:15px;line-height:1.35;color:var(--muted)}
+.bdg span{display:block;margin-top:8px;text-wrap:balance;font-size:15px;line-height:1.35;color:var(--muted)}
 
 /* ---------- quest ---------- */
 .quest{background:linear-gradient(180deg,var(--night) 0%,#002553 50%,var(--night) 100%);padding-top:clamp(88px,10vw,144px)}
 .quest .bgdots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(238,243,250,.10) 1.2px,transparent 1.2px);background-size:28px 28px;-webkit-mask-image:linear-gradient(180deg,transparent,#000 15%,#000 85%,transparent);mask-image:linear-gradient(180deg,transparent,#000 15%,#000 85%,transparent)}
-.xp{position:sticky;top:80px;z-index:20;margin:0 auto 8px;width:min(760px,100% - var(--pad)*2);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;padding:12px 16px;border-radius:18px;background:rgba(0,16,42,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line-d);box-shadow:0 18px 40px -20px rgba(0,0,0,.8)}
+.xpwrap{position:sticky;top:80px;z-index:20;margin:0 auto 8px;width:min(760px,100% - var(--pad)*2)}
+.xp{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;padding:12px 16px;border-radius:18px;background:rgba(0,16,42,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line-d);box-shadow:0 18px 40px -20px rgba(0,0,0,.8)}
 .xp-l{display:flex;align-items:center;gap:10px;font:700 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--sun)}
 .xp-l i{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:var(--sun);color:var(--navy);font:900 11px/1 var(--display);font-style:normal;letter-spacing:0}
 .xp-track{position:relative;height:14px;border-radius:999px;background:rgba(238,243,250,.1);overflow:hidden;box-shadow:inset 0 2px 3px rgba(0,0,0,.4)}
@@ -234,13 +235,15 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-l
 .ach b{color:var(--navy)}
 
 /* toast */
-.toasts{position:fixed;right:24px;bottom:24px;z-index:150;display:grid;gap:10px;justify-items:end;pointer-events:none}
-.toast{display:flex;align-items:center;gap:14px;min-width:300px;max-width:min(380px,calc(100vw - 32px));padding:12px 18px 12px 12px;border-radius:18px;background:var(--night);color:var(--cream);border:1px solid rgba(248,192,11,.45);box-shadow:0 20px 40px -14px rgba(0,0,0,.7),0 0 0 4px rgba(248,192,11,.08);transform:translateX(120%);opacity:0;transition:transform .55s var(--spring),opacity .3s}
+.toasts{position:absolute;left:0;right:0;top:calc(100% + 8px);display:flex;justify-content:center;pointer-events:none}
+.toast{display:flex;align-items:center;gap:10px;max-width:100%;padding:6px 14px 6px 6px;border-radius:12px;background:var(--sun);color:var(--navy);box-shadow:0 4px 0 var(--sun-d),0 14px 30px -12px rgba(0,0,0,.7);transform:translateY(-10px);opacity:0;transition:transform .45s var(--spring),opacity .25s}
 .toast.in{transform:none;opacity:1}
-.toast.out{transform:translateY(12px);opacity:0;transition:transform .35s var(--ease),opacity .3s}
-.toast .cup{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:13px;background:var(--sun);color:var(--navy);font-size:22px;box-shadow:0 4px 0 var(--sun-d)}
-.toast small{display:block;font:700 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--sun)}
-.toast b{display:block;margin-top:6px;font:800 16px/1.2 var(--display);letter-spacing:-.01em}
+@media (max-width:760px){.toasts{display:none}} /* phones: the lit level node is the feedback; never cover card text */
+.toast.out{transform:translateY(-6px);opacity:0;transition:transform .25s var(--ease),opacity .2s}
+.toast .cup{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--navy);color:var(--sun);font-size:16px}
+.toast small{font:700 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.toast b{font:800 14px/1.2 var(--display);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast .txt{display:flex;align-items:center;gap:10px;min-width:0}
 
 /* ---------- characters ---------- */
 .chars .sec-head h2{color:var(--navy)}
@@ -449,9 +452,9 @@ footer{position:relative;background:var(--night-2);color:var(--cream);padding:cl
   .qbar a .i{font-size:18px}
   .qbar a.p{background:var(--sun);color:var(--navy);box-shadow:0 3px 0 var(--sun-d)}
   .badge{bottom:calc(80px + env(safe-area-inset-bottom));left:12px;font-size:10px;padding:6px 9px}
-  .toasts{right:12px;left:12px;bottom:auto;top:150px;justify-items:stretch}
-  .toast{min-width:0;max-width:none;transform:translateY(-20px)}
-  .xp{top:76px;grid-template-columns:auto 1fr;gap:10px 12px;padding:10px 12px;margin-bottom:40px}
+  .toast small{display:none}
+  .xpwrap{top:76px;margin-bottom:40px}
+  .xp{grid-template-columns:auto 1fr;gap:10px 12px;padding:10px 12px}
   .xp-n{grid-column:1/-1;text-align:left;display:none}
   .picker{grid-template-columns:1fr;gap:14px}
   .pups{grid-template-columns:1fr 1fr;gap:10px}
@@ -620,7 +623,7 @@ footer{position:relative;background:var(--night-2);color:var(--cream);padding:cl
       <li class="bdg"><span class="ico" aria-hidden="true"><svg class="i"><use href="#i-family"/></svg></span><div><b>40+</b><span>years of property in the family</span></div></li>
       <li class="bdg"><span class="ico" aria-hidden="true"><svg class="i"><use href="#i-globe"/></svg></span><div><b>15+</b><span>years in Aotearoa</span></div></li>
       <li class="bdg"><span class="ico" aria-hidden="true"><svg class="i"><use href="#i-cam"/></svg></span><div><b>12K+</b><span>following along on Instagram</span></div></li>
-      <li class="bdg"><span class="ico" aria-hidden="true"><svg class="i"><use href="#i-flag"/></svg></span><div><b>1</b><span>goal. See the main quest.</span></div></li>
+      <li class="bdg"><span class="ico" aria-hidden="true"><svg class="i"><use href="#i-home"/></svg></span><div><b>2019</b><span>calling South Auckland home since</span></div></li>
     </ul>
   </div>
 </section>
@@ -635,10 +638,13 @@ footer{position:relative;background:var(--night-2);color:var(--cream);padding:cl
       <p>Selling is a big deal, so every level is clear before you play it. Scroll to walk the path.</p>
     </div>
   </div>
+  <div class="xpwrap">
   <div class="xp" role="progressbar" aria-label="Quest progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="xp">
     <span class="xp-l"><i id="xpLv">LV0</i>XP</span>
     <span class="xp-track" aria-hidden="true"><span class="xp-fill" id="xpFill"></span><span class="xp-ticks"><span></span><span></span><span></span><span></span></span></span>
     <span class="xp-n" id="xpN" aria-hidden="true">0 / 400 XP</span>
+  </div>
+    <div class="toasts" id="toasts" aria-hidden="true"></div>
   </div>
   <div class="wrap">
     <div class="levels" id="levels">
@@ -884,7 +890,6 @@ footer{position:relative;background:var(--night-2);color:var(--cream);padding:cl
   </div>
 </footer>
 
-<div class="toasts" id="toasts" aria-hidden="true"></div>
 
 <div class="qbar" id="qbar">
   <a href="tel:+64277860004"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg>Call</a>
@@ -1014,16 +1019,19 @@ addEventListener('DOMContentLoaded',function(){
     if(!reduce){const p=draw.getPointAtLength(Math.max(L,0.01));token.style.transform=`translate(${p.x}px,${p.y}px)`;token.classList.toggle('live',L>2&&L<total-2);}
     let unlocked=0;
     levels.forEach((l,i)=>{const on=reduce||lineY>=stops[i]-4;l.classList.toggle('on',on);if(on){unlocked++;
-      if(!seen.has(i)){seen.add(i);const nt=stops[i]+box.top;if(!reduce&&nt>0&&nt<innerHeight)toast(l.dataset.ach);}}});
+      if(!seen.has(i)){seen.add(i);const nt=stops[i]+box.top;if(!reduce&&questIn&&nt>0&&nt<innerHeight)toast(l.dataset.ach);}}});
     const prog=reduce?Math.max(0,Math.min(1,(innerHeight*.62-box.top)/box.height)):L/total;
     xpFill.style.setProperty('--p',prog.toFixed(4));
     xp.setAttribute('aria-valuenow',Math.round(prog*100));
     xpN.textContent=`${Math.round(prog*400)} / 400 XP`;xpLv.textContent='LV'+unlocked;}
   const toasts=$('#toasts');
   function toast(name){$$('.toast',toasts).forEach(o=>{o.classList.add('out');setTimeout(()=>o.remove(),350);});const t=document.createElement('div');t.className='toast';
-    t.innerHTML=`<span class="cup"><svg class="i"><use href="#i-cup"/></svg></span><span><small>Achievement unlocked</small><b>${name}</b></span>`;
+    t.innerHTML=`<span class="cup"><svg class="i"><use href="#i-cup"/></svg></span><span class="txt"><small>Achievement unlocked</small><b>${name}</b></span>`;
     toasts.appendChild(t);requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));
-    setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),400);},3200);}
+    setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300);},2500);}
+  let questIn=false;
+  const clearToasts=()=>$$('.toast',toasts).forEach(o=>o.remove());
+  if('IntersectionObserver' in window)new IntersectionObserver(([e])=>{questIn=e.isIntersecting;if(!questIn)clearToasts();}).observe($('#quest'));
   let tick=false;
   addEventListener('scroll',()=>{if(tick)return;tick=true;requestAnimationFrame(()=>{tick=false;update();});},{passive:true});
   let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(build,120);});
