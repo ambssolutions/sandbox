@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Jot Punia | South Auckland Real Estate, Barfoot &amp; Thompson</title>
-<meta name="description" content="Jot Punia, Residential Sales at Barfoot & Thompson in South Auckland. A real estate agent who markets homes like a content creator: honest advice, a 40-year family legacy and listings seen by thousands of locals. Book a free appraisal.">
+<meta name="description" content="Jot Punia, Residential Sales at Barfoot & Thompson in South Auckland. Markets homes like a content creator, with honest advice, written appraisals and a 40-year family legacy in property. Book a free appraisal.">
 <meta name="theme-color" content="#0A0F1C">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_NZ">
@@ -17,7 +17,7 @@
 /* theme before first paint; `js` flag so content is only hidden while JS runs; intro once per visit */
 (function(){var d=document.documentElement;d.classList.add('js');
   try{var t=localStorage.getItem('jp-theme');if(t)d.setAttribute('data-theme',t);}catch(e){}
-  try{if(!location.hash&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!sessionStorage.getItem('jp-intro')){d.classList.add('intro-on');sessionStorage.setItem('jp-intro','1');}}catch(e){}
+  try{if(!location.hash&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!sessionStorage.getItem('jp-intro')&&localStorage.getItem('jp-still')!=='1'){d.classList.add('intro-on');sessionStorage.setItem('jp-intro','1');}}catch(e){}
 })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,7 +65,7 @@ h1,h2,h3{font-family:var(--display);margin:0;font-weight:800;letter-spacing:-.02
 .eyebrow{display:inline-flex;align-items:center;gap:10px;font:500 12px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent-text)}
 .dark .eyebrow{color:var(--kowhai)}
 .sun .eyebrow{color:#0E1626}
-.eyebrow .tc{opacity:.6}
+.eyebrow .tc{font-weight:500}
 .h2{font-size:clamp(36px,4.6vw,60px);margin-top:18px;max-width:18ch}
 .hl{color:var(--accent-text)}
 .dark .hl{color:var(--kowhai)}
@@ -241,7 +241,7 @@ html[data-theme=dark] .theme .i-dark{display:none}
 .stat{padding:20px;border-left:1px solid var(--line)}
 .stat:first-child{border-left:0}
 .stat b{display:block;font:800 clamp(30px,3.2vw,42px)/1 var(--display);letter-spacing:-.04em}
-.stat b sup{font-size:.5em;color:var(--kowhai);vertical-align:top;position:relative;top:.1em}
+.stat b sup{font-size:.5em;color:var(--accent-text);vertical-align:top;position:relative;top:.1em}
 .stat p{color:var(--muted);font-size:13.5px;margin-top:8px;line-height:1.4}
 @media (max-width:1040px){.origin-grid{grid-template-columns:1fr}}
 @media (max-width:640px){.stats{grid-template-columns:1fr 1fr}.stat:nth-child(3){border-left:0}.stat:nth-child(n+3){border-top:1px solid var(--line)}}
@@ -354,13 +354,13 @@ html[data-theme=dark] .theme .i-dark{display:none}
 
 /* ---------- DM / appraisal ---------- */
 .dm-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(30px,5vw,70px);align-items:start}
-.contact{margin:30px 0 0;display:grid;gap:10px}
+.contact{margin:30px 0 0;padding:0;list-style:none;display:grid;gap:10px}
 .contact a{display:flex;align-items:center;gap:14px;text-decoration:none;padding:14px 18px;border-radius:18px;background:rgba(14,22,38,.08);transition:background .25s}
 .contact a:hover{background:rgba(14,22,38,.14)}
 .contact .ic{width:42px;height:42px;border-radius:12px;background:#0E1626;color:var(--kowhai);display:grid;place-items:center;flex:none}
 .contact .ic svg{width:19px;height:19px}
-.contact dt{font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;opacity:.7}
-.contact dd{margin:5px 0 0;font-weight:700;font-size:17px}
+.contact .dt{display:block;font:600 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase}
+.contact .dd{display:block;margin:5px 0 0;font-weight:700;font-size:17px}
 .dm{background:var(--paper);color:var(--ink);border-radius:30px;overflow:hidden;box-shadow:0 40px 80px -40px rgba(14,22,38,.6)}
 .dm-top{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);background:var(--card)}
 .dm-top .av{position:relative;width:44px;height:44px;border-radius:50%;background:var(--studio);color:var(--kowhai);display:grid;place-items:center;font:800 15px var(--display)}
@@ -409,7 +409,7 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
 .wrapt{font:800 clamp(64px,13vw,190px)/.86 var(--display);letter-spacing:-.06em;color:var(--cream)}
 .wrapt span{color:var(--kowhai)}
 .credits{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;margin-top:56px;padding-top:30px;border-top:1px solid var(--line-d)}
-.credits h4{margin:0 0 12px;font:500 11.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--kowhai)}
+.credits .ch{margin:0 0 12px;font:500 11.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--kowhai)}
 .credits ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .credits a{text-decoration:none}.credits a:hover{color:var(--kowhai)}
 .legal{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 30px;margin-top:44px;font-size:13px;opacity:.75}
@@ -423,6 +423,22 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
 .qbar svg{width:17px;height:17px}
 @media (max-width:760px){.qbar{display:grid}}
 
+
+/* compliance additions */
+.lic{margin-top:22px;font:500 11.5px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cream-dim)}
+.pnote{margin-top:14px;font:500 11.5px/1.4 var(--mono);letter-spacing:.06em;color:var(--cream-dim);text-align:center}
+.imgnote{margin-top:22px;font:500 12px/1.5 var(--mono);letter-spacing:.06em;color:var(--cream-dim)}
+.gsap-on .imgnote{margin-top:-90px}
+@media (max-width:1040px){.gsap-on .imgnote{margin-top:22px}}
+.good{margin-top:22px;padding:16px 18px;border-radius:16px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);font-size:15.5px;color:var(--muted);max-width:52ch}
+.good b{color:var(--ink)}
+.q .fold a{color:var(--accent-text);font-weight:700}
+.motion-btn{position:absolute;right:max(var(--pad),calc((100% - 1240px)/2));bottom:calc(var(--sheet) + 92px);z-index:3;border:0;cursor:pointer;min-height:44px;padding:0 16px;border-radius:999px;background:rgba(245,242,234,.08);color:var(--cream-dim);font:500 11.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;box-shadow:inset 0 0 0 1px var(--line-d)}
+.motion-btn:hover{color:#fff;background:rgba(245,242,234,.14)}
+@media (max-width:760px){.motion-btn{position:static;display:block;margin:24px auto 0}}
+.linkbtn{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.linkbtn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+html.still *,html.still *::before,html.still *::after{animation-play-state:paused!important}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .js .rv{opacity:1;transform:none;transition:none}
@@ -499,15 +515,16 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
       <h1 id="hero-h" aria-label="Real estate, told straight.">
         <span aria-hidden="true"><span class="w"><span>Real</span></span> <span class="w"><span>estate,</span></span><br><span class="w"><span>told</span></span> <span class="w"><span class="hl">straight.</span></span></span>
       </h1>
-      <p class="caps rv" style="--rd:2"><span class="sub">I'm Jot. I sell South Auckland homes with Barfoot &amp; Thompson, and I market every one like a content creator: honest, local and seen by thousands.</span></p>
+      <p class="caps rv" style="--rd:2"><span class="sub">I'm Jot. I sell South Auckland homes with Barfoot &amp; Thompson, and I market every one like a content creator: honest, local and made to be shared.</span></p>
       <div class="hero-cta rv" style="--rd:3">
         <a class="btn btn-sun mag" href="#dm">Book a free appraisal <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn btn-ghost" href="#series">See how I market homes</a>
       </div>
+      <p class="lic rv" style="--rd:4">Jot Punia, Residential Sales · Barfoot &amp; Thompson Ltd · Licensed REAA 2008</p>
       <div class="channel rv" style="--rd:4">
         <span class="av" aria-hidden="true"><span>JP</span></span>
         <span><b>@jot_punia_real_estate</b><small>Real estate creator · South Auckland</small></span>
-        <div class="ch-stats">
+        <div class="ch-stats" aria-label="Channel facts">
           <div><b>12K+</b><small>Followers</small></div>
           <div><b>40+</b><small>Years in<br>the family</small></div>
           <div><b>B&amp;T</b><small>Barfoot &amp;<br>Thompson</small></div>
@@ -555,12 +572,14 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
         <button class="tap prev" type="button" aria-label="Previous story"></button>
         <button class="tap next" type="button" aria-label="Next story"></button>
       </div>
+      <p class="pnote">Stories use illustrative images, not current listings.</p>
       <div class="float f1" aria-hidden="true"><span class="ic"><svg><use href="#i-eye"/></svg></span><span>Seen by locals<small>before open home day</small></span></div>
       <div class="float f2" aria-hidden="true"><span class="ic"><svg><use href="#i-heart"/></svg></span><span>Honest pricing<small>no inflated promises</small></span></div>
     </div>
   </div>
 
-  <div class="marq" aria-label="Suburbs Jot works in: Manukau, Papatoetoe, Flat Bush, Manurewa, Takanini, Papakura, Māngere, Wattle Downs, Clendon Park, Randwick Park and Ōtāhuhu">
+  <button type="button" class="motion-btn" data-motion aria-pressed="false">Pause animations</button>
+  <div class="marq" role="marquee" aria-label="Suburbs Jot works in: Manukau, Papatoetoe, Flat Bush, Manurewa, Takanini, Papakura, Māngere, Wattle Downs, Clendon Park, Randwick Park and Ōtāhuhu">
     <div class="marq-in" aria-hidden="true">
       <span>Manukau</span><span>Papatoetoe</span><span>Flat Bush</span><span>Manurewa</span><span>Takanini</span><span>Papakura</span><span>Māngere</span><span>Wattle Downs</span><span>Clendon Park</span><span>Randwick Park</span><span>Ōtāhuhu</span><span>South Auckland</span>
       <span>Manukau</span><span>Papatoetoe</span><span>Flat Bush</span><span>Manurewa</span><span>Takanini</span><span>Papakura</span><span>Māngere</span><span>Wattle Downs</span><span>Clendon Park</span><span>Randwick Park</span><span>Ōtāhuhu</span><span>South Auckland</span>
@@ -575,7 +594,7 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
       <div class="frame">
         <span class="big" aria-hidden="true">JP</span>
         <!-- Add Jot's photo as assets/img/jot.webp (portrait, about 1000 x 1250) and it replaces the monogram -->
-        <img src="assets/img/jot.webp" alt="Jot Punia, Barfoot & Thompson real estate agent" width="1000" height="1250" loading="lazy" decoding="async" onerror="this.remove()">
+        <img src="assets/img/jot.webp" alt="Jot Punia, Residential Sales, Barfoot &amp; Thompson" width="1000" height="1250" loading="lazy" decoding="async" onerror="this.remove()">
         <span class="vf" aria-hidden="true"></span>
         <div class="hud" aria-hidden="true"><span class="rec"><i></i>REC</span><span class="bat">4K · 60</span></div>
         <div class="hud hud-b" aria-hidden="true"><span>EP 00 · THE ORIGIN STORY</span><span>ISO 400</span></div>
@@ -594,7 +613,7 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
         <div class="stat"><b><span data-count="40">40</span><sup>+</sup></b><p>years of real estate in the family</p></div>
         <div class="stat"><b><span data-count="15">15</span><sup>+</sup></b><p>years calling New Zealand home</p></div>
         <div class="stat"><b><span data-count="12">12</span><sup>K+</sup></b><p>followers on Instagram</p></div>
-        <div class="stat"><b>#1</b><p>the goal at Barfoot &amp; Thompson</p></div>
+        <div class="stat"><b>Goal</b><p>to become Barfoot &amp; Thompson's number one</p></div>
       </div>
     </div>
   </div>
@@ -612,22 +631,23 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
     </div>
     <div class="eps" id="eps">
       <article class="epc rv">
-        <div class="thumb"><img src="assets/img/hero-home-800.webp" alt="" width="800" height="533" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span><span class="dur">0:15</span></div>
-        <div class="meta"><span class="ep">EP 01 · The teaser</span><h3>Coming soon.</h3><p>A short teaser to build interest with local buyers before your home goes live.</p></div>
+        <div class="thumb"><img src="assets/img/hero-home-800.webp" alt="" width="800" height="533" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="dur">15 sec</span></div>
+        <div class="meta"><span class="ep">Format 01 · The teaser</span><h3>Coming soon.</h3><p>A short teaser to build interest with local buyers before your home goes live.</p></div>
       </article>
       <article class="epc rv" style="--rd:1">
-        <div class="thumb"><img src="assets/img/living-800.webp" alt="" width="800" height="544" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span><span class="dur">1:00</span></div>
-        <div class="meta"><span class="ep">EP 02 · The tour</span><h3>The 60-second walkthrough.</h3><p>Shows how your home feels room by room, not just the floor plan.</p></div>
+        <div class="thumb"><img src="assets/img/living-800.webp" alt="" width="800" height="544" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="dur">60 sec</span></div>
+        <div class="meta"><span class="ep">Format 02 · The tour</span><h3>The 60-second walkthrough.</h3><p>Shows how your home feels room by room, not just the floor plan.</p></div>
       </article>
       <article class="epc rv" style="--rd:2">
-        <div class="thumb"><img src="assets/img/dusk-home-800.webp" alt="" width="800" height="533" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span><span class="dur">0:45</span></div>
-        <div class="meta"><span class="ep">EP 03 · The neighbourhood</span><h3>Why you'll love living here.</h3><p>Parks, schools, cafés and commute. The things buyers ask about first.</p></div>
+        <div class="thumb"><img src="assets/img/dusk-home-800.webp" alt="" width="800" height="533" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="dur">45 sec</span></div>
+        <div class="meta"><span class="ep">Format 03 · The neighbourhood</span><h3>Why you'll love living here.</h3><p>Parks, schools, cafés and commute. The things buyers ask about first.</p></div>
       </article>
       <article class="epc rv" style="--rd:3">
-        <div class="thumb"><img src="assets/img/cedar-home-800.webp" alt="" width="800" height="533" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span><span class="dur">0:30</span></div>
-        <div class="meta"><span class="ep">EP 04 · The finale</span><h3>Open home and sold.</h3><p>Open home reminders, then a sold post that keeps your street's buyers watching.</p></div>
+        <div class="thumb"><img src="assets/img/cedar-home-800.webp" alt="" width="800" height="533" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="dur">30 sec</span></div>
+        <div class="meta"><span class="ep">Format 04 · The finale</span><h3>Open home and sold.</h3><p>Open home reminders, then a sold post that keeps your street's buyers watching.</p></div>
       </article>
     </div>
+    <p class="imgnote rv">These are the formats I use. Images are illustrative only and are not current listings.</p>
     <div class="reach">
       <div class="rv"><b>Published where buyers are.</b><div class="plat"><span>Instagram</span><span>TikTok</span><span>Facebook</span><span>barfoot.co.nz</span><span>Trade Me</span></div></div>
       <div class="rv" style="--rd:1"><b>Backed by Barfoot &amp; Thompson.</b><p>New Zealand's largest privately owned real estate network, with its buyer database and branch reach.</p></div>
@@ -649,11 +669,11 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
       <ol class="stack">
         <li class="scene" style="--i:0">
           <div class="shot"><img src="assets/img/modern-home-800.webp" alt="" width="800" height="671" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="rec" aria-hidden="true"><i></i>SC 01</span></div>
-          <div class="body"><span class="top"><span>Scene 01</span><span>00:00:01</span></span><h3>The appraisal.</h3><p>I walk through your home and give you an honest price range, backed by recent local sales.</p><span class="dir">Free · No obligation · About 45 minutes</span></div>
+          <div class="body"><span class="top"><span>Scene 01</span><span>00:00:01</span></span><h3>The appraisal.</h3><p>I walk through your home, then give you a written appraisal that reflects the current market and is backed by comparable local sales.</p><span class="dir">Free · No obligation · In writing</span></div>
         </li>
         <li class="scene" style="--i:1">
           <div class="shot"><img src="assets/img/living-800.webp" alt="" width="800" height="544" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="rec" aria-hidden="true"><i></i>SC 02</span></div>
-          <div class="body"><span class="top"><span>Scene 02</span><span>00:01:30</span></span><h3>Pre-production.</h3><p>We choose the method of sale, work through a simple styling checklist, and agree a marketing plan with every cost up front.</p><span class="dir">Shot list · Styling tips · Clear costs</span></div>
+          <div class="body"><span class="top"><span>Scene 02</span><span>00:01:30</span></span><h3>Pre-production.</h3><p>We choose the method of sale, work through a simple styling checklist, and agree a marketing plan with every cost up front. Before you sign the agency agreement, I'll recommend you get legal advice and give you time to do that.</p><span class="dir">Shot list · Styling tips · Clear costs</span></div>
         </li>
         <li class="scene" style="--i:2">
           <div class="shot"><img src="assets/img/dusk-home-800.webp" alt="" width="800" height="533" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="rec" aria-hidden="true"><i></i>SC 03</span></div>
@@ -661,7 +681,7 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
         </li>
         <li class="scene" style="--i:3">
           <div class="shot"><img src="assets/img/cedar-home-800.webp" alt="" width="800" height="533" loading="lazy" decoding="async"><span class="vf" aria-hidden="true"></span><span class="rec" aria-hidden="true"><i></i>SC 04</span></div>
-          <div class="body"><span class="top"><span>Scene 04</span><span>00:04:00</span></span><h3>The final cut.</h3><p>I negotiate hard for your best result and stay with you all the way to settlement day.</p><span class="dir">Offers · Negotiation · Settlement</span></div>
+          <div class="body"><span class="top"><span>Scene 04</span><span>00:04:00</span></span><h3>The final cut.</h3><p>I negotiate for your best result, keep you informed at every step, and stay with you all the way to settlement day.</p><span class="dir">Offers · Negotiation · Settlement</span></div>
         </li>
       </ol>
     </div>
@@ -671,11 +691,12 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
         <span class="eyebrow rv">Buying?</span>
         <h2 class="h2 rv" style="--rd:1;font-size:clamp(30px,3.4vw,44px)">Turn on notifications.</h2>
         <p class="lead rv" style="--rd:2">Here is how I help buyers find the right home and move quickly.</p>
+        <p class="good rv" style="--rd:3"><b>Good to know.</b> When I'm marketing a home, I act for the seller. I'll always deal with you fairly and honestly, and I'll recommend you get legal advice before you sign anything.</p>
       </div>
       <div class="blist">
-        <div class="rv"><b><svg aria-hidden="true"><use href="#i-bell"/></svg>Early access.</b><p>Hear about homes early, often before they reach the portals.</p></div>
+        <div class="rv"><b><svg aria-hidden="true"><use href="#i-bell"/></svg>Early access.</b><p>Be among the first to hear about new listings, when the seller is happy for me to share them early.</p></div>
         <div class="rv" style="--rd:1"><b><svg aria-hidden="true"><use href="#i-check"/></svg>A proper chat first.</b><p>Your budget, must-haves and timing. Coffee is on me.</p></div>
-        <div class="rv" style="--rd:2"><b><svg aria-hidden="true"><use href="#i-check"/></svg>The right people.</b><p>Introductions to trusted brokers and lawyers so you're ready to buy.</p></div>
+        <div class="rv" style="--rd:2"><b><svg aria-hidden="true"><use href="#i-check"/></svg>The right people.</b><p>Introductions to brokers and lawyers so you're ready to buy. If I ever receive a fee or benefit for a referral, I'll tell you first.</p></div>
         <div class="rv" style="--rd:3"><b><svg aria-hidden="true"><use href="#i-check"/></svg>Straight answers.</b><p>What a home is really worth, with comparable sales to back it up.</p></div>
       </div>
     </div>
@@ -694,7 +715,7 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
     <div class="scout rv" style="--rd:2">
       <img id="scoutImg" src="assets/img/modern-home-800.webp" alt="" width="800" height="671" loading="lazy" decoding="async">
       <span class="vf" aria-hidden="true"></span>
-      <div class="hud" aria-hidden="true"><span class="rec"><i></i>SCOUTING</span><span id="scoutGps">36.99° S · 174.88° E</span></div>
+      <div class="hud" aria-hidden="true"><span class="rec"><i></i>SCOUTING · ILLUSTRATIVE IMAGE</span><span id="scoutGps">36.99° S · 174.88° E</span></div>
       <div class="body" id="scoutBody" aria-live="polite"></div>
     </div>
   </div>
@@ -726,10 +747,12 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
       <div>
         <p class="faq-t rv">Top questions in the comments.</p>
         <div class="faq" id="faq">
-          <div class="q rv"><button type="button" aria-expanded="false">Is the appraisal really free? <span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></button><div class="fold"><div><p>Yes. No cost and no obligation. I'll visit, look at recent sales nearby and give you an honest price range, whether you're selling next month or just curious.</p></div></div></div>
-          <div class="q rv"><button type="button" aria-expanded="false">Do I have to be on camera? <span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></button><div class="fold"><div><p>Not at all. The star is your home. I handle the content and posting, and you approve what goes out. If you'd rather keep things low-key, we can focus on the portals and the Barfoot network.</p></div></div></div>
+          <div class="q rv"><button type="button" aria-expanded="false">Is the appraisal really free? <span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></button><div class="fold"><div><p>Yes. No cost and no obligation. I'll visit, look at comparable recent sales nearby and give you a written appraisal, whether you're selling next month or just curious. If there aren't good comparable sales, I'll explain that in writing too.</p></div></div></div>
+          <div class="q rv"><button type="button" aria-expanded="false">Do I have to be on camera? <span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></button><div class="fold"><div><p>Not at all. The star is your home. I handle the content and posting, and you approve what goes out. If you'd rather keep things low-key, we can focus on the property websites and the Barfoot network. Nothing is advertised without your approval.</p></div></div></div>
           <div class="q rv"><button type="button" aria-expanded="false">How often will I hear from you? <span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></button><div class="fold"><div><p>After every open home, and with a written update every week. You can also call, text or WhatsApp me any time.</p></div></div></div>
           <div class="q rv"><button type="button" aria-expanded="false">Which areas do you cover? <span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></button><div class="fold"><div><p>Mainly South Auckland: Manukau, Papatoetoe, Flat Bush, Manurewa, Takanini, Papakura, Māngere, Wattle Downs and nearby suburbs. If you're further afield, ask anyway.</p></div></div></div>
+          <div class="q rv"><button type="button" aria-expanded="false">Where can I get independent advice? <span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></button><div class="fold"><div><p><a href="https://www.settled.govt.nz" target="_blank" rel="noopener">settled.govt.nz</a> has free, independent guidance on buying and selling a home in New Zealand, including the guide I'll give you when you buy or sell.</p></div></div></div>
+          <div class="q rv"><button type="button" aria-expanded="false">What if I'm not happy with something? <span class="pm" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></button><div class="fold"><div><p>Please talk to me first and I'll do my best to put it right. You can also use Barfoot &amp; Thompson's complaints process, or contact the <a href="https://www.rea.govt.nz" target="_blank" rel="noopener">Real Estate Authority (REA)</a>, which licenses and regulates real estate professionals.</p></div></div></div>
         </div>
       </div>
     </div>
@@ -742,18 +765,18 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
     <div>
       <span class="eyebrow rv">Free · No obligation</span>
       <h2 class="h2 rv" style="--rd:1" id="dm-h">Slide into the DMs.</h2>
-      <p class="lead rv" style="--rd:2">Ask for a free appraisal or ask me anything. No pressure and no inflated numbers to win the listing. I reply within one business day.</p>
-      <dl class="contact rv" style="--rd:3">
-        <a href="tel:+64277860004"><span class="ic"><svg aria-hidden="true"><use href="#i-phone"/></svg></span><span><dt>Call or text</dt><dd>027 786 0004</dd></span></a>
-        <a href="https://wa.me/64277860004?text=Kia%20ora%20Jot%2C%20I%27d%20like%20a%20free%20appraisal." target="_blank" rel="noopener"><span class="ic"><svg aria-hidden="true"><use href="#i-wa"/></svg></span><span><dt>WhatsApp</dt><dd>Message Jot</dd></span></a>
-        <a href="mailto:j.punia@barfoot.co.nz"><span class="ic"><svg aria-hidden="true"><use href="#i-mail"/></svg></span><span><dt>Email</dt><dd>j.punia@barfoot.co.nz</dd></span></a>
-      </dl>
+      <p class="lead rv" style="--rd:2">Ask for a free appraisal or ask me anything. No pressure and no inflated numbers to win the listing. I aim to reply within one business day.</p>
+      <ul class="contact rv" style="--rd:3">
+        <li><a href="tel:+64277860004"><span class="ic"><svg aria-hidden="true"><use href="#i-phone"/></svg></span><span><span class="dt">Call or text</span><span class="dd">027 786 0004</span></span></a></li>
+        <li><a href="https://wa.me/64277860004?text=Kia%20ora%20Jot%2C%20I%27d%20like%20a%20free%20appraisal." target="_blank" rel="noopener"><span class="ic"><svg aria-hidden="true"><use href="#i-wa"/></svg></span><span><span class="dt">WhatsApp</span><span class="dd">Message Jot</span></span></a></li>
+        <li><a href="mailto:j.punia@barfoot.co.nz"><span class="ic"><svg aria-hidden="true"><use href="#i-mail"/></svg></span><span><span class="dt">Email</span><span class="dd">j.punia@barfoot.co.nz</span></span></a></li>
+      </ul>
     </div>
 
     <form class="dm rv" id="form" style="--rd:2" novalidate aria-labelledby="dm-form-h">
       <div class="dm-top">
         <span class="av" aria-hidden="true">JP</span>
-        <span><b id="dm-form-h">Message Jot</b><small>Usually replies within a day</small></span>
+        <span><b id="dm-form-h">Message Jot</b><small>Aims to reply within one business day</small></span>
       </div>
       <div class="dm-body">
         <div class="msgs" aria-hidden="true">
@@ -780,7 +803,7 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
         <div class="hp" aria-hidden="true"><label for="f-hp">Company website</label><input id="f-hp" name="company_website" tabindex="-1" autocomplete="off"></div>
         <button class="btn btn-ink" type="submit">Send message <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
         <p class="status" id="status" role="status" aria-live="polite"></p>
-        <p class="note">We use your details only to reply to your enquiry.</p>
+        <p class="note">We use your details only to reply to your enquiry. See the <a href="privacy.html">privacy statement</a>.</p>
       </div>
     </form>
   </div>
@@ -792,13 +815,14 @@ footer{position:relative;background:var(--studio);color:var(--cream-dim);padding
   <div class="wrap">
     <div class="wrapt" id="wrapt">That's a <span>wrap.</span></div>
     <div class="credits" id="credits">
-      <div><h4>Starring</h4><ul><li>Jot Punia</li><li>Residential Sales</li><li>Barfoot &amp; Thompson Manukau</li></ul></div>
-      <div><h4>Scenes</h4><ul><li><a href="#story">The origin story</a></li><li><a href="#series">Your listing</a></li><li><a href="#storyboard">How I sell</a></li><li><a href="#dm">Free appraisal</a></li></ul></div>
-      <div><h4>Follow</h4><ul><li><a href="https://www.instagram.com/jot_punia_real_estate/" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://www.tiktok.com/@jotsinghpunia" target="_blank" rel="noopener">TikTok</a></li><li><a href="https://www.barfoot.co.nz/our-people/j.punia" target="_blank" rel="noopener">My Barfoot listings</a></li></ul></div>
-      <div><h4>Contact</h4><ul><li><a href="tel:+64277860004">027 786 0004</a></li><li><a href="mailto:j.punia@barfoot.co.nz">j.punia@barfoot.co.nz</a></li><li><a href="https://wa.me/64277860004" target="_blank" rel="noopener">WhatsApp</a></li></ul></div>
+      <div><h2 class="ch">Starring</h2><ul><li>Jot Punia</li><li>Residential Sales</li><li>Barfoot &amp; Thompson Manukau</li></ul></div>
+      <div><h2 class="ch">Scenes</h2><ul><li><a href="#story">The origin story</a></li><li><a href="#series">Your listing</a></li><li><a href="#storyboard">How I sell</a></li><li><a href="#dm">Free appraisal</a></li></ul></div>
+      <div><h2 class="ch">Follow</h2><ul><li><a href="https://www.instagram.com/jot_punia_real_estate/" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://www.tiktok.com/@jotsinghpunia" target="_blank" rel="noopener">TikTok</a></li><li><a href="https://www.barfoot.co.nz/our-people/j.punia" target="_blank" rel="noopener">My Barfoot listings</a></li></ul></div>
+      <div><h2 class="ch">Contact</h2><ul><li><a href="tel:+64277860004">027 786 0004</a></li><li><a href="mailto:j.punia@barfoot.co.nz">j.punia@barfoot.co.nz</a></li><li><a href="https://wa.me/64277860004" target="_blank" rel="noopener">WhatsApp</a></li></ul></div>
     </div>
     <div class="legal">
-      <p>© <span id="yr">2026</span> Jot Punia. Barfoot &amp; Thompson Ltd, licensed under the Real Estate Agents Act 2008.</p>
+      <p>© <span id="yr">2026</span> Jot Punia, Residential Sales, Barfoot &amp; Thompson Ltd. Licensed under the Real Estate Agents Act 2008 (REAA 2008).</p>
+      <p>Check licence details on the <a href="https://www.rea.govt.nz" target="_blank" rel="noopener">REA public register</a> · <a href="https://www.settled.govt.nz" target="_blank" rel="noopener">settled.govt.nz</a> · <a href="privacy.html">Privacy</a> · <button type="button" class="linkbtn" data-motion>Pause animations</button></p>
       <p>Some images on this website may be stock images or illustrative renders.</p>
       <p>Proudly designed by <a href="https://ambs.co.nz" target="_blank" rel="noopener">AMBS Solutions</a></p>
     </div>
@@ -867,7 +891,7 @@ addEventListener('DOMContentLoaded',function(){
   /* ---- running timecode in the hero ---- */
   const tc=$('#tc'), t0=performance.now();
   if(!reduce) (function tick(){const s=(performance.now()-t0)/1000,pad=n=>String(Math.floor(n)).padStart(2,'0');
-    tc.textContent=`${pad(s/3600)}:${pad(s/60%60)}:${pad(s%60)}:${pad((s%1)*25)}`;requestAnimationFrame(tick);})();
+    if(!html.classList.contains('still'))tc.textContent=`${pad(s/3600)}:${pad(s/60%60)}:${pad(s%60)}:${pad((s%1)*25)}`;requestAnimationFrame(tick);})();
 
   /* ---- stories player ---- */
   const player=$('#player'), stories=$$('.story',player), barsEl=$('.bars',player), pp=$('#pp');
@@ -891,6 +915,15 @@ addEventListener('DOMContentLoaded',function(){
   player.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){go(idx+1);}if(e.key==='ArrowLeft'){go(idx-1);}});
   if('IntersectionObserver' in window) new IntersectionObserver(([e])=>visible=e.isIntersecting).observe(player);
   setPaused(reduce); go(0); raf=requestAnimationFrame(loop);
+
+  /* ---- pause all automatic motion (WCAG 2.2.2) ---- */
+  let still=false; try{still=localStorage.getItem('jp-still')==='1';}catch(e){}
+  function setStill(v){still=v;html.classList.toggle('still',v);
+    $$('[data-motion]').forEach(b=>{b.textContent=v?'Play animations':'Pause animations';if(b.classList.contains('motion-btn'))b.setAttribute('aria-pressed',v);});
+    try{localStorage.setItem('jp-still',v?'1':'0');}catch(e){}
+    if(typeof setPaused==='function') setPaused(v||reduce);}
+  $$('[data-motion]').forEach(b=>b.addEventListener('click',()=>setStill(!still)));
+  setStill(still);
 
   /* poll sticker: answer goes straight into the DM form */
   $$('.poll button').forEach(b=>b.addEventListener('click',()=>{
@@ -948,7 +981,7 @@ addEventListener('DOMContentLoaded',function(){
       try{status.textContent='Sending…';
         const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({access_key:FORM_KEY,subject,...fd})});
         if(!r.ok) throw new Error(r.status);
-        form.reset();status.className='status ok';status.textContent='Message sent. Jot will reply within one business day.';return;
+        form.reset();status.className='status ok';status.textContent='Message sent. Jot aims to reply within one business day.';return;
       }catch(err){status.textContent='Sending failed, so your email app will open instead.';}
     }
     const lines=['Kia ora Jot,','',`I'm looking to: ${fd.intent}`,`Name: ${fd.name}`,`Phone: ${fd.phone}`,`Email: ${fd.email||'-'}`,`Suburb: ${fd.suburb}`,`Timing: ${fd.when}`,'',fd.message||''];

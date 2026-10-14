@@ -18,10 +18,12 @@ The concept is built around Jot as a content creator. The site works like his ch
 - `index.html`: the whole site (inline CSS and JS, no build step)
 - `assets/vendor/`: self-hosted GSAP 3.12.5, ScrollTrigger and Lenis 1.1.13
 - `assets/img/`: imagery in `-800` and `-1400` webp sizes (illustrative stock photos from Unsplash)
+- `privacy.html`: Privacy Act 2020 statement, linked from the form and the footer
 - `404.html`, `robots.txt`, `vercel.json` (main-only deploys, clean URLs, security headers)
+- `COMPLIANCE.md`: how the site meets REAA 2008 / Code of Conduct, Fair Trading Act, Privacy Act and WCAG 2.2 AA, and what still needs sign-off
 
 Preview locally: `python3 -m http.server`, then open http://localhost:8000.
 
 ## Things to finish before launch
 
-See `CONTENT-NEEDED.md`. The appraisal form opens the visitor's email app until a `FORM_ENDPOINT` is set.
+See `CONTENT-NEEDED.md` (the compliance sign-off table comes first). The appraisal form opens the visitor's email app until a `FORM_ENDPOINT` is set.

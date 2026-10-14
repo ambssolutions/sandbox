@@ -1,5 +1,16 @@
 # What we still need from Jot
 
+## Compliance sign-off (must be done before launch)
+| Need | Why |
+|---|---|
+| Barfoot & Thompson approval of the site (name, logo use, wording) | Licensees' advertising is the agency's responsibility; most agencies require sign-off on personal websites |
+| Jot's licence class on the REA register (salesperson, branch manager or agent) | REAA 2008: don't describe the licence differently from the register. Copy currently says "Residential Sales" |
+| Written permission from Gurdeep Singh to publish his review and name | Fair Trading Act 1986 / Privacy Act 2020 |
+| Proof for the 12K+ Instagram figure (screenshot on launch date) | Fair Trading Act 1986: claims must be substantiated |
+| Confirm Barfoot's complaints process link, if it should be linked directly | REA Code rule 12.1 |
+| Confirm the privacy statement with Barfoot's privacy officer | Privacy Act 2020 |
+
+
 The site is built and works today. Send these and they go in without a redesign.
 
 | Need | Goes in |
