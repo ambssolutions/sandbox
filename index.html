@@ -67,7 +67,7 @@ const g=document.getElementById('grid');
 CONCEPTS.forEach(c=>{const a=document.createElement('article');a.className='card';
   a.innerHTML=`${c.prev?'<span class="prev">Previous version</span>':''}<div class="thumb"><img src="designs/${c.slug}/thumb.webp" alt="" width="640" height="400" loading="${+c.n<4?'eager':'lazy'}"></div>
   <div class="body"><span class="num">Concept ${c.n}</span><h2>${c.name}</h2><div class="tags"><span class="tag">${c.type}</span><span class="tag m">${c.motion}</span></div><p>${c.d}</p>
-  <a class="go" href="designs/${c.slug}/">Open concept ${c.n}</a></div>`;g.appendChild(a);});
+  <a class="go" href="designs/${c.slug}/index.html">Open concept ${c.n}</a></div>`;g.appendChild(a);});
 </script>
 </body>
 </html>
