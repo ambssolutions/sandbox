@@ -199,6 +199,9 @@ main{display:block}
 .btn-navy{background:var(--navy);color:#fff}
 .btn-line{border-color:rgba(255,255,255,.55);color:#fff}
 .reel[data-tone=sun] .btn-line,.sheet .btn-line{border-color:var(--navy);color:var(--navy)}
+.btns .wide{flex:1 1 100%}
+.btns .wide~.btn{flex:1 1 auto}
+.btn{white-space:nowrap}
 .btn-sm{min-height:44px;padding:0 14px;font-size:14px}
 .legal{font-size:12px;line-height:1.45;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.88)}
 
@@ -211,16 +214,17 @@ main{display:block}
 
 /* ---------- reel 2: profile ---------- */
 .cover{position:absolute;inset:0;background:var(--navy);overflow:hidden}
-.cover .mono{position:absolute;right:-6%;bottom:44%;font:800 calc(var(--fw) * .78)/.8 var(--display);font-stretch:75%;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.22);letter-spacing:-.04em}
+.cover .mono{position:absolute;right:-6%;bottom:44%;font:800 calc(var(--fw) * .78)/.8 var(--display);font-stretch:75%;color:transparent;-webkit-text-stroke:2px rgba(248,192,11,.4);letter-spacing:-.04em}
 .cover::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,transparent 1px 44px)}
-.prof{display:flex;align-items:center;gap:16px;margin:4px 0 16px}
+.prof{display:flex;align-items:center;gap:16px;margin:16px 0 4px}
 .jp{width:66px;height:66px;flex:none;border-radius:50%;background:var(--navy);color:var(--sun);display:grid;place-items:center;font:800 28px/1 var(--display);font-stretch:80%;position:relative;margin-left:8px}
 .jp::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px dashed rgba(0,53,114,.6)}
 .anim .jp::after{animation:spin 18s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center;flex:1}
-.stats b{display:block;font:800 22px/1 var(--display);font-stretch:85%}
-.stats small{display:block;font-size:10.5px;line-height:1.2;margin-top:4px;font-weight:600}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1;margin:0}
+.stats>div{background:rgba(0,53,114,.1);border-radius:12px;padding:9px 11px}
+.stats b{display:block;font:800 26px/1 var(--display);font-stretch:80%}
+.stats small{display:block;font-size:11.5px;line-height:1.25;margin-top:3px;font-weight:600}
 .quote{margin-top:14px;padding:14px 16px;background:var(--navy);color:#fff;border-radius:16px;font:700 16px/1.35 var(--display);font-stretch:95%}
 .quote small{display:block;font:600 11px/1.3 var(--mono);color:var(--sun);margin-top:8px;letter-spacing:.06em;text-transform:uppercase}
 .vals{display:grid;gap:8px;margin-top:12px;list-style:none;padding:0}
@@ -384,7 +388,8 @@ main{display:block}
 .end .btn-line{border-color:var(--navy);color:var(--navy)}
 .reel .panel.sheet{--pbg:#fff}
 .reel[data-tone=sun] .panel.sheet{--pbg:var(--sun)}
-.rnd:disabled{opacity:.35}
+.rnd:disabled{opacity:.3}
+.snav .rnd:disabled,.subnav .rnd:disabled{background:transparent;box-shadow:inset 0 0 0 2px var(--navy);color:var(--navy)}
 @media (min-width:761px){
   .deep .mega.front{display:none}
   .deep .mega .w{top:52%}
@@ -410,13 +415,15 @@ main{display:block}
   .frame{top:0;left:0;width:100%;height:100%;margin:0;border-radius:0;box-shadow:none!important}
   .mega.back{display:none}
   .mega.front{clip-path:none}
-  .mega .w{top:calc(122px + env(safe-area-inset-top,0px) + var(--ms) * .4)}
+
   .mega.front .w{color:var(--sun);-webkit-text-stroke:0;text-shadow:0 6px 30px rgba(0,10,30,.35)}
   .fhead{top:calc(60px + env(safe-area-inset-top,0px));padding-top:16px}
   .prog{top:4px}
-  .pbody{max-height:calc(var(--sv) * .64);padding:18px 16px calc(116px + var(--safe-b))}
+  .panel{padding-bottom:calc(112px + var(--safe-b))}
+  .pbody{max-height:calc(var(--sv) * .64 - 112px - var(--safe-b));padding:18px 16px 18px;-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 22px),transparent)}
   .reel:not([data-rail=off]) .pbody{padding-right:84px}
-  .sheet .pbody{max-height:calc(var(--sv) * .68)}
+  .sheet .pbody{max-height:calc(var(--sv) * .66 - 112px - var(--safe-b))}
+  .sub .im{aspect-ratio:16/6.5}
   .r4 .fhead{padding-top:46px}
   .segs{top:calc(58px + env(safe-area-inset-top,0px))}
   .notif{display:none}
@@ -437,14 +444,13 @@ main{display:block}
   .foot{grid-template-columns:1fr}
   .fcols{grid-template-columns:1fr 1fr}
   .row{grid-template-columns:1fr}
-  .stats b{font-size:20px}
+  .prof .jp{display:none}
 }
 @media (max-width:380px){
   .brand small{font-size:10px}
   .brand b{font-size:14px}
   .h1{font-size:36px}
   .h2{font-size:29px}
-  .stats small{font-size:9.5px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -545,13 +551,13 @@ main{display:block}
       <div class="media"><img src="../../assets/img/hero-home-1400.webp" srcset="../../assets/img/hero-home-800.webp 800w, ../../assets/img/hero-home-1400.webp 1400w" sizes="(max-width:760px) 100vw, 520px" width="1400" height="933" alt="Illustrative photo of a modern family home at golden hour" fetchpriority="high"></div>
       <div class="fhead"><div class="prog" aria-hidden="true"><i></i></div><span class="av" aria-hidden="true">JP</span><span class="who"><a href="https://www.instagram.com/jot_punia_real_estate/" target="_blank" rel="noopener">@jot_punia_real_estate</a><small>Illustrative image, not a current listing</small></span><span class="fcount" aria-hidden="true">01/09</span></div>
       <div class="panel">
-        <p class="cap"><span class="vh">POV: you finally get a straight answer from a real estate agent.</span><span class="tw" aria-hidden="true">POV: you finally get a straight answer from a real estate agent.</span></p>
+        <p class="cap"><span class="vh">POV: you finally get a straight answer from a real estate agent.</span><span class="tw" aria-hidden="true">POV: you finally get a straight answer from a real estate agent.</span></p>
         <div class="pbody">
-          <p class="eyebrow st">South Auckland · Barfoot &amp; Thompson</p>
+          <p class="eyebrow st">South Auckland real estate</p>
           <h1 class="h1 st" id="h-1" style="--d:1">Real estate, minus the waffle.</h1>
           <p class="lead st" style="--d:2">Kia ora, I'm Jot. I sell South Auckland homes with Barfoot &amp; Thompson, and I market them like a creator. Big ideas, straight talk, no fluff.</p>
           <div class="btns st" style="--d:3">
-            <a class="btn btn-sun" href="#reel-9">Get my free appraisal <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn-sun wide" href="#reel-9">Get my free appraisal <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
             <a class="btn btn-line" href="#reel-4">Watch how I sell</a>
             <a class="btn btn-line" href="sms:+64277860004">Text Jot</a>
           </div>
@@ -565,7 +571,7 @@ main{display:block}
 </section>
 
 <!-- ============ 02 WHO IS JOT ============ -->
-<section class="reel r2 deep" id="reel-2" data-tone="sun" style="--i:2" aria-labelledby="h-2">
+<section class="reel r2" id="reel-2" data-tone="sun" style="--i:2" aria-labelledby="h-2">
   <div class="reel-in" style="--my:24%;--mym:22%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>40+ years.</span></div></div>
     <div class="frame">
@@ -574,17 +580,17 @@ main{display:block}
       <div class="panel">
         <p class="cap"><span class="vh">I didn't choose this job. I was raised in it.</span><span class="tw" aria-hidden="true">I didn't choose this job. I was raised in it.</span></p>
         <div class="pbody">
-          <div class="prof st">
+          <p class="eyebrow st" style="--d:1">Who is Jot</p>
+          <h2 class="h2 st" id="h-2" style="--d:1">Real estate picked me.</h2>
+          <div class="prof st" style="--d:2">
             <span class="jp" aria-hidden="true">JP</span>
             <dl class="stats">
               <div><dt class="vh">Family</dt><dd style="margin:0"><b>40+</b><small>years of property in the family</small></dd></div>
               <div><dt class="vh">Home</dt><dd style="margin:0"><b>15+</b><small>years in Aotearoa</small></dd></div>
               <div><dt class="vh">Following</dt><dd style="margin:0"><b>12K+</b><small>following along on Instagram</small></dd></div>
-              <div><dt class="vh">Goal</dt><dd style="margin:0"><b>1</b><small>goal</small></dd></div>
+              <div><dt class="vh">South Auckland</dt><dd style="margin:0"><b>2019</b><small>calling South Auckland home since</small></dd></div>
             </dl>
           </div>
-          <p class="eyebrow st" style="--d:1">Who is Jot</p>
-          <h2 class="h2 st" id="h-2" style="--d:1">Real estate picked me.</h2>
           <p class="lead st" style="--d:2">I grew up in a property family. Forty years of kitchen-table deals, sold signs and Sunday open homes. I didn't choose this job. I was raised in it.</p>
           <p class="lead st" style="--d:3">I moved to New Zealand more than 15 years ago and made South Auckland home in 2019. Now I sell it, film it, and run the odd community fundraiser on weekends.</p>
           <p class="quote st" style="--d:4">“My goal is simple. Become Barfoot &amp; Thompson's number one, one honest deal at a time.”<small>The goal, not a ranking</small></p>
@@ -715,7 +721,7 @@ main{display:block}
 </section>
 
 <!-- ============ 06 SUBURBS ============ -->
-<section class="reel r6 deep" id="reel-6" data-tone="sun" data-rail="off" style="--i:6" aria-labelledby="h-6">
+<section class="reel r6" id="reel-6" data-tone="sun" data-rail="off" style="--i:6" aria-labelledby="h-6">
   <div class="reel-in" style="--my:21%;--mym:20%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>Local.</span></div></div>
     <div class="frame">
@@ -751,7 +757,7 @@ main{display:block}
 </section>
 
 <!-- ============ 07 REVIEW ============ -->
-<section class="reel r7 deep" id="reel-7" data-tone="blue" data-rail="off" style="--i:7" aria-labelledby="h-7">
+<section class="reel r7 deep" data-deep="1" id="reel-7" data-tone="blue" data-rail="off" style="--i:7" aria-labelledby="h-7">
   <div class="reel-in" style="--my:25%;--mym:25%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>Honest.</span></div></div>
     <div class="frame">
@@ -788,7 +794,7 @@ main{display:block}
 </section>
 
 <!-- ============ 08 FAQ ============ -->
-<section class="reel r8 deep" id="reel-8" data-tone="sun" data-rail="off" style="--i:8" aria-labelledby="h-8">
+<section class="reel r8 deep" data-deep="1" id="reel-8" data-tone="sun" data-rail="off" style="--i:8" aria-labelledby="h-8">
   <div class="reel-in" style="--my:15%;--mym:17%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>Ask me.</span></div></div>
     <div class="frame">
@@ -820,7 +826,7 @@ main{display:block}
 </section>
 
 <!-- ============ 09 APPRAISAL ============ -->
-<section class="reel r9 deep" id="reel-9" data-tone="blue" data-rail="off" style="--i:9" aria-labelledby="h-9">
+<section class="reel r9 deep" data-deep="1" id="reel-9" data-tone="blue" data-rail="off" style="--i:9" aria-labelledby="h-9">
   <div class="reel-in" style="--my:14%;--mym:17%">
     <div class="mega back" aria-hidden="true"><div class="w"><span>Free.</span></div></div>
     <div class="frame">
@@ -939,10 +945,22 @@ const FORM_KEY='';
       const ri=$('.reel-in',r), w=$(phone?'.mega.front .w':'.mega.back .w',r);
       if(!w) return;
       w.style.fontSize='100px'; const width=w.offsetWidth||1; w.style.fontSize='';
-      const deep=r.classList.contains('deep');
-      const target=phone?W*.94:(deep?W*.98:W*.92);
-      const max=phone?H*.115:(deep?H*.92:H*.34);
-      ri.style.setProperty('--ms',Math.min(100*target/width,max).toFixed(1)+'px');
+      const fr=$('.frame',r), fh=$('.fhead',r), pn=$('.panel',r), nt=$('.notif',r);
+      const base=phone?0:fr.offsetTop;
+      const zTop=base+(nt&&nt.offsetHeight?nt.offsetTop+nt.offsetHeight:fh.offsetTop+fh.offsetHeight)+10;
+      const zBot=base+pn.offsetTop-(phone?78:74);
+      let size;
+      if(phone){
+        size=Math.min(100*W*.94/width,H*.12,Math.max(60,(zBot-zTop)/.8));
+        ri.style.setProperty('--my',(zTop+size*.4)+'px');
+      }else{
+        size=Math.min(100*W*.92/width,H*.3,(zBot-zTop)/.76);
+        const deep=r.dataset.deep==="1"||size<150;
+        r.classList.toggle('deep',deep);
+        if(deep){size=Math.min(100*W*.98/width,H*.92);ri.style.removeProperty('--my');}
+        else ri.style.setProperty('--my',((zTop+zBot)/2)+'px');
+      }
+      ri.style.setProperty('--ms',size.toFixed(1)+'px');
     });
   }
 
