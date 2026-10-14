@@ -161,7 +161,7 @@ main{display:block}
 @keyframes prog{to{transform:scaleX(1)}}
 .av{width:38px;height:38px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--sun);color:var(--navy);font:800 15px/1 var(--display);box-shadow:0 0 0 2px #fff}
 .who{display:flex;flex-direction:column;min-width:0;line-height:1.25;text-shadow:0 1px 8px rgba(0,0,0,.45)}
-.who a{font-weight:700;font-size:14px;text-decoration:none;color:#fff}
+.who a{font-weight:700;font-size:14px;text-decoration:none;color:#fff;display:inline-flex;align-items:center;min-height:24px;align-self:flex-start}
 .who a:hover{text-decoration:underline}
 .who small{font-size:11.5px;color:#fff;opacity:.92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fcount{margin-left:auto;font:600 11.5px/1 var(--mono);color:#fff;background:rgba(0,20,50,.6);padding:7px 9px;border-radius:999px}
@@ -946,7 +946,11 @@ const FORM_KEY='';
     });
   }
 
-  function measure(){tops=items.map(el=>el.offsetTop);}
+  /* a panel that overflows must be reachable by keyboard */
+  function scrollables(){$$('.pbody').forEach(pb=>{const r=pb.closest('.reel'),h=r&&$('h1,h2',r);
+    if(pb.scrollHeight>pb.clientHeight+2){pb.tabIndex=0;pb.setAttribute('role','region');if(h)pb.setAttribute('aria-labelledby',h.id);}
+    else{pb.removeAttribute('tabindex');pb.removeAttribute('role');pb.removeAttribute('aria-labelledby');}});}
+  function measure(){tops=items.map(el=>el.offsetTop);scrollables();}
 
   /* ---------- typewriter captions ---------- */
   $$('.cap .tw').forEach(tw=>{const t=tw.textContent;tw.textContent='';tw._c=[...t].map(ch=>{const s=document.createElement('span');s.textContent=ch;tw.appendChild(s);return s;});});
