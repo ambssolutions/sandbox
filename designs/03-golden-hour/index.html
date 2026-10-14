@@ -258,7 +258,7 @@ html.js:not(.rm) .steps::after{transition:transform 2.4s var(--ease-io) .2s}
 .step h3{font:400 clamp(28px,2.3vw,36px)/1.1 var(--serif);letter-spacing:-.01em;margin-bottom:16px}
 .step p{color:var(--ink-2);font-size:16px}
 .step p+p{margin-top:14px}
-.step .legal{color:var(--ink);border-left:1px solid var(--gold);padding-left:14px;margin-top:20px}
+.step .sl{color:var(--ink);border-left:1px solid var(--gold);padding-left:14px;margin-top:20px}
 
 /* ---------- buyers ---------- */
 .buy{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(20px,3vw,40px)}
@@ -290,10 +290,10 @@ html.js:not(.rm) .steps::after{transition:transform 2.4s var(--ease-io) .2s}
   .sub:hover p,.sub:focus-within p,.sub:hover a,.sub:focus-within a{opacity:1;transform:none}
   .sub:hover a,.sub:focus-within a{transition-delay:.06s}
   .sub:hover h3,.sub:focus-within h3{transform:translateX(18px);color:var(--gold)}
-  .subs:hover .sub:not(:hover){opacity:.45}
+  html.js .subs:hover .sub.rv:not(:hover){opacity:.32}
 }
 .subs-more{margin-top:28px;color:var(--ink-2);font-size:15px}
-.peek{position:fixed;left:0;top:0;z-index:5;width:300px;aspect-ratio:3/2;pointer-events:none;border-radius:4px;overflow:hidden;opacity:0;transform:translate3d(-50%,-50%,0) scale(.86);transition:opacity .45s var(--ease),transform .6s var(--ease);background:#1d2b44;box-shadow:0 30px 80px -20px rgba(0,0,0,.6)}
+.peek{position:fixed;left:0;top:0;z-index:5;width:280px;aspect-ratio:3/2;pointer-events:none;border-radius:4px;overflow:hidden;opacity:0;transform:translate3d(-50%,-50%,0) scale(.86);transition:opacity .45s var(--ease),transform .6s var(--ease);background:#1d2b44;box-shadow:0 30px 80px -20px rgba(0,0,0,.6)}
 .peek.on{opacity:1;transform:translate3d(-50%,-50%,0) scale(1)}
 .peek img{width:100%;height:100%;object-fit:cover}
 .peek span{position:absolute;left:10px;bottom:10px;font:500 10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;background:rgba(6,14,32,.72);color:#fff;padding:6px 8px;border-radius:2px}
@@ -572,7 +572,7 @@ html.still .hero-media img,html.still .scrollcue i,html.still .hero-sun{animatio
         <div><b>40+</b><span>years of property in the family</span></div>
         <div><b>15+</b><span>years in Aotearoa</span></div>
         <div><b>12K+</b><span>following along on Instagram</span></div>
-        <div><b>1</b><span>goal, and it's below</span></div>
+        <div><b>2019</b><span>calling South Auckland home since</span></div>
       </div>
     </div>
 
@@ -631,7 +631,7 @@ html.still .hero-media img,html.still .scrollcue i,html.still .hero-sun{animatio
     </div>
     <ol class="steps" id="steps">
       <li class="step rv"><span class="n" aria-hidden="true">01</span><h3>Get the real number.</h3><p>A free, no-obligation written appraisal backed by comparable local sales. No flattering figure just to win your listing.</p></li>
-      <li class="step rv" style="--d:1"><span class="n" aria-hidden="true">02</span><h3>Plan it like a premiere.</h3><p>Method of sale, a simple styling game plan and a marketing budget with every cost up front.</p><p class="legal">Before you sign the agency agreement, I'll recommend you get legal advice.</p></li>
+      <li class="step rv" style="--d:1"><span class="n" aria-hidden="true">02</span><h3>Plan it like a premiere.</h3><p>Method of sale, a simple styling game plan and a marketing budget with every cost up front.</p><p class="sl">Before you sign the agency agreement, I'll recommend you get legal advice.</p></li>
       <li class="step rv" style="--d:2"><span class="n" aria-hidden="true">03</span><h3>Drop day.</h3><p>Photos, video and reels go live on barfoot.co.nz, Trade Me and my socials together. After every open home you'll hear who came, what they said and what it means.</p></li>
       <li class="step rv" style="--d:3"><span class="n" aria-hidden="true">04</span><h3>Keys, cheque, done.</h3><p>I negotiate hard for your best result and stay with you right through to settlement day.</p></li>
     </ol>
@@ -915,7 +915,7 @@ addEventListener('DOMContentLoaded',function(){
       if(run)requestAnimationFrame(follow);};
     $$('.sub',subs).forEach(li=>li.addEventListener('pointerenter',()=>{const src='../../assets/img/'+li.dataset.img+'-800.webp';
       if(!peekImg.src.endsWith(src.slice(5)))peekImg.src=src;}));
-    subs.addEventListener('pointermove',e=>{tx=e.clientX+190;ty=e.clientY;if(!run){x=tx;y=ty;run=true;follow();}peek.classList.add('on');});
+    subs.addEventListener('pointermove',e=>{tx=e.clientX+120;ty=e.clientY-150;if(!run){x=tx;y=ty;run=true;follow();}peek.classList.add('on');});
     subs.addEventListener('pointerleave',()=>{peek.classList.remove('on');run=false;});
     addEventListener('scroll',()=>{if(run){peek.classList.remove('on');}},{passive:true});
   }
