@@ -423,6 +423,10 @@ footer{position:relative;background:var(--night-2);color:var(--cream);padding:cl
   .hero-grid,.story-grid,.panel-grid,.rv-grid,.help-grid,.save-grid{grid-template-columns:minmax(0,1fr)}
   .pc{max-width:460px}
   .help-grid .sec-head{position:static}
+  .rv-side{display:contents}
+  .rv-side .sec-head{order:0}
+  .review{order:1}
+  .reply{order:2}
   .credits{grid-template-columns:1fr 1fr}
   .level,.level:nth-of-type(even){width:100%;grid-template-columns:52px minmax(0,1fr);gap:12px;margin-top:48px}
   .level:nth-of-type(even) .node{order:0}
@@ -462,7 +466,11 @@ footer{position:relative;background:var(--night-2);color:var(--cream);padding:cl
   .credits{grid-template-columns:1fr 1fr;gap:24px}
 }
 @media (max-width:560px){
-  .tiles{grid-template-columns:minmax(0,1fr)}
+  .tiles{grid-template-columns:minmax(0,1fr);gap:14px}
+  .terrain{height:64px;margin-bottom:14px}
+  .terrain .flag{width:30px;height:30px;bottom:10px;font-size:16px}
+  .tile{padding:18px 18px 18px}
+  .tile .go{margin-top:14px}
   .pups{grid-template-columns:minmax(0,1fr)}
   .pup{display:grid;grid-template-columns:120px minmax(0,1fr)}
   .pup .ph{aspect-ratio:auto;min-height:100%}
@@ -472,6 +480,8 @@ footer{position:relative;background:var(--night-2);color:var(--cream);padding:cl
   .lic-chip b{flex-basis:100%}
   .hero h1{font-size:clamp(34px,10.4vw,52px)}
   .lic-chip{border-radius:14px}
+  .spark{display:none}
+  .backed{flex-direction:column;align-items:flex-start}
   .review .qm{font-size:96px;right:20px}
   .slots{gap:8px}
   .slots span{font-size:14px}
@@ -672,7 +682,7 @@ footer{position:relative;background:var(--night-2);color:var(--cream);padding:cl
       <article class="level" data-ach="Keys, cheque, done" aria-labelledby="l4">
         <div class="node" aria-hidden="true"><span><small>Level</small><b>4</b></span></div>
         <div class="lcard">
-          <p class="lk"><span>Level 4 of 4</span><span class="state">Negotiate and settle</span></p>
+          <p class="lk"><span>Level 4 of 4</span><span class="state">Negotiate</span></p>
           <h3 id="l4">Keys, cheque, done.</h3>
           <p>I negotiate hard for your best result and stay with you right through to settlement day.</p>
           <p class="rule"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg><span>I don't disappear after the offer. I'm with you through to settlement.</span></p>
@@ -1004,13 +1014,13 @@ addEventListener('DOMContentLoaded',function(){
     if(!reduce){const p=draw.getPointAtLength(Math.max(L,0.01));token.style.transform=`translate(${p.x}px,${p.y}px)`;token.classList.toggle('live',L>2&&L<total-2);}
     let unlocked=0;
     levels.forEach((l,i)=>{const on=reduce||lineY>=stops[i]-4;l.classList.toggle('on',on);if(on){unlocked++;
-      if(!seen.has(i)){seen.add(i);if(!reduce)toast(l.dataset.ach);}}});
+      if(!seen.has(i)){seen.add(i);const nt=stops[i]+box.top;if(!reduce&&nt>0&&nt<innerHeight)toast(l.dataset.ach);}}});
     const prog=reduce?Math.max(0,Math.min(1,(innerHeight*.62-box.top)/box.height)):L/total;
     xpFill.style.setProperty('--p',prog.toFixed(4));
     xp.setAttribute('aria-valuenow',Math.round(prog*100));
     xpN.textContent=`${Math.round(prog*400)} / 400 XP`;xpLv.textContent='LV'+unlocked;}
   const toasts=$('#toasts');
-  function toast(name){const t=document.createElement('div');t.className='toast';
+  function toast(name){$$('.toast',toasts).forEach(o=>{o.classList.add('out');setTimeout(()=>o.remove(),350);});const t=document.createElement('div');t.className='toast';
     t.innerHTML=`<span class="cup"><svg class="i"><use href="#i-cup"/></svg></span><span><small>Achievement unlocked</small><b>${name}</b></span>`;
     toasts.appendChild(t);requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));
     setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),400);},3200);}
