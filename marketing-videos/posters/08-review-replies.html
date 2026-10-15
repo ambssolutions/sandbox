@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Poster — Review replies</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* 4:5 feed poster: 540x675 CSS => 1080x1350. Lemon + black palette. */
+  :root { --lemon: #FFD93D; --lemon2: #FFE97A; --ink: #111111; --grey: #4b4b4b; }
+  #frame { height: 675px; margin-top: -337px; display: flex; flex-direction: column; align-items: center; text-align: center; color: var(--ink);
+    background: radial-gradient(70% 40% at 100% 0%, var(--lemon2), transparent 70%), var(--lemon); }
+  #frame::before { background-image: repeating-linear-gradient(-45deg, rgba(17,17,17,.045) 0 2px, transparent 2px 14px); }
+  .logo { margin-top: 18px; width: 108px; position: relative; filter: drop-shadow(0 3px 0 rgba(17,17,17,.25)); }
+  .kicker { position: relative; margin-top: 8px; font-size: 13px; font-weight: 900; letter-spacing: .18em; background: var(--ink); color: var(--lemon);
+    padding: 5px 12px; border-radius: 999px; }
+  h1 { position: relative; margin-top: 8px; font-size: 36px; line-height: 1.03; font-weight: 900; letter-spacing: -.03em; padding: 0 26px; }
+  h1 u { text-decoration: none; background: var(--ink); color: var(--lemon); padding: 0 8px; border-radius: 6px; }
+  .stack { position: relative; margin-top: 12px; width: 480px; text-align: left; }
+  .card { background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 12px 14px; box-shadow: 6px 6px 0 var(--ink); }
+  .rv .top { display: flex; align-items: center; gap: 10px; }
+  .av { width: 36px; height: 36px; border-radius: 50%; background: #7c3aed; color: #fff; font-weight: 900; display: grid; place-items: center; flex: none; }
+  .rv b { font-size: 14.5px; } .rv .meta { font-size: 11.5px; color: #6b7280; font-weight: 600; }
+  .stars { color: #f59e0b; font-size: 15px; letter-spacing: 1px; margin-left: auto; }
+  .rv p { margin-top: 8px; font-size: 14px; line-height: 1.4; font-weight: 600; color: #222; }
+  .rv .noreply { margin-top: 8px; font-size: 11.5px; font-weight: 800; color: #b91c1c; }
+  .ai { margin: 12px 0 0 34px; background: var(--ink); color: #fff; border-color: var(--ink); box-shadow: 6px 6px 0 rgba(17,17,17,.25); }
+  .ai .lab { font-size: 10.5px; font-weight: 900; letter-spacing: .14em; color: var(--lemon); }
+  .ai p { margin-top: 6px; font-size: 13.5px; line-height: 1.45; font-weight: 600; color: #f5f5f5; }
+  .ai .btns { margin-top: 10px; display: flex; gap: 8px; }
+  .ai .ok { background: var(--lemon); color: var(--ink); font-weight: 900; font-size: 13px; padding: 7px 14px; border-radius: 10px; }
+  .ai .ed { background: #2a2a2a; color: #ddd; font-weight: 800; font-size: 13px; padding: 7px 14px; border-radius: 10px; }
+  .pts { position: relative; margin-top: 14px; width: 480px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: left; }
+  .pts div { background: rgba(255,255,255,.7); border: 2px solid var(--ink); border-radius: 12px; padding: 8px 10px; font-size: 13px; font-weight: 800;
+    display: flex; gap: 8px; align-items: center; }
+  .pts i { font-style: normal; flex: none; width: 20px; height: 20px; border-radius: 50%; background: var(--ink); color: var(--lemon);
+    font-size: 11px; font-weight: 900; display: grid; place-items: center; }
+  .cta { position: relative; margin-top: 12px; font-size: 18px; font-weight: 900; }
+  .cta span.k { background: var(--ink); color: var(--lemon); padding: 4px 11px; border-radius: 8px; margin: 0 3px; }
+  .url { position: relative; margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--grey); letter-spacing: .04em; }
+  .url b { color: var(--ink); }
+</style></head><body>
+<div id="frame">
+  <img class="logo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="kicker">CUSTOMER REPLIES</div>
+  <h1>5-star review.<br><u>Still no reply?</u></h1>
+  <div class="stack">
+    <div class="card rv"><div class="top"><div class="av">M</div><div><b>Mere T.</b><div class="meta">Google review · 3 weeks ago</div></div>
+      <div class="stars emoji">⭐⭐⭐⭐⭐</div></div>
+      <p>"Fantastic job on our bathroom. Sam and the team were on time, tidy and so easy to deal with!"</p>
+      <div class="noreply">✕ No reply from the owner yet</div></div>
+    <div class="card ai"><div class="lab">✨ REPLY DRAFTED IN YOUR VOICE</div>
+      <p>"Kia ora Mere, thank you! It was a pleasure working on your bathroom. Enjoy the new space, and give us a call anytime."</p>
+      <div class="btns"><span class="ok">Approve &amp; post ✓</span><span class="ed">Edit</span></div></div>
+  </div>
+  <div class="pts">
+    <div><i>✓</i>Written in your own tone</div>
+    <div><i>✓</i>You approve before it posts</div>
+    <div><i>✓</i>Urgent messages flagged fast</div>
+    <div><i>✓</i>FAQs answered for you</div>
+  </div>
+  <div class="cta">Comment <span class="k">REPLY</span> <span class="emoji">👇</span></div>
+  <div class="url"><b>ambs.co.nz</b> · AI automation &amp; websites for NZ businesses</div>
+</div></body></html>
