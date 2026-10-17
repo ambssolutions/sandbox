@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — Ambs Bot (BOT)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<link rel="stylesheet" href="../engine/theme-website.css">
+<style>
+  /* Ambs Bot colours: blue → purple, as in the real chat widget on ambs.co.nz */
+  :root { --b1: #1877e0; --b2: #7b2fbe; --accent: #1877e0; --mark: #1877e0; }
+  #frame { background: radial-gradient(80% 40% at 50% 0%, #dbe7ff 0%, transparent 65%),
+                       radial-gradient(70% 40% at 100% 100%, #efe3fb 0%, transparent 70%), #f4f7fc; }
+  .progress i { background: linear-gradient(90deg, var(--b1), var(--b2)); }
+  .caption mark { background: linear-gradient(90deg, var(--b1), var(--b2)); color: #fff; }
+  .caption .cyan { color: var(--b2); }
+  .end { background: radial-gradient(80% 50% at 50% 35%, rgba(123,47,190,.16), transparent 70%), rgba(244,247,252,.97); }
+  .end .kw span { background: linear-gradient(135deg, var(--b1), var(--b2)); color: #fff; box-shadow: 0 10px 0 #4c1d95, 0 18px 40px rgba(123,47,190,.35); }
+
+  .phone { position: absolute; left: 105px; top: 196px; width: 330px; height: 600px; border-radius: 44px; background: #0b0b0f; padding: 11px;
+    box-shadow: 0 30px 70px rgba(20,23,43,.3); }
+  .scr { position: relative; width: 100%; height: 100%; border-radius: 34px; overflow: hidden; background: #fff; color: #14172b; }
+  .notch { position: absolute; left: 50%; top: 9px; width: 90px; height: 22px; margin-left: -45px; background: #0b0b0f; border-radius: 12px; z-index: 9; }
+  .clock { position: absolute; left: 22px; top: 12px; font-size: 13px; font-weight: 800; z-index: 9; }
+
+  /* website behind */
+  .site { position: absolute; inset: 0; padding: 50px 20px 0; background: linear-gradient(180deg, #0f1428, #1b2450); color: #fff; }
+  .site .nav { display: flex; justify-content: space-between; align-items: center; }
+  .site .nav img { height: 26px; } .site .nav span { font-size: 18px; }
+  .site h3 { margin-top: 40px; font-size: 26px; line-height: 1.1; font-weight: 900; }
+  .site h3 em { font-style: normal; color: #7fbcff; }
+  .site p { margin-top: 12px; font-size: 13px; color: #a3adca; line-height: 1.45; }
+  .site .b { margin-top: 18px; display: inline-block; background: #2E9418; color: #fff; font-weight: 900; font-size: 13px; padding: 10px 16px; border-radius: 10px; }
+  .closed { margin-top: 30px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: 12px; padding: 10px 12px; font-size: 12.5px; color: #cbd2e6; }
+  .launch { position: absolute; right: 16px; bottom: 18px; display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 999px;
+    background: linear-gradient(135deg, var(--b1), var(--b2)); color: #fff; font-weight: 900; font-size: 14px; box-shadow: 0 10px 26px rgba(123,47,190,.45); z-index: 5; }
+  .nudge { position: absolute; right: 16px; bottom: 76px; width: 230px; background: #fff; color: #14172b; border-radius: 16px; padding: 10px 12px;
+    font-size: 12px; line-height: 1.4; font-weight: 600; box-shadow: 0 12px 30px rgba(0,0,0,.35); z-index: 5; }
+
+  /* chat panel */
+  .panel { position: absolute; inset: 0; background: #fff; z-index: 6; display: flex; flex-direction: column; }
+  .head { padding: 44px 14px 10px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid rgba(30,45,80,.11); }
+  .av { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, var(--b1), var(--b2)); color: #fff; display: grid;
+    place-items: center; font-size: 19px; flex: none; }
+  .head b { display: block; font-size: 15px; } .head small { font-size: 11.5px; color: #5b6479; font-weight: 600; }
+  .head .on { margin-left: auto; font-size: 10.5px; font-weight: 800; color: #2E9418; }
+  .view { position: relative; flex: 1; overflow: hidden; background: #f4f7fc; }
+  .log { position: absolute; left: 0; right: 0; top: 0; padding: 12px; }
+  .msg { max-width: 86%; padding: 9px 12px; border-radius: 16px; font-size: 12.5px; line-height: 1.42; margin-bottom: 9px; }
+  .bot { background: #fff; border: 1px solid rgba(30,45,80,.08); border-bottom-left-radius: 6px; }
+  .me { margin-left: auto; background: linear-gradient(135deg, var(--b1), var(--b2)); color: #fff; border-bottom-right-radius: 6px; width: fit-content; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 9px; }
+  .chips span { background: #fff; border: 1px solid rgba(24,119,224,.35); color: var(--b1); font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 999px; }
+  .acts { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 9px; }
+  .acts span { font-size: 11px; font-weight: 900; padding: 7px 11px; border-radius: 10px; }
+  .acts .g { background: #2E9418; color: #fff; } .acts .w { background: #fff; border: 1px solid rgba(30,45,80,.15); color: #14172b; }
+  .typing { color: #5b6479; font-style: italic; }
+  .form { background: #fff; border: 1px solid rgba(30,45,80,.1); border-radius: 14px; padding: 10px; margin-bottom: 9px; }
+  .form div { height: 26px; border: 1px solid rgba(30,45,80,.14); border-radius: 8px; margin-bottom: 6px; font-size: 11px; padding: 6px 8px; color: #14172b; }
+  .form .send { background: linear-gradient(135deg, var(--b1), var(--b2)); color: #fff; font-weight: 900; text-align: center; border: 0; }
+  .sent { background: #e8f6e0; border: 1px solid rgba(46,148,24,.35); color: #14532d; font-weight: 700; }
+  .inp { display: flex; gap: 8px; align-items: center; padding: 10px 12px 16px; border-top: 1px solid rgba(30,45,80,.11); background: #fff; }
+  .inp .f { flex: 1; height: 36px; border-radius: 999px; background: #f4f7fc; padding: 0 14px; display: flex; align-items: center; font-size: 12.5px; color: #5b6479; }
+  .inp .f.has { color: #14172b; }
+  .mic, .snd { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex: none; font-size: 16px; }
+  .mic { background: #f1f5fc; } .mic.on { background: #fee2e2; box-shadow: 0 0 0 6px rgba(239,68,68,.15); }
+  .snd { background: linear-gradient(135deg, var(--b1), var(--b2)); color: #fff; font-weight: 900; }
+  .lang { position: absolute; left: 22px; right: 22px; top: 806px; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .lang span { background: #fff; border: 1px solid rgba(123,47,190,.3); color: #4c1d95; font-weight: 800; font-size: 13px; padding: 6px 11px; border-radius: 999px;
+    box-shadow: 0 6px 14px rgba(20,23,43,.08); }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div class="phone"><div class="scr">
+    <div class="notch"></div><div class="clock" id="clk">11:04</div>
+    <div class="site">
+      <div class="nav"><img src="../assets/ambs-logo.png" alt=""><span>☰</span></div>
+      <h3>We solve your operational headaches <em>with easy-to-use AI.</em></h3>
+      <p>You bring the business problems, we bring the solutions.</p>
+      <div class="b">Book a free session</div>
+      <div class="closed"><span class="emoji">📞</span> Office closed · back 8:30am</div>
+    </div>
+    <div class="nudge" id="nudge">Kia ora! I'm Ambs Bot, and I can answer your questions about automation, websites, pricing and our free session.</div>
+    <div class="launch" id="launch"><span class="emoji">💬</span> Ask us</div>
+
+    <div class="panel" id="panel">
+      <div class="head"><div class="av emoji">🤖</div><div><b>Ambs Bot</b><small>Ambs Solutions assistant</small></div><div class="on">● Online</div></div>
+      <div class="view"><div class="log" id="log">
+        <div class="msg bot" data-a="4.9">Kia ora! I'm Ambs Bot, the Ambs Solutions assistant. I can answer your questions about our services, pricing, how we work and booking a free session.</div>
+        <div class="chips" data-a="5.4"><span>What can you automate?</span><span>How much does it cost?</span><span>How does it work?</span><span>Free session?</span></div>
+        <div class="msg me" data-a="8.0">How much does it cost?</div>
+        <div class="msg bot typing" data-a="8.25" data-b="9.0">Looking…</div>
+        <div class="msg bot" data-a="9.0">It depends on the task and the tools involved, so we don't publish a price list. The first session is free. After it you get a written plan, and the scope and price are agreed in writing before any work starts.</div>
+        <div class="acts" data-a="9.6"><span class="g">Book a free session</span><span class="w">Leave a message</span><span class="w">Call or email</span></div>
+        <div class="msg bot" data-a="12.2">I also speak 中文, हिन्दी, Te Reo Māori and ਪੰਜਾਬੀ. Just type in your language, or tap one below.</div>
+        <div class="msg me" data-a="16.3">Can you look at my old Excel macros?</div>
+        <div class="msg bot" data-a="16.9">I couldn't find a precise answer to that on our website. Our team can answer it properly:</div>
+        <div class="form" data-a="17.4"><div>Mere T.</div><div>mere@email.co.nz</div><div class="send" id="sendbtn">Send message</div></div>
+        <div class="msg bot sent" data-a="18.4">Thanks! Your message is with the team. We'll get back to you soon. ✓</div>
+      </div></div>
+      <div class="inp"><div class="f" id="field">Type your question…</div><div class="mic" id="mic"><span class="emoji">🎙️</span></div><div class="snd">➤</div></div>
+    </div>
+  </div></div>
+  <div class="lang" id="langs"><span>English</span><span>中文</span><span>हिन्दी</span><span>Te Reo Māori</span><span>ਪੰਜਾਬੀ</span></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis, type, p, ease, lerp, clamp } = E;
+const items = $$("#log > *");
+const view = $(".view");
+const cur = E.cursor($("#frame"));
+window.COVER_AT = 9.8;
+
+E.setup({
+  duration: 24,
+  keyword: "BOT",
+  voice: [
+    { a: 0.15, b: 3.2, text: "Eleven p.m. Someone on your website has a question." },
+    { a: 3.3, b: 7.5, text: "Meet Ambs Bot, the chat assistant we built for our own website." },
+    { a: 7.7, b: 11.9, text: "It answers straight from the website. Pricing, services and booking." },
+    { a: 12.1, b: 15.9, text: "It speaks five languages, and you can even ask it out loud." },
+    { a: 16.1, b: 19.4, text: "If it can't answer, it takes a message for the team." },
+    { a: 19.8, b: 23.9, text: "Want a bot like this on your website? Comment, bot." },
+  ],
+  captions: [
+    { a: 0, b: 3.3, html: `11pm. Someone on your website has <mark>a question.</mark>` },
+    { a: 3.3, b: 7.6, html: `Meet <mark>Ambs Bot.</mark> We built it for our own site.` },
+    { a: 7.6, b: 12, html: `Real answers, <span class="cyan">straight from the website.</span>` },
+    { a: 12, b: 16, html: `5 languages. You can even <mark>ask out loud.</mark>` },
+    { a: 16, b: 19.6, html: `Can't answer? It <span class="cyan">takes a message</span> for the team.` },
+  ],
+  phases: [],
+  end: { at: 19.6, title: "Want a bot like this on your website?", sub: "It answers from your own site, in your customers' language, any time." },
+});
+
+E.use((t) => {
+  vis(".phone", t, 0, null, { y: 40 });
+  $("#clk").textContent = t < 1.5 ? "11:03" : "11:04";
+  vis("#nudge", t, 1.2, 3.9, { y: 14, scale: 0.9 });
+  vis("#launch", t, 0.6, null, { y: 0, scale: 0.5 });
+  $("#launch").style.transform += ` scale(${1 + 0.06 * Math.max(0, Math.sin(t * 6)) * (t > 1 && t < 3.6 ? 1 : 0) - (t > 3.7 && t < 3.95 ? 0.08 : 0)})`;
+  cur(t, [{ t: 2.6, x: 360, y: 660 }, { t: 3.7, x: 395, y: 765, click: true }, { t: 4.4, x: 420, y: 740 }], 2.6, 4.4);
+  // panel slides up
+  const op = p(t, 3.9, 4.5, ease.out);
+  const panel = $("#panel");
+  panel.style.transform = `translateY(${(1 - op) * 100}%)`;
+  panel.style.visibility = op > 0 ? "visible" : "hidden";
+  // messages + auto-scroll
+  let bottom = 0;
+  items.forEach((el) => {
+    const a = +el.dataset.a, b = el.dataset.b ? +el.dataset.b : null;
+    const o = vis(el, t, a, b, { y: 12, dur: 0.3, outDur: 0.05 });
+    el.style.display = b != null && t >= b ? "none" : "";
+    if (o > 0) bottom = Math.max(bottom, el.offsetTop + el.offsetHeight * Math.min(1, o * 1.2) + 12);
+  });
+  $("#log").style.transform = `translateY(${-Math.max(0, bottom - view.clientHeight)}px)`;
+  // input field typing
+  const f = $("#field");
+  if (t >= 6.9 && t < 8.0) { f.classList.add("has"); type(f, "How much does it cost?", t, 6.9, 7.7); }
+  else if (t >= 13.2 && t < 15.6) { f.classList.remove("caret"); f.classList.add("has"); f.textContent = "Listening… speak now"; }
+  else if (t >= 15.4 && t < 16.3) { f.classList.add("has"); type(f, "Can you look at my old Excel macros?", t, 15.4, 16.2); }
+  else { f.classList.remove("has", "caret"); f.textContent = "Type your question…"; }
+  $("#mic").classList.toggle("on", t >= 13.0 && t < 15.4);
+  $("#mic").style.transform = `scale(${t >= 13.0 && t < 15.4 ? 1 + 0.08 * Math.sin(t * 10) : 1})`;
+  vis("#langs", t, 12.3, 16, { y: 16 });
+  $("#sendbtn").style.transform = `scale(${t > 18.0 && t < 18.25 ? 0.94 : 1})`;
+  cur2(t);
+});
+const cur2b = E.cursor($("#frame"));
+function cur2(t) { cur2b(t, [{ t: 12.5, x: 470, y: 780 }, { t: 13.0, x: 382, y: 770, click: true }, { t: 13.6, x: 470, y: 740 },
+  { t: 17.6, x: 300, y: 760 }, { t: 18.0, x: 270, y: 700, click: true }, { t: 18.6, x: 320, y: 730 }], 12.5, 18.7); }
+</script>
+</body>
+</html>
