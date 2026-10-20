@@ -1,0 +1,17 @@
+# MiKia Consulting Group
+
+> Land development consultancy in Auckland, New Zealand. One accountable team takes a site from feasibility through planning, survey, civil design and traffic to construction and final title.
+
+Office: 1c, 32 Mahuhu Crescent, Auckland CBD 1010
+Email: info@mikia.co.nz
+Phone: +64 21 573 085
+
+## Pages
+- [Home](https://www.mikia.co.nz/): the eight services and how the work runs
+- [Services](https://www.mikia.co.nz/services): planning, survey, civil, traffic, construction and project management
+- [Projects](https://www.mikia.co.nz/projects): residential and commercial work
+- [How we work](https://www.mikia.co.nz/how-we-work): the four stages from understanding the site to handover
+- [About us](https://www.mikia.co.nz/about): who we are and why clients choose us
+- [Questions](https://www.mikia.co.nz/faq): answers to common questions about subdivision and consent
+- [Contact us](https://www.mikia.co.nz/contact): book a meeting or send an enquiry
+- [Privacy](https://www.mikia.co.nz/privacy): how enquiry details are used
