@@ -14,6 +14,7 @@ Where each item goes:  **content.js** = `assets/content.js` (one file, plain tex
 | 5 to 8 best project photos | projects.js + `projects/` |
 | 2 to 3 client testimonials with name and suburb, and permission | content.js `testimonials` |
 | Logos of accreditations and associations (SVG or PNG) | content.js `accreditations` |
+| Project photos and YouTube links for the home "In the field" section (the section shows once there is one) | content.js `media`: `{ type: "photo", src, alt, caption }` or `{ type: "youtube", url, title }` |
 
 ## About
 | Need | Goes in |
@@ -24,7 +25,7 @@ Where each item goes:  **content.js** = `assets/content.js` (one file, plain tex
 | Licences, certifications and insurance, with numbers they are happy to show | content.js `credentials` |
 | Group photo or photos on site | content.js `teamPhoto` |
 
-## Services (six pages exist)
+## Services (eight services; Cross Lease to Freehold sits under Neighbour's Consent)
 For each service: any extra detail on what is included, typical process, typical size or budget range
 if they will share it, 2 to 3 photos, and anything they do not do.  Goes in: `SERVICES` in the build, or send as text.
 
@@ -85,3 +86,6 @@ Other content still needed:
 - Our team: Neelam Gandhi was removed from the site copy and the team card; send the people to show (names, roles, photos).
 - Blog: the page exists and is empty (posts go in assets/blog.js); it is not linked from the footer. Keep the About page "Visit the blog" link?
 - QR code: not received yet; recommended placement is the Contact page only, pointing to the new site's contact page.
+
+## Cross Lease to Freehold
+The wording on the services page is general. Send MiKia's own description of what they do and what it costs or how long it takes, and it replaces the draft. Goes in: `svcdata.py` / `svcmore.py` in the build.
