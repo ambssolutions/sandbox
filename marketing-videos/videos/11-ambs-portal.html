@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — AMBS Portal (PORTAL)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* Charcoal + tangerine, matching the portal poster */
+  :root { --or: #fb923c; --or2: #fdba74; --accent: #fb923c; --mark: #fb923c; }
+  #frame { background: radial-gradient(60% 40% at 85% 8%, rgba(251,146,60,.28), transparent 70%),
+                       radial-gradient(60% 40% at 0% 100%, rgba(251,146,60,.14), transparent 70%),
+                       linear-gradient(180deg, #26262e, #17171c); }
+  .progress i { background: var(--or); }
+  .caption mark { background: var(--or); color: #17171c; }
+  .caption .cyan { color: var(--or2); }
+  .end { background: radial-gradient(80% 50% at 50% 35%, rgba(251,146,60,.22), transparent 70%), rgba(23,23,28,.96); }
+  .end .kw span { background: var(--or); color: #17171c; box-shadow: 0 10px 0 #c2410c, 0 18px 40px rgba(251,146,60,.35); }
+
+  /* hook: the old way */
+  .mess { position: absolute; width: 230px; border-radius: 12px; background: #fff; color: #1f2937; box-shadow: 0 14px 30px rgba(0,0,0,.45); overflow: hidden; }
+  .mess .bar { height: 26px; display: flex; align-items: center; padding: 0 10px; font-size: 10.5px; font-weight: 700; color: #fff; }
+  .mess .b { padding: 10px 12px; font-size: 12.5px; line-height: 1.6; }
+  .sticky2 { position: absolute; width: 170px; padding: 12px; background: #fde047; color: #3f3a06; font-weight: 800; font-size: 14px; border-radius: 4px;
+    box-shadow: 0 10px 22px rgba(0,0,0,.4); }
+  .sms2 { position: absolute; width: 250px; background: #2563eb; color: #fff; font-size: 13px; padding: 10px 13px; border-radius: 16px; border-bottom-right-radius: 5px;
+    box-shadow: 0 10px 22px rgba(0,0,0,.4); }
+
+  /* phone */
+  .phone { position: absolute; left: 105px; top: 196px; width: 330px; height: 600px; border-radius: 44px; background: #000; padding: 11px;
+    box-shadow: 0 30px 70px rgba(0,0,0,.55), 0 0 0 2px #3f3f46; }
+  .scr { position: relative; width: 100%; height: 100%; border-radius: 34px; overflow: hidden; background: #f6f6f7; color: #18181b; }
+  .notch { position: absolute; left: 50%; top: 9px; width: 90px; height: 22px; margin-left: -45px; background: #000; border-radius: 12px; z-index: 20; }
+  .pg { position: absolute; inset: 0; padding: 44px 14px 14px; }
+  .ah { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 900; }
+  .ah span { font-size: 11px; color: #71717a; font-weight: 700; }
+  .tiles { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .t { background: #fff; border-radius: 14px; padding: 9px 10px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .t small { display: block; font-size: 9.5px; color: #71717a; font-weight: 800; letter-spacing: .03em; }
+  .t b { font-size: 19px; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .t.o b { color: #ea580c; } .t.g b { color: #16a34a; }
+  .row { margin-top: 8px; background: #fff; border-radius: 14px; padding: 10px 11px; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .row b { display: block; font-size: 12.5px; } .row span { color: #71717a; font-size: 11px; }
+  .row i { margin-left: auto; font-style: normal; font-size: 10.5px; font-weight: 900; padding: 4px 8px; border-radius: 999px; white-space: nowrap; }
+  .pd { background: #dcfce7; color: #15803d; } .ac { background: #ffedd5; color: #c2410c; } .rm { background: #e0e7ff; color: #4338ca; }
+  .rp { background: #f3e8ff; color: #7e22ce; } .sn { background: #e4e4e7; color: #3f3f46; }
+  .btns { position: absolute; left: 14px; right: 14px; bottom: 16px; display: flex; gap: 7px; }
+  .btns span { flex: 1; text-align: center; font-size: 12.5px; font-weight: 900; padding: 11px 0; border-radius: 12px; background: #18181b; color: #fff; }
+  .btns span.o { background: var(--or); color: #18181b; }
+  .doc { margin-top: 10px; background: #fff; border-radius: 16px; padding: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.06); font-size: 12.5px; }
+  .doc .hd { display: flex; justify-content: space-between; align-items: baseline; }
+  .doc .hd b { font-size: 15px; } .doc .hd span { font-size: 10.5px; color: #71717a; }
+  .doc .to { margin: 4px 0 8px; font-size: 11px; color: #71717a; }
+  .li { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #f0f0f2; }
+  .li.s { color: #71717a; } .li.tot { border: 0; font-weight: 900; font-size: 15.5px; padding-top: 9px; }
+  .tag2 { display: inline-flex; gap: 5px; align-items: center; margin-top: 8px; background: #fff7ed; color: #c2410c; font-size: 10.5px; font-weight: 900; padding: 5px 9px; border-radius: 999px; }
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; border-radius: 22px 22px 0 0; padding: 14px 16px 22px; box-shadow: 0 -10px 30px rgba(0,0,0,.18); z-index: 10; }
+  .sheet .h { font-size: 12px; font-weight: 900; color: #71717a; letter-spacing: .06em; }
+  .opts { margin-top: 10px; display: flex; justify-content: space-around; }
+  .opts div { text-align: center; font-size: 11px; font-weight: 800; }
+  .opts .ic { width: 50px; height: 50px; border-radius: 16px; display: grid; place-items: center; font-size: 22px; margin: 0 auto 5px; }
+  /* client view */
+  .cv { background: #fff; }
+  .cv .brand2 { display: flex; align-items: center; gap: 9px; }
+  .cv .bl { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #2563eb, #06b6d4); color: #fff; font-weight: 900; display: grid; place-items: center; }
+  .cv .brand2 b { font-size: 14px; display: block; } .cv .brand2 span { font-size: 11px; color: #71717a; }
+  .accept { position: absolute; left: 14px; right: 14px; bottom: 18px; background: #16a34a; color: #fff; font-weight: 900; font-size: 15px; text-align: center;
+    padding: 14px; border-radius: 14px; }
+  .ok { position: absolute; left: 14px; right: 14px; bottom: 18px; background: #dcfce7; color: #14532d; font-weight: 800; font-size: 13px; text-align: center;
+    padding: 12px; border-radius: 14px; border: 1px solid rgba(22,163,74,.4); }
+  .toast { top: 812px; }
+  .stamp2 { position: absolute; right: 30px; top: 376px; border: 3px solid #16a34a; color: #16a34a; font-weight: 900; font-size: 20px; padding: 4px 12px;
+    border-radius: 10px; rotate: -10deg; background: rgba(255,255,255,.92); letter-spacing: .08em; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <!-- hook -->
+  <div class="mess" id="h1" style="left:40px;top:250px;rotate:-5deg"><div class="bar" style="background:#2b579a">Quote_v3_FINAL.docx</div>
+    <div class="b">QUOTATION<br>Kitchen reno … $14,2??<br>GST … <span class="emoji">🤔</span></div></div>
+  <div class="mess" id="h2" style="left:270px;top:340px;rotate:4deg"><div class="bar" style="background:#107c41">Invoices_2026.xlsx</div>
+    <div class="b">INV-1049 · Te Aro Café<br>$320.00 · <b style="color:#dc2626">OVERDUE 21 days</b></div></div>
+  <div class="sticky2" id="h3" style="left:60px;top:480px;rotate:-3deg">Chase Dave for $$ AGAIN <span class="emoji">😩</span></div>
+  <div class="sms2" id="h4" style="left:250px;top:560px">Hi Dave, just following up on that invoice again…</div>
+
+  <!-- phone -->
+  <div class="phone" id="phone"><div class="scr"><div class="notch"></div>
+    <div class="pg" id="p1">
+      <div class="ah">AMBS Invoicing <span>Dashboard</span></div>
+      <div class="tiles"><div class="t o"><small>AWAITING PAYMENT</small><b id="aw">$3,480</b></div><div class="t g"><small>PAID THIS MONTH</small><b id="pm">$11,710</b></div></div>
+      <div class="row"><div><b>INV-1048 · Kauri Builders</b><span>$1,250.00</span></div><i class="pd">Paid ✓</i></div>
+      <div class="row"><div><b>INV-1050 · Harbour Dental</b><span>Monthly · sends 1 Nov</span></div><i class="rp">Repeating</i></div>
+      <div class="row" id="r51"><div><b>INV-1051 · Aroha T.</b><span>Kitchen reno · $14,260.00</span></div><i id="st51" class="sn">Sent</i></div>
+      <div class="btns"><span class="o" id="bq">+ Quote</span><span class="o">+ Invoice</span><span>Share</span></div>
+    </div>
+    <div class="pg" id="p2">
+      <div class="ah">New quote <span>Q-232</span></div>
+      <div class="doc"><div class="hd"><b>Kitchen reno</b><span>Valid 30 days</span></div><div class="to">For Aroha T. · aroha@email.co.nz</div>
+        <div class="li" data-q><span>Cabinetry supply &amp; install</span><span>$8,400.00</span></div>
+        <div class="li" data-q><span>Stone benchtop · 12 m²</span><span>$3,240.00</span></div>
+        <div class="li" data-q><span>Plumbing &amp; electrical</span><span>$760.00</span></div>
+        <div class="li s" data-q><span>GST (15%)</span><span>$1,860.00</span></div>
+        <div class="li tot" data-q><span>Total</span><span>$14,260.00</span></div></div>
+      <div class="sheet" id="share"><div class="h">SEND QUOTE</div>
+        <div class="opts"><div><div class="ic" style="background:#e0e7ff"><span class="emoji">📧</span></div>Email</div>
+          <div><div class="ic" style="background:#f4f4f5"><span class="emoji">💬</span></div>Text</div>
+          <div id="wa"><div class="ic" style="background:#dcfce7"><span class="emoji">🟢</span></div>WhatsApp</div></div></div>
+    </div>
+    <div class="pg cv" id="p3">
+      <div class="brand2"><div class="bl">PP</div><div><b>Patel Plumbing Ltd</b><span>Quote Q-232 for Aroha T.</span></div></div>
+      <div class="doc" style="box-shadow:none;border:1px solid #eee"><div class="hd"><b>Kitchen reno</b><span>Valid 30 days</span></div>
+        <div class="li"><span>Cabinetry supply &amp; install</span><span>$8,400.00</span></div>
+        <div class="li"><span>Stone benchtop · 12 m²</span><span>$3,240.00</span></div>
+        <div class="li"><span>Plumbing &amp; electrical</span><span>$760.00</span></div>
+        <div class="li s"><span>GST (15%)</span><span>$1,860.00</span></div>
+        <div class="li tot"><span>Total</span><span>$14,260.00</span></div></div>
+      <div class="accept" id="accept">Accept quote ✓</div>
+      <div class="ok" id="okmsg">✓ Accepted. We'll book your start date.</div>
+    </div>
+    <div class="pg" id="p4">
+      <div class="ah">Invoice <span>INV-1051</span></div>
+      <div class="doc"><div class="hd"><b>Kitchen reno</b><span>Due in 14 days</span></div><div class="to">For Aroha T. · from accepted quote Q-232</div>
+        <div class="li"><span>Cabinetry supply &amp; install</span><span>$8,400.00</span></div>
+        <div class="li"><span>Stone benchtop · 12 m²</span><span>$3,240.00</span></div>
+        <div class="li"><span>Plumbing &amp; electrical</span><span>$760.00</span></div>
+        <div class="li s"><span>GST (15%)</span><span>$1,860.00</span></div>
+        <div class="li tot"><span>Total</span><span>$14,260.00</span></div>
+        <div class="tag2" id="pdf"><span class="emoji">📎</span> Branded PDF attached</div>
+        <div class="tag2" id="rem" style="background:#e0e7ff;color:#4338ca;margin-left:4px"><span class="emoji">🔔</span> Auto reminders on</div></div>
+      <div class="btns"><span class="o" id="bs">Send invoice</span></div>
+      <div class="stamp2" id="sent2">SENT ✓</div>
+    </div>
+  </div></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis, p, ease, lerp, count } = E;
+$("#frame").insertAdjacentHTML("beforeend",
+  `<div class="toast" id="t1"><div class="ic" style="background:#4338ca"><span class="emoji">🔔</span></div><div><div class="tt">Payment reminder sent · 9:00am</div><div class="ts">INV-1051 · Aroha T. · due tomorrow</div></div><div class="when">auto</div></div>
+   <div class="toast" id="t2"><div class="ic" style="background:#16a34a"><span class="emoji">💸</span></div><div><div class="tt">Paid ✓ $14,260.00</div><div class="ts">INV-1051 · Aroha T. · bank transfer</div></div><div class="when">now</div></div>`);
+const cur = E.cursor($("#frame"));
+window.COVER_AT = 4.6;
+const qlines = $$("[data-q]");
+
+E.setup({
+  duration: 24,
+  keyword: "PORTAL",
+  voice: [
+    { a: 0.15, b: 3.2, text: "Quotes in Word? Invoices in Excel? Chasing payments?" },
+    { a: 3.3, b: 8.0, text: "Meet the A M B S Portal. Make a quote, and send it on WhatsApp." },
+    { a: 8.2, b: 11.4, text: "Your client accepts it online, with one tap." },
+    { a: 11.6, b: 15.2, text: "Turn it into an invoice, with G S T and a P D F." },
+    { a: 15.4, b: 19.4, text: "Reminders go out on their own, and you get paid." },
+    { a: 19.8, b: 23.9, text: "Want your own portal? Comment, portal." },
+  ],
+  captions: [
+    { a: 0, b: 3.3, html: `Quotes in Word. Invoices in Excel. <mark>Chasing payments</mark> by text?` },
+    { a: 3.3, b: 8.1, html: `Meet the <mark>AMBS Portal.</mark> Quote &amp; send in seconds.` },
+    { a: 8.1, b: 11.6, html: `Clients <span class="cyan">accept online.</span> One tap.` },
+    { a: 11.6, b: 15.4, html: `Invoice with <mark>GST &amp; PDF.</mark>` },
+    { a: 15.4, b: 19.7, html: `Reminders send themselves. <span class="cyan">You get paid.</span>` },
+  ],
+  phases: [],
+  end: { at: 19.6, title: "Want your own portal?", sub: "Your logo, your colours. Quotes, invoices, reminders and a client portal, on your phone." },
+});
+
+E.use((t) => {
+  ["#h1", "#h2", "#h3", "#h4"].forEach((s, i) => vis(s, t, 0.1 + i * 0.45, 3.3, { y: -40, scale: 1.2 }));
+  vis("#phone", t, 3.2, null, { y: 40 });
+  const show = (id, a, b) => { const el = $(id); const o = p(t, a, a + 0.3) * (1 - p(t, b - 0.25, b)); el.style.opacity = o; el.style.visibility = o > 0 ? "visible" : "hidden"; };
+  show("#p1", 0, 5.4); show("#p2", 5.2, 8.3); show("#p3", 8.2, 11.6); show("#p4", 11.5, 15.4);
+  const p1b = $("#p1"); const o5 = p(t, 15.3, 15.6); if (t > 15.3) { p1b.style.opacity = o5; p1b.style.visibility = "visible"; }
+  $("#bq").style.transform = `scale(${t > 4.9 && t < 5.15 ? 0.92 : 1})`;
+  qlines.forEach((l, i) => vis(l, t, 5.6 + i * 0.28, null, { x: -14, y: 0 }));
+  vis("#share", t, 7.0, 8.3, { y: 120, dur: 0.35 });
+  $("#wa").style.transform = `scale(${t > 7.7 && t < 7.95 ? 0.9 : 1})`;
+  const acc = t > 10.0;
+  $("#accept").style.display = acc ? "none" : ""; $("#accept").style.transform = `scale(${t > 9.75 && t < 10.0 ? 0.95 : 1})`;
+  vis("#okmsg", t, 10.0, null, { y: 10, scale: 0.9 });
+  vis("#pdf", t, 12.6, null, { y: 6 }); vis("#rem", t, 13.0, null, { y: 6 });
+  $("#bs").style.transform = `scale(${t > 13.9 && t < 14.15 ? 0.94 : 1})`;
+  vis("#sent2", t, 14.15, null, { scale: 2.2, y: 0, dur: 0.3 });
+  cur(t, [{ t: 4.3, x: 200, y: 700 }, { t: 4.95, x: 175, y: 760, click: true }, { t: 6.8, x: 330, y: 700 },
+    { t: 7.75, x: 365, y: 735, click: true }, { t: 9.1, x: 300, y: 780 }, { t: 9.8, x: 270, y: 755, click: true },
+    { t: 13.2, x: 300, y: 780 }, { t: 13.95, x: 270, y: 760, click: true }, { t: 14.8, x: 330, y: 800 }], 4.3, 14.9);
+  // back on dashboard: reminder then paid
+  vis("#t1", t, 15.9, 17.4, { y: 26 }); vis("#t2", t, 17.4, 19.6, { y: 26 });
+  const paid = t >= 17.4;
+  const st = $("#st51"); st.className = paid ? "pd" : (t > 15.9 ? "rm" : "sn"); st.textContent = paid ? "Paid ✓" : (t > 15.9 ? "Reminder sent" : "Sent");
+  $("#r51").style.boxShadow = t > 15.9 && t < 18.2 ? "0 0 0 3px rgba(251,146,60,.6)" : "";
+  count("#pm", t, 17.4, 18.4, 11710, 25970, (v) => "$" + Math.round(v).toLocaleString("en-NZ"));
+});
+</script>
+</body>
+</html>
