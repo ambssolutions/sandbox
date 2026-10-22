@@ -113,3 +113,17 @@ html.motion .btn:hover::after, html.motion .send:hover::after, html.motion .nav-
 .faq-item { padding: 22px 4px; }
 .faq-q { margin: 0 0 8px; font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 1.35; }
 .faq-a { margin: 0; color: var(--c-muted); }
+
+/* ---------- light: every build arrives in the evening with its LEDs on, then the room lights come up ---------- */
+.tile-ph { position: relative; }
+.tile-ph .nt { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 2.2s ease; pointer-events: none; }
+html.motion .tile-ph .nt { opacity: 1; }
+html.motion .tile-ph.day .nt { opacity: 0; }
+.evening .tile-ph .nt, html.motion .evening .tile-ph.day .nt { opacity: 1; transition-duration: 1.4s; }
+.eve { display: table; margin: 16px auto 0; min-height: 44px; padding: 0 20px 0 42px; position: relative; border-radius: 999px; border: 1px solid var(--c-line); background: none; color: inherit; font: 600 14px/1 var(--sans); cursor: pointer; }
+.eve::before { content: ""; position: absolute; left: 16px; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%; background: linear-gradient(90deg, #f3c27a 50%, #2a2622 50%); }
+.eve[aria-pressed="true"]::before { background: #f3c27a; }
+/* an LED strip above each section heading that switches on from the middle outwards */
+.sec-head h2::before { content: ""; display: block; width: min(180px, 36vw); height: 2px; margin: 0 auto 22px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--c-accent), transparent); }
+html.motion .sec-head h2::before { transform: scaleX(0); opacity: .2; transition: transform 1.4s cubic-bezier(.22,.61,.36,1), opacity 1.4s ease; }
+html.motion .sec-head h2.in::before { transform: none; opacity: 1; }

@@ -4,6 +4,13 @@
    - .rv elements fade up once as they come into view.
    Everything is visible without JavaScript and with reduced motion; classes are only added here. */
 (function () {
+  // "See them in the evening": every build in that section switches to its evening photo, and back
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("[data-evening]"); if (!b) return;
+    var on = b.getAttribute("aria-pressed") !== "true", sec = b.closest("section");
+    b.setAttribute("aria-pressed", on ? "true" : "false"); b.textContent = on ? "Back to daylight" : "See them in the evening";
+    if (sec) sec.classList.toggle("evening", on);
+  });
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var root = document.documentElement;
   if (reduce || !("IntersectionObserver" in window)) { root.classList.remove("motion"); root.classList.add("motion-off"); return; }
@@ -43,6 +50,11 @@
     }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
     [].forEach.call(heads, function (h) { io.observe(h); });
     [].forEach.call(document.querySelectorAll(".rv"), function (el) { io.observe(el); });
+    // each build arrives in the evening, LEDs on; once it reaches the middle of the screen the room lights come up
+    var lio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { var t = e.target; lio.unobserve(t); setTimeout(function () { t.classList.add("day"); }, 700); } });
+    }, { rootMargin: "-30% 0px -30% 0px" });
+    [].forEach.call(document.querySelectorAll(".tile-ph"), function (t) { lio.observe(t); });
     // the hero headline starts straight away
     [].forEach.call(document.querySelectorAll("[data-hero] [data-split]"), function (h) { requestAnimationFrame(function () { h.classList.add("in"); }); });
   }

@@ -32,10 +32,10 @@ def img(im, sizes, eager=False, cls="", alt=None):
             f'{load} decoding="async" alt="{escape(alt if alt is not None else im["alt"])}">')
 
 
-def night_img(im, sizes, eager=False, cls=""):
+def night_img(im, sizes, eager=False, cls="", lazy=False):
     srcset = ", ".join(f"{B}{im['src']}-night-{w}.webp {w}w" for w in im["sizes"])
     pick = 720 if 720 in im["sizes"] else im["sizes"][-1]
-    load = 'fetchpriority="high"' if eager else 'loading="eager"'
+    load = 'fetchpriority="high"' if eager else ('loading="lazy"' if lazy else 'loading="eager"')
     return (f'<img class="{cls}" src="{B}{im["src"]}-night-{pick}.webp" srcset="{srcset}" sizes="{sizes}" width="{im["w"]}" height="{im["h"]}" '
             f'{load} decoding="async" alt="" aria-hidden="true">')
 
@@ -100,7 +100,7 @@ def head(c, css, preload=""):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
-{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=5">
+{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=6">
 <link rel="stylesheet" href="{B}assets/studio.css?v=5">
 <script>(function(d){{d.classList.add("js");window.CW_BASE="{B}";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){{d.classList.add("motion");setTimeout(function(){{if(!window.CW_MOTION){{d.classList.remove("motion");d.classList.add("motion-off");}}}},3000);}}}})(document.documentElement);</script>
 <style>
@@ -212,7 +212,7 @@ SCRIPTS = f"""<script src="{B}assets/content.js?v=3"></script>
 <script src="{B}assets/designs.js?v=4" defer></script>
 <script src="{B}assets/studio.js?v=5" defer></script>
 <script src="{B}assets/cw-common.js?v=2" defer></script>
-<script src="{B}assets/cw-motion.js?v=2" defer></script>
+<script src="{B}assets/cw-motion.js?v=3" defer></script>
 <script src="/concepts/assets/concepts.js?v=3" defer></script>
 </body>
 </html>
@@ -233,7 +233,7 @@ def tile(p, sizes, cls="tile", i=0, extra=""):
     im = p["images"][i]
     n = len(p["images"])
     return (f'<article class="{cls} rv">'
-            f'<button class="tile-ph" type="button" data-open="{p["id"]}" aria-label="See {n} photo{"s" if n > 1 else ""} of {escape(p["title"])}">{img(im, sizes)}</button>'
+            f'<button class="tile-ph" type="button" data-open="{p["id"]}" aria-label="See {n} photo{"s" if n > 1 else ""} of {escape(p["title"])}">{img(im, sizes)}{night_img(im, sizes, cls="nt", lazy=True)}</button>'
             f'<div class="tile-txt"><span class="k">{escape(TYPES[p["type"]])}</span><h3>{escape(p["title"])}</h3>{extra}'
             f'<div class="tile-act"><button type="button" class="t-link" data-open="{p["id"]}">{n} photo{"s" if n > 1 else ""}</button>'
             f'<button type="button" class="t-link t-place" data-place-photo="{p["id"]}:{i}">Place in my room</button></div></div></article>')
@@ -276,9 +276,6 @@ html.motion .hero.day .pane .nt{opacity:0}
 .switch{position:absolute;z-index:3;top:18px;right:var(--pad);min-height:44px;padding:0 18px 0 40px;border-radius:999px;border:1px solid rgba(239,231,218,.35);background:rgba(10,8,7,.55);color:var(--c-ink);font:600 14px/1 var(--sans);cursor:pointer}
 .switch::before{content:"";position:absolute;left:16px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:#5a4f45}
 .switch[aria-pressed="true"]::before{background:var(--c-accent)}
-.tile-ph::after{content:"";position:absolute;inset:0;background:#0a0807;opacity:0;pointer-events:none}
-html.motion .tile-ph::after{opacity:.8;transition:opacity 1.6s ease}
-html.motion .tile.lit .tile-ph::after{opacity:0}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,7,0) 0%,rgba(10,8,7,0) 38%,rgba(10,8,7,.78) 66%,rgba(10,8,7,.96) 100%);z-index:1;pointer-events:none}
 .hero-copy{position:relative;z-index:2;padding:0 var(--pad) clamp(28px,7vh,72px);display:grid;gap:clamp(14px,2.4vh,24px);justify-items:center}
 .hero h1{font-size:clamp(3rem,min(8vw,13vh),8.4rem);line-height:.92;letter-spacing:-.02em}
@@ -347,7 +344,7 @@ section{padding-block:clamp(80px,11vw,150px)}
 </section>
 <section id="work" aria-labelledby="work-title">
   <div class="wrap">
-    <div class="sec-head"><h2 id="work-title">Built with light</h2><p class="lede">Every build here is a real job from our TikTok and Instagram. Open one for its photos, or place it in a photo of your room.</p></div>
+    <div class="sec-head"><h2 id="work-title">Built with light</h2><p class="lede">Every build here is a real job from our TikTok and Instagram. Open one for its photos, or place it in a photo of your room.</p><button class="eve" type="button" aria-pressed="false" data-evening>See them in the evening</button></div>
     <div class="lights">{tiles}</div>
   </div>
 </section>
@@ -372,10 +369,6 @@ section{padding-block:clamp(80px,11vw,150px)}
   setTimeout(function(){{hero.classList.add("leds");}},350);
   setTimeout(function(){{hero.classList.add("day");}},3000);
   sw.addEventListener("click",function(){{var on=sw.getAttribute("aria-pressed")!=="true";sw.setAttribute("aria-pressed",on?"true":"false");sw.textContent=on?"Room lights on":"Room lights off";hero.classList.add("leds","day");hero.classList.toggle("evening",!on);}});
-  /* each build switches on as it reaches the middle of the screen */
-  if(!("IntersectionObserver" in window))return;
-  var io=new IntersectionObserver(function(es){{es.forEach(function(e){{if(e.isIntersecting){{e.target.classList.add("lit");io.unobserve(e.target);}}}});}},{{rootMargin:"-35% 0px -35% 0px"}});
-  [].forEach.call(document.querySelectorAll(".lights .tile"),function(t){{io.observe(t);}});
 }})();
 </script>
 """
@@ -516,7 +509,7 @@ html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:l
 </section>
 <section id="work" aria-labelledby="work-title">
   <div class="wrap">
-    <div class="sec-head"><h2 id="work-title">Recent builds</h2><p class="lede">Real jobs from our TikTok and Instagram. Open one for its photos, or place it in a photo of your room.</p></div>
+    <div class="sec-head"><h2 id="work-title">Recent builds</h2><p class="lede">Real jobs from our TikTok and Instagram. Open one for its photos, or place it in a photo of your room.</p><button class="eve" type="button" aria-pressed="false" data-evening>See them in the evening</button></div>
     <div class="mosaic">{tiles}</div>
   </div>
 </section>
@@ -644,7 +637,7 @@ html.motion .phone:nth-child(2){animation-delay:.25s}html.motion .phone:nth-chil
   </div>
 </section>
 <section id="work" aria-labelledby="work-title">
-  <div class="wrap"><div class="sec-head"><h2 id="work-title">The builds from our feed</h2><p class="lede">Real jobs from our TikTok and Instagram. Tap one for its photos, or put it straight into a photo of your room.</p></div>
+  <div class="wrap"><div class="sec-head"><h2 id="work-title">The builds from our feed</h2><p class="lede">Real jobs from our TikTok and Instagram. Tap one for its photos, or put it straight into a photo of your room.</p><button class="eve" type="button" aria-pressed="false" data-evening>See them in the evening</button></div>
   <div class="feed">{reels}</div></div>
 </section>
 <section class="story" aria-labelledby="story-title" style="background:#141417">
@@ -706,6 +699,8 @@ section{padding-block:clamp(80px,10vw,140px)}
 html.motion .plate svg{opacity:1;animation:hidesvg 1.4s 3.1s ease forwards}
 html.motion .plate svg *{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 2.4s .3s cubic-bezier(.65,0,.35,1) forwards}
 html.motion .plate img{opacity:0;animation:showimg 1.6s 2.5s ease forwards}
+html.motion .plate img.nt{animation:showimg 1.4s 2.5s ease forwards,hideimg 2s 5s ease forwards}
+@keyframes hideimg{to{opacity:0}}
 @keyframes linedraw{to{stroke-dashoffset:0}}@keyframes showimg{to{opacity:1}}@keyframes hidesvg{to{opacity:0}}
 .plate svg path,.plate svg rect,.plate svg line{fill:none;stroke:#85631f;stroke-width:1.4;vector-effect:non-scaling-stroke}
 
@@ -780,7 +775,7 @@ html.motion .plate img{opacity:0;animation:showimg 1.6s 2.5s ease forwards}
       <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a class="btn" href="#studio">Place a piece in your room</a><a class="btn line" href="#work">The catalogue</a></div>
       <ol class="index"><li><a href="#make">TV and media walls</a><span>01</span></li><li><a href="#make">Prayer units</a><span>02</span></li><li><a href="#make">Carved panels</a><span>03</span></li><li><a href="#make">Bedrooms and wardrobes</a><span>04</span></li></ol>
     </div>
-    <figure class="plate">{img(unit, "(max-width:900px) 70vw, 30vw", eager=True)}{plate_svg}<figcaption>Arched Gurbani prayer unit, drawn then built</figcaption></figure>
+    <figure class="plate">{img(unit, "(max-width:900px) 70vw, 30vw", eager=True)}{night_img(unit, "(max-width:900px) 70vw, 30vw", eager=True, cls="nt")}{plate_svg}<figcaption>Arched Gurbani prayer unit, drawn then built</figcaption></figure>
   </div>
 </section>
 <section id="work" aria-labelledby="work-title">
@@ -891,7 +886,7 @@ section{padding-block:clamp(70px,9vw,120px)}
 </section>
 <section id="work" aria-labelledby="work-title">
   <div class="wrap">
-    <div class="sec-head"><h2 id="work-title">Pick any of our builds</h2><p class="lede">Real jobs from our TikTok and Instagram. Put any of them in your room, or open the photos first.</p></div>
+    <div class="sec-head"><h2 id="work-title">Pick any of our builds</h2><p class="lede">Real jobs from our TikTok and Instagram. Put any of them in your room, or open the photos first.</p><button class="eve" type="button" aria-pressed="false" data-evening>See them in the evening</button></div>
     <div class="pick">{tiles}</div>
   </div>
 </section>

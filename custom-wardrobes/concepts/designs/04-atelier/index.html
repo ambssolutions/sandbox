@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/cw-common.css?v=5">
+<link rel="stylesheet" href="/assets/cw-common.css?v=6">
 <link rel="stylesheet" href="/assets/studio.css?v=5">
 <script>(function(d){d.classList.add("js");window.CW_BASE="/";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("motion");setTimeout(function(){if(!window.CW_MOTION){d.classList.remove("motion");d.classList.add("motion-off");}},3000);}})(document.documentElement);</script>
 <style>
@@ -53,6 +53,8 @@ section{padding-block:clamp(80px,10vw,140px)}
 html.motion .plate svg{opacity:1;animation:hidesvg 1.4s 3.1s ease forwards}
 html.motion .plate svg *{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 2.4s .3s cubic-bezier(.65,0,.35,1) forwards}
 html.motion .plate img{opacity:0;animation:showimg 1.6s 2.5s ease forwards}
+html.motion .plate img.nt{animation:showimg 1.4s 2.5s ease forwards,hideimg 2s 5s ease forwards}
+@keyframes hideimg{to{opacity:0}}
 @keyframes linedraw{to{stroke-dashoffset:0}}@keyframes showimg{to{opacity:1}}@keyframes hidesvg{to{opacity:0}}
 .plate svg path,.plate svg rect,.plate svg line{fill:none;stroke:#85631f;stroke-width:1.4;vector-effect:non-scaling-stroke}
 
@@ -141,7 +143,7 @@ main>section:not([data-hero]){padding-block:clamp(64px,8vw,112px)}
       <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a class="btn" href="#studio">Place a piece in your room</a><a class="btn line" href="#work">The catalogue</a></div>
       <ol class="index"><li><a href="#make">TV and media walls</a><span>01</span></li><li><a href="#make">Prayer units</a><span>02</span></li><li><a href="#make">Carved panels</a><span>03</span></li><li><a href="#make">Bedrooms and wardrobes</a><span>04</span></li></ol>
     </div>
-    <figure class="plate"><img src="/assets/img/work/gurbani-unit-2-576.webp?v=2" srcset="/assets/img/work/gurbani-unit-2-480.webp?v=2 480w, /assets/img/work/gurbani-unit-2-576.webp?v=2 576w" sizes="(max-width:900px) 70vw, 30vw" width="576" height="1024" fetchpriority="high" decoding="async" alt="The prayer unit seen straight on"><svg viewBox="0 0 560 1080" preserveAspectRatio="none" aria-hidden="true"><rect pathLength="1" x="6" y="6" width="548" height="1068"/><line pathLength="1" x1="6" y1="150" x2="554" y2="150"/><path pathLength="1" d="M40,800 L40,300 Q40,200 140,200 L170,200 Q200,150 280,150 Q360,150 390,200 L420,200 Q520,200 520,300 L520,800"/><path pathLength="1" d="M140,800 L140,320 A140,140 0 0 1 420,320 L420,800"/><path pathLength="1" d="M190,780 L190,360 A90,90 0 0 1 370,360 L370,780 Z"/><rect pathLength="1" x="30" y="820" width="250" height="110"/><rect pathLength="1" x="280" y="820" width="250" height="110"/><rect pathLength="1" x="30" y="930" width="250" height="110"/><rect pathLength="1" x="280" y="930" width="250" height="110"/></svg><figcaption>Arched Gurbani prayer unit, drawn then built</figcaption></figure>
+    <figure class="plate"><img src="/assets/img/work/gurbani-unit-2-576.webp?v=2" srcset="/assets/img/work/gurbani-unit-2-480.webp?v=2 480w, /assets/img/work/gurbani-unit-2-576.webp?v=2 576w" sizes="(max-width:900px) 70vw, 30vw" width="576" height="1024" fetchpriority="high" decoding="async" alt="The prayer unit seen straight on"><img class="nt" src="/assets/img/work/gurbani-unit-2-night-576.webp" srcset="/assets/img/work/gurbani-unit-2-night-480.webp 480w, /assets/img/work/gurbani-unit-2-night-576.webp 576w" sizes="(max-width:900px) 70vw, 30vw" width="576" height="1024" fetchpriority="high" decoding="async" alt="" aria-hidden="true"><svg viewBox="0 0 560 1080" preserveAspectRatio="none" aria-hidden="true"><rect pathLength="1" x="6" y="6" width="548" height="1068"/><line pathLength="1" x1="6" y1="150" x2="554" y2="150"/><path pathLength="1" d="M40,800 L40,300 Q40,200 140,200 L170,200 Q200,150 280,150 Q360,150 390,200 L420,200 Q520,200 520,300 L520,800"/><path pathLength="1" d="M140,800 L140,320 A140,140 0 0 1 420,320 L420,800"/><path pathLength="1" d="M190,780 L190,360 A90,90 0 0 1 370,360 L370,780 Z"/><rect pathLength="1" x="30" y="820" width="250" height="110"/><rect pathLength="1" x="280" y="820" width="250" height="110"/><rect pathLength="1" x="30" y="930" width="250" height="110"/><rect pathLength="1" x="280" y="930" width="250" height="110"/></svg><figcaption>Arched Gurbani prayer unit, drawn then built</figcaption></figure>
   </div>
 </section>
 <section id="work" aria-labelledby="work-title">
@@ -232,7 +234,7 @@ main>section:not([data-hero]){padding-block:clamp(64px,8vw,112px)}
 <script src="/assets/designs.js?v=4" defer></script>
 <script src="/assets/studio.js?v=5" defer></script>
 <script src="/assets/cw-common.js?v=2" defer></script>
-<script src="/assets/cw-motion.js?v=2" defer></script>
+<script src="/assets/cw-motion.js?v=3" defer></script>
 <script src="/concepts/assets/concepts.js?v=3" defer></script>
 </body>
 </html>
