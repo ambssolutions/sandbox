@@ -1,7 +1,9 @@
 /* Designs for the room preview: one source for the design list, finishes and trims.
-   Each design draws itself onto a canvas at 0.5 px per mm, so its shape matches real proportions.
-   The drawings are illustrative. When real product photos arrive, a design can set
-   `image: "assets/img/NAME.webp"` and `size: [widthMm, heightMm]` to use the photo instead. */
+   Two kinds:
+   - photo designs: a real build, flattened from the client's own video (`photo` + `size` in mm)
+   - drawn designs: drawn to real proportions at 0.5 px per mm, in the styles of the client's
+     builds, using marble and walnut herringbone textures taken from those builds.
+   Every design has a `cat` (see CATS). Call CW_DESIGNS.ready() before drawing. */
 (function () {
   var PX = 0.5; // pixels per millimetre in the texture
 
@@ -11,15 +13,97 @@
     white:    { label: "White gloss", base: "#f2f0eb", gloss: true },
     charcoal: { label: "Charcoal",    base: "#3b3b3d", matt: true },
     cream:    { label: "Cream",       base: "#d8c6a1", soft: true },
-    mirror:   { label: "Mirror",      base: "#c9d2d6", mirror: true }
+    mirror:   { label: "Mirror",      base: "#c9d2d6", mirror: true },
+    taupe:    { label: "Taupe",       base: "#8d7d71", matt: true },
+    greige:   { label: "Soft grey",   base: "#b9b1a8", matt: true }
   };
 
   var TRIMS = {
     brass:  { label: "Brass",  c: "#b8944f", hi: "#e3c88c" },
     black:  { label: "Black",  c: "#1d1c1b", hi: "#4a4846" },
     silver: { label: "Silver", c: "#a9adb0", hi: "#e4e6e7" },
-    none:   { label: "None" }
+    none:   { label: "None" },
+    warm:   { label: "Warm light", light: "255,190,105" },
+    cool:   { label: "Cool light", light: "236,240,255" },
+    dark:   { label: "No light" }
   };
+
+  var CATS = [
+    { id: "tv", label: "TV walls" },
+    { id: "prayer", label: "Prayer and art" },
+    { id: "walls", label: "Walls and bedroom" },
+    { id: "wardrobes", label: "Wardrobes" }
+  ];
+
+  // Real photos and textures from the client's builds
+  var IMG = {}, SRC = {
+    marble: "assets/img/designs/tex-marble.webp",
+    herringbone: "assets/img/designs/tex-herringbone.webp",
+    carved: "assets/img/designs/carved-panel.webp",
+    prayer: "assets/img/designs/prayer-unit.webp"
+  };
+  var loading = null;
+  function ready() {
+    if (loading) return loading;
+    loading = Promise.all(Object.keys(SRC).map(function (k) {
+      return new Promise(function (res) {
+        var im = new Image(); im.decoding = "async";
+        im.onload = function () { IMG[k] = im; res(); }; im.onerror = function () { res(); };
+        im.src = SRC[k];
+      });
+    }));
+    return loading;
+  }
+  // Mirror a texture into a 2 x 2 tile, so it repeats without hard seams
+  var tiles = {};
+  function tile(key) {
+    if (tiles[key] || !IMG[key]) return tiles[key];
+    var im = IMG[key], w = im.naturalWidth, h = im.naturalHeight, c = document.createElement("canvas");
+    c.width = w * 2; c.height = h * 2;
+    var x = c.getContext("2d");
+    [[1, 1, 0, 0], [-1, 1, w * 2, 0], [1, -1, 0, h * 2], [-1, -1, w * 2, h * 2]].forEach(function (t) {
+      x.setTransform(t[0], 0, 0, t[1], t[2], t[3]); x.drawImage(im, 0, 0);
+    });
+    return (tiles[key] = c);
+  }
+  function fillTex(ctx, key, x, y, w, h, scale, fallback) {
+    var t = tile(key);
+    ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+    if (!t) { ctx.fillStyle = fallback; ctx.fillRect(x, y, w, h); ctx.restore(); return; }
+    var pat = ctx.createPattern(t, "repeat");
+    if (pat.setTransform && window.DOMMatrix) pat.setTransform(new DOMMatrix().translate(x, y).scale(scale));
+    ctx.fillStyle = pat; ctx.fillRect(x, y, w, h); ctx.restore();
+  }
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  // LED strip light: a soft spill of light around a shape, as in the client's builds
+  function halo(ctx, x, y, w, h, r, key, size) {
+    var t = TRIMS[key]; if (!t || !t.light) return;
+    ctx.save();
+    ctx.shadowColor = "rgba(" + t.light + ",.95)"; ctx.shadowBlur = size;
+    ctx.strokeStyle = "rgba(" + t.light + ",.9)"; ctx.lineWidth = 6;
+    roundRect(ctx, x, y, w, h, r); ctx.stroke(); ctx.stroke();
+    ctx.restore();
+  }
+  function lightBand(ctx, x, y, w, h, key, down) {
+    var t = TRIMS[key]; if (!t || !t.light) return;
+    var g = ctx.createLinearGradient(0, y, 0, y + h);
+    g.addColorStop(down ? 0 : 1, "rgba(" + t.light + ",.75)"); g.addColorStop(down ? 1 : 0, "rgba(" + t.light + ",0)");
+    ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+  }
+  function slats(ctx, x, y, w, h, key, seed, slat, gapW) {
+    slat = slat || 28; gapW = gapW || 10;
+    ctx.fillStyle = "#17120e"; ctx.fillRect(x, y, w, h);
+    for (var sx = x + 3, i = 0; sx < x + w; sx += slat + gapW, i++) panel(ctx, sx, y, Math.min(slat, x + w - sx), h, key, seed + i);
+  }
+  function tvScreen(ctx, x, y, w, h) {
+    ctx.fillStyle = "#0b0b0d"; ctx.fillRect(x, y, w, h);
+    var g = ctx.createLinearGradient(x, y, x + w, y + h);
+    g.addColorStop(0, "rgba(255,255,255,.10)"); g.addColorStop(0.45, "rgba(255,255,255,0)");
+    ctx.fillStyle = g; ctx.fillRect(x + 5, y + 5, w - 10, h - 10);
+  }
 
   // Small seeded random, so the grain is the same every time a design is drawn
   function rand(seed) {
@@ -98,7 +182,127 @@
 
   var DESIGNS = [
     {
-      id: "sliding", label: "Sliding wardrobe",
+      id: "carved", cat: "prayer", label: "Backlit carved panel", photo: "carved", lift: 250,
+      note: "A real build, from our Radha Krishna panel",
+      count: { label: "Size", min: 1, max: 3, value: 2 },
+      size: function (n) { return [[900, 1100, 1300][n - 1], [1800, 2200, 2600][n - 1]]; }
+    },
+    {
+      id: "prayerunit", cat: "prayer", label: "Arched prayer unit", photo: "prayer", lift: 150,
+      note: "A real build, from our Gurbani prayer unit",
+      count: { label: "Size", min: 1, max: 3, value: 2 },
+      size: function (n) { return [[1200, 1400, 1600][n - 1], [2300, 2700, 3100][n - 1]]; }
+    },
+    {
+      id: "marbletv", cat: "tv", label: "Marble TV wall",
+      count: { label: "Width, m", min: 3, max: 5, value: 4 },
+      finishes: ["taupe", "walnut", "oak", "greige"], finish: "taupe",
+      trims: ["warm", "cool", "dark"], trim: "warm", trimLabel: "Lighting",
+      size: function (n) { return [n * 1000, 2500]; },
+      draw: function (ctx, W, H, o) {
+        var shelf = 500 * PX, tall = 650 * PX, unitTop = H - 760 * PX, unitH = 420 * PX;
+        var mx = shelf + 120 * PX, mw = W - shelf - tall - 240 * PX, my = 330 * PX, mh = unitTop - my - 220 * PX;
+        panel(ctx, 0, 0, W, H, o.finish, 2000);
+        slats(ctx, shelf, 0, W - shelf - tall, H, o.finish === "taupe" ? "walnut" : o.finish, 2010, 14, 8);
+        panel(ctx, shelf, my - 120 * PX, W - shelf - tall, mh + 240 * PX, o.finish, 2005);
+        // lit display shelves on the left
+        panel(ctx, 0, 0, shelf, unitTop, "white", 2020);
+        for (var s = 1; s < 5; s++) { var sy = s * unitTop / 5; lightBand(ctx, 10, sy + 10, shelf - 20, 140, o.trim, true); panel(ctx, 0, sy, shelf, 12, "white", 2021 + s); }
+        panel(ctx, W - tall, 0, tall, H - 60, o.finish, 2030);
+        gap(ctx, W - tall, 0, 3, H);
+        halo(ctx, mx, my, mw, mh, 60, o.trim, 60);
+        ctx.save(); roundRect(ctx, mx, my, mw, mh, 60); ctx.clip();
+        fillTex(ctx, "marble", mx, my, mw, mh, 1.6, "#e9e7e4"); ctx.restore();
+        tvScreen(ctx, mx + mw * 0.14, my + mh * 0.16, mw * 0.72, mw * 0.72 * 9 / 16);
+        // floating unit: white doors, timber top
+        panel(ctx, 0, unitTop, W - tall, 30, "walnut", 2040);
+        var doors = Math.max(3, Math.round((W - tall) / 300));
+        for (var d = 0; d < doors; d++) panel(ctx, d * (W - tall) / doors + 2, unitTop + 30, (W - tall) / doors - 4, unitH, "white", 2050 + d);
+        lightBand(ctx, 0, unitTop + 30 + unitH, W - tall, 140, o.trim, true);
+      }
+    },
+    {
+      id: "oakmarble", cat: "tv", label: "Oak and marble media wall",
+      count: { label: "Width, m", min: 3, max: 5, value: 4 },
+      finishes: ["oak", "walnut", "greige"], finish: "oak",
+      trims: ["warm", "cool", "dark"], trim: "warm", trimLabel: "Lighting",
+      size: function (n) { return [n * 1000, 2500]; },
+      draw: function (ctx, W, H, o) {
+        var tower = 500 * PX, unitTop = H - 700 * PX, unitH = 520 * PX, top = 160 * PX;
+        var cx = tower + 40, cw = W - 2 * tower - 80;
+        slats(ctx, 0, 0, W, H, o.finish, 2100, 18, 26);
+        panel(ctx, 0, 0, W, top, o.finish, 2101);
+        lightBand(ctx, 0, top, W, 110, o.trim, true);
+        var mY = top + 200 * PX, mH = unitTop - mY - 220 * PX;
+        fillTex(ctx, "marble", cx + 30, mY, cw - 60, mH, 1.5, "#e9e7e4");
+        halo(ctx, cx + 30, mY, cw - 60, mH, 2, o.trim, 40);
+        tvScreen(ctx, cx + cw * 0.2, mY + mH * 0.16, cw * 0.6, cw * 0.6 * 9 / 16);
+        [0, W - tower].forEach(function (tx, k) {
+          panel(ctx, tx, 0, tower, H - 40, o.finish, 2110 + k);
+          ctx.fillStyle = "rgba(25,18,12,.55)"; ctx.fillRect(tx + 16, top, tower - 32, unitTop - top + unitH);
+          for (var s = 0; s < 6; s++) {
+            var sy = top + s * (unitTop + unitH - top) / 6;
+            lightBand(ctx, tx + 16, sy + 8, tower - 32, 120, o.trim, true);
+            panel(ctx, tx + 16, sy, tower - 32, 10, o.finish, 2120 + s);
+          }
+        });
+        for (var d = 0; d < 4; d++) panel(ctx, cx + d * cw / 4 + 2, unitTop, cw / 4 - 4, unitH, "greige", 2140 + d);
+        panel(ctx, cx, unitTop - 14, cw, 14, o.finish, 2150);
+        lightBand(ctx, cx, unitTop + unitH, cw, 120, o.trim, true);
+      }
+    },
+    {
+      id: "walnutarc", cat: "tv", label: "Walnut media wall with arcs",
+      count: { label: "Width, m", min: 3, max: 5, value: 4 },
+      finishes: ["walnut", "charcoal", "oak"], finish: "walnut",
+      trims: ["warm", "cool", "dark"], trim: "cool", trimLabel: "Lighting",
+      size: function (n) { return [n * 1000, 2500]; },
+      draw: function (ctx, W, H, o) {
+        var fw = Math.min(W * 0.46, 1900 * PX), fx = (W - fw) / 2, fy = 330 * PX, fh = fw * 0.82, inset = 46;
+        panel(ctx, 0, 0, W, H, o.finish, 2200);
+        for (var x = 300 * PX; x < W; x += 600 * PX) gap(ctx, x, 0, 2, H);
+        // white four-point arc inlays along the bottom and sides
+        function star(cx, cy, r) {
+          ctx.fillStyle = "#e9e6e1"; ctx.beginPath();
+          ctx.moveTo(cx, cy - r); ctx.quadraticCurveTo(cx, cy, cx + r, cy); ctx.quadraticCurveTo(cx, cy, cx, cy + r);
+          ctx.quadraticCurveTo(cx, cy, cx - r, cy); ctx.quadraticCurveTo(cx, cy, cx, cy - r); ctx.fill();
+        }
+        var sy = H - 420 * PX;
+        for (var s = 600 * PX; s < W; s += 900 * PX) star(s, sy, 170 * PX);
+        star(fx - 300 * PX, fy + fh * 0.75, 170 * PX); star(fx + fw + 300 * PX, fy + fh * 0.75, 170 * PX);
+        // lit frame with a fluted backing
+        panel(ctx, fx - 40, fy - 40, fw + 80, fh + 80, "greige", 2210);
+        ctx.fillStyle = "#e9e5df"; ctx.fillRect(fx + inset, fy + inset, fw - 2 * inset, fh - 2 * inset);
+        ctx.fillStyle = "rgba(120,110,100,.35)";
+        for (var f = fx + inset; f < fx + fw - inset; f += 5) ctx.fillRect(f, fy + inset, 1.5, fh - 2 * inset);
+        halo(ctx, fx + inset, fy + inset, fw - 2 * inset, fh - 2 * inset, 2, o.trim, 50);
+        var tw = fw * 0.76; tvScreen(ctx, fx + (fw - tw) / 2, fy + inset + 40, tw, tw * 9 / 16);
+        // timber plinth with light underneath
+        panel(ctx, 0, H - 70, W, 70, "oak", 2220);
+        lightBand(ctx, 0, H - 150, W, 80, o.trim, false);
+      }
+    },
+    {
+      id: "herringbone", cat: "walls", label: "Walnut herringbone wall",
+      count: { label: "Width, m", min: 2, max: 5, value: 3 },
+      finishes: ["walnut"], finish: "walnut",
+      trims: ["warm", "dark"], trim: "warm", trimLabel: "Wall lights",
+      size: function (n) { return [n * 1000, 2500]; },
+      draw: function (ctx, W, H, o) {
+        var strip = 400 * PX;
+        fillTex(ctx, "herringbone", 0, 0, W, H, 0.9, "#5a3e2b");
+        for (var x = 1200 * PX; x < W; x += 1200 * PX) { gap(ctx, x - 1, 0, 2, H); slats(ctx, x - strip / 2, 0, strip, H, "walnut", 2300 + x, 16, 8); }
+        if (TRIMS[o.trim].light) [0.25, 0.75].forEach(function (k) {
+          var lx = W * k, ly = H * 0.42;
+          ctx.fillStyle = "#1b1612"; ctx.fillRect(lx - 40, ly, 80, 30);
+          var g = ctx.createRadialGradient(lx, ly, 4, lx, ly, 260);
+          g.addColorStop(0, "rgba(255,190,105,.55)"); g.addColorStop(1, "rgba(255,190,105,0)");
+          ctx.fillStyle = g; ctx.fillRect(lx - 260, ly - 260, 520, 520);
+        });
+      }
+    },
+    {
+      id: "sliding", cat: "wardrobes", label: "Sliding wardrobe",
       count: { label: "Doors", min: 2, max: 4, value: 3 },
       finishes: ["walnut", "white", "oak", "charcoal", "mirror"], finish: "walnut",
       trims: ["brass", "black", "silver", "none"], trim: "brass",
@@ -121,7 +325,7 @@
       }
     },
     {
-      id: "hinged", label: "Hinged wardrobe",
+      id: "hinged", cat: "wardrobes", label: "Hinged wardrobe",
       count: { label: "Doors", min: 2, max: 6, value: 4 },
       finishes: ["white", "walnut", "oak", "charcoal"], finish: "white",
       trims: ["black", "brass", "silver"], trim: "black",
@@ -141,7 +345,7 @@
       }
     },
     {
-      id: "walkin", label: "Open walk-in",
+      id: "walkin", cat: "wardrobes", label: "Open walk-in",
       count: { label: "Sections", min: 2, max: 4, value: 3 },
       finishes: ["walnut", "oak", "white", "charcoal"], finish: "walnut",
       trims: ["brass", "black", "silver"], trim: "brass",
@@ -204,7 +408,7 @@
       }
     },
     {
-      id: "slatwall", label: "Slatted feature wall",
+      id: "slatwall", cat: "walls", label: "Slatted feature wall",
       count: { label: "Width, m", min: 2, max: 5, value: 3 },
       finishes: ["walnut", "oak", "charcoal", "white"], finish: "walnut",
       trims: ["brass", "black", "none"], trim: "brass",
@@ -224,7 +428,7 @@
       }
     },
     {
-      id: "headboard", label: "Panelled headboard", lift: 0,
+      id: "headboard", cat: "walls", label: "Panelled headboard", lift: 0,
       count: { label: "Panels", min: 3, max: 6, value: 4 },
       finishes: ["cream", "white", "charcoal", "walnut"], finish: "cream",
       trims: ["brass", "black", "none"], trim: "brass",
@@ -243,7 +447,7 @@
       }
     },
     {
-      id: "tvunit", label: "Floating TV unit", lift: 300,
+      id: "tvunit", cat: "tv", label: "Floating TV unit", lift: 300,
       count: { label: "Width, m", min: 1, max: 3, value: 2 },
       finishes: ["walnut", "white", "oak", "charcoal"], finish: "walnut",
       trims: ["brass", "black", "none"], trim: "brass",
@@ -263,42 +467,7 @@
       }
     },
     {
-      id: "mediawall", label: "TV media wall",
-      count: { label: "Width, m", min: 3, max: 5, value: 4 },
-      finishes: ["walnut", "oak", "white", "charcoal"], finish: "walnut",
-      trims: ["brass", "black", "none"], trim: "brass",
-      size: function (n) { return [n * 1000, 2400]; },
-      draw: function (ctx, W, H, o) {
-        var side = 600 * PX, unitH = 420 * PX, unitTop = H - unitH - 300 * PX, mid = W - 2 * side;
-        // slatted panel behind the TV
-        ctx.fillStyle = "#16110d"; ctx.fillRect(side, 0, mid, H);
-        for (var x = side + 4, i = 0; x < side + mid; x += 38, i++) panel(ctx, x, 0, Math.min(28, side + mid - x), H, o.finish === "white" ? "walnut" : o.finish, 1500 + i);
-        // tall cabinets either side
-        [0, W - side].forEach(function (sx, s) {
-          panel(ctx, sx, 0, side, H, o.finish, 1600 + s);
-          ctx.fillStyle = "rgba(20,14,10,.7)"; ctx.fillRect(sx + side / 2 - 1, 0, 2, H - 40);
-          trimRect(ctx, sx + side / 2 - 14, H * 0.45, 5, 160, o.trim === "none" ? "black" : o.trim);
-          trimRect(ctx, sx + side / 2 + 9, H * 0.45, 5, 160, o.trim === "none" ? "black" : o.trim);
-          gap(ctx, sx, H - 40, side, 40);
-          if (o.trim !== "none") trimRect(ctx, s ? sx : sx + side - 8, 0, 8, H, o.trim);
-        });
-        // TV screen, shown for scale
-        var tvW = Math.min(mid * 0.72, 1650 * PX), tvH = tvW * 9 / 16, tvX = side + (mid - tvW) / 2, tvY = unitTop - tvH - 180 * PX;
-        ctx.fillStyle = "#0d0d0f"; ctx.fillRect(tvX, tvY, tvW, tvH);
-        var sg = ctx.createLinearGradient(tvX, tvY, tvX + tvW, tvY + tvH);
-        sg.addColorStop(0, "rgba(255,255,255,.10)"); sg.addColorStop(0.4, "rgba(255,255,255,0)");
-        ctx.fillStyle = sg; ctx.fillRect(tvX + 6, tvY + 6, tvW - 12, tvH - 12);
-        // floating unit under it
-        var doors = 3, dw = mid / doors;
-        for (var d = 0; d < doors; d++) panel(ctx, side + d * dw + 2, unitTop, dw - 4, unitH, o.finish, 1700 + d);
-        if (o.trim !== "none") trimRect(ctx, side, unitTop - 4, mid, 4, o.trim);
-        var glow = ctx.createLinearGradient(0, unitTop + unitH, 0, unitTop + unitH + 80);
-        glow.addColorStop(0, "rgba(255,214,150,.55)"); glow.addColorStop(1, "rgba(255,214,150,0)");
-        ctx.fillStyle = glow; ctx.fillRect(side, unitTop + unitH, mid, 80);
-      }
-    },
-    {
-      id: "bedside", label: "Floating bedside", lift: 350,
+      id: "bedside", cat: "walls", label: "Floating bedside", lift: 350,
       count: { label: "Drawers", min: 1, max: 3, value: 2 },
       finishes: ["white", "walnut", "oak", "charcoal"], finish: "white",
       trims: ["black", "brass", "silver"], trim: "black",
@@ -319,7 +488,9 @@
   function render(design, opts, maxSide) {
     var mm = design.size(opts.count), W = Math.round(mm[0] * PX), H = Math.round(mm[1] * PX);
     var c = document.createElement("canvas"); c.width = W; c.height = H;
-    design.draw(c.getContext("2d"), W, H, opts);
+    var x = c.getContext("2d");
+    if (design.photo) { if (IMG[design.photo]) x.drawImage(IMG[design.photo], 0, 0, W, H); else { x.fillStyle = "#ddd"; x.fillRect(0, 0, W, H); } }
+    else design.draw(x, W, H, opts);
     if (maxSide && Math.max(W, H) > maxSide) {
       var k = maxSide / Math.max(W, H), s = document.createElement("canvas");
       s.width = Math.round(W * k); s.height = Math.round(H * k);
@@ -330,10 +501,13 @@
   }
 
   function describe(design, opts) {
+    if (design.photo) return design.label + ", " + ["smaller", "as built", "larger"][opts.count - 1];
     var parts = [design.label, /m$/.test(design.count.label) ? opts.count + " m wide" : opts.count + " " + design.count.label.toLowerCase(), FINISHES[opts.finish].label.toLowerCase()];
-    if (opts.trim && opts.trim !== "none") parts.push(TRIMS[opts.trim].label.toLowerCase() + " trim");
+    var t = TRIMS[opts.trim];
+    if (t && t.light) parts.push(t.label.toLowerCase());
+    else if (t && t.c) parts.push(t.label.toLowerCase() + " trim");
     return parts.join(", ");
   }
 
-  window.CW_DESIGNS = { list: DESIGNS, finishes: FINISHES, trims: TRIMS, render: render, describe: describe };
+  window.CW_DESIGNS = { list: DESIGNS, cats: CATS, finishes: FINISHES, trims: TRIMS, render: render, describe: describe, ready: ready };
 })();

@@ -23,7 +23,7 @@ Built by AMBS Solutions. Follow the **ambs-website-design** skill (and **website
 
 ## This site
 - Stack: static HTML, CSS and JS, no build step. Vercel with cleanUrls.
-- Content lives in: assets/content.js (business facts) and assets/designs.js (room preview designs). Real facts in BRIEF.md.
+- Content lives in: assets/content.js (business facts), assets/projects.js (projects and photos), assets/designs.js (room preview designs). Real facts in BRIEF.md.
 - Form endpoint: not set yet. Falls back to a text message to 020 4149 8811.
 - Languages: English (NZ).
 - Things to finish before launch: see README.md

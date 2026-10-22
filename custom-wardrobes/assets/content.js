@@ -4,8 +4,9 @@ window.SITE = {
   phone: "020 4149 8811",
   phoneTel: "+642041498811",
   tiktok: "https://www.tiktok.com/@customwardrobes1singh",
+  instagram: "https://www.instagram.com/customwardrobe1singh/",
+  area: "Auckland",     // from the client's own post tags (#auckland #newzealand)
   email: "",            // e.g. "hello@example.co.nz"
-  area: "",             // e.g. "Auckland and Waikato"
   formEndpoint: "",     // e.g. "https://api.web3forms.com/submit"
   web3formsKey: ""
 };

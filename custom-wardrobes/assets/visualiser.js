@@ -30,7 +30,7 @@ function cwPreviewInit(root) {
   var state = {
     photo: null, photoW: 1600, photoH: 1066, sample: true,
     quad: SAMPLE_QUAD.map(function (p) { return p.slice(); }),
-    design: D.list[0], opts: null,
+    design: D.list.filter(function (d) { return d.id === "marbletv"; })[0] || D.list[0], opts: null,
     light: 0, warmth: 0, shadow: 0.6, hide: false
   };
   function optsFor(d) { return { count: d.count.value, finish: d.finish, trim: d.trim }; }
@@ -236,6 +236,9 @@ function cwPreviewInit(root) {
   var countOut = root.querySelector("[data-pv=count]");
   var countLabel = root.querySelector("[data-pv=count-label]");
   var summary = root.querySelector("[data-pv=summary]");
+  var tabBox = root.querySelector("[data-pv=cats]");
+  var note = root.querySelector("[data-pv=note]");
+  var cat = state.design.cat;
 
   function chip(box, label, on, swatch, fn) {
     var b = document.createElement("button");
@@ -251,33 +254,54 @@ function cwPreviewInit(root) {
     if (f.mirror) return "linear-gradient(135deg,#eef2f3,#a9b5bb 55%,#dfe5e7)";
     return f.base;
   }
-  function trimSwatch(key) { var t = D.trims[key]; return t.c ? "linear-gradient(135deg," + t.hi + "," + t.c + ")" : "transparent"; }
+  function trimSwatch(key) {
+    var t = D.trims[key];
+    if (t.light) return "radial-gradient(circle,rgb(" + t.light + ") 0 35%,rgba(" + t.light + ",.25) 70%)";
+    return t.c ? "linear-gradient(135deg," + t.hi + "," + t.c + ")" : "transparent";
+  }
 
   function buildDesigns() {
+    tabBox.textContent = ""; designBox.textContent = "";
+    D.cats.forEach(function (c) {
+      var t = document.createElement("button");
+      t.type = "button"; t.className = "pv-tab"; t.textContent = c.label; t.dataset.cat = c.id;
+      t.setAttribute("aria-pressed", c.id === cat ? "true" : "false");
+      t.addEventListener("click", function () { cat = c.id; buildDesigns(); });
+      tabBox.appendChild(t);
+    });
     D.list.forEach(function (d) {
+      if (d.cat !== cat) return;
       var b = chip(designBox, d.label, d === state.design, null, function () { pick(d); });
       b.dataset.id = d.id;
-      var th = D.render(d, optsFor(d), 160);
+      if (d.photo) { var tag = document.createElement("small"); tag.textContent = "Real build"; b.appendChild(tag); }
+      if (!thumbs[d.id]) thumbs[d.id] = D.render(d, optsFor(d), 160).toDataURL("image/jpeg", 0.8);
       var img = document.createElement("img");
-      img.src = th.toDataURL("image/jpeg", 0.8); img.alt = ""; img.width = 40; img.height = 40;
+      img.src = thumbs[d.id]; img.alt = ""; img.width = 40; img.height = 40;
       b.insertBefore(img, b.firstChild);
     });
   }
+  var thumbs = {};
+  function group(box, show) { box.closest("[data-pv-group]").hidden = !show; }
   function buildOptions() {
+    var d = state.design, fins = d.finishes || [], trims = d.trims || [];
     finishBox.textContent = ""; trimBox.textContent = "";
-    state.design.finishes.forEach(function (k) {
+    fins.forEach(function (k) {
       chip(finishBox, D.finishes[k].label, k === state.opts.finish, swatchFor(k), function () { state.opts.finish = k; refreshDesign(); buildOptions(); });
     });
-    state.design.trims.forEach(function (k) {
+    trims.forEach(function (k) {
       chip(trimBox, D.trims[k].label, k === state.opts.trim, trimSwatch(k), function () { state.opts.trim = k; refreshDesign(); buildOptions(); });
     });
-    countLabel.textContent = state.design.count.label.replace(/, m$/, " (metres)");
-    countOut.textContent = state.opts.count;
-    [].forEach.call(designBox.children, function (b) { b.setAttribute("aria-pressed", b.dataset.id === state.design.id ? "true" : "false"); });
-    summary.textContent = D.describe(state.design, state.opts);
+    group(finishBox, fins.length > 1); group(trimBox, trims.length > 0);
+    root.querySelector("[data-pv=trim-label]").textContent = d.trimLabel || "Trim and handles";
+    countLabel.textContent = d.count.label.replace(/, m$/, " (metres)");
+    countOut.textContent = d.photo ? ["Smaller", "As built", "Larger"][state.opts.count - 1] : state.opts.count;
+    note.textContent = d.note || "";
+    [].forEach.call(designBox.children, function (b) { b.setAttribute("aria-pressed", b.dataset.id === d.id ? "true" : "false"); });
+    summary.textContent = D.describe(d, state.opts);
   }
   function pick(d) {
     state.design = d; state.opts = optsFor(d);
+    if (cat !== d.cat) { cat = d.cat; buildDesigns(); }
     uploadDesign(); state.quad = defaultQuad(); buildOptions(); schedule();
   }
   function refreshDesign() { var old = designAspect; uploadDesign(); if (old !== designAspect) refit(old); schedule(); }
@@ -391,17 +415,23 @@ function cwPreviewInit(root) {
     var field = document.getElementById("f-design");
     if (field) field.value = D.describe(state.design, state.opts);
     var kind = document.getElementById("f-kind");
-    if (kind) kind.value = { sliding: "Wardrobe", hinged: "Wardrobe", walkin: "Wardrobe", slatwall: "Feature wall or headboard", headboard: "Feature wall or headboard", tvunit: "TV unit", mediawall: "TV unit", bedside: "Bedside units" }[state.design.id] || "";
+    if (kind) kind.value = { tv: "TV unit or media wall", prayer: "Prayer unit or carved panel", walls: "Feature wall or bedroom", wardrobes: "Wardrobe" }[state.design.cat] || "";
     var c = document.getElementById("contact");
     if (c) { c.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); setTimeout(function () { var n = document.getElementById("f-name"); if (n) n.focus({ preventScroll: true }); }, 700); }
   });
 
   /* ---------- start ---------- */
-  buildDesigns();
-  uploadDesign();
-  buildOptions();
-  loadPhoto(stage.dataset.sample, true);
+  status.textContent = "Loading designs…";
+  D.ready().then(function () {
+    status.textContent = "";
+    buildDesigns();
+    uploadDesign();
+    buildOptions();
+    loadPhoto(stage.dataset.sample, true);
+  });
   var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(layout, 120); });
   root.classList.add("pv-ready");
-  window.CW_PREVIEW = { pick: function (id) { var d = D.list.filter(function (x) { return x.id === id; })[0]; if (d) pick(d); } };
+  window.CW_PREVIEW = { pick: function (id) {
+    D.ready().then(function () { var d = D.list.filter(function (x) { return x.id === id; })[0]; if (d) pick(d); });
+  } };
 }

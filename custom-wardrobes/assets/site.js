@@ -1,5 +1,6 @@
-/* Site behaviour: menu, header, slow folds, hide-if-missing, the enquiry form, the TikTok
-   loader, the phone quick bar and scroll reveals. Business facts come from assets/content.js. */
+/* Site behaviour: menu, header, slow folds, hide-if-missing, project tiles and the lightbox,
+   the work rail, gallery filters, videos, the enquiry form, the TikTok loader, the phone quick
+   bar and scroll reveals. Facts come from assets/content.js, projects from assets/projects.js. */
 (function () {
   var SITE = window.SITE || {};
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -30,7 +31,7 @@
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
   // Slow folds for "What we make" and the questions
-  [].forEach.call(document.querySelectorAll(".make-list button, .faq-item button"), function (b) {
+  [].forEach.call(document.querySelectorAll(".make-list > li > button, .faq-item > button"), function (b) {
     b.addEventListener("click", function () {
       var open = b.getAttribute("aria-expanded") !== "true";
       b.setAttribute("aria-expanded", open ? "true" : "false");
@@ -42,6 +43,93 @@
   [].forEach.call(document.querySelectorAll("[data-try]"), function (a) {
     a.addEventListener("click", function () { if (window.CW_PREVIEW) window.CW_PREVIEW.pick(a.dataset.try); });
   });
+
+
+  /* ---------- the lightbox (tiles are built by assets/tiles.js) ---------- */
+  var PROJECTS = window.CW_PROJECTS || [];
+  function srcset(im) { return im.sizes.map(function (w) { return im.src + "-" + w + ".webp " + w + "w"; }).join(", "); }
+  var box = null, cur = null, idx = 0, opener = null;
+  function buildBox() {
+    box = document.createElement("dialog"); box.className = "lb"; box.setAttribute("aria-label", "Project photos");
+    box.innerHTML = '<div class="lb-in"><div class="lb-top"><h2></h2><button class="lb-close" type="button" aria-label="Close">&times;</button></div>' +
+      '<figure class="lb-fig"><img alt=""></figure>' +
+      '<div class="lb-bot"><button class="btn small ghost" type="button" data-go="-1">Previous</button><p aria-live="polite"></p><button class="btn small ghost" type="button" data-go="1">Next</button></div></div>';
+    document.body.appendChild(box);
+    box.querySelector(".lb-close").addEventListener("click", closeBox);
+    [].forEach.call(box.querySelectorAll("[data-go]"), function (b) { b.addEventListener("click", function () { go(+b.dataset.go); }); });
+    box.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") go(1); if (e.key === "ArrowLeft") go(-1); });
+    box.addEventListener("close", function () { document.documentElement.style.overflow = ""; if (opener) opener.focus(); });
+    box.addEventListener("click", function (e) { if (e.target === box) closeBox(); });
+    var fig = box.querySelector(".lb-fig"), sx = null;
+    fig.addEventListener("pointerdown", function (e) { sx = e.clientX; });
+    fig.addEventListener("pointerup", function (e) { if (sx != null && Math.abs(e.clientX - sx) > 40) go(e.clientX < sx ? 1 : -1); sx = null; });
+  }
+  function show() {
+    var im = cur.images[idx], img = box.querySelector(".lb-fig img");
+    img.srcset = srcset(im); img.sizes = "(max-width: 900px) 100vw, 60vw";
+    img.src = im.src + "-" + im.sizes[im.sizes.length - 1] + ".webp"; img.alt = im.alt;
+    box.querySelector("h2").textContent = cur.title;
+    box.querySelector("p").textContent = im.alt + " \u00b7 " + (idx + 1) + " of " + cur.images.length;
+    [].forEach.call(box.querySelectorAll("[data-go]"), function (b) { b.hidden = cur.images.length < 2; });
+  }
+  function go(n) { idx = (idx + n + cur.images.length) % cur.images.length; show(); }
+  function openBox(p, i, from) {
+    if (!box) buildBox();
+    cur = p; idx = i; opener = from; show();
+    document.documentElement.style.overflow = "hidden";
+    if (box.showModal) box.showModal(); else box.setAttribute("open", "");
+  }
+  function closeBox() { if (box.close) box.close(); else { box.removeAttribute("open"); document.documentElement.style.overflow = ""; } }
+  window.CW_OPEN = function (id) { var p = PROJECTS.filter(function (x) { return x.id === id; })[0]; if (p) openBox(p, 0, document.activeElement); };
+  [].forEach.call(document.querySelectorAll("[data-open]"), function (a) {
+    a.addEventListener("click", function (e) { e.preventDefault(); window.CW_OPEN(a.dataset.open); });
+  });
+
+  [].forEach.call(document.querySelectorAll(".tile[data-id]"), function (t) {
+    t.addEventListener("click", function () { window.CW_OPEN(t.dataset.id); });
+  });
+  var rail = document.getElementById("rail");
+  if (rail) {
+    var bar = document.querySelector(".rail-bar i");
+    function railPos() {
+      var f = Math.min(1, rail.clientWidth / rail.scrollWidth), max = rail.scrollWidth - rail.clientWidth, k = max > 0 ? rail.scrollLeft / max : 0;
+      bar.style.width = f * 100 + "%"; bar.style.transform = "translateX(" + (k * (1 - f) / f * 100) + "%)";
+    }
+    rail.addEventListener("scroll", railPos, { passive: true }); addEventListener("resize", railPos); railPos();
+    [].forEach.call(document.querySelectorAll("[data-rail]"), function (b) {
+      b.addEventListener("click", function () { rail.scrollBy({ left: +b.dataset.rail * rail.clientWidth * 0.8, behavior: reduce ? "auto" : "smooth" }); });
+    });
+  }
+  var filters = document.getElementById("filters"), grid = document.getElementById("grid");
+  if (filters && grid) {
+    [].forEach.call(filters.children, function (b) {
+      b.addEventListener("click", function () {
+        [].forEach.call(filters.children, function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+        [].forEach.call(grid.children, function (t) { t.hidden = b.dataset.f !== "all" && t.dataset.type !== b.dataset.f; });
+        try { history.replaceState(null, "", b.dataset.f === "all" ? location.pathname : "#" + b.dataset.f); } catch (e) {}
+      });
+    });
+    var sb = filters.querySelector('[data-f="' + location.hash.slice(1) + '"]'); if (sb) sb.click();
+  }
+
+  /* ---------- videos: muted loops that start once the page has loaded, and pause off screen ---------- */
+  var saveData = navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || ""));
+  if (!reduce && !saveData && "IntersectionObserver" in window) {
+    addEventListener("load", function () {
+      setTimeout(function () {
+        var vio = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            var v = e.target;
+            if (e.isIntersecting) {
+              if (!v.src && v.dataset.src) v.src = v.dataset.src;
+              var pr = v.play(); if (pr && pr.then) pr.then(function () { v.classList.add("playing"); }).catch(function () {});
+            } else if (!v.paused) v.pause();
+          });
+        }, { threshold: 0.2 });
+        [].forEach.call(document.querySelectorAll("video[data-src]"), function (v) { vio.observe(v); });
+      }, 900);
+    });
+  }
 
   // TikTok videos load only when asked, so TikTok's player and cookies stay off by default
   var tt = document.getElementById("tt-load");
@@ -110,7 +198,7 @@
   }
 
   // Reveals
-  var rv = document.querySelectorAll(".rv");
+  var rv = document.querySelectorAll(".rv, .draw-on-view");
   if (reduce || !("IntersectionObserver" in window)) { [].forEach.call(rv, function (el) { el.classList.add("in"); }); return; }
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
