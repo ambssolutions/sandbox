@@ -12,7 +12,7 @@ Built by AMBS Solutions. Follow the **ambs-website-design** skill (and **website
 - Centre-align section headings, intros, the hero, the footer and menus. Keep tick lists, FAQs, timelines and forms left-aligned.
 - One type scale across all pages, with calm, readable fonts.
 - Real logo (vector), and all accent colours taken from the logo. No glow, haloes, highlighter bands or white outer shadows.
-- Native motion only: CSS sticky stacking cards (opaque, heading pinned, each card's number and title showing), slow smooth opens (~1.4s), no scroll-jacking or JS pinning, no count-ups, tilt or zoom. Respect reduced motion.
+- No animation on this site (owner's rule, 22 October 2026): no reveals, no stacking cards, no carousels or sliders, no drawing or scroll effects, no hover zoom. Sections open instantly. Videos play only when tapped. The room studio is the interactive feature.
 - Declutter: one headline and one main action in the hero; few cards, chips and arrows.
 - Doesn't look AI-generated: plain NZ English, no em dashes, no exclamation marks, no hype words, no "X. One Y." headings, no eyebrow on every section.
 - Real, sharp, uncropped photos (WebP with srcset). Smooth on phones: no live backdrop-blur.
@@ -24,6 +24,7 @@ Built by AMBS Solutions. Follow the **ambs-website-design** skill (and **website
 ## This site
 - Stack: static HTML, CSS and JS, no build step. Vercel with cleanUrls.
 - Content lives in: assets/content.js (business facts), assets/projects.js (projects and photos), assets/designs.js (room preview designs). Real facts in BRIEF.md.
+- Concepts: /concepts (gallery) and concepts/designs/NN-slug, built by `python3 concepts/tools/build.py`. The room studio is assets/studio.js + studio.css.
 - Form endpoint: not set yet. Falls back to a text message to 020 4149 8811.
 - Languages: English (NZ).
 - Things to finish before launch: see README.md
