@@ -79,6 +79,11 @@
       "source": "/concepts/studio",
       "destination": "/concepts/designs/05-studio/",
       "permanent": false
+    },
+    {
+      "source": "/concepts/showroom",
+      "destination": "/concepts/designs/06-showroom/",
+      "permanent": false
     }
   ],
   "rewrites": [

@@ -8,7 +8,8 @@
     ['02-arch', 'Arch', 'Signature arch'],
     ['03-reels', 'Reels', 'Social first'],
     ['04-atelier', 'Atelier', 'Light editorial'],
-    ['05-studio', 'Studio', 'Studio first']
+    ['05-studio', 'Studio', 'Studio first'],
+    ['06-showroom', 'Showroom', 'Cinematic, 3D']
   ];
   var current = document.documentElement.getAttribute('data-concept');
   var i = CONCEPTS.findIndex(function (c) { return c[0] === current; });
@@ -29,7 +30,7 @@
     '.bar{position:fixed;left:16px;bottom:16px;z-index:2147483000;display:flex;align-items:center;gap:2px;' +
     'font:500 13px/1 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#fff;background:rgba(14,22,17,.9);' +
     'border:1px solid rgba(255,255,255,.14);border-radius:999px;' +
-    'padding:4px;box-shadow:0 12px 32px -12px rgba(0,0,0,.5)' +
+    'padding:4px;box-shadow:0 12px 32px -12px rgba(0,0,0,.5)}' +
     '.bar.tuck{opacity:.35}.bar:hover,.bar:focus-within{opacity:1}' +
     '.bar.gone{opacity:0;pointer-events:none;transform:translate(-50%,24px)}' +
     'a,button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:999px;color:#fff;white-space:nowrap}' +

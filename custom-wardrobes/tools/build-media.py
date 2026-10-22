@@ -113,3 +113,8 @@ clip(7, 12.0, 7, "hero-media-wall", 432)
 clip(4, 13.5, 6, "hero-prayer-unit", 432)
 clip(3, 9.0, 7, "hero-carved-panel", 432)
 clip(3, 0, 21.5, "bare-wall-to-panel", 540)
+
+# Concept 06 Showroom: three full-quality clips for the cinematic hero, played side by side
+clip(6, 10.5, 8, "show-walnut", 576)
+clip(5, 0.0, 8, "show-gurbani", 576)
+clip(7, 12.0, 8, "show-oak", 576)

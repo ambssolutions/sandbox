@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Custom Wardrobes · Website concepts</title>
-<meta name="description" content="Five website concepts for Custom Wardrobes. Preview them, shortlist your favourites and send us your preferred design.">
+<meta name="description" content="Six website concepts for Custom Wardrobes. Preview them, shortlist your favourites and send us your preferred design.">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="assets/logo/mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -221,8 +221,8 @@ footer{border-top:1px solid var(--line);padding:24px 0 120px;color:var(--muted);
 
 <main class="wrap">
   <section class="intro" aria-labelledby="h1">
-    <span class="eyebrow">Design review · 5 concepts</span>
-    <h1 id="h1">Five directions for <em>Custom Wardrobes</em></h1>
+    <span class="eyebrow">Design review · 6 concepts</span>
+    <h1 id="h1">Six directions for <em>Custom Wardrobes</em></h1>
     <p>Each concept is a full working homepage built from your real photos, videos and follower numbers, with its own look and layout. Every one includes the room studio: take a photo of a wall and place any of your pieces in it, including anything cut out of your gallery photos. Each one turns its lights on as you scroll, and nothing slides sideways. Open each one, try the studio on your phone, shortlist the ones you like, then send us your favourite.</p>
     <ol class="steps">
       <li><b>Explore</b><span>Click any preview to open the live site. Scroll and click through the pages to see the motion.</span></li>
@@ -233,7 +233,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 120px;color:var(--muted);
 
   <div class="bar">
     <div class="seg" role="group" aria-label="Filter concepts">
-      <button type="button" aria-pressed="true" data-filter="all">All 5</button>
+      <button type="button" aria-pressed="true" data-filter="all">All 6</button>
       <button type="button" aria-pressed="false" data-filter="rec">★ Recommended</button>
       <button type="button" aria-pressed="false" data-filter="short">Shortlisted <span class="count" id="countSeg">0</span></button>
     </div>
@@ -337,7 +337,8 @@ const CONCEPTS = [
   {id:"02",motion:"Subtle motion",rec:"Uses the arch from your prayer units as its signature, so it looks like nobody else's site. Warm and premium.",slug:"02-arch",name:"Arch",insp:"Boutique interior studios",desc:"Your arch shape frames the hero photo and the gallery tiles. Warm black and paper, with gold taken from your LED lighting.",tags:["Signature arch","Warm","Premium"],sw:["#0f0c0a","#f5f0e7","#c9a35a"]},
   {id:"03",motion:"Subtle motion",slug:"03-reels",name:"Reels",insp:"TikTok and Instagram",desc:"Built around the videos your followers already watch: three phones in the hero, follower numbers up front, and builds shown as an even grid of reel cards.",tags:["Social first","Bold type","Dark"],sw:["#0d0d0f","#ff5a4e","#e9c77f"]},
   {id:"04",motion:"Subtle motion",slug:"04-atelier",name:"Atelier",insp:"Design magazines and furniture catalogues",desc:"Light and editorial. Opens with a line drawing of your prayer unit that turns into the lit build, then a numbered catalogue of all ten builds.",tags:["Light","Editorial","Catalogue"],sw:["#faf8f4","#141210","#a8812f"]},
-  {id:"05",motion:"Interactive",rec:"The room studio is the first thing people see, so more visitors try your pieces on their own wall and send you an enquiry.",slug:"05-studio",name:"Studio",insp:"Online room planners",desc:"The page opens on the room studio with your oak and marble wall already placed. Below it, every build has a Place in my room button.",tags:["Studio first","Enquiries","Practical"],sw:["#121110","#f3efe8","#c9a35a"]}
+  {id:"05",motion:"Interactive",rec:"The room studio is the first thing people see, so more visitors try your pieces on their own wall and send you an enquiry.",slug:"05-studio",name:"Studio",insp:"Online room planners",desc:"The page opens on the room studio with your oak and marble wall already placed. Below it, every build has a Place in my room button.",tags:["Studio first","Enquiries","Practical"],sw:["#121110","#f3efe8","#c9a35a"]},
+  {id:"06",motion:"Highly animated",rec:"Built on your pick of ideas: your build videos play through the word LIGHT, one wall lights up as people scroll, and a 3D showroom they can walk around.",slug:"06-showroom",name:"Showroom",insp:"Cinematic builder sites and lighting brands",desc:"Opens on three of your build videos seen through giant cut-out letters. Then a statement whose words light up, a wall that goes from lights off to daylight as you scroll, your builds, and a 3D room to explore.",tags:["Cinematic","3D showroom","Bold type"],sw:["#0b0a09","#f4efe7","#c9a35a"]}
 ];
 const url = c => "/concepts/designs/" + c.slug + "/";
 const byId = id => CONCEPTS.find(c => c.id === id);

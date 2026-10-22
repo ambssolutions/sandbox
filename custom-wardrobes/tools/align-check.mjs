@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const { chromium } = require(execSync("npm root -g").toString().trim() + "/playwright");
 const b = await chromium.launch({ args: ["--use-gl=swiftshader", "--enable-unsafe-swiftshader"] });
 const BASE = process.env.BASE || "http://127.0.0.1:8124/";
-const pages = ["concepts/", "concepts/designs/01-after-dark/", "concepts/designs/02-arch/", "concepts/designs/03-reels/", "concepts/designs/04-atelier/", "concepts/designs/05-studio/", "v1.html", "gallery.html"];
+const pages = ["concepts/", "concepts/designs/01-after-dark/", "concepts/designs/02-arch/", "concepts/designs/03-reels/", "concepts/designs/04-atelier/", "concepts/designs/05-studio/", "concepts/designs/06-showroom/", "v1.html", "gallery.html"];
 let total = 0;
 for (const u of pages) for (const [w, h] of [[1366, 768], [390, 844]]) {
   const p = await b.newPage({ viewport: { width: w, height: h } });
