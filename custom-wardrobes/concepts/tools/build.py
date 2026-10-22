@@ -331,7 +331,7 @@ section{padding-block:clamp(80px,11vw,150px)}
 @media (min-width:901px){.foot{padding-bottom:64px}}
 """
     hero_video = "hero-media-wall"
-    tiles = "".join(tile(P[k], "(max-width:560px) 92vw, (max-width:900px) 46vw, 34vw") for k in ["oak-marble", "carved-panel", "gurbani-unit", "marble-tv", "walnut-media", "prayer-room", "herringbone", "upholstered-bed"])
+    tiles = "".join(tile(P[k], "(max-width:900px) 46vw, 24vw", i=(1 if k in ("oak-marble", "gurbani-unit", "walnut-media") else 0)) for k in ["oak-marble", "carved-panel", "gurbani-unit", "marble-tv", "walnut-media", "prayer-room", "herringbone", "upholstered-bed"])
     body = f"""<header class="top"><div class="wrap">{brand('#efe7da', '#f0c27a')}{nav()}</div></header>
 <main id="main">
 <section class="hero" id="hero01" data-hero aria-labelledby="hero-title" style="padding:0">
