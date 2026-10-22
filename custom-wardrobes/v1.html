@@ -20,7 +20,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap"></noscript>
 <link rel="preload" as="image" href="assets/video/hero-media-wall.webp" fetchpriority="high">
-<link rel="stylesheet" href="assets/site.css?v=3">
+<link rel="stylesheet" href="assets/site.css?v=4">
 <script>document.documentElement.classList.add("js")</script>
 <script type="application/ld+json">
 {
@@ -109,14 +109,9 @@
       <h2 id="work-title">Recent builds</h2>
       <p class="lede">Every piece here is a real job from our TikTok and Instagram. Tap one to see more photos.</p>
     </div>
-    <div class="rail" id="rail" tabindex="0" aria-label="Recent builds, scroll sideways"></div>
+    <div class="rail" id="rail"></div>
 <script src="assets/projects.js?v=3"></script>
 <script src="assets/tiles.js?v=3"></script>
-    <div class="rail-ctl">
-      <button class="btn small ghost" type="button" data-rail="-1">Previous</button>
-      <span class="rail-bar" aria-hidden="true"><i></i></span>
-      <button class="btn small ghost" type="button" data-rail="1">Next</button>
-    </div>
     <p class="center"><a class="btn ink" href="gallery.html">See the full gallery</a></p>
   </section>
 
@@ -147,8 +142,7 @@
         <p class="lede">Every piece is made for the room it goes in, with the lighting built in.</p>
       </div>
       <ul class="make-list rv">
-        <li>
-          <button type="button" aria-expanded="false" aria-controls="m1"><span class="n">01</span><span class="t">TV and media walls</span><span class="pm" aria-hidden="true"></span></button>
+        <li class="open"><h3 class="make-h"><span class="n">01</span><span class="t">TV and media walls</span></h3>
           <div class="fold" id="m1"><div><div class="in make-in">
             <img src="assets/img/work/marble-tv-2-480.webp" width="480" height="853" loading="lazy" decoding="async" alt="A marble TV wall with a light halo and a floating unit">
             <img src="assets/img/work/walnut-media-1-480.webp" width="480" height="853" loading="lazy" decoding="async" alt="A walnut media wall with a lit frame around the TV">
@@ -158,8 +152,7 @@
             </div>
           </div></div></div>
         </li>
-        <li>
-          <button type="button" aria-expanded="false" aria-controls="m2"><span class="n">02</span><span class="t">Prayer units and prayer rooms</span><span class="pm" aria-hidden="true"></span></button>
+        <li class="open"><h3 class="make-h"><span class="n">02</span><span class="t">Prayer units and prayer rooms</span></h3>
           <div class="fold" id="m2"><div><div class="in make-in">
             <img src="assets/img/work/gurbani-unit-2-480.webp" width="480" height="853" loading="lazy" decoding="async" alt="An arched Gurbani prayer unit with a carved frame and drawers">
             <img src="assets/img/work/prayer-room-2-480.webp" width="480" height="853" loading="lazy" decoding="async" alt="A lit Gurbani arch panel on a slatted wall">
@@ -169,8 +162,7 @@
             </div>
           </div></div></div>
         </li>
-        <li>
-          <button type="button" aria-expanded="false" aria-controls="m3"><span class="n">03</span><span class="t">Carved and backlit panels</span><span class="pm" aria-hidden="true"></span></button>
+        <li class="open"><h3 class="make-h"><span class="n">03</span><span class="t">Carved and backlit panels</span></h3>
           <div class="fold" id="m3"><div><div class="in make-in">
             <img src="assets/img/work/carved-panel-2-480.webp" width="480" height="853" loading="lazy" decoding="async" alt="A carved Radha Krishna panel lit from behind">
             <img src="assets/img/work/gurbani-unit-4-480.webp" width="480" height="853" loading="lazy" decoding="async" alt="Raised Gurmukhi lettering lit around the edge">
@@ -180,8 +172,7 @@
             </div>
           </div></div></div>
         </li>
-        <li>
-          <button type="button" aria-expanded="false" aria-controls="m4"><span class="n">04</span><span class="t">Feature walls and bedrooms</span><span class="pm" aria-hidden="true"></span></button>
+        <li class="open"><h3 class="make-h"><span class="n">04</span><span class="t">Feature walls and bedrooms</span></h3>
           <div class="fold" id="m4"><div><div class="in make-in">
             <img src="assets/img/work/herringbone-1-480.webp" width="480" height="853" loading="lazy" decoding="async" alt="Walnut herringbone and slatted wall panels with a wall light">
             <img src="assets/img/work/upholstered-bed-1-480.webp" width="480" height="853" loading="lazy" decoding="async" alt="An upholstered bed in front of a walnut wall">
@@ -191,8 +182,7 @@
             </div>
           </div></div></div>
         </li>
-        <li>
-          <button type="button" aria-expanded="false" aria-controls="m5"><span class="n">05</span><span class="t">Wardrobes</span><span class="pm" aria-hidden="true"></span></button>
+        <li class="open"><h3 class="make-h"><span class="n">05</span><span class="t">Wardrobes</span></h3>
           <div class="fold" id="m5"><div><div class="in make-in no-photo">
             <div class="txt">
               <p>Sliding, hinged or open walk-in, sized to your wall, with rails, shelves, drawers and lighting laid out around what you keep in it.</p>
@@ -326,20 +316,16 @@
     <div class="wrap">
       <div class="head rv"><h2 id="faq-title">Questions</h2></div>
       <div class="faq-list rv">
-        <div class="faq-item">
-          <button type="button" aria-expanded="false" aria-controls="q1">Is my photo uploaded anywhere?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-item open"><h3 class="faq-h">Is my photo uploaded anywhere?</h3>
           <div class="fold" id="q1"><div><div class="in"><p>No. The room preview runs in your browser, so your photo stays on your phone or computer. It only reaches us if you choose to send it.</p></div></div></div>
         </div>
-        <div class="faq-item">
-          <button type="button" aria-expanded="false" aria-controls="q2">How accurate is the preview?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-item open"><h3 class="faq-h">How accurate is the preview?</h3>
           <div class="fold" id="q2"><div><div class="in"><p>It gives you a feel for the style, colour and size in your space. It is not a measured drawing, and colours look different from screen to screen. Sizes and finishes are confirmed in person before anything is made.</p></div></div></div>
         </div>
-        <div class="faq-item">
-          <button type="button" aria-expanded="false" aria-controls="q3">Can you make something that isn't in the preview?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-item open"><h3 class="faq-h">Can you make something that isn't in the preview?</h3>
           <div class="fold" id="q3"><div><div class="in"><p>Yes. Every piece is made for its room. Send a photo, a sketch or a screenshot of something you like and we can talk it through.</p></div></div></div>
         </div>
-        <div class="faq-item">
-          <button type="button" aria-expanded="false" aria-controls="q4">How do I get a quote?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-item open"><h3 class="faq-h">How do I get a quote?</h3>
           <div class="fold" id="q4"><div><div class="in"><p>Call or text <a class="link" href="tel:+642041498811">020 4149 8811</a>, or send the form below. A photo of the space and rough measurements help.</p></div></div></div>
         </div>
       </div>
@@ -423,7 +409,7 @@
 </div>
 
 <script src="assets/content.js?v=2"></script>
-<script src="assets/site.js?v=2" defer></script>
+<script src="assets/site.js?v=3" defer></script>
 <script src="assets/designs.js?v=2" defer></script>
 <script src="assets/visualiser.js?v=2" defer></script>
 </body>

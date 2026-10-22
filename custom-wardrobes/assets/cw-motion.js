@@ -1,8 +1,6 @@
-/* Gentle motion for the concept pages (owner's rules: slow and smooth, about 1.4s; rotating hero
-   text changes within about 2s and never jumps; no count-ups, tilt, zoom, spinners or glow).
+/* Gentle motion for the concept pages (owner's rules: slow and smooth, about 1.4s; nothing rotates,
+   cycles, slides sideways or opens like a book; no count-ups, tilt, zoom, spinners or glow).
    - Headlines rise word by word ([data-split], and every .sec-head h2 as it comes into view).
-   - [data-rotate="a|b|c"] cycles a word in place. Its width is held for the longest word, so
-     nothing around it moves.
    - .rv elements fade up once as they come into view.
    Everything is visible without JavaScript and with reduced motion; classes are only added here. */
 (function () {
@@ -11,13 +9,10 @@
   if (reduce || !("IntersectionObserver" in window)) { root.classList.remove("motion"); root.classList.add("motion-off"); return; }
   root.classList.add("motion"); window.CW_MOTION = 1;
 
-  // split a headline into words that rise one after another; keeps <em> and the rotator as single words
+  // split a headline into words that rise one after another; keeps <em> as a single word
   function split(el) {
     if (el.dataset.splitDone) return; el.dataset.splitDone = "1";
-    // the spoken label uses the rotating word's first word only
-    var clone = el.cloneNode(true);
-    [].forEach.call(clone.querySelectorAll(".rot"), function (r) { r.replaceWith(r.firstChild ? r.firstChild.textContent : ""); });
-    el.setAttribute("aria-label", clone.textContent.replace(/\s+/g, " ").trim());
+    el.setAttribute("aria-label", el.textContent.replace(/\s+/g, " ").trim());
     var n = 0, nodes = [].slice.call(el.childNodes);
     nodes.forEach(function (node) {
       if (node.nodeType === 3) {
@@ -30,7 +25,6 @@
         node.parentNode.replaceChild(frag, node);
       } else if (node.nodeType === 1) {
         var w = word(null, n++); node.parentNode.replaceChild(w, node); w.firstChild.appendChild(node);
-        if (node.classList && node.classList.contains("rot")) w.classList.add("wrot");
       }
     });
     [].forEach.call(el.querySelectorAll(".w"), function (w) { w.setAttribute("aria-hidden", "true"); });
@@ -41,26 +35,7 @@
     o.appendChild(inner); return o;
   }
 
-  // rotating word: all words stacked in one grid cell, so the cell is as wide as the longest
-  function rotator(el) {
-    var words = el.dataset.rotate.split("|"), i = 0;
-    el.textContent = ""; el.classList.add("rot");
-    var spans = words.map(function (t, k) { var s = document.createElement("span"); s.textContent = t; if (k === 0) s.className = "on"; el.appendChild(s); return s; });
-    var timer = null;
-    function onScreen() { var r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; }
-    function next() {
-      if (onScreen() && !document.hidden) {
-        spans[i].className = "out"; var prev = spans[i];
-        i = (i + 1) % spans.length; spans[i].className = "on";
-        setTimeout(function () { if (prev.className === "out") prev.className = ""; }, 1300);
-      }
-      timer = setTimeout(next, 2600);
-    }
-    timer = setTimeout(next, 1900); // first change inside about 2 seconds
-  }
-
   function ready() {
-    [].forEach.call(document.querySelectorAll("[data-rotate]"), rotator);
     var heads = document.querySelectorAll("[data-split], .sec-head h2");
     [].forEach.call(heads, split);
     var io = new IntersectionObserver(function (es) {

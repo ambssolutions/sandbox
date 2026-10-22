@@ -89,7 +89,7 @@
     t.addEventListener("click", function () { window.CW_OPEN(t.dataset.id); });
   });
   var rail = document.getElementById("rail");
-  if (rail) {
+  if (rail && document.querySelector(".rail-bar i")) {
     var bar = document.querySelector(".rail-bar i");
     function railPos() {
       var f = Math.min(1, rail.clientWidth / rail.scrollWidth), max = rail.scrollWidth - rail.clientWidth, k = max > 0 ? rail.scrollLeft / max : 0;

@@ -84,7 +84,7 @@ def head(c, css, preload=""):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
-{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=2">
+{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=4">
 <link rel="stylesheet" href="{B}assets/studio.css?v=3">
 <script>(function(d){{d.classList.add("js");window.CW_BASE="{B}";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){{d.classList.add("motion");setTimeout(function(){{if(!window.CW_MOTION){{d.classList.remove("motion");d.classList.add("motion-off");}}}},3000);}}}})(document.documentElement);</script>
 <style>
@@ -133,13 +133,11 @@ FAQ = [
 
 
 def faq(cls="faq"):
-    items = "".join(
-        f'<div class="faq-item"><button type="button" data-fold aria-expanded="false" aria-controls="q{i}">{escape(q)}<span class="pm" aria-hidden="true"></span></button>'
-        f'<div class="fold" id="q{i}"><div><div class="in"><p>{escape(a)}</p></div></div></div></div>' for i, (q, a) in enumerate(FAQ, 1))
+    items = "".join(f'<div class="faq-item"><h3 class="faq-q">{escape(q)}</h3><p class="faq-a">{escape(a)}</p></div>' for q, a in FAQ)
     return f"""<section class="{cls}" id="questions" aria-labelledby="faq-title">
   <div class="wrap">
     <div class="sec-head"><h2 id="faq-title">Questions</h2></div>
-    <div class="faq-list">{items}</div>
+    <div class="faq-list rv">{items}</div>
   </div>
 </section>"""
 
@@ -197,7 +195,7 @@ SCRIPTS = f"""<script src="{B}assets/content.js?v=3"></script>
 <script src="{B}assets/designs.js?v=4" defer></script>
 <script src="{B}assets/studio.js?v=4" defer></script>
 <script src="{B}assets/cw-common.js?v=1" defer></script>
-<script src="{B}assets/cw-motion.js?v=1" defer></script>
+<script src="{B}assets/cw-motion.js?v=2" defer></script>
 <script src="/concepts/assets/concepts.js?v=2" defer></script>
 </body>
 </html>
@@ -322,7 +320,7 @@ section{padding-block:clamp(80px,11vw,150px)}
   <button class="switch" type="button" aria-pressed="true" data-switch>Lights on</button>
   <div class="tri">{img(P["carved-panel"]["images"][0], "(max-width:760px) 100vw, 33vw")}{img(P["gurbani-unit"]["images"][0], "(max-width:760px) 100vw, 33vw", eager=True)}{img(P["prayer-room"]["images"][0], "(max-width:760px) 100vw, 33vw")}</div>
   <div class="hero-copy">
-    <h1 id="hero-title" data-split>Design your <em>dream</em> <span data-rotate="room|TV wall|prayer room|bedroom|wardrobe">room</span></h1>
+    <h1 id="hero-title" data-split>Design your <em>dream</em> room</h1>
     <p>TV walls, prayer units and carved panels with the light built in. Made in Auckland.</p>
     <div class="row"><a class="btn" href="#studio">Try one in your room</a><a class="btn ghost" href="#work">See the builds</a></div>
     <p class="counts-line"><a href="{TIKTOK}" rel="noopener" target="_blank">82.5K on TikTok</a> &middot; <a href="{INSTA}" rel="noopener" target="_blank">60K on Instagram</a> &middot; {AS_AT}</p>
@@ -364,19 +362,16 @@ section{padding-block:clamp(80px,11vw,150px)}
     return head(c, css) + body + SCRIPTS
 
 
-def make_section(cls="make", photo_sizes="(max-width:720px) 46vw, 300px"):
-    rows = []
+def make_section(cls="make", photo_sizes="(max-width:720px) 46vw, 420px"):
+    items = []
     for i, (t, p1, i1, p2, i2, text, d) in enumerate(MAKE, 1):
-        pics = ""
-        if p1:
-            pics = img(P[p1]["images"][i1], photo_sizes) + img(P[p2]["images"][i2], photo_sizes)
-        rows.append(f'<li><button type="button" data-fold aria-expanded="false" aria-controls="m{i}">{escape(t)}<span class="pm" aria-hidden="true"></span></button>'
-                    f'<div class="fold" id="m{i}"><div><div class="in make-in{"" if p1 else " no-photo"}">{pics}<div class="txt"><p>{escape(text)}</p>'
-                    f'<button type="button" class="t-link t-place" data-place="{d}">Place one in my room</button></div></div></div></div></li>')
+        pics = f'<div class="make-pics">{img(P[p1]["images"][i1], photo_sizes)}{img(P[p2]["images"][i2], photo_sizes)}</div>' if p1 else ""
+        items.append(f'<article class="make-item rv"><h3>{escape(t)}</h3>{pics}<p>{escape(text)}</p>'
+                     f'<button type="button" class="t-link t-place" data-place="{d}">Place one in my room</button></article>')
     return f"""<section class="{cls}" id="make" aria-labelledby="make-title">
   <div class="wrap">
     <div class="sec-head"><h2 id="make-title">What we make</h2><p class="lede">Every piece is made for the room it goes in, with the lighting built in.</p></div>
-    <ul class="make-list rv">{''.join(rows)}</ul>
+    <div class="make-grid">{''.join(items)}</div>
   </div>
 </section>"""
 
@@ -403,7 +398,7 @@ def counts_html(cls="counts"):
 # ---------------------------------------------------------------------------------------------
 def c02(c):
     css = """
-:root{--step-n:#7c5c22;--c-bg:#f5f0e7;--c-ink:#16110d;--c-muted:#5e5246;--c-line:#dcd1c0;--c-accent:#c9a35a;--c-accent-ink:#1b130a;--c-field:#fff;--dark:#0f0c0a;--gold-text:#7c5c22;
+:root{--make-radius:9999px 9999px 0 0;--step-n:#7c5c22;--c-bg:#f5f0e7;--c-ink:#16110d;--c-muted:#5e5246;--c-line:#dcd1c0;--c-accent:#c9a35a;--c-accent-ink:#1b130a;--c-field:#fff;--dark:#0f0c0a;--gold-text:#7c5c22;
  --serif:"Newsreader",Georgia,serif;--sans:"Manrope",system-ui,sans-serif;--header:72px;--pad:clamp(20px,5.5vw,80px);--arch:9999px 9999px 0 0}
 *,*::before,*::after{box-sizing:border-box}html{scroll-padding-top:84px}body{margin:0;background:var(--c-bg);color:var(--c-ink);font:400 17px/1.6 var(--sans)}
 img,video{display:block;max-width:100%}a{color:inherit}:focus-visible{outline:2px solid var(--c-accent);outline-offset:3px}
@@ -430,9 +425,8 @@ section{padding-block:clamp(80px,10vw,140px)}
 .window{position:relative;width:min(40vw,calc((100svh - var(--header) - 100px) * .5625));aspect-ratio:9/16;border-radius:var(--arch);overflow:hidden;background:#1a1410}
 .window-line{position:absolute;left:-14px;top:-14px;width:calc(100% + 28px);height:calc(100% + 14px);overflow:visible;pointer-events:none}
 .window-line path{fill:none;stroke:#c9a35a;stroke-width:1.5;vector-effect:non-scaling-stroke}
-html.motion .window{clip-path:inset(100% 0 0 0);animation:archopen 1.8s .2s cubic-bezier(.65,0,.35,1) forwards}
 html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 2.4s .9s cubic-bezier(.65,0,.35,1) forwards}
-@keyframes archopen{to{clip-path:inset(0 0 0 0)}}@keyframes linedraw{to{stroke-dashoffset:0}}
+@keyframes linedraw{to{stroke-dashoffset:0}}
 .window img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-words{display:grid;gap:clamp(14px,2.4vh,24px);justify-items:center;text-align:center}
 .hero h1{font-size:clamp(3rem,min(7.4vw,12vh),8rem);line-height:.92;letter-spacing:-.04em}
@@ -486,7 +480,7 @@ html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:l
 <section class="hero" data-hero aria-labelledby="hero-title">
   <div class="wrap">
     <div class="hero-words">
-      <h1 id="hero-title" data-split>Design your <em>dream</em> <span data-rotate="room|TV wall|prayer room|bedroom|wardrobe">room</span></h1>
+      <h1 id="hero-title" data-split>Design your <em>dream</em> room</h1>
       <p>TV walls, prayer units, carved panels, bedrooms and wardrobes, made for your home in Auckland.</p>
       <div class="row"><a class="btn" href="#studio">Place one in your room</a><a class="btn ghost" href="#work">See our work</a></div>
       <p class="hero-proof"><a href="{TIKTOK}" rel="noopener" target="_blank">82.5K on TikTok</a> &middot; <a href="{INSTA}" rel="noopener" target="_blank">60K on Instagram</a> &middot; {AS_AT}</p>
@@ -614,7 +608,7 @@ html.motion .phone:nth-child(2){animation-delay:.25s}html.motion .phone:nth-chil
   <div class="wrap">
     <div class="hero-copy">
       <span class="handle"><i></i>@customwardrobes1singh</span>
-      <h1 id="hero-title" data-split>Design your <em>dream</em> <span data-rotate="room|TV wall|prayer room|bedroom|wardrobe">room</span></h1>
+      <h1 id="hero-title" data-split>Design your <em>dream</em> room</h1>
       <p>The TV walls, prayer units and carved panels you've seen on TikTok and Instagram, built for homes in Auckland.</p>
       <div class="stats"><a href="{TIKTOK}" rel="noopener" target="_blank"><b>82.5K</b><span>TikTok followers</span></a><a href="{TIKTOK}" rel="noopener" target="_blank"><b>846.2K</b><span>likes</span></a><a href="{INSTA}" rel="noopener" target="_blank"><b>60K</b><span>on Instagram</span></a></div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><a class="btn hot" href="#studio">Put one in my room</a><a class="btn ghost" href="#work">Watch the builds</a></div>
@@ -650,7 +644,7 @@ html.motion .phone:nth-child(2){animation-delay:.25s}html.motion .phone:nth-chil
 # ---------------------------------------------------------------------------------------------
 def c04(c):
     css = """
-:root{--step-n:#8a6a2c;--c-bg:#faf8f4;--c-ink:#141210;--c-muted:#6b635a;--c-line:#e2dcd2;--c-accent:#141210;--c-accent-ink:#faf8f4;--c-field:#fff;--gold:#85631f;
+:root{--make-radius:0;--step-n:#8a6a2c;--c-bg:#faf8f4;--c-ink:#141210;--c-muted:#6b635a;--c-line:#e2dcd2;--c-accent:#141210;--c-accent-ink:#faf8f4;--c-field:#fff;--gold:#85631f;
  --serif:"EB Garamond",Georgia,serif;--sans:"Jost",system-ui,sans-serif;--header:76px;--pad:clamp(20px,6vw,96px)}
 *,*::before,*::after{box-sizing:border-box}html{scroll-padding-top:88px}body{margin:0;background:var(--c-bg);color:var(--c-ink);font:400 17px/1.65 var(--sans)}
 img,video{display:block;max-width:100%}a{color:inherit}:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
@@ -755,7 +749,7 @@ html.motion .plate img{opacity:0;animation:showimg 1.6s 2.5s ease forwards}
   <div class="wrap">
     <div class="hero-copy">
       <span class="no">Joinery with light, Auckland</span>
-      <h1 id="hero-title" data-split>Design your <em>dream</em> <span data-rotate="room|TV wall|prayer room|bedroom|wardrobe">room</span></h1>
+      <h1 id="hero-title" data-split>Design your <em>dream</em> room</h1>
       <p>Every piece starts as a drawing of your wall and ends as a lit build in your home: TV walls, prayer units, carved panels, bedrooms and wardrobes.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a class="btn" href="#studio">Place a piece in your room</a><a class="btn line" href="#work">The catalogue</a></div>
       <ol class="index"><li><a href="#make">TV and media walls</a><span>01</span></li><li><a href="#make">Prayer units</a><span>02</span></li><li><a href="#make">Carved panels</a><span>03</span></li><li><a href="#make">Bedrooms and wardrobes</a><span>04</span></li></ol>
@@ -862,7 +856,7 @@ section{padding-block:clamp(70px,9vw,120px)}
 <section class="hero" id="studio" data-hero aria-labelledby="hero-title">
   <div class="wrap">
     <div class="hero-head">
-      <h1 id="hero-title" data-split>See your <em>dream</em> <span data-rotate="room|TV wall|prayer room|bedroom|wardrobe">room</span> before we build it</h1>
+      <h1 id="hero-title" data-split>See your <em>dream</em> room before we build it</h1>
       <div class="hero-side"><p>TV walls, prayer units, carved panels, bedrooms and wardrobes, made in Auckland. Try any of them on your own wall, right here.</p>
       <small><a href="{TIKTOK}" rel="noopener" target="_blank">82.5K on TikTok</a> &middot; <a href="{INSTA}" rel="noopener" target="_blank">60K on Instagram</a> &middot; {AS_AT}</small></div>
     </div>
