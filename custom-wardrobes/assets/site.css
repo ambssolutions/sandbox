@@ -249,13 +249,15 @@ p { margin: 0; }
 /* Lightbox */
 .lb { border: 0; padding: 0; margin: 0; width: 100%; height: 100%; max-width: none; max-height: none; background: rgba(10, 8, 6, .97); color: var(--paper); }
 .lb::backdrop { background: rgba(10, 8, 6, .9); }
-.lb-in { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; padding: 14px var(--pad) calc(18px + env(safe-area-inset-bottom)); }
-.lb-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.lb-top h2 { font-size: clamp(20px, 2.4vw, 28px); }
-.lb-fig { margin: 0; min-height: 0; position: relative; touch-action: pan-y; }
-.lb-fig img { position: absolute; inset: 0; margin: auto; max-height: 100%; max-width: 100%; width: auto; height: auto; border-radius: 10px; user-select: none; -webkit-user-drag: none; }
-.lb-bot { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.lb-bot p { color: var(--muted-dark); font-size: 15px; flex: 1; text-align: center; }
+.lb-in { height: 100%; overflow-y: auto; display: block; padding: 0 var(--pad, 20px) calc(28px + env(safe-area-inset-bottom)); }
+.lb-top { position: sticky; top: 0; z-index: 2; display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 12px; padding: 14px 0; background: #0a0806; }
+.lb-top h2 { grid-column: 2; margin: 0; text-align: center; font-size: clamp(20px, 2.4vw, 28px); font-weight: 400; }
+.lb-close { grid-column: 3; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(245,240,231,.3); background: none; color: inherit; font-size: 24px; line-height: 1; cursor: pointer; }
+.lb-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(14px, 2vw, 26px); max-width: 1320px; margin: 8px auto 0; }
+.lb-item { flex: 0 1 290px; margin: 0; display: grid; gap: 10px; justify-items: center; align-content: start; text-align: center; }
+.lb-item img { width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: contain; border-radius: 10px; background: #000; }
+.lb-item figcaption { font-size: 14px; color: rgba(245,240,231,.72); max-width: 34ch; }
+@media (max-width: 700px) { .lb-item { flex-basis: 100%; max-width: 360px; } }
 .lb .btn.ghost { color: var(--paper); }
 .lb-close { width: 48px; height: 48px; flex: none; border-radius: 50%; border: 1px solid var(--line-dark); background: none; color: var(--paper); cursor: pointer; font-size: 26px; line-height: 1; }
 @media (max-width: 560px) { .lb-bot { flex-wrap: wrap; } .lb-bot p { flex-basis: 100%; order: -1; } .lb-bot .btn { flex: 1; } }

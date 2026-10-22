@@ -9,13 +9,15 @@
 /* lightbox */
 .lb { border: 0; padding: 0; margin: 0; width: 100%; height: 100%; max-width: none; max-height: none; background: rgba(10,8,6,.97); color: #f5f0e7; }
 .lb::backdrop { background: rgba(10,8,6,.9); }
-.lb-in { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; padding: 14px clamp(16px, 4vw, 48px) calc(18px + env(safe-area-inset-bottom)); }
-.lb-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.lb-top h2 { margin: 0; font-size: clamp(20px, 2.4vw, 28px); font-weight: 400; }
-.lb-fig { margin: 0; min-height: 0; position: relative; touch-action: pan-y; }
-.lb-fig img { position: absolute; inset: 0; margin: auto; max-height: 100%; max-width: 100%; border-radius: 10px; user-select: none; -webkit-user-drag: none; }
-.lb-bot { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-.lb-bot p { margin: 0; color: #c4b6a3; font-size: 14px; flex: 1; text-align: center; }
+.lb-in { height: 100%; overflow-y: auto; display: block; padding: 0 var(--pad, 20px) calc(28px + env(safe-area-inset-bottom)); }
+.lb-top { position: sticky; top: 0; z-index: 2; display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 12px; padding: 14px 0; background: #0a0806; }
+.lb-top h2 { grid-column: 2; margin: 0; text-align: center; font-size: clamp(20px, 2.4vw, 28px); font-weight: 400; }
+.lb-close { grid-column: 3; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(245,240,231,.3); background: none; color: inherit; font-size: 24px; line-height: 1; cursor: pointer; }
+.lb-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(14px, 2vw, 26px); max-width: 1320px; margin: 8px auto 0; }
+.lb-item { flex: 0 1 290px; margin: 0; display: grid; gap: 10px; justify-items: center; align-content: start; text-align: center; }
+.lb-item img { width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: contain; border-radius: 10px; background: #000; }
+.lb-item figcaption { font-size: 14px; color: rgba(245,240,231,.72); max-width: 34ch; }
+@media (max-width: 700px) { .lb-item { flex-basis: 100%; max-width: 360px; } }
 .lb-btn { min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid rgba(245,240,231,.35); background: none; color: #f5f0e7; font: 700 14px/1 system-ui, sans-serif; cursor: pointer; white-space: nowrap; }
 .lb-place { background: #c9a35a; border-color: #c9a35a; color: #1b130a; }
 .lb-close { width: 48px; height: 48px; flex: none; border-radius: 50%; border: 1px solid rgba(245,240,231,.3); background: none; color: #f5f0e7; cursor: pointer; font-size: 26px; line-height: 1; }
@@ -116,14 +118,14 @@ html.motion .btn:hover::after, html.motion .send:hover::after, html.motion .nav-
 
 /* ---------- light: every build arrives in the evening with its LEDs on, then the room lights come up ---------- */
 .tile-ph { position: relative; }
-.tile-ph .nt { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 2.2s ease; pointer-events: none; }
+.tile-ph .nt { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity .8s ease; pointer-events: none; }
 html.motion .tile-ph .nt { opacity: 1; }
 html.motion .tile-ph.day .nt { opacity: 0; }
-.evening .tile-ph .nt, html.motion .evening .tile-ph.day .nt { opacity: 1; transition-duration: 1.4s; }
+.evening .tile-ph .nt, html.motion .evening .tile-ph.day .nt { opacity: 1; transition-duration: .5s; }
 .eve { display: table; margin: 16px auto 0; min-height: 44px; padding: 0 20px 0 42px; position: relative; border-radius: 999px; border: 1px solid var(--c-line); background: none; color: inherit; font: 600 14px/1 var(--sans); cursor: pointer; }
 .eve::before { content: ""; position: absolute; left: 16px; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%; background: linear-gradient(90deg, #f3c27a 50%, #2a2622 50%); }
 .eve[aria-pressed="true"]::before { background: #f3c27a; }
 /* an LED strip above each section heading that switches on from the middle outwards */
 .sec-head h2::before { content: ""; display: block; width: min(180px, 36vw); height: 2px; margin: 0 auto 22px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--c-accent), transparent); }
-html.motion .sec-head h2::before { transform: scaleX(0); opacity: .2; transition: transform 1.4s cubic-bezier(.22,.61,.36,1), opacity 1.4s ease; }
+html.motion .sec-head h2::before { transform: scaleX(0); opacity: .2; transition: transform .8s cubic-bezier(.22,.61,.36,1), opacity .8s ease; }
 html.motion .sec-head h2.in::before { transform: none; opacity: 1; }

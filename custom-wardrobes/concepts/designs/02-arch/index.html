@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/cw-common.css?v=6">
+<link rel="stylesheet" href="/assets/cw-common.css?v=8">
 <link rel="stylesheet" href="/assets/studio.css?v=5">
 <script>(function(d){d.classList.add("js");window.CW_BASE="/";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("motion");setTimeout(function(){if(!window.CW_MOTION){d.classList.remove("motion");d.classList.add("motion-off");}},3000);}})(document.documentElement);</script>
 <style>
@@ -46,11 +46,11 @@ section{padding-block:clamp(80px,10vw,140px)}
 .window-line path{fill:none;stroke:#c9a35a;stroke-width:2.5;vector-effect:non-scaling-stroke}
 /* the wow: the arch draws itself in gold, the unit's LED lights switch on as the line closes, then the room light comes up */
 .window .nt{opacity:0}
-html.motion .window .nt{animation:arch-night 6.6s ease forwards}
+html.motion .window .nt{animation:arch-night 2.6s ease forwards}
 @keyframes arch-night{0%,70%{opacity:1}100%{opacity:0}}
-html.motion .window::after{content:"";position:absolute;inset:0;z-index:2;background:#0f0c0a;pointer-events:none;animation:arch-cover 3.8s ease forwards}
-@keyframes arch-cover{0%,80%{opacity:1}100%{opacity:0}}
-html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 2.4s .9s cubic-bezier(.65,0,.35,1) forwards}
+html.motion .window::after{content:"";position:absolute;inset:0;z-index:2;background:#0f0c0a;pointer-events:none;animation:arch-cover 1.5s steps(1,end) forwards}
+@keyframes arch-cover{0%,74%{opacity:1}80%{opacity:.2}86%{opacity:.85}92%,100%{opacity:0}}
+html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 1s .15s cubic-bezier(.65,0,.35,1) forwards}
 @keyframes linedraw{to{stroke-dashoffset:0}}
 .window img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-words{display:grid;gap:clamp(14px,2.4vh,24px);justify-items:center;text-align:center}
@@ -235,8 +235,8 @@ main>section:not([data-hero]){padding-block:clamp(64px,8vw,112px)}
 <script src="/assets/projects.js?v=4"></script>
 <script src="/assets/designs.js?v=4" defer></script>
 <script src="/assets/studio.js?v=5" defer></script>
-<script src="/assets/cw-common.js?v=2" defer></script>
-<script src="/assets/cw-motion.js?v=3" defer></script>
-<script src="/concepts/assets/concepts.js?v=3" defer></script>
+<script src="/assets/cw-common.js?v=3" defer></script>
+<script src="/assets/cw-motion.js?v=4" defer></script>
+<script src="/concepts/assets/concepts.js?v=4" defer></script>
 </body>
 </html>

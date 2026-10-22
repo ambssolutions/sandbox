@@ -54,42 +54,41 @@
     else { var parts = a.dataset.placePhoto.split(":"), p = CW.project(parts[0]); if (p) CW.placePhoto(CW.largest(p.images[+parts[1] || 0]), p.title); }
   });
 
-  /* ---------- lightbox ---------- */
-  var box = null, cur = null, idx = 0, opener = null;
+  /* ---------- photo sheet: every photo of a build at once, in an even grid (no Previous/Next, no swiping) ---------- */
+  var box = null, opener = null;
   function buildBox() {
     box = document.createElement("dialog"); box.className = "lb"; box.setAttribute("aria-label", "Project photos");
-    box.innerHTML = '<div class="lb-in"><div class="lb-top"><h2></h2><button class="lb-close" type="button" aria-label="Close">&times;</button></div>' +
-      '<figure class="lb-fig"><img alt=""></figure>' +
-      '<div class="lb-bot"><button class="lb-btn" type="button" data-go="-1">Previous</button><p aria-live="polite"></p>' +
-      '<button class="lb-btn lb-place" type="button">Place this in my room</button><button class="lb-btn" type="button" data-go="1">Next</button></div></div>';
+    box.innerHTML = '<div class="lb-in"><div class="lb-top"><h2></h2><button class="lb-close" type="button" aria-label="Close">&times;</button></div><div class="lb-grid"></div></div>';
     document.body.appendChild(box);
     box.querySelector(".lb-close").addEventListener("click", closeBox);
-    [].forEach.call(box.querySelectorAll("[data-go]"), function (b) { b.addEventListener("click", function () { go(+b.dataset.go); }); });
-    box.querySelector(".lb-place").addEventListener("click", function () { var im = cur.images[idx], t = cur.title; closeBox(); CW.placePhoto(CW.largest(im), t); });
-    box.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") go(1); if (e.key === "ArrowLeft") go(-1); });
     box.addEventListener("close", function () { document.documentElement.style.overflow = ""; if (opener && opener.focus) opener.focus(); });
     box.addEventListener("click", function (e) { if (e.target === box) closeBox(); });
-    var fig = box.querySelector(".lb-fig"), sx = null;
-    fig.addEventListener("pointerdown", function (e) { sx = e.clientX; });
-    fig.addEventListener("pointerup", function (e) { if (sx != null && Math.abs(e.clientX - sx) > 40) go(e.clientX < sx ? 1 : -1); sx = null; });
   }
-  function show() {
-    var im = cur.images[idx], img = box.querySelector(".lb-fig img");
-    img.srcset = CW.srcset(im); img.sizes = "(max-width: 900px) 100vw, 60vw"; img.src = CW.largest(im); img.alt = im.alt;
-    box.querySelector("h2").textContent = cur.title;
-    box.querySelector("p").textContent = im.alt + " · " + (idx + 1) + " of " + cur.images.length;
-    [].forEach.call(box.querySelectorAll("[data-go]"), function (b) { b.hidden = cur.images.length < 2; });
-    box.querySelector(".lb-place").hidden = !document.querySelector("[data-studio]");
-  }
-  function go(n) { idx = (idx + n + cur.images.length) % cur.images.length; show(); }
   function closeBox() { if (box.close) box.close(); else { box.removeAttribute("open"); document.documentElement.style.overflow = ""; } }
   CW.open = function (id, i, from) {
     var p = CW.project(id); if (!p) return;
     if (!box) buildBox();
-    cur = p; idx = i || 0; opener = from || document.activeElement; show();
+    opener = from || document.activeElement;
+    box.querySelector("h2").textContent = p.title + " \u00b7 " + p.images.length + " photo" + (p.images.length > 1 ? "s" : "");
+    var grid = box.querySelector(".lb-grid"), studio = !!document.querySelector("[data-studio]");
+    grid.textContent = ""; grid.style.setProperty("--n", Math.min(4, p.images.length));
+    p.images.forEach(function (im) {
+      var f = document.createElement("figure"); f.className = "lb-item";
+      var img = document.createElement("img"); img.srcset = CW.srcset(im); img.sizes = "(max-width: 700px) 92vw, 30vw"; img.src = CW.largest(im); img.alt = im.alt; img.loading = "lazy"; img.decoding = "async";
+      var cap = document.createElement("figcaption"); cap.textContent = im.alt;
+      f.appendChild(img); f.appendChild(cap);
+      if (studio) {
+        var b = document.createElement("button"); b.type = "button"; b.className = "lb-btn lb-place"; b.textContent = "Place this in my room";
+        b.addEventListener("click", function () { closeBox(); CW.placePhoto(CW.largest(im), p.title); });
+        f.appendChild(b);
+      }
+      grid.appendChild(f);
+    });
     document.documentElement.style.overflow = "hidden";
     if (box.showModal) box.showModal(); else box.setAttribute("open", "");
+    box.querySelector(".lb-in").scrollTop = 0;
   };
+
   document.addEventListener("click", function (e) {
     var a = e.target.closest("[data-open]"); if (!a) return;
     e.preventDefault(); CW.open(a.dataset.open, +(a.dataset.index || 0), a);

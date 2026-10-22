@@ -1,5 +1,5 @@
 /* Custom Wardrobes concept switcher: a small floating control on every concept page
-   to jump to the previous/next concept, open any concept, return to the gallery,
+   to open any concept, return to the gallery,
    and shortlist the current one. Rendered in a shadow root so it never inherits or
    leaks a concept's styles. Shortlist is shared with the gallery via localStorage. */
 (function () {
@@ -50,10 +50,8 @@
     '@media print{.bar{display:none}}' +
     '</style>' +
     '<nav class="bar" aria-label="Design concepts">' +
-    '<a class="arrow" href="' + href(prev) + '" aria-label="Previous concept: ' + prev[1] + '">&#8249;</a>' +
     '<button type="button" class="label" aria-expanded="false" aria-haspopup="true">' +
     '<span class="tag">' + pad(i) + '</span> ' + cur[1] + '<span class="sub">&nbsp;&middot; ' + cur[2] + '</span> <span aria-hidden="true">&#9662;</span></button>' +
-    '<a class="arrow" href="' + href(next) + '" aria-label="Next concept: ' + next[1] + '">&#8250;</a>' +
     '<button type="button" class="fav" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.25 4.1 1 5.85L12 16.9l-5.25 2.75 1-5.85L3.5 9.7l5.9-.9z"/></svg></button>' +
     '<div class="menu" role="menu">' +
     '<a role="menuitem" href="' + base.href + '">All concepts <small>gallery &amp; send your pick</small></a><hr>' +

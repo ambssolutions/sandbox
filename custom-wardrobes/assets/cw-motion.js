@@ -52,8 +52,8 @@
     [].forEach.call(document.querySelectorAll(".rv"), function (el) { io.observe(el); });
     // each build arrives in the evening, LEDs on; once it reaches the middle of the screen the room lights come up
     var lio = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { var t = e.target; lio.unobserve(t); setTimeout(function () { t.classList.add("day"); }, 700); } });
-    }, { rootMargin: "-30% 0px -30% 0px" });
+      es.forEach(function (e) { if (e.isIntersecting) { var t = e.target; lio.unobserve(t); setTimeout(function () { t.classList.add("day"); }, 250); } });
+    }, { rootMargin: "-15% 0px -15% 0px" });
     [].forEach.call(document.querySelectorAll(".tile-ph"), function (t) { lio.observe(t); });
     // the hero headline starts straight away
     [].forEach.call(document.querySelectorAll("[data-hero] [data-split]"), function (h) { requestAnimationFrame(function () { h.classList.add("in"); }); });

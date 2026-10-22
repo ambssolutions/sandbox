@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Inter:wght@400;500;600;700&display=optional" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Inter:wght@400;500;600;700&display=optional"></noscript>
-<link rel="stylesheet" href="/assets/cw-common.css?v=6">
+<link rel="stylesheet" href="/assets/cw-common.css?v=8">
 <link rel="stylesheet" href="/assets/studio.css?v=5">
 <script>(function(d){d.classList.add("js");window.CW_BASE="/";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("motion");setTimeout(function(){if(!window.CW_MOTION){d.classList.remove("motion");d.classList.add("motion-off");}},3000);}})(document.documentElement);</script>
 <style>
@@ -40,8 +40,10 @@ h2{font-size:clamp(34px,4.4vw,60px);line-height:1.05} .lede{color:var(--c-muted)
 .pane img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 @media (max-width:760px){.tri{grid-template-columns:1fr}.pane:not(:nth-child(2)){display:none}}
 /* the wow: the room is dark, its LED strips switch on, then the room lights come up. The switch toggles them. */
-.pane .nt{opacity:0;transition:opacity 2.4s ease}
-.night{position:absolute;inset:0;z-index:1;background:#050403;opacity:0;pointer-events:none;transition:opacity .9s ease}
+.pane .nt{opacity:0;transition:opacity .9s ease}
+.night{position:absolute;inset:0;z-index:1;background:#050403;opacity:0;pointer-events:none}
+html.motion .hero.leds .night{animation:flick .35s steps(1,end) forwards}
+@keyframes flick{0%{opacity:1}20%{opacity:.15}40%{opacity:.8}55%{opacity:0}100%{opacity:0}}
 html.motion .pane .nt{opacity:1}
 html.motion .hero:not(.leds) .night{opacity:1}
 html.motion .hero.day .pane .nt{opacity:0}
@@ -234,8 +236,8 @@ main>section:not([data-hero]){padding-block:clamp(64px,8vw,112px)}
 (function(){
   /* the room is dark, the LED strips switch on, then the room lights come up; the switch takes it back to evening */
   var hero=document.getElementById("hero01"),sw=hero.querySelector("[data-switch]");
-  setTimeout(function(){hero.classList.add("leds");},350);
-  setTimeout(function(){hero.classList.add("day");},3000);
+  setTimeout(function(){hero.classList.add("leds");},250);
+  setTimeout(function(){hero.classList.add("day");},1300);
   sw.addEventListener("click",function(){var on=sw.getAttribute("aria-pressed")!=="true";sw.setAttribute("aria-pressed",on?"true":"false");sw.textContent=on?"Room lights on":"Room lights off";hero.classList.add("leds","day");hero.classList.toggle("evening",!on);});
 })();
 </script>
@@ -243,8 +245,8 @@ main>section:not([data-hero]){padding-block:clamp(64px,8vw,112px)}
 <script src="/assets/projects.js?v=4"></script>
 <script src="/assets/designs.js?v=4" defer></script>
 <script src="/assets/studio.js?v=5" defer></script>
-<script src="/assets/cw-common.js?v=2" defer></script>
-<script src="/assets/cw-motion.js?v=3" defer></script>
-<script src="/concepts/assets/concepts.js?v=3" defer></script>
+<script src="/assets/cw-common.js?v=3" defer></script>
+<script src="/assets/cw-motion.js?v=4" defer></script>
+<script src="/concepts/assets/concepts.js?v=4" defer></script>
 </body>
 </html>

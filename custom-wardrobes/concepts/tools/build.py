@@ -100,7 +100,7 @@ def head(c, css, preload=""):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
-{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=6">
+{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=8">
 <link rel="stylesheet" href="{B}assets/studio.css?v=5">
 <script>(function(d){{d.classList.add("js");window.CW_BASE="{B}";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){{d.classList.add("motion");setTimeout(function(){{if(!window.CW_MOTION){{d.classList.remove("motion");d.classList.add("motion-off");}}}},3000);}}}})(document.documentElement);</script>
 <style>
@@ -211,9 +211,9 @@ SCRIPTS = f"""<script src="{B}assets/content.js?v=3"></script>
 <script src="{B}assets/projects.js?v=4"></script>
 <script src="{B}assets/designs.js?v=4" defer></script>
 <script src="{B}assets/studio.js?v=5" defer></script>
-<script src="{B}assets/cw-common.js?v=2" defer></script>
-<script src="{B}assets/cw-motion.js?v=3" defer></script>
-<script src="/concepts/assets/concepts.js?v=3" defer></script>
+<script src="{B}assets/cw-common.js?v=3" defer></script>
+<script src="{B}assets/cw-motion.js?v=4" defer></script>
+<script src="/concepts/assets/concepts.js?v=4" defer></script>
 </body>
 </html>
 """
@@ -267,8 +267,10 @@ h2{font-size:clamp(34px,4.4vw,60px);line-height:1.05} .lede{color:var(--c-muted)
 .pane img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 @media (max-width:760px){.tri{grid-template-columns:1fr}.pane:not(:nth-child(2)){display:none}}
 /* the wow: the room is dark, its LED strips switch on, then the room lights come up. The switch toggles them. */
-.pane .nt{opacity:0;transition:opacity 2.4s ease}
-.night{position:absolute;inset:0;z-index:1;background:#050403;opacity:0;pointer-events:none;transition:opacity .9s ease}
+.pane .nt{opacity:0;transition:opacity .9s ease}
+.night{position:absolute;inset:0;z-index:1;background:#050403;opacity:0;pointer-events:none}
+html.motion .hero.leds .night{animation:flick .35s steps(1,end) forwards}
+@keyframes flick{0%{opacity:1}20%{opacity:.15}40%{opacity:.8}55%{opacity:0}100%{opacity:0}}
 html.motion .pane .nt{opacity:1}
 html.motion .hero:not(.leds) .night{opacity:1}
 html.motion .hero.day .pane .nt{opacity:0}
@@ -366,8 +368,8 @@ section{padding-block:clamp(80px,11vw,150px)}
 (function(){{
   /* the room is dark, the LED strips switch on, then the room lights come up; the switch takes it back to evening */
   var hero=document.getElementById("hero01"),sw=hero.querySelector("[data-switch]");
-  setTimeout(function(){{hero.classList.add("leds");}},350);
-  setTimeout(function(){{hero.classList.add("day");}},3000);
+  setTimeout(function(){{hero.classList.add("leds");}},250);
+  setTimeout(function(){{hero.classList.add("day");}},1300);
   sw.addEventListener("click",function(){{var on=sw.getAttribute("aria-pressed")!=="true";sw.setAttribute("aria-pressed",on?"true":"false");sw.textContent=on?"Room lights on":"Room lights off";hero.classList.add("leds","day");hero.classList.toggle("evening",!on);}});
 }})();
 </script>
@@ -439,11 +441,11 @@ section{padding-block:clamp(80px,10vw,140px)}
 .window-line path{fill:none;stroke:#c9a35a;stroke-width:2.5;vector-effect:non-scaling-stroke}
 /* the wow: the arch draws itself in gold, the unit's LED lights switch on as the line closes, then the room light comes up */
 .window .nt{opacity:0}
-html.motion .window .nt{animation:arch-night 6.6s ease forwards}
+html.motion .window .nt{animation:arch-night 2.6s ease forwards}
 @keyframes arch-night{0%,70%{opacity:1}100%{opacity:0}}
-html.motion .window::after{content:"";position:absolute;inset:0;z-index:2;background:#0f0c0a;pointer-events:none;animation:arch-cover 3.8s ease forwards}
-@keyframes arch-cover{0%,80%{opacity:1}100%{opacity:0}}
-html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 2.4s .9s cubic-bezier(.65,0,.35,1) forwards}
+html.motion .window::after{content:"";position:absolute;inset:0;z-index:2;background:#0f0c0a;pointer-events:none;animation:arch-cover 1.5s steps(1,end) forwards}
+@keyframes arch-cover{0%,74%{opacity:1}80%{opacity:.2}86%{opacity:.85}92%,100%{opacity:0}}
+html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 1s .15s cubic-bezier(.65,0,.35,1) forwards}
 @keyframes linedraw{to{stroke-dashoffset:0}}
 .window img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-words{display:grid;gap:clamp(14px,2.4vh,24px);justify-items:center;text-align:center}
@@ -696,10 +698,10 @@ section{padding-block:clamp(80px,10vw,140px)}
 .plate{position:relative;margin:0;justify-self:center;width:min(100%,calc((100svh - var(--header) - 120px) * .5625));aspect-ratio:560/1080;background:#fff;box-shadow:0 30px 60px -40px rgba(20,18,16,.5)}
 .plate img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .plate svg{position:absolute;inset:0;width:100%;height:100%;opacity:0;pointer-events:none}
-html.motion .plate svg{opacity:1;animation:hidesvg 1.4s 3.1s ease forwards}
-html.motion .plate svg *{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 2.4s .3s cubic-bezier(.65,0,.35,1) forwards}
-html.motion .plate img{opacity:0;animation:showimg 1.6s 2.5s ease forwards}
-html.motion .plate img.nt{animation:showimg 1.4s 2.5s ease forwards,hideimg 2s 5s ease forwards}
+html.motion .plate svg{opacity:1;animation:hidesvg .5s 1.4s ease forwards}
+html.motion .plate svg *{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 1.1s .1s cubic-bezier(.65,0,.35,1) forwards}
+html.motion .plate img{opacity:0;animation:showimg .3s 1.25s steps(2,end) forwards}
+html.motion .plate img.nt{animation:showimg .3s 1.25s steps(2,end) forwards,hideimg .9s 2.1s ease forwards}
 @keyframes hideimg{to{opacity:0}}
 @keyframes linedraw{to{stroke-dashoffset:0}}@keyframes showimg{to{opacity:1}}@keyframes hidesvg{to{opacity:0}}
 .plate svg path,.plate svg rect,.plate svg line{fill:none;stroke:#85631f;stroke-width:1.4;vector-effect:non-scaling-stroke}
