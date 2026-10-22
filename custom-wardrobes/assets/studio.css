@@ -95,7 +95,7 @@ html.st-locked { overflow: hidden; }
 }
 @media (max-width: 560px) {
   .st-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); max-height: 280px; }
-  .st-tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .st-tabs { flex-wrap: wrap; }
   .st-tab { flex: none; }
 }
 

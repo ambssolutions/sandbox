@@ -32,6 +32,14 @@ def img(im, sizes, eager=False, cls="", alt=None):
             f'{load} decoding="async" alt="{escape(alt if alt is not None else im["alt"])}">')
 
 
+def night_img(im, sizes, eager=False, cls=""):
+    srcset = ", ".join(f"{B}{im['src']}-night-{w}.webp {w}w" for w in im["sizes"])
+    pick = 720 if 720 in im["sizes"] else im["sizes"][-1]
+    load = 'fetchpriority="high"' if eager else 'loading="eager"'
+    return (f'<img class="{cls}" src="{B}{im["src"]}-night-{pick}.webp" srcset="{srcset}" sizes="{sizes}" width="{im["w"]}" height="{im["h"]}" '
+            f'{load} decoding="async" alt="" aria-hidden="true">')
+
+
 def video(name, alt, w=432, h=768, eager=False, cls="", play=True):
     """A still from the video. With play=True, a Play button loads the real video with its controls."""
     c = f' class="{cls}"' if cls else ""
@@ -55,9 +63,9 @@ def brand(ink, gold="#c9a35a", sub=True):
 CENTRE = """
 .sec-head,.hero-copy,.hero-words,.hero-head,.story-copy,.contact-copy,.tile-txt,.step,.make-in .txt,.feature button,.tt,.cta-band{text-align:center;justify-items:center;justify-content:center}
 .lede{margin-left:auto;margin-right:auto}
-.contact-grid{grid-template-columns:1fr;max-width:820px;margin-inline:auto;gap:clamp(28px,4vw,48px)}
+.contact-grid{grid-template-columns:1fr;max-width:960px;margin-inline:auto;gap:clamp(28px,4vw,48px)}.contact-grid .form{width:100%;max-width:820px;justify-self:center}
 .contact-copy .lede{margin:0 auto}
-.details{display:flex!important;flex-wrap:wrap;justify-content:center;gap:16px 40px}.details div{display:grid;justify-items:center;text-align:center}
+.details{display:flex!important;flex-wrap:wrap;justify-content:center;gap:14px 34px}.details dd{font-size:clamp(17px,1.5vw,20px)!important}.details div{display:grid;justify-items:center;text-align:center}
 .tile-act,.make-in .txt,.hero-head .row{justify-content:center}
 .make-in{grid-template-columns:1fr 1fr!important;justify-items:center;padding-left:0!important;padding-right:0!important}.make-in .txt{grid-column:1/-1;max-width:60ch}.make-in.no-photo{grid-template-columns:1fr!important}
 .hero-head{display:grid!important;justify-items:center;justify-content:center;text-align:center}.hero-side{justify-items:center;text-align:center}
@@ -66,6 +74,7 @@ CENTRE = """
 .form .send{grid-column:1/-1;justify-self:center}
 .form-note,.form-status{text-align:center}
 ol.steps,ul.steps{justify-content:center}
+main>section:not([data-hero]){padding-block:clamp(64px,8vw,112px)}
 /* photos are always shown whole, at their own shape: never cropped or zoomed in (owner) */
 .tile-ph,.reel{aspect-ratio:9/16}
 .tile-ph img,.reel .tile-ph img,.story-media img,.story-media video,.window img,.phone img,.phone video,.plate img,.tri img,.feature img,.row .thumb img,.make-pics img{object-fit:contain}
@@ -91,8 +100,8 @@ def head(c, css, preload=""):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
-{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=4">
-<link rel="stylesheet" href="{B}assets/studio.css?v=4">
+{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=5">
+<link rel="stylesheet" href="{B}assets/studio.css?v=5">
 <script>(function(d){{d.classList.add("js");window.CW_BASE="{B}";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){{d.classList.add("motion");setTimeout(function(){{if(!window.CW_MOTION){{d.classList.remove("motion");d.classList.add("motion-off");}}}},3000);}}}})(document.documentElement);</script>
 <style>
 {css}
@@ -155,6 +164,7 @@ def contact(title="Tell us about your room", cls="contact"):
     <div class="contact-copy">
       <h2 id="contact-title">{title}</h2>
       <p class="lede">A rough idea is enough to start. We will come back to you with questions and a time to measure.</p>
+      <ol class="how-line" aria-label="How it goes"><li><b>1</b>Send a photo or call</li><li><b>2</b>We measure and agree the design</li><li><b>3</b>Made and fitted</li></ol>
       <dl class="details">
         <div><dt>Call or text</dt><dd><a href="tel:{TEL}">{PHONE}</a></dd></div>
         <div><dt>Based in</dt><dd>Auckland</dd></div>
@@ -203,7 +213,7 @@ SCRIPTS = f"""<script src="{B}assets/content.js?v=3"></script>
 <script src="{B}assets/studio.js?v=5" defer></script>
 <script src="{B}assets/cw-common.js?v=2" defer></script>
 <script src="{B}assets/cw-motion.js?v=2" defer></script>
-<script src="/concepts/assets/concepts.js?v=2" defer></script>
+<script src="/concepts/assets/concepts.js?v=3" defer></script>
 </body>
 </html>
 """
@@ -252,20 +262,24 @@ h2{font-size:clamp(34px,4.4vw,60px);line-height:1.05} .lede{color:var(--c-muted)
 @media (max-width:900px){.menu-btn{display:block}.nav{position:fixed;inset:var(--header) 0 auto 0;flex-direction:column;background:#0a0807;padding:18px var(--pad) 28px;border-bottom:1px solid var(--c-line);visibility:hidden;opacity:0}.nav.open{visibility:visible;opacity:1}.nav a{font-size:18px;padding:10px}}
 /* hero: the room is dark until your light finds it */
 .hero{position:relative;height:calc(100svh - var(--header));min-height:560px;max-height:960px;overflow:hidden;display:grid;place-items:end center;text-align:center;isolation:isolate}
-.tri{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.tri img{width:100%;height:100%;object-fit:cover;object-position:50% 35%}
-@media (max-width:760px){.tri{grid-template-columns:1fr}.tri img:not(:nth-child(2)){display:none}}
-.night{position:absolute;inset:0;z-index:1;background:#050403;opacity:0;pointer-events:none}
-html.motion .night{opacity:.86;transition:opacity 1.8s ease .6s}
-html.motion .hero.lit .night{opacity:0}
-.hero.dark .night{opacity:.86!important;transition:opacity 1.4s ease}
+.tri{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#050403}
+.pane{position:relative;overflow:hidden}
+.pane img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+@media (max-width:760px){.tri{grid-template-columns:1fr}.pane:not(:nth-child(2)){display:none}}
+/* the wow: the room is dark, its LED strips switch on, then the room lights come up. The switch toggles them. */
+.pane .nt{opacity:0;transition:opacity 2.4s ease}
+.night{position:absolute;inset:0;z-index:1;background:#050403;opacity:0;pointer-events:none;transition:opacity .9s ease}
+html.motion .pane .nt{opacity:1}
+html.motion .hero:not(.leds) .night{opacity:1}
+html.motion .hero.day .pane .nt{opacity:0}
+.hero.evening .pane .nt{opacity:1!important}
 .switch{position:absolute;z-index:3;top:18px;right:var(--pad);min-height:44px;padding:0 18px 0 40px;border-radius:999px;border:1px solid rgba(239,231,218,.35);background:rgba(10,8,7,.55);color:var(--c-ink);font:600 14px/1 var(--sans);cursor:pointer}
 .switch::before{content:"";position:absolute;left:16px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:#5a4f45}
 .switch[aria-pressed="true"]::before{background:var(--c-accent)}
 .tile-ph::after{content:"";position:absolute;inset:0;background:#0a0807;opacity:0;pointer-events:none}
 html.motion .tile-ph::after{opacity:.8;transition:opacity 1.6s ease}
 html.motion .tile.lit .tile-ph::after{opacity:0}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,7,.1) 0%,rgba(10,8,7,.2) 30%,rgba(10,8,7,.9) 56%,rgba(10,8,7,.97) 100%);z-index:1;pointer-events:none}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,7,0) 0%,rgba(10,8,7,0) 38%,rgba(10,8,7,.78) 66%,rgba(10,8,7,.96) 100%);z-index:1;pointer-events:none}
 .hero-copy{position:relative;z-index:2;padding:0 var(--pad) clamp(28px,7vh,72px);display:grid;gap:clamp(14px,2.4vh,24px);justify-items:center}
 .hero h1{font-size:clamp(3rem,min(8vw,13vh),8.4rem);line-height:.92;letter-spacing:-.02em}
 .hero h1 em{font-style:italic;color:var(--c-accent)}
@@ -278,15 +292,13 @@ section{padding-block:clamp(80px,11vw,150px)}
 /* lights on: each build is dark until it reaches the middle of the screen */
 .lights{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(12px,1.6vw,22px)}
 .tile{position:relative;grid-column:span 4;display:grid;gap:14px;align-content:start}
-.tile:nth-child(5n+1){grid-column:span 5}.tile:nth-child(5n+2){grid-column:span 4;margin-top:80px}.tile:nth-child(5n+3){grid-column:span 3;margin-top:30px}
-.tile:nth-child(5n+4){grid-column:span 6}.tile:nth-child(5n+5){grid-column:span 6;margin-top:60px}
+.lights{grid-template-columns:repeat(4,minmax(0,1fr))}.tile,.tile:nth-child(n){grid-column:auto;margin-top:0}
 .tile-ph{position:relative;display:block;padding:0;border:0;background:#14100c;cursor:zoom-in;border-radius:4px;overflow:hidden;aspect-ratio:4/5}
 .tile-ph img{width:100%;height:100%;object-fit:cover}
 .tile .k{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--c-accent)} .tile h3{font-size:22px;line-height:1.2;margin-top:4px}
 .tile-act{display:flex;gap:16px;margin-top:8px}.t-link{background:none;border:0;padding:0;color:var(--c-muted);font:600 14px/1 var(--sans);cursor:pointer;text-decoration:underline;text-underline-offset:4px;min-height:32px}
 .t-place{color:var(--c-ink)}
-@media (max-width:900px){.tile,.tile:nth-child(n){grid-column:span 6;margin-top:0}}
-@media (max-width:560px){.tile,.tile:nth-child(n){grid-column:span 12}}
+@media (max-width:900px){.lights{grid-template-columns:1fr 1fr}}
 /* story */
 .story .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,90px);align-items:center}
 .story-copy{display:grid;gap:20px;justify-items:center;text-align:center}
@@ -319,13 +331,13 @@ section{padding-block:clamp(80px,11vw,150px)}
 @media (min-width:901px){.foot{padding-bottom:64px}}
 """
     hero_video = "hero-media-wall"
-    tiles = "".join(tile(P[k], "(max-width:560px) 92vw, (max-width:900px) 46vw, 34vw") for k in ["oak-marble", "carved-panel", "gurbani-unit", "marble-tv", "walnut-media", "prayer-room", "herringbone", "storage-bed", "upholstered-bed", "gurbani-office"])
+    tiles = "".join(tile(P[k], "(max-width:560px) 92vw, (max-width:900px) 46vw, 34vw") for k in ["oak-marble", "carved-panel", "gurbani-unit", "marble-tv", "walnut-media", "prayer-room", "herringbone", "upholstered-bed"])
     body = f"""<header class="top"><div class="wrap">{brand('#efe7da', '#f0c27a')}{nav()}</div></header>
 <main id="main">
 <section class="hero" id="hero01" data-hero aria-labelledby="hero-title" style="padding:0">
   <div class="night" aria-hidden="true"></div>
-  <button class="switch" type="button" aria-pressed="true" data-switch>Lights on</button>
-  <div class="tri">{img(P["carved-panel"]["images"][0], "(max-width:760px) 100vw, 33vw")}{img(P["gurbani-unit"]["images"][0], "(max-width:760px) 100vw, 33vw", eager=True)}{img(P["prayer-room"]["images"][0], "(max-width:760px) 100vw, 33vw")}</div>
+  <button class="switch" type="button" aria-pressed="true" data-switch>Room lights on</button>
+  <div class="tri">{''.join(f'<div class="pane">{img(P[k]["images"][0], "(max-width:760px) 100vw, 33vw", eager=(k == "gurbani-unit"))}{night_img(P[k]["images"][0], "(max-width:760px) 100vw, 33vw", eager=(k == "gurbani-unit"), cls="nt")}</div>' for k in ["walnut-media", "gurbani-unit", "oak-marble"])}</div>
   <div class="hero-copy">
     <h1 id="hero-title" data-split>Design your <em>dream</em> room</h1>
     <p>TV walls, prayer units and carved panels with the light built in. Made in Auckland.</p>
@@ -355,10 +367,11 @@ section{padding-block:clamp(80px,11vw,150px)}
 {footer()}
 <script>
 (function(){{
-  /* the hero room starts dark and its lights come up; the switch turns them off and on again */
+  /* the room is dark, the LED strips switch on, then the room lights come up; the switch takes it back to evening */
   var hero=document.getElementById("hero01"),sw=hero.querySelector("[data-switch]");
-  requestAnimationFrame(function(){{hero.classList.add("lit");}});
-  sw.addEventListener("click",function(){{var on=sw.getAttribute("aria-pressed")!=="true";sw.setAttribute("aria-pressed",on?"true":"false");sw.textContent=on?"Lights on":"Lights off";hero.classList.toggle("dark",!on);}});
+  setTimeout(function(){{hero.classList.add("leds");}},350);
+  setTimeout(function(){{hero.classList.add("day");}},3000);
+  sw.addEventListener("click",function(){{var on=sw.getAttribute("aria-pressed")!=="true";sw.setAttribute("aria-pressed",on?"true":"false");sw.textContent=on?"Room lights on":"Room lights off";hero.classList.add("leds","day");hero.classList.toggle("evening",!on);}});
   /* each build switches on as it reaches the middle of the screen */
   if(!("IntersectionObserver" in window))return;
   var io=new IntersectionObserver(function(es){{es.forEach(function(e){{if(e.isIntersecting){{e.target.classList.add("lit");io.unobserve(e.target);}}}});}},{{rootMargin:"-35% 0px -35% 0px"}});
@@ -369,35 +382,34 @@ section{padding-block:clamp(80px,11vw,150px)}
     return head(c, css) + body + SCRIPTS
 
 
-def make_section(cls="make", photo_sizes="(max-width:720px) 46vw, 420px"):
-    items = []
-    for i, (t, p1, i1, p2, i2, text, d) in enumerate(MAKE, 1):
-        pics = f'<div class="make-pics">{img(P[p1]["images"][i1], photo_sizes)}{img(P[p2]["images"][i2], photo_sizes)}</div>' if p1 else ""
-        items.append(f'<article class="make-item rv"><h3>{escape(t)}</h3>{pics}<p>{escape(text)}</p>'
-                     f'<button type="button" class="t-link t-place" data-place="{d}">Place one in my room</button></article>')
+MAKE4 = [
+    ("TV and media walls", "marble-tv", 1, "Marble-look panels, walnut and oak, lit shelves and long floating units.", "oakmarble"),
+    ("Prayer units", "gurbani-unit", 3, "Carved arches with raised Gurbani lettering lit from behind, drawers below.", "prayerunit"),
+    ("Carved panels", "carved-panel", 1, "Carved art and lettering with light set in behind, on a slatted or plain wall.", "carved"),
+    ("Bedrooms", "herringbone", 1, "Herringbone and slatted walls, padded headboards and storage beds lit underneath.", "herringbone"),
+]
+
+
+def make_section(cls="make", photo_sizes="(max-width:820px) 44vw, 240px"):
+    items = "".join(f'<article class="make-item rv">{img(P[k]["images"][i], photo_sizes)}<h3>{escape(t)}</h3><p>{escape(text)}</p>'
+                    f'<button type="button" class="t-link t-place" data-place="{d}">Place one in my room</button></article>'
+                    for t, k, i, text, d in MAKE4)
     return f"""<section class="{cls}" id="make" aria-labelledby="make-title">
   <div class="wrap">
     <div class="sec-head"><h2 id="make-title">What we make</h2><p class="lede">Every piece is made for the room it goes in, with the lighting built in.</p></div>
-    <div class="make-grid">{''.join(items)}</div>
+    <div class="make-grid">{items}</div>
+    <p class="make-more">We also build wardrobes: sliding, hinged or open walk-in, sized to your wall. <button type="button" class="t-link t-place" data-place="sliding">Try one in your room</button></p>
   </div>
 </section>"""
 
 
-def process_section(cols=("#1a1410", "#221a14", "#2b2019"), cls="how"):
-    steps = [("Send a photo or give us a call", "Tell us which room it's for and roughly what you have in mind. A saved preview from the room studio, or a screenshot of one of our builds, is a good place to start."),
-             ("Measure and agree the design", "We check the space, then go through the layout, the finish, the carving and the lighting with you."),
-             ("Made and fitted", "Your piece is built to those measurements and installed in your home, lighting and all.")]
-    cards = "".join(f'<li class="step" style="--c:{cols[i]}"><span class="n">0{i + 1}</span><h3>{t}</h3><p>{p}</p></li>' for i, (t, p) in enumerate(steps))
-    return f"""<section class="{cls}" aria-labelledby="how-title">
-  <div class="wrap">
-    <div class="sec-head"><h2 id="how-title">How it works</h2></div>
-    <ol class="steps3 rv">{cards}</ol>
-  </div>
-</section>"""
+def process_section(*a, **k):
+    return ""
 
 
 def counts_html(cls="counts"):
-    return f'<div class="{cls} rv">' + "".join(f'<a href="{u}" rel="noopener" target="_blank"><b>{n}</b><span>{l}</span></a>' for n, l, u in COUNTS) + "</div>"
+    return (f'<div class="follow2 rv"><a href="{TIKTOK}" rel="noopener" target="_blank"><span class="f-net">TikTok</span><b>82.5K</b><span>followers</span><small>846.2K likes &middot; @customwardrobes1singh</small></a>'
+            f'<a href="{INSTA}" rel="noopener" target="_blank"><span class="f-net">Instagram</span><b>60K</b><span>followers</span><small>699 posts &middot; @customwardrobe1singh</small></a></div>')
 
 
 # ---------------------------------------------------------------------------------------------
@@ -431,7 +443,13 @@ section{padding-block:clamp(80px,10vw,140px)}
 .window-wrap{position:relative;justify-self:center}
 .window{position:relative;width:min(40vw,calc((100svh - var(--header) - 100px) * .5625));aspect-ratio:9/16;border-radius:var(--arch);overflow:hidden;background:#1a1410}
 .window-line{position:absolute;left:-14px;top:-14px;width:calc(100% + 28px);height:calc(100% + 14px);overflow:visible;pointer-events:none}
-.window-line path{fill:none;stroke:#c9a35a;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.window-line path{fill:none;stroke:#c9a35a;stroke-width:2.5;vector-effect:non-scaling-stroke}
+/* the wow: the arch draws itself in gold, the unit's LED lights switch on as the line closes, then the room light comes up */
+.window .nt{opacity:0}
+html.motion .window .nt{animation:arch-night 6.6s ease forwards}
+@keyframes arch-night{0%,70%{opacity:1}100%{opacity:0}}
+html.motion .window::after{content:"";position:absolute;inset:0;z-index:2;background:#0f0c0a;pointer-events:none;animation:arch-cover 3.8s ease forwards}
+@keyframes arch-cover{0%,80%{opacity:1}100%{opacity:0}}
 html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 2.4s .9s cubic-bezier(.65,0,.35,1) forwards}
 @keyframes linedraw{to{stroke-dashoffset:0}}
 .window img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -492,7 +510,7 @@ html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:l
       <div class="row"><a class="btn" href="#studio">Place one in your room</a><a class="btn ghost" href="#work">See our work</a></div>
       <p class="hero-proof"><a href="{TIKTOK}" rel="noopener" target="_blank">82.5K on TikTok</a> &middot; <a href="{INSTA}" rel="noopener" target="_blank">60K on Instagram</a> &middot; {AS_AT}</p>
     </div>
-    <div class="window-wrap"><div class="window">{img(P["gurbani-unit"]["images"][1], "(max-width:900px) 64vw, 40vw", eager=True)}</div>
+    <div class="window-wrap"><div class="window">{img(P["gurbani-unit"]["images"][1], "(max-width:900px) 64vw, 40vw", eager=True)}{night_img(P["gurbani-unit"]["images"][1], "(max-width:900px) 64vw, 40vw", eager=True, cls="nt")}</div>
       <svg class="window-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M0,100 L0,28 A50,28 0 0 1 100,28 L100,100"/></svg></div>
   </div>
 </section>
@@ -571,7 +589,7 @@ html.motion .phone:nth-child(2){animation-delay:.25s}html.motion .phone:nth-chil
 @media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.phones{height:min(46svh,420px)}}
 @media (max-width:520px){.phone:nth-child(1){transform:translateX(-44%) rotate(-6deg) scale(.82)}.phone:nth-child(3){transform:translateX(44%) rotate(6deg) scale(.82)}}
 /* the feed: swipe through real builds */
-.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr));gap:16px}
+.feed{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;max-width:1100px;margin-inline:auto}@media (max-width:820px){.feed{grid-template-columns:1fr 1fr}}
 .reel{position:relative;aspect-ratio:9/16;border-radius:22px;overflow:hidden;background:#1a1a1d}
 .reel .tile-ph{position:absolute;inset:0;padding:0;border:0;background:none;cursor:zoom-in}
 .reel .tile-ph img{width:100%;height:100%;object-fit:cover}
@@ -605,7 +623,7 @@ html.motion .phone:nth-child(2){animation-delay:.25s}html.motion .phone:nth-chil
 .foot ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}.foot a{text-decoration:none}.legal{display:grid;gap:4px;font-size:13px}.legal p{margin:0}
 @media (min-width:901px){.foot{padding-bottom:64px}}
 """
-    reels = "".join(tile(P[k], "(max-width:640px) 70vw, 320px", cls="reel", i=i) for k, i in [("oak-marble", 0), ("gurbani-unit", 0), ("carved-panel", 0), ("walnut-media", 0), ("prayer-room", 0), ("marble-tv", 0), ("herringbone", 0), ("upholstered-bed", 0), ("gurbani-office", 0), ("storage-bed", 0)])
+    reels = "".join(tile(P[k], "(max-width:640px) 70vw, 320px", cls="reel", i=i) for k, i in [("oak-marble", 0), ("gurbani-unit", 0), ("carved-panel", 0), ("walnut-media", 0), ("prayer-room", 0), ("marble-tv", 0), ("herringbone", 0), ("upholstered-bed", 0)])
     phones = "".join(f'<div class="phone"><div class="scr">{video(n, a, eager=(k == 1), play=False)}<p class="cap">{escape(cap)}</p></div></div>'
                      for k, (n, a, cap) in enumerate([("hero-carved-panel", "A carved panel lit from behind on a slatted wall", "Backlit carved panel"),
                                                       ("hero-media-wall", "An oak and marble media wall with lit display towers", "Oak and marble media wall"),
@@ -631,7 +649,7 @@ html.motion .phone:nth-child(2){animation-delay:.25s}html.motion .phone:nth-chil
 </section>
 <section class="story" aria-labelledby="story-title" style="background:#141417">
   <div class="wrap">
-    <div class="story-copy"><h2 id="story-title">Bare wall. Then this.</h2><p class="lede">One of our most watched kinds of build: a plain hallway turned into a slatted wall with a carved Radha Krishna panel lit from behind.</p><div class="row"><button class="btn ghost" type="button" data-open="carved-panel">See the photos</button><button class="btn hot" type="button" data-place="carved">Put it in my room</button></div></div>
+    <div class="story-copy"><h2 id="story-title">From a bare wall to a lit panel</h2><p class="lede">One of our most watched kinds of build: a plain hallway turned into a slatted wall with a carved Radha Krishna panel lit from behind.</p><div class="row"><button class="btn ghost" type="button" data-open="carved-panel">See the photos</button><button class="btn hot" type="button" data-place="carved">Put it in my room</button></div></div>
     <div class="story-media">{video('bare-wall-to-panel', 'The bare hallway wall before the build', 540, 960)}</div>
   </div>
 </section>
@@ -768,7 +786,6 @@ html.motion .plate img{opacity:0;animation:showimg 1.6s 2.5s ease forwards}
 <section id="work" aria-labelledby="work-title">
   <div class="wrap">
     <div class="sec-head"><h2 id="work-title">The catalogue</h2><p class="lede">Ten recent builds from our TikTok and Instagram. Open a build for its photos, or place it in a photo of your room.</p></div>
-    <div class="feature">{feat}</div>
     <div class="cat">{''.join(rows)}</div>
   </div>
 </section>

@@ -46,7 +46,7 @@
     '.menu hr{border:0;border-top:1px solid rgba(255,255,255,.12);margin:6px 4px}' +
     '.fav{width:34px;padding:0;justify-content:center}.fav svg{width:17px;height:17px}' +
     '.fav[aria-pressed="true"]{color:#F5C518}.fav[aria-pressed="true"] svg{fill:currentColor}' +
-    '@media (max-width:760px){.bar{left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom))}.sub{display:none}}' +
+    '@media (max-width:760px){.bar{left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom))}.sub{display:none}}' +
     '@media print{.bar{display:none}}' +
     '</style>' +
     '<nav class="bar" aria-label="Design concepts">' +
