@@ -10,9 +10,9 @@ window.CW_PROJECTS = [
   "text": "A carved Radha Krishna panel, lit from behind, set into a full slatted wall.",
   "images": [
    {"src": "assets/img/work/carved-panel-1", "sizes": [480, 720, 1080], "w": 1080, "h": 1920, "alt": "The finished hallway wall, with the carved panel lit from behind"},
-   {"src": "assets/img/work/carved-panel-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "Close up of the carved Radha Krishna panel and the light around its frame"},
-   {"src": "assets/img/work/carved-panel-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The panel and slatted wall from the side"},
-   {"src": "assets/img/work/carved-panel-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The finished wall from across the room"},
+   {"src": "assets/img/work/carved-panel-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The finished carved panel lit on the slatted wall"},
+   {"src": "assets/img/work/carved-panel-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The carved Radha Krishna panel lit around its frame"},
+   {"src": "assets/img/work/carved-panel-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The panel and slatted wall from the side"},
    {"src": "assets/img/work/carved-panel-5", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The same wall before the build"}
   ]
  },
@@ -24,8 +24,8 @@ window.CW_PROJECTS = [
   "images": [
    {"src": "assets/img/work/gurbani-unit-1", "sizes": [480, 720, 1080], "w": 1080, "h": 1920, "alt": "The prayer unit with its carved arch frame, lit Gurbani panel and drawers"},
    {"src": "assets/img/work/gurbani-unit-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The prayer unit seen straight on"},
-   {"src": "assets/img/work/gurbani-unit-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The lit Gurbani panel inside the arch"},
-   {"src": "assets/img/work/gurbani-unit-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "Close up of the raised Gurmukhi lettering, lit around the edge"},
+   {"src": "assets/img/work/gurbani-unit-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The whole prayer unit with its carved arch and drawers"},
+   {"src": "assets/img/work/gurbani-unit-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The prayer unit straight on, lit around the arch and below the drawers"},
    {"src": "assets/img/work/gurbani-unit-5", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The prayer unit with the light underneath"}
   ]
  },
@@ -37,8 +37,8 @@ window.CW_PROJECTS = [
   "images": [
    {"src": "assets/img/work/prayer-room-1", "sizes": [480, 720, 1080], "w": 1080, "h": 1920, "alt": "The lit Gurbani arch panel beside lit glass shelves"},
    {"src": "assets/img/work/prayer-room-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The arch panel and slatted wall"},
-   {"src": "assets/img/work/prayer-room-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The prayer room with its floating bench and window"},
-   {"src": "assets/img/work/prayer-room-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The arch panel and lit shelving from the doorway"}
+   {"src": "assets/img/work/prayer-room-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The arch panel, lit shelves and floating bench"},
+   {"src": "assets/img/work/prayer-room-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The prayer room wall from the side, with the lit shelves"}
   ]
  },
  {
@@ -48,8 +48,8 @@ window.CW_PROJECTS = [
   "text": "A marble-look panel with a soft light halo, slatted inserts, lit shelving and a long floating unit.",
   "images": [
    {"src": "assets/img/work/marble-tv-1", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The marble TV wall with lit shelving on the left"},
-   {"src": "assets/img/work/marble-tv-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The marble panel with the light halo and the floating unit"},
-   {"src": "assets/img/work/marble-tv-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The TV wall seen from the side"},
+   {"src": "assets/img/work/marble-tv-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The marble panel with its light halo, above the floating unit"},
+   {"src": "assets/img/work/marble-tv-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The whole TV wall with the lit display shelves"},
    {"src": "assets/img/work/marble-tv-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The TV wall with its lit display shelves"}
   ]
  },
@@ -59,10 +59,10 @@ window.CW_PROJECTS = [
   "type": "tv",
   "text": "Dark walnut with white curved inlays and a lit frame around the TV. One door opens to a lit prayer cabinet.",
   "images": [
-   {"src": "assets/img/work/walnut-media-1", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The walnut media wall with its lit TV frame"},
-   {"src": "assets/img/work/walnut-media-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The lit frame and fluted panel around the TV"},
+   {"src": "assets/img/work/walnut-media-1", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The walnut media wall with its lit TV frame and arc details"},
+   {"src": "assets/img/work/walnut-media-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The walnut media wall from the side, with its lit TV frame"},
    {"src": "assets/img/work/walnut-media-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The hidden cabinet open, showing a lit Gurbani panel"},
-   {"src": "assets/img/work/walnut-media-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The media wall with a door being opened"}
+   {"src": "assets/img/work/walnut-media-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The full media wall from the side, with the lit base"}
   ]
  },
  {
@@ -73,7 +73,7 @@ window.CW_PROJECTS = [
   "images": [
    {"src": "assets/img/work/oak-marble-1", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The oak and marble media wall with lit display towers"},
    {"src": "assets/img/work/oak-marble-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The full media wall with lighting above and below"},
-   {"src": "assets/img/work/oak-marble-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "Close up of a lit display tower beside the marble panel"},
+   {"src": "assets/img/work/oak-marble-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The full media wall with lit display towers and the marble panel"},
    {"src": "assets/img/work/oak-marble-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The media wall from the left"}
   ]
  },
@@ -83,10 +83,10 @@ window.CW_PROJECTS = [
   "type": "bedroom",
   "text": "Walnut herringbone and slatted panels behind the bed, with wall lights and matching bedside drawers.",
   "images": [
-   {"src": "assets/img/work/herringbone-1", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "Walnut herringbone and slatted wall panels with a wall light"},
-   {"src": "assets/img/work/herringbone-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The bedroom wall with the bed base and bedside drawers"},
-   {"src": "assets/img/work/herringbone-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The herringbone wall from the end of the bed"},
-   {"src": "assets/img/work/herringbone-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The slatted and herringbone panels with a wall light"}
+   {"src": "assets/img/work/herringbone-1", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The walnut feature wall with a wall light and bedside drawers"},
+   {"src": "assets/img/work/herringbone-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "Walnut herringbone and slatted wall panels with the bed base"},
+   {"src": "assets/img/work/herringbone-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The bedroom wall with the bed base and bedside drawers"},
+   {"src": "assets/img/work/herringbone-4", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The slatted and herringbone panels beside the bedside drawers"}
   ]
  },
  {
@@ -105,8 +105,8 @@ window.CW_PROJECTS = [
   "text": "A deep upholstered bed in front of a walnut panelled wall, with walnut bedside drawers.",
   "images": [
    {"src": "assets/img/work/upholstered-bed-1", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The upholstered bed in front of the walnut wall"},
-   {"src": "assets/img/work/upholstered-bed-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The bed and walnut wall from the doorway"},
-   {"src": "assets/img/work/upholstered-bed-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The walnut wall, wall light and bedside drawers"}
+   {"src": "assets/img/work/upholstered-bed-2", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The upholstered bed and walnut wall from the end of the room"},
+   {"src": "assets/img/work/upholstered-bed-3", "sizes": [480, 576], "w": 576, "h": 1024, "alt": "The bed, walnut wall and bedside drawers from the side"}
   ]
  },
  {

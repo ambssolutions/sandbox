@@ -72,6 +72,30 @@
     return new Promise(function (res, rej) { var i = new Image(); i.decoding = "async"; i.onload = function () { res(i); }; i.onerror = rej; i.src = src; });
   }
 
+  /* Find the back wall in a room photo: the long level lines where the wall meets the ceiling and the
+     floor, and the upright lines of the room's corners. It is an estimate from one photo, so the
+     visitor sees the outline and can drag its corners or type the real size. */
+  function senseWall(canvas) {
+    var W = 200, H = Math.max(40, Math.round(canvas.height * W / canvas.width)), c = document.createElement("canvas");
+    c.width = W; c.height = H; var x = c.getContext("2d"); x.drawImage(canvas, 0, 0, W, H);
+    var d = x.getImageData(0, 0, W, H).data, g = new Float32Array(W * H), i, j;
+    for (i = 0; i < W * H; i++) g[i] = d[i * 4] * 0.3 + d[i * 4 + 1] * 0.59 + d[i * 4 + 2] * 0.11;
+    function at(px, py) { return g[py * W + px]; }
+    // how much of a line (row or column, over a span) has a clear step across it
+    function rowScore(y, x0, x1) { var n = 0; for (var k = x0; k < x1; k++) if (Math.abs(at(k, Math.min(H - 1, y + 2)) - at(k, Math.max(0, y - 2))) > 9) n++; return n / (x1 - x0); }
+    function colScore(cx, y0, y1) { var n = 0; for (var k = y0; k < y1; k++) if (Math.abs(at(Math.min(W - 1, cx + 2), k) - at(Math.max(0, cx - 2), k)) > 9) n++; return n / Math.max(1, y1 - y0); }
+    function best(from, to, fn) { var b = { at: -1, s: 0 }; for (var k = from; k <= to; k++) { var v = fn(k); if (v > b.s) b = { at: k, s: v }; } return b; }
+    var x0 = Math.round(W * 0.25), x1 = Math.round(W * 0.75);
+    var top = best(Math.round(H * 0.03), Math.round(H * 0.45), function (y) { return rowScore(y, x0, x1); });
+    var bot = best(Math.round(H * 0.55), Math.round(H * 0.97), function (y) { return rowScore(y, x0, x1); });
+    var t = top.s > 0.45 ? top.at / H : 0.06, b = bot.s > 0.45 ? bot.at / H : 0.94;
+    var y0 = Math.round(t * H) + 3, y1 = Math.round(b * H) - 3;
+    var lf = best(Math.round(W * 0.02), Math.round(W * 0.4), function (k) { return colScore(k, y0, y1); });
+    var rt = best(Math.round(W * 0.6), Math.round(W * 0.98), function (k) { return colScore(k, y0, y1); });
+    var l = lf.s > 0.6 ? lf.at / W : 0.02, r = rt.s > 0.6 ? rt.at / W : 0.98;
+    return { quad: [[l, t], [r, t], [r, b], [l, b]], ceiling: top.s > 0.45, floor: bot.s > 0.45 };
+  }
+
   function mount(root) {
     root.classList.add("st");
     root.innerHTML =
@@ -91,7 +115,12 @@
       '<section class="st-step"><h2><span>1</span>Your room</h2><div class="st-room">' +
       '<label class="st-btn st-primary st-file">Take a photo<input type="file" accept="image/*" capture="environment" aria-label="Take a photo of your room"></label>' +
       '<label class="st-btn st-file">Choose a photo<input type="file" accept="image/*" aria-label="Choose a photo of your room"></label>' +
-      '<div class="st-rooms" role="group" aria-label="Sample rooms"></div></div></section>' +
+      '<div class="st-rooms" role="group" aria-label="Sample rooms"></div></div>' +
+      '<div class="st-wall" hidden><h3>Your wall</h3><p class="st-note st-wall-how"></p>' +
+      '<div class="st-wall-size"><label>Width <input type="number" inputmode="decimal" min="0.5" max="20" step="0.05" data-w="w"> m</label>' +
+      '<label>Height <input type="number" inputmode="decimal" min="1.8" max="6" step="0.05" data-w="h"> m</label></div>' +
+      '<button class="st-btn" type="button" data-a="wall" aria-pressed="false">Adjust the wall outline</button>' +
+      '<p class="st-fitsum" role="status"></p></div></section>' +
       '<section class="st-step"><h2><span>2</span>Pick a piece</h2>' +
       '<div class="st-tabs" role="tablist"></div><div class="st-picker"></div></section>' +
       '<section class="st-step st-opts" hidden><h2><span>3</span>Finish</h2><div class="st-optbox"></div></section>' +
@@ -120,7 +149,7 @@
     var stage = $(".st-stage"), base = $(".st-base"), glc = $(".st-gl"), status = $(".st-status");
     var handles = [].slice.call(root.querySelectorAll(".st-stage .st-h")), grip = $(".st-grip");
 
-    var state = { photo: null, pw: 1600, ph: 1066, room: ROOMS[0], own: false, items: [], active: -1, hide: false, lights: "day" };
+    var state = { photo: null, pw: 1600, ph: 1066, room: ROOMS[0], own: false, items: [], active: -1, hide: false, lights: "day", wall: ROOMS[0].wall, wallH: 2400, wallEdit: false };
 
     /* ---------- WebGL ---------- */
     var gl = glc.getContext("webgl", { premultipliedAlpha: true, preserveDrawingBuffer: true, antialias: true, alpha: true });
@@ -150,7 +179,7 @@
     function drawGL(W, H) {
       if (glc.width !== W || glc.height !== H) { glc.width = W; glc.height = H; }
       gl.viewport(0, 0, W, H); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
-      if (state.hide) return;
+      if (state.hide || state.wallEdit) return;
       gl.uniform2f(U.r, W, H); gl.uniform1f(U.h, H);
       state.items.forEach(function (it) {
         var q = it.quad.map(function (p) { return [p[0] * W, p[1] * H]; });
@@ -163,9 +192,10 @@
         gl.drawArrays(gl.TRIANGLES, 0, 6);
       });
     }
-    function drawBase(ctx, W, H) {
+    function drawBase(ctx, W, H, forSave) {
       ctx.clearRect(0, 0, W, H);
       if (state.photo) ctx.drawImage(state.photo, 0, 0, W, H);
+      if (state.own && state.wallEdit && !forSave) { drawWall(ctx, W, H); return; }
       if (state.lights !== "day") { ctx.fillStyle = "rgba(10,12,26," + (state.lights === "on" ? 0.6 : 0.68) + ")"; ctx.fillRect(0, 0, W, H); }
       if (state.hide) return;
       if (state.lights === "on") state.items.forEach(function (it) {
@@ -194,6 +224,23 @@
       });
     }
 
+    // the measured wall: a dotted outline with its size along the top and the side
+    function drawWall(ctx, W, H) {
+      var q = state.wall.map(function (p) { return [p[0] * W, p[1] * H]; }), m = wallSize(), fs = Math.max(12, Math.round(H / 28));
+      ctx.save(); ctx.lineWidth = Math.max(2, W / 400); ctx.setLineDash([fs * 0.6, fs * 0.4]);
+      ctx.strokeStyle = "rgba(0,0,0,.55)"; ctx.beginPath(); q.forEach(function (p, i) { ctx[i ? "lineTo" : "moveTo"](p[0] + 1, p[1] + 1); }); ctx.closePath(); ctx.stroke();
+      ctx.strokeStyle = "#fff"; ctx.beginPath(); q.forEach(function (p, i) { ctx[i ? "lineTo" : "moveTo"](p[0], p[1]); }); ctx.closePath(); ctx.stroke();
+      ctx.setLineDash([]); ctx.font = "600 " + fs + "px system-ui, sans-serif"; ctx.textBaseline = "middle";
+      function tag(text, x, y) {
+        var w = ctx.measureText(text).width + fs; x = Math.min(W - w / 2 - 4, Math.max(w / 2 + 4, x)); y = Math.min(H - fs, Math.max(fs, y));
+        ctx.fillStyle = "rgba(15,12,10,.82)"; ctx.fillRect(x - w / 2, y - fs * 0.8, w, fs * 1.6);
+        ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.fillText(text, x, y);
+      }
+      tag((m.typed ? "" : "about ") + m.w.toFixed(m.typed ? 2 : 1).replace(/0$/, "") + " m wide", (q[0][0] + q[1][0]) / 2, (q[0][1] + q[1][1]) / 2 + fs * 1.4);
+      tag(m.h.toFixed(2).replace(/0$/, "") + " m high", (q[0][0] + q[3][0]) / 2 + fs * 4.2, (q[0][1] + q[3][1]) / 2);
+      ctx.restore();
+    }
+
     /* ---------- layout and painting ---------- */
     var cssW = 0, cssH = 0, raf = 0;
     function layout() {
@@ -210,10 +257,15 @@
       raf = 0;
       drawBase(base.getContext("2d"), base.width, base.height);
       drawGL(base.width, base.height);
-      var it = state.items[state.active];
-      handles.forEach(function (h, i) { h.hidden = !it || state.hide; if (it) h.style.transform = "translate(" + it.quad[i][0] * cssW + "px," + it.quad[i][1] * cssH + "px)"; });
-      grip.hidden = !it || state.hide;
-      if (it) { var c = centre(it.quad); grip.style.transform = "translate(" + c[0] * cssW + "px," + c[1] * cssH + "px)"; }
+      var q = target();
+      handles.forEach(function (h, i) { h.hidden = !q; h.classList.toggle("st-h-wall", state.wallEdit); if (q) h.style.transform = "translate(" + q[i][0] * cssW + "px," + q[i][1] * cssH + "px)"; });
+      grip.hidden = !q || state.wallEdit;
+      if (q) { var c = centre(q); grip.style.transform = "translate(" + c[0] * cssW + "px," + c[1] * cssH + "px)"; }
+    }
+    // the corners being dragged: the wall outline while it is being adjusted, otherwise the selected piece
+    function target() {
+      if (state.wallEdit) return state.wall;
+      var it = state.items[state.active]; return it && !state.hide ? it.quad : null;
     }
     function centre(q) { var x = 0, y = 0; q.forEach(function (p) { x += p[0] / 4; y += p[1] / 4; }); return [x, y]; }
 
@@ -237,17 +289,48 @@
     /* ---------- pieces ---------- */
     // Start a piece straight on, at true scale when we know its size, staggered so pieces don't stack exactly
     function startQuad(mm, lift, aspect) {
-      var wallTop = state.own ? 0.2 : state.room.wall[0][1], floor = state.own ? 0.8 : state.room.wall[3][1];
-      var perMm = (floor - wallTop) / 2400, a = state.ph / state.pw, h, w;
-      if (mm) { h = mm[1] * perMm; w = mm[0] * perMm * a; } else { h = (floor - wallTop) * 0.62; w = h * aspect * a; }
+      var s = scaleInfo(), wallTop = s.top, floor = s.floor, perMm = s.perMm, a = state.ph / state.pw, h, w;
+      if (mm) { h = mm[1] * perMm; w = mm[0] * s.perMmX; } else { h = (floor - wallTop) * 0.62; w = h * aspect * a; }
       // keep it inside the photo with a margin: at most 84% wide and 70% tall (true proportions kept)
       var k = Math.min(1, 0.84 / w, 0.7 / h); w *= k; h *= k;
       var bottom = Math.min(0.95, floor - (lift || 0) * perMm * k), top = bottom - h;
       if (top < 0.05) { top = 0.05; bottom = top + h; }
       // small pieces start beside what is already there; wide ones start centred so they stay in frame
       var n = state.items.length, side = n && w < 0.4 ? (n % 2 ? -1 : 1) * Math.min(0.25, w / 2 + 0.06) : 0;
-      var cx = Math.min(1 - w / 2 - 0.03, Math.max(w / 2 + 0.03, 0.5 + side));
+      var cx = Math.min(1 - w / 2 - 0.03, Math.max(w / 2 + 0.03, s.cx + side));
       return [[cx - w / 2, top], [cx + w / 2, top], [cx + w / 2, bottom], [cx - w / 2, bottom]];
+    }
+    // the wall: where it sits in the photo, and its size in metres
+    function scaleInfo() {
+      var q = state.wall, top = (q[0][1] + q[1][1]) / 2, floor = (q[2][1] + q[3][1]) / 2;
+      var perMm = (floor - top) / state.wallH, wFrac = (Math.abs(q[1][0] - q[0][0]) + Math.abs(q[2][0] - q[3][0])) / 2;
+      // across: from the typed width when the visitor knows it, otherwise the same scale as up and down
+      return { top: top, floor: floor, perMm: perMm, perMmX: state.wallW ? wFrac / state.wallW : perMm * state.ph / state.pw, cx: centre(q)[0] };
+    }
+    function wallSize() {
+      var q = state.wall, W = state.pw, H = state.ph;
+      function len(a, b) { return Math.hypot((a[0] - b[0]) * W, (a[1] - b[1]) * H); }
+      var wPx = (len(q[0], q[1]) + len(q[3], q[2])) / 2, hPx = (len(q[0], q[3]) + len(q[1], q[2])) / 2;
+      return { w: state.wallW ? state.wallW / 1000 : state.wallH / 1000 * wPx / Math.max(1, hPx), h: state.wallH / 1000, typed: !!state.wallW };
+    }
+    /* ---------- will it fit? (only on the visitor's own photo, where we have measured the wall) ---------- */
+    function fitOf(d, n) {
+      var mm = d.size(n), lift = d.lift || 0, m = wallSize();
+      var toCeiling = lift <= 200 && lift + mm[1] >= 2400; // full-height walls, wardrobes and units are made to the ceiling
+      var wide = mm[0] > m.w * 1000 + 1, tall = !toCeiling && lift + mm[1] > m.h * 1000 + 1;
+      return { ok: !wide && !tall, wide: wide, tall: tall, w: mm[0], h: mm[1] + lift };
+    }
+    function bestCount(d) {
+      if (!state.own) return d.count.value;
+      if (fitOf(d, d.count.value).ok) return d.count.value;
+      for (var n = d.count.value - 1; n >= d.count.min; n--) if (fitOf(d, n).ok) return n;
+      for (n = d.count.value + 1; n <= d.count.max; n++) if (fitOf(d, n).ok) return n;
+      return null;
+    }
+    function metres(mm) { return (mm / 1000).toFixed(1) + " m"; }
+    function whyNot(f) {
+      return f.wide ? "it is about " + metres(f.w) + " wide and the wall is about " + metres(wallSize().w * 1000)
+        : "it reaches about " + metres(f.h) + " high and the wall is " + metres(wallSize().h * 1000);
     }
     function fitAgain() {
       var it = state.items[state.active]; if (!it) return;
@@ -257,17 +340,19 @@
     function addItem(it) {
       if (state.items.length >= MAX_ITEMS) state.items.shift();
       it.light = 0; it.warmth = 0; it.shadow = 0.6;
-      state.items.push(it); state.active = state.items.length - 1;
+      state.items.push(it); state.active = state.items.length - 1; setWallEdit(false);
       syncSliders(); renderLayers(); renderOpts(); schedule();
       say(it.label + " placed. Drag the corners to fit it.");
     }
     function addDesign(d) {
       D.ready().then(function () {
-        var opts = { count: d.count.value, finish: d.finish, trim: d.trim, content: d.content };
+        var n = bestCount(d), opts = { count: n || d.count.min, finish: d.finish, trim: d.trim, content: d.content };
         var it = { label: d.label, kind: "design", design: d, opts: opts };
         var c = D.render(d, effOpts(it), maxTex);
         it.canvas = c; it.tex = texFrom(c); it.aspect = c.width / c.height; it.quad = startQuad(d.size(opts.count), d.lift, 1);
         addItem(it);
+        if (state.own && n == null) say(d.label + " won't fit this wall at any of our sizes: " + whyNot(fitOf(d, d.count.min)) + ". It is shown anyway; ask us about a custom size.");
+        else if (state.own && n !== d.count.value) say(d.label + " placed in a " + (n < d.count.value ? "smaller" : "larger") + " size, so it fits your wall. Drag the corners to fine-tune.");
       });
     }
     function addCut(canvas, label) {
@@ -292,7 +377,7 @@
     function renderLayers() {
       layers.textContent = "";
       state.items.forEach(function (it, i) {
-        var b = button("st-layer", it.label, function () { state.active = i; syncSliders(); renderLayers(); renderOpts(); schedule(); });
+        var b = button("st-layer", it.label, function () { setWallEdit(false); state.active = i; syncSliders(); renderLayers(); renderOpts(); schedule(); });
         b.setAttribute("aria-pressed", i === state.active ? "true" : "false");
         layers.appendChild(b);
       });
@@ -326,7 +411,14 @@
           picker.textContent = "";
           var grid = el("div", "st-grid");
           D.list.filter(function (d) { return tab === "builds" ? !!d.photo : !d.photo; }).forEach(function (d) {
-            grid.appendChild(card(designThumb(d), d.label, tab === "builds" ? "Real build" : (D.cats.filter(function (c) { return c.id === d.cat; })[0] || {}).label, function () { addDesign(d); }));
+            var b = card(designThumb(d), d.label, tab === "builds" ? "Real build" : (D.cats.filter(function (c) { return c.id === d.cat; })[0] || {}).label, function () { addDesign(d); });
+            if (state.own) {
+              var n = bestCount(d);
+              if (n == null) { b.classList.add("st-nofit"); b.appendChild(el("small", "st-fit st-fit-no", "Too big for your wall")); }
+              else if (n !== d.count.value) b.appendChild(el("small", "st-fit", "Fits in a smaller size"));
+              else b.appendChild(el("small", "st-fit st-fit-ok", "Fits your wall"));
+            }
+            grid.appendChild(b);
           });
           picker.appendChild(grid);
           if (tab === "builds") picker.appendChild(el("p", "st-note", "Want something else we've built? Use <b>From our photos</b> to cut any piece out of our gallery."));
@@ -336,8 +428,8 @@
         var grid = el("div", "st-grid st-grid-photos");
         PROJECTS.forEach(function (p) {
           p.images.forEach(function (im) {
-            grid.appendChild(card(BASE + im.src + "-480.webp", p.title, null, function () {
-              openCutter(BASE + im.src + "-" + im.sizes[im.sizes.length - 1] + ".webp", p.title);
+            grid.appendChild(card(BASE + im.src + "-480.webp?v=2", p.title, null, function () {
+              openCutter(BASE + im.src + "-" + im.sizes[im.sizes.length - 1] + ".webp?v=2", p.title);
             }));
           });
         });
@@ -401,6 +493,10 @@
       var out = el("output", "", d.photo ? ["Smaller", "As built", "Larger"][it.opts.count - 1] : it.opts.count);
       c.appendChild(less); c.appendChild(out); c.appendChild(more); optBox.appendChild(c);
       function step(n) { var v = Math.min(d.count.max, Math.max(d.count.min, it.opts.count + n)); if (v !== it.opts.count) { it.opts.count = v; rerender(it); renderOpts(); } }
+      if (state.own) {
+        var f = fitOf(d, it.opts.count);
+        optBox.appendChild(el("p", "st-note st-fitnote" + (f.ok ? "" : " st-fit-no"), f.ok ? "This size fits your wall." : "This size won't fit: " + whyNot(f) + "."));
+      }
       if (d.note) optBox.appendChild(el("p", "st-note", d.note));
     }
 
@@ -440,9 +536,9 @@
     }
     var drag = null;
     function startDrag(e, kind) {
-      var it = state.items[state.active]; if (!it || state.hide) return;
+      var q = target(); if (!q) return;
       e.preventDefault();
-      drag = { kind: kind, from: toNorm(e, stage), quad: it.quad.map(function (p) { return p.slice(); }), id: e.pointerId };
+      drag = { kind: kind, from: toNorm(e, stage), quad: q.map(function (p) { return p.slice(); }), id: e.pointerId };
       try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {}
       stage.classList.add("dragging");
     }
@@ -454,7 +550,7 @@
     grip.addEventListener("keydown", function (e) { nudge(e, [0, 1, 2, 3]); });
     // On a mouse, click a piece to select it and drag it. On touch, the grip moves it so the page still scrolls.
     stage.addEventListener("pointerdown", function (e) {
-      if (e.pointerType !== "mouse" || (e.target !== glc && e.target !== base)) return;
+      if (e.pointerType !== "mouse" || state.wallEdit || (e.target !== glc && e.target !== base)) return;
       var pt = toNorm(e, stage);
       for (var i = state.items.length - 1; i >= 0; i--) if (inside(state.items[i].quad, pt)) {
         if (i !== state.active) { state.active = i; syncSliders(); renderLayers(); renderOpts(); }
@@ -467,20 +563,21 @@
     });
     addEventListener("pointermove", function (e) {
       if (!drag || e.pointerId !== drag.id) return;
-      var it = state.items[state.active], p = toNorm(e, stage), dx = p[0] - drag.from[0], dy = p[1] - drag.from[1];
-      if (drag.kind === "move") it.quad = drag.quad.map(function (q) { return [q[0] + dx, q[1] + dy]; });
-      else it.quad[drag.kind] = [drag.quad[drag.kind][0] + dx, drag.quad[drag.kind][1] + dy];
-      schedule();
+      var q = target(), p = toNorm(e, stage), dx = p[0] - drag.from[0], dy = p[1] - drag.from[1];
+      if (!q) return;
+      if (drag.kind === "move") drag.quad.forEach(function (o, i) { q[i] = [o[0] + dx, o[1] + dy]; });
+      else q[drag.kind] = [drag.quad[drag.kind][0] + dx, drag.quad[drag.kind][1] + dy];
+      if (state.wallEdit) wallChanged(); else schedule();
     });
-    function endDrag() { if (drag) { drag = null; stage.classList.remove("dragging"); } }
+    function endDrag() { if (drag) { drag = null; stage.classList.remove("dragging"); if (state.wallEdit) renderFits(); } }
     addEventListener("pointerup", endDrag); addEventListener("pointercancel", endDrag);
     function nudge(e, idx) {
-      var k = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key], it = state.items[state.active];
-      if (!k || !it) return;
+      var k = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key], q = target();
+      if (!k || !q) return;
       e.preventDefault();
       var s = e.shiftKey ? 0.02 : 0.004;
-      idx.forEach(function (i) { it.quad[i][0] += k[0] * s; it.quad[i][1] += k[1] * s; });
-      schedule();
+      idx.forEach(function (i) { q[i][0] += k[0] * s; q[i][1] += k[1] * s; });
+      if (state.wallEdit) { wallChanged(); renderFits(); } else schedule();
     }
 
     /* ---------- the cutter ---------- */
@@ -546,6 +643,10 @@
       c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
       var old = { w: state.pw, h: state.ph };
       state.photo = c; state.pw = c.width; state.ph = c.height; state.room = room || state.room; state.own = !!own;
+      state.wallH = 2400; state.wallW = 0;
+      if (own) { var found = senseWall(c); state.wall = found.quad; state.found = found; }
+      else state.wall = state.room.wall.map(function (p) { return p.slice(); });
+      showWall(own);
       // keep pieces where they are on screen when the photo's shape changes
       if (old.w / old.h !== state.pw / state.ph) state.items.forEach(function (it) { it.quad = startQuad(it.design ? it.design.size(it.opts.count) : null, it.design && it.design.lift, it.aspect); });
       [].forEach.call(roomBox.children, function (b) { b.setAttribute("aria-pressed", !own && room && b.dataset.r === room.id ? "true" : "false"); });
@@ -559,11 +660,58 @@
       inp.addEventListener("change", function () {
         var f = inp.files && inp.files[0]; if (!f) return;
         var u = URL.createObjectURL(f);
-        loadImage(u).then(function (i) { setPhoto(i, null, true); URL.revokeObjectURL(u); say("Your photo is in. Pick a piece, then drag its corners to fit."); })
+        loadImage(u).then(function (i) {
+          setPhoto(i, null, true); URL.revokeObjectURL(u);
+          var m = wallSize(), f = state.found;
+          say("Your photo is in. We measured the wall at about " + m.w.toFixed(1) + " m wide, taking a standard 2.4 m ceiling" +
+            (f.ceiling && f.floor ? "" : " (we couldn't see where it meets the " + (f.ceiling ? "floor" : "ceiling") + ", so check the outline)") + ".");
+        })
           .catch(function () { say("That photo didn't open. Try a JPG or PNG."); });
         inp.value = "";
       });
     });
+
+    /* ---------- the measured wall ---------- */
+    var wallBox = $(".st-wall"), wallBtn = $('[data-a="wall"]'), fitSum = $(".st-fitsum");
+    var inW = wallBox.querySelector('[data-w="w"]'), inH = wallBox.querySelector('[data-w="h"]');
+    function setWallEdit(on) {
+      state.wallEdit = on && state.own; wallBtn.setAttribute("aria-pressed", state.wallEdit ? "true" : "false");
+      wallBtn.textContent = state.wallEdit ? "Done" : "Adjust the wall outline"; schedule();
+    }
+    function showWall(own) {
+      wallBox.hidden = !own;
+      wallBox.querySelector(".st-wall-how").textContent = "Measured from your photo, taking a standard 2.4 m ceiling. Drag the dotted corners to the edges of the wall, or type its size if you know it. Pieces show again when you tap Done.";
+      setWallEdit(own); wallChanged(); renderFits();
+    }
+    function wallChanged() {
+      var m = wallSize();
+      if (document.activeElement !== inW) inW.value = m.w.toFixed(2);
+      if (document.activeElement !== inH) inH.value = m.h.toFixed(2);
+      schedule();
+    }
+    inW.addEventListener("change", function () {
+      var v = parseFloat(inW.value); if (!(v > 0.4 && v < 30)) return;
+      state.wallW = v * 1000; wallChanged(); renderFits(); refit();
+    });
+    inH.addEventListener("change", function () {
+      var v = parseFloat(inH.value); if (!(v > 1.5 && v < 8)) return;
+      state.wallH = v * 1000; wallChanged(); renderFits(); refit();
+    });
+    wallBtn.addEventListener("click", function () { setWallEdit(!state.wallEdit); if (!state.wallEdit) { renderFits(); refit(); } });
+    // after the wall changes, made-to-measure pieces are redrawn at their true size against it
+    function refit() {
+      state.items.forEach(function (it) { if (it.design) it.quad = startQuad(it.design.size(it.opts.count), it.design.lift, it.aspect); });
+      schedule();
+    }
+    function renderFits() {
+      if (!state.own) { fitSum.textContent = ""; return; }
+      var tooBig = [], smaller = [];
+      D.list.forEach(function (d) { var n = bestCount(d); if (n == null) tooBig.push(d.label); else if (n !== d.count.value) smaller.push(d.label); });
+      fitSum.textContent = !tooBig.length && !smaller.length ? "Every piece fits this wall in its usual size." :
+        (tooBig.length ? "Won't fit this wall: " + tooBig.join(", ") + ". " : "") + (smaller.length ? "Fits in a smaller size: " + smaller.join(", ") + "." : "");
+      if (tab === "builds" || tab === "made") renderPicker();
+      renderOpts();
+    }
 
     /* ---------- actions ---------- */
     var compare = root.querySelector('[data-a="compare"]');
@@ -576,7 +724,7 @@
     function describe() { return state.items.map(function (it) { return it.kind === "design" ? D.describe(it.design, it.opts) : it.label + " (cut from a photo)"; }).join("; "); }
     root.querySelector('[data-a="save"]').addEventListener("click", function () {
       var W = state.pw, H = state.ph, out = document.createElement("canvas"); out.width = W; out.height = H;
-      var ctx = out.getContext("2d"); drawBase(ctx, W, H);
+      var ctx = out.getContext("2d"); drawBase(ctx, W, H, true);
       var keep = [glc.width, glc.height]; drawGL(Math.min(W, 4096), Math.min(H, 4096)); ctx.drawImage(glc, 0, 0, W, H);
       glc.width = keep[0]; glc.height = keep[1]; schedule();
       var fs = Math.max(14, Math.round(W / 60)); ctx.font = "600 " + fs + "px system-ui, sans-serif";
@@ -607,7 +755,7 @@
         say("");
         m.open(state.items.map(function (it) {
           var mm = it.design && it.design.size(it.opts.count);
-          var wallTop = state.own ? 0.2 : state.room.wall[0][1], floor = state.own ? 0.8 : state.room.wall[3][1], perMm = (floor - wallTop) / 2400;
+          var s = scaleInfo(), floor = s.floor, perMm = s.perMm;
           var qh = (dist(it.quad[0], it.quad[3]) + dist(it.quad[1], it.quad[2])) / 2, bottom = (it.quad[2][1] + it.quad[3][1]) / 2;
           var h = mm ? mm[1] : Math.max(400, Math.min(2700, qh / perMm));
           return {
@@ -634,7 +782,7 @@
     // data-demo: once, a few seconds after it opens, switch the lights on to show the glow (only if untouched)
     if (root.dataset.demo && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
       var touched = false; ["pointerdown", "keydown"].forEach(function (ev) { root.addEventListener(ev, function () { touched = true; }, { once: true }); });
-      setTimeout(function () { if (!touched && state.items.length) setLights("on"); }, 3200);
+      setTimeout(function () { if (!touched && !state.own && state.items.length) setLights("on"); }, 3200);
     }
 
     return {

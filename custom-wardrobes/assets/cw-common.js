@@ -6,16 +6,16 @@
   var BASE = window.CW_BASE || "", SITE = window.SITE || {}, PROJECTS = window.CW_PROJECTS || [];
     var CW = window.CW = window.CW || {};
 
-  CW.srcset = function (im) { return im.sizes.map(function (w) { return BASE + im.src + "-" + w + ".webp " + w + "w"; }).join(", "); };
+  CW.srcset = function (im) { return im.sizes.map(function (w) { return BASE + im.src + "-" + w + ".webp?v=2 " + w + "w"; }).join(", "); };
   CW.img = function (im, sizes, eager) {
     var i = document.createElement("img"), last = im.sizes[im.sizes.length - 1];
-    i.src = BASE + im.src + "-" + (im.sizes.indexOf(720) >= 0 ? 720 : last) + ".webp";
+    i.src = BASE + im.src + "-" + (im.sizes.indexOf(720) >= 0 ? 720 : last) + ".webp?v=2";
     i.srcset = CW.srcset(im); i.sizes = sizes || "50vw"; i.alt = im.alt; i.width = im.w; i.height = im.h;
     i.decoding = "async"; i.loading = eager ? "eager" : "lazy";
     return i;
   };
   CW.project = function (id) { return PROJECTS.filter(function (p) { return p.id === id; })[0]; };
-  CW.largest = function (im) { return BASE + im.src + "-" + im.sizes[im.sizes.length - 1] + ".webp"; };
+  CW.largest = function (im) { return BASE + im.src + "-" + im.sizes[im.sizes.length - 1] + ".webp?v=2"; };
 
   // Hide what the client hasn't supplied yet, and fill in what they have
   [].forEach.call(document.querySelectorAll("[data-need]"), function (el) { el.hidden = !SITE[el.dataset.need]; });

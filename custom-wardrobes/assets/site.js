@@ -47,7 +47,7 @@
 
   /* ---------- the lightbox (tiles are built by assets/tiles.js) ---------- */
   var PROJECTS = window.CW_PROJECTS || [];
-  function srcset(im) { return im.sizes.map(function (w) { return im.src + "-" + w + ".webp " + w + "w"; }).join(", "); }
+  function srcset(im) { return im.sizes.map(function (w) { return im.src + "-" + w + ".webp?v=2 " + w + "w"; }).join(", "); }
   var box = null, cur = null, idx = 0, opener = null;
   function buildBox() {
     box = document.createElement("dialog"); box.className = "lb"; box.setAttribute("aria-label", "Project photos");
@@ -67,7 +67,7 @@
   function show() {
     var im = cur.images[idx], img = box.querySelector(".lb-fig img");
     img.srcset = srcset(im); img.sizes = "(max-width: 900px) 100vw, 60vw";
-    img.src = im.src + "-" + im.sizes[im.sizes.length - 1] + ".webp"; img.alt = im.alt;
+    img.src = im.src + "-" + im.sizes[im.sizes.length - 1] + ".webp?v=2"; img.alt = im.alt;
     box.querySelector("h2").textContent = cur.title;
     box.querySelector("p").textContent = im.alt + " \u00b7 " + (idx + 1) + " of " + cur.images.length;
     [].forEach.call(box.querySelectorAll("[data-go]"), function (b) { b.hidden = cur.images.length < 2; });

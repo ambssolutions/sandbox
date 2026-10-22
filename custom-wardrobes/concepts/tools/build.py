@@ -24,11 +24,11 @@ AS_AT = "as at 22 October 2026"
 
 
 def img(im, sizes, eager=False, cls="", alt=None):
-    srcset = ", ".join(f"{B}{im['src']}-{w}.webp {w}w" for w in im["sizes"])
+    srcset = ", ".join(f"{B}{im['src']}-{w}.webp?v=2 {w}w" for w in im["sizes"])
     pick = 720 if 720 in im["sizes"] else im["sizes"][-1]
     load = 'fetchpriority="high"' if eager else 'loading="lazy"'
     c = f' class="{cls}"' if cls else ""
-    return (f'<img{c} src="{B}{im["src"]}-{pick}.webp" srcset="{srcset}" sizes="{sizes}" width="{im["w"]}" height="{im["h"]}" '
+    return (f'<img{c} src="{B}{im["src"]}-{pick}.webp?v=2" srcset="{srcset}" sizes="{sizes}" width="{im["w"]}" height="{im["h"]}" '
             f'{load} decoding="async" alt="{escape(alt if alt is not None else im["alt"])}">')
 
 
@@ -66,6 +66,13 @@ CENTRE = """
 .form .send{grid-column:1/-1;justify-self:center}
 .form-note,.form-status{text-align:center}
 ol.steps,ul.steps{justify-content:center}
+/* photos are always shown whole, at their own shape: never cropped or zoomed in (owner) */
+.tile-ph,.reel{aspect-ratio:9/16}
+.tile-ph img,.reel .tile-ph img,.story-media img,.story-media video,.window img,.phone img,.phone video,.plate img,.tri img,.feature img,.row .thumb img,.make-pics img{object-fit:contain}
+.feature img,.row .thumb img,.make-pics img{aspect-ratio:9/16}
+/* a whole photo never stands taller than the screen: it narrows instead, centred in its space */
+.tile-ph,.feature img{width:min(100%,calc(min(76svh,660px) * .5625));margin-inline:auto}
+.reel .tile-ph{width:auto;margin:0}
 """
 
 
@@ -85,7 +92,7 @@ def head(c, css, preload=""):
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
 {preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=4">
-<link rel="stylesheet" href="{B}assets/studio.css?v=3">
+<link rel="stylesheet" href="{B}assets/studio.css?v=4">
 <script>(function(d){{d.classList.add("js");window.CW_BASE="{B}";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){{d.classList.add("motion");setTimeout(function(){{if(!window.CW_MOTION){{d.classList.remove("motion");d.classList.add("motion-off");}}}},3000);}}}})(document.documentElement);</script>
 <style>
 {css}
@@ -191,10 +198,10 @@ def footer(cls="foot", ink="#f5f0e7"):
 
 
 SCRIPTS = f"""<script src="{B}assets/content.js?v=3"></script>
-<script src="{B}assets/projects.js?v=3"></script>
+<script src="{B}assets/projects.js?v=4"></script>
 <script src="{B}assets/designs.js?v=4" defer></script>
-<script src="{B}assets/studio.js?v=4" defer></script>
-<script src="{B}assets/cw-common.js?v=1" defer></script>
+<script src="{B}assets/studio.js?v=5" defer></script>
+<script src="{B}assets/cw-common.js?v=2" defer></script>
 <script src="{B}assets/cw-motion.js?v=2" defer></script>
 <script src="/concepts/assets/concepts.js?v=2" defer></script>
 </body>
@@ -550,7 +557,7 @@ section{padding-block:clamp(72px,10vw,130px)}
 .stats{display:flex;gap:clamp(18px,3vw,36px);justify-content:center}.stats a{text-decoration:none;display:grid;text-align:center}.stats b{font:700 clamp(28px,3vw,40px)/1 var(--serif)}.stats span{font-size:12px;color:var(--c-muted)}
 .as-at{font-size:12px;color:var(--c-muted)}
 .phones{position:relative;height:min(calc(100svh - var(--header) - 80px),720px);display:flex;justify-content:center;align-items:center}
-.phone{position:absolute;aspect-ratio:9/19;height:86%;border-radius:36px;padding:8px;background:#222;box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
+.phone{position:absolute;aspect-ratio:.574;height:86%;border-radius:36px;padding:8px;background:#222;box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
 .phone .scr{position:relative;width:100%;height:100%;border-radius:28px;overflow:hidden;background:#000}
 .phone img,.phone video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .phone .cap{position:absolute;left:12px;right:12px;bottom:14px;z-index:2;font-size:12px;font-weight:600;text-shadow:0 1px 6px rgba(0,0,0,.8)}
@@ -562,6 +569,7 @@ html.motion .phone:nth-child(2){animation-delay:.25s}html.motion .phone:nth-chil
 .phone:nth-child(2){z-index:2}
 .phone:nth-child(3){transform:translateX(58%) rotate(7deg) scale(.86);opacity:.75}
 @media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.phones{height:min(46svh,420px)}}
+@media (max-width:520px){.phone:nth-child(1){transform:translateX(-44%) rotate(-6deg) scale(.82)}.phone:nth-child(3){transform:translateX(44%) rotate(6deg) scale(.82)}}
 /* the feed: swipe through real builds */
 .feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr));gap:16px}
 .reel{position:relative;aspect-ratio:9/16;border-radius:22px;overflow:hidden;background:#1a1a1d}
@@ -708,7 +716,7 @@ html.motion .plate img{opacity:0;animation:showimg 1.6s 2.5s ease forwards}
 .make-in{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:16px;padding:0 0 30px;align-items:end}.make-in img{width:100%;aspect-ratio:3/4;object-fit:cover}
 .make-in .txt{display:grid;gap:14px;color:var(--c-muted);justify-items:start}.make-in.no-photo{grid-template-columns:1fr}
 @media (max-width:720px){.make-in{grid-template-columns:1fr 1fr}.make-in .txt{grid-column:1/-1}}
-.studio-sec{background:#f1ece3}.studio-sec .st{--st-bg:#e7e0d4;--st-panel:#fff;--st-ink:#141210;--st-muted:#6b635a;--st-line:#e2dcd2;--st-accent:#141210;--st-accent-ink:#faf8f4;--st-card:#faf8f4;--st-radius:2px}
+.studio-sec{background:#f1ece3}.studio-sec .st{--st-bg:#e7e0d4;--st-panel:#fff;--st-ink:#141210;--st-muted:#6b635a;--st-line:#e2dcd2;--st-accent:#141210;--st-accent-ink:#faf8f4;--st-card:#faf8f4;--st-radius:2px;--st-ok:#2f6b3a;--st-no:#a32a1f}
 .counts b{font:400 clamp(40px,4.6vw,64px)/1 var(--serif)}.counts span{color:var(--c-muted);font-size:14px}
 @media (max-width:760px){.counts{grid-template-columns:1fr 1fr}.counts a:nth-child(2){border-right:0}}
 .small{font-size:13px;color:var(--c-muted);text-align:center;margin-top:14px}
