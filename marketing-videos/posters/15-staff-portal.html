@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Poster — Staff &amp; customer portals</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* 4:5 feed poster. Deep indigo + lime palette. */
+  :root { --in: #1e1b4b; --in2: #312e81; --li: #a3e635; --li2: #d9f99d; --tx: #f5f3ff; --mu: #c4b5fd; }
+  #frame { height: 675px; margin-top: -337.5px; display: flex; flex-direction: column; align-items: center; text-align: center; color: var(--tx);
+    background: radial-gradient(55% 40% at 100% 0%, rgba(163,230,53,.22), transparent 70%), radial-gradient(60% 45% at 0% 100%, rgba(129,140,248,.35), transparent 70%),
+                linear-gradient(180deg, var(--in2), var(--in)); }
+  #frame::before { background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1.4px); background-size: 18px 18px; }
+  .logo { margin-top: 20px; width: 108px; position: relative; }
+  .kicker { position: relative; margin-top: 8px; font-size: 13px; font-weight: 900; letter-spacing: .16em; color: var(--li); }
+  h1 { position: relative; margin-top: 4px; font-size: 38px; line-height: 1.04; font-weight: 900; letter-spacing: -.03em; }
+  h1 mark { background: var(--li); color: var(--in); padding: 0 8px; border-radius: 8px; }
+  .sub { position: relative; margin-top: 6px; font-size: 14.5px; color: var(--mu); font-weight: 600; }
+  .main { position: relative; margin-top: 14px; width: 494px; display: flex; gap: 14px; align-items: stretch; text-align: left; }
+  .ph { width: 206px; height: 384px; flex: none; border-radius: 30px; background: #000; padding: 7px; box-shadow: 0 18px 44px rgba(0,0,0,.5), 0 0 0 1.5px #4c1d95; }
+  .s { position: relative; height: 100%; border-radius: 24px; background: #f5f5fa; color: #1e1b4b; overflow: hidden; padding: 30px 10px 10px; }
+  .s::before { content: ""; position: absolute; left: 50%; top: 6px; width: 54px; height: 14px; margin-left: -27px; background: #000; border-radius: 9px; }
+  .ah { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 900; }
+  .ah .yl { width: 20px; height: 20px; border-radius: 6px; background: var(--in2); color: var(--li); display: grid; place-items: center; font-size: 9px; font-weight: 900; }
+  .ah span { margin-left: auto; font-size: 8.5px; color: #6b7280; font-weight: 700; }
+  .job { margin-top: 8px; background: #fff; border-radius: 12px; padding: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.07); }
+  .job .top { display: flex; justify-content: space-between; align-items: center; }
+  .job b { font-size: 11px; } .job small { display: block; font-size: 8.5px; color: #6b7280; font-weight: 700; margin-top: 1px; }
+  .job i { font-style: normal; font-size: 8px; font-weight: 900; padding: 3px 6px; border-radius: 999px; background: #ecfccb; color: #3f6212; white-space: nowrap; }
+  .pics { margin-top: 7px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .pics div { height: 40px; border-radius: 7px; }
+  .p1 { background: linear-gradient(135deg, #93c5fd, #1d4ed8); } .p2 { background: linear-gradient(135deg, #fcd34d, #b45309); } .p3 { background: linear-gradient(135deg, #a7f3d0, #047857); }
+  .ck { margin-top: 6px; background: #fff; border-radius: 10px; padding: 7px 8px; display: flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 800; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .ck .tk { width: 16px; height: 16px; border-radius: 50%; background: var(--li); color: var(--in); display: grid; place-items: center; font-size: 9px; font-weight: 900; flex: none; }
+  .ck span { margin-left: auto; font-size: 8.5px; color: #6b7280; font-weight: 700; }
+  .btn { margin-top: 8px; text-align: center; font-size: 9.5px; font-weight: 900; padding: 7px 0; border-radius: 9px; background: var(--in2); color: var(--li); }
+  .demo { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font-size: 7.5px; color: #9ca3af; font-weight: 700; }
+  .ft { flex: 1; display: grid; grid-template-rows: repeat(4, 1fr); gap: 10px; }
+  .f { display: flex; gap: 9px; align-items: center; background: rgba(255,255,255,.06); border: 1px solid rgba(163,230,53,.3); border-radius: 12px; padding: 9px 10px; }
+  .f .e { font-size: 18px; flex: none; width: 22px; text-align: center; line-height: 1.2; }
+  .f b { display: block; font-size: 13.5px; font-weight: 850; line-height: 1.2; }
+  .f span { display: block; font-size: 11px; color: var(--mu); font-weight: 600; margin-top: 2px; line-height: 1.3; }
+  .cta { position: relative; margin-top: 14px; font-size: 16.5px; font-weight: 800; color: var(--mu); }
+  .cta span.k { background: var(--li); color: var(--in); padding: 3px 9px; border-radius: 7px; margin: 0 3px; box-shadow: 0 3px 0 #4d7c0f; }
+  .url { position: relative; margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--mu); letter-spacing: .04em; }
+  .url b { color: #fff; }
+</style></head><body>
+<div id="frame">
+  <img class="logo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="kicker">STAFF &amp; CUSTOMER PORTALS</div>
+  <h1>Your team. Your jobs.<br><mark>One app.</mark></h1>
+  <div class="sub">No more photos lost in group chats and paper job sheets.</div>
+  <div class="main">
+    <div class="ph"><div class="s">
+      <div class="ah"><div class="yl">YL</div>Your Logo Ltd <span>Today</span></div>
+      <div class="job">
+        <div class="top"><div><b>Job #214 · Bathroom refit</b><small>12 Kauri St · Assigned to Mike</small></div></div>
+        <div class="pics"><div class="p1"></div><div class="p2"></div><div class="p3"></div></div>
+      </div>
+      <div class="ck"><div class="tk">✓</div>Photos from site<span>3 added</span></div>
+      <div class="ck"><div class="tk">✓</div>Checklist done<span>8/8</span></div>
+      <div class="ck"><div class="tk">✓</div>Approved<span>by client</span></div>
+      <div class="ck"><div class="tk">✓</div>Invoice sent<span>2:41pm</span></div>
+      <div class="btn">Next job →</div>
+      <div class="demo">Demo data</div>
+    </div></div>
+    <div class="ft">
+      <div class="f"><div class="e emoji">📋</div><div><b>Jobs, photos &amp; approvals</b><span>Job tracking, photos, invoices and approvals in one place</span></div></div>
+      <div class="f"><div class="e emoji">👥</div><div><b>Everyone sees their part</b><span>Each person sees only what they need</span></div></div>
+      <div class="f"><div class="e emoji">🎨</div><div><b>Your logo &amp; colours</b><span>With a secure sign-in</span></div></div>
+      <div class="f"><div class="e emoji">📱</div><div><b>On every phone</b><span>Installs on the home screen like a normal app</span></div></div>
+    </div>
+  </div>
+  <div class="cta">Want one for your team? Comment <span class="k">APP</span> <span class="emoji">👇</span></div>
+  <div class="url"><b>ambs.co.nz</b> · Built for NZ businesses</div>
+</div></body></html>
