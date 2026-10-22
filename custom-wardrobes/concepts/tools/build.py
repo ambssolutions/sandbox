@@ -84,9 +84,9 @@ def head(c, css, preload=""):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
-{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=1">
+{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=2">
 <link rel="stylesheet" href="{B}assets/studio.css?v=2">
-<script>document.documentElement.classList.add("js");window.CW_BASE="{B}";</script>
+<script>(function(d){{d.classList.add("js");window.CW_BASE="{B}";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){{d.classList.add("motion");setTimeout(function(){{if(!window.CW_MOTION){{d.classList.remove("motion");d.classList.add("motion-off");}}}},3000);}}}})(document.documentElement);</script>
 <style>
 {css}
 {CENTRE}
@@ -195,8 +195,9 @@ def footer(cls="foot", ink="#f5f0e7"):
 SCRIPTS = f"""<script src="{B}assets/content.js?v=3"></script>
 <script src="{B}assets/projects.js?v=3"></script>
 <script src="{B}assets/designs.js?v=4" defer></script>
-<script src="{B}assets/studio.js?v=2" defer></script>
+<script src="{B}assets/studio.js?v=3" defer></script>
 <script src="{B}assets/cw-common.js?v=1" defer></script>
+<script src="{B}assets/cw-motion.js?v=1" defer></script>
 <script src="/concepts/assets/concepts.js?v=2" defer></script>
 </body>
 </html>
@@ -216,7 +217,7 @@ COUNTS = [("82.5K", "followers on TikTok", TIKTOK), ("846.2K", "likes on TikTok"
 def tile(p, sizes, cls="tile", i=0, extra=""):
     im = p["images"][i]
     n = len(p["images"])
-    return (f'<article class="{cls}">'
+    return (f'<article class="{cls} rv">'
             f'<button class="tile-ph" type="button" data-open="{p["id"]}" aria-label="See {n} photo{"s" if n > 1 else ""} of {escape(p["title"])}">{img(im, sizes)}</button>'
             f'<div class="tile-txt"><span class="k">{escape(TYPES[p["type"]])}</span><h3>{escape(p["title"])}</h3>{extra}'
             f'<div class="tile-act"><button type="button" class="t-link" data-open="{p["id"]}">{n} photo{"s" if n > 1 else ""}</button>'
@@ -249,6 +250,16 @@ h2{font-size:clamp(34px,4.4vw,60px);line-height:1.05} .lede{color:var(--c-muted)
 .tri{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .tri img{width:100%;height:100%;object-fit:cover;object-position:50% 35%}
 @media (max-width:760px){.tri{grid-template-columns:1fr}.tri img:not(:nth-child(2)){display:none}}
+.night{position:absolute;inset:0;z-index:1;background:#050403;opacity:0;pointer-events:none}
+html.motion .night{opacity:.86;transition:opacity 1.8s ease .6s}
+html.motion .hero.lit .night{opacity:0}
+.hero.dark .night{opacity:.86!important;transition:opacity 1.4s ease}
+.switch{position:absolute;z-index:3;top:18px;right:var(--pad);min-height:44px;padding:0 18px 0 40px;border-radius:999px;border:1px solid rgba(239,231,218,.35);background:rgba(10,8,7,.55);color:var(--c-ink);font:600 14px/1 var(--sans);cursor:pointer}
+.switch::before{content:"";position:absolute;left:16px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:#5a4f45}
+.switch[aria-pressed="true"]::before{background:var(--c-accent)}
+.tile-ph::after{content:"";position:absolute;inset:0;background:#0a0807;opacity:0;pointer-events:none}
+html.motion .tile-ph::after{opacity:.8;transition:opacity 1.6s ease}
+html.motion .tile.lit .tile-ph::after{opacity:0}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,7,.1) 0%,rgba(10,8,7,.2) 30%,rgba(10,8,7,.9) 56%,rgba(10,8,7,.97) 100%);z-index:1;pointer-events:none}
 .hero-copy{position:relative;z-index:2;padding:0 var(--pad) clamp(28px,7vh,72px);display:grid;gap:clamp(14px,2.4vh,24px);justify-items:center}
 .hero h1{font-size:clamp(3rem,min(8vw,13vh),8.4rem);line-height:.92;letter-spacing:-.02em}
@@ -306,10 +317,12 @@ section{padding-block:clamp(80px,11vw,150px)}
     tiles = "".join(tile(P[k], "(max-width:560px) 92vw, (max-width:900px) 46vw, 34vw") for k in ["oak-marble", "carved-panel", "gurbani-unit", "marble-tv", "walnut-media", "prayer-room", "herringbone", "storage-bed", "upholstered-bed", "gurbani-office"])
     body = f"""<header class="top"><div class="wrap">{brand('#efe7da', '#f0c27a')}{nav()}</div></header>
 <main id="main">
-<section class="hero" data-hero aria-labelledby="hero-title" style="padding:0">
+<section class="hero" id="hero01" data-hero aria-labelledby="hero-title" style="padding:0">
+  <div class="night" aria-hidden="true"></div>
+  <button class="switch" type="button" aria-pressed="true" data-switch>Lights on</button>
   <div class="tri">{img(P["carved-panel"]["images"][0], "(max-width:760px) 100vw, 33vw")}{img(P["gurbani-unit"]["images"][0], "(max-width:760px) 100vw, 33vw", eager=True)}{img(P["prayer-room"]["images"][0], "(max-width:760px) 100vw, 33vw")}</div>
   <div class="hero-copy">
-    <h1 id="hero-title">Design your <em>dream</em></h1>
+    <h1 id="hero-title" data-split>Design your <em>dream</em> <span data-rotate="room|TV wall|prayer room|bedroom|wardrobe">room</span></h1>
     <p>TV walls, prayer units and carved panels with the light built in. Made in Auckland.</p>
     <div class="row"><a class="btn" href="#studio">Try one in your room</a><a class="btn ghost" href="#work">See the builds</a></div>
     <p class="counts-line"><a href="{TIKTOK}" rel="noopener" target="_blank">82.5K on TikTok</a> &middot; <a href="{INSTA}" rel="noopener" target="_blank">60K on Instagram</a> &middot; {AS_AT}</p>
@@ -335,6 +348,18 @@ section{padding-block:clamp(80px,11vw,150px)}
 {contact()}
 </main>
 {footer()}
+<script>
+(function(){{
+  /* the hero room starts dark and its lights come up; the switch turns them off and on again */
+  var hero=document.getElementById("hero01"),sw=hero.querySelector("[data-switch]");
+  requestAnimationFrame(function(){{hero.classList.add("lit");}});
+  sw.addEventListener("click",function(){{var on=sw.getAttribute("aria-pressed")!=="true";sw.setAttribute("aria-pressed",on?"true":"false");sw.textContent=on?"Lights on":"Lights off";hero.classList.toggle("dark",!on);}});
+  /* each build switches on as it reaches the middle of the screen */
+  if(!("IntersectionObserver" in window))return;
+  var io=new IntersectionObserver(function(es){{es.forEach(function(e){{if(e.isIntersecting){{e.target.classList.add("lit");io.unobserve(e.target);}}}});}},{{rootMargin:"-35% 0px -35% 0px"}});
+  [].forEach.call(document.querySelectorAll(".lights .tile"),function(t){{io.observe(t);}});
+}})();
+</script>
 """
     return head(c, css) + body + SCRIPTS
 
@@ -351,7 +376,7 @@ def make_section(cls="make", photo_sizes="(max-width:720px) 46vw, 300px"):
     return f"""<section class="{cls}" id="make" aria-labelledby="make-title">
   <div class="wrap">
     <div class="sec-head"><h2 id="make-title">What we make</h2><p class="lede">Every piece is made for the room it goes in, with the lighting built in.</p></div>
-    <ul class="make-list">{''.join(rows)}</ul>
+    <ul class="make-list rv">{''.join(rows)}</ul>
   </div>
 </section>"""
 
@@ -364,13 +389,13 @@ def process_section(cols=("#1a1410", "#221a14", "#2b2019"), cls="how"):
     return f"""<section class="{cls}" aria-labelledby="how-title">
   <div class="wrap">
     <div class="sec-head"><h2 id="how-title">How it works</h2></div>
-    <ol class="steps3">{cards}</ol>
+    <ol class="steps3 rv">{cards}</ol>
   </div>
 </section>"""
 
 
 def counts_html(cls="counts"):
-    return f'<div class="{cls}">' + "".join(f'<a href="{u}" rel="noopener" target="_blank"><b>{n}</b><span>{l}</span></a>' for n, l, u in COUNTS) + "</div>"
+    return f'<div class="{cls} rv">' + "".join(f'<a href="{u}" rel="noopener" target="_blank"><b>{n}</b><span>{l}</span></a>' for n, l, u in COUNTS) + "</div>"
 
 
 # ---------------------------------------------------------------------------------------------
@@ -401,7 +426,13 @@ section{padding-block:clamp(80px,10vw,140px)}
 /* hero: his arch, framing a real build */
 .hero{background:var(--dark);color:#f5f0e7;padding-block:clamp(24px,4vh,56px);min-height:calc(100svh - var(--header));display:grid;align-items:center}
 .hero .wrap{display:grid;grid-template-columns:1fr auto;gap:clamp(30px,5vw,80px);align-items:center}
-.window{position:relative;width:min(40vw,calc((100svh - var(--header) - 100px) * .5625));aspect-ratio:9/16;border-radius:var(--arch);overflow:hidden;background:#1a1410;justify-self:center;outline:1px solid #c9a35a;outline-offset:12px}
+.window-wrap{position:relative;justify-self:center}
+.window{position:relative;width:min(40vw,calc((100svh - var(--header) - 100px) * .5625));aspect-ratio:9/16;border-radius:var(--arch);overflow:hidden;background:#1a1410}
+.window-line{position:absolute;left:-14px;top:-14px;width:calc(100% + 28px);height:calc(100% + 14px);overflow:visible;pointer-events:none}
+.window-line path{fill:none;stroke:#c9a35a;stroke-width:1.5;vector-effect:non-scaling-stroke}
+html.motion .window{clip-path:inset(100% 0 0 0);animation:archopen 1.8s .2s cubic-bezier(.65,0,.35,1) forwards}
+html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 2.4s .9s cubic-bezier(.65,0,.35,1) forwards}
+@keyframes archopen{to{clip-path:inset(0 0 0 0)}}@keyframes linedraw{to{stroke-dashoffset:0}}
 .window img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-words{display:grid;gap:clamp(14px,2.4vh,24px);justify-items:center;text-align:center}
 .hero h1{font-size:clamp(3rem,min(7.4vw,12vh),8rem);line-height:.92;letter-spacing:-.04em}
@@ -455,12 +486,13 @@ section{padding-block:clamp(80px,10vw,140px)}
 <section class="hero" data-hero aria-labelledby="hero-title">
   <div class="wrap">
     <div class="hero-words">
-      <h1 id="hero-title">Design your <em>dream</em> room</h1>
+      <h1 id="hero-title" data-split>Design your <em>dream</em> <span data-rotate="room|TV wall|prayer room|bedroom|wardrobe">room</span></h1>
       <p>TV walls, prayer units, carved panels, bedrooms and wardrobes, made for your home in Auckland.</p>
       <div class="row"><a class="btn" href="#studio">Place one in your room</a><a class="btn ghost" href="#work">See our work</a></div>
       <p class="hero-proof"><a href="{TIKTOK}" rel="noopener" target="_blank">82.5K on TikTok</a> &middot; <a href="{INSTA}" rel="noopener" target="_blank">60K on Instagram</a> &middot; {AS_AT}</p>
     </div>
-    <div class="window">{img(P["gurbani-unit"]["images"][1], "(max-width:900px) 64vw, 40vw", eager=True)}</div>
+    <div class="window-wrap"><div class="window">{img(P["gurbani-unit"]["images"][1], "(max-width:900px) 64vw, 40vw", eager=True)}</div>
+      <svg class="window-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M0,100 L0,28 A50,28 0 0 1 100,28 L100,100"/></svg></div>
   </div>
 </section>
 <section id="work" aria-labelledby="work-title">
@@ -519,7 +551,7 @@ section{padding-block:clamp(72px,10vw,130px)}
 .handle{display:inline-flex;gap:8px;align-items:center;font-size:14px;font-weight:600;color:var(--c-muted)}
 .handle i{width:8px;height:8px;border-radius:50%;background:var(--c-accent)}
 .hero h1{font-size:clamp(2.8rem,min(6.4vw,11vh),6.6rem);line-height:.92}
-.hero h1 span{color:var(--gold)}
+.hero h1 em{font-style:normal;color:var(--gold)}
 .hero p{margin:0;color:var(--c-muted);max-width:36ch;font-size:clamp(16px,1.4vw,19px)}
 .stats{display:flex;gap:clamp(18px,3vw,36px);justify-content:center}.stats a{text-decoration:none;display:grid;text-align:center}.stats b{font:700 clamp(28px,3vw,40px)/1 var(--serif)}.stats span{font-size:12px;color:var(--c-muted)}
 .as-at{font-size:12px;color:var(--c-muted)}
@@ -528,6 +560,10 @@ section{padding-block:clamp(72px,10vw,130px)}
 .phone .scr{position:relative;width:100%;height:100%;border-radius:28px;overflow:hidden;background:#000}
 .phone img,.phone video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .phone .cap{position:absolute;left:12px;right:12px;bottom:14px;z-index:2;font-size:12px;font-weight:600;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+html.motion .phone{translate:0 70px;opacity:0;animation:rise 1.4s cubic-bezier(.22,.61,.36,1) forwards}
+html.motion .phone:nth-child(2){animation-delay:.25s}html.motion .phone:nth-child(1){animation-delay:.55s}html.motion .phone:nth-child(3){animation-delay:.75s}
+@keyframes rise{to{translate:0 0;opacity:var(--o,1)}}
+.phone:nth-child(1),.phone:nth-child(3){--o:.75}
 .phone:nth-child(1){transform:translateX(-58%) rotate(-7deg) scale(.86);opacity:.75}
 .phone:nth-child(2){z-index:2}
 .phone:nth-child(3){transform:translateX(58%) rotate(7deg) scale(.86);opacity:.75}
@@ -578,7 +614,7 @@ section{padding-block:clamp(72px,10vw,130px)}
   <div class="wrap">
     <div class="hero-copy">
       <span class="handle"><i></i>@customwardrobes1singh</span>
-      <h1 id="hero-title">Design your <span>dream</span></h1>
+      <h1 id="hero-title" data-split>Design your <em>dream</em> <span data-rotate="room|TV wall|prayer room|bedroom|wardrobe">room</span></h1>
       <p>The TV walls, prayer units and carved panels you've seen on TikTok and Instagram, built for homes in Auckland.</p>
       <div class="stats"><a href="{TIKTOK}" rel="noopener" target="_blank"><b>82.5K</b><span>TikTok followers</span></a><a href="{TIKTOK}" rel="noopener" target="_blank"><b>846.2K</b><span>likes</span></a><a href="{INSTA}" rel="noopener" target="_blank"><b>60K</b><span>on Instagram</span></a></div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><a class="btn hot" href="#studio">Put one in my room</a><a class="btn ghost" href="#work">Watch the builds</a></div>
@@ -646,9 +682,13 @@ section{padding-block:clamp(80px,10vw,140px)}
 .index a{text-decoration:none}
 .plate{position:relative;margin:0;justify-self:center;width:min(100%,calc((100svh - var(--header) - 120px) * .5625));aspect-ratio:560/1080;background:#fff;box-shadow:0 30px 60px -40px rgba(20,18,16,.5)}
 .plate img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.plate svg{position:absolute;top:0;right:calc(100% + 18px);width:38%;height:38%;opacity:.8}
-.plate svg path,.plate svg rect,.plate svg line{fill:none;stroke:#a8812f;stroke-width:1;vector-effect:non-scaling-stroke}
-@media (max-width:1100px){.plate svg{display:none}}
+.plate svg{position:absolute;inset:0;width:100%;height:100%;opacity:0;pointer-events:none}
+html.motion .plate svg{opacity:1;animation:hidesvg 1.4s 3.1s ease forwards}
+html.motion .plate svg *{stroke-dasharray:1;stroke-dashoffset:1;animation:linedraw 2.4s .3s cubic-bezier(.65,0,.35,1) forwards}
+html.motion .plate img{opacity:0;animation:showimg 1.6s 2.5s ease forwards}
+@keyframes linedraw{to{stroke-dashoffset:0}}@keyframes showimg{to{opacity:1}}@keyframes hidesvg{to{opacity:0}}
+.plate svg path,.plate svg rect,.plate svg line{fill:none;stroke:#85631f;stroke-width:1.4;vector-effect:non-scaling-stroke}
+
 .plate figcaption{position:absolute;left:0;right:0;bottom:-34px;text-align:center;font-size:13px;color:var(--c-muted)}
 @media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.plate{width:min(70vw,300px)}.index{display:none}}
 /* catalogue: an index where each row shows its build */
@@ -715,7 +755,7 @@ section{padding-block:clamp(80px,10vw,140px)}
   <div class="wrap">
     <div class="hero-copy">
       <span class="no">Joinery with light, Auckland</span>
-      <h1 id="hero-title">Design your <em>dream</em> room</h1>
+      <h1 id="hero-title" data-split>Design your <em>dream</em> <span data-rotate="room|TV wall|prayer room|bedroom|wardrobe">room</span></h1>
       <p>Every piece starts as a drawing of your wall and ends as a lit build in your home: TV walls, prayer units, carved panels, bedrooms and wardrobes.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a class="btn" href="#studio">Place a piece in your room</a><a class="btn line" href="#work">The catalogue</a></div>
       <ol class="index"><li><a href="#make">TV and media walls</a><span>01</span></li><li><a href="#make">Prayer units</a><span>02</span></li><li><a href="#make">Carved panels</a><span>03</span></li><li><a href="#make">Bedrooms and wardrobes</a><span>04</span></li></ol>
@@ -822,12 +862,12 @@ section{padding-block:clamp(70px,9vw,120px)}
 <section class="hero" id="studio" data-hero aria-labelledby="hero-title">
   <div class="wrap">
     <div class="hero-head">
-      <h1 id="hero-title">See your <em>dream</em> room before we build it</h1>
+      <h1 id="hero-title" data-split>See your <em>dream</em> <span data-rotate="room|TV wall|prayer room|bedroom|wardrobe">room</span> before we build it</h1>
       <div class="hero-side"><p>TV walls, prayer units, carved panels, bedrooms and wardrobes, made in Auckland. Try any of them on your own wall, right here.</p>
       <small><a href="{TIKTOK}" rel="noopener" target="_blank">82.5K on TikTok</a> &middot; <a href="{INSTA}" rel="noopener" target="_blank">60K on Instagram</a> &middot; {AS_AT}</small></div>
     </div>
     <ol class="steps"><li><b>1</b>Snap your wall</li><li><b>2</b>Pick any of our pieces</li><li><b>3</b>Drag the corners, turn the lights on</li><li><b>4</b>See it in 3D, then send it to us</li></ol>
-    <div data-studio data-start="litframe" data-eager="1"></div>
+    <div data-studio data-start="litframe" data-eager="1" data-demo="1"></div>
   </div>
 </section>
 <section id="work" aria-labelledby="work-title">
@@ -855,7 +895,7 @@ section{padding-block:clamp(70px,9vw,120px)}
 
 CONCEPTS = [
     {"id": "01", "slug": "01-after-dark", "name": "After Dark", "theme": "#0a0807", "build": c01,
-     "fonts": "https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Inter:wght@400;500;600;700&display=swap"},
+     "fonts": "https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Inter:wght@400;500;600;700&display=optional"},
     {"id": "02", "slug": "02-arch", "name": "Arch", "theme": "#0f0c0a", "build": c02,
      "fonts": "https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap"},
     {"id": "03", "slug": "03-reels", "name": "Reels", "theme": "#0d0d0f", "build": c03,

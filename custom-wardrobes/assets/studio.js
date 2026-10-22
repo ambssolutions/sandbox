@@ -622,6 +622,11 @@
       if (first) addDesign(first);
     });
     root.classList.add("st-ready");
+    // data-demo: once, a few seconds after it opens, switch the lights on to show the glow (only if untouched)
+    if (root.dataset.demo && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      var touched = false; ["pointerdown", "keydown"].forEach(function (ev) { root.addEventListener(ev, function () { touched = true; }, { once: true }); });
+      setTimeout(function () { if (!touched && state.items.length) setLights("on"); }, 3200);
+    }
 
     return {
       add: function (id) { var d = D.list.filter(function (x) { return x.id === id; })[0]; if (d) addDesign(d); },
