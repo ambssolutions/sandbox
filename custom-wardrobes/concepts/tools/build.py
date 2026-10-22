@@ -50,6 +50,25 @@ def brand(ink, gold="#c9a35a", sub=True):
             f'<span><b>Custom Wardrobes</b>{s}</span></a>')
 
 
+# Owner's rule: centre section headings, intros, text and buttons. Only FAQs, form fields and the
+# catalogue list stay left-aligned. Added last to every concept so it wins over the concept's own CSS.
+CENTRE = """
+.sec-head,.hero-copy,.hero-words,.hero-head,.story-copy,.contact-copy,.tile-txt,.step,.make-in .txt,.feature button,.tt,.cta-band{text-align:center;justify-items:center;justify-content:center}
+.lede{margin-left:auto;margin-right:auto}
+.contact-grid{grid-template-columns:1fr;max-width:820px;margin-inline:auto;gap:clamp(28px,4vw,48px)}
+.contact-copy .lede{margin:0 auto}
+.details{display:flex!important;flex-wrap:wrap;justify-content:center;gap:16px 40px}.details div{display:grid;justify-items:center;text-align:center}
+.tile-act,.make-in .txt,.hero-head .row{justify-content:center}
+.make-in{grid-template-columns:1fr 1fr!important;justify-items:center;padding-left:0!important;padding-right:0!important}.make-in .txt{grid-column:1/-1;max-width:60ch}.make-in.no-photo{grid-template-columns:1fr!important}
+.hero-head{display:grid!important;justify-items:center;justify-content:center;text-align:center}.hero-side{justify-items:center;text-align:center}
+.reel .tile-txt{justify-items:center;text-align:center}
+.step .n{justify-self:center}
+.form .send{grid-column:1/-1;justify-self:center}
+.form-note,.form-status{text-align:center}
+ol.steps,ul.steps{justify-content:center}
+"""
+
+
 def head(c, css, preload=""):
     return f"""<!doctype html>
 <html lang="en-NZ" data-concept="{c['slug']}">
@@ -70,6 +89,7 @@ def head(c, css, preload=""):
 <script>document.documentElement.classList.add("js");window.CW_BASE="{B}";</script>
 <style>
 {css}
+{CENTRE}
 </style>
 </head>
 <body>

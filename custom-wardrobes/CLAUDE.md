@@ -9,7 +9,7 @@ Built by AMBS Solutions. Follow the **ambs-website-design** skill (and **website
 
 ## Design rules the owner always checks
 - Everything fits the screen: 390×844 phones and 1280×720 / 1366×768 / 1440×900 / 1536×864 laptops. No overlapping text, and the hero fits the first screen.
-- Centre-align section headings, intros, the hero, the footer and menus. Keep tick lists, FAQs, timelines and forms left-aligned.
+- Centre-align every section from the first draft: headings, intros, paragraphs, cards, captions, contact details, buttons (alone or as a centred row), the hero, the footer and menus. Only FAQs, form fields, the catalogue list and the studio tools stay left-aligned. Run `node tools/align-check.mjs` (with `python3 -m http.server 8124`) and get TOTAL 0 before showing anything.
 - One type scale across all pages, with calm, readable fonts.
 - Real logo (vector), and all accent colours taken from the logo. No glow, haloes, highlighter bands or white outer shadows.
 - No animation on this site (owner's rule, 22 October 2026): no reveals, no stacking cards, no carousels or sliders, no drawing or scroll effects, no hover zoom. Sections open instantly. Videos play only when tapped. The room studio is the interactive feature.
