@@ -19,6 +19,9 @@ Preview: `python3 -m http.server`, then open http://localhost:8000.
 - `assets/site.css`: one stylesheet.
 - `tools/build-media.py`: rebuilds photos, clips, cut-outs and textures from the downloaded social media files. `tools/sample-room.py` draws the sample room.
 
+## Room studio (assets/studio.js, studio.css, studio3d.js)
+Used by every concept. Your photo or a sample room; real builds, made-to-measure designs, a piece cut from any gallery photo, or an uploaded screenshot; up to four pieces; Daylight / Lights on / Lights off; lit panels with a choice of contents (Gurbani, Radha Krishna, or the visitor's own image shown as a carving); View in 3D (three.js, vendored in assets/vendor/three, loaded only when opened). Photos never leave the device.
+
 ## Adding a project
 Add photos with `tools/projects-media.json` and `tools/build-media.py`, then add the project to `assets/projects.js` (title, type, text, and alt text for each photo).
 

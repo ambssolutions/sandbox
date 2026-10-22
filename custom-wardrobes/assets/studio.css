@@ -18,6 +18,11 @@
 .st-h::before { content: ""; position: absolute; inset: 12px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px var(--st-accent), 0 2px 8px rgba(0,0,0,.4); }
 .st-grip::before { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: rgba(20,15,11,.8); box-shadow: 0 0 0 2px var(--st-accent); }
 .st-grip::after { content: ""; position: absolute; inset: 15px; background: linear-gradient(#fff, #fff) center / 2px 100% no-repeat, linear-gradient(#fff, #fff) center / 100% 2px no-repeat; }
+.st-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-top: 10px; }
+.st-lights { display: inline-flex; padding: 3px; border-radius: 999px; border: 1px solid var(--st-line); }
+.st-lights button { min-height: 38px; padding: 0 14px; border-radius: 999px; border: 0; background: none; cursor: pointer; font-size: 13px; font-weight: 700; color: var(--st-ink); }
+.st-lights button[aria-pressed="true"] { background: var(--st-accent); color: var(--st-accent-ink); }
+.st .st-3d { min-height: 42px; }
 .st-layers { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 10px; min-height: 36px; }
 .st-layer { min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--st-line); background: none; cursor: pointer; font-size: 13px; font-weight: 600; }
 .st-layer[aria-pressed="true"] { background: var(--st-accent); color: var(--st-accent-ink); border-color: var(--st-accent); }
@@ -94,3 +99,18 @@ html.st-locked { overflow: hidden; }
 /* space held for the studio before it is built, so nothing below it jumps */
 [data-studio]:not(.st) { min-height: 1316px; }
 @media (max-width: 1080px) { [data-studio]:not(.st) { min-height: calc(40vw + 1490px); } }
+
+/* 3D view */
+.st3d { position: fixed; inset: 0; z-index: 210; background: #0b0a09; color: #f5f0e7; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; font-family: var(--sans, system-ui); }
+.st3d-top { display: flex; justify-content: space-between; align-items: center; gap: 12px 20px; flex-wrap: wrap; padding: 12px clamp(14px, 3vw, 32px); }
+.st3d-top h2 { margin: 0; font: 400 24px/1.2 var(--serif, Georgia); }
+.st3d-top p { margin: 2px 0 0; font-size: 13px; color: #c4b6a3; }
+.st3d-ctl { display: flex; gap: 10px; align-items: center; }
+.st3d .st-lights { border-color: rgba(245,240,231,.25); }
+.st3d .st-lights button { color: #f5f0e7; }
+.st3d .st-lights button[aria-pressed="true"] { background: #c9a35a; color: #1b130a; }
+.st3d-close { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(245,240,231,.3); background: none; color: #f5f0e7; font-size: 26px; line-height: 1; cursor: pointer; }
+.st3d-stage { position: relative; min-height: 0; touch-action: none; }
+.st3d-stage canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+.st3d-note { margin: 0; padding: 8px 16px calc(10px + env(safe-area-inset-bottom)); font-size: 12px; color: #a99b88; text-align: center; }
+.st3d :focus-visible { outline: 2px solid #c9a35a; outline-offset: 3px; }

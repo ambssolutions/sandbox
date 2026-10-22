@@ -82,7 +82,11 @@
       '<button class="st-h" type="button" aria-label="Bottom right corner of the selected piece. Use the arrow keys to move it."></button>' +
       '<button class="st-h" type="button" aria-label="Bottom left corner of the selected piece. Use the arrow keys to move it."></button>' +
       '<button class="st-grip" type="button" aria-label="Move the selected piece. Drag it, or use the arrow keys."></button>' +
-      '</div></div><div class="st-layers" aria-label="Pieces in your room"></div><p class="st-status" role="status" aria-live="polite"></p></div>' +
+      '</div></div>' +
+      '<div class="st-bar"><div class="st-lights" role="group" aria-label="Lighting">' +
+      '<button type="button" data-l="day" aria-pressed="true">Daylight</button><button type="button" data-l="on" aria-pressed="false">Lights on</button><button type="button" data-l="off" aria-pressed="false">Lights off</button></div>' +
+      '<button type="button" class="st-btn st-3d" data-a="3d">View in 3D</button></div>' +
+      '<div class="st-layers" aria-label="Pieces in your room"></div><p class="st-status" role="status" aria-live="polite"></p></div>' +
       '<div class="st-panel">' +
       '<section class="st-step"><h2><span>1</span>Your room</h2><div class="st-room">' +
       '<label class="st-btn st-primary st-file">Take a photo<input type="file" accept="image/*" capture="environment" aria-label="Take a photo of your room"></label>' +
@@ -115,7 +119,7 @@
     var stage = $(".st-stage"), base = $(".st-base"), glc = $(".st-gl"), status = $(".st-status");
     var handles = [].slice.call(root.querySelectorAll(".st-stage .st-h")), grip = $(".st-grip");
 
-    var state = { photo: null, pw: 1600, ph: 1066, room: ROOMS[0], own: false, items: [], active: -1, hide: false };
+    var state = { photo: null, pw: 1600, ph: 1066, room: ROOMS[0], own: false, items: [], active: -1, hide: false, lights: "day" };
 
     /* ---------- WebGL ---------- */
     var gl = glc.getContext("webgl", { premultipliedAlpha: true, preserveDrawingBuffer: true, antialias: true, alpha: true });
@@ -152,7 +156,8 @@
         var hi = inv3(squareToQuad(q)); if (!hi) return;
         gl.bindTexture(gl.TEXTURE_2D, it.tex);
         gl.uniformMatrix3fv(U.hi, false, [hi[0], hi[3], hi[6], hi[1], hi[4], hi[7], hi[2], hi[5], hi[8]]);
-        gl.uniform1f(U.lt, it.light); gl.uniform1f(U.wm, it.warmth);
+        var lt = it.light + (state.lights === "off" ? -0.62 : state.lights === "on" ? (isLit(it) ? -0.05 : -0.5) : 0);
+        gl.uniform1f(U.lt, lt); gl.uniform1f(U.wm, it.warmth);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([q[0][0], q[0][1], q[1][0], q[1][1], q[2][0], q[2][1], q[0][0], q[0][1], q[2][0], q[2][1], q[3][0], q[3][1]]), gl.DYNAMIC_DRAW);
         gl.drawArrays(gl.TRIANGLES, 0, 6);
       });
@@ -160,7 +165,22 @@
     function drawBase(ctx, W, H) {
       ctx.clearRect(0, 0, W, H);
       if (state.photo) ctx.drawImage(state.photo, 0, 0, W, H);
+      if (state.lights !== "day") { ctx.fillStyle = "rgba(10,12,26," + (state.lights === "on" ? 0.6 : 0.68) + ")"; ctx.fillRect(0, 0, W, H); }
       if (state.hide) return;
+      if (state.lights === "on") state.items.forEach(function (it) {
+        if (!isLit(it)) return;
+        var q = it.quad.map(function (p) { return [p[0] * W, p[1] * H]; }), hgt = dist(q[0], q[3]), off = W * 4, col = lightOf(it);
+        ctx.save(); ctx.globalCompositeOperation = "lighter";
+        // light spilling onto the wall around the piece
+        ctx.shadowColor = "rgba(" + col + ",.55)"; ctx.shadowBlur = Math.max(20, hgt * 0.28); ctx.shadowOffsetX = off;
+        ctx.beginPath(); q.forEach(function (p, i) { ctx[i ? "lineTo" : "moveTo"](p[0] - off, p[1]); }); ctx.closePath(); ctx.fill();
+        // and a pool of light on the floor below it
+        var bx = (q[3][0] + q[2][0]) / 2, by = (q[3][1] + q[2][1]) / 2, bw = dist(q[3], q[2]);
+        var g = ctx.createRadialGradient(bx, by, 2, bx, by, bw * 0.75);
+        g.addColorStop(0, "rgba(" + col + ",.35)"); g.addColorStop(1, "rgba(" + col + ",0)");
+        ctx.shadowColor = "transparent"; ctx.fillStyle = g; ctx.fillRect(bx - bw, by - bw * 0.2, bw * 2, bw * 0.9);
+        ctx.restore();
+      });
       state.items.forEach(function (it) {
         if (it.shadow <= 0) return;
         var q = it.quad.map(function (p) { return [p[0] * W, p[1] * H]; }), hgt = dist(q[0], q[3]), off = W * 4;
@@ -196,6 +216,23 @@
     }
     function centre(q) { var x = 0, y = 0; q.forEach(function (p) { x += p[0] / 4; y += p[1] / 4; }); return [x, y]; }
 
+    /* ---------- lighting ---------- */
+    function isLit(it) { if (it.kind !== "design") return true; var t = D.trims[it.opts.trim]; return !!(t && t.light) || !!it.design.photo; }
+    function lightOf(it) { var t = it.kind === "design" && D.trims[it.opts.trim]; return t && t.light ? t.light : "255,196,120"; }
+    function effOpts(it) {
+      var o = { count: it.opts.count, finish: it.opts.finish, trim: it.opts.trim, content: it.opts.content };
+      if (state.lights === "off" && D.trims[o.trim] && D.trims[o.trim].light) o.trim = "dark";
+      return o;
+    }
+    function setLights(m) {
+      state.lights = m;
+      [].forEach.call(root.querySelectorAll(".st-lights button"), function (b) { b.setAttribute("aria-pressed", b.dataset.l === m ? "true" : "false"); });
+      state.items.forEach(function (it) { if (it.kind === "design" && !it.design.photo) rerender(it); });
+      schedule();
+      say({ day: "Daylight.", on: "Evening, with the lights on.", off: "Evening, with the lights off." }[m]);
+    }
+    [].forEach.call(root.querySelectorAll(".st-lights button"), function (b) { b.addEventListener("click", function () { setLights(b.dataset.l); }); });
+
     /* ---------- pieces ---------- */
     // Start a piece straight on, at true scale when we know its size, staggered so pieces don't stack exactly
     function startQuad(mm, lift, aspect) {
@@ -218,17 +255,19 @@
     }
     function addDesign(d) {
       D.ready().then(function () {
-        var opts = { count: d.count.value, finish: d.finish, trim: d.trim };
-        var c = D.render(d, opts, maxTex);
-        addItem({ label: d.label, kind: "design", design: d, opts: opts, tex: texFrom(c), aspect: c.width / c.height, quad: startQuad(d.size(opts.count), d.lift, 1) });
+        var opts = { count: d.count.value, finish: d.finish, trim: d.trim, content: d.content };
+        var it = { label: d.label, kind: "design", design: d, opts: opts };
+        var c = D.render(d, effOpts(it), maxTex);
+        it.canvas = c; it.tex = texFrom(c); it.aspect = c.width / c.height; it.quad = startQuad(d.size(opts.count), d.lift, 1);
+        addItem(it);
       });
     }
     function addCut(canvas, label) {
-      addItem({ label: label, kind: "cut", tex: texFrom(canvas), aspect: canvas.width / canvas.height, quad: startQuad(null, 0, canvas.width / canvas.height) });
+      addItem({ label: label, kind: "cut", canvas: canvas, tex: texFrom(canvas), aspect: canvas.width / canvas.height, quad: startQuad(null, 0, canvas.width / canvas.height) });
     }
     function rerender(it) {
-      var oldA = it.aspect, c = D.render(it.design, it.opts, maxTex);
-      gl.deleteTexture(it.tex); it.tex = texFrom(c); it.aspect = c.width / c.height;
+      var oldA = it.aspect, c = D.render(it.design, effOpts(it), maxTex);
+      gl.deleteTexture(it.tex); it.canvas = c; it.tex = texFrom(c); it.aspect = c.width / c.height;
       var k = it.aspect / oldA, q = it.quad;
       [[0, 1], [3, 2]].forEach(function (p) { var a = q[p[0]], b = q[p[1]]; b[0] = a[0] + (b[0] - a[0]) * k; b[1] = a[1] + (b[1] - a[1]) * k; });
       schedule();
@@ -337,6 +376,15 @@
       var d = it.design; optBox.textContent = "";
       optSec.querySelector("h2").lastChild.textContent = d.label;
       chips("Finish", d.finishes, it.opts.finish, function (k) { return D.finishes[k].label; }, swatchFor, function (k) { it.opts.finish = k; rerender(it); renderOpts(); });
+      if (d.contents) {
+        chips("Contents", d.contents, it.opts.content, function (k) { return D.contents[k].label; }, function (k) {
+          return k === "custom" ? "conic-gradient(#e9e4da,#b9ab98,#e9e4da)" : "url(" + BASE + "assets/img/designs/content-" + (k === "moolmantar" ? "mool-mantar" : "radha-krishna") + ".webp) center / cover";
+        }, function (k) {
+          if (k === "custom") { customFor = it; customInput.click(); return; }
+          it.opts.content = k; rerender(it); renderOpts();
+        });
+        optBox.appendChild(el("p", "st-note", "Choose what goes inside the panel. With <b>Your own image</b>, upload a picture and we show it as a lit carving."));
+      }
       chips(d.trimLabel || "Trim and handles", d.trims, it.opts.trim, function (k) { return D.trims[k].label; }, trimSwatch, function (k) { it.opts.trim = k; rerender(it); renderOpts(); });
       var c = el("div", "st-count");
       c.appendChild(el("h3", "", d.count.label.replace(/, m$/, " (metres)")));
@@ -347,6 +395,14 @@
       function step(n) { var v = Math.min(d.count.max, Math.max(d.count.min, it.opts.count + n)); if (v !== it.opts.count) { it.opts.count = v; rerender(it); renderOpts(); } }
       if (d.note) optBox.appendChild(el("p", "st-note", d.note));
     }
+
+    var customFor = null, customInput = el("input"); customInput.type = "file"; customInput.accept = "image/*"; customInput.hidden = true; root.appendChild(customInput);
+    customInput.addEventListener("change", function () {
+      var f = customInput.files && customInput.files[0]; if (!f || !customFor) return;
+      var u = URL.createObjectURL(f);
+      loadImage(u).then(function (img) { D.setCustom(img); URL.revokeObjectURL(u); customFor.opts.content = "custom"; rerender(customFor); renderOpts(); say("Your image is in the panel, shown as a lit carving."); });
+      customInput.value = "";
+    });
 
     /* ---------- fit sliders ---------- */
     var sliders = {};
@@ -533,6 +589,26 @@
       if (k && it && it.design) k.value = { tv: "TV unit or media wall", prayer: "Prayer unit or carved panel", walls: "Feature wall or bedroom", wardrobes: "Wardrobe" }[it.design.cat] || k.value;
       var c = document.getElementById("contact");
       if (c) { c.scrollIntoView(); var n = document.getElementById("f-name"); if (n) n.focus({ preventScroll: true }); }
+    });
+
+    root.querySelector('[data-a="3d"]').addEventListener("click", function () {
+      if (!state.items.length) { say("Pick a piece first, then view it in 3D."); return; }
+      say("Opening the 3D room…");
+      import(new URL(BASE + "assets/studio3d.js", location.href).href).then(function (m) {
+        say("");
+        m.open(state.items.map(function (it) {
+          var mm = it.design && it.design.size(it.opts.count);
+          var wallTop = state.own ? 0.2 : state.room.wall[0][1], floor = state.own ? 0.8 : state.room.wall[3][1], perMm = (floor - wallTop) / 2400;
+          var qh = (dist(it.quad[0], it.quad[3]) + dist(it.quad[1], it.quad[2])) / 2, bottom = (it.quad[2][1] + it.quad[3][1]) / 2;
+          var h = mm ? mm[1] : Math.max(400, Math.min(2700, qh / perMm));
+          return {
+            label: it.label, canvas: it.canvas, w: mm ? mm[0] : h * it.aspect, h: h,
+            lift: it.design && it.design.lift != null ? it.design.lift : Math.max(0, Math.min(1200, (floor - bottom) / perMm)),
+            depth: { tv: 380, prayer: 420, walls: 40, wardrobes: 600 }[it.design ? it.design.cat : ""] || 300,
+            x: centre(it.quad)[0], lit: isLit(it), light: lightOf(it)
+          };
+        }), state.lights, function (m) { setLights(m); });
+      }).catch(function () { say("The 3D room couldn't open on this device."); });
     });
 
     var rt; addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { layout(); layoutCut(); }, 120); });

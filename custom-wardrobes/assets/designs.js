@@ -41,7 +41,15 @@
     herringbone: "assets/img/designs/tex-herringbone.webp",
     carved: "assets/img/designs/carved-panel.webp",
     prayer: "assets/img/designs/prayer-unit.webp",
-    litframe: "assets/img/designs/lit-tv-frame.webp"
+    litframe: "assets/img/designs/lit-tv-frame.webp",
+    moolmantar: "assets/img/designs/content-mool-mantar.webp",
+    radhakrishna: "assets/img/designs/content-radha-krishna.webp"
+  };
+  // What can go inside a lit panel. "custom" is the visitor's own image, shown as a carving.
+  var CONTENTS = {
+    moolmantar: { label: "Gurbani (Mool Mantar)" },
+    radhakrishna: { label: "Radha Krishna carving" },
+    custom: { label: "Your own image" }
   };
   // Pages in sub-folders set window.CW_BASE (e.g. "../../../") so these paths still resolve
   Object.keys(SRC).forEach(function (k) { SRC[k] = (window.CW_BASE || "") + SRC[k]; });
@@ -57,6 +65,23 @@
     }));
     return loading;
   }
+  // Turn the visitor's image into a carved, backlit look: greyscale, then an emboss, then warm white
+  function setCustom(img) {
+    var max = 700, k = Math.min(1, max / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height));
+    var w = Math.max(2, Math.round((img.naturalWidth || img.width) * k)), h = Math.max(2, Math.round((img.naturalHeight || img.height) * k));
+    var c = document.createElement("canvas"); c.width = w; c.height = h;
+    var x = c.getContext("2d"); x.drawImage(img, 0, 0, w, h);
+    var src = x.getImageData(0, 0, w, h), d = src.data, g = new Float32Array(w * h), out = x.createImageData(w, h), o = out.data;
+    for (var i = 0; i < w * h; i++) g[i] = 0.299 * d[i * 4] + 0.587 * d[i * 4 + 1] + 0.114 * d[i * 4 + 2];
+    for (var y = 0; y < h; y++) for (var xx = 0; xx < w; xx++) {
+      var a = g[Math.max(0, y - 1) * w + Math.max(0, xx - 1)], b = g[Math.min(h - 1, y + 1) * w + Math.min(w - 1, xx + 1)];
+      var v = Math.max(0, Math.min(255, 214 + (a - b) * 1.6 + (g[y * w + xx] - 128) * 0.12)), j = (y * w + xx) * 4;
+      o[j] = v; o[j + 1] = v * 0.985; o[j + 2] = v * 0.95; o[j + 3] = 255;
+    }
+    x.putImageData(out, 0, 0);
+    IMG.custom = c;
+  }
+
   // Mirror a texture into a 2 x 2 tile, so it repeats without hard seams
   var tiles = {};
   function tile(key) {
@@ -183,7 +208,50 @@
 
   function gap(ctx, x, y, w, h) { ctx.fillStyle = "rgba(20,14,10,.75)"; ctx.fillRect(x, y, w, h); }
 
+  // A framed panel with its contents lit from behind
+  function litPanel(ctx, W, H, o, arch) {
+    var frame = Math.round(Math.min(W, H) * 0.07), x = frame, y = frame, w = W - 2 * frame, h = H - 2 * frame, r = w / 2;
+    panel(ctx, 0, 0, W, H, o.finish, 3000);
+    function shape() {
+      ctx.beginPath();
+      if (arch) { ctx.moveTo(x, y + h); ctx.lineTo(x, y + r); ctx.arc(x + r, y + r, r, Math.PI, 0); ctx.lineTo(x + w, y + h); ctx.closePath(); }
+      else roundRect(ctx, x, y, w, h, Math.min(w, h) * 0.03);
+    }
+    ctx.save(); shape(); ctx.clip();
+    ctx.fillStyle = "#e9e4da"; ctx.fillRect(x, y, w, h);
+    var im = IMG[o.content] || IMG[arch ? "moolmantar" : "radhakrishna"];
+    if (im) {
+      var iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height, k = Math.max(w / iw, h / ih);
+      ctx.drawImage(im, x + (w - iw * k) / 2, y + (h - ih * k) / 2, iw * k, ih * k);
+    }
+    var t = TRIMS[o.trim];
+    if (t && t.light) { // light pooling in from the edges
+      var g = ctx.createLinearGradient(x, 0, x + w, 0), c = "rgba(" + t.light + ",";
+      g.addColorStop(0, c + ".55)"); g.addColorStop(0.12, c + "0)"); g.addColorStop(0.88, c + "0)"); g.addColorStop(1, c + ".55)");
+      ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+    } else { ctx.fillStyle = "rgba(20,16,12,.32)"; ctx.fillRect(x, y, w, h); }
+    ctx.restore();
+    if (t && t.light) { ctx.save(); ctx.shadowColor = "rgba(" + t.light + ",1)"; ctx.shadowBlur = frame * 0.9; ctx.strokeStyle = "rgba(" + t.light + ",.95)"; ctx.lineWidth = frame * 0.18; shape(); ctx.stroke(); ctx.stroke(); ctx.restore(); }
+    ctx.save(); ctx.strokeStyle = "rgba(0,0,0,.25)"; ctx.lineWidth = 3; shape(); ctx.stroke(); ctx.restore();
+  }
+
   var DESIGNS = [
+    {
+      id: "archpanel", cat: "prayer", label: "Lit arch panel", contents: ["moolmantar", "radhakrishna", "custom"], content: "moolmantar",
+      count: { label: "Size", min: 1, max: 3, value: 2 }, lift: 700,
+      finishes: ["white", "walnut", "oak", "charcoal"], finish: "white",
+      trims: ["warm", "cool", "dark"], trim: "warm", trimLabel: "Lighting",
+      size: function (n) { return [[700, 900, 1100][n - 1], [1300, 1650, 2000][n - 1]]; },
+      draw: function (ctx, W, H, o) { litPanel(ctx, W, H, o, true); }
+    },
+    {
+      id: "rectpanel", cat: "prayer", label: "Lit carved panel", contents: ["radhakrishna", "moolmantar", "custom"], content: "radhakrishna",
+      count: { label: "Size", min: 1, max: 3, value: 2 }, lift: 400,
+      finishes: ["white", "greige", "walnut", "charcoal"], finish: "greige",
+      trims: ["warm", "cool", "dark"], trim: "warm", trimLabel: "Lighting",
+      size: function (n) { return [[800, 1000, 1200][n - 1], [1600, 2000, 2400][n - 1]]; },
+      draw: function (ctx, W, H, o) { litPanel(ctx, W, H, o, false); }
+    },
     {
       id: "carved", cat: "prayer", label: "Backlit carved panel", photo: "carved", lift: 250,
       note: "A real build, from our Radha Krishna panel",
@@ -509,6 +577,7 @@
 
   function describe(design, opts) {
     if (design.photo) return design.label + ", " + ["smaller", "as built", "larger"][opts.count - 1];
+    if (design.contents) return design.label + ", " + CONTENTS[opts.content || design.content].label.toLowerCase() + ", " + FINISHES[opts.finish].label.toLowerCase() + " frame, " + TRIMS[opts.trim].label.toLowerCase();
     var parts = [design.label, /m$/.test(design.count.label) ? opts.count + " m wide" : opts.count + " " + design.count.label.toLowerCase(), FINISHES[opts.finish].label.toLowerCase()];
     var t = TRIMS[opts.trim];
     if (t && t.light) parts.push(t.label.toLowerCase());
@@ -516,5 +585,5 @@
     return parts.join(", ");
   }
 
-  window.CW_DESIGNS = { list: DESIGNS, cats: CATS, finishes: FINISHES, trims: TRIMS, render: render, describe: describe, ready: ready };
+  window.CW_DESIGNS = { list: DESIGNS, cats: CATS, finishes: FINISHES, trims: TRIMS, contents: CONTENTS, render: render, describe: describe, ready: ready, setCustom: setCustom, hasCustom: function () { return !!IMG.custom; } };
 })();

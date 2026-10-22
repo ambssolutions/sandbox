@@ -336,7 +336,7 @@ const CONCEPTS = [
   {id:"04",motion:"Subtle motion",slug:"04-atelier",name:"Atelier",insp:"Design magazines and furniture catalogues",desc:"Light and editorial. Opens with a line drawing of your prayer unit beside the finished build, then a numbered catalogue of all ten builds.",tags:["Light","Editorial","Catalogue"],sw:["#faf8f4","#141210","#a8812f"]},
   {id:"05",motion:"Interactive",rec:"The room studio is the first thing people see, so more visitors try your pieces on their own wall and send you an enquiry.",slug:"05-studio",name:"Studio",insp:"Online room planners",desc:"The page opens on the room studio with your oak and marble wall already placed. Below it, every build has a Place in my room button.",tags:["Studio first","Enquiries","Practical"],sw:["#121110","#f3efe8","#c9a35a"]}
 ];
-const url = c => "designs/" + c.slug + "/";
+const url = c => "/concepts/designs/" + c.slug + "/";
 const byId = id => CONCEPTS.find(c => c.id === id);
 const $ = s => document.querySelector(s);
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -376,7 +376,7 @@ CONCEPTS.forEach((c,i) => {
   el.innerHTML = `
     <button class="thumb" type="button" aria-label="Preview concept ${c.id}, ${c.name}" style="background:linear-gradient(135deg,${c.sw[0]},${c.sw[2]})">
       <span class="num">${c.id}</span><span class="pick-flag">★ Preferred</span>${c.rec?'<span class="rec">Recommended</span>':''}
-      <img src="designs/${c.slug}/thumb.webp" alt="Concept ${c.id}, ${c.name}: homepage preview" width="720" height="450" loading="${i<3?"eager":"lazy"}" decoding="async">
+      <img src="/concepts/designs/${c.slug}/thumb.webp" alt="Concept ${c.id}, ${c.name}: homepage preview" width="720" height="450" loading="${i<3?"eager":"lazy"}" decoding="async">
     </button>
     <div class="body">
       <h2>${c.name}</h2>

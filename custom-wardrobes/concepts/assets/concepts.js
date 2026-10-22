@@ -14,7 +14,7 @@
   var i = CONCEPTS.findIndex(function (c) { return c[0] === current; });
   if (i < 0) return;
   var script = document.currentScript;
-  var base = new URL('../', script ? script.src : location.href); // the concepts folder
+  var base = new URL('/concepts/', location.href); // absolute, so it works with or without a trailing slash
   var href = function (c) { return new URL('designs/' + c[0] + '/', base).href; };
   var n = CONCEPTS.length, cur = CONCEPTS[i], prev = CONCEPTS[(i + n - 1) % n], next = CONCEPTS[(i + 1) % n];
   var id = cur[0].slice(0, 2);

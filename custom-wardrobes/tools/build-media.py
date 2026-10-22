@@ -84,6 +84,10 @@ for name, im, q, w, h in cut:
     flatten(im, q, w, h).save(DES / f"{name}.webp", quality=84, method=6)
     print("cutout", name)
 
+# Panel contents (the artwork inside a lit panel), cropped from the cut-outs above
+Image.open(DES / "prayer-unit.webp").convert("RGB").crop((176, 342, 388, 768)).save(DES / "content-mool-mantar.webp", quality=86, method=6)
+Image.open(DES / "carved-panel.webp").convert("RGB").crop((46, 46, 556, 1156)).save(DES / "content-radha-krishna.webp", quality=84, method=6)
+
 # Real textures from his builds, used by the drawn designs
 tex = [
     ("marble", Image.open(SRC / "frames/v2_09.jpg").convert("RGB").crop((8, 262, 262, 588))),

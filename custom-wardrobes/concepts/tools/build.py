@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "concepts" / "designs"
-B = "../../../"  # from concepts/designs/NN-slug/ back to the site root
+B = "/"  # absolute paths, so pages work with or without a trailing slash
 
 src = (ROOT / "assets/projects.js").read_text()
 PROJECTS = json.loads(re.search(r"window\.CW_PROJECTS = (\[.*\]);", src, re.S).group(1))
@@ -66,7 +66,7 @@ def head(c, css, preload=""):
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
 {preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=1">
-<link rel="stylesheet" href="{B}assets/studio.css?v=1">
+<link rel="stylesheet" href="{B}assets/studio.css?v=2">
 <script>document.documentElement.classList.add("js");window.CW_BASE="{B}";</script>
 <style>
 {css}
@@ -96,6 +96,7 @@ def studio(title, lede, start="oakmarble", eager=False, extra=""):
       <h2 id="studio-title">{title}</h2>
       <p class="lede">{lede}</p>
     </div>
+    <ul class="studio-points"><li>Turn the lights on or off</li><li>Choose what goes in a lit panel</li><li>See it in 3D</li></ul>
     <div data-studio data-start="{start}"{e}></div>
     {extra}
     <noscript><p>The room studio needs JavaScript. You can still call or text {PHONE} with a photo of your room.</p></noscript>
@@ -173,10 +174,10 @@ def footer(cls="foot", ink="#f5f0e7"):
 
 SCRIPTS = f"""<script src="{B}assets/content.js?v=3"></script>
 <script src="{B}assets/projects.js?v=3"></script>
-<script src="{B}assets/designs.js?v=3" defer></script>
-<script src="{B}assets/studio.js?v=1" defer></script>
+<script src="{B}assets/designs.js?v=4" defer></script>
+<script src="{B}assets/studio.js?v=2" defer></script>
 <script src="{B}assets/cw-common.js?v=1" defer></script>
-<script src="../../assets/concepts.js?v=1" defer></script>
+<script src="/concepts/assets/concepts.js?v=2" defer></script>
 </body>
 </html>
 """
@@ -805,7 +806,7 @@ section{padding-block:clamp(70px,9vw,120px)}
       <div class="hero-side"><p>TV walls, prayer units, carved panels, bedrooms and wardrobes, made in Auckland. Try any of them on your own wall, right here.</p>
       <small><a href="{TIKTOK}" rel="noopener" target="_blank">82.5K on TikTok</a> &middot; <a href="{INSTA}" rel="noopener" target="_blank">60K on Instagram</a> &middot; {AS_AT}</small></div>
     </div>
-    <ol class="steps"><li><b>1</b>Snap your wall</li><li><b>2</b>Pick any of our pieces</li><li><b>3</b>Drag the corners to fit</li><li><b>4</b>Send it to us</li></ol>
+    <ol class="steps"><li><b>1</b>Snap your wall</li><li><b>2</b>Pick any of our pieces</li><li><b>3</b>Drag the corners, turn the lights on</li><li><b>4</b>See it in 3D, then send it to us</li></ol>
     <div data-studio data-start="litframe" data-eager="1"></div>
   </div>
 </section>
