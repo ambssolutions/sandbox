@@ -78,6 +78,7 @@ for p in PROJECTS:
 cut = [
     ("carved-panel", Image.open(SRC / "ig/Dd_DAtqBAL2.jpg").convert("RGB"), [(347, 412), (828, 442), (818, 1338), (374, 1380)], 600, 1200),
     ("prayer-unit", Image.open(SRC / "frames/v5_06.jpg").convert("RGB"), [(60, 66), (481, 66), (498, 872), (78, 872)], 560, 1080),
+    ("lit-tv-frame", Image.open(SRC / "frames/v6_12.jpg").convert("RGB"), [(198, 278), (552, 275), (552, 698), (200, 700)], 600, 712),
 ]
 for name, im, q, w, h in cut:
     flatten(im, q, w, h).save(DES / f"{name}.webp", quality=84, method=6)

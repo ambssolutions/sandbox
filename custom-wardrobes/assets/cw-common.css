@@ -1,0 +1,73 @@
+/* Shared base for the concept pages: lightbox, form fields, quick bar, folds, video stills and
+   the three steps. Everything is still: no animation, no stacking cards, no carousels.
+   Each page sets --c-bg, --c-ink, --c-muted, --c-line, --c-accent, --c-accent-ink, --c-field. */
+.skip { position: absolute; left: 12px; top: -60px; z-index: 300; background: var(--c-accent); color: var(--c-accent-ink); padding: 12px 18px; border-radius: 8px; }
+.skip:focus { top: 12px; }
+[hidden] { display: none !important; }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* lightbox */
+.lb { border: 0; padding: 0; margin: 0; width: 100%; height: 100%; max-width: none; max-height: none; background: rgba(10,8,6,.97); color: #f5f0e7; }
+.lb::backdrop { background: rgba(10,8,6,.9); }
+.lb-in { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; padding: 14px clamp(16px, 4vw, 48px) calc(18px + env(safe-area-inset-bottom)); }
+.lb-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.lb-top h2 { margin: 0; font-size: clamp(20px, 2.4vw, 28px); font-weight: 400; }
+.lb-fig { margin: 0; min-height: 0; position: relative; touch-action: pan-y; }
+.lb-fig img { position: absolute; inset: 0; margin: auto; max-height: 100%; max-width: 100%; border-radius: 10px; user-select: none; -webkit-user-drag: none; }
+.lb-bot { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.lb-bot p { margin: 0; color: #c4b6a3; font-size: 14px; flex: 1; text-align: center; }
+.lb-btn { min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid rgba(245,240,231,.35); background: none; color: #f5f0e7; font: 700 14px/1 system-ui, sans-serif; cursor: pointer; white-space: nowrap; }
+.lb-place { background: #c9a35a; border-color: #c9a35a; color: #1b130a; }
+.lb-close { width: 48px; height: 48px; flex: none; border-radius: 50%; border: 1px solid rgba(245,240,231,.3); background: none; color: #f5f0e7; cursor: pointer; font-size: 26px; line-height: 1; }
+@media (max-width: 640px) { .lb-bot { flex-wrap: wrap; } .lb-bot p { flex-basis: 100%; order: -1; } .lb-btn { flex: 1; padding: 0 10px; } .lb-place { flex-basis: 100%; order: 3; } }
+
+/* form */
+.form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form .full { grid-column: 1 / -1; }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 14px; font-weight: 700; }
+.field label span { font-weight: 400; opacity: .75; }
+.field input, .field select, .field textarea { width: 100%; min-height: 50px; border: 1px solid var(--c-line); border-radius: 10px; padding: 12px 14px; background: var(--c-field); color: var(--c-ink); font: inherit; }
+.field textarea { min-height: 110px; resize: vertical; }
+.field [aria-invalid="true"] { border-color: #c2410c; box-shadow: 0 0 0 1px #c2410c; }
+.hp { position: absolute; left: -9999px; }
+.form-note { font-size: 13px; color: var(--c-muted); margin: 0; }
+.form-status { font-size: 15px; font-weight: 600; margin: 0; }
+.form-status:empty { display: none; }
+.sms-copy { grid-column: 1 / -1; border: 1px solid var(--c-line); border-radius: 10px; padding: 14px; display: grid; gap: 10px; font-size: 15px; }
+.sms-copy p { margin: 0; }
+.sms-copy pre { margin: 0; white-space: pre-wrap; font: 14px/1.5 inherit; font-family: inherit; }
+.copy-btn { justify-self: start; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 0; background: var(--c-accent); color: var(--c-accent-ink); font-weight: 700; cursor: pointer; }
+@media (max-width: 560px) { .form { grid-template-columns: 1fr; } }
+
+/* folds */
+.fold { display: grid; grid-template-rows: 0fr; }
+.fold > div { overflow: hidden; }
+.fold .in { visibility: hidden; }
+.open > .fold { grid-template-rows: 1fr; }
+.open > .fold .in { visibility: visible; }
+.pm { width: 16px; height: 16px; position: relative; flex: none; }
+.pm::before, .pm::after { content: ""; position: absolute; left: 0; top: 7px; width: 16px; height: 2px; background: currentColor; }
+.pm::after { transform: rotate(90deg); }
+[aria-expanded="true"] .pm::after { transform: rotate(0); }
+
+/* quick bar on phones */
+.quick { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; display: none; gap: 8px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: var(--c-bg); border-top: 1px solid var(--c-line); transform: translateY(110%); }
+.quick a { flex: 1; min-height: 46px; display: grid; place-items: center; border-radius: 999px; text-decoration: none; font-weight: 700; color: var(--c-ink); box-shadow: inset 0 0 0 1px var(--c-line); }
+.quick a:first-child { background: var(--c-accent); color: var(--c-accent-ink); box-shadow: none; }
+.quick.show { transform: none; }
+@media (max-width: 900px) { .quick { display: flex; } }
+
+/* video stills: a Play button swaps in the real video with its controls */
+.play { position: absolute; left: 50%; top: 50%; width: 72px; height: 72px; margin: -36px 0 0 -36px; border-radius: 50%; border: 0; background: rgba(15,12,10,.72); color: #fff; cursor: pointer; display: grid; place-items: center; z-index: 2; }
+.play svg { width: 30px; height: 30px; fill: currentColor; margin-left: 4px; }
+.play:hover { background: rgba(15,12,10,.9); }
+video.played { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; z-index: 3; }
+
+/* how it works: three plain steps side by side */
+.steps3 { list-style: none; margin: 0 auto; padding: 0; max-width: 1100px; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(14px, 2vw, 24px); }
+.step { background: var(--c); border: 1px solid var(--c-line); border-radius: 18px; padding: clamp(22px, 2.6vw, 34px); display: grid; gap: 10px; align-content: start; }
+.step .n { font-size: clamp(40px, 4.4vw, 60px); line-height: 1; color: var(--step-n, var(--c-accent)); font-family: var(--serif, Georgia); }
+.step h3 { font-size: clamp(21px, 2vw, 26px); line-height: 1.2; margin: 0; }
+.step p { margin: 0; color: var(--c-muted); }
+@media (max-width: 860px) { .steps3 { grid-template-columns: 1fr; } }

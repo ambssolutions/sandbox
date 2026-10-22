@@ -40,8 +40,11 @@
     marble: "assets/img/designs/tex-marble.webp",
     herringbone: "assets/img/designs/tex-herringbone.webp",
     carved: "assets/img/designs/carved-panel.webp",
-    prayer: "assets/img/designs/prayer-unit.webp"
+    prayer: "assets/img/designs/prayer-unit.webp",
+    litframe: "assets/img/designs/lit-tv-frame.webp"
   };
+  // Pages in sub-folders set window.CW_BASE (e.g. "../../../") so these paths still resolve
+  Object.keys(SRC).forEach(function (k) { SRC[k] = (window.CW_BASE || "") + SRC[k]; });
   var loading = null;
   function ready() {
     if (loading) return loading;
@@ -124,14 +127,14 @@
     ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
     ctx.fillStyle = f.base; ctx.fillRect(x, y, w, h);
     if (f.grain) {
-      var r = rand(seed * 7919 + 13), lines = Math.max(12, Math.round(w / 3));
+      var r = rand(seed * 7919 + 13), lines = Math.max(6, Math.round(w / 3 * Math.min(1, K * 1.5)));
       for (var i = 0; i < lines; i++) {
         var gx = x + r() * w, amp = 1 + r() * 4, freq = 0.004 + r() * 0.01, ph = r() * 6.28;
         ctx.strokeStyle = r() > 0.5 ? f.dark : f.light;
         ctx.globalAlpha = 0.08 + r() * 0.22;
         ctx.lineWidth = 0.6 + r() * 1.8;
         ctx.beginPath();
-        for (var yy = y; yy <= y + h; yy += 12) {
+        for (var yy = y, st = 12 / Math.max(K, 0.25); yy <= y + h + st; yy += st) {
           var xx = gx + Math.sin(yy * freq + ph) * amp;
           if (yy === y) ctx.moveTo(xx, yy); else ctx.lineTo(xx, yy);
         }
@@ -192,6 +195,12 @@
       note: "A real build, from our Gurbani prayer unit",
       count: { label: "Size", min: 1, max: 3, value: 2 },
       size: function (n) { return [[1200, 1400, 1600][n - 1], [2300, 2700, 3100][n - 1]]; }
+    },
+    {
+      id: "litframe", cat: "tv", label: "Lit TV frame", photo: "litframe", lift: 500,
+      note: "A real build, from our walnut media wall",
+      count: { label: "Size", min: 1, max: 3, value: 2 },
+      size: function (n) { return [[1500, 1800, 2100][n - 1], [1780, 2136, 2492][n - 1]]; }
     },
     {
       id: "marbletv", cat: "tv", label: "Marble TV wall",
@@ -485,18 +494,16 @@
   ];
 
   // Draw a design to a canvas. Returns the canvas; its aspect matches the real size.
+  // With maxSide, it is drawn straight at the smaller size (faster than drawing big and shrinking).
+  var K = 1;
   function render(design, opts, maxSide) {
     var mm = design.size(opts.count), W = Math.round(mm[0] * PX), H = Math.round(mm[1] * PX);
-    var c = document.createElement("canvas"); c.width = W; c.height = H;
-    var x = c.getContext("2d");
+    var k = maxSide ? Math.min(1, maxSide / Math.max(W, H)) : 1;
+    var c = document.createElement("canvas"); c.width = Math.max(1, Math.round(W * k)); c.height = Math.max(1, Math.round(H * k));
+    var x = c.getContext("2d"); x.scale(k, k); K = k;
     if (design.photo) { if (IMG[design.photo]) x.drawImage(IMG[design.photo], 0, 0, W, H); else { x.fillStyle = "#ddd"; x.fillRect(0, 0, W, H); } }
     else design.draw(x, W, H, opts);
-    if (maxSide && Math.max(W, H) > maxSide) {
-      var k = maxSide / Math.max(W, H), s = document.createElement("canvas");
-      s.width = Math.round(W * k); s.height = Math.round(H * k);
-      var sc = s.getContext("2d"); sc.imageSmoothingQuality = "high"; sc.drawImage(c, 0, 0, s.width, s.height);
-      return s;
-    }
+    K = 1;
     return c;
   }
 

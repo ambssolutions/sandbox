@@ -1,6 +1,6 @@
 """Render the illustrative sample room used by the room preview.
 
-Run: python3 tools/sample-room.py  (writes assets/img/sample-room-*.webp)
+Run: python3 tools/sample-room.py [bedroom|lounge]  (writes assets/img/sample-room-*.webp or sample-lounge-*.webp)
 A one-point perspective bedroom with an empty back wall, so visitors can try
 the preview before uploading their own photo.
 """
@@ -9,7 +9,9 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
+import sys
 W, H = 1600, 1066
+VARIANT = sys.argv[1] if len(sys.argv) > 1 else "bedroom"
 rng = np.random.default_rng(7)
 OUT = Path(__file__).resolve().parent.parent / "assets" / "img"
 
@@ -43,6 +45,13 @@ carpet += (xx / W)[..., None] * 14
 noise = rng.normal(0, 5.5, (H, W, 1)).astype(np.float32)
 carpet += noise
 mask_floor = yy >= BB
+if VARIANT == "lounge":
+    # timber planks in perspective, lines running to the vanishing point
+    carpet = lerp((176, 136, 98), (150, 112, 78), t) + noise * 0.6
+    for k in range(-14, 15):
+        x0 = VP[0] + k * 120
+        xl = VP[0] + (x0 - VP[0]) * (yy - VP[1]) / (H - VP[1])
+        carpet -= (np.exp(-((xx - xl) / 1.4) ** 2) * 26)[..., None]
 img[mask_floor] = carpet[mask_floor]
 
 # Side walls: trapezoids between ceiling line and floor line
@@ -61,6 +70,8 @@ img[mask_rw] = rwc[mask_rw]
 # Back wall with soft light from the right
 mask_bw = (xx >= BL) & (xx <= BR) & (yy >= BT) & (yy <= BB)
 bwc = lerp((222, 216, 206), (238, 234, 226), np.clip((xx - BL) / (BR - BL), 0, 1))
+if VARIANT == "lounge":
+    bwc = lerp((196, 190, 180), (214, 209, 200), np.clip((xx - BL) / (BR - BL), 0, 1))
 bwc -= ((yy - BT) / (BB - BT))[..., None] * 6
 img[mask_bw] = bwc[mask_bw]
 
@@ -115,5 +126,6 @@ d.rounded_rectangle([BL + 70, BB - 120, BL + 104, BB - 74], 3, fill=(246, 245, 2
 im = im.filter(ImageFilter.GaussianBlur(0.6))
 OUT.mkdir(parents=True, exist_ok=True)
 for w in (800, 1600):
-    im.resize((w, round(H * w / W)), Image.LANCZOS).save(OUT / f"sample-room-{w}.webp", quality=82, method=6)
+    name = "sample-room" if VARIANT == "bedroom" else "sample-" + VARIANT
+    im.resize((w, round(H * w / W)), Image.LANCZOS).save(OUT / f"{name}-{w}.webp", quality=82, method=6)
 print("wall quad (fractions):", [(BL / W, BT / H), (BR / W, BT / H), (BR / W, BB / H), (BL / W, BB / H)])

@@ -1,20 +1,84 @@
 {
   "cleanUrls": true,
-  "git": { "deploymentEnabled": { "main": true } },
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=(self)" },
-        { "key": "X-Robots-Tag", "value": "noindex" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(), microphone=(), camera=(self)"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
       ]
     },
     {
       "source": "/assets/img/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/concepts/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/concepts/after-dark",
+      "destination": "/concepts/designs/01-after-dark/",
+      "permanent": false
+    },
+    {
+      "source": "/concepts/arch",
+      "destination": "/concepts/designs/02-arch/",
+      "permanent": false
+    },
+    {
+      "source": "/concepts/reels",
+      "destination": "/concepts/designs/03-reels/",
+      "permanent": false
+    },
+    {
+      "source": "/concepts/atelier",
+      "destination": "/concepts/designs/04-atelier/",
+      "permanent": false
+    },
+    {
+      "source": "/concepts/studio",
+      "destination": "/concepts/designs/05-studio/",
+      "permanent": false
     }
   ]
 }
