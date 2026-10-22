@@ -75,18 +75,18 @@
   function mount(root) {
     root.classList.add("st");
     root.innerHTML =
-      '<div class="st-view"><div class="st-frame"><div class="st-stage" aria-label="Your room. Drag the round handles to fit the selected piece.">' +
+      '<div class="st-left"><div class="st-view"><div class="st-frame"><div class="st-stage" aria-label="Your room. Drag the round handles to fit the selected piece.">' +
       '<canvas class="st-base" aria-hidden="true"></canvas><canvas class="st-gl" aria-hidden="true"></canvas>' +
       '<button class="st-h" type="button" aria-label="Top left corner of the selected piece. Use the arrow keys to move it."></button>' +
       '<button class="st-h" type="button" aria-label="Top right corner of the selected piece. Use the arrow keys to move it."></button>' +
       '<button class="st-h" type="button" aria-label="Bottom right corner of the selected piece. Use the arrow keys to move it."></button>' +
       '<button class="st-h" type="button" aria-label="Bottom left corner of the selected piece. Use the arrow keys to move it."></button>' +
       '<button class="st-grip" type="button" aria-label="Move the selected piece. Drag it, or use the arrow keys."></button>' +
-      '</div></div>' +
-      '<div class="st-bar"><div class="st-lights" role="group" aria-label="Lighting">' +
+      '</div></div></div>' +
+      '<div class="st-under"><div class="st-bar"><div class="st-lights" role="group" aria-label="Lighting">' +
       '<button type="button" data-l="day" aria-pressed="true">Daylight</button><button type="button" data-l="on" aria-pressed="false">Lights on</button><button type="button" data-l="off" aria-pressed="false">Lights off</button></div>' +
       '<button type="button" class="st-btn st-3d" data-a="3d">View in 3D</button></div>' +
-      '<div class="st-layers" aria-label="Pieces in your room"></div><p class="st-status" role="status" aria-live="polite"></p></div>' +
+      '<div class="st-layers" aria-label="Pieces in your room"></div><p class="st-status" role="status" aria-live="polite"></p></div></div>' +
       '<div class="st-panel">' +
       '<section class="st-step"><h2><span>1</span>Your room</h2><div class="st-room">' +
       '<label class="st-btn st-primary st-file">Take a photo<input type="file" accept="image/*" capture="environment" aria-label="Take a photo of your room"></label>' +
@@ -103,6 +103,7 @@
       '<label>Warmth <input type="range" min="-100" max="100" value="0" data-k="warmth"></label>' +
       '<label>Shadow <input type="range" min="0" max="100" value="60" data-k="shadow"></label></div>' +
       '<div class="st-actions"><button class="st-btn" type="button" data-a="compare" aria-pressed="false">Hide pieces</button>' +
+      '<button class="st-btn" type="button" data-a="fit">Fit again</button>' +
       '<button class="st-btn" type="button" data-a="remove">Remove piece</button>' +
       '<button class="st-btn" type="button" data-a="save">Save image</button>' +
       '<button class="st-btn st-primary" type="button" data-a="ask">Ask about this</button></div></section>' +
@@ -197,7 +198,7 @@
     var cssW = 0, cssH = 0, raf = 0;
     function layout() {
       var maxW = stage.parentElement.clientWidth || 600;
-      var maxH = Math.max(220, innerHeight * (matchMedia("(max-width: 1080px)").matches ? 0.46 : 0.72));
+      var maxH = Math.max(200, innerHeight * (matchMedia("(max-width: 1080px)").matches ? 0.4 : 0.72));
       var ar = state.pw / state.ph;
       cssW = Math.min(maxW, maxH * ar); cssH = cssW / ar;
       stage.style.width = cssW + "px"; stage.style.height = cssH + "px";
@@ -239,12 +240,19 @@
       var wallTop = state.own ? 0.2 : state.room.wall[0][1], floor = state.own ? 0.8 : state.room.wall[3][1];
       var perMm = (floor - wallTop) / 2400, a = state.ph / state.pw, h, w;
       if (mm) { h = mm[1] * perMm; w = mm[0] * perMm * a; } else { h = (floor - wallTop) * 0.62; w = h * aspect * a; }
-      var maxW = state.own ? 0.85 : 0.72; if (w > maxW) { h *= maxW / w; w = maxW; }
+      // keep it inside the photo with a margin: at most 84% wide and 70% tall (true proportions kept)
+      var k = Math.min(1, 0.84 / w, 0.7 / h); w *= k; h *= k;
+      var bottom = Math.min(0.95, floor - (lift || 0) * perMm * k), top = bottom - h;
+      if (top < 0.05) { top = 0.05; bottom = top + h; }
       // small pieces start beside what is already there; wide ones start centred so they stay in frame
       var n = state.items.length, side = n && w < 0.4 ? (n % 2 ? -1 : 1) * Math.min(0.25, w / 2 + 0.06) : 0;
-      var bottom = floor - (lift || 0) * perMm, cx = 0.5 + side;
-      cx = Math.min(1 - w / 2, Math.max(w / 2, cx));
-      return [[cx - w / 2, bottom - h], [cx + w / 2, bottom - h], [cx + w / 2, bottom], [cx - w / 2, bottom]];
+      var cx = Math.min(1 - w / 2 - 0.03, Math.max(w / 2 + 0.03, 0.5 + side));
+      return [[cx - w / 2, top], [cx + w / 2, top], [cx + w / 2, bottom], [cx - w / 2, bottom]];
+    }
+    function fitAgain() {
+      var it = state.items[state.active]; if (!it) return;
+      it.quad = startQuad(it.design ? it.design.size(it.opts.count) : null, it.design && it.design.lift, it.aspect);
+      it.scale = 100; syncSliders(); schedule(); say(it.label + " fitted again. Drag the corners to fine-tune.");
     }
     function addItem(it) {
       if (state.items.length >= MAX_ITEMS) state.items.shift();
@@ -526,7 +534,7 @@
       var W = cutImg.naturalWidth, H = cutImg.naturalHeight;
       var flat = flatten(cutImg, cutQuad.map(function (p) { return [p[0] * W, p[1] * H]; }));
       closeCutter(); addCut(flat, cutLabel);
-      root.querySelector(".st-view").scrollIntoView({ block: "center" });
+      root.querySelector(".st-view").scrollIntoView({ block: "start" });
     });
     cut.addEventListener("keydown", function (e) { if (e.key === "Escape") closeCutter(); });
 
@@ -564,6 +572,7 @@
       compare.textContent = state.hide ? "Show pieces" : "Hide pieces"; schedule();
     });
     root.querySelector('[data-a="remove"]').addEventListener("click", removeActive);
+    root.querySelector('[data-a="fit"]').addEventListener("click", fitAgain);
     function describe() { return state.items.map(function (it) { return it.kind === "design" ? D.describe(it.design, it.opts) : it.label + " (cut from a photo)"; }).join("; "); }
     root.querySelector('[data-a="save"]').addEventListener("click", function () {
       var W = state.pw, H = state.ph, out = document.createElement("canvas"); out.width = W; out.height = H;

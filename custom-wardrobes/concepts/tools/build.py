@@ -85,7 +85,7 @@ def head(c, css, preload=""):
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
 {preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=2">
-<link rel="stylesheet" href="{B}assets/studio.css?v=2">
+<link rel="stylesheet" href="{B}assets/studio.css?v=3">
 <script>(function(d){{d.classList.add("js");window.CW_BASE="{B}";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){{d.classList.add("motion");setTimeout(function(){{if(!window.CW_MOTION){{d.classList.remove("motion");d.classList.add("motion-off");}}}},3000);}}}})(document.documentElement);</script>
 <style>
 {css}
@@ -195,7 +195,7 @@ def footer(cls="foot", ink="#f5f0e7"):
 SCRIPTS = f"""<script src="{B}assets/content.js?v=3"></script>
 <script src="{B}assets/projects.js?v=3"></script>
 <script src="{B}assets/designs.js?v=4" defer></script>
-<script src="{B}assets/studio.js?v=3" defer></script>
+<script src="{B}assets/studio.js?v=4" defer></script>
 <script src="{B}assets/cw-common.js?v=1" defer></script>
 <script src="{B}assets/cw-motion.js?v=1" defer></script>
 <script src="/concepts/assets/concepts.js?v=2" defer></script>
@@ -237,7 +237,7 @@ img,video{display:block;max-width:100%} a{color:inherit} :focus-visible{outline:
 h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;letter-spacing:-.01em}
 h2{font-size:clamp(34px,4.4vw,60px);line-height:1.05} .lede{color:var(--c-muted);max-width:56ch;margin:0 auto;font-size:clamp(16px,1.3vw,18px)}
 .sec-head{text-align:center;display:grid;gap:14px;margin-bottom:clamp(36px,5vw,64px)}
-.top{position:sticky;top:0;z-index:40;height:var(--header);background:rgba(10,8,7,.94);border-bottom:1px solid transparent}
+.top{position:sticky;top:0;z-index:40;height:var(--header);background:#0a0807;border-bottom:1px solid transparent}
 .top.scrolled{border-color:var(--c-line)} .top .wrap{height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none}.brand b{display:block;font:400 21px/1 var(--serif)}.brand small{display:block;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--c-muted);margin-top:6px}
 .nav{display:flex;align-items:center;gap:clamp(14px,2.2vw,32px)} .nav a{text-decoration:none;font-size:14px;font-weight:500;color:var(--c-muted)} .nav a:hover{color:var(--c-ink)}
@@ -534,7 +534,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0;letter-spacing:-.03em
 .lede{color:var(--c-muted);max-width:52ch;margin:0 auto;font-size:clamp(16px,1.3vw,18px)}
 .sec-head{text-align:center;display:grid;gap:14px;margin-bottom:clamp(32px,5vw,56px)}
 section{padding-block:clamp(72px,10vw,130px)}
-.top{position:sticky;top:0;z-index:40;height:var(--header);background:rgba(13,13,15,.95);border-bottom:1px solid var(--c-line)}
+.top{position:sticky;top:0;z-index:40;height:var(--header);background:#0d0d0f;border-bottom:1px solid var(--c-line)}
 .top .wrap{height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}.brand b{display:block;font:700 19px/1 var(--serif);letter-spacing:-.02em}.brand small{display:block;font-size:11px;color:var(--c-muted);margin-top:5px}
 .nav{display:flex;align-items:center;gap:clamp(14px,2vw,28px)}.nav a{text-decoration:none;font-size:14px;font-weight:600;color:var(--c-muted)}.nav a:hover{color:#fff}
@@ -659,7 +659,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;letter-spacing:-.01em
 .lede{color:var(--c-muted);max-width:54ch;margin:0 auto;font-size:clamp(17px,1.35vw,19px)}
 .sec-head{text-align:center;display:grid;gap:14px;margin-bottom:clamp(36px,5vw,64px)}
 section{padding-block:clamp(80px,10vw,140px)}
-.top{position:sticky;top:0;z-index:40;height:var(--header);background:rgba(250,248,244,.97);border-bottom:1px solid var(--c-line)}
+.top{position:sticky;top:0;z-index:40;height:var(--header);background:#faf8f4;border-bottom:1px solid var(--c-line)}
 .top .wrap{height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none}.brand b{display:block;font:400 24px/1 var(--serif)}.brand small{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--c-muted);margin-top:6px}
 .nav{display:flex;align-items:center;gap:clamp(14px,2.4vw,36px)}.nav a{text-decoration:none;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--c-muted)}.nav a:hover{color:var(--c-ink)}
