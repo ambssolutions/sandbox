@@ -80,5 +80,11 @@
       "destination": "/concepts/designs/05-studio/",
       "permanent": false
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/concepts/"
+    }
   ]
 }
