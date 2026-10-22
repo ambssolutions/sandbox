@@ -239,7 +239,7 @@ p { margin: 0; }
 .crumbs { font-size: 14px; color: var(--muted-dark); }
 .crumbs a { color: var(--muted-dark); }
 .page-hero h1 { font-size: clamp(44px, 6vw, 84px); line-height: 1; letter-spacing: -.03em; }
-.filters { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 48px); }
+.filters { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; min-height: 44px; margin-bottom: clamp(28px, 4vw, 48px); }
 .filters button { min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: none; cursor: pointer; font-weight: 600; font-size: 15px; }
 .filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 @media (max-width: 640px) { .filters { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; margin-inline: calc(-1 * var(--pad)); padding-inline: var(--pad); scrollbar-width: none; } .filters button { flex: none; } }
