@@ -114,7 +114,7 @@ ol.steps,ul.steps{justify-content:center}
 /* photos are always shown whole, at their own shape: never cropped or zoomed in (owner) */
 .tile-ph,.reel{aspect-ratio:9/16}
 .tile-ph img,.reel .tile-ph img,.story-media img,.story-media video,.window img,.phone img,.phone video,.plate img,.tri img,.feature img,.row .thumb img,.make-pics img{object-fit:contain}
-.feature img,.row .thumb img,.make-pics img{aspect-ratio:9/16}
+.feature img,.row .thumb img,.make-pics img{aspect-ratio:9/16;height:auto}
 /* a whole photo never stands taller than the screen: it narrows instead, centred in its space */
 .tile-ph,.feature img{width:min(100%,calc(min(76svh,660px) * .5625));margin-inline:auto}
 .reel .tile-ph{width:auto;margin:0}
