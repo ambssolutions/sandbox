@@ -100,7 +100,7 @@ def head(c, css, preload=""):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
-{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=13">
+{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=14">
 <link rel="stylesheet" href="{B}assets/studio.css?v=5">
 <script>(function(d){{d.classList.add("js");window.CW_BASE="{B}";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){{d.classList.add("motion");setTimeout(function(){{if(!window.CW_MOTION){{d.classList.remove("motion");d.classList.add("motion-off");}}}},3000);}}}})(document.documentElement);</script>
 <style>
@@ -212,7 +212,7 @@ SCRIPTS = f"""<script src="{B}assets/content.js?v=3"></script>
 <script src="{B}assets/projects.js?v=4"></script>
 <script src="{B}assets/designs.js?v=4" defer></script>
 <script src="{B}assets/studio.js?v=5" defer></script>
-<script src="{B}assets/cw-common.js?v=3" defer></script>
+<script src="{B}assets/cw-common.js?v=4" defer></script>
 <script src="{B}assets/cw-motion.js?v=4" defer></script>
 <script src="/concepts/assets/concepts.js?v=5" defer></script>
 </body>
@@ -401,6 +401,33 @@ def make_section(cls="make", photo_sizes="(max-width:820px) 44vw, 240px"):
 
 def process_section(*a, **k):
     return ""
+
+
+def carousel(slides, label="Builds", cls=""):
+    """A swipeable row (owner, 23 October 2026: carousels wanted). Native scroll-snap, swipe on phones,
+    arrows and a counter on laptops, never moves on its own. slides: list of HTML strings."""
+    return (f'<div class="car {cls}" data-car role="region" aria-roledescription="carousel" aria-label="{escape(label)}">'
+            f'<div class="car-track" tabindex="0">{"".join(slides)}</div>'
+            '<div class="car-bar"><button class="car-btn" type="button" data-car-prev aria-label="Previous">&larr;</button>'
+            '<span class="car-count" aria-live="polite"></span>'
+            '<button class="car-btn" type="button" data-car-next aria-label="Next">&rarr;</button></div></div>')
+
+
+def car_build(k, i=0, sizes="(max-width:760px) 72vw, 300px", place="Place in my room"):
+    """One build as a carousel slide: the whole photo (evening first, then lit), its name and a place button."""
+    p = P[k]; im = p["images"][i]; n = len(p["images"])
+    return (f'<figure class="car-slide">'
+            f'<button class="tile-ph" type="button" data-open="{k}" aria-label="See {n} photo{"s" if n > 1 else ""} of {escape(p["title"])}">{img(im, sizes)}{night_img(im, sizes, cls="nt", lazy=True)}</button>'
+            f'<figcaption><b>{escape(p["title"])}</b><span>{escape(TYPES[p["type"]])} &middot; {n} photo{"s" if n > 1 else ""}</span>'
+            f'<button type="button" class="t-link t-place" data-place-photo="{k}:{i}">{escape(place)}</button></figcaption></figure>')
+
+
+def stack(cards, cls=""):
+    """Sticky stacking cards (owner's pattern): fully opaque, each card's number and title stay showing as
+    the next one stacks; plain list on short screens. cards: list of (title, text, media_html)."""
+    items = "".join(f'<li class="stk-card" style="--i:{n}"><div class="stk-top"><span class="stk-n">{n + 1:02d}</span><h3>{escape(t)}</h3></div>'
+                    f'<div class="stk-body"><p>{escape(d)}</p>{m}</div></li>' for n, (t, d, m) in enumerate(cards))
+    return f'<ol class="stk {cls}" style="--n:{len(cards)}">{items}</ol>'
 
 
 def counts_html(cls="counts"):

@@ -52,14 +52,17 @@ html.motion .avatar .ring circle{stroke-dasharray:1;stroke-dashoffset:1;animatio
 .ptabs a:first-child{color:var(--c-ink);border-color:var(--c-ink)}
 @media (max-width:600px){.pstats li{padding:0 10px;font-size:11.5px}.pstats b{font-size:20px}.hero h1{font-size:clamp(2.3rem,11vw,3rem)}.bio{font-size:15px}.ptabs{gap:16px}.ptabs a{font-size:13px}}
 /* ---------- pinned videos ---------- */
-.pins{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,1.6vw,22px);max-width:960px;margin:0 auto}
+.pins{--car-w:clamp(230px,23vw,280px);--car-gap:clamp(12px,1.6vw,20px);max-width:1180px;margin:0 auto}
+.pins .car-btn{border-radius:12px;border-color:#2a2a2f;background:#17171a}.pins .car-btn:hover:not(:disabled){border-color:var(--c-accent)}
+.pins .car-count{color:#f5f2ee}
+.pin .vid{border:6px solid #232327;border-radius:26px!important}
 .pin{display:grid;gap:12px;justify-items:center;text-align:center;align-content:start}
 .pin .vid{position:relative;width:100%;aspect-ratio:9/16;border-radius:16px;overflow:hidden;background:#000}
 .pin .vid img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .pin .tag{position:absolute;left:8px;top:8px;z-index:3;padding:4px 8px;border-radius:6px;background:var(--c-accent);color:#fff;font:700 11px/1 var(--sans)}
 .pin h3{font-size:clamp(15px,1.6vw,20px);line-height:1.15;letter-spacing:-.02em}
 .pin .t-place{min-height:40px;padding:0 16px;border-radius:10px;border:0;background:#232327;color:#fff;font:700 13px/1 var(--sans);cursor:pointer}
-@media (max-width:600px){.pin .play{width:48px;height:48px;margin:-24px 0 0 -24px}.pin .play svg{width:20px;height:20px}.pin .t-place{display:none}.pin h3{font-size:13.5px}}
+@media (max-width:760px){.pins{--car-w:66vw}.pin h3{font-size:16px}}
 /* ---------- the grid of builds: 3 x 3, like a profile ---------- */
 .feed{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(6px,1.4vw,18px);max-width:960px;margin:0 auto}
 .post{display:grid;gap:10px;justify-items:center;text-align:center;align-content:start}
@@ -81,6 +84,15 @@ html.motion .avatar .ring circle{stroke-dasharray:1;stroke-dashoffset:1;animatio
 .steps-mini{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
 .steps-mini li{padding:7px 12px;border-radius:999px;background:#232327;font-size:13px;font-weight:600}
 @media (max-width:900px){.spot .wrap{grid-template-columns:1fr}.phone6{width:min(72vw,300px)}}
+/* ---------- from DM to install: stacking cards ---------- */
+.dm{--stk-bg:#151518;--stk-ink:#f5f2ee;--stk-muted:#a9a39c;--stk-line:rgba(245,242,238,.09);--stk-accent:#d1342a;--stk-r:22px}
+.dm .stk-card{border:1px solid #26262b}
+.dm .stk-n{display:inline-grid;place-items:center;min-width:34px;height:26px;padding:0 6px;border-radius:7px;background:var(--c-accent);color:#fff;letter-spacing:.04em}
+.dm .stk-top h3{font-family:var(--serif);letter-spacing:-.02em}
+.dm .stk-body p{color:#d6d0c8}
+.dm .stk-body{grid-template-columns:1fr;justify-items:center;align-content:center;gap:16px}
+.dm .stk-body img{order:-1;height:min(46svh,calc(100svh - var(--header) - 250px - var(--n) * 64px))}
+@media (max-width:760px){.dm .stk-body img{height:min(36svh,320px)}}
 /* ---------- studio ---------- */
 .studio-sec{background:var(--c-bg)}.studio-sec .st{--st-bg:#0b0b0d;--st-panel:#151518;--st-accent:#d1342a;--st-accent-ink:#fff;--st-ink:#f5f2ee;--st-muted:#a9a39c}
 /* ---------- questions as a chat ---------- */
@@ -105,11 +117,14 @@ html.motion .chat.in .msg:nth-child(2n){transition-delay:.18s}
 """
     arch = ('<svg width="40" height="52" viewBox="0 0 30 40" aria-hidden="true"><path d="M2 39V15a13 13 0 0 1 26 0v24" fill="none" stroke="#e9c77f" stroke-width="2.4"/>'
             '<path d="M8 39V17a7 7 0 0 1 14 0v22" fill="none" stroke="#f5f2ee" stroke-width="1.6"/></svg>')
-    pins = [("show-oak", "oak-marble", "oakmarble"), ("show-gurbani", "gurbani-unit", "prayerunit"), ("show-walnut", "walnut-media", "walnutarc")]
-    pin_html = "".join(
-        f'<article class="pin rv"><div class="vid"><span class="tag">Pinned</span>{video(n, P[k]["title"], 576, 1024)}</div>'
-        f'<h3>{escape(P[k]["title"])}</h3><button type="button" class="t-place" data-place="{d}">Put it in my room</button></article>'
-        for n, k, d in pins)
+    # six short clips, each from a different moment; the bare-wall clip is kept for the start-to-finish section
+    pins = [("show-oak", "Oak and marble media wall", "oakmarble"), ("show-gurbani", "Arched Gurbani prayer unit", "prayerunit"),
+            ("show-walnut", "Walnut media wall", "walnutarc"), ("hero-carved-panel", "Radha Krishna panel, lit from behind", "carved"),
+            ("hero-prayer-unit", "Gurbani unit, lights on", "prayerunit"), ("hero-media-wall", "Lit shelves beside the marble", "oakmarble")]
+    pin_html = carousel([
+        f'<article class="pin"><div class="vid"><span class="tag">Pinned</span>{video(n, t, 576, 1024)}</div>'
+        f'<h3>{escape(t)}</h3><button type="button" class="t-place" data-place="{d}">Put it in my room</button></article>'
+        for n, t, d in pins], "Pinned videos", "pins")
     feed_keys = ["gurbani-unit", "oak-marble", "carved-panel", "walnut-media", "prayer-room", "marble-tv", "herringbone", "upholstered-bed", "gurbani-office"]
     posts = []
     for k in feed_keys:
@@ -136,8 +151,8 @@ html.motion .chat.in .msg:nth-child(2n){transition-delay:.18s}
 </section>
 <section id="make" aria-labelledby="pin-title">
   <div class="wrap">
-    <div class="sec-head"><h2 id="pin-title">Pinned</h2><p class="lede">Short videos from three finished rooms. Tap one to play it.</p></div>
-    <div class="pins">{pin_html}</div>
+    <div class="sec-head"><h2 id="pin-title">Pinned</h2><p class="lede">Short videos from finished rooms. Swipe through, and tap one to play it.</p></div>
+    {pin_html}
   </div>
 </section>
 <section id="work" aria-labelledby="work-title" style="padding-top:0">
@@ -155,6 +170,14 @@ html.motion .chat.in .msg:nth-child(2n){transition-delay:.18s}
       <ul class="steps-mini" aria-label="The build"><li>Bare wall</li><li>Slatted wall</li><li>Carved panel</li><li>Lights on</li></ul>
       <div class="row"><button class="btn ghost" type="button" data-open="carved-panel">See the photos</button><button class="btn hot" type="button" data-place="carved">Put it in my room</button></div>
     </div>
+  </div>
+</section>
+<section class="dm" id="steps" aria-labelledby="dm-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="dm-title">From DM to install</h2><p class="lede">What happens after you get in touch.</p></div>
+    {stack([("Send a photo or a message", "Message us on TikTok or Instagram, text 020 4149 8811 or use the form. A photo of the wall and a rough size is enough to start.", img(P["carved-panel"]["images"][4], "(max-width:760px) 60vw, 240px")),
+            ("We measure and agree the design", "We check the space, then go through the layout, the finish, the carving and the lighting with you.", img(P["gurbani-unit"]["images"][2], "(max-width:760px) 60vw, 240px")),
+            ("Made and fitted", "Your piece is built to those measurements and installed in your home, lighting and all.", img(P["oak-marble"]["images"][3], "(max-width:760px) 60vw, 240px"))])}
   </div>
 </section>
 {studio("Duet it with your room", "Your wall, our build. Take a photo of your wall and drop in any build from the grid, or a screenshot you saved from TikTok. Your photos stay on your device.", "litframe")}

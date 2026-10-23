@@ -77,6 +77,21 @@ section{padding-block:clamp(56px,7vw,96px)}
 .pc-try{min-height:40px;border-radius:10px;border:0;background:var(--ink);color:#fff;font:700 13.5px/1 var(--sans);cursor:pointer}
 .pc-try:hover{background:#000}
 @media (max-width:1100px){.pcs{--cols:4}}
+/* each group of pieces is a swipe row, like an app shelf */
+.pcar{--car-w:clamp(150px,14.5vw,186px);--car-gap:clamp(10px,1.2vw,16px);--car-r:11px}
+.pcar .car-track{padding-bottom:6px}
+.pcar .pc{flex:none;height:100%}
+.pcar .car-btn{width:42px;height:42px;background:var(--panel)}
+@media (max-width:760px){.pcar .car-track{--car-w:38vw}}
+/* tips: stacking cards, white on the light grey, each with its drawing */
+.tipstk{--stk-bg:#fff;--stk-ink:var(--ink);--stk-muted:var(--muted);--stk-line:var(--line);--stk-accent:var(--gold-text);--stk-r:var(--r);max-width:960px}
+.tipstk .stk-card{border:1px solid var(--line)}
+.tipstk svg{width:min(240px,100%);height:auto;justify-self:center}
+.tipstk svg *{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tipstk svg .g{stroke:var(--gold)}.tipstk svg .f{fill:var(--gold-soft);stroke:none}.tipstk svg .k{fill:var(--ink);stroke:none}
+.tipstk .stk-body{min-height:0;max-height:none;padding-block:clamp(28px,5vh,56px)}
+.tipstk .stk-body{grid-template-columns:1fr;justify-items:center;align-content:center;gap:clamp(12px,2vh,20px)}.tipstk .stk-body p{order:-1}.tipstk .stk-body img{height:max(170px,calc(100svh - var(--header) - 16px - var(--n) * 64px - 160px))}
+@media (max-width:760px){.tipstk svg{width:min(200px,70%)}}
 @media (max-width:600px){.pcs{--cols:3;--gap:8px;gap:8px}.pc{padding:5px 5px 7px;border-radius:12px;gap:6px}.pc h4{font-size:12px}.pc-try{min-height:36px;font-size:12.5px;border-radius:8px}.pc-tag{font-size:9px;padding:3px 5px;left:4px;top:4px}}
 /* tips: one panel, three columns split by hairlines, each with a small drawing */
 .tips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:1080px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--r)}
@@ -110,9 +125,8 @@ html.motion .tip.in svg .d{stroke-dashoffset:0}
 """
     groups = []
     for title, builds, drawn in LIBRARY:
-        cards = "".join(_photo_card(k) for k in builds) + "".join(_drawn_card(d, l) for d, l in drawn)
-        n = len(builds) + len(drawn)
-        groups.append(f'<div class="group"><div class="group-h"><h3>{escape(title)}</h3><span>{n} pieces</span></div><div class="pcs">{cards}</div></div>')
+        cards = [_photo_card(k) for k in builds] + [_drawn_card(d, l) for d, l in drawn]
+        groups.append(f'<div class="group"><div class="group-h"><h3>{escape(title)}</h3><span>{len(cards)} pieces</span></div>{carousel(cards, title, "pcar")}</div>')
     tips = [
         ("Stand back, face the wall",
          "Hold the phone level and take the photo straight on, with the whole wall and a bit of floor in it.",
@@ -129,7 +143,7 @@ html.motion .tip.in svg .d{stroke-dashoffset:0}
          '<circle cx="38" cy="18" r="7" fill="#fff" stroke="#c9a35a" stroke-width="2.2"/><circle cx="124" cy="24" r="7" fill="#fff" stroke="#c9a35a" stroke-width="2.2"/>'
          '<circle cx="124" cy="90" r="7" fill="#fff" stroke="#c9a35a" stroke-width="2.2"/><circle cx="38" cy="98" r="7" fill="#fff" stroke="#c9a35a" stroke-width="2.2"/></svg>'),
     ]
-    tips_html = "".join(f'<li class="tip rv">{svg}<b>Tip {i + 1}</b><h3>{escape(t)}</h3><p>{escape(d)}</p></li>' for i, (t, d, svg) in enumerate(tips))
+    tips_html = stack([(t, d, svg) for t, d, svg in tips], "tipstk")
     send = contact("Send it to us").replace(
         "A rough idea is enough to start. We will come back to you with questions and a time to measure.",
         f"Happy with a preview? Tap Save image in the studio, then send this form or text the picture to {PHONE}. A rough size is enough to start.")
@@ -156,7 +170,7 @@ html.motion .tip.in svg .d{stroke-dashoffset:0}
 <section id="tips" aria-labelledby="tips-title">
   <div class="wrap">
     <div class="sec-head"><h2 id="tips-title">How to get a great preview</h2></div>
-    <ol class="tips" style="list-style:none;padding:0">{tips_html}</ol>
+    {tips_html}
   </div>
 </section>
 {send}

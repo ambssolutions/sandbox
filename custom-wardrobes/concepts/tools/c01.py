@@ -81,18 +81,19 @@ html.motion .scene.on .pair .night .k2{animation:flick .5s steps(1,end) both}
  html.motion .scene.day .pair .day{opacity:1}
  html.motion .scene .switch{display:inline-flex}
 }
-/* ---------- the rest of the collection: an index of names ---------- */
-.index{list-style:none;margin:0 auto;padding:0;max-width:880px;border-top:1px solid var(--c-line)}
-.index li{border-bottom:1px solid var(--c-line)}
-.index .it{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:clamp(14px,2.4vw,28px);padding:16px 4px}
-.index button.open{display:contents;background:none;border:0;color:inherit;cursor:zoom-in;font:inherit;text-align:left}
-.index .th{position:relative;width:56px;aspect-ratio:9/16;border-radius:4px;overflow:hidden;background:#000}
-.index .th img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.index .nm{display:grid;gap:4px;justify-items:start;text-align:left}
-.index h3{font-size:clamp(22px,2.6vw,34px);line-height:1.1}
-.index small{color:var(--c-muted);font-size:13px}
-.index .pl{grid-column:2;justify-self:start;margin-top:-6px}
-@media (min-width:701px){.index .it{grid-template-columns:auto 1fr auto}.index .pl{grid-column:auto;margin-top:0;justify-self:end}}
+/* ---------- the collection as a carousel: night first, lighting up as each slide comes into view ---------- */
+#make .car{--car-r:6px;--car-w:clamp(230px,22vw,290px);max-width:1180px;margin:0 auto}
+#make .car-slide figcaption b{font:400 clamp(21px,1.9vw,25px)/1.15 var(--serif)}
+#make .car-slide .t-link{color:var(--c-ink);background:none;border:0;padding:0;font:600 14px/1 var(--sans);text-decoration:underline;text-underline-offset:4px;cursor:pointer;min-height:36px}
+#make .car-btn{border-color:rgba(239,231,218,.3)}
+/* ---------- how a wall gets its light: stacking cards ---------- */
+.lightway{background:#0b0908}
+.lightway .stk{--stk-bg:#15110d;--stk-ink:#efe7da;--stk-muted:#b5a691;--stk-line:rgba(239,231,218,.12);--stk-accent:#f0c27a;--stk-r:8px}
+.lightway .stk-top h3{font-family:var(--serif);font-weight:400}
+.lightway .stk-body img{border-radius:4px}
+.lightway .stk-body{grid-template-columns:1fr;justify-items:center;align-content:center;gap:16px}
+.lightway .stk-body img,.lightway .stk-body .stk-media{height:max(200px,calc(100svh - var(--header) - 32px - var(--n) * 64px - 150px))}
+@media (max-width:760px){.lightway .stk-body img,.lightway .stk-body .stk-media{height:min(34svh,300px)}}
 /* ---------- studio, questions, contact, footer ---------- */
 .studio-sec{background:#0e0c0b}.studio-sec .st{--st-bg:#08070a;--st-panel:#17130f;--st-accent:#f0c27a}
 .faq-list{max-width:820px;margin:0 auto;border-top:1px solid var(--c-line)}.faq-item{border-bottom:1px solid var(--c-line)}
@@ -129,13 +130,14 @@ html.motion .scene.on .pair .night .k2{animation:flick .5s steps(1,end) both}
     </div>
   </div>
 </section>''')
-    rest = []
-    for k in ["carved-panel", "prayer-room", "upholstered-bed", "gurbani-office", "storage-bed"]:
-        p, im = P[k], P[k]["images"][0]
-        cnt = len(p["images"])
-        rest.append(f'<li class="rv"><div class="it"><button class="open" type="button" data-open="{k}" aria-label="See {cnt} photo{"s" if cnt > 1 else ""} of {escape(p["title"])}">'
-                    f'<span class="th">{night_img(im, "56px", lazy=True)}</span><span class="nm"><h3>{escape(p["title"])}</h3><small>{escape(TYPES[p["type"]])} &middot; {cnt} photo{"s" if cnt > 1 else ""}</small></span></button>'
-                    f'<button class="t-link pl" type="button" data-place-photo="{k}:0">Place in my room</button></div></li>')
+    rest = [car_build(k, 0, "(max-width:760px) 72vw, 290px") for k in ["carved-panel", "prayer-room", "upholstered-bed", "gurbani-office", "storage-bed"]]
+    cp = P["carved-panel"]["images"]
+    lightway = stack([
+        ("A plain wall", "The hallway as we found it: a bare white wall, nothing on it yet.", img(cp[4], "(max-width:760px) 60vw, 300px")),
+        ("The panel goes up", "A full slatted wall goes in, with the carved Radha Krishna panel set into it.", img(cp[2], "(max-width:760px) 60vw, 300px")),
+        ("The light goes in", "LED strips sit behind the panel, so after dark the light comes from around its frame.", night_img(cp[1], "(max-width:760px) 60vw, 300px", lazy=True)),
+        ("Lights on", "The finished wall, from the side, with the slats running the full height.", img(cp[3], "(max-width:760px) 60vw, 300px")),
+    ])
     body = f"""<header class="top"><div class="wrap">{brand('#efe7da', '#f0c27a')}<button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menu"><span></span><span></span></button>
     <nav class="nav" id="nav" aria-label="Main"><a href="#work">After dark</a><a href="#make">The collection</a><a href="#studio">Your wall</a><a href="#questions">Questions</a><a class="nav-cta" href="#contact">Get a quote</a></nav></div></header>
 <main id="main">
@@ -157,8 +159,14 @@ html.motion .scene.on .pair .night .k2{animation:flick .5s steps(1,end) both}
 <section id="make" aria-labelledby="make-title" style="background:#0e0c0b">
   <div class="wrap">
     <div class="sec-head"><h2 id="make-title">The rest of the collection</h2><p class="lede">More of our work, from prayer rooms to bedrooms. Open any of them for every photo.</p></div>
-    <ul class="index">{''.join(rest)}</ul>
+    {carousel(rest, "More of our builds")}
     <p class="lede" style="text-align:center;margin-top:28px">We also build wardrobes: sliding, hinged or walk-in, sized to your wall. <button class="t-link" type="button" data-place="sliding" style="color:var(--c-ink);display:table;margin:8px auto 0">Try one in your room</button></p>
+  </div>
+</section>
+<section class="lightway" id="lightway" aria-labelledby="lightway-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="lightway-title">How a wall gets its light</h2><p class="lede">One hallway in Auckland, from a plain wall to a lit carved panel.</p></div>
+    {lightway}
   </div>
 </section>
 {studio("Light your own wall", "Take a photo of your wall and place any of our pieces on it. Then turn the lights off and see it at night. Your photos stay on your device.", "oakmarble")}

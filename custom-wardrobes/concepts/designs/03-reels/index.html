@@ -13,7 +13,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Inter:wght@400;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Inter:wght@400;600;700&display=swap"></noscript>
 <link rel="preload" as="image" href="/assets/video/show-oak.webp">
-<link rel="stylesheet" href="/assets/cw-common.css?v=13">
+<link rel="stylesheet" href="/assets/cw-common.css?v=14">
 <link rel="stylesheet" href="/assets/studio.css?v=5">
 <script>(function(d){d.classList.add("js");window.CW_BASE="/";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("motion");setTimeout(function(){if(!window.CW_MOTION){d.classList.remove("motion");d.classList.add("motion-off");}},3000);}})(document.documentElement);</script>
 <style>
@@ -64,14 +64,17 @@ html.motion .avatar .ring circle{stroke-dasharray:1;stroke-dashoffset:1;animatio
 .ptabs a:first-child{color:var(--c-ink);border-color:var(--c-ink)}
 @media (max-width:600px){.pstats li{padding:0 10px;font-size:11.5px}.pstats b{font-size:20px}.hero h1{font-size:clamp(2.3rem,11vw,3rem)}.bio{font-size:15px}.ptabs{gap:16px}.ptabs a{font-size:13px}}
 /* ---------- pinned videos ---------- */
-.pins{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,1.6vw,22px);max-width:960px;margin:0 auto}
+.pins{--car-w:clamp(230px,23vw,280px);--car-gap:clamp(12px,1.6vw,20px);max-width:1180px;margin:0 auto}
+.pins .car-btn{border-radius:12px;border-color:#2a2a2f;background:#17171a}.pins .car-btn:hover:not(:disabled){border-color:var(--c-accent)}
+.pins .car-count{color:#f5f2ee}
+.pin .vid{border:6px solid #232327;border-radius:26px!important}
 .pin{display:grid;gap:12px;justify-items:center;text-align:center;align-content:start}
 .pin .vid{position:relative;width:100%;aspect-ratio:9/16;border-radius:16px;overflow:hidden;background:#000}
 .pin .vid img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .pin .tag{position:absolute;left:8px;top:8px;z-index:3;padding:4px 8px;border-radius:6px;background:var(--c-accent);color:#fff;font:700 11px/1 var(--sans)}
 .pin h3{font-size:clamp(15px,1.6vw,20px);line-height:1.15;letter-spacing:-.02em}
 .pin .t-place{min-height:40px;padding:0 16px;border-radius:10px;border:0;background:#232327;color:#fff;font:700 13px/1 var(--sans);cursor:pointer}
-@media (max-width:600px){.pin .play{width:48px;height:48px;margin:-24px 0 0 -24px}.pin .play svg{width:20px;height:20px}.pin .t-place{display:none}.pin h3{font-size:13.5px}}
+@media (max-width:760px){.pins{--car-w:66vw}.pin h3{font-size:16px}}
 /* ---------- the grid of builds: 3 x 3, like a profile ---------- */
 .feed{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(6px,1.4vw,18px);max-width:960px;margin:0 auto}
 .post{display:grid;gap:10px;justify-items:center;text-align:center;align-content:start}
@@ -93,6 +96,15 @@ html.motion .avatar .ring circle{stroke-dasharray:1;stroke-dashoffset:1;animatio
 .steps-mini{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
 .steps-mini li{padding:7px 12px;border-radius:999px;background:#232327;font-size:13px;font-weight:600}
 @media (max-width:900px){.spot .wrap{grid-template-columns:1fr}.phone6{width:min(72vw,300px)}}
+/* ---------- from DM to install: stacking cards ---------- */
+.dm{--stk-bg:#151518;--stk-ink:#f5f2ee;--stk-muted:#a9a39c;--stk-line:rgba(245,242,238,.09);--stk-accent:#d1342a;--stk-r:22px}
+.dm .stk-card{border:1px solid #26262b}
+.dm .stk-n{display:inline-grid;place-items:center;min-width:34px;height:26px;padding:0 6px;border-radius:7px;background:var(--c-accent);color:#fff;letter-spacing:.04em}
+.dm .stk-top h3{font-family:var(--serif);letter-spacing:-.02em}
+.dm .stk-body p{color:#d6d0c8}
+.dm .stk-body{grid-template-columns:1fr;justify-items:center;align-content:center;gap:16px}
+.dm .stk-body img{order:-1;height:min(46svh,calc(100svh - var(--header) - 250px - var(--n) * 64px))}
+@media (max-width:760px){.dm .stk-body img{height:min(36svh,320px)}}
 /* ---------- studio ---------- */
 .studio-sec{background:var(--c-bg)}.studio-sec .st{--st-bg:#0b0b0d;--st-panel:#151518;--st-accent:#d1342a;--st-accent-ink:#fff;--st-ink:#f5f2ee;--st-muted:#a9a39c}
 /* ---------- questions as a chat ---------- */
@@ -159,8 +171,8 @@ main>section:not([data-hero]){padding-block:clamp(64px,8vw,112px)}
 </section>
 <section id="make" aria-labelledby="pin-title">
   <div class="wrap">
-    <div class="sec-head"><h2 id="pin-title">Pinned</h2><p class="lede">Short videos from three finished rooms. Tap one to play it.</p></div>
-    <div class="pins"><article class="pin rv"><div class="vid"><span class="tag">Pinned</span><img src="/assets/video/show-oak.webp" width="576" height="1024" alt="Oak and marble media wall" loading="lazy" decoding="async"><button class="play" type="button" data-play="assets/video/show-oak.mp4" aria-label="Play the video: Oak and marble media wall"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div><h3>Oak and marble media wall</h3><button type="button" class="t-place" data-place="oakmarble">Put it in my room</button></article><article class="pin rv"><div class="vid"><span class="tag">Pinned</span><img src="/assets/video/show-gurbani.webp" width="576" height="1024" alt="Arched Gurbani prayer unit" loading="lazy" decoding="async"><button class="play" type="button" data-play="assets/video/show-gurbani.mp4" aria-label="Play the video: Arched Gurbani prayer unit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div><h3>Arched Gurbani prayer unit</h3><button type="button" class="t-place" data-place="prayerunit">Put it in my room</button></article><article class="pin rv"><div class="vid"><span class="tag">Pinned</span><img src="/assets/video/show-walnut.webp" width="576" height="1024" alt="Walnut media wall with a hidden prayer cabinet" loading="lazy" decoding="async"><button class="play" type="button" data-play="assets/video/show-walnut.mp4" aria-label="Play the video: Walnut media wall with a hidden prayer cabinet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div><h3>Walnut media wall with a hidden prayer cabinet</h3><button type="button" class="t-place" data-place="walnutarc">Put it in my room</button></article></div>
+    <div class="sec-head"><h2 id="pin-title">Pinned</h2><p class="lede">Short videos from finished rooms. Swipe through, and tap one to play it.</p></div>
+    <div class="car pins" data-car role="region" aria-roledescription="carousel" aria-label="Pinned videos"><div class="car-track" tabindex="0"><article class="pin"><div class="vid"><span class="tag">Pinned</span><img src="/assets/video/show-oak.webp" width="576" height="1024" alt="Oak and marble media wall" loading="lazy" decoding="async"><button class="play" type="button" data-play="assets/video/show-oak.mp4" aria-label="Play the video: Oak and marble media wall"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div><h3>Oak and marble media wall</h3><button type="button" class="t-place" data-place="oakmarble">Put it in my room</button></article><article class="pin"><div class="vid"><span class="tag">Pinned</span><img src="/assets/video/show-gurbani.webp" width="576" height="1024" alt="Arched Gurbani prayer unit" loading="lazy" decoding="async"><button class="play" type="button" data-play="assets/video/show-gurbani.mp4" aria-label="Play the video: Arched Gurbani prayer unit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div><h3>Arched Gurbani prayer unit</h3><button type="button" class="t-place" data-place="prayerunit">Put it in my room</button></article><article class="pin"><div class="vid"><span class="tag">Pinned</span><img src="/assets/video/show-walnut.webp" width="576" height="1024" alt="Walnut media wall" loading="lazy" decoding="async"><button class="play" type="button" data-play="assets/video/show-walnut.mp4" aria-label="Play the video: Walnut media wall"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div><h3>Walnut media wall</h3><button type="button" class="t-place" data-place="walnutarc">Put it in my room</button></article><article class="pin"><div class="vid"><span class="tag">Pinned</span><img src="/assets/video/hero-carved-panel.webp" width="576" height="1024" alt="Radha Krishna panel, lit from behind" loading="lazy" decoding="async"><button class="play" type="button" data-play="assets/video/hero-carved-panel.mp4" aria-label="Play the video: Radha Krishna panel, lit from behind"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div><h3>Radha Krishna panel, lit from behind</h3><button type="button" class="t-place" data-place="carved">Put it in my room</button></article><article class="pin"><div class="vid"><span class="tag">Pinned</span><img src="/assets/video/hero-prayer-unit.webp" width="576" height="1024" alt="Gurbani unit, lights on" loading="lazy" decoding="async"><button class="play" type="button" data-play="assets/video/hero-prayer-unit.mp4" aria-label="Play the video: Gurbani unit, lights on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div><h3>Gurbani unit, lights on</h3><button type="button" class="t-place" data-place="prayerunit">Put it in my room</button></article><article class="pin"><div class="vid"><span class="tag">Pinned</span><img src="/assets/video/hero-media-wall.webp" width="576" height="1024" alt="Lit shelves beside the marble" loading="lazy" decoding="async"><button class="play" type="button" data-play="assets/video/hero-media-wall.mp4" aria-label="Play the video: Lit shelves beside the marble"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div><h3>Lit shelves beside the marble</h3><button type="button" class="t-place" data-place="oakmarble">Put it in my room</button></article></div><div class="car-bar"><button class="car-btn" type="button" data-car-prev aria-label="Previous">&larr;</button><span class="car-count" aria-live="polite"></span><button class="car-btn" type="button" data-car-next aria-label="Next">&rarr;</button></div></div>
   </div>
 </section>
 <section id="work" aria-labelledby="work-title" style="padding-top:0">
@@ -178,6 +190,12 @@ main>section:not([data-hero]){padding-block:clamp(64px,8vw,112px)}
       <ul class="steps-mini" aria-label="The build"><li>Bare wall</li><li>Slatted wall</li><li>Carved panel</li><li>Lights on</li></ul>
       <div class="row"><button class="btn ghost" type="button" data-open="carved-panel">See the photos</button><button class="btn hot" type="button" data-place="carved">Put it in my room</button></div>
     </div>
+  </div>
+</section>
+<section class="dm" id="steps" aria-labelledby="dm-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="dm-title">From DM to install</h2><p class="lede">What happens after you get in touch.</p></div>
+    <ol class="stk " style="--n:3"><li class="stk-card" style="--i:0"><div class="stk-top"><span class="stk-n">01</span><h3>Send a photo or a message</h3></div><div class="stk-body"><p>Message us on TikTok or Instagram, text 020 4149 8811 or use the form. A photo of the wall and a rough size is enough to start.</p><img src="/assets/img/work/carved-panel-5-576.webp?v=2" srcset="/assets/img/work/carved-panel-5-480.webp?v=2 480w, /assets/img/work/carved-panel-5-576.webp?v=2 576w" sizes="(max-width:760px) 60vw, 240px" width="576" height="1024" loading="lazy" decoding="async" alt="The same wall before the build"></div></li><li class="stk-card" style="--i:1"><div class="stk-top"><span class="stk-n">02</span><h3>We measure and agree the design</h3></div><div class="stk-body"><p>We check the space, then go through the layout, the finish, the carving and the lighting with you.</p><img src="/assets/img/work/gurbani-unit-3-576.webp?v=2" srcset="/assets/img/work/gurbani-unit-3-480.webp?v=2 480w, /assets/img/work/gurbani-unit-3-576.webp?v=2 576w" sizes="(max-width:760px) 60vw, 240px" width="576" height="1024" loading="lazy" decoding="async" alt="The whole prayer unit with its carved arch and drawers"></div></li><li class="stk-card" style="--i:2"><div class="stk-top"><span class="stk-n">03</span><h3>Made and fitted</h3></div><div class="stk-body"><p>Your piece is built to those measurements and installed in your home, lighting and all.</p><img src="/assets/img/work/oak-marble-4-576.webp?v=2" srcset="/assets/img/work/oak-marble-4-480.webp?v=2 480w, /assets/img/work/oak-marble-4-576.webp?v=2 576w" sizes="(max-width:760px) 60vw, 240px" width="576" height="1024" loading="lazy" decoding="async" alt="The media wall from the left"></div></li></ol>
   </div>
 </section>
 <section class="studio-sec" id="studio" aria-labelledby="studio-title">
@@ -247,7 +265,7 @@ main>section:not([data-hero]){padding-block:clamp(64px,8vw,112px)}
 <script src="/assets/projects.js?v=4"></script>
 <script src="/assets/designs.js?v=4" defer></script>
 <script src="/assets/studio.js?v=5" defer></script>
-<script src="/assets/cw-common.js?v=3" defer></script>
+<script src="/assets/cw-common.js?v=4" defer></script>
 <script src="/assets/cw-motion.js?v=4" defer></script>
 <script src="/concepts/assets/concepts.js?v=5" defer></script>
 </body>

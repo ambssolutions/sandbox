@@ -78,6 +78,23 @@ html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:l
 @media (max-width:900px){.arcade{grid-template-columns:1fr 1fr}}
 @media (max-width:600px){.arcade{gap:22px 14px}.arc h3{font-size:16px}.arc-place{display:none}}
 .eve{color:var(--c-ink)}
+/* ---------- the arcade as a carousel: equal arches you swipe through ---------- */
+#work .car{--car-r:var(--arch);--car-w:clamp(220px,21vw,260px);--car-gap:clamp(18px,2.4vw,34px);max-width:1180px;margin:0 auto}
+#work .car-track{padding:14px 14px 16px}
+#work .car-slide .tile-ph{background:#1a1410;box-shadow:0 0 0 1.5px var(--gold),0 0 0 7px var(--paper),0 0 0 8.5px rgba(201,163,90,.45)}
+#work .car-slide figcaption b{font:400 clamp(19px,1.7vw,23px)/1.2 var(--serif);margin-top:8px}
+#work .car-slide .t-link{background:none;border:0;padding:0;min-height:32px;font:700 13px/1 var(--sans);color:var(--gold-text);cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+#work .car-btn{border-color:var(--gold);color:var(--gold-text);border-radius:999px 999px 14px 14px}
+/* ---------- the hallway as arched stacking cards ---------- */
+.dome .stk{--stk-bg:#f5efe4;--stk-ink:#1c140e;--stk-muted:#5e5246;--stk-line:#dccfbb;--stk-accent:#7c5c22;--stk-r:160px 160px 22px 22px/80px 80px 22px 22px;max-width:1000px}
+.dome .stk-card{box-shadow:0 0 0 1.5px var(--gold),0 -18px 34px -22px rgba(0,0,0,.7)}
+.dome .stk-top h3{font-family:var(--serif);font-weight:400;font-size:clamp(21px,2.2vw,28px)}
+.dome .stk-body img,.dome .stk-body .stk-media{border-radius:var(--arch-soft)}
+.dome .stk-media{position:relative;overflow:hidden}
+.dome .stk-media img{position:absolute;inset:0;width:100%;height:100%;border-radius:0}
+.dome .stk-body{grid-template-columns:1fr;justify-items:center;align-content:center;gap:16px}
+.dome .stk-body img,.dome .stk-body .stk-media{height:max(200px,calc(100svh - var(--header) - 32px - var(--n) * 64px - 150px))}
+@media (max-width:760px){.dome .stk-body img,.dome .stk-body .stk-media{height:min(34svh,300px)}}
 /* ---------- one hallway, start to finish: an arched timeline ---------- */
 .tl{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,4vw,64px);max-width:1080px;position:relative}
 .tl::before{content:"";position:absolute;left:16%;right:16%;top:calc(var(--tlw) * .9);height:2px;background:linear-gradient(90deg,transparent,var(--gold) 12%,var(--gold) 88%,transparent);--tlw:min(15vw,190px)}
@@ -134,18 +151,13 @@ html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:l
 """
     unit = P["gurbani-unit"]["images"][1]
     order = ["gurbani-unit", "oak-marble", "carved-panel", "walnut-media", "prayer-room", "marble-tv", "herringbone", "upholstered-bed"]
-    arches = "".join(
-        f'<article class="arc rv"><button class="tile-ph" type="button" data-open="{k}" aria-label="See the photos of {escape(P[k]["title"])}">'
-        f'{img(P[k]["images"][0], "(max-width:900px) 44vw, 250px")}{night_img(P[k]["images"][0], "(max-width:900px) 44vw, 250px", cls="nt", lazy=True)}</button>'
-        f'<h3>{escape(P[k]["title"])}</h3><button type="button" class="arc-place" data-place-photo="{k}:0">Place in my room</button></article>'
-        for k in order)
+    arches = carousel([car_build(k, 0, "(max-width:760px) 72vw, 260px") for k in order], "The arcade of builds")
     cp = P["carved-panel"]["images"]
-    steps = [
-        (f'<figure class="tl-f" style="margin:0">{img(cp[4], "(max-width:900px) 72vw, 300px")}</figure>', "The wall as we found it", "A plain white hallway wall, with nothing on it."),
-        (f'<div class="tl-f">{video("bare-wall-to-panel", "The hallway wall changing from bare to finished", 540, 960)}</div>', "Watch it change", "Tap to play the short video from our TikTok."),
-        (f'<figure class="tl-f" style="margin:0">{img(cp[1], "(max-width:900px) 72vw, 300px")}</figure>', "Lit from behind", "A carved Radha Krishna panel set into a full slatted wall, with light around its frame."),
-    ]
-    tl = "".join(f'<li class="rv">{m}<span class="tl-n" aria-hidden="true">{i + 1}</span><h3>{escape(t)}</h3><p>{escape(d)}</p></li>' for i, (m, t, d) in enumerate(steps))
+    tl = stack([
+        ("The wall as we found it", "A plain white hallway wall in an Auckland home, with nothing on it.", img(cp[4], "(max-width:760px) 60vw, 300px")),
+        ("Watch it change", "Tap to play the short video from our TikTok, from the bare wall to the finished panel.", f'<div class="stk-media">{video("bare-wall-to-panel", "The hallway wall changing from bare to finished", 540, 960)}</div>'),
+        ("Lit from behind", "A carved Radha Krishna panel set into a full slatted wall, with light around its frame.", img(cp[1], "(max-width:760px) 60vw, 300px")),
+    ])
     kinds = [("Prayer units", "Carved arches with raised Gurbani lettering lit from behind, drawers below.", "prayerunit"),
              ("TV and media walls", "Marble-look panels, walnut and oak, lit shelves and long floating units.", "oakmarble"),
              ("Carved panels", "Carved art and lettering with light set in behind, on a slatted or plain wall.", "carved"),
@@ -168,14 +180,14 @@ html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:l
 </section>
 <section id="work" aria-labelledby="work-title">
   <div class="wrap">
-    <div class="sec-head"><h2 id="work-title">The <em>arcade</em></h2><p class="lede">Eight of our builds, each in its own arch. Tap one for all its photos.</p><button class="eve" type="button" aria-pressed="false" data-evening>See them in the evening</button></div>
-    <div class="arcade">{arches}</div>
+    <div class="sec-head"><h2 id="work-title">The <em>arcade</em></h2><p class="lede">Eight of our builds, each in its own arch. Swipe through them, and tap one for all its photos.</p><button class="eve" type="button" aria-pressed="false" data-evening>See them in the evening</button></div>
+    {arches}
   </div>
 </section>
 <section class="dark dome" id="story" aria-labelledby="story-title">
   <div class="wrap">
     <div class="sec-head"><h2 id="story-title">One hallway, <em>start to finish</em></h2><p class="lede">A plain wall in an Auckland home, turned into a slatted wall with a carved panel lit from behind.</p></div>
-    <ol class="tl">{tl}</ol>
+    {tl}
     <div class="row tale-act"><button class="btn ghost" type="button" data-open="carved-panel">See all five photos</button><button class="btn" type="button" data-place="carved">Place this panel in my room</button></div>
   </div>
 </section>

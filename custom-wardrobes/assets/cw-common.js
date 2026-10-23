@@ -150,6 +150,27 @@
     });
   });
 
+  /* ---------- carousels: arrows step one slide, the counter follows the swipe; nothing moves on its own ---------- */
+  [].forEach.call(document.querySelectorAll("[data-car]"), function (car) {
+    var track = car.querySelector(".car-track"), slides = [].slice.call(track.children), n = slides.length;
+    var prev = car.querySelector("[data-car-prev]"), next = car.querySelector("[data-car-next]"), count = car.querySelector(".car-count");
+    function pad(k) { return (k < 10 ? "0" : "") + k; }
+    function stepW() { return n > 1 ? slides[1].offsetLeft - slides[0].offsetLeft : track.clientWidth; }
+    function update() {
+      var max = track.scrollWidth - track.clientWidth;
+      car.classList.toggle("fits", max <= 2);
+      var i = Math.min(n - 1, Math.round(track.scrollLeft / Math.max(1, stepW())));
+      var shown = Math.max(1, Math.floor((track.clientWidth + 8) / Math.max(1, stepW())));
+      count.textContent = pad(Math.min(n, i + shown)) + " / " + pad(n);
+      prev.disabled = track.scrollLeft <= 2; next.disabled = track.scrollLeft >= max - 2;
+    }
+    prev.addEventListener("click", function () { track.scrollBy({ left: -stepW(), behavior: "smooth" }); });
+    next.addEventListener("click", function () { track.scrollBy({ left: stepW(), behavior: "smooth" }); });
+    track.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") { e.preventDefault(); next.click(); } if (e.key === "ArrowLeft") { e.preventDefault(); prev.click(); } });
+    var t = 0; track.addEventListener("scroll", function () { if (!t) t = requestAnimationFrame(function () { t = 0; update(); }); }, { passive: true });
+    addEventListener("resize", update); update();
+  });
+
   // Phone quick bar: once the hero has scrolled away
   var quick = document.getElementById("quick"), hero = document.querySelector("[data-hero]");
   if (quick && hero && "IntersectionObserver" in window) new IntersectionObserver(function (es) { quick.classList.toggle("show", !es[0].isIntersecting); }).observe(hero);

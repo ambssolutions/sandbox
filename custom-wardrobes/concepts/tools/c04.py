@@ -62,23 +62,39 @@ html.motion .plate img.nt{animation:showimg .3s 1.25s steps(2,end) forwards,hide
 @media (max-width:700px){.ix li{grid-template-columns:44px minmax(0,1fr) auto;gap:2px 12px;padding:13px 0;align-items:center}
  .ix .n{grid-column:1;grid-row:1/span 2}.ix .t{grid-column:2;grid-row:1;font-size:19px}.ix .ixk{grid-column:2;grid-row:2;font-size:11px}
  .ix a,.ix button{grid-column:3;grid-row:1/span 2}}
-/* ---------- plates: one build per spread ---------- */
-.plates{display:grid;gap:clamp(80px,11vw,160px)}
-.spread{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(30px,6vw,100px);max-width:1120px;margin:0 auto;width:100%}
-.spread:nth-child(even) .mount{order:2}
-.mount{margin:0;justify-self:center;background:#fff;border:1px solid var(--c-line);padding:clamp(12px,1.6vw,20px) clamp(12px,1.6vw,20px) 12px;display:grid;gap:10px;width:min(100%,calc(min(70svh,620px) * .5625 + 40px))}
-.mount .tile-ph{display:block;width:100%!important;margin:0!important;padding:0;border:0;background:#0d0b09;cursor:zoom-in;aspect-ratio:9/16;overflow:hidden;position:relative}
-.mount .tile-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.mount .tile-ph,.mount .tile-ph img{border-radius:0!important}
-.mount figcaption{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--c-muted);text-align:center}
-.spec{display:grid;justify-items:center;text-align:center;gap:16px;max-width:430px;justify-self:center}
-.spec h3{font-size:clamp(34px,3.4vw,52px);line-height:1.04}
-.spec dl{margin:4px 0 0;width:100%;border-top:1px solid var(--c-ink)}
-.spec dl div{display:grid;gap:4px;padding:12px 0;border-bottom:1px solid var(--c-line);justify-items:center}
+/* ---------- plates: catalogue pages that stack (owner's stacking cards; opaque, plate number and title stay showing) ---------- */
+.plates{--stk-bg:#fff;--stk-ink:#141210;--stk-muted:#6b635a;--stk-line:#e2dcd2;--stk-accent:#85631f;--stk-r:0;max-width:1060px;gap:28px}
+.plates .stk-card{grid-template-rows:52px auto;top:calc(var(--header) + 14px + var(--i) * 52px);border:1px solid var(--c-line);box-shadow:0 -14px 30px -26px rgba(20,18,16,.6)}
+.plates .stk-top{gap:16px}
+.plates .stk-n{font:500 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;flex:none}
+.plates .stk-top h3{font:400 clamp(20px,2vw,26px)/1.1 var(--serif)}
+.plates .stk-body{grid-template-columns:auto minmax(0,1fr);gap:clamp(22px,4vw,64px);padding:clamp(16px,2.4vw,30px) clamp(18px,4vw,56px);
+  min-height:calc(100svh - var(--header) - 28px - var(--n) * 52px - 28px);max-height:calc(100svh - var(--header) - 28px - var(--n) * 52px)}
+.plates .stk-media{position:relative;display:block;height:calc(100svh - var(--header) - 88px - var(--n) * 52px);max-height:560px;aspect-ratio:9/16;width:auto;padding:0;border:1px solid var(--c-line);background:#0d0b09;cursor:zoom-in;overflow:hidden;border-radius:0}
+.plates .stk-media img{position:absolute;inset:0;width:100%!important;height:100%!important;object-fit:contain;border-radius:0!important;aspect-ratio:auto!important}
+.spec{display:grid;justify-items:center;text-align:center;gap:12px;max-width:430px;justify-self:center}
+.spec dl{margin:0;width:100%;border-top:1px solid var(--c-ink)}
+.spec dl div{display:grid;gap:4px;padding:10px 0;border-bottom:1px solid var(--c-line);justify-items:center}
 .spec dt{font:500 11.5px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
-.spec dd{margin:0;color:var(--c-muted);font-size:16px}
-.spec .acts{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-top:4px}
-@media (max-width:820px){.spread{grid-template-columns:1fr;gap:20px}.spread:nth-child(even) .mount{order:0}.mount{width:min(58vw,236px);padding:10px 10px 8px}.spec h3{font-size:29px}.spec{gap:10px}.spec dl div:last-child{display:none}.plates{gap:60px}}
+.spec dd{margin:0;color:var(--c-muted);font-size:15.5px;line-height:1.5}
+.spec .acts{display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
+@media (max-width:760px){
+ .plates .stk-card{grid-template-rows:48px auto;top:calc(var(--header) + 10px + var(--i) * 48px)}
+ .plates .stk-top{gap:12px;padding:0 14px}.plates .stk-top h3{font-size:16.5px;line-height:1.15}.plates .stk-n{font-size:10.5px;letter-spacing:.16em}
+ .plates .stk-body{grid-template-columns:1fr;min-height:0;max-height:none;gap:12px;padding:14px 16px 16px}
+ .plates .stk-media{height:min(34svh,300px);justify-self:center}
+ .spec dl div:last-child,.spec .sc{display:none}.spec dd{font-size:14px}.spec{gap:8px}.spec .acts{gap:18px}
+}
+@media (max-height:640px){.plates .stk-body{min-height:0;max-height:none}}
+/* ---------- more from the catalogue: a carousel, square corners and hairlines ---------- */
+.more{--car-r:0;--car-w:clamp(220px,22vw,270px)}
+.more .tile-ph{border:1px solid var(--c-line)}
+.more .car-slide figcaption b{font:400 22px/1.2 var(--serif)}
+.more .car-slide figcaption span{font:500 11px/1.3 var(--sans);letter-spacing:.18em;text-transform:uppercase}
+.more .t-link{font:500 12.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;text-decoration:underline;text-underline-offset:6px;color:var(--c-ink);background:none;border:0;padding:0;cursor:pointer;min-height:40px}
+.more .car-btn{border-radius:0;border-color:var(--c-ink)}
+.more .car-count{letter-spacing:.14em;color:var(--c-ink)}
+@media (max-width:760px){.more{--car-w:64vw}}
 /* ---------- materials ---------- */
 .mats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.6vw,40px);max-width:1080px;margin:0 auto}
 .mat{display:grid;gap:12px;justify-items:center;text-align:center}
@@ -104,7 +120,7 @@ html.motion .plate img.nt{animation:showimg .3s 1.25s steps(2,end) forwards,hide
 /* ---------- studio ---------- */
 .studio-sec{background:#f1ece3}.studio-sec .st{--st-bg:#e7e0d4;--st-panel:#fff;--st-ink:#141210;--st-muted:#6b635a;--st-line:#e2dcd2;--st-accent:#141210;--st-accent-ink:#faf8f4;--st-card:#faf8f4;--st-radius:2px;--st-ok:#2f6b3a;--st-no:#a32a1f}
 /* ---------- where people find us: a printed line, not cards ---------- */
-.reach{padding-block:clamp(60px,8vw,100px);border-top:1px solid var(--c-line);border-bottom:1px solid var(--c-line)}
+.find{padding-block:clamp(60px,8vw,100px);border-top:1px solid var(--c-line);border-bottom:1px solid var(--c-line)}
 .reach-line{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:10px clamp(18px,3vw,44px);margin:0;padding:0;list-style:none}
 .reach-line a{text-decoration:none;display:grid;justify-items:center;gap:6px}
 .reach-line b{font:400 clamp(44px,5vw,72px)/1 var(--serif)}
@@ -144,20 +160,21 @@ html.motion .plate img.nt{animation:showimg .3s 1.25s steps(2,end) forwards,hide
         go = (f'<a href="#plate-{k}">Plate {PLATES.index(k) + 1:02d}</a>' if k in PLATES
               else f'<button type="button" data-open="{k}">Photos</button>')
         ix.append(f'<li><span class="n">No. {n:02d}</span><span class="t">{escape(p["title"])}</span><span class="ixk">{escape(TYPES[p["type"]])}</span>{go}</li>')
-    spreads = []
+    cards = []
     for n, k in enumerate(PLATES, 1):
         p = P[k]
         im = p["images"][0]
         cnt = len(p["images"])
-        spreads.append(
-            f'<article class="spread" id="plate-{k}">'
-            f'<figure class="mount rv"><button class="tile-ph" type="button" data-open="{k}" aria-label="See {cnt} photos of {escape(p["title"])}">'
-            f'{img(im, "(max-width:820px) 70vw, 360px")}{night_img(im, "(max-width:820px) 70vw, 360px", cls="nt", lazy=True)}</button>'
-            f'<figcaption>Plate {n:02d}</figcaption></figure>'
-            f'<div class="spec rv"><span class="sc">Plate {n:02d} &middot; {escape(TYPES[p["type"]])}</span><h3>{escape(p["title"])}</h3>'
+        cards.append(
+            f'<li class="stk-card" id="plate-{k}" style="--i:{n - 1}"><div class="stk-top"><span class="stk-n">Plate {n:02d}</span><h3>{escape(p["title"])}</h3></div>'
+            f'<div class="stk-body"><button class="tile-ph stk-media" type="button" data-open="{k}" aria-label="See {cnt} photos of {escape(p["title"])}">'
+            f'{img(im, "(max-width:760px) 50vw, 320px")}{night_img(im, "(max-width:760px) 50vw, 320px", cls="nt", lazy=True)}</button>'
+            f'<div class="spec"><span class="sc">{escape(TYPES[p["type"]])}</span>'
             f'<dl><div><dt>Made with</dt><dd>{escape(p["text"])}</dd></div><div><dt>In the gallery</dt><dd>{cnt} photos from the finished room</dd></div></dl>'
             f'<div class="acts"><button type="button" class="tlink" data-open="{k}">See the photos</button>'
-            f'<button type="button" class="tlink" data-place-photo="{k}:0">Place in my room</button></div></div></article>')
+            f'<button type="button" class="tlink" data-place-photo="{k}:0">Place in my room</button></div></div></div></li>')
+    MORE = [k for k in ORDER if k not in PLATES]
+    more = carousel([car_build(k, 0, "(max-width:760px) 64vw, 270px") for k in MORE], "More from the catalogue", "more")
     mats = [("sw-img", f'<img src="{B}assets/img/designs/tex-marble.webp" alt="" width="254" height="326" loading="lazy" decoding="async">', "Marble-look panels", "Behind the TV in the marble TV wall and the oak and marble media wall."),
             ("sw-img", f'<img src="{B}assets/img/designs/tex-herringbone.webp" alt="" width="280" height="760" loading="lazy" decoding="async">', "Walnut", "Herringbone and panelled bedroom walls, and the walnut media wall."),
             ("sw-oak", "<i></i>", "Oak", "Slats around the marble panel and the display towers either side."),
@@ -188,8 +205,14 @@ html.motion .plate img.nt{animation:showimg .3s 1.25s steps(2,end) forwards,hide
 </section>
 <section id="work" aria-labelledby="work-title">
   <div class="wrap">
-    <div class="sec-head"><h2 id="work-title">The <em>plates</em></h2><p class="lede">One build to a page. Each photo starts at night with its LEDs on, then the room lights come up.</p></div>
-    <div class="plates">{''.join(spreads)}</div>
+    <div class="sec-head"><h2 id="work-title">The <em>plates</em></h2><p class="lede">One build to a page, each laid over the last as you scroll. Each photo starts at night with its LEDs on, then the room lights come up.</p></div>
+    <ol class="stk plates" style="--n:{len(PLATES)}">{''.join(cards)}</ol>
+  </div>
+</section>
+<section id="more" aria-labelledby="more-title" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="more-title">More from the <em>catalogue</em></h2><p class="lede">The other five builds. Swipe through, open one for its photos, or place it in a photo of your room.</p></div>
+    {more}
   </div>
 </section>
 <section id="make" aria-labelledby="mat-title" style="background:#fff">
@@ -206,7 +229,7 @@ html.motion .plate img.nt{animation:showimg .3s 1.25s steps(2,end) forwards,hide
   </div>
 </section>
 {studio("Try a piece on your wall", "Photograph your wall and place any of our pieces on it: one from the plates, a piece cut from any of our photos, or an image of your own. Your photos stay on your device.", "carved")}
-<section class="reach" aria-labelledby="reach-title">
+<section class="find" aria-labelledby="reach-title">
   <div class="wrap">
     <div class="sec-head" style="margin-bottom:34px"><h2 id="reach-title">Where people <em>find us</em></h2></div>
     <ul class="reach-line">
