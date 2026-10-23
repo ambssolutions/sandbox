@@ -100,7 +100,7 @@ def head(c, css, preload=""):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
-{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=10">
+{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=13">
 <link rel="stylesheet" href="{B}assets/studio.css?v=5">
 <script>(function(d){{d.classList.add("js");window.CW_BASE="{B}";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){{d.classList.add("motion");setTimeout(function(){{if(!window.CW_MOTION){{d.classList.remove("motion");d.classList.add("motion-off");}}}},3000);}}}})(document.documentElement);</script>
 <style>
@@ -165,13 +165,14 @@ def contact(title="Tell us about your room", cls="contact"):
       <h2 id="contact-title">{title}</h2>
       <p class="lede">A rough idea is enough to start. We will come back to you with questions and a time to measure.</p>
       <ol class="how-line" aria-label="How it goes"><li><b>1</b>Send a photo or call</li><li><b>2</b>We measure and agree the design</li><li><b>3</b>Made and fitted</li></ol>
-      <dl class="details">
-        <div><dt>Call or text</dt><dd><a href="tel:{TEL}">{PHONE}</a></dd></div>
-        <div><dt>Based in</dt><dd>Auckland</dd></div>
-        <div><dt>TikTok</dt><dd><a href="{TIKTOK}" rel="noopener" target="_blank">@customwardrobes1singh</a></dd></div>
-        <div><dt>Instagram</dt><dd><a href="{INSTA}" rel="noopener" target="_blank">@customwardrobe1singh</a></dd></div>
-        <div data-need="email"><dt>Email</dt><dd><a data-fill="email" href="#"></a></dd></div>
-      </dl>
+      <ul class="reach" aria-label="Ways to reach us">
+        <li><a href="tel:{TEL}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h3l1.4 4-2 1.3a12 12 0 0 0 6.2 6.2l1.3-2 4 1.4v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></svg><small>Call or text</small><b>{PHONE}</b></a></li>
+        <li><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.1-6.5-11a6.5 6.5 0 0 1 13 0c0 4.9-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg><small>Based in</small><b>Auckland</b></span></li>
+        <li><a href="{TIKTOK}" rel="noopener" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.4 2.6 2.2 4.4 5 4.6"/></svg><small>TikTok</small><b>82.5K followers</b><i>@customwardrobes1singh</i></a></li>
+        <li><a href="{INSTA}" rel="noopener" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9"/></svg><small>Instagram</small><b>60K followers</b><i>@customwardrobe1singh</i></a></li>
+        <li data-need="email"><a data-fill="email" href="#"><small>Email</small></a></li>
+      </ul>
+      <p class="reach-note">Follower counts {AS_AT}.</p>
     </div>
     <form class="form" data-enquiry novalidate>
       <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required></div>

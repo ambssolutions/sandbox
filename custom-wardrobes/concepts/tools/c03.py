@@ -64,7 +64,7 @@ html.motion .avatar .ring circle{stroke-dasharray:1;stroke-dashoffset:1;animatio
 .feed{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(6px,1.4vw,18px);max-width:960px;margin:0 auto}
 .post{display:grid;gap:10px;justify-items:center;text-align:center;align-content:start}
 .post .tile-ph{width:100%!important;margin:0!important;border-radius:14px;overflow:hidden;background:#000;border:0;padding:0;cursor:zoom-in}
-.post .tile-ph img{object-fit:contain}
+.post .tile-ph img{width:100%;height:100%;object-fit:contain}
 .post .count{position:absolute;right:8px;top:8px;z-index:3;padding:4px 8px;border-radius:6px;background:rgba(11,11,13,.78);color:#fff;font:700 11px/1 var(--sans);pointer-events:none}
 .post h3{font-size:clamp(14px,1.5vw,19px);line-height:1.15;letter-spacing:-.02em;max-width:18ch}
 .post .t-place{min-height:40px;padding:0 16px;border-radius:10px;border:0;background:var(--c-accent);color:#fff;font:700 13px/1 var(--sans);cursor:pointer}

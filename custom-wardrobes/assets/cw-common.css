@@ -144,3 +144,17 @@ html.motion .sec-head h2.in::before { transform: none; opacity: 1; }
   .follow2 small { font-size: 11px; }
   .studio-points { display: none !important; }
 }
+
+/* every build photo fills its frame and is shown whole (never its own 1920px height) */
+.tile-ph > img { width: 100%; height: 100%; object-fit: contain; }
+
+/* ways to reach us: four even cards with icons (phone, place, TikTok, Instagram) */
+.reach { list-style: none; margin: 8px auto 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; width: 100%; max-width: 960px; }
+.reach li > a, .reach li > span { height: 100%; display: grid; justify-items: center; align-content: start; gap: 4px; padding: 18px 12px 16px; border: 1px solid var(--c-line); border-radius: 16px; text-decoration: none; color: inherit; text-align: center; background: color-mix(in srgb, var(--c-ink) 3%, transparent); }
+.reach a:hover { border-color: var(--c-accent); }
+.reach svg { width: 34px; height: 34px; padding: 7px; margin-bottom: 6px; border-radius: 50%; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; background: color-mix(in srgb, var(--c-accent) 22%, transparent); }
+.reach small { font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--c-muted); }
+.reach b { font-size: 17px; font-weight: 700; line-height: 1.25; }
+.reach i { font-style: normal; font-size: 13px; color: var(--c-muted); white-space: nowrap; }
+@media (max-width: 760px) { .reach { grid-template-columns: 1fr 1fr; gap: 10px; } .reach b { font-size: 15px; } .reach small { font-size: 10.5px; } .reach i { font-size: 11px; } }
+.reach-note { margin: 2px 0 0; font-size: 12px; color: var(--c-muted); text-align: center; }
