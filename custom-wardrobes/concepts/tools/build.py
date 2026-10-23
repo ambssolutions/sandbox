@@ -100,7 +100,7 @@ def head(c, css, preload=""):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
-{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=8">
+{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=10">
 <link rel="stylesheet" href="{B}assets/studio.css?v=5">
 <script>(function(d){{d.classList.add("js");window.CW_BASE="{B}";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){{d.classList.add("motion");setTimeout(function(){{if(!window.CW_MOTION){{d.classList.remove("motion");d.classList.add("motion-off");}}}},3000);}}}})(document.documentElement);</script>
 <style>
@@ -708,6 +708,7 @@ html.motion .plate img.nt{animation:showimg .3s 1.25s steps(2,end) forwards,hide
 
 .plate figcaption{position:absolute;left:0;right:0;bottom:-34px;text-align:center;font-size:13px;color:var(--c-muted)}
 @media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.plate{width:min(70vw,300px)}.index{display:none}}
+@media (max-width:600px){.hero .btn.line,.hero .no{display:none}.hero-copy p{font-size:15px}.plate{width:min(58vw,240px)}}
 /* catalogue: an index where each row shows its build */
 .cat{border-top:1px solid var(--c-ink)}
 .row{display:grid;grid-template-columns:70px 1.4fr 1fr auto;gap:20px;align-items:center;padding:22px 0;border-bottom:1px solid var(--c-line);position:relative}
@@ -1014,6 +1015,31 @@ html.motion-off .big .sw,.no-js .big .sw{opacity:1}
 .small{font-size:13px;color:var(--c-muted);text-align:center;margin:0}
 /* ---------- followers ---------- */
 .follow2 b{font-family:var(--sans);font-weight:800;letter-spacing:-.05em}
+/* ---------- richer surfaces: raised cream cards, a champagne band, espresso sections ---------- */
+#work{background:linear-gradient(180deg,#f4efe7,#efe6d8)}
+.grid8 .tile{background:linear-gradient(180deg,#fffaf2,#f1e8da);border-radius:24px;padding:8px 8px 16px;box-shadow:0 22px 34px -26px rgba(60,40,10,.55),inset 0 1px 0 #fff}
+.grid8 .tile-ph{border-radius:18px}
+.make{background:linear-gradient(180deg,#efe1c3,#e3cd9f)!important}.make .lede,.make-item p,.make-more{color:#5a4a33}
+.make-item{background:linear-gradient(180deg,#fffaf0,#f5ead6);border-radius:24px;padding:10px 10px 18px;box-shadow:0 22px 34px -26px rgba(80,55,10,.6),inset 0 1px 0 #fff}
+.make-item img{border-radius:18px;width:100%}
+.dark{background:radial-gradient(120% 80% at 50% 0%,#231a12 0%,#0b0a09 62%)}
+.follow2 a{background:linear-gradient(180deg,rgba(201,163,90,.16),rgba(201,163,90,.04));border-color:rgba(230,205,150,.3)}
+.faq-item{background:#fffaf2;border:0!important;border-radius:18px;padding:20px 22px;margin-bottom:10px;box-shadow:0 14px 26px -22px rgba(60,40,10,.5)}.faq-list{border:0!important}
+/* ---------- phones ---------- */
+@media (max-width:600px){
+ .hero .badge,.hero .btn.ghost{display:none}
+ .hero h1{font-size:clamp(2.7rem,13vw,3.6rem)}
+ .hero-copy{padding-bottom:calc(26px + env(safe-area-inset-bottom))}
+ .knock span{font-size:30vw}
+ .big{font-size:clamp(28px,8vw,36px);max-width:none}
+ .ls-steps li,.ls-steps li:first-child,.ls-steps li:last-child{min-height:34svh}
+ .ls-frame{width:min(100%,calc(50svh * .5625))}
+ .grid8{gap:12px}.grid8 .tile{padding:6px 6px 12px;border-radius:18px}.grid8 .tile-ph{border-radius:13px}
+ .make-grid{gap:12px}.make-item{padding:6px 6px 14px;border-radius:18px}
+ .sr{border-radius:18px}
+ .sec-head{margin-bottom:28px}
+ section{padding-block:64px}
+}
 /* ---------- studio, questions, contact, footer ---------- */
 .studio-sec .st{--st-bg:#0b0a09;--st-panel:#1a1714;--st-accent:#e0bf7c}
 .make{background:var(--paper)}.make-item h3{font-family:var(--sans);font-weight:700;letter-spacing:-.03em}

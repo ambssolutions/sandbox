@@ -129,3 +129,18 @@ html.motion .tile-ph.day .nt { opacity: 0; }
 .sec-head h2::before { content: ""; display: block; width: min(180px, 36vw); height: 2px; margin: 0 auto 22px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--c-accent), transparent); }
 html.motion .sec-head h2::before { transform: scaleX(0); opacity: .2; transition: transform .8s cubic-bezier(.22,.61,.36,1), opacity .8s ease; }
 html.motion .sec-head h2.in::before { transform: none; opacity: 1; }
+
+/* ---------- phones: fewer words per screen, bigger pictures (owner, 23 October 2026) ---------- */
+@media (max-width: 600px) {
+  /* builds: photo and name only; tapping the photo opens every photo with "Place this in my room" */
+  .tile .k, .tile-act { display: none !important; }
+  .tile h3 { font-size: 16px; line-height: 1.25; }
+  .make-item p { display: none !important; }
+  .make-item h3 { font-size: 19px !important; }
+  .make-more { font-size: 15px; }
+  .follow2 { grid-template-columns: 1fr 1fr !important; gap: 10px; }
+  .follow2 a { padding: 20px 8px; }
+  .follow2 b { font-size: 40px; }
+  .follow2 small { font-size: 11px; }
+  .studio-points { display: none !important; }
+}
