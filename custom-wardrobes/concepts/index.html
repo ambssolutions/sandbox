@@ -202,6 +202,15 @@ footer{border-top:1px solid var(--line);padding:24px 0 120px;color:var(--muted);
 .body{align-items:center;text-align:center}.tags{justify-content:center}.why{text-align:center}
 .actions{justify-content:center;flex-wrap:wrap}.star{margin-left:0}
 .card:hover{transform:none}.btn:hover{transform:none}
+.intro p{max-width:52ch}
+.steps{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:30px}
+.steps li{display:inline-flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 18px 8px 8px;text-align:left}
+.steps li::before{position:static;margin:0;width:30px;height:30px;background:var(--ink);color:#fff}
+.steps b{display:inline;font-size:14.5px}.steps span{font-size:14px}
+@media (max-width:640px){.steps{flex-direction:column;align-items:center}.steps li{width:min(100%,320px)}}
+.vstyles button{display:inline-flex;gap:6px;align-items:center}.vstyles b{font-weight:700}
+@media (max-width:1720px){.vstyles .nm{display:none}}
+@media (max-width:820px){.vbar .t small{display:none}.vstyles{order:5;flex-basis:100%;justify-content:center;max-width:none}}
 </style>
 </head>
 <body>
@@ -221,13 +230,13 @@ footer{border-top:1px solid var(--line);padding:24px 0 120px;color:var(--muted);
 
 <main class="wrap">
   <section class="intro" aria-labelledby="h1">
-    <span class="eyebrow">Design review · 6 concepts</span>
+    <span class="eyebrow">Website concepts · 6 designs</span>
     <h1 id="h1">Six directions for <em>Custom Wardrobes</em></h1>
-    <p>Each concept is a full working homepage built from your real photos, videos and follower numbers, with its own look and layout. Every one includes the room studio: take a photo of a wall and place any of your pieces in it, including anything cut out of your gallery photos. Each one turns its lights on as you scroll, and nothing slides sideways. Open each one, try the studio on your phone, shortlist the ones you like, then send us your favourite.</p>
+    <p>Six homepages built from your own photos, videos and follower numbers, each with its own look. Every one has the room studio, so people can try your pieces on a photo of their wall.</p>
     <ol class="steps">
-      <li><b>Explore</b><span>Click any preview to open the live site. Scroll and click through the pages to see the motion.</span></li>
-      <li><b>Shortlist</b><span>Tap the star on the designs you like. Compare up to 3 side by side.</span></li>
-      <li><b>Send your pick</b><span>Choose your preferred design, add notes and send it to us.</span></li>
+      <li><b>Open</b><span>Tap a preview, then scroll</span></li>
+      <li><b>Star</b><span>Shortlist and compare up to 3</span></li>
+      <li><b>Send</b><span>Pick one and add your notes</span></li>
     </ol>
   </section>
 
@@ -265,6 +274,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 120px;color:var(--muted);
     <button class="btn vbtn-ico" type="button" id="vClose" aria-label="Close preview">✕</button>
     <div class="t" id="vTitle"></div>
     <span class="grow"></span>
+    <div class="seg vstyles" id="vStyles" role="group" aria-label="Change style"></div>
     <div class="seg hide-sm" role="group" aria-label="Device size">
       <button type="button" aria-pressed="true" data-dev="desktop">Desktop</button>
       <button type="button" aria-pressed="false" data-dev="tablet">Tablet</button>
@@ -443,6 +453,7 @@ function openViewer(id){
 }
 function syncViewer(){
   const c = CONCEPTS[vIndex];
+  [].forEach.call(document.querySelectorAll("#vStyles [data-k]"), b => b.setAttribute("aria-pressed", +b.dataset.k === vIndex ? "true" : "false"));
   $("#vTitle").innerHTML = `${c.id} · ${c.name} <small>Inspired by ${c.insp}</small>`;
   $("#vOpen").href = url(c);
   const on = isOn(c.id);
@@ -450,6 +461,10 @@ function syncViewer(){
   $("#vStar").textContent = on ? "★ Shortlisted" : "☆ Shortlist";
   $("#vPick").textContent = pick === c.id ? "★ Your pick · Send" : "This is the one";
 }
+// style picker in the preview bar: jump straight to any of the concepts
+const vStyles = $("#vStyles");
+vStyles.innerHTML = CONCEPTS.map((c,k)=>`<button type="button" data-k="${k}" title="${c.name}"><b>${c.id}</b><span class="nm">${c.name}</span></button>`).join("");
+vStyles.addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b) return; vIndex = +b.dataset.k; frame.src = url(CONCEPTS[vIndex]); syncViewer(); });
 function step(d){ vIndex = (vIndex + d + CONCEPTS.length) % CONCEPTS.length; frame.src = url(CONCEPTS[vIndex]); syncViewer(); }
 function closeViewer(){ viewer.classList.remove("open"); document.body.classList.remove("locked"); vIndex = null; setTimeout(()=>{ if(vIndex==null) frame.src="about:blank"; },350); lastFocus?.focus(); }
 $("#vClose").onclick = closeViewer;
