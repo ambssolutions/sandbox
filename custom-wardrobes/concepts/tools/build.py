@@ -1152,6 +1152,21 @@ html.motion-off .big .sw,.no-js .big .sw{opacity:1}
     return head(c, css, f'<link rel="preload" as="image" href="{B}assets/video/show-gurbani.webp" fetchpriority="high">\n') + body + SCRIPTS
 
 
+# A concept can be rebuilt in its own file, concepts/tools/cNN.py, which replaces the cNN function above.
+# If that file has an error, the version above is used and the error is printed.
+import traceback as _tb
+for _n in ("01", "02", "03", "04", "05", "06"):
+    _f = Path(__file__).resolve().parent / f"c{_n}.py"
+    if _f.exists():
+        _keep = globals().get(f"c{_n}")
+        try:
+            exec(compile(_f.read_text(), str(_f), "exec"), globals())
+        except Exception:
+            print(f"c{_n}.py failed, using the built-in version:")
+            _tb.print_exc()
+            globals()[f"c{_n}"] = _keep
+
+
 CONCEPTS = [
     {"id": "01", "slug": "01-after-dark", "name": "After Dark", "theme": "#0a0807", "build": c01,
      "fonts": "https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Inter:wght@400;500;600;700&display=optional"},
@@ -1171,6 +1186,11 @@ if __name__ == "__main__":
     for c in CONCEPTS:
         d = OUT / c["slug"]
         d.mkdir(parents=True, exist_ok=True)
-        html = c["build"](c)
+        try:
+            html = c["build"](c)
+        except Exception:
+            print(c["slug"], "failed to build; its page was left as it was:")
+            _tb.print_exc()
+            continue
         (d / "index.html").write_text(html)
         print(c["slug"], f"{len(html) / 1024:.0f} KB")
