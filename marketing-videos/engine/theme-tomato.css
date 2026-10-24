@@ -1,0 +1,25 @@
+/* "Tomato & cream" theme — bold red background, cream cards, butter-yellow highlights.
+   Load after base.css: <link rel="stylesheet" href="../engine/theme-tomato.css"> */
+:root {
+  --bg: #e8402a; --bg2: #b8231a; --ink: #fff8ec; --muted: #ffd9cf;
+  --accent: #ffd166; --accent-2: #ffd166; --mark: #ffd166;
+  --card: #fff8ec; --card-ink: #2b0b07; --card-muted: #8a4a3d; --dark: #2b0b07;
+}
+#frame { color: var(--ink);
+  background: radial-gradient(80% 45% at 15% 0%, #ff7a4d 0%, transparent 65%),
+              radial-gradient(70% 45% at 100% 100%, #8f1611 0%, transparent 70%),
+              linear-gradient(180deg, var(--bg), var(--bg2)); }
+#frame::before { background-image: radial-gradient(rgba(255,248,236,.12) 1.2px, transparent 1.6px); background-size: 22px 22px; }
+.progress { background: rgba(255,248,236,.25); } .progress i { background: var(--accent); }
+.caption { text-shadow: 0 2px 12px rgba(80,10,5,.35); }
+.caption mark { background: var(--mark); color: var(--dark); }
+.caption .cyan { color: var(--accent); }
+.chip { background: var(--dark); color: var(--ink); border-color: rgba(255,209,102,.5); box-shadow: 0 10px 26px rgba(60,5,0,.35); }
+.toast { box-shadow: 0 14px 34px rgba(60,5,0,.35); }
+.end { background: radial-gradient(80% 50% at 50% 35%, rgba(255,209,102,.25), transparent 70%), rgba(170,28,20,.97); }
+.end .sub, .end .foot { color: var(--muted); } .end .foot b { color: var(--ink); }
+.end .kw span { background: var(--accent); color: var(--dark); box-shadow: 0 10px 0 #c98a12, 0 18px 40px rgba(60,5,0,.4); }
+/* the logo has red in it, so sit it on a cream tab */
+.brand { background: var(--card); padding: 5px 9px; height: 46px; border-radius: 12px; filter: none; box-shadow: 0 6px 16px rgba(60,5,0,.3); }
+.caption { top: 78px; }
+.end .elogo { width: 220px; margin-left: -110px; top: 40px; background: var(--card); padding: 10px 18px; border-radius: 22px; filter: none; box-shadow: 0 12px 30px rgba(60,5,0,.35); }

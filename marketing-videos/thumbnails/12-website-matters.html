@@ -1,40 +1,42 @@
 <!doctype html>
 <html lang="en-NZ"><head><meta charset="utf-8"><title>Thumbnail — why your website matters</title>
 <link rel="stylesheet" href="../engine/base.css"><link rel="stylesheet" href="thumbs.css">
-<link rel="stylesheet" href="../engine/theme-website.css">
+<link rel="stylesheet" href="../engine/theme-tomato.css">
 <style>
-  .tlogo { filter: none; }
+  .tlogo { filter: none; background: var(--card); padding: 10px 18px; border-radius: 20px; box-shadow: 0 10px 26px rgba(60,5,0,.35); }
+  .kicker { color: var(--accent); }
+  h1 { color: var(--ink); }
   h1 { text-shadow: none; font-size: 50px; }
-  h1 mark { background: var(--accent); color: #fff; }
-  .side.bad { background: #fff4f2; border-color: #fdba9d; }
-  .side.good { background: #fff; border-color: rgba(46,148,24,.6); box-shadow: 0 16px 40px rgba(46,148,24,.18); }
-  .good .tag { background: var(--accent); color: #fff; }
+  h1 mark { background: var(--accent); color: var(--dark); }
+  .side.bad { background: rgba(43,11,7,.55); border-color: rgba(255,217,207,.35); }
+  .side.good { background: var(--card); border: 3px solid var(--accent); box-shadow: 0 16px 40px rgba(60,5,0,.4); }
+  .good .tag { background: var(--accent); color: var(--dark); }
   .arrow { box-shadow: 0 8px 24px rgba(16,19,33,.18); }
-  .post { width: 150px; margin: 6px auto 0; border-radius: 16px; background: #fff; border: 1px solid #dfe5ee; overflow: hidden; color: var(--ink); }
+  .post { width: 150px; margin: 6px auto 0; border-radius: 16px; background: #fff; border: 1px solid #dfe5ee; overflow: hidden; color: var(--card-ink); }
   .post .hd { display: flex; align-items: center; gap: 6px; padding: 7px 8px; font-size: 10px; font-weight: 800; }
   .post .hd i { width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(45deg, #f59e0b, #ec4899, #8b5cf6); }
   .post .im { height: 130px; display: grid; place-items: center; font-size: 48px; background: linear-gradient(135deg, #fde68a, #fbcfe8); }
   .post .ft { padding: 7px 8px; font-size: 11.5px; font-weight: 800; }
-  .lk { margin-top: 8px; text-align: center; font-size: 11px; font-weight: 800; color: #c2410c; }
-  .site { width: 160px; margin: 6px auto 0; border-radius: 12px; background: #fff; border: 1px solid #dfe5ee; overflow: hidden; color: var(--ink); }
-  .site .u { font-size: 8.5px; font-weight: 700; color: var(--muted); padding: 5px 8px; background: #f3f5f9; }
-  .site .h { background: linear-gradient(160deg, #10331a, #1e5d2b); color: #fff; padding: 12px 9px; }
+  .lk { margin-top: 8px; text-align: center; font-size: 11px; font-weight: 800; color: #ffb8a8; }
+  .site { width: 160px; margin: 6px auto 0; border-radius: 12px; background: #fff; border: 1px solid #dfe5ee; overflow: hidden; color: var(--card-ink); }
+  .site .u { font-size: 8.5px; font-weight: 700; color: var(--card-muted); padding: 5px 8px; background: #f3f5f9; }
+  .site .h { background: linear-gradient(160deg, #1d2a44, #2f4470); color: #fff; padding: 12px 9px; }
   .site .h b { display: block; font-size: 14px; line-height: 1.1; font-weight: 900; }
-  .site .h span { display: inline-block; margin-top: 8px; font-size: 10px; font-weight: 900; background: #4ade80; color: #10331a; padding: 5px 8px; border-radius: 7px; }
+  .site .h span { display: inline-block; margin-top: 8px; font-size: 10px; font-weight: 900; background: var(--accent); color: #1d2a44; padding: 5px 8px; border-radius: 7px; }
   .site .r { font-size: 10px; font-weight: 800; padding: 8px 9px 4px; } .site .r em { font-style: normal; color: #f59e0b; }
   .site .s { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px 9px 10px; }
   .site .s div { background: #f3f5f9; border-radius: 6px; font-size: 8.5px; font-weight: 800; padding: 5px; }
-  .stat2 { background: #fff; border-color: #dfe5ee; color: var(--ink); box-shadow: 0 8px 22px rgba(16,19,33,.08); }
+  .stat2 { background: var(--dark); border-color: rgba(255,209,102,.5); color: var(--ink); box-shadow: 0 10px 26px rgba(60,5,0,.35); }
   .stat2 b { color: var(--accent); }
-  .cta { color: var(--muted); }
-  .cta span { background: var(--accent); color: #fff; box-shadow: 0 4px 0 #1f6b10; }
+  .cta { color: var(--ink); }
+  .cta span { background: var(--accent); color: var(--dark); box-shadow: 0 4px 0 #c98a12; }
 </style></head><body>
 <div id="frame">
   <img class="tlogo" src="../assets/ambs-logo.png" alt="AMBS">
   <div class="kicker">WEBSITES · SOCIAL MEDIA</div>
   <h1>Likes don't<br><mark>pay the bills.</mark></h1>
   <div class="ba">
-    <div class="side bad" style="transform:rotate(-2deg)"><div class="tag" style="background:#f97316">GETS YOU SEEN</div>
+    <div class="side bad" style="transform:rotate(-2deg)"><div class="tag" style="background:#ff6b5b">GETS YOU SEEN</div>
       <div class="post"><div class="hd"><i></i>yourbusiness</div><div class="im emoji">🛠️</div><div class="ft">❤️ 1.2k &nbsp;💬 48</div></div>
       <div class="lk">Rented space</div>
     </div>
