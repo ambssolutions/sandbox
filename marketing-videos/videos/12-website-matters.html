@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — why your website matters (WEBSITE)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<link rel="stylesheet" href="../engine/theme-website.css">
+<style>
+  /* Hook: social posts */
+  .post { position: absolute; width: 150px; border-radius: 18px; background: #fff; border: 1px solid #dfe5ee; overflow: hidden;
+    box-shadow: 0 12px 28px rgba(16,19,33,.12); }
+  .post .hd { display: flex; align-items: center; gap: 6px; padding: 8px 9px; font-size: 11px; font-weight: 800; }
+  .post .hd i { width: 18px; height: 18px; border-radius: 50%; flex: none; }
+  .post .im { height: 120px; display: grid; place-items: center; font-size: 44px; }
+  .post .ft { padding: 7px 9px 9px; font-size: 12px; font-weight: 800; display: flex; gap: 10px; }
+  .ig i { background: linear-gradient(45deg, #f59e0b, #ec4899, #8b5cf6); } .ig .im { background: linear-gradient(135deg, #fde68a, #fbcfe8); }
+  .tt i { background: #111; } .tt .im { background: linear-gradient(135deg, #a5f3fc, #fecdd3); }
+  .fb i { background: #1877f2; } .fb .im { background: linear-gradient(135deg, #bfdbfe, #ddd6fe); }
+  .heart { position: absolute; font-size: 26px; }
+
+  /* Journey */
+  .jr { position: absolute; left: 22px; right: 22px; height: 84px; border-radius: 20px; display: flex; align-items: center; gap: 14px;
+    padding: 0 18px; background: #fff; border: 1px solid #dfe5ee; box-shadow: 0 8px 22px rgba(16,19,33,.07); }
+  .jr .e { font-size: 30px; flex: none; width: 40px; text-align: center; }
+  .jr b { display: block; font-size: 19px; font-weight: 850; }
+  .jr span { display: block; font-size: 13.5px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+  .jr.hot { border: 2px solid var(--accent); background: #f3fbef; box-shadow: 0 14px 34px rgba(46,148,24,.2); }
+  .jr .q { margin-left: auto; font-size: 12px; font-weight: 900; color: #fff; background: var(--accent); padding: 4px 10px; border-radius: 999px; }
+  .arr { position: absolute; left: 50%; margin-left: -10px; font-size: 18px; color: var(--muted); font-weight: 900; }
+
+  /* Rent vs own */
+  .col { position: absolute; top: 226px; width: 240px; border-radius: 22px; padding: 16px 14px 14px; }
+  #rent { left: 22px; background: #fff4f2; border: 2px solid #fdba9d; }
+  #own { right: 22px; background: #fff; border: 2px solid var(--accent); box-shadow: 0 16px 40px rgba(46,148,24,.18); }
+  .col h3 { font-size: 13px; font-weight: 900; letter-spacing: .12em; }
+  #rent h3 { color: #c2410c; } #own h3 { color: var(--accent); }
+  .col h2 { margin-top: 4px; font-size: 25px; font-weight: 900; letter-spacing: -.02em; }
+  .li { margin-top: 10px; display: flex; gap: 8px; font-size: 14.5px; line-height: 1.3; font-weight: 700; }
+  .li .m { flex: none; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 900; color: #fff; margin-top: 1px; }
+  #rent .m { background: #f97316; } #own .m { background: var(--accent); }
+
+  /* Website mock */
+  .site { position: absolute; left: 50px; right: 50px; top: 236px; height: 372px; border-radius: 18px; background: #fff; overflow: hidden;
+    border: 1px solid #dfe5ee; box-shadow: 0 24px 60px rgba(16,19,33,.18); }
+  .site .url { height: 34px; background: #f3f5f9; border-bottom: 1px solid #e5e9f0; display: flex; align-items: center; gap: 8px; padding: 0 12px; font-size: 12px; font-weight: 700; color: var(--muted); }
+  .site .url span { flex: 1; background: #fff; border-radius: 8px; padding: 4px 10px; border: 1px solid #e5e9f0; }
+  .site .hero { padding: 20px 18px 16px; background: linear-gradient(160deg, #10331a, #1e5d2b); color: #fff; }
+  .site .hero small { font-size: 11px; font-weight: 800; letter-spacing: .12em; color: #bbf7d0; }
+  .site .hero h4 { margin-top: 4px; font-size: 23px; line-height: 1.1; font-weight: 900; }
+  .site .hero p { margin-top: 6px; font-size: 12.5px; color: #d1fae5; font-weight: 600; }
+  .site .btns { margin-top: 12px; display: flex; gap: 8px; }
+  .site .btns b { font-size: 13px; font-weight: 900; padding: 9px 12px; border-radius: 10px; background: #fff; color: #10331a; }
+  .site .btns b.g { background: #4ade80; }
+  .site .rv { margin: 12px 18px 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; }
+  .site .rv .st { color: #f59e0b; letter-spacing: 1px; }
+  .site .srv { margin: 10px 18px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .site .srv div { background: #f3f5f9; border-radius: 10px; padding: 9px 10px; font-size: 12.5px; font-weight: 800; }
+  .site .lang { margin: 10px 18px 0; font-size: 11.5px; color: var(--muted); font-weight: 700; }
+  .site .demo { position: absolute; right: 12px; bottom: 8px; font-size: 10px; color: #a3acbb; font-weight: 700; }
+  .toast { left: 34px; right: 34px; }
+
+  /* Final line */
+  #line { position: absolute; left: 22px; right: 22px; top: 300px; text-align: center; }
+  #line p { font-size: 34px; line-height: 1.15; font-weight: 900; letter-spacing: -.02em; }
+  #line p + p { margin-top: 18px; }
+  #line .g { color: var(--accent); }
+  #line small { display: block; margin-top: 26px; font-size: 17px; font-weight: 700; color: var(--muted); }
+</style>
+</head>
+<body>
+<div id="frame">
+  <!-- 0–3.6 hook -->
+  <div class="post ig" id="s1" style="left:30px;top:260px;rotate:-5deg"><div class="hd"><i></i>yourbusiness</div><div class="im emoji">🛠️</div><div class="ft">❤️ 1.2k <span>💬 48</span></div></div>
+  <div class="post tt" id="s2" style="left:195px;top:236px;rotate:2deg"><div class="hd"><i></i>@yourbusiness</div><div class="im emoji">🎬</div><div class="ft">▶ 18.4k <span>❤️ 960</span></div></div>
+  <div class="post fb" id="s3" style="left:360px;top:268px;rotate:6deg"><div class="hd"><i></i>Your Business</div><div class="im emoji">📸</div><div class="ft">👍 312 <span>↗ 27</span></div></div>
+  <div class="chip" id="q" style="left:60px;right:60px;top:500px;justify-content:center;font-size:20px;font-weight:850"><span class="emoji">🤔</span> …then what do they do?</div>
+
+  <!-- 3.6–9.6 journey -->
+  <div class="jr" id="j1" style="top:226px"><div class="e emoji">📱</div><div><b>They see your post</b><span>Instagram, TikTok, Facebook</span></div></div>
+  <div class="arr" id="a1" style="top:314px">↓</div>
+  <div class="jr" id="j2" style="top:338px"><div class="e emoji">👆</div><div><b>They tap your profile</b><span>"Link in bio"</span></div></div>
+  <div class="arr" id="a2" style="top:426px">↓</div>
+  <div class="jr hot" id="j3" style="top:450px"><div class="e emoji">🌐</div><div><b>They check your website</b><span>Are you real? What do you cost?</span></div><div class="q">HERE</div></div>
+  <div class="arr" id="a3" style="top:538px">↓</div>
+  <div class="jr" id="j4" style="top:562px"><div class="e emoji">📞</div><div><b>Then they call or book</b><span>Or they go to someone else</span></div></div>
+
+  <!-- 9.6–15.6 rent vs own -->
+  <div class="col" id="rent"><h3>SOCIAL MEDIA</h3><h2>You rent it</h2>
+    <div class="li" id="r1"><div class="m">✕</div>The algorithm decides who sees you</div>
+    <div class="li" id="r2"><div class="m">✕</div>Posts get buried in a day or two</div>
+    <div class="li" id="r3"><div class="m">✕</div>Their rules can change any time</div>
+    <div class="li" id="r4"><div class="m">✕</div>Hard to show prices, services &amp; reviews</div></div>
+  <div class="col" id="own"><h3>YOUR WEBSITE</h3><h2>You own it</h2>
+    <div class="li" id="o1"><div class="m">✓</div>Found on Google when they search</div>
+    <div class="li" id="o2"><div class="m">✓</div>Open 24/7, even while you sleep</div>
+    <div class="li" id="o3"><div class="m">✓</div>Your domain, your content</div>
+    <div class="li" id="o4"><div class="m">✓</div>Everything they need to say yes</div></div>
+
+  <!-- 15.6–20.4 website -->
+  <div class="site" id="site">
+    <div class="url">🔒 <span>yourbusiness.co.nz</span></div>
+    <div class="hero"><small>AUCKLAND · SINCE 2014</small><h4>Plumbing you can count on</h4><p>Fast quotes. Upfront prices. Same-week jobs.</p>
+      <div class="btns"><b class="g">📞 Call now</b><b>Book online</b></div></div>
+    <div class="rv"><span class="st">★★★★★</span> 4.9 from Google reviews</div>
+    <div class="srv"><div>🚿 Bathrooms</div><div>🔥 Hot water</div><div>🚰 Leaks &amp; repairs</div><div>🏠 New builds</div></div>
+    <div class="lang">🌏 English · 中文 · हिन्दी · Te reo Māori</div>
+    <div class="demo">Example website</div>
+  </div>
+
+  <!-- 20.4–23 line -->
+  <div id="line"><p>Social media gets you <span class="g">seen.</span></p><p>Your website gets you <span class="g">chosen.</span></p>
+    <small>Use both. Send your followers somewhere that sells.</small></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis } = E;
+$("#frame").insertAdjacentHTML("beforeend",
+  `<div class="toast" id="tst1" style="top:630px"><div class="ic" style="background:#2E9418"><span class="emoji">📩</span></div>
+   <div><div class="tt">New enquiry from your website</div><div class="ts">"Hi, can you quote a bathroom reno?"</div></div><div class="when">now</div></div>`);
+const HEARTS = [[70, 240], [470, 250], [260, 205], [120, 430], [420, 440]];
+HEARTS.forEach(([x, y]) => $("#frame").insertAdjacentHTML("beforeend", `<div class="heart emoji" style="left:${x}px;top:${y}px">❤️</div>`));
+const hearts = $$(".heart");
+window.COVER_AT = 15;
+
+E.setup({
+  duration: 27,
+  keyword: "WEBSITE",
+  voice: [
+    { a: 0.15, b: 3.5, text: "Your posts get likes and views. But then what?" },
+    { a: 3.7, b: 9.5, text: "Someone sees your post, taps your profile, and checks your website. That's where they decide to call you, or not." },
+    { a: 9.7, b: 15.5, text: "On social, you're renting. The algorithm picks who sees you. Your website is yours, on Google, day and night." },
+    { a: 15.7, b: 20.3, text: "We build fast websites that turn visitors into calls and bookings." },
+    { a: 20.5, b: 23.0, text: "Social gets you seen. Your website gets you chosen." },
+    { a: 23.4, b: 26.9, text: "Want one that works? Comment, website." },
+  ],
+  captions: [
+    { a: 0, b: 3.6, html: `Likes are great. <mark>Then what?</mark>` },
+    { a: 3.6, b: 9.6, html: `Before they call, <span class="cyan">they check your website.</span>` },
+    { a: 9.6, b: 15.6, html: `Social is <mark>rented.</mark> Your website is <span class="cyan">yours.</span>` },
+    { a: 15.6, b: 20.4, html: `A website that turns visitors into <mark>calls.</mark>` },
+  ],
+  phases: [],
+  end: { at: 23.2, title: "Want a website that works?", sub: "Fast, multilingual websites that turn visitors into calls. Built and owned by you." },
+});
+
+E.use((t) => {
+  // hook
+  vis("#s1", t, 0.1, 3.6, { y: 40, scale: 0.8 });
+  vis("#s2", t, 0.35, 3.6, { y: 40, scale: 0.8 });
+  vis("#s3", t, 0.6, 3.6, { y: 40, scale: 0.8 });
+  hearts.forEach((h, i) => {
+    const a = 0.8 + i * 0.22;
+    const op = vis(h, t, a, 2.6, { y: 10, scale: 0.3 });
+    if (op > 0) h.style.transform += ` translateY(${-(t - a) * 30}px)`;
+  });
+  vis("#q", t, 1.9, 3.6, { y: 20 });
+
+  // journey
+  ["#j1", "#j2", "#j3", "#j4"].forEach((s, i) => vis(s, t, 3.8 + i * 1.15, 9.6, { x: -40, y: 0, scale: s === "#j3" ? 0.9 : 1 }));
+  ["#a1", "#a2", "#a3"].forEach((s, i) => vis(s, t, 4.4 + i * 1.15, 9.6, { y: -8 }));
+
+  // rent vs own
+  vis("#rent", t, 9.8, 15.6, { x: -40, y: 0 });
+  vis("#own", t, 12.4, 15.6, { x: 40, y: 0 });
+  for (let i = 1; i <= 4; i++) {
+    vis("#r" + i, t, 10.2 + (i - 1) * 0.5, null, { x: -14, y: 0 });
+    vis("#o" + i, t, 12.8 + (i - 1) * 0.6, null, { x: 14, y: 0 });
+  }
+
+  // website
+  vis("#site", t, 15.7, 20.4, { y: 40, scale: 0.92 });
+  vis("#tst1", t, 17.8, 20.4, { y: 26 });
+
+  // line
+  vis("#line", t, 20.5, 23.2, { y: 0, scale: 0.8, dur: 0.45 });
+});
+</script>
+</body>
+</html>
