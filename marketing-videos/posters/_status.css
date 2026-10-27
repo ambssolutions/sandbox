@@ -1,0 +1,7 @@
+/* Shared by the WhatsApp status options: AMBS website brand, and the status safe zones
+   (keep the top ~9% and bottom ~13% clear for WhatsApp's name bar and reply box). */
+@font-face { font-family: "Bricolage Grotesque"; src: url("../assets/bricolage-grotesque-latin.woff2") format("woff2"); font-weight: 500 800; }
+@font-face { font-family: "Instrument Sans"; src: url("../assets/instrument-sans-latin.woff2") format("woff2"); font-weight: 400 700; }
+:root { --paper: #EFF3F9; --ink: #101321; --mu: #5B6B84; --g: #2E9418; --gd: #1f6b10; --soft: #D3EFB9; --line: #dfe5ee; }
+#frame { font-family: "Instrument Sans", Inter, sans-serif, var(--emoji); }
+.hd { font-family: "Bricolage Grotesque", Inter, sans-serif; }

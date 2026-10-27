@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — WhatsApp status (any digital needs)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* A WhatsApp-style chat in AMBS colours, made for status: the top ~9% and bottom ~13% are left clear
+     for WhatsApp's own name bar and reply box, and the engine's progress bar and corner logo are hidden. */
+  @font-face { font-family: "Bricolage Grotesque"; src: url("../assets/bricolage-grotesque-latin.woff2") format("woff2"); font-weight: 500 800; }
+  @font-face { font-family: "Instrument Sans"; src: url("../assets/instrument-sans-latin.woff2") format("woff2"); font-weight: 400 700; }
+  :root { --paper: #EFF3F9; --ink: #101321; --mu: #5B6B84; --g: #2E9418; --gd: #1f6b10; --soft: #D3EFB9; }
+  .progress, .brand { display: none; }
+  #frame { color: var(--ink); font-family: "Instrument Sans", Inter, sans-serif, var(--emoji);
+    background: radial-gradient(90% 30% at 50% 0%, #D3EFB9 0%, transparent 70%), var(--paper); }
+  #frame::before { background-image: radial-gradient(rgba(46,148,24,.10) 1.5px, transparent 2px); background-size: 26px 26px; }
+  .hd { font-family: "Bricolage Grotesque", Inter, sans-serif; }
+
+  .top { position: absolute; left: 18px; right: 18px; top: 92px; height: 66px; border-radius: 20px; background: var(--g); color: #fff;
+    display: flex; align-items: center; gap: 12px; padding: 0 14px; box-shadow: 0 12px 30px rgba(46,148,24,.3); }
+  .top .av { width: 46px; height: 46px; border-radius: 50%; background: #fff; display: grid; place-items: center; overflow: hidden; flex: none; }
+  .top .av img { width: 40px; }
+  .top b { display: block; font-size: 19px; font-weight: 700; }
+  .top span { display: block; font-size: 13px; font-weight: 600; color: #e6f7dc; }
+  .top .ic { margin-left: auto; font-size: 20px; letter-spacing: 10px; }
+
+  .chat { position: absolute; left: 18px; right: 18px; top: 176px; display: flex; flex-direction: column; gap: 9px; }
+  .m { max-width: 82%; padding: 10px 14px 8px; border-radius: 18px; font-size: 19px; line-height: 1.28; font-weight: 600;
+    box-shadow: 0 2px 6px rgba(16,19,33,.08); position: relative; }
+  .m.in { align-self: flex-start; background: #fff; border-top-left-radius: 6px; }
+  .m.out { align-self: flex-end; background: var(--soft); border-top-right-radius: 6px; }
+  .m.out b { color: var(--gd); }
+  .m small { display: block; text-align: right; margin-top: 2px; font-size: 11px; font-weight: 600; color: var(--mu); }
+  .m small i { font-style: normal; color: #34b7f1; margin-left: 3px; }
+  .ty { position: absolute; right: 18px; padding: 12px 16px; border-radius: 18px; border-top-right-radius: 6px; background: var(--soft); display: flex; gap: 5px; }
+  .ty i { width: 8px; height: 8px; border-radius: 50%; background: var(--gd); }
+
+  .cta { position: absolute; left: 18px; right: 18px; top: 640px; border-radius: 26px; background: #fff; text-align: center; padding: 16px 16px 18px;
+    border: 2px solid var(--g); box-shadow: 0 18px 44px rgba(16,19,33,.14); }
+  .cta .q { font-size: 30px; font-weight: 800; letter-spacing: -.02em; line-height: 1.05; }
+  .cta .q em { font-style: normal; color: var(--g); }
+  .cta .btn { margin: 12px auto 0; display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; border-radius: 999px; background: var(--g); color: #fff;
+    font-size: 23px; font-weight: 700; }
+  .cta .w { margin-top: 10px; font-size: 18px; font-weight: 700; color: var(--mu); }
+  .cta .w b { color: var(--ink); }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div class="top" id="top"><div class="av"><img src="../assets/ambs-logo.png" alt=""></div>
+    <div><b>AMBS Solutions</b><span>online</span></div><div class="ic emoji">📞⋮</div></div>
+
+  <div class="chat">
+    <div class="m in" id="m1">Can you build us a website? <span class="emoji">🌐</span><small>9:41</small></div>
+    <div class="m out" id="m2">Yes! Fast websites that <b>bring in calls</b> <span class="emoji">✅</span><small>9:41<i>✓✓</i></small></div>
+    <div class="m in" id="m3">Can our invoices send themselves? <span class="emoji">🧾</span><small>9:42</small></div>
+    <div class="m out" id="m4">Done. Quotes, invoices and reminders <b>on autopilot</b> <span class="emoji">⚙️</span><small>9:42<i>✓✓</i></small></div>
+    <div class="m in" id="m5">And an app for our staff? <span class="emoji">📱</span><small>9:43</small></div>
+    <div class="m out" id="m6">Your own app on every phone. <b>First session is free</b> <span class="emoji">😊</span><small>9:43<i>✓✓</i></small></div>
+  </div>
+  <div class="ty" id="ty"><i></i><i></i><i></i></div>
+
+  <div class="cta" id="cta">
+    <div class="q hd">Need anything <em>digital?</em></div>
+    <div class="btn hd"><span class="emoji">💬</span> 022 099 9578</div>
+    <div class="w"><b>ambs.co.nz</b> · AI automation &amp; websites</div>
+  </div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, vis } = E;
+// in messages appear at a; out messages show "typing…" first, then land at a
+const MSG = [["#m1", 0.8], ["#m2", 2.8, 2.0], ["#m3", 4.4], ["#m4", 6.2, 5.3], ["#m5", 7.8], ["#m6", 9.6, 8.7]];
+window.COVER_AT = 15.5;
+
+E.setup({
+  duration: 16,
+  keyword: "",
+  voice: [
+    { a: 0.3, b: 4.2, text: "Need a website for your business? We build fast ones that bring in calls." },
+    { a: 4.4, b: 7.6, text: "Want your quotes and invoices to send themselves? Done." },
+    { a: 7.8, b: 10.6, text: "An app for your staff? On every phone." },
+    { a: 10.8, b: 15.8, text: "Need anything digital? Message A M B S. Your first session is free." },
+  ],
+  captions: [],
+  phases: [],
+  end: { at: 99, title: "", sub: "" },
+});
+
+E.use((t) => {
+  vis("#top", t, 0.1, null, { y: -20 });
+  let typing = null;
+  MSG.forEach(([s, a, ty]) => {
+    vis(s, t, a, null, { y: 14, scale: 0.85, dur: 0.3 });
+    if (ty != null && t >= ty && t < a) typing = s;
+  });
+  const tyEl = $("#ty");
+  if (typing) {
+    const m = $(typing);
+    tyEl.style.top = (176 + m.offsetTop) + "px";
+    tyEl.style.opacity = 1; tyEl.style.visibility = "visible";
+    [...tyEl.children].forEach((d, i) => { d.style.transform = `translateY(${-4 * Math.max(0, Math.sin(t * 9 - i * 0.9))}px)`; });
+  } else { tyEl.style.opacity = 0; tyEl.style.visibility = "hidden"; }
+  vis("#cta", t, 10.8, null, { y: 30, scale: 0.9, dur: 0.45 });
+  const pulse = t > 11.6 ? 1 + 0.04 * Math.max(0, Math.sin((t - 11.6) * 4)) : 1;
+  $(".cta .btn").style.transform = `scale(${pulse})`;
+});
+</script>
+</body>
+</html>

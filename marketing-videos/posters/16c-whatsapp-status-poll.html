@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Poster — WhatsApp status option C (poll)</title>
+<link rel="stylesheet" href="../engine/base.css"><link rel="stylesheet" href="_status.css">
+<style>
+  /* Looks like a WhatsApp poll message, with "All of the above" winning. */
+  #frame { color: var(--ink); background: radial-gradient(90% 30% at 50% 0%, #D3EFB9 0%, transparent 70%), var(--paper); }
+  #frame::before { background-image: radial-gradient(rgba(46,148,24,.10) 1.5px, transparent 2px); background-size: 26px 26px; }
+  .logo { position: absolute; left: 50%; top: 96px; width: 190px; margin-left: -95px; }
+  .poll { position: absolute; left: 22px; right: 22px; top: 196px; border-radius: 22px; border-top-right-radius: 6px; background: var(--soft);
+    padding: 18px 18px 12px; box-shadow: 0 10px 26px rgba(16,19,33,.1); }
+  .poll .h { font-size: 27px; font-weight: 800; line-height: 1.12; letter-spacing: -.01em; }
+  .poll .sel { margin-top: 6px; font-size: 14px; font-weight: 600; color: var(--mu); }
+  .op { margin-top: 14px; }
+  .op .r { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 700; }
+  .op .c { width: 24px; height: 24px; border-radius: 50%; border: 2.5px solid var(--gd); flex: none; display: grid; place-items: center; font-size: 13px; color: #fff; }
+  .op.on .c { background: var(--g); border-color: var(--g); }
+  .op .n { margin-left: auto; font-size: 16px; color: var(--mu); }
+  .op .b { margin: 7px 0 0 34px; height: 7px; border-radius: 4px; background: rgba(31,107,16,.15); overflow: hidden; }
+  .op .b i { display: block; height: 100%; border-radius: 4px; background: var(--g); }
+  .poll small { display: block; margin-top: 12px; text-align: right; font-size: 12px; color: var(--mu); font-weight: 600; }
+  .poll small i { font-style: normal; color: #34b7f1; margin-left: 3px; }
+  .ans { position: absolute; left: 22px; right: 22px; top: 572px; border-radius: 24px; background: var(--g); color: #fff; text-align: center; padding: 16px 16px 18px;
+    box-shadow: 0 18px 40px rgba(46,148,24,.3); }
+  .ans .q { font-size: 26px; font-weight: 800; }
+  .ans .p { margin-top: 10px; display: inline-block; padding: 9px 20px; border-radius: 999px; background: #fff; color: var(--ink); font-size: 24px; font-weight: 800; }
+  .ans .w { margin-top: 8px; font-size: 17px; font-weight: 700; color: #e6f7dc; }
+</style></head><body>
+<div id="frame">
+  <img class="logo" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="poll">
+    <div class="h hd">What does your business need most? <span class="emoji">🤔</span></div>
+    <div class="sel">Select one</div>
+    <div class="op"><div class="r"><div class="c"></div>A website that brings in calls</div><div class="b"><i style="width:30%"></i></div></div>
+    <div class="op"><div class="r"><div class="c"></div>Invoices that send themselves</div><div class="b"><i style="width:22%"></i></div></div>
+    <div class="op"><div class="r"><div class="c"></div>An app for my staff</div><div class="b"><i style="width:15%"></i></div></div>
+    <div class="op on"><div class="r"><div class="c">✓</div>All of the above <span class="emoji">😅</span></div><div class="b"><i style="width:78%"></i></div></div>
+    <small>9:41<i>✓✓</i></small>
+  </div>
+  <div class="ans"><div class="q hd">We do all of it <span class="emoji">🙌</span> First session free.</div>
+    <div class="p hd"><span class="emoji">💬</span> 022 099 9578</div><div class="w">ambs.co.nz</div></div>
+</div></body></html>
