@@ -2,52 +2,39 @@
 <html lang="en-NZ"><head><meta charset="utf-8"><title>Poster — WhatsApp status (any digital needs)</title>
 <link rel="stylesheet" href="../engine/base.css">
 <style>
-  /* 9:16 WhatsApp status in the ambs.co.nz brand: paper, ink, website green, and the site's own fonts. */
+  /* 9:16 WhatsApp status in the ambs.co.nz brand (paper, ink, website green, the site's fonts).
+     Built for status: few words, big type that survives WhatsApp's compression, and nothing important
+     in the top ~9% (name and progress bar) or bottom ~13% (reply box). */
   @font-face { font-family: "Bricolage Grotesque"; src: url("../assets/bricolage-grotesque-latin.woff2") format("woff2"); font-weight: 500 800; }
   @font-face { font-family: "Instrument Sans"; src: url("../assets/instrument-sans-latin.woff2") format("woff2"); font-weight: 400 700; }
   :root { --paper: #EFF3F9; --ink: #101321; --mu: #5B6B84; --g: #2E9418; --gd: #1f6b10; --soft: #D3EFB9; --line: #dfe5ee; }
   #frame { display: flex; flex-direction: column; align-items: center; text-align: center; color: var(--ink);
     font-family: "Instrument Sans", Inter, sans-serif, var(--emoji);
-    background: radial-gradient(90% 32% at 50% 0%, #D3EFB9 0%, transparent 70%), radial-gradient(70% 30% at 100% 100%, #dbe7f7 0%, transparent 70%), var(--paper); }
-  #frame::before { background-image: linear-gradient(rgba(16,19,33,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(16,19,33,.045) 1px, transparent 1px); }
+    background: radial-gradient(90% 32% at 50% 8%, #D3EFB9 0%, transparent 70%), radial-gradient(70% 30% at 100% 100%, #dbe7f7 0%, transparent 70%), var(--paper); }
   .hd { font-family: "Bricolage Grotesque", Inter, sans-serif; }
-  .logo { position: relative; margin-top: 40px; width: 220px; }
-  .tagl { position: relative; margin-top: 8px; font-size: 13px; font-weight: 700; letter-spacing: .14em; color: var(--g); }
-  h1 { position: relative; margin-top: 16px; font-size: 54px; line-height: 1; font-weight: 800; letter-spacing: -.03em; }
+  .logo { position: relative; margin-top: 84px; width: 220px; }
+  h1 { position: relative; margin-top: 12px; font-size: 66px; line-height: .98; font-weight: 800; letter-spacing: -.035em; }
   h1 em { font-style: normal; color: var(--g); }
-  .sub { position: relative; margin-top: 12px; font-size: 18px; font-weight: 600; color: var(--mu); line-height: 1.4; padding: 0 30px; }
-  .grid { position: relative; margin-top: 18px; width: 484px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; }
-  .t { border-radius: 18px; padding: 11px 13px; background: #fff; border: 1px solid var(--line); box-shadow: 0 8px 22px rgba(16,19,33,.06); display: flex; gap: 10px; align-items: center; }
-  .t .e { width: 40px; height: 40px; flex: none; border-radius: 12px; background: var(--soft); display: grid; place-items: center; font-size: 21px; }
-  .t b { display: block; font-family: "Bricolage Grotesque", Inter, sans-serif; font-size: 16.5px; font-weight: 700; line-height: 1.12; }
-  .t span { display: block; font-size: 12.5px; color: var(--mu); font-weight: 600; margin-top: 2px; line-height: 1.25; }
-  .ok { position: relative; margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 484px; }
-  .ok span { font-size: 14px; font-weight: 700; padding: 8px 13px; border-radius: 999px; background: #fff; border: 1px solid rgba(46,148,24,.45); color: var(--gd); }
-  .cta { position: relative; margin-top: 18px; width: 484px; border-radius: 24px; padding: 18px 18px 16px; background: var(--g); color: #fff;
+  .list { position: relative; margin-top: 22px; width: 440px; display: grid; gap: 12px; }
+  .it { display: flex; align-items: center; gap: 16px; padding: 11px 20px; border-radius: 20px; background: #fff; border: 1px solid var(--line);
+    box-shadow: 0 8px 22px rgba(16,19,33,.06); text-align: left; }
+  .it .e { width: 48px; height: 48px; flex: none; border-radius: 14px; background: var(--soft); display: grid; place-items: center; font-size: 26px; }
+  .it b { font-family: "Bricolage Grotesque", Inter, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: -.01em; }
+  .free { position: relative; margin-top: 16px; font-size: 22px; font-weight: 700; color: var(--gd); }
+  .cta { position: relative; margin-top: 14px; width: 440px; border-radius: 26px; padding: 18px 18px 20px; background: var(--g); color: #fff;
     box-shadow: 0 18px 40px rgba(46,148,24,.3); }
-  .cta .l1 { font-family: "Bricolage Grotesque", Inter, sans-serif; font-size: 24px; font-weight: 800; }
-  .cta .l2 { margin-top: 10px; display: flex; justify-content: center; gap: 10px; }
-  .cta .l2 span { font-size: 19px; font-weight: 700; padding: 8px 14px; border-radius: 12px; background: #fff; color: var(--ink); }
-  .cta .l3 { margin-top: 10px; font-size: 15px; font-weight: 600; color: #e6f7dc; }
-  .tag { position: relative; margin-top: 14px; font-size: 16px; font-weight: 700; color: var(--mu); }
-  .tag b { color: var(--ink); }
+  .cta .w { font-family: "Bricolage Grotesque", Inter, sans-serif; font-size: 44px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+  .cta .p { margin-top: 10px; font-size: 28px; font-weight: 700; }
 </style></head><body>
 <div id="frame">
   <img class="logo" src="../assets/ambs-logo.png" alt="AMBS Solutions">
-  <div class="tagl">AI AUTOMATION · WEBSITES · PORTALS</div>
   <h1 class="hd">Need anything<br><em>digital?</em></h1>
-  <div class="sub">We solve your operational headaches with easy-to-use AI. Auckland-based, working nationwide.</div>
-  <div class="grid">
-    <div class="t"><div class="e emoji">🌐</div><div><b>Websites</b><span>Fast, multilingual, built to bring in calls</span></div></div>
-    <div class="t"><div class="e emoji">🧾</div><div><b>Quotes &amp; invoices</b><span>Sent and chased automatically</span></div></div>
-    <div class="t"><div class="e emoji">📅</div><div><b>Bookings &amp; reminders</b><span>Fewer missed calls and no-shows</span></div></div>
-    <div class="t"><div class="e emoji">💬</div><div><b>Customer replies</b><span>Enquiries answered fast</span></div></div>
-    <div class="t"><div class="e emoji">📱</div><div><b>Staff &amp; customer apps</b><span>Your own portal on every phone</span></div></div>
-    <div class="t"><div class="e emoji">📊</div><div><b>Live dashboards</b><span>Your numbers, every week</span></div></div>
+  <div class="list">
+    <div class="it"><div class="e emoji">🌐</div><b>Websites</b></div>
+    <div class="it"><div class="e emoji">⚙️</div><b>AI automation</b></div>
+    <div class="it"><div class="e emoji">📱</div><b>Apps &amp; portals</b></div>
+    <div class="it"><div class="e emoji">📊</div><b>Live dashboards</b></div>
   </div>
-  <div class="ok"><span>✓ Free first session</span><span>✓ Your data stays yours</span><span>✓ A real person answers</span></div>
-  <div class="cta"><div class="l1">Book your free session</div>
-    <div class="l2"><span><span class="emoji">📞</span> 022 099 9578</span><span><span class="emoji">🌐</span> ambs.co.nz</span></div>
-    <div class="l3">hello@ambs.co.nz</div></div>
-  <div class="tag">Mention <b>who sent you</b> when you get in touch <span class="emoji">😉</span></div>
+  <div class="free">✓ Free first session</div>
+  <div class="cta"><div class="w">ambs.co.nz</div><div class="p"><span class="emoji">📞</span> 022 099 9578</div></div>
 </div></body></html>
