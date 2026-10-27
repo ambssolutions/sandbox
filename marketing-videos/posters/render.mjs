@@ -10,7 +10,7 @@ const wanted = process.argv.slice(2);
 const names = readdirSync(here).filter((f) => f.endsWith(".html") && !f.startsWith("_")).map((f) => f.slice(0, -5))
   .filter((n) => !wanted.length || wanted.some((w) => n.startsWith(w)));
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 540, height: 960 }, deviceScaleFactor: 2 });
+const page = await browser.newPage({ viewport: { width: 640, height: 960 }, deviceScaleFactor: 2 });
 for (const n of names) {
   await page.goto(pathToFileURL(join(here, n + ".html")).href);
   await page.evaluate(() => document.fonts.ready);
