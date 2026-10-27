@@ -79,22 +79,49 @@ html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:l
 @media (max-width:600px){.arcade{gap:22px 14px}.arc h3{font-size:16px}.arc-place{display:none}}
 .eve{color:var(--c-ink)}
 /* ---------- the arcade as a carousel: equal arches you swipe through ---------- */
-#work .car{--car-r:var(--arch);--car-w:clamp(220px,21vw,260px);--car-gap:clamp(18px,2.4vw,34px);max-width:1180px;margin:0 auto}
-#work .car-track{padding:14px 14px 16px}
+#work .car{--car-r:var(--arch);--car-gap:clamp(20px,2.6vw,36px);--car-w:calc((100% - 4 * var(--car-gap)) / 4.4);max-width:1240px;margin:0 auto;gap:22px}
+#work .car-track{padding:14px 14px 12px;scroll-padding-inline:14px}
+#work .car-track>*{scroll-snap-align:start}
+#work .car-slide{gap:14px}
+#work .car-slide figcaption{gap:4px}
+#work .car-slide figcaption span{font-size:13px}
+@media (max-width:760px){#work .car{--car-w:60vw;--car-gap:18px}#work .car-track>*{scroll-snap-align:center}}
 #work .car-slide .tile-ph{background:#1a1410;box-shadow:0 0 0 1.5px var(--gold),0 0 0 7px var(--paper),0 0 0 8.5px rgba(201,163,90,.45)}
 #work .car-slide figcaption b{font:400 clamp(19px,1.7vw,23px)/1.2 var(--serif);margin-top:8px}
 #work .car-slide .t-link{background:none;border:0;padding:0;min-height:32px;font:700 13px/1 var(--sans);color:var(--gold-text);cursor:pointer;text-decoration:underline;text-underline-offset:4px}
-#work .car-btn{border-color:var(--gold);color:var(--gold-text);border-radius:999px 999px 14px 14px}
-/* ---------- the hallway as arched stacking cards ---------- */
-.dome .stk{--stk-bg:#f5efe4;--stk-ink:#1c140e;--stk-muted:#5e5246;--stk-line:#dccfbb;--stk-accent:#7c5c22;--stk-r:160px 160px 22px 22px/80px 80px 22px 22px;max-width:1000px}
-.dome .stk-card{box-shadow:0 0 0 1.5px var(--gold),0 -18px 34px -22px rgba(0,0,0,.7)}
-.dome .stk-top h3{font-family:var(--serif);font-weight:400;font-size:clamp(21px,2.2vw,28px)}
-.dome .stk-body img,.dome .stk-body .stk-media{border-radius:var(--arch-soft)}
-.dome .stk-media{position:relative;overflow:hidden}
-.dome .stk-media img{position:absolute;inset:0;width:100%;height:100%;border-radius:0}
-.dome .stk-body{grid-template-columns:1fr;justify-items:center;align-content:center;gap:16px}
-.dome .stk-body img,.dome .stk-body .stk-media{height:max(200px,calc(100svh - var(--header) - 32px - var(--n) * 64px - 150px))}
-@media (max-width:760px){.dome .stk-body img,.dome .stk-body .stk-media{height:min(34svh,300px)}}
+#work .car-btn{color:var(--c-ink);border-color:var(--c-ink);border-radius:999px 999px 14px 14px}
+#work .car-btn:hover:not(:disabled){background:var(--c-ink);border-color:var(--c-ink);color:var(--paper)}
+#work .car-count{color:var(--c-ink)}
+/* ---------- the hallway as arched stacking cards ----------
+   Each card is an opaque walnut rectangle exactly as tall per step as its header (--stk-hh), with the
+   paper arch painted inside it, so the curved corners show walnut and never the card underneath. */
+.dome .stk{--stk-hh:78px;--stk-bg:var(--walnut);--stk-ink:#1c140e;--stk-muted:#5e5246;--stk-line:#dccfbb;--stk-accent:#7c5c22;--stk-r:0;max-width:1080px;gap:20px}
+.dome .stk-card{background:var(--walnut);box-shadow:none;overflow:visible;border-radius:0;
+  /* earlier cards carry a transparent margin so every card's bottom lines up: they stay stacked and release together,
+     instead of the last card sliding up over the others' headers */
+  margin-bottom:calc((var(--n) - 1 - var(--i)) * var(--stk-hh))}
+.dome .stk-top{background:var(--paper);border:1.5px solid var(--gold);border-bottom:1px solid #dccfbb;border-radius:50% 50% 0 0/62px 62px 0 0;padding:14px 24px 0;align-items:center}
+.dome .stk-top h3{font-family:var(--serif);font-weight:400;font-size:clamp(21px,2.1vw,28px)}
+.dome .stk-body{background:var(--paper);border:1.5px solid var(--gold);border-top:0;border-radius:0 0 22px 22px;box-shadow:0 22px 40px -26px rgba(0,0,0,.8);
+  grid-template-columns:auto minmax(0,1fr);justify-items:center;align-items:center;gap:clamp(24px,4vw,64px);padding:clamp(18px,2.4vw,30px) clamp(24px,5vw,72px)}
+.dome .stk-card:nth-child(even) .stk-body{grid-template-columns:minmax(0,1fr) auto}
+.dome .stk-card:nth-child(even) .stk-copy{order:-1}
+.dome .stk-copy p{font-size:clamp(17px,1.5vw,21px);color:#4b4036;max-width:28ch}
+.dome .stk-copy::before{content:"";display:block;width:26px;height:34px;border:2px solid var(--gold);border-bottom:0;border-radius:999px 999px 0 0}
+.dome .stk-body img,.dome .stk-body .stk-media{border-radius:var(--arch-soft);box-shadow:0 0 0 1.5px var(--gold)}
+.dome .stk-media{position:relative;overflow:hidden;aspect-ratio:9/16}
+.dome .stk-media img{position:absolute;inset:0;width:100%;height:100%;border-radius:0;box-shadow:none}
+.dome .stk-body img,.dome .stk-body .stk-media{height:max(220px,calc(100svh - var(--header) - 32px - var(--n) * var(--stk-hh) - 24px - 2 * clamp(18px,2.4vw,30px)));max-height:none}
+@media (max-width:760px){
+ .dome .stk{--stk-hh:66px;gap:20px}
+ .dome .stk-top{border-radius:50% 50% 0 0/46px 46px 0 0;padding-top:12px}
+ .dome .stk-top h3{font-size:19px}
+ .dome .stk-body,.dome .stk-card:nth-child(even) .stk-body{grid-template-columns:1fr;gap:14px;padding:16px 18px 20px}
+ .dome .stk-card:nth-child(even) .stk-copy{order:0}
+ .dome .stk-copy::before{display:none}
+ .dome .stk-copy p{font-size:16px}
+ .dome .stk-body img,.dome .stk-body .stk-media{height:min(38svh,320px)}
+}
 /* ---------- one hallway, start to finish: an arched timeline ---------- */
 .tl{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,4vw,64px);max-width:1080px;position:relative}
 .tl::before{content:"";position:absolute;left:16%;right:16%;top:calc(var(--tlw) * .9);height:2px;background:linear-gradient(90deg,transparent,var(--gold) 12%,var(--gold) 88%,transparent);--tlw:min(15vw,190px)}
@@ -123,14 +150,17 @@ html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:l
 .kind{display:grid;gap:12px;justify-items:center;align-content:start;text-align:center;padding:clamp(70px,7vw,96px) 18px 24px;border-radius:999px 999px 20px 20px;border:1.5px solid var(--gold);background:linear-gradient(180deg,rgba(201,163,90,.12),rgba(201,163,90,0) 60%)}
 .kind h3{font-size:clamp(22px,2vw,28px);line-height:1.1}
 .kind p{margin:0;color:var(--c-muted);font-size:15px}
-.kind .btn{min-height:46px;padding:0 18px;font-size:14px;margin-top:4px}
+.kind{grid-template-rows:auto 1fr auto}
+.kind .btn{min-height:46px;padding:0 20px;font-size:14px;margin-top:8px;align-self:end}
 .more{margin:clamp(28px,4vw,44px) auto 0;text-align:center;color:var(--c-muted);max-width:56ch}
 .more .arc-place{display:table;margin:8px auto 0}
 @media (max-width:900px){.kinds{grid-template-columns:1fr 1fr}}
-@media (max-width:600px){.kind{padding:58px 10px 18px}.kind p{display:none}.kind h3{font-size:20px}}
+@media (max-width:600px){.kinds{gap:14px}.kind{padding:64px 10px 16px;gap:10px}.kind p{display:none}.kind h3{font-size:20px}
+ .kind .btn{min-height:40px;padding:0 14px;font-size:13px;white-space:normal}.kind .btn .x{display:none}}
 /* ---------- followers: one sentence inside an arch ---------- */
 .follow .wrap{display:grid;justify-items:center}
-.f-arch{width:min(100%,760px);padding:clamp(70px,9vw,120px) clamp(18px,4vw,60px) clamp(30px,4vw,50px);border-radius:999px 999px 24px 24px/clamp(120px,18vw,300px) clamp(120px,18vw,300px) 24px 24px;border:1.5px solid rgba(230,205,150,.5);text-align:center;display:grid;gap:16px;justify-items:center}
+.follow{padding-top:clamp(100px,11vw,150px);padding-bottom:clamp(64px,8vw,110px)}
+.f-arch{width:min(100%,760px);padding:clamp(60px,7vw,96px) clamp(18px,4vw,60px) clamp(28px,4vw,46px);border-radius:999px 999px 24px 24px/clamp(120px,18vw,300px) clamp(120px,18vw,300px) 24px 24px;border:1.5px solid rgba(230,205,150,.5);text-align:center;display:grid;gap:16px;justify-items:center}
 .f-big{margin:0;font:400 clamp(28px,3.4vw,46px)/1.2 var(--serif);max-width:20ch}
 .f-big a{color:var(--gold-hi);text-decoration:none;white-space:nowrap}
 .small{font-size:13px;color:var(--c-muted);margin:0}
@@ -147,7 +177,9 @@ html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:l
 .foot-cols h2::before{display:none}
 .foot ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}.foot a{text-decoration:none}.legal{display:grid;gap:4px;font-size:13px}.legal p{margin:0}
 @media (min-width:901px){.foot{padding-bottom:64px}}
-@media (max-width:600px){section{padding-block:64px}.dome{padding-top:110px}.sec-head{margin-bottom:30px}}
+@media (max-width:600px){section{padding-block:64px}.dome{padding-top:110px}.sec-head{margin-bottom:30px}
+ .f-big{font-size:27px}.follow .btn{min-height:48px;padding:0 20px;font-size:15px}
+ .form{border-radius:44px 44px 16px 16px;padding:30px 16px 18px}}
 """
     unit = P["gurbani-unit"]["images"][1]
     order = ["gurbani-unit", "oak-marble", "carved-panel", "walnut-media", "prayer-room", "marble-tv", "herringbone", "upholstered-bed"]
@@ -162,7 +194,7 @@ html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:l
              ("TV and media walls", "Marble-look panels, walnut and oak, lit shelves and long floating units.", "oakmarble"),
              ("Carved panels", "Carved art and lettering with light set in behind, on a slatted or plain wall.", "carved"),
              ("Bedrooms", "Herringbone and slatted walls, padded headboards and storage beds lit underneath.", "herringbone")]
-    kinds_html = "".join(f'<article class="kind rv"><h3>{escape(t)}</h3><p>{escape(d)}</p><button type="button" class="btn" data-place="{p}">Try one in your room</button></article>' for t, d, p in kinds)
+    kinds_html = "".join(f'<article class="kind rv"><h3>{escape(t)}</h3><p>{escape(d)}</p><button type="button" class="btn" data-place="{p}">Try one<span class="x">&nbsp;in your room</span></button></article>' for t, d, p in kinds)
     body = f"""<header class="top"><div class="wrap">{brand('#f5efe4')}{nav()}</div></header>
 <main id="main">
 <section class="hero" data-hero aria-labelledby="hero-title">
@@ -203,6 +235,7 @@ html.motion .window-line path{stroke-dasharray:1;stroke-dashoffset:1;animation:l
   <div class="wrap">
     <div class="f-arch"><h2 id="follow-title" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Follow the builds</h2>
       <p class="f-big"><a href="{TIKTOK}" rel="noopener" target="_blank">82.5K people</a> follow our builds on TikTok, and <a href="{INSTA}" rel="noopener" target="_blank">60K</a> on Instagram.</p>
+      <div class="row"><a class="btn" href="{TIKTOK}" rel="noopener" target="_blank">Follow on TikTok</a><a class="btn ghost" href="{INSTA}" rel="noopener" target="_blank">Follow on Instagram</a></div>
       <p class="small">New jobs go up most weeks. Counts {AS_AT}.</p></div>
   </div>
 </section>

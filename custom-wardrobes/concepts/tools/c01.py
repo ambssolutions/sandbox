@@ -53,9 +53,13 @@ main>section.intro:not([data-hero]){padding-block:clamp(64px,8vw,110px) clamp(28
 .scene{min-height:calc(100svh - var(--header));display:grid;align-content:center;border-top:1px solid var(--c-line)}
 main>section.scene:not([data-hero]){padding-block:clamp(20px,3.4vh,40px)}
 .scene:nth-of-type(even){background:#0e0c0b}
-.pair{display:grid;grid-template-columns:auto minmax(240px,380px) auto;grid-template-areas:"night mid day";justify-content:center;align-items:center;gap:clamp(18px,3vw,48px)}
-.pair figure{position:relative;margin:0;height:min(calc(100svh - var(--header) - 84px),700px);min-height:380px;aspect-ratio:9/16;border-radius:6px;overflow:hidden;background:#000}
-.pair .night{grid-area:night}.pair .day{grid-area:day}.mid{grid-area:mid;display:grid;justify-items:center;text-align:center;gap:18px}
+.pair{display:grid;grid-template-columns:auto minmax(250px,340px) auto;grid-template-areas:"night mid day";justify-content:center;align-items:center;gap:clamp(20px,3.2vw,56px)}
+.pair figure{position:relative;margin:0;height:min(calc(100svh - var(--header) - 44px),780px);min-height:380px;aspect-ratio:9/16;border-radius:4px;overflow:hidden;background:#000;box-shadow:0 0 0 1px rgba(239,231,218,.1)}
+.pair figure[data-open]{cursor:zoom-in}
+.scene-no{font:italic 400 clamp(52px,5vw,84px)/.9 var(--serif);color:var(--c-accent)}
+.scene-head .scene-no small{font:500 13px/1 var(--sans);font-style:normal;letter-spacing:.2em;color:var(--c-muted);margin-left:6px;vertical-align:middle}
+.mid .rule{width:48px;height:1px;background:var(--c-accent);opacity:.7}
+.pair .night{grid-area:night}.pair .day{grid-area:day}.mid{grid-area:mid;display:grid;justify-items:center;text-align:center;gap:22px}
 .pair img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .pair figcaption{position:absolute;left:12px;top:12px;z-index:2;padding:7px 12px;border-radius:999px;background:rgba(8,7,10,.78);color:var(--c-ink);font:600 12.5px/1 var(--sans);letter-spacing:.04em}
 .pair .night .k2{position:absolute;inset:0;z-index:1;background:#000;opacity:0;pointer-events:none}
@@ -63,37 +67,47 @@ html.motion .scene:not(.on) .pair .night .k2{opacity:1}
 html.motion .scene.on .pair .night .k2{animation:flick .5s steps(1,end) both}
 .scene-head{display:grid;justify-items:center;text-align:center;gap:10px}
 .scene-head small{font:600 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--c-accent)}
-.scene-head h2{font-size:clamp(30px,3.2vw,48px);line-height:1.05}
+.scene-head h2{font-size:clamp(32px,3.3vw,50px);line-height:1.05}
 .scene-head p{margin:0;color:var(--c-muted);max-width:30ch}
 .scene-act{display:grid;gap:10px;justify-items:center}
 .t-link{background:none;border:0;padding:0;color:var(--c-muted);font:600 14px/1 var(--sans);cursor:pointer;text-decoration:underline;text-underline-offset:4px;min-height:44px}
-.scene .switch{display:none}
+.scene .sw{display:none}
 /* phones (and narrow laptops): title, one picture going from night to day, then the buttons */
 @media (max-width:900px){
  .scene{min-height:0}main>section.scene:not([data-hero]){padding-block:56px}
- .pair{grid-template-columns:min(100%,calc(62svh * .5625));grid-template-areas:"head" "night" "day" "sw" "act";gap:18px}
- .mid{display:contents}.scene-head{grid-area:head}.sw{grid-area:sw;display:flex;justify-content:center}.scene-act{grid-area:act;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 20px}
+ .pair{grid-template-columns:min(100%,calc(64svh * .5625));grid-template-areas:"head" "night" "day" "act";gap:20px}
+ .mid{display:contents}.scene-head{grid-area:head}.mid .rule{display:none}.scene-act{grid-area:act;display:flex;justify-content:center}
+ .scene-act .t-link{display:none}.scene-no{font-size:44px}
+ .scene-head h2{font-size:clamp(28px,8vw,34px)}
  .pair figure{height:auto;min-height:0;width:100%}
  .scene-head p{max-width:40ch}
- html.motion .pair{grid-template-areas:"head" "pic" "sw" "act"}
+ html.motion .pair{grid-template-areas:"head" "pic" "act"}
  html.motion .pair .night,html.motion .pair .day{grid-area:pic}
  html.motion .pair .day{opacity:0;transition:opacity .45s ease}
  html.motion .scene.day .pair .day{opacity:1}
- html.motion .scene .switch{display:inline-flex}
+ html.motion .scene.day .pair .night figcaption{opacity:0}
 }
 /* ---------- the collection as a carousel: night first, lighting up as each slide comes into view ---------- */
 #make .car{--car-r:6px;--car-w:clamp(230px,22vw,290px);max-width:1180px;margin:0 auto}
 #make .car-slide figcaption b{font:400 clamp(21px,1.9vw,25px)/1.15 var(--serif)}
 #make .car-slide .t-link{color:var(--c-ink);background:none;border:0;padding:0;font:600 14px/1 var(--sans);text-decoration:underline;text-underline-offset:4px;cursor:pointer;min-height:36px}
-#make .car-btn{border-color:rgba(239,231,218,.3)}
+#make .car-slide figcaption{gap:4px}#make .car-slide figcaption span{font-size:12.5px;letter-spacing:.06em}
 /* ---------- how a wall gets its light: stacking cards ---------- */
 .lightway{background:#0b0908}
-.lightway .stk{--stk-bg:#15110d;--stk-ink:#efe7da;--stk-muted:#b5a691;--stk-line:rgba(239,231,218,.12);--stk-accent:#f0c27a;--stk-r:8px}
-.lightway .stk-top h3{font-family:var(--serif);font-weight:400}
-.lightway .stk-body img{border-radius:4px}
-.lightway .stk-body{grid-template-columns:1fr;justify-items:center;align-content:center;gap:16px}
-.lightway .stk-body img,.lightway .stk-body .stk-media{height:max(200px,calc(100svh - var(--header) - 32px - var(--n) * 64px - 150px))}
-@media (max-width:760px){.lightway .stk-body img,.lightway .stk-body .stk-media{height:min(34svh,300px)}}
+.lightway .stk{--stk-bg:#15110d;--stk-ink:#efe7da;--stk-muted:#b5a691;--stk-line:rgba(239,231,218,.12);--stk-accent:#f0c27a;--stk-r:8px;--stk-hh:56px;max-width:860px}
+/* each card keeps its own header row showing even while the whole stack scrolls away */
+.lightway .stk-card{top:calc(var(--header) + 12px + var(--i) * var(--stk-hh));margin-bottom:calc((var(--n) - 1 - var(--i)) * var(--stk-hh))}
+.lightway .stk-top h3{font-family:var(--serif);font-weight:400;font-size:clamp(20px,1.9vw,26px)}
+.lightway .stk-body{grid-template-columns:1fr auto;align-items:center;gap:clamp(24px,4vw,64px);padding:20px clamp(24px,4vw,56px);
+ height:calc(100svh - var(--header) - 24px - var(--n) * var(--stk-hh));min-height:0;max-height:none}
+.lightway .stk-copy p{font-size:clamp(17px,1.5vw,21px);line-height:1.55;max-width:30ch;color:var(--stk-muted)}
+.lightway .stk-body img{height:calc(100svh - var(--header) - 64px - var(--n) * var(--stk-hh));max-height:560px;width:auto;border-radius:4px;box-shadow:0 0 0 1px rgba(239,231,218,.1)}
+@media (max-width:760px){
+ .lightway .stk{--stk-hh:52px}
+ .lightway .stk-top{padding:0 14px}.lightway .stk-top h3{font-size:18px}
+ .lightway .stk-body{grid-template-columns:1fr;justify-items:center;align-content:center;gap:14px;padding:16px;height:calc(min(40svh,330px) + 142px)}
+ .lightway .stk-body img{height:min(40svh,330px)}
+}
 /* ---------- studio, questions, contact, footer ---------- */
 .studio-sec{background:#0e0c0b}.studio-sec .st{--st-bg:#08070a;--st-panel:#17130f;--st-accent:#f0c27a}
 .faq-list{max-width:820px;margin:0 auto;border-top:1px solid var(--c-line)}.faq-item{border-bottom:1px solid var(--c-line)}
@@ -120,13 +134,13 @@ html.motion .scene.on .pair .night .k2{animation:flick .5s steps(1,end) both}
         sc.append(f'''<section class="scene" aria-labelledby="sc{n}">
   <div class="wrap">
     <div class="pair">
-      <figure class="night">{night_img(im, "(max-width:900px) 90vw, 400px", lazy=True)}<span class="k2" aria-hidden="true"></span><figcaption>After dark</figcaption></figure>
+      <figure class="night" data-open="{k}">{night_img(im, "(max-width:900px) 90vw, 400px", lazy=True)}<span class="k2" aria-hidden="true"></span><figcaption>After dark</figcaption></figure>
       <div class="mid">
-        <div class="scene-head rv"><small>{escape(cat)}</small><h2 id="sc{n}">{escape(title)}</h2><p>{escape(line)}</p></div>
-        <div class="sw"><button class="switch" type="button" aria-pressed="false" data-scene-switch><i></i>Room lights off</button></div>
+        <div class="scene-head rv"><span class="scene-no">0{n}<small>/ 04</small></span><small>{escape(cat)}</small><h2 id="sc{n}">{escape(title)}</h2><p>{escape(line)}</p></div>
+        <span class="rule" aria-hidden="true"></span>
         <div class="scene-act"><button class="btn" type="button" data-place-photo="{k}:0">Place it in my room</button><button class="t-link" type="button" data-open="{k}">All {cnt} photo{"s" if cnt > 1 else ""}</button></div>
       </div>
-      <figure class="day">{img(im, "(max-width:900px) 90vw, 400px", alt=p["title"] + ": " + im["alt"])}<figcaption>By day</figcaption></figure>
+      <figure class="day" data-open="{k}">{img(im, "(max-width:900px) 90vw, 400px", alt=p["title"] + ": " + im["alt"])}<figcaption>By day</figcaption></figure>
     </div>
   </div>
 </section>''')
@@ -182,10 +196,9 @@ html.motion .scene.on .pair .night .k2{animation:flick .5s steps(1,end) both}
   sw.addEventListener("click",function(){{set(sw.getAttribute("aria-pressed")!=="true");}});
   /* scenes: each one's LEDs flick on as it reaches the middle of the screen; on phones the room lights follow a moment later */
   var scenes=[].slice.call(document.querySelectorAll(".scene"));
-  scenes.forEach(function(s){{var b=s.querySelector("[data-scene-switch]");b.addEventListener("click",function(){{var on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",on?"true":"false");b.lastChild.textContent=on?"Room lights on":"Room lights off";s.classList.toggle("day",on);}});}});
   if(!("IntersectionObserver" in window)){{scenes.forEach(function(s){{s.classList.add("on");}});return;}}
   var io=new IntersectionObserver(function(es){{es.forEach(function(e){{if(!e.isIntersecting)return;var s=e.target;io.unobserve(s);s.classList.add("on");
-    setTimeout(function(){{var b=s.querySelector("[data-scene-switch]");if(b.getAttribute("aria-pressed")!=="true")b.click();}},1100);}});}},{{rootMargin:"-30% 0px -30% 0px"}});
+    setTimeout(function(){{s.classList.add("day");}},900);}});}},{{rootMargin:"-30% 0px -30% 0px"}});
   scenes.forEach(function(s){{io.observe(s);}});
 }})();
 </script>

@@ -100,7 +100,7 @@ def head(c, css, preload=""):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="{c['fonts']}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{c['fonts']}"></noscript>
-{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=14">
+{preload}<link rel="stylesheet" href="{B}assets/cw-common.css?v=16">
 <link rel="stylesheet" href="{B}assets/studio.css?v=5">
 <script>(function(d){{d.classList.add("js");window.CW_BASE="{B}";if(!matchMedia("(prefers-reduced-motion: reduce)").matches){{d.classList.add("motion");setTimeout(function(){{if(!window.CW_MOTION){{d.classList.remove("motion");d.classList.add("motion-off");}}}},3000);}}}})(document.documentElement);</script>
 <style>
@@ -426,7 +426,7 @@ def stack(cards, cls=""):
     """Sticky stacking cards (owner's pattern): fully opaque, each card's number and title stay showing as
     the next one stacks; plain list on short screens. cards: list of (title, text, media_html)."""
     items = "".join(f'<li class="stk-card" style="--i:{n}"><div class="stk-top"><span class="stk-n">{n + 1:02d}</span><h3>{escape(t)}</h3></div>'
-                    f'<div class="stk-body"><p>{escape(d)}</p>{m}</div></li>' for n, (t, d, m) in enumerate(cards))
+                    f'<div class="stk-body"><div class="stk-copy"><p>{escape(d)}</p></div>{m}</div></li>' for n, (t, d, m) in enumerate(cards))
     return f'<ol class="stk {cls}" style="--n:{len(cards)}">{items}</ol>'
 
 

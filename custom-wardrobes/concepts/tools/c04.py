@@ -54,46 +54,56 @@ html.motion .plate img.nt{animation:showimg .3s 1.25s steps(2,end) forwards,hide
 /* ---------- index ---------- */
 .index-sec{background:#f3efe8}
 .ix{list-style:none;margin:0 auto;padding:0;max-width:880px;border-top:1px solid var(--c-ink)}
-.ix li{display:grid;grid-template-columns:72px 1fr auto auto;gap:18px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--c-line)}
-.ix .n{font-size:13px;letter-spacing:.14em;color:var(--gold)}
+.ix li{display:grid;grid-template-columns:64px minmax(0,1fr) 250px 76px;gap:16px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--c-line)}
+.ix .ixk{text-align:right}.ix li>a,.ix li>button{justify-self:end}
+.ix .n{font-size:13px;letter-spacing:.14em;color:var(--gold);white-space:nowrap}
 .ix .t{font:400 clamp(21px,2vw,27px)/1.2 var(--serif)}
 .ix .ixk{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--c-muted)}
 .ix a,.ix button{font:500 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--c-ink);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:5px;min-height:32px;white-space:nowrap}
-@media (max-width:700px){.ix li{grid-template-columns:44px minmax(0,1fr) auto;gap:2px 12px;padding:13px 0;align-items:center}
+@media (max-width:700px){.ix .n{font-size:11px;letter-spacing:.08em}.ix li{grid-template-columns:48px minmax(0,1fr) 68px;gap:2px 12px;padding:12px 0;align-items:center}.ix .ixk{text-align:left}
  .ix .n{grid-column:1;grid-row:1/span 2}.ix .t{grid-column:2;grid-row:1;font-size:19px}.ix .ixk{grid-column:2;grid-row:2;font-size:11px}
  .ix a,.ix button{grid-column:3;grid-row:1/span 2}}
-/* ---------- plates: catalogue pages that stack (owner's stacking cards; opaque, plate number and title stay showing) ---------- */
-.plates{--stk-bg:#fff;--stk-ink:#141210;--stk-muted:#6b635a;--stk-line:#e2dcd2;--stk-accent:#85631f;--stk-r:0;max-width:1060px;gap:28px}
-.plates .stk-card{grid-template-rows:52px auto;top:calc(var(--header) + 14px + var(--i) * 52px);border:1px solid var(--c-line);box-shadow:0 -14px 30px -26px rgba(20,18,16,.6)}
-.plates .stk-top{gap:16px}
+/* ---------- plates: catalogue pages that stack (opaque; each plate number and title stay showing) ---------- */
+.plates{--stk-hh:50px;--stk-bg:#fff;--stk-ink:#141210;--stk-muted:#6b635a;--stk-line:#e2dcd2;--stk-accent:#85631f;--stk-r:0;max-width:1120px;gap:28px}
+.plates .stk-card{border:1px solid var(--c-line);box-shadow:0 -14px 30px -26px rgba(20,18,16,.6)}
+.plates .stk-top{gap:16px;background:#fff}
 .plates .stk-n{font:500 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;flex:none}
-.plates .stk-top h3{font:400 clamp(20px,2vw,26px)/1.1 var(--serif)}
-.plates .stk-body{grid-template-columns:auto minmax(0,1fr);gap:clamp(22px,4vw,64px);padding:clamp(16px,2.4vw,30px) clamp(18px,4vw,56px);
-  min-height:calc(100svh - var(--header) - 28px - var(--n) * 52px - 28px);max-height:calc(100svh - var(--header) - 28px - var(--n) * 52px)}
-.plates .stk-media{position:relative;display:block;height:calc(100svh - var(--header) - 88px - var(--n) * 52px);max-height:560px;aspect-ratio:9/16;width:auto;padding:0;border:1px solid var(--c-line);background:#0d0b09;cursor:zoom-in;overflow:hidden;border-radius:0}
+.plates .stk-top h3{font:400 clamp(20px,2vw,25px)/1.1 var(--serif)}
+/* a full page: the photo on a cream mount filling the left half, the specification centred in the right half */
+.plates .stk-body{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;padding:0;align-items:stretch;
+  height:calc(100svh - var(--header) - 28px - var(--n) * var(--stk-hh));min-height:0;max-height:620px}
+.plates .mount{display:grid;place-items:center;padding:clamp(16px,2.4vw,28px);background:#f3efe8;border-right:1px solid var(--c-line);min-height:0}
+.plates .stk-media{border-radius:0!important;position:relative;display:block;height:100%;max-height:100%;aspect-ratio:9/16;width:auto;padding:0;border:1px solid var(--c-line);background:#0d0b09;cursor:zoom-in;overflow:hidden;border-radius:0}
 .plates .stk-media img{position:absolute;inset:0;width:100%!important;height:100%!important;object-fit:contain;border-radius:0!important;aspect-ratio:auto!important}
-.spec{display:grid;justify-items:center;text-align:center;gap:12px;max-width:430px;justify-self:center}
+.plates .stk-copy{align-content:center;padding:clamp(18px,3vw,44px)}
+.spec{display:grid;justify-items:center;text-align:center;gap:14px;width:100%;max-width:420px;margin:0 auto}
+.spec .pn{font:italic 400 clamp(56px,6vw,88px)/.9 var(--serif);color:var(--gold)}
 .spec dl{margin:0;width:100%;border-top:1px solid var(--c-ink)}
-.spec dl div{display:grid;gap:4px;padding:10px 0;border-bottom:1px solid var(--c-line);justify-items:center}
+.spec dl div{display:grid;gap:4px;padding:11px 0;border-bottom:1px solid var(--c-line);justify-items:center}
 .spec dt{font:500 11.5px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
 .spec dd{margin:0;color:var(--c-muted);font-size:15.5px;line-height:1.5}
 .spec .acts{display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
 @media (max-width:760px){
- .plates .stk-card{grid-template-rows:48px auto;top:calc(var(--header) + 10px + var(--i) * 48px)}
- .plates .stk-top{gap:12px;padding:0 14px}.plates .stk-top h3{font-size:16.5px;line-height:1.15}.plates .stk-n{font-size:10.5px;letter-spacing:.16em}
- .plates .stk-body{grid-template-columns:1fr;min-height:0;max-height:none;gap:12px;padding:14px 16px 16px}
- .plates .stk-media{height:min(34svh,300px);justify-self:center}
- .spec dl div:last-child,.spec .sc{display:none}.spec dd{font-size:14px}.spec{gap:8px}.spec .acts{gap:18px}
+ .plates{--stk-hh:46px;gap:18px}
+ .plates .stk-top{gap:10px;padding:0 14px}.plates .stk-top h3{font-size:16px;line-height:1.15}.plates .stk-n{font-size:10.5px;letter-spacing:.16em}
+ .plates .stk-body{grid-template-columns:1fr;height:auto;max-height:none}
+ .plates .mount{border-right:0;border-bottom:1px solid var(--c-line);padding:14px}
+ .plates .stk-media{height:min(28svh,230px)}
+ .plates .mount{padding:10px}
+ .plates .stk-copy{padding:14px 18px 18px}
+ .spec .pn,.spec dl div:last-child,.spec .sc{display:none}.spec dd{font-size:14px}.spec{gap:10px}.spec .acts{gap:18px}
 }
-@media (max-height:640px){.plates .stk-body{min-height:0;max-height:none}}
+@media (max-height:640px){.plates .stk-body{height:auto;max-height:none}.plates .stk-media{height:320px}}
 /* ---------- more from the catalogue: a carousel, square corners and hairlines ---------- */
 .more{--car-r:0;--car-w:clamp(220px,22vw,270px)}
 .more .tile-ph{border:1px solid var(--c-line)}
-.more .car-slide figcaption b{font:400 22px/1.2 var(--serif)}
+.more .car-slide figcaption{border-top:1px solid var(--c-line);padding-top:12px;gap:4px}
+.more .car-slide figcaption b{font:400 21px/1.2 var(--serif);max-width:20ch}
 .more .car-slide figcaption span{font:500 11px/1.3 var(--sans);letter-spacing:.18em;text-transform:uppercase}
 .more .t-link{font:500 12.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;text-decoration:underline;text-underline-offset:6px;color:var(--c-ink);background:none;border:0;padding:0;cursor:pointer;min-height:40px}
-.more .car-btn{border-radius:0;border-color:var(--c-ink)}
-.more .car-count{letter-spacing:.14em;color:var(--c-ink)}
+.more .car-btn{border-radius:0;border:1px solid var(--c-ink);width:48px;height:48px;font-size:17px}.more .car-btn:hover:not(:disabled){background:var(--c-ink);color:var(--c-bg)}
+.more .car-bar{gap:22px;margin-top:6px}
+.more .car-count{font:500 13px/1 var(--sans);letter-spacing:.2em;color:var(--c-ink)}
 @media (max-width:760px){.more{--car-w:64vw}}
 /* ---------- materials ---------- */
 .mats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.6vw,40px);max-width:1080px;margin:0 auto}
@@ -108,7 +118,7 @@ html.motion .plate img.nt{animation:showimg .3s 1.25s steps(2,end) forwards,hide
 .sw-carve i{background:#ece6dc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 90'%3E%3Cg fill='none' stroke='%2385631f' stroke-width='1.2'%3E%3Cpath d='M30 86V40a30 30 0 0 1 60 0v46'/%3E%3Cpath d='M42 86V44a18 18 0 0 1 36 0v42'/%3E%3Cpath d='M18 86V36Q18 14 40 12M102 86V36Q102 14 80 12'/%3E%3C/g%3E%3C/svg%3E") center/70% no-repeat}
 .sw-led i{background:#151210;position:relative}
 .sw-led i::after{content:"";position:absolute;left:12%;right:12%;top:50%;height:3px;margin-top:-1.5px;background:#f6d39a;box-shadow:0 0 0 1px rgba(246,211,154,.3),0 -10px 26px rgba(246,190,110,.35),0 10px 26px rgba(246,190,110,.35)}
-@media (max-width:760px){.mats{grid-template-columns:1fr 1fr;gap:22px 14px}.mat p{font-size:14px}}
+@media (max-width:760px){.mats{grid-template-columns:1fr 1fr;gap:26px 14px}.mat{gap:8px}.mat h3{font-size:20px}.mat p{font-size:13.5px;line-height:1.45}.sw{padding:6px}}
 /* ---------- before and after ---------- */
 .ba{background:#f3efe8}
 .ba .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,96px);align-items:center;max-width:1040px}
@@ -127,7 +137,7 @@ html.motion .plate img.nt{animation:showimg .3s 1.25s steps(2,end) forwards,hide
 .reach-line span{font:500 11.5px/1.2 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--c-muted)}
 .reach-line li+li{border-left:1px solid var(--c-line);padding-left:clamp(18px,3vw,44px)}
 .small{font-size:13px;color:var(--c-muted);text-align:center;margin:22px 0 0}
-@media (max-width:640px){.reach-line{display:grid;grid-template-columns:1fr 1fr;gap:26px 0}.reach-line li+li{border-left:0;padding-left:0}.reach-line li:nth-child(even){border-left:1px solid var(--c-line)}}
+@media (max-width:640px){.reach-line{display:grid;grid-template-columns:1fr 1fr;gap:22px 0;max-width:340px;margin:0 auto}.reach-line b{font-size:38px}.reach-line span{font-size:10px;letter-spacing:.16em}.reach-line li+li{border-left:0;padding-left:0}.reach-line li:nth-child(even){border-left:1px solid var(--c-line)}}
 /* ---------- questions, contact, footer ---------- */
 .faq-list{max-width:820px;margin:0 auto;border-top:1px solid var(--c-ink)}.faq-item{border-bottom:1px solid var(--c-line);padding:24px 0!important}
 .faq-q{font:400 clamp(22px,2vw,26px)/1.3 var(--serif)!important;margin-bottom:8px!important}
@@ -167,12 +177,12 @@ html.motion .plate img.nt{animation:showimg .3s 1.25s steps(2,end) forwards,hide
         cnt = len(p["images"])
         cards.append(
             f'<li class="stk-card" id="plate-{k}" style="--i:{n - 1}"><div class="stk-top"><span class="stk-n">Plate {n:02d}</span><h3>{escape(p["title"])}</h3></div>'
-            f'<div class="stk-body"><button class="tile-ph stk-media" type="button" data-open="{k}" aria-label="See {cnt} photos of {escape(p["title"])}">'
-            f'{img(im, "(max-width:760px) 50vw, 320px")}{night_img(im, "(max-width:760px) 50vw, 320px", cls="nt", lazy=True)}</button>'
-            f'<div class="spec"><span class="sc">{escape(TYPES[p["type"]])}</span>'
+            f'<div class="stk-body"><div class="mount"><button class="tile-ph stk-media" type="button" data-open="{k}" aria-label="See {cnt} photos of {escape(p["title"])}">'
+            f'{img(im, "(max-width:760px) 50vw, 340px")}{night_img(im, "(max-width:760px) 50vw, 340px", cls="nt", lazy=True)}</button></div>'
+            f'<div class="stk-copy"><div class="spec"><span class="pn" aria-hidden="true">{n:02d}</span><span class="sc">{escape(TYPES[p["type"]])}</span>'
             f'<dl><div><dt>Made with</dt><dd>{escape(p["text"])}</dd></div><div><dt>In the gallery</dt><dd>{cnt} photos from the finished room</dd></div></dl>'
             f'<div class="acts"><button type="button" class="tlink" data-open="{k}">See the photos</button>'
-            f'<button type="button" class="tlink" data-place-photo="{k}:0">Place in my room</button></div></div></div></li>')
+            f'<button type="button" class="tlink" data-place-photo="{k}:0">Place in my room</button></div></div></div></div></li>')
     MORE = [k for k in ORDER if k not in PLATES]
     more = carousel([car_build(k, 0, "(max-width:760px) 64vw, 270px") for k in MORE], "More from the catalogue", "more")
     mats = [("sw-img", f'<img src="{B}assets/img/designs/tex-marble.webp" alt="" width="254" height="326" loading="lazy" decoding="async">', "Marble-look panels", "Behind the TV in the marble TV wall and the oak and marble media wall."),
