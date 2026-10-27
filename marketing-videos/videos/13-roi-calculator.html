@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — website ROI calculator</title>
+<link rel="stylesheet" href="../engine/base.css">
+<link rel="stylesheet" href="../engine/theme-cobalt.css">
+<style>
+  /* Hook: what is one job worth? */
+  #q { position: absolute; left: 0; right: 0; top: 236px; text-align: center; }
+  #q .big { font-size: 120px; font-weight: 900; letter-spacing: -.05em; line-height: 1; color: var(--accent);
+    text-shadow: 0 10px 40px rgba(5,15,60,.45); }
+  #q p { margin-top: 10px; font-size: 20px; font-weight: 800; color: var(--muted); }
+  .jobs { position: absolute; left: 22px; right: 22px; top: 470px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .jobs span { padding: 12px 18px; border-radius: 999px; background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.35);
+    font-size: 20px; font-weight: 900; }
+  .jobs span.on { background: var(--accent); color: var(--dark); border-color: var(--accent); box-shadow: 0 10px 26px rgba(253,224,71,.4); }
+
+  /* Calculator card */
+  .calc { position: absolute; left: 22px; right: 22px; top: 222px; border-radius: 26px; background: var(--card); color: var(--card-ink);
+    padding: 16px 18px 18px; box-shadow: 0 26px 60px rgba(5,15,60,.45); }
+  .calc .ey { font-size: 11px; font-weight: 900; letter-spacing: .14em; color: #2152e0; }
+  .jv { margin-top: 6px; display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 14px; background: #eef3ff; }
+  .jv span { font-size: 13.5px; font-weight: 800; color: var(--card-muted); }
+  .jv b { font-size: 22px; font-weight: 900; }
+  .sl { margin-top: 12px; }
+  .sl .row { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; font-weight: 800; }
+  .sl .row b { font-size: 18px; font-weight: 900; color: #2152e0; font-variant-numeric: tabular-nums; }
+  .sl .tr { position: relative; margin-top: 8px; height: 10px; border-radius: 6px; background: #e2e8f0; }
+  .sl .tr i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; background: #2152e0; }
+  .sl .tr u { position: absolute; top: 50%; width: 24px; height: 24px; margin: -12px 0 0 -12px; border-radius: 50%; background: #fff;
+    border: 4px solid #2152e0; box-shadow: 0 3px 8px rgba(15,23,42,.25); }
+  .sl.live .tr u { border-color: #f59e0b; box-shadow: 0 0 0 7px rgba(253,224,71,.45); }
+  .fl { margin-top: 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .fl div { border-radius: 12px; background: #f1f5f9; padding: 8px 4px; text-align: center; }
+  .fl small { display: block; font-size: 10.5px; font-weight: 800; color: var(--card-muted); }
+  .fl b { display: block; margin-top: 2px; font-size: 18px; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .fl div.w { background: var(--dark); color: #fff; } .fl div.w small { color: #c9d8ff; } .fl div.w b { color: var(--accent); }
+  .mo { margin-top: 12px; text-align: center; }
+  .mo b { display: block; font-size: 46px; font-weight: 900; letter-spacing: -.03em; line-height: 1; color: #16318f; font-variant-numeric: tabular-nums; }
+  .mo span { display: block; margin-top: 4px; font-size: 13.5px; font-weight: 700; color: var(--card-muted); }
+
+  /* Year view */
+  .yr { position: absolute; left: 22px; right: 22px; top: 222px; border-radius: 26px; background: var(--card); color: var(--card-ink);
+    padding: 16px 18px 18px; box-shadow: 0 26px 60px rgba(5,15,60,.45); }
+  .tabs { display: flex; gap: 6px; padding: 4px; background: #eef3ff; border-radius: 12px; }
+  .tabs span { flex: 1; text-align: center; padding: 8px 0; border-radius: 9px; font-size: 14px; font-weight: 900; color: var(--card-muted); }
+  .tabs span.on { background: #2152e0; color: #fff; }
+  .yr .bn { margin-top: 14px; text-align: center; }
+  .yr .bn b { display: block; font-size: 58px; font-weight: 900; letter-spacing: -.04em; line-height: 1; color: #16318f; font-variant-numeric: tabular-nums; }
+  .yr .bn span { display: block; margin-top: 6px; font-size: 14px; font-weight: 700; color: var(--card-muted); }
+  .yr svg { display: block; margin-top: 12px; width: 100%; height: auto; }
+  .yr svg .g { stroke: #e2e8f0; stroke-width: 1; }
+  .yr svg .cost { stroke: #ef4444; stroke-width: 2.5; stroke-dasharray: 7 5; }
+  .yr svg rect.paid { fill: #2152e0; } .yr svg rect.owed { fill: #fca5a5; }
+  .yr svg text { font: 700 12px Inter, sans-serif; fill: #64748b; }
+  .lg { display: flex; gap: 14px; justify-content: center; font-size: 11.5px; font-weight: 800; color: var(--card-muted); }
+  .lg i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  .pay { margin-top: 12px; text-align: center; }
+  .pay span { display: inline-block; padding: 9px 16px; border-radius: 999px; background: var(--accent); color: var(--dark); font-size: 16px; font-weight: 900; }
+
+  /* Finale: visit the website */
+  #note { position: absolute; left: 30px; right: 30px; top: 226px; text-align: center; font-size: 15px; font-weight: 700; color: var(--muted); }
+  #fin { position: absolute; left: 22px; right: 22px; top: 262px; text-align: center; }
+  #fin .lg2 { width: 230px; padding: 10px 18px; border-radius: 22px; background: #fff; box-shadow: 0 16px 40px rgba(5,15,60,.35); }
+  #fin h3 { margin-top: 18px; font-size: 34px; line-height: 1.08; font-weight: 900; letter-spacing: -.02em; }
+  #fin h3 em { font-style: normal; color: var(--accent); }
+  .url { margin: 20px auto 0; width: 470px; display: flex; align-items: center; gap: 8px; padding: 13px 16px; border-radius: 16px; background: #fff;
+    color: var(--card-ink); font-size: 18px; font-weight: 800; text-align: left; box-shadow: 0 16px 40px rgba(5,15,60,.35); }
+  .url .lk { font-size: 16px; } .url #ut { flex: 1; white-space: nowrap; overflow: hidden; }
+  .url .go { padding: 6px 12px; border-radius: 10px; background: #2152e0; color: #fff; font-size: 14px; font-weight: 900; }
+  .steps { margin-top: 20px; display: flex; flex-direction: column; gap: 9px; align-items: center; }
+  .steps div { font-size: 17px; font-weight: 800; padding: 9px 16px; border-radius: 12px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); }
+  #free { margin-top: 18px; font-size: 22px; font-weight: 900; color: var(--accent); }
+  .caret::after { content: "|"; margin-left: 1px; color: #2152e0; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <!-- 0–3.6 hook -->
+  <div id="q"><div class="big">$?</div><p>What is one new job worth to you?</p></div>
+  <div class="jobs" id="jobs"></div>
+
+  <!-- 3.6–14.4 calculator -->
+  <div class="calc" id="calc">
+    <div class="ey">WEBSITE ROI CALCULATOR</div>
+    <div class="jv"><span>Average job value</span><b>$5,000</b></div>
+    <div class="sl" id="s1"><div class="row">Website visitors a month <b id="v1"></b></div><div class="tr"><i></i><u></u></div></div>
+    <div class="sl" id="s2"><div class="row">Visitors who send an enquiry <b id="v2"></b></div><div class="tr"><i></i><u></u></div></div>
+    <div class="sl" id="s3"><div class="row">Enquiries you win <b id="v3"></b></div><div class="tr"><i></i><u></u></div></div>
+    <div class="fl"><div><small>Visitors</small><b id="f1"></b></div><div><small>Enquiries</small><b id="f2"></b></div>
+      <div><small>Jobs won</small><b id="f3"></b></div><div class="w"><small>Work</small><b id="f4"></b></div></div>
+    <div class="mo"><b id="mo"></b><span>of work your website could bring in a month</span></div>
+  </div>
+
+  <!-- 14.4–19.6 a year -->
+  <div class="yr" id="yr">
+    <div class="tabs"><span>Month</span><span class="on">Year</span><span>3 years</span></div>
+    <div class="bn"><b id="yb">$0</b><span>of work your website could bring in a year</span></div>
+    <svg id="ch" viewBox="0 0 620 226"></svg>
+    <div class="lg"><span><i style="background:#2152e0"></i>Paid for</span><span><i style="background:#ef4444"></i>Website cost $3,000</span></div>
+    <div class="pay" id="pay"><span>✓ Pays for itself in the first month</span></div>
+  </div>
+
+  <!-- 19.6–28 visit the website -->
+  <div id="note">Example figures to show how the sum works, not a promise.</div>
+  <div id="fin">
+    <img class="lg2" src="../assets/ambs-logo.png" alt="AMBS">
+    <h3>Try it with <em>your</em> numbers</h3>
+    <div class="url" id="url"><span class="lk emoji">🔒</span><span id="ut"></span><span class="go">Go</span></div>
+    <div class="steps"><div id="st1">1. Visit <b>ambs.co.nz</b></div><div id="st2">2. Open the <b>Website ROI calculator</b></div><div id="st3">3. Move the sliders, see what you could earn</div></div>
+    <div id="free">It's free <span class="emoji">👆</span> Link in bio</div>
+  </div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis, p, ease, lerp, cursor } = E;
+const JOBS = [500, 2000, 5000, 10000, 25000];
+const money = (n) => "$" + Math.round(n).toLocaleString("en-NZ");
+$("#jobs").innerHTML = JOBS.map((j) => `<span>${money(j)}</span>`).join("");
+const chips = $$("#jobs span");
+const cur = cursor($("#frame"));
+
+// Same ranges and sum as the calculator on ambs.co.nz (site-src/assets/blocks.mjs).
+const R = { visitors: [20, 1000], enquiry: [0.5, 8], win: [10, 70] };
+const one = (n) => (n < 10 ? n.toFixed(1) : String(Math.round(n)));
+function slider(id, k, v) {
+  const f = (v - R[k][0]) / (R[k][1] - R[k][0]) * 100;
+  $(`#${id} .tr i`).style.width = f + "%";
+  $(`#${id} .tr u`).style.left = f + "%";
+}
+// Year chart, drawn like the site's: work won added up month by month against the website cost.
+const MONTH = 150 * 0.02 * 0.35 * 5000, COST = 3000;
+(function chart() {
+  const L = 58, Rt = 600, T = 12, B = 176, W = Rt - L, H = B - T, top = MONTH * 12, max = top * 1.08;
+  const y = (v) => B - (v / max) * H;
+  let s = "";
+  for (const f of [0, 0.5, 1]) { const yy = y(top * f); s += `<line class="g" x1="${L}" x2="${Rt}" y1="${yy}" y2="${yy}"/><text x="${L - 8}" y="${yy + 5}" text-anchor="end">${f ? "$" + Math.round(top * f / 1000) + "k" : "$0"}</text>`; }
+  const bw = W / 12;
+  for (let m = 1; m <= 12; m++) {
+    const x = L + (m - 1) * bw + bw * 0.16, h = B - y(MONTH * m);
+    s += `<rect class="${MONTH * m >= COST ? "paid" : "owed"}" data-m="${m}" x="${x}" y="${B - h}" width="${bw * 0.68}" height="${h}" rx="4" style="transform-origin:${x}px ${B}px"/><text x="${x + bw * 0.34}" y="${B + 20}" text-anchor="middle">${m}</text>`;
+  }
+  s += `<line class="cost" x1="${L}" x2="${Rt}" y1="${y(COST)}" y2="${y(COST)}"/><text x="${Rt}" y="216" text-anchor="end">Month</text>`;
+  $("#ch").innerHTML = s;
+})();
+const bars = $$("#ch rect");
+window.COVER_AT = 12.6;
+
+E.setup({
+  duration: 28,
+  keyword: "",
+  voice: [
+    { a: 0.15, b: 3.5, text: "What is one new job worth to your business?" },
+    { a: 3.7, b: 9.3, text: "Our free website calculator shows you. Pick your job value, then move the sliders." },
+    { a: 9.3, b: 14.4, text: "A hundred and fifty visitors, two percent enquire, you win thirty five percent. Over five grand a month." },
+    { a: 14.6, b: 19.4, text: "That's sixty three thousand a year, and the website pays for itself in the first month." },
+    { a: 19.7, b: 23.0, text: "Those are example numbers. Try it with yours." },
+    { a: 23.2, b: 27.8, text: "Visit A M B S dot co dot N Z, and try the free calculator." },
+  ],
+  captions: [
+    { a: 0, b: 3.6, html: `What's <mark>one job</mark> worth to you?` },
+    { a: 3.6, b: 14.4, html: `Move the sliders. <span class="cyan">Watch the money.</span>` },
+    { a: 14.4, b: 19.6, html: `Over a year, it <mark>adds up.</mark>` },
+    { a: 19.6, b: 28, html: `See what <mark>your website</mark> could earn you.` },
+  ],
+  phases: [],
+  end: { at: 99, title: "", sub: "" },
+});
+
+E.use((t) => {
+  // hook
+  vis("#q", t, 0.1, 3.6, { y: 0, scale: 0.6, dur: 0.45 });
+  chips.forEach((c, i) => { vis(c, t, 0.6 + i * 0.15, 3.6, { y: 20, scale: 0.7 }); c.classList.toggle("on", i === 2 && t >= 2.75); });
+  if (t >= 2.75) $("#q .big").textContent = "$5,000"; else $("#q .big").textContent = "$?";
+  $("#q .big").style.fontSize = t >= 2.75 ? "96px" : "120px";
+  cur(t, [{ t: 1.7, x: 420, y: 760 }, { t: 2.5, x: 262, y: 505 }, { t: 2.7, x: 262, y: 505, click: true }, { t: 3.3, x: 262, y: 505 }]);
+
+  // calculator: sliders move one after another, results follow the site's sum
+  vis("#calc", t, 3.7, 14.4, { y: 40, scale: 0.94 });
+  const vv = Math.round(lerp(40, 150, p(t, 4.6, 6.4, ease.inOut)) / 10) * 10;
+  const ve = Math.round(lerp(0.5, 2, p(t, 6.8, 8.4, ease.inOut)) * 2) / 2;
+  const vw = Math.round(lerp(10, 35, p(t, 8.8, 10.4, ease.inOut)) / 5) * 5;
+  slider("s1", "visitors", vv); slider("s2", "enquiry", ve); slider("s3", "win", vw);
+  $("#s1").classList.toggle("live", t >= 4.4 && t < 6.6);
+  $("#s2").classList.toggle("live", t >= 6.6 && t < 8.6);
+  $("#s3").classList.toggle("live", t >= 8.6 && t < 10.6);
+  $("#v1").textContent = vv.toLocaleString("en-NZ"); $("#v2").textContent = ve + "%"; $("#v3").textContent = vw + "%";
+  const leads = vv * ve / 100, jobs = leads * vw / 100, month = jobs * 5000;
+  $("#f1").textContent = vv; $("#f2").textContent = one(leads); $("#f3").textContent = one(jobs); $("#f4").textContent = money(month);
+  $("#mo").textContent = money(month);
+  const pop = t > 10.4 ? 1 + 0.06 * Math.max(0, Math.sin((t - 10.4) * 4)) : 1;
+  $(".mo b").style.transform = `scale(${pop})`;
+
+  // a year
+  vis("#yr", t, 14.5, 19.6, { y: 40, scale: 0.94 });
+  $("#yb").textContent = money(MONTH * 12 * p(t, 14.9, 16.8, ease.out));
+  bars.forEach((b, i) => { const q = p(t, 15.0 + i * 0.12, 15.4 + i * 0.12, ease.back); b.style.transform = `scaleY(${q})`; });
+  vis("#pay", t, 17.2, 19.6, { y: 0, scale: 0.5 });
+
+  // visit the website
+  vis("#note", t, 19.7, null, { y: 10 });
+  vis("#fin", t, 19.9, null, { y: 30 });
+  vis("#url", t, 20.6, null, { y: 20 });
+  const ut = $("#ut");
+  ut.textContent = "ambs.co.nz/website-roi-calculator".slice(0, Math.floor(p(t, 21.0, 22.8, ease.linear) * 33 + 1e-6));
+  ut.classList.toggle("caret", t >= 21 && t < 23.4);
+  vis("#st1", t, 23.3, null, { x: -20, y: 0 });
+  vis("#st2", t, 24.4, null, { x: -20, y: 0 });
+  vis("#st3", t, 25.5, null, { x: -20, y: 0 });
+  vis("#free", t, 26.4, null, { y: 0, scale: 0.6 });
+});
+</script>
+</body>
+</html>

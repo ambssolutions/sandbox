@@ -1,0 +1,22 @@
+/* "Cobalt & sunshine" theme — bright cobalt background, white cards, sunshine-yellow highlights.
+   Load after base.css: <link rel="stylesheet" href="../engine/theme-cobalt.css"> */
+:root {
+  --bg: #2152e0; --bg2: #16318f; --ink: #ffffff; --muted: #c9d8ff;
+  --accent: #fde047; --accent-2: #fde047; --mark: #fde047;
+  --card: #ffffff; --card-ink: #0f172a; --card-muted: #64748b; --dark: #0b1b4d;
+}
+#frame { color: var(--ink);
+  background: radial-gradient(70% 40% at 85% 0%, #4f7dff 0%, transparent 65%),
+              radial-gradient(70% 45% at 0% 100%, #0d2270 0%, transparent 70%),
+              linear-gradient(180deg, var(--bg), var(--bg2)); }
+#frame::before { background-image: linear-gradient(135deg, rgba(255,255,255,.05) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.05) 50%, rgba(255,255,255,.05) 75%, transparent 75%); background-size: 28px 28px; }
+.progress { background: rgba(255,255,255,.25); } .progress i { background: var(--accent); }
+.caption { top: 78px; text-shadow: 0 2px 12px rgba(5,15,60,.35); }
+.caption mark { background: var(--mark); color: var(--dark); }
+.caption .cyan { color: var(--accent); }
+.chip { background: var(--dark); color: var(--ink); border-color: rgba(253,224,71,.5); }
+/* the logo has blue in it, so sit it on a white tab */
+.brand { background: #fff; padding: 5px 9px; height: 46px; border-radius: 12px; filter: none; box-shadow: 0 6px 16px rgba(5,15,60,.3); }
+.end { background: radial-gradient(80% 50% at 50% 35%, rgba(253,224,71,.2), transparent 70%), rgba(22,49,143,.97); }
+.end .elogo { width: 220px; margin-left: -110px; top: 40px; background: #fff; padding: 10px 18px; border-radius: 22px; filter: none; }
+.end .kw span { background: var(--accent); color: var(--dark); box-shadow: 0 10px 0 #b8a000; }

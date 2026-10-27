@@ -16,6 +16,7 @@ Nobody appears on camera. Each one is an animated screen recording of a real kin
 | 10 | `out/10-ambs-bot.mp4` | Ambs Bot, the "Ask us" chat assistant on ambs.co.nz: real greeting & answers, 5 languages, voice, takes a message (24 s) | **BOT** |
 | 11 | `out/11-ambs-portal.mp4` | AMBS Portal: quote → share on WhatsApp → client accepts → invoice with GST & PDF → auto reminder → paid (24 s) | **PORTAL** |
 | 12 | `out/12-website-matters.mp4` | Why your website matters: social gets you seen → people check your website → it gets you chosen (rented vs owned), tomato & cream theme (27 s) | **WEBSITE** |
+| 13 | `out/13-roi-calculator.mp4` | The free Website ROI calculator on ambs.co.nz: pick a job value, move the sliders, see the work a website could bring in a month and a year; ends by sending people to the website (cobalt & sunshine theme, 28 s) | visit **ambs.co.nz** |
 | 5 | `out/05-help-reporting.mp4` | Monday copy-paste reporting → live dashboard and an auto-emailed weekly report | **HELP** |
 
 Each video also has a `-cover.jpg` frame grab in `out/`. Videos 2 and 3 also have a designed thumbnail (`out/02-crm-leads-thumbnail.jpg`, `out/03-website-bookings-thumbnail.jpg`) with a bold headline and a before/after visual. Its sources are in `thumbnails/`, and `node thumbnails/render.mjs` re-renders it. Upload it as the custom cover when you post.
