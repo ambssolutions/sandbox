@@ -1,0 +1,9 @@
+/* Dark WhatsApp status set (same tone as 18c-share-story): content centred between WhatsApp's
+   top bar (~9%) and reply box (~13%), and the same white contact card on every option. */
+#frame { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 86px 30px 124px; }
+.card { width: 100%; padding: 20px 18px 22px; text-align: center; }
+.card .logo { width: 190px; } .card .p { margin-top: 6px; font-size: 34px; } .card .w { font-size: 19px; } .card .free { font-size: 16px; padding: 7px 13px; }
+.e { font-size: 70px; line-height: 1; }
+h1 { font-size: 64px; }
+.lead { margin-top: 16px; font-size: 22px; font-weight: 600; color: var(--mu); line-height: 1.35; }
+.gap { margin-top: 34px; }
