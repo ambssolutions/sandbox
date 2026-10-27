@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Poster — endorse AMBS: chat with shared contact</title>
+<link rel="stylesheet" href="../engine/base.css"><link rel="stylesheet" href="_status.css">
+<style>
+  /* A friend asks for a recommendation; the sharer answers with AMBS's contact card, the way people really refer on WhatsApp. */
+  #frame { color: var(--ink); background: radial-gradient(90% 30% at 50% 0%, #D3EFB9 0%, transparent 70%), var(--paper); }
+  #frame::before { background-image: radial-gradient(rgba(46,148,24,.10) 1.5px, transparent 2px); background-size: 26px 26px; }
+  .chat { position: absolute; left: 18px; right: 18px; top: 100px; display: flex; flex-direction: column; gap: 10px; }
+  .m { max-width: 84%; padding: 11px 15px 8px; border-radius: 18px; font-size: 21px; line-height: 1.28; font-weight: 600; box-shadow: 0 2px 6px rgba(16,19,33,.08); }
+  .m.in { align-self: flex-start; background: #fff; border-top-left-radius: 6px; }
+  .m.out { align-self: flex-end; background: var(--soft); border-top-right-radius: 6px; }
+  .m small { display: block; text-align: right; margin-top: 2px; font-size: 11px; font-weight: 600; color: var(--mu); }
+  .m small i { font-style: normal; color: #34b7f1; margin-left: 3px; }
+  .m b { color: var(--gd); }
+  .ct { align-self: flex-end; width: 84%; border-radius: 18px; border-top-right-radius: 6px; background: var(--soft); padding: 10px; box-shadow: 0 2px 6px rgba(16,19,33,.08); }
+  .ct .in { display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 14px; padding: 12px; }
+  .ct .av { width: 62px; height: 62px; border-radius: 50%; background: #fff; border: 2px solid var(--soft); display: grid; place-items: center; flex: none; }
+  .ct .av img { width: 54px; }
+  .ct b { display: block; font-size: 21px; font-weight: 700; }
+  .ct span { display: block; font-size: 15px; color: var(--mu); font-weight: 600; }
+  .ct .bt { margin-top: 8px; text-align: center; font-size: 19px; font-weight: 700; color: var(--g); padding: 8px 0 4px; border-top: 1px solid rgba(31,107,16,.2); }
+  .foot { position: absolute; left: 18px; right: 18px; top: 610px; text-align: center; }
+  .foot .h { font-size: 30px; font-weight: 800; letter-spacing: -.02em; line-height: 1.05; }
+  .foot .h em { font-style: normal; color: var(--g); }
+  .foot .w { margin-top: 10px; display: inline-block; padding: 10px 20px; border-radius: 999px; background: var(--g); color: #fff; font-size: 21px; font-weight: 700; }
+</style></head><body>
+<div id="frame">
+  <div class="chat">
+    <div class="m in">Know anyone good for websites? Our business needs one <span class="emoji">😩</span><small>9:41</small></div>
+    <div class="m out">Yes! <b>AMBS Solutions</b>. Websites, apps, automation, all of it. I recommend them <span class="emoji">👍</span><small>9:42<i>✓✓</i></small></div>
+    <div class="ct"><div class="in"><div class="av"><img src="../assets/ambs-logo.png" alt=""></div>
+      <div><b>AMBS Solutions</b><span>022 099 9578</span><span>ambs.co.nz</span></div></div>
+      <div class="bt">Message</div></div>
+    <div class="m in">Legend, messaging them now <span class="emoji">🙌</span><small>9:43</small></div>
+  </div>
+  <div class="foot"><div class="h hd">Need anything <em>digital?</em> I recommend AMBS.</div>
+    <div class="w hd"><span class="emoji">💬</span> 022 099 9578 · ambs.co.nz</div></div>
+</div></body></html>
