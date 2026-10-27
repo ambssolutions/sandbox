@@ -13,3 +13,13 @@ h1 { margin-top: 18px; font-size: 56px; }
 .mock { background: #fff; color: var(--ink); border-radius: 20px; box-shadow: 0 18px 44px rgba(0,0,0,.45); text-align: left; }
 .ok { color: #1f6b10; background: var(--soft); font-weight: 700; border-radius: 999px; padding: 4px 10px; font-size: 13px; white-space: nowrap; }
 .vis > * { zoom: 1.14; } .vis > .ph { zoom: 1.04; }
+/* "Forwarded" label like WhatsApp's own, so it is clear the sharer is passing on another business's message */
+#frame { padding-top: 88px; }
+.fwd { width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 16px; background: rgba(255,255,255,.07);
+  border: 1px dashed rgba(255,255,255,.28); text-align: left; margin-bottom: 18px; }
+.fwd .ar { font-size: 26px; color: var(--mu); line-height: 1; }
+.fwd i { display: block; font-size: 14px; color: var(--mu); font-weight: 600; }
+.fwd b { display: block; font-size: 17px; font-weight: 700; color: #fff; }
+.fwd b span { color: var(--gl); }
+.vis { margin-top: 18px; }
+.vis > * { zoom: 1.06; } .vis > .ph { zoom: .96; }
