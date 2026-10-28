@@ -11,3 +11,8 @@
 .wl { font-size: 18px; font-weight: 700; color: var(--mu); }
 .wl b { color: #fff; }
 .lg { width: 150px; padding: 8px 14px; border-radius: 16px; background: #fff; }
+/* headline + contact row sit together, anchored just above WhatsApp's reply box, growing upwards */
+.foot { position: absolute; left: 26px; right: 26px; bottom: 128px; z-index: 4; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+.foot h1 { position: static !important; font-size: 40px !important; line-height: 1.06; }
+.foot h1 em { display: block; margin-top: 4px; white-space: nowrap; }
+.foot .bt, .foot .row { position: static !important; margin: 0 !important; display: flex; justify-content: center; align-items: center; gap: 12px; }
