@@ -1,0 +1,13 @@
+/* Shared bits for the 22-series statuses (each has its own layout): dark AMBS tone, the WhatsApp-style
+   "Forwarded" label, and safe zones (content between ~9% and ~87% of the height). */
+#frame { overflow: hidden; }
+.fwd { position: absolute; left: 30px; right: 30px; top: 86px; z-index: 5; display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 16px;
+  background: rgba(16,19,33,.75); border: 1px dashed rgba(255,255,255,.3); text-align: left; backdrop-filter: blur(6px); }
+.fwd .ar { font-size: 24px; color: var(--mu); line-height: 1; }
+.fwd i { display: block; font-size: 13px; color: var(--mu); font-weight: 600; }
+.fwd b { display: block; font-size: 16px; font-weight: 700; color: #fff; }
+.fwd b span { color: var(--gl); }
+.num { display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; border-radius: 999px; background: var(--g); color: #fff; font-size: 26px; font-weight: 800; box-shadow: 0 14px 34px rgba(46,148,24,.35); }
+.wl { font-size: 18px; font-weight: 700; color: var(--mu); }
+.wl b { color: #fff; }
+.lg { width: 150px; padding: 8px 14px; border-radius: 16px; background: #fff; }
