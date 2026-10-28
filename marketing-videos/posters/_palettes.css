@@ -1,0 +1,20 @@
+/* Colour palettes for the all-services statuses (24-series). Load after the layout CSS and add the class to #frame.
+   --g accent fill, --on text on the accent, --gl highlight text, --soft light tint, --gd dark accent text, --mu muted text. */
+.p-blue   { --ink: #0a2463; --g: #fde047; --on: #0a2463; --gl: #fde047; --soft: #fef9c3; --gd: #854d0e; --mu: #b9c8ee; --glow: 253,224,71; }
+.p-purple { --ink: #2a0f45; --g: #ec4899; --on: #fff;    --gl: #f9a8d4; --soft: #fce7f3; --gd: #9d174d; --mu: #d6c2ec; --glow: 236,72,153; }
+.p-teal   { --ink: #053b3f; --g: #ff7a59; --on: #fff;    --gl: #ffb199; --soft: #ffe4dc; --gd: #b23a1c; --mu: #a8d5d2; --glow: 255,122,89; }
+.p-wine   { --ink: #3d0a1a; --g: #fbbf24; --on: #3d0a1a; --gl: #fcd34d; --soft: #fef3c7; --gd: #92400e; --mu: #e6bcc8; --glow: 251,191,36; }
+.p-sky    { --ink: #0f172a; --g: #38bdf8; --on: #0f172a; --gl: #7dd3fc; --soft: #e0f2fe; --gd: #075985; --mu: #b4c2d6; --glow: 56,189,248; }
+#frame[class^="p-"] { background: radial-gradient(60% 45% at 100% 0%, rgba(var(--glow),.32), transparent 70%), radial-gradient(60% 45% at 0% 100%, rgba(var(--glow),.18), transparent 70%), var(--ink); }
+#frame[class^="p-"] .foot .c span { color: var(--gd); }
+#frame[class^="p-"] .ck i, #frame[class^="p-"] .s .e { color: var(--on); }
+#frame[class^="p-"] .ring { border-color: rgba(var(--glow),.55); }
+#frame[class^="p-"] .hub { box-shadow: 0 0 0 10px rgba(var(--glow),.25), 0 20px 50px rgba(0,0,0,.5); }
+#frame[class^="p-"] .ck .e { background: var(--soft); }
+#frame[class^="p-"] .fwd b span { color: var(--gl); }
+/* clear call to action: a big button in the accent colour */
+.cta2 { border-radius: 24px; background: #fff; color: var(--ink); padding: 12px 12px 12px; box-shadow: 0 18px 44px rgba(0,0,0,.45); }
+.cta2 .btn { display: block; text-align: center; padding: 15px 10px; border-radius: 16px; background: var(--g); color: var(--on); font-size: 27px; font-weight: 800;
+  box-shadow: 0 6px 0 rgba(0,0,0,.18); }
+.cta2 .sub { margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px; font-weight: 600; color: #5B6B84; }
+.cta2 .sub img { height: 28px; } .cta2 .sub b { color: var(--ink); }
