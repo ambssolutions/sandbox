@@ -1,0 +1,35 @@
+/* "New on ambs.co.nz" announcement: Website ROI calculator. AMBS website look: paper, ink, website green, site fonts. */
+#frame { color: var(--ink); background: radial-gradient(90% 35% at 50% 0%, #D3EFB9, transparent 70%), radial-gradient(70% 30% at 100% 100%, #dbe7f7, transparent 70%), #EFF3F9; }
+#frame::before { background-image: linear-gradient(rgba(16,19,33,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(16,19,33,.04) 1px, transparent 1px); background-size: 24px 24px; }
+:root { --ink: #101321; --g: #2E9418; --gd: #1f6b10; --soft: #D3EFB9; --mu: #5B6B84; }
+.new { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px 7px 8px; border-radius: 999px; background: #fff; border: 1px solid #dfe5ee; font-size: 14px; font-weight: 700; color: var(--mu); box-shadow: 0 6px 16px rgba(16,19,33,.06); }
+.new b { background: var(--g); color: #fff; padding: 4px 10px; border-radius: 999px; font-size: 13px; letter-spacing: .12em; }
+h1 { font-weight: 800; letter-spacing: -.03em; line-height: 1.02; }
+h1 em { font-style: normal; color: var(--g); }
+.lead { font-weight: 600; color: var(--mu); line-height: 1.35; }
+.calc { background: #fff; border-radius: 22px; border: 1px solid #dfe5ee; box-shadow: 0 20px 46px rgba(16,19,33,.12); padding: 16px 18px; text-align: left; }
+.calc .ey { font-size: 11px; font-weight: 700; letter-spacing: .14em; color: var(--g); display: flex; justify-content: space-between; }
+.calc .ey span { color: var(--mu); background: #f1f5f9; border-radius: 999px; padding: 2px 8px; letter-spacing: .06em; }
+.calc .jobs { margin-top: 10px; display: flex; gap: 6px; }
+.calc .jobs i { font-style: normal; flex: 1; text-align: center; padding: 7px 0; border-radius: 999px; border: 1.5px solid #dfe5ee; font-size: 13px; font-weight: 700; }
+.calc .jobs i.on { background: var(--g); border-color: var(--g); color: #fff; }
+.calc .sl { margin-top: 11px; }
+.calc .sl .r { display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 700; } .calc .sl .r b { color: var(--g); }
+.calc .sl .tr { position: relative; margin-top: 6px; height: 8px; border-radius: 5px; background: #e2e8f0; }
+.calc .sl .tr i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; background: var(--g); }
+.calc .sl .tr u { position: absolute; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; background: #fff; border: 4px solid var(--g); }
+.calc .res { margin-top: 12px; border-radius: 14px; background: #101321; color: #fff; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+.calc .res b { font-size: 30px; font-weight: 800; color: #5cd13c; font-family: "Bricolage Grotesque", sans-serif; }
+.calc .res span { font-size: 12.5px; font-weight: 600; color: #c9d3e1; line-height: 1.3; }
+.calc .pay { margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--gd); }
+.steps { display: grid; gap: 9px; text-align: left; }
+.steps div { display: flex; gap: 12px; align-items: center; font-weight: 600; }
+.steps div i { font-style: normal; flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--g); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 15px; }
+.bot { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 16px; background: #fff; border: 1px dashed #b9c6d8; font-weight: 600; color: var(--mu); text-align: left; }
+.bot b { color: var(--ink); } .bot .q { color: var(--g); font-weight: 700; }
+.cta { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 22px; background: var(--g); color: #fff; box-shadow: 0 16px 36px rgba(46,148,24,.3); text-align: left; }
+.cta img { width: 104px; padding: 6px 10px; background: #fff; border-radius: 14px; flex: none; }
+.cta small { display: block; font-size: 13px; font-weight: 700; color: #e6f7dc; }
+.cta b { display: block; font-weight: 800; font-family: "Bricolage Grotesque", sans-serif; }
+.eg { font-size: 11.5px; font-weight: 600; color: var(--mu); }
+.cta .path { margin-top: 2px; font-size: 15px; color: #fff; }
