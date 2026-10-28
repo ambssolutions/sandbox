@@ -18,3 +18,36 @@
   box-shadow: 0 6px 0 rgba(0,0,0,.18); }
 .cta2 .sub { margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px; font-weight: 600; color: #5B6B84; }
 .cta2 .sub img { height: 28px; } .cta2 .sub b { color: var(--ink); }
+/* AMBS brand palettes (ambs.co.nz: green #2E9418, ink #101321, paper #EFF3F9, soft #D3EFB9; service-card blue #1877E0,
+   purple #7B4DFF and green #139918). --bgimg is the full background. */
+.b-ink    { --ink: #101321; --g: #2E9418; --on: #fff; --gl: #5cd13c; --soft: #D3EFB9; --gd: #1f6b10; --mu: #9aa6bd; --glow: 46,148,24;
+  --bgimg: radial-gradient(60% 45% at 100% 0%, rgba(46,148,24,.42), transparent 70%), radial-gradient(60% 45% at 0% 100%, rgba(46,148,24,.22), transparent 70%), #101321; }
+.b-auto   { --ink: #101321; --g: #fff; --on: #1877E0; --gl: #D3EFB9; --soft: #e8eefc; --gd: #1877E0; --mu: #dbe4ff; --glow: 255,255,255;
+  --bgimg: linear-gradient(160deg, #1877E0 0%, #7B4DFF 100%); }
+.b-green  { --ink: #101321; --g: #101321; --on: #fff; --gl: #101321; --soft: #D3EFB9; --gd: #1f6b10; --mu: #e6f7dc; --glow: 255,255,255;
+  --bgimg: radial-gradient(70% 40% at 30% 10%, #45b52c, transparent 70%), linear-gradient(180deg, #2E9418, #1f6b10); }
+.b-digi   { --ink: #101321; --g: #fff; --on: #139918; --gl: #fff; --soft: #e6f7dc; --gd: #139918; --mu: #e1f3ff; --glow: 255,255,255;
+  --bgimg: linear-gradient(160deg, #139918 0%, #1877E0 100%); }
+.b-paper  { --ink: #101321; --g: #2E9418; --on: #fff; --gl: #2E9418; --soft: #D3EFB9; --gd: #1f6b10; --mu: #5B6B84; --glow: 46,148,24;
+  --bgimg: radial-gradient(90% 35% at 50% 0%, #D3EFB9, transparent 70%), #EFF3F9; }
+#frame[class^="b-"] { background: var(--bgimg); }
+#frame[class^="b-"] .foot .c span, #frame[class^="b-"] .cta2 .sub { color: #5B6B84; }
+#frame[class^="b-"] .ck i, #frame[class^="b-"] .s .e { color: var(--on); }
+#frame[class^="b-"] .ring { border-color: rgba(var(--glow),.55); }
+#frame[class^="b-"] .hub { box-shadow: 0 0 0 10px rgba(var(--glow),.25), 0 20px 50px rgba(0,0,0,.4); }
+#frame[class^="b-"] .fwd b span { color: var(--gl); }
+#frame[class^="b-"] .cta2 .btn { background: var(--g); color: var(--on); }
+#frame.b-auto .cta2 .btn, #frame.b-digi .cta2 .btn { background: #101321; color: #fff; }
+#frame.b-auto .t, #frame.b-digi .menu { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.35); }
+#frame.b-auto .t span, #frame.b-digi .menu .r .v { color: #fff; opacity: .9; }
+#frame.b-digi .menu .mt { color: #fff; }
+#frame.b-auto .fwd, #frame.b-digi .fwd, #frame.b-green .fwd { background: rgba(16,19,33,.22); border-color: rgba(255,255,255,.45); }
+#frame.b-auto .fwd i, #frame.b-digi .fwd i, #frame.b-green .fwd i { color: rgba(255,255,255,.8); }
+#frame.b-green h1 { color: #fff; } #frame.b-green h1 em { color: #101321; }
+/* light paper version */
+#frame.b-paper { color: #101321; }
+#frame.b-paper .fwd { background: #fff; border-color: #c9d3e1; } #frame.b-paper .fwd b { color: #101321; } #frame.b-paper .fwd i, #frame.b-paper .fwd .ar { color: #5B6B84; }
+#frame.b-paper .m.in { box-shadow: 0 4px 14px rgba(16,19,33,.1); }
+#frame.b-paper .cta2 { box-shadow: 0 14px 34px rgba(16,19,33,.14); }
+#frame.b-green .fwd b span { color: #D3EFB9; }
+#frame.b-auto .t .e { display: inline-grid; place-items: center; width: 46px; height: 46px; border-radius: 14px; background: #fff; font-size: 26px; }
