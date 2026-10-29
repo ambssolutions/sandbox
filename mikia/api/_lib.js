@@ -20,7 +20,7 @@ const STOCK = [
   ['stock-com-3', 'A building clad in black metal and vertical timber battens', 'Timber and black cladding'],
   ['stock-com-4', 'A dark angular apartment building with balconies', 'Apartments'],
   ['stock-com-5', 'An apartment building clad in copper-toned panels', 'Cladding and balconies']
-].map(([id, alt, caption]) => ({ id, src: '/projects/' + id + '-1600.webp', alt, caption, stock: true }));
+].map(([id, alt, caption]) => ({ id, src: '/projects/' + id + '-1600.webp', alt, caption, desc: alt + '.', stock: true }));
 
 function send(res, code, obj) {
   res.statusCode = code;
@@ -82,7 +82,7 @@ async function writeManifest(photos) {
 }
 async function currentPhotos() { return (await readManifest()) || STOCK.map((p) => Object.assign({}, p)); }
 function storageReady() { return !!process.env.BLOB_READ_WRITE_TOKEN; }
-function publicPhoto(p) { return { id: p.id, src: p.src, alt: p.alt, caption: p.caption, stock: !!p.stock }; }
+function publicPhoto(p) { return { id: p.id, src: p.src, alt: p.alt, caption: p.caption, desc: p.desc || '', stock: !!p.stock }; }
 
 /* Feedback store. The store file name is derived from the secret so the (public) blob address cannot be guessed.
    Only name, project, text and status are kept here; email addresses go in the notification email only. */

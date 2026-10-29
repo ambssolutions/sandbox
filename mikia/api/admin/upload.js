@@ -17,11 +17,13 @@ module.exports = async function (req, res) {
   if (!k) return L.send(res, 400, { error: 'Please choose a JPEG, PNG or WebP photo.' });
   let caption = ''; try { caption = decodeURIComponent(req.headers['x-caption'] || ''); } catch (e) { caption = ''; }
   caption = clean(caption, 120);
+  let desc = ''; try { desc = decodeURIComponent(req.headers['x-desc'] || ''); } catch (e) { desc = ''; }
+  desc = clean(desc, 220);
   try {
     const photos = await L.currentPhotos();
     const name = 'media/p-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7) + '.' + k[1];
     const out = await L.put(name, buf, { access: 'public', contentType: k[0], addRandomSuffix: false, cacheControlMaxAge: 31536000 });
-    photos.push({ id: name, src: out.url, alt: caption || 'MiKia project photo', caption: caption, blob: true });
+    photos.push({ id: name, src: out.url, alt: caption || 'MiKia project photo', caption: caption, desc: desc, blob: true });
     await L.writeManifest(photos);
     return L.send(res, 200, { ok: true, photos: photos.map(L.publicPhoto) });
   } catch (e) {
