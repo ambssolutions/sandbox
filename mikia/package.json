@@ -1,0 +1,12 @@
+{
+  "name": "mikia-site",
+  "version": "1.0.0",
+  "description": "MiKia static site with a small media admin API",
+  "dependencies": {
+    "@vercel/blob": "2.8.2"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}
