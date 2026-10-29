@@ -84,4 +84,29 @@ async function currentPhotos() { return (await readManifest()) || STOCK.map((p) 
 function storageReady() { return !!process.env.BLOB_READ_WRITE_TOKEN; }
 function publicPhoto(p) { return { id: p.id, src: p.src, alt: p.alt, caption: p.caption, stock: !!p.stock }; }
 
-module.exports = { STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
+/* Feedback store. The store file name is derived from the secret so the (public) blob address cannot be guessed.
+   Only name, project, text and status are kept here; email addresses go in the notification email only. */
+const FB_CLEAN = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').trim().slice(0, n);
+function fbPath() { return 'testimonials/s-' + sign('fbstore').slice(0, 32) + '.json'; }
+function approveToken(id) { return sign('approve:' + id).slice(0, 32); }
+async function readFeedback() {
+  try {
+    const l = await list({ prefix: fbPath(), limit: 5 });
+    const b = (l.blobs || []).find((x) => x.pathname === fbPath());
+    if (!b) return [];
+    const r = await fetch(b.url + '?t=' + Date.now());
+    if (!r.ok) return [];
+    const j = await r.json();
+    return Array.isArray(j.items) ? j.items : [];
+  } catch (e) { return []; }
+}
+async function writeFeedback(items) {
+  await put(fbPath(), JSON.stringify({ items, updated: new Date().toISOString() }), {
+    access: 'public', contentType: 'application/json', allowOverwrite: true, addRandomSuffix: false, cacheControlMaxAge: 30
+  });
+}
+const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function origin(req) { return 'https://' + (req.headers['x-forwarded-host'] || req.headers.host || 'www.mikia.co.nz'); }
+function publicFeedback(p) { return { id: p.id, name: p.name, project: p.project, text: p.text }; }
+
+module.exports = { FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
