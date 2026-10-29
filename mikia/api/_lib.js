@@ -13,13 +13,9 @@ const DAYS = 7;
 const STOCK = [
   ['stock-res-1', 'New black-clad townhouses along a residential street', 'New townhouses'],
   ['stock-res-2', 'Houses scattered across a bush-covered hillside suburb', 'Hillside suburbs'],
-  ['stock-res-3', 'A blue weatherboard home with white trim and a timber door', 'Weatherboard homes'],
   ['stock-res-4', 'A new modern house beside a traditional home', 'Infill housing'],
-  ['stock-res-5', 'A low modern house among dunes with pine trees behind', 'Modern homes in the landscape'],
   ['stock-com-2', 'A mixed-use building with black and white cladding and large windows', 'Mixed-use frontage'],
-  ['stock-com-3', 'A building clad in black metal and vertical timber battens', 'Timber and black cladding'],
-  ['stock-com-4', 'A dark angular apartment building with balconies', 'Apartments'],
-  ['stock-com-5', 'An apartment building clad in copper-toned panels', 'Cladding and balconies']
+  ['stock-com-3', 'A building clad in black metal and vertical timber battens', 'Timber and black cladding']
 ].map(([id, alt, caption]) => ({ id, src: '/projects/' + id + '-1600.webp', alt, caption, desc: alt + '.', stock: true }));
 
 function send(res, code, obj) {
@@ -82,7 +78,11 @@ async function writeManifest(photos) {
 }
 async function currentPhotos() { return (await readManifest()) || STOCK.map((p) => Object.assign({}, p)); }
 function storageReady() { return !!process.env.BLOB_READ_WRITE_TOKEN; }
-function publicPhoto(p) { return { id: p.id, src: p.src, alt: p.alt, caption: p.caption, desc: p.desc || '', stock: !!p.stock }; }
+function publicPhoto(p) {
+  let desc = p.desc || '';
+  if (!desc && p.stock) { const s = STOCK.find((x) => x.id === p.id); if (s) desc = s.desc; }  // photos saved before descriptions existed
+  return { id: p.id, src: p.src, alt: p.alt, caption: p.caption, desc: desc, stock: !!p.stock };
+}
 
 /* Feedback store. The store file name is derived from the secret so the (public) blob address cannot be guessed.
    Only name, project, text and status are kept here; email addresses go in the notification email only. */
