@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — book your free session (BOOK)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<link rel="stylesheet" href="../engine/theme-website.css">
+<style>
+  /* Hook: the week's admin */
+  .chipx { position: absolute; padding: 12px 16px; border-radius: 16px; background: #fff; border: 1px solid #dfe5ee; box-shadow: 0 10px 24px rgba(16,19,33,.1);
+    font-size: 18px; font-weight: 800; display: flex; gap: 10px; align-items: center; white-space: nowrap; }
+  #qq { position: absolute; left: 30px; right: 30px; top: 560px; text-align: center; font-size: 30px; font-weight: 900; line-height: 1.15; }
+  #qq em { font-style: normal; color: var(--accent); }
+
+  /* Booking section, like ambs.co.nz */
+  .bk { position: absolute; left: 26px; right: 26px; top: 222px; border-radius: 24px; background: #fff; border: 1px solid #dfe5ee; padding: 20px 20px 22px;
+    box-shadow: 0 24px 56px rgba(16,19,33,.14); }
+  .bk .ey { font-size: 12px; font-weight: 900; letter-spacing: .16em; color: var(--accent); }
+  .bk h3 { margin-top: 6px; font-size: 30px; font-weight: 900; letter-spacing: -.02em; }
+  .bk p { margin-top: 6px; font-size: 15px; font-weight: 600; color: var(--muted); line-height: 1.35; }
+  .bk .two { margin-top: 14px; display: flex; gap: 10px; }
+  .bk .two div { flex: 1; text-align: center; padding: 13px 0; border-radius: 14px; font-size: 17px; font-weight: 800; border: 2px solid var(--accent); color: var(--accent); }
+  .bk .two div.on { background: var(--accent); color: #fff; }
+  .bk .slots { margin-top: 14px; }
+  .bk .day { font-size: 14px; font-weight: 800; color: var(--muted); }
+  .bk .tm { margin-top: 8px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .bk .tm div { text-align: center; padding: 11px 0; border-radius: 12px; background: #f1f5f9; font-size: 16px; font-weight: 800; }
+  .bk .tm div.pick { background: var(--accent); color: #fff; }
+  .bk .eg { margin-top: 8px; font-size: 11px; font-weight: 700; color: #9aa6bd; text-align: right; }
+  .done { position: absolute; left: 26px; right: 26px; top: 590px; border-radius: 18px; background: #D3EFB9; color: #1f6b10; padding: 14px 16px; display: flex; gap: 12px; align-items: center;
+    font-size: 18px; font-weight: 800; box-shadow: 0 12px 30px rgba(46,148,24,.2); }
+  .done i { font-style: normal; width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; flex: none; }
+
+  /* What happens */
+  .st { position: absolute; left: 26px; right: 26px; height: 112px; border-radius: 22px; background: #fff; border: 1px solid #dfe5ee; display: flex; gap: 14px; align-items: center;
+    padding: 0 18px; box-shadow: 0 10px 26px rgba(16,19,33,.08); }
+  .st .n { width: 46px; height: 46px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 22px; font-weight: 900; display: grid; place-items: center; flex: none; }
+  .st .e { font-size: 32px; flex: none; }
+  .st b { display: block; font-size: 21px; font-weight: 900; }
+  .st span { display: block; margin-top: 3px; font-size: 14.5px; font-weight: 600; color: var(--muted); line-height: 1.3; }
+  .st.hot { border: 2px solid var(--accent); background: #f3fbef; }
+  #s1 { top: 226px; } #s2 { top: 352px; } #s3 { top: 478px; }
+
+  /* Trust */
+  .tr { position: absolute; left: 26px; right: 26px; height: 64px; border-radius: 18px; background: #fff; border: 1px solid rgba(46,148,24,.45); display: flex; gap: 12px; align-items: center;
+    padding: 0 18px; font-size: 19px; font-weight: 800; box-shadow: 0 8px 22px rgba(16,19,33,.06); }
+  .tr .e { font-size: 26px; }
+  #big { position: absolute; left: 0; right: 0; top: 236px; text-align: center; }
+  #big .p { display: inline-block; padding: 18px 30px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 40px; font-weight: 900; box-shadow: 0 18px 40px rgba(46,148,24,.35); }
+</style>
+</head>
+<body>
+<div id="frame">
+  <!-- 0–3.6 hook -->
+  <div class="chipx" id="c1" style="left:34px;top:250px;rotate:-4deg"><span class="emoji">🧾</span>Quotes at 10pm</div>
+  <div class="chipx" id="c2" style="left:250px;top:320px;rotate:3deg"><span class="emoji">📞</span>Missed calls</div>
+  <div class="chipx" id="c3" style="left:60px;top:400px;rotate:2deg"><span class="emoji">⌨️</span>Typing it all twice</div>
+  <div class="chipx" id="c4" style="left:270px;top:470px;rotate:-3deg"><span class="emoji">⏰</span>Chasing invoices</div>
+  <div id="qq">Not sure what to <em>fix first?</em></div>
+
+  <!-- 3.6–10 booking -->
+  <div class="bk" id="bk">
+    <div class="ey">LET’S TALK</div>
+    <h3>Book your free session</h3>
+    <p>Tell us what is taking up your week. We will come back with a plan and an hours estimate.</p>
+    <div class="two"><div id="pick">📅 Pick a time</div><div>✉️ Send a request</div></div>
+    <div class="slots" id="slots"><div class="day">Thursday</div>
+      <div class="tm"><div>9:00</div><div id="t10">10:00</div><div>11:30</div><div>1:00</div><div>2:30</div><div>4:00</div></div>
+      <div class="eg">example times</div></div>
+  </div>
+  <div class="done" id="done"><i>✓</i>Free session booked. Thursday, 10:00</div>
+
+  <!-- 10–17.8 what happens -->
+  <div class="st" id="s1"><div class="n">1</div><div class="e emoji">👀</div><div><b>We watch the work</b><span>We sit with whoever actually does the job.</span></div></div>
+  <div class="st" id="s2"><div class="n">2</div><div class="e emoji">📝</div><div><b>You get a written plan</b><span>Plus an hours estimate: what to automate first.</span></div></div>
+  <div class="st hot" id="s3"><div class="n">3</div><div class="e emoji">🔑</div><div><b>It’s yours to keep</b><span>Even if you don’t hire us.</span></div></div>
+
+  <!-- 17.8–22.4 trust -->
+  <div id="big"><div class="p">It’s free.</div></div>
+  <div class="tr" id="r1" style="top:360px"><span class="e emoji">🙅</span>No cost, no jargon</div>
+  <div class="tr" id="r2" style="top:436px"><span class="e emoji">📍</span>Auckland-based, working nationwide</div>
+  <div class="tr" id="r3" style="top:512px"><span class="e emoji">⏱️</span>We aim to reply within one working day</div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, vis } = E;
+const cur = E.cursor($("#frame"));
+window.COVER_AT = 13.4;
+
+E.setup({
+  duration: 27,
+  keyword: "BOOK",
+  voice: [
+    { a: 0.15, b: 3.5, text: "Drowning in admin, but not sure what to fix first?" },
+    { a: 3.7, b: 9.8, text: "Book a free session with A M B S. Pick a time on our website, or send us a request. It takes a minute." },
+    { a: 10.0, b: 17.6, text: "We watch how the work gets done. You get a written plan and an hours estimate. And it's yours to keep, even if you don't hire us." },
+    { a: 17.8, b: 22.4, text: "It's free. No cost, no jargon. And we aim to reply within one working day." },
+    { a: 22.7, b: 26.9, text: "Want your hours back? Comment, book." },
+  ],
+  captions: [
+    { a: 0, b: 3.6, html: `Too much admin? <mark>Start here.</mark>` },
+    { a: 3.6, b: 10, html: `Book a <mark>free session</mark> in a minute.` },
+    { a: 10, b: 17.8, html: `What you get: a <span class="cyan">plan + hours estimate.</span>` },
+    { a: 17.8, b: 22.6, html: `No cost. <mark>No jargon.</mark>` },
+  ],
+  phases: [],
+  end: { at: 22.6, title: "Book your free session", sub: "ambs.co.nz · or call 022 099 9578", foot: "AI automation &amp; websites for NZ businesses" },
+});
+
+E.use((t) => {
+  // hook
+  ["#c1", "#c2", "#c3", "#c4"].forEach((s, i) => vis(s, t, 0.2 + i * 0.35, 3.6, { y: -30, scale: 1.2, dur: 0.3 }));
+  vis("#qq", t, 1.7, 3.6, { y: 20 });
+
+  // booking
+  vis("#bk", t, 3.8, 10, { y: 40, scale: 0.94 });
+  $("#pick").classList.toggle("on", t >= 5.6);
+  vis("#slots", t, 6.0, null, { y: 14 });
+  $("#t10").classList.toggle("pick", t >= 7.6);
+  cur(t, [{ t: 4.6, x: 400, y: 800 }, { t: 5.4, x: 150, y: 378 }, { t: 5.6, x: 150, y: 378, click: true }, { t: 6.9, x: 262, y: 462 }, { t: 7.5, x: 262, y: 462, click: true }, { t: 8.2, x: 262, y: 462 }]);
+  vis("#done", t, 8.2, 10, { y: 20, scale: 0.9 });
+
+  // what happens
+  vis("#s1", t, 10.2, 17.8, { x: -40, y: 0 });
+  vis("#s2", t, 12.6, 17.8, { x: -40, y: 0 });
+  vis("#s3", t, 15.0, 17.8, { x: -40, y: 0, scale: 0.92 });
+
+  // trust
+  vis("#big", t, 17.9, 22.6, { y: 0, scale: 0.5, dur: 0.45 });
+  vis("#r1", t, 18.9, 22.6, { x: -30, y: 0 });
+  vis("#r2", t, 19.5, 22.6, { x: -30, y: 0 });
+  vis("#r3", t, 20.1, 22.6, { x: -30, y: 0 });
+});
+</script>
+</body>
+</html>
