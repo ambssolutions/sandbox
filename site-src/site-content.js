@@ -75,6 +75,6 @@
   if(K.address1||K.address2){
     var a1='1c, 32 Mahuhu Crescent',a2='Auckland CBD 1010',n1=K.address1||a1,n2=K.address2||a2,q=encodeURIComponent((n1+' '+n2).replace(/^[^,]*,\s*/,'')).replace(/%20/g,'+');
     [].forEach.call(document.querySelectorAll('.addr span,.dl dd,.side p'),function(e){var w=document.createTreeWalker(e,NodeFilter.SHOW_TEXT),n;while(n=w.nextNode()){n.nodeValue=swap(swap(n.nodeValue,a1,n1),a2,n2);}});
-    [].forEach.call(document.querySelectorAll('a[href*="google.com/maps"]'),function(a){a.setAttribute('href','https://www.google.com/maps/search/?api=1&query='+q);});
+    [].forEach.call(document.querySelectorAll('a[href*="google.com/maps"]:not([data-office="chc"])'),function(a){a.setAttribute('href','https://www.google.com/maps/search/?api=1&query='+q);});
   }
 })();

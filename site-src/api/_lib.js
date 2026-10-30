@@ -36,18 +36,42 @@ function readCookie(req, name) {
   const m = String(req.headers.cookie || '').split(/;\s*/).map((s) => s.split('=')).find((p) => p[0] === name);
   return m ? m.slice(1).join('=') : '';
 }
-function isAdmin(req) {
-  if (!secret()) return false;
-  const t = readCookie(req, COOKIE), i = t.indexOf('.');
-  if (i < 1) return false;
-  const exp = t.slice(0, i);
-  return Number(exp) > Date.now() && safeEq(t.slice(i + 1), sign('mk' + exp));
+/* Who is signed in.
+   New logins carry a signed session with the person's email and role (owner = AMBS, can manage users; editor = MiKia team).
+   The old shared-password cookie still works and counts as an owner, so the AMBS master password is always a way in. */
+const SESSION = 'mk_session';
+function b64u(s) { return Buffer.from(s).toString('base64url'); }
+function makeSession(u) {
+  const body = b64u(JSON.stringify({ e: u.email, n: u.name || '', r: u.role === 'owner' ? 'owner' : 'editor', x: Date.now() + DAYS * 864e5 }));
+  return body + '.' + sign('sess' + body);
 }
-function cookieHeader(value, maxAge) {
-  return COOKIE + '=' + value + '; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=' + maxAge;
+function currentUser(req) {
+  if (!secret()) return null;
+  const t = readCookie(req, SESSION), i = t.indexOf('.');
+  if (i > 0) {
+    const body = t.slice(0, i);
+    if (safeEq(t.slice(i + 1), sign('sess' + body))) {
+      try {
+        const j = JSON.parse(Buffer.from(body, 'base64url').toString('utf8'));
+        if (Number(j.x) > Date.now() && j.e) return { email: j.e, name: j.n || '', role: j.r === 'owner' ? 'owner' : 'editor' };
+      } catch (e) { /* fall through */ }
+    }
+  }
+  const o = readCookie(req, COOKIE), k = o.indexOf('.');
+  if (k > 0) {
+    const exp = o.slice(0, k);
+    if (Number(exp) > Date.now() && safeEq(o.slice(k + 1), sign('mk' + exp))) return { email: 'master', name: 'AMBS master login', role: 'owner' };
+  }
+  return null;
 }
-function sessionCookie() { return cookieHeader(makeToken(), DAYS * 86400); }
-function clearCookie() { return cookieHeader('', 0); }
+function isAdmin(req) { return !!currentUser(req); }
+function isOwner(req) { const u = currentUser(req); return !!u && u.role === 'owner'; }
+function cookieHeader(name, value, maxAge) {
+  return name + '=' + value + '; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=' + maxAge;
+}
+function sessionCookie() { return cookieHeader(COOKIE, makeToken(), DAYS * 86400); }
+function sessionCookieFor(u) { return cookieHeader(SESSION, makeSession(u), DAYS * 86400); }
+function clearCookie() { return [cookieHeader(COOKIE, '', 0), cookieHeader(SESSION, '', 0)]; }
 
 async function readJson(req, limit) {
   const chunks = []; let n = 0;
@@ -109,4 +133,4 @@ const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': 
 function origin(req) { return 'https://' + (req.headers['x-forwarded-host'] || req.headers.host || 'www.mikia.co.nz'); }
 function publicFeedback(p) { return { id: p.id, name: p.name, project: p.project, text: p.text }; }
 
-module.exports = { FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
+module.exports = { currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
