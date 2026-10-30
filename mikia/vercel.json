@@ -17,6 +17,106 @@
       "source": "/commercial",
       "destination": "/projects#commercial",
       "permanent": false
+    },
+    {
+      "source": "/residential-projects",
+      "destination": "/projects#residential",
+      "permanent": false
+    },
+    {
+      "source": "/commercial-projects",
+      "destination": "/projects#commercial",
+      "permanent": false
+    },
+    {
+      "source": "/civil",
+      "destination": "/services#cat-civil",
+      "permanent": false
+    },
+    {
+      "source": "/planning",
+      "destination": "/services#cat-planning",
+      "permanent": false
+    },
+    {
+      "source": "/survey",
+      "destination": "/services#cat-survey",
+      "permanent": false
+    },
+    {
+      "source": "/land-surveying",
+      "destination": "/services#cat-survey",
+      "permanent": false
+    },
+    {
+      "source": "/traffic",
+      "destination": "/services#cat-traffic",
+      "permanent": false
+    },
+    {
+      "source": "/construction",
+      "destination": "/services#cat-construction",
+      "permanent": false
+    },
+    {
+      "source": "/project-management",
+      "destination": "/services#cat-project-management",
+      "permanent": false
+    },
+    {
+      "source": "/neighbour-consent",
+      "destination": "/services#cat-neighbour-consent",
+      "permanent": false
+    },
+    {
+      "source": "/neighbours-consent",
+      "destination": "/services#cat-neighbour-consent",
+      "permanent": false
+    },
+    {
+      "source": "/coa",
+      "destination": "/services#cat-coa",
+      "permanent": false
+    },
+    {
+      "source": "/cross-lease",
+      "destination": "/services#cat-cross-lease-to-freehold",
+      "permanent": false
+    },
+    {
+      "source": "/our-services",
+      "destination": "/services",
+      "permanent": false
+    },
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/sitemap",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/contact-us",
+      "destination": "/contact",
+      "permanent": false
+    },
+    {
+      "source": "/about-us",
+      "destination": "/about",
+      "permanent": false
+    },
+    {
+      "source": "/contact-us-1",
+      "destination": "/contact",
+      "permanent": false
+    },
+    {
+      "source": "/enquiry",
+      "destination": "/contact",
+      "permanent": false
     }
   ],
   "headers": [
