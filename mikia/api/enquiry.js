@@ -16,7 +16,7 @@ module.exports = async function (req, res) {
     const user = process.env.SMTP_USER || 'hello@ambs.co.nz';
     const port = Number(process.env.SMTP_PORT || 465);
     const tx = nodemailer.createTransport({ host: process.env.SMTP_HOST || 'smtp.zoho.com.au', port, secure: port === 465, auth: { user, pass: process.env.SMTP_PASSWORD }, connectionTimeout: 10000, socketTimeout: 15000 });
-    const rows = [['Name', name], ['Email', email], ['Phone', phone || '(not given)'], ['Project type', type || '(not given)'], ['Site address', site || '(not given)'], ['Message', message]];
+    const rows = [['Name', name], ['Email', email], ['Phone', phone || '(not given)'], ['Project type', type || '(not given)'], ['Site address', site || '(not given)'], ['About your project', message]];
     const html = '<table cellpadding="8" style="border-collapse:collapse;font:15px system-ui,sans-serif">' + rows.map((r) => '<tr><td style="border:1px solid #ddd;background:#f6f6f6;vertical-align:top"><b>' + L.esc(r[0]) + '</b></td><td style="border:1px solid #ddd;white-space:pre-wrap">' + L.esc(r[1]) + '</td></tr>').join('') + '</table>';
     await tx.sendMail({ from: '"MiKia website" <' + (process.env.FEEDBACK_FROM || user) + '>', to: TO(), replyTo: email, subject: 'Website enquiry from ' + name, text: rows.map((r) => r[0] + ': ' + r[1]).join('\n'), html });
   } catch (e) { return L.send(res, 502, { error: 'Could not send that just now.' }); }
