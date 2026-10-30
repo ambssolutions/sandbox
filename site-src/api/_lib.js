@@ -84,22 +84,37 @@ async function readBuffer(req, limit) {
   return Buffer.concat(chunks);
 }
 
-async function readManifest() {
+/* Stored lists (photos, feedback, people).
+   Each save is written as a NEW file whose name carries the time, and a read takes the newest one. Files are never overwritten, so a read straight after
+   a save always sees the save (an overwritten file can be served stale from the cache for a minute). Older copies are tidied away. */
+const VER = /-(\d{13})\.json$/;
+async function readStore(base) {
   try {
-    const l = await list({ prefix: MANIFEST, limit: 5 });
-    const b = (l.blobs || []).find((x) => x.pathname === MANIFEST);
-    if (!b) return null;
-    const r = await fetch(b.url + '?t=' + Date.now());
+    const l = await list({ prefix: base.replace(/\.json$/, ''), limit: 200 });
+    const all = l.blobs || [];
+    const vers = all.filter((x) => VER.test(x.pathname)).sort((a, b) => a.pathname < b.pathname ? 1 : -1);
+    const hit = vers[0] || all.find((x) => x.pathname === base);
+    if (!hit) return null;
+    const r = await fetch(hit.url);
     if (!r.ok) return null;
-    const j = await r.json();
-    return Array.isArray(j.photos) ? j.photos : null;
+    return await r.json();
   } catch (e) { return null; }
 }
-async function writeManifest(photos) {
-  await put(MANIFEST, JSON.stringify({ photos, updated: new Date().toISOString() }), {
-    access: 'public', contentType: 'application/json', allowOverwrite: true, addRandomSuffix: false, cacheControlMaxAge: 30
-  });
+let lastStamp = 0;
+async function writeStore(base, obj) {
+  const stem = base.replace(/\.json$/, '');
+  lastStamp = Math.max(Date.now(), lastStamp + 1);
+  const name = stem + '-' + String(lastStamp).padStart(13, '0') + '.json';
+  await put(name, JSON.stringify(obj), { access: 'public', contentType: 'application/json', allowOverwrite: false, addRandomSuffix: false, cacheControlMaxAge: 60 });
+  try {
+    const l = await list({ prefix: stem, limit: 200 });
+    const old = (l.blobs || []).filter((x) => x.pathname !== name && (VER.test(x.pathname) ? x.pathname < name : false)).sort((a, b) => a.pathname < b.pathname ? 1 : -1).slice(3);
+    for (const o of old) { try { await del(o.url); } catch (e) { /* tidy-up only */ } }
+  } catch (e) { /* tidy-up only */ }
 }
+
+async function readManifest() { const j = await readStore(MANIFEST); return j && Array.isArray(j.photos) ? j.photos : null; }
+async function writeManifest(photos) { await writeStore(MANIFEST, { photos, updated: new Date().toISOString() }); }
 async function currentPhotos() { return (await readManifest()) || STOCK.map((p) => Object.assign({}, p)); }
 function storageReady() { return !!process.env.BLOB_READ_WRITE_TOKEN; }
 function publicPhoto(p) {
@@ -113,24 +128,10 @@ function publicPhoto(p) {
 const FB_CLEAN = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').trim().slice(0, n);
 function fbPath() { return 'testimonials/s-' + sign('fbstore').slice(0, 32) + '.json'; }
 function approveToken(id) { return sign('approve:' + id).slice(0, 32); }
-async function readFeedback() {
-  try {
-    const l = await list({ prefix: fbPath(), limit: 5 });
-    const b = (l.blobs || []).find((x) => x.pathname === fbPath());
-    if (!b) return [];
-    const r = await fetch(b.url + '?t=' + Date.now());
-    if (!r.ok) return [];
-    const j = await r.json();
-    return Array.isArray(j.items) ? j.items : [];
-  } catch (e) { return []; }
-}
-async function writeFeedback(items) {
-  await put(fbPath(), JSON.stringify({ items, updated: new Date().toISOString() }), {
-    access: 'public', contentType: 'application/json', allowOverwrite: true, addRandomSuffix: false, cacheControlMaxAge: 30
-  });
-}
+async function readFeedback() { const j = await readStore(fbPath()); return j && Array.isArray(j.items) ? j.items : []; }
+async function writeFeedback(items) { await writeStore(fbPath(), { items, updated: new Date().toISOString() }); }
 const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function origin(req) { return 'https://' + (req.headers['x-forwarded-host'] || req.headers.host || 'www.mikia.co.nz'); }
 function publicFeedback(p) { return { id: p.id, name: p.name, project: p.project, text: p.text }; }
 
-module.exports = { currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
+module.exports = { readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
