@@ -36,7 +36,7 @@ async function writeUsers(users) {
     access: 'public', contentType: 'application/json', allowOverwrite: true, addRandomSuffix: false, cacheControlMaxAge: 5
   });
 }
-const publicUser = (u) => ({ email: u.email, name: u.name || '', role: u.role === 'owner' ? 'owner' : 'editor', created: u.created || '', lastLogin: u.lastLogin || '' });
+const publicUser = (u) => ({ email: u.email, name: u.name || '', role: u.role === 'owner' ? 'owner' : 'editor', created: u.created || '', lastLogin: u.lastLogin || '', pending: !u.hash || !!u.invite });
 const cleanEmail = (v) => L.FB_CLEAN(v, 120).toLowerCase();
 function passwordProblem(pw) {
   pw = String(pw || '');

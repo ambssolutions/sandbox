@@ -4777,3 +4777,17 @@ html body .mcar-s.on figcaption{transition:opacity .5s 1s}
 html body .nav .logo-img,html body .sticky-nav .sn-logo img{height:48px;width:auto}
 @media (max-width:900px){html body .nav .logo-img,html body .sticky-nav .sn-logo img{height:44px}}
 @media (max-width:360px){html body .nav .logo-img,html body .sticky-nav .sn-logo img{height:38px}}
+/* admin: tabs, people, invitation link */
+html body .ad-card select{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid rgba(18,32,27,.3);border-radius:12px;font:inherit;background:#fff;color:#12201b}
+html body .ad-card input[type=email]{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid rgba(18,32,27,.3);border-radius:12px;font:inherit;background:#fff;color:#12201b}
+html body .ad-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+html body .ad-tabs button{min-height:44px;padding:0 18px;border:1px solid rgba(18,32,27,.3);border-radius:999px;background:#fff;color:#12201b;font:inherit;cursor:pointer}
+html body .ad-tabs button[aria-selected=true]{background:#12201b;color:#fff;border-color:#12201b}
+html body .ad-who .ad-top p{margin:0;text-align:left}
+html body .ad-help{font-size:14px;color:#5b6a62;margin:10px 0 0;text-align:left}
+html body .ad-badge{display:inline-block;font-size:12px;padding:3px 10px;border-radius:99px;background:#eceeed;color:#33413a}
+html body .ad-badge.ok{background:#e6f2ec;color:#1c6b47}
+html body .ad-link{margin-top:16px;display:grid;gap:8px}
+html body .ad-link input{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid rgba(18,32,27,.3);border-radius:12px;font:inherit}
+html body .ad-link button{min-height:44px;border:1px solid rgba(18,32,27,.3);border-radius:999px;background:#fff;font:inherit;cursor:pointer;color:#12201b}
+html body .ad-card label,html body .ad-card h2,html body .ad-cap{text-align:left}

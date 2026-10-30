@@ -7,6 +7,7 @@ module.exports = async function (req, res) {
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   if (!L.secret()) return L.send(res, 503, { error: 'The admin password has not been set up yet.' });
   let b; try { b = await L.readJson(req, 4000); } catch (e) { return L.send(res, 413, { error: 'Request too large.' }); }
+  if (b.action === 'logout') { res.setHeader('Set-Cookie', L.clearCookie()); return L.send(res, 200, { ok: true }); }
   const email = U.cleanEmail(b.email), pw = String(b.password || '');
   const key = (req.headers['x-forwarded-for'] || '') + '|' + email;
   const f = fails[key] || { n: 0, t: 0 };
@@ -26,7 +27,7 @@ module.exports = async function (req, res) {
   }
   const users = await U.readUsers();
   const u = users.find((x) => x.email === email);
-  if (!u || !U.checkPassword(pw, u.hash)) return bad();
+  if (!u || !u.hash || !U.checkPassword(pw, u.hash)) return bad();
   delete fails[key];
   u.lastLogin = new Date().toISOString();
   try { await U.writeUsers(users); } catch (e) { /* signing in still works */ }
