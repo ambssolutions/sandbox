@@ -1,0 +1,177 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "v2-client-feedback": true,
+      "**": false
+    }
+  },
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/residential",
+      "destination": "/projects#residential",
+      "permanent": false
+    },
+    {
+      "source": "/commercial",
+      "destination": "/projects#commercial",
+      "permanent": false
+    },
+    {
+      "source": "/residential-projects",
+      "destination": "/projects#residential",
+      "permanent": false
+    },
+    {
+      "source": "/commercial-projects",
+      "destination": "/projects#commercial",
+      "permanent": false
+    },
+    {
+      "source": "/civil",
+      "destination": "/services#cat-civil",
+      "permanent": false
+    },
+    {
+      "source": "/planning",
+      "destination": "/services#cat-planning",
+      "permanent": false
+    },
+    {
+      "source": "/survey",
+      "destination": "/services#cat-survey",
+      "permanent": false
+    },
+    {
+      "source": "/land-surveying",
+      "destination": "/services#cat-survey",
+      "permanent": false
+    },
+    {
+      "source": "/traffic",
+      "destination": "/services#cat-traffic",
+      "permanent": false
+    },
+    {
+      "source": "/construction",
+      "destination": "/services#cat-construction",
+      "permanent": false
+    },
+    {
+      "source": "/project-management",
+      "destination": "/services#cat-project-management",
+      "permanent": false
+    },
+    {
+      "source": "/neighbour-consent",
+      "destination": "/services#cat-neighbour-consent",
+      "permanent": false
+    },
+    {
+      "source": "/neighbours-consent",
+      "destination": "/services#cat-neighbour-consent",
+      "permanent": false
+    },
+    {
+      "source": "/coa",
+      "destination": "/services#cat-coa",
+      "permanent": false
+    },
+    {
+      "source": "/cross-lease",
+      "destination": "/services#cat-cross-lease-to-freehold",
+      "permanent": false
+    },
+    {
+      "source": "/our-services",
+      "destination": "/services",
+      "permanent": false
+    },
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/sitemap",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/contact-us",
+      "destination": "/contact",
+      "permanent": false
+    },
+    {
+      "source": "/about-us",
+      "destination": "/about",
+      "permanent": false
+    },
+    {
+      "source": "/contact-us-1",
+      "destination": "/contact",
+      "permanent": false
+    },
+    {
+      "source": "/enquiry",
+      "destination": "/contact",
+      "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/(assets|projects|tex)/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/assets/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.+)\\.(css|js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(assets|projects|tex)/(.+)\\.(webp|jpg|jpeg|png|svg|ico)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, stale-while-revalidate=604800"
+        }
+      ]
+    }
+  ]
+}
