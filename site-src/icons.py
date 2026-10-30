@@ -1,0 +1,21 @@
+def svg(cls,inner,vb='0 0 48 48',extra=''):
+    return f'<svg class="ic {cls}" viewBox="{vb}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"{extra}>{inner}</svg>'
+IC={}
+IC['survey']=svg('ic-survey','<circle class="ic-ring" cx="24" cy="24" r="15" stroke-dasharray="3 5"/><circle cx="24" cy="24" r="9"/><path d="M24 4v9M24 35v9M4 24h9M35 24h9"/><circle class="ic-dot" cx="24" cy="24" r="2.6" fill="currentColor"/>')
+IC['consent']=svg('ic-consent','<path d="M12 5h18l8 8v30H12z"/><path d="M30 5v8h8"/><path class="ic-l1" d="M17 22h14" pathLength="1"/><path class="ic-l2" d="M17 28h14" pathLength="1"/><path class="ic-l3" d="M17 34h8" pathLength="1"/><circle class="ic-stamp" cx="33" cy="36" r="6" fill="var(--ia,currentColor)" fill-opacity=".18"/><path class="ic-chk" d="M30 36l2.4 2.4 4.2-4.8" pathLength="1"/>')
+IC['build']=svg('ic-build','<g class="ic-hammer"><path d="M26 22L10 38"/><path d="M26 10l12 12-5 5-12-12z" fill="currentColor" fill-opacity=".16"/></g><path d="M8 44h32" stroke-opacity=".5"/><path class="ic-spark" d="M36 8l2 4M42 14l-4 2M40 6l-1 3"/>')
+IC['handover']=svg('ic-handover','<g class="ic-key"><circle cx="16" cy="28" r="8"/><circle cx="16" cy="28" r="2.6" fill="currentColor"/><path d="M22 22L40 6M33 13l5 5M37 9l4 4"/></g><path class="ic-spark" d="M38 30l1.5 3.5L43 35l-3.5 1.5L38 40l-1.5-3.5L33 35l3.5-1.5z" fill="currentColor" fill-opacity=".2"/>')
+IC['arrow']=svg('ic-arrow','<path d="M14 34L34 14"/><path d="M16 14h18v18"/>')
+IC['tick']=svg('ic-tick','<path class="ic-chk" d="M10 26l10 10 20-22" pathLength="1"/>')
+IC['pin']=svg('ic-pin','<circle class="ic-ripple" cx="24" cy="40" r="5" stroke-opacity=".6"/><g class="ic-bounce"><path d="M24 40S12 28 12 19a12 12 0 0124 0c0 9-12 21-12 21z"/><circle cx="24" cy="19" r="4.5"/></g>')
+IC['phone']=svg('ic-phone','<g class="ic-ring-ph"><path d="M13 7h8l3 9-5 3a24 24 0 0010 10l3-5 9 3v8a4 4 0 01-4 4A32 32 0 019 11a4 4 0 014-4z"/></g><path class="ic-wave1" d="M31 8a10 10 0 0110 10"/><path class="ic-wave2" d="M31 14a4 4 0 014 4"/>')
+IC['mail']=svg('ic-mail','<rect x="6" y="11" width="36" height="26" rx="4"/><path class="ic-flap" d="M7 14l17 13 17-13"/>')
+IC['calendar']=svg('ic-cal','<rect x="7" y="10" width="34" height="31" rx="4"/><path d="M7 20h34M16 6v8M32 6v8"/><g class="ic-days" fill="currentColor"><circle cx="16" cy="28" r="1.8"/><circle cx="24" cy="28" r="1.8"/><circle class="ic-today" cx="32" cy="28" r="2.4" fill="var(--ia,currentColor)"/><circle cx="16" cy="35" r="1.8"/><circle cx="24" cy="35" r="1.8"/></g>')
+IC['rotate']=svg('ic-rotate','<g class="ic-orbit"><path d="M40 24a16 16 0 11-6-12.5"/><path d="M36 5v9h-9"/></g><circle cx="24" cy="24" r="3" fill="currentColor"/>')
+IC['play']=svg('ic-play','<path class="ic-tri" d="M16 10l22 14-22 14z" fill="currentColor" fill-opacity=".2"/>')
+IC['door']=svg('ic-door','<rect x="12" y="6" width="24" height="36" rx="2"/><g class="ic-leaf"><path d="M12 6h14l0 36H12z" fill="currentColor" fill-opacity=".15"/><circle cx="22" cy="25" r="1.6" fill="currentColor"/></g>')
+IC['sun']=svg('ic-sun','<circle cx="24" cy="24" r="7"/><g class="ic-rays"><path d="M24 5v6M24 37v6M5 24h6M37 24h6M10.6 10.6l4.2 4.2M33.2 33.2l4.2 4.2M10.6 37.4l4.2-4.2M33.2 14.8l4.2-4.2"/></g>')
+IC['home']=svg('ic-home','<path d="M6 22L24 7l18 15"/><path d="M11 20v22h26V20"/><path class="ic-smoke" d="M34 10v-4"/><rect class="ic-win" x="19" y="28" width="10" height="14" fill="currentColor" fill-opacity=".18"/>')
+IC['panel']=svg('ic-panel','<rect x="8" y="8" width="32" height="32" rx="4"/><path class="ic-p1" d="M8 20h32M20 8v32" stroke-opacity=".5"/><circle class="ic-glint" cx="14" cy="14" r="2" fill="currentColor"/>')
+IC['palette']=svg('ic-palette','<path d="M24 5C13 5 5 13 5 24s8 19 19 19c3 0 4-2 3-4s-1-5 3-5h6c4 0 7-3 7-7C43 13 35 5 24 5z"/><g class="ic-dots"><circle cx="15" cy="21" r="2.4" fill="currentColor"/><circle cx="22" cy="14" r="2.4" fill="currentColor"/><circle cx="31" cy="15" r="2.4" fill="currentColor"/></g>')
+IC['roof']=svg('ic-roof','<path class="ic-rf" d="M5 28L24 10l19 18"/><path d="M10 28v13h28V28"/>')
