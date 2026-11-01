@@ -1,24 +1,27 @@
 <!doctype html>
-<html lang="en-NZ"><head><meta charset="utf-8"><title>Thumbnail — Halloween scares</title>
-<link rel="stylesheet" href="../engine/base.css"><link rel="stylesheet" href="thumbs.css">
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Thumbnail — Halloween scares (horror style)</title>
+<link rel="stylesheet" href="../engine/base.css">
 <style>
-  #frame { background: radial-gradient(70% 35% at 80% 8%, rgba(255,138,31,.4), transparent 70%), radial-gradient(60% 40% at 0% 100%, rgba(123,77,255,.3), transparent 70%), linear-gradient(180deg, #0d0f1a, #171028); }
-  .tlogo { filter: none; background: #fff; padding: 10px 18px; border-radius: 20px; }
-  .kicker { color: #ffb36b; }
-  h1 { text-shadow: none; font-size: 44px; white-space: nowrap; }
-  h1 mark { background: #ff8a1f; color: #1a0d00; }
-  .pk { margin-top: 10px; font-size: 120px; line-height: 1; }
-  .ls { margin: 18px auto 0; width: 440px; display: grid; gap: 10px; text-align: left; }
-  .ls div { display: flex; gap: 12px; align-items: center; padding: 12px 16px; border-radius: 16px; background: rgba(255,138,31,.12); border: 1.5px solid rgba(255,138,31,.5); font-size: 20px; font-weight: 800; }
-  .ls div span { margin-left: auto; font-size: 13px; font-weight: 900; color: #fff; background: #2E9418; padding: 4px 10px; border-radius: 999px; }
-  .cta { color: #fff; } .cta span { background: #ff8a1f; color: #1a0d00; box-shadow: 0 4px 0 #b35500; }
+  @font-face { font-family: "Bricolage Grotesque"; src: url("../assets/bricolage-grotesque-latin.woff2") format("woff2"); font-weight: 500 800; }
+  #frame { background: radial-gradient(60% 35% at 50% 18%, #2a1b3d, transparent 70%), #050507; color: #f4efe6; text-align: center; font-family: "Bricolage Grotesque", sans-serif, var(--emoji); }
+  #frame::before { display: none; }
+  .serif { font-family: "DejaVu Serif", serif; }
+  .moon { position: absolute; left: 50%; top: 80px; width: 170px; height: 170px; margin-left: -85px; border-radius: 50%; background: radial-gradient(circle at 38% 35%, #fff8e3, #f2d48c 55%, #c99a3b); box-shadow: 0 0 100px rgba(242,212,140,.45); }
+  .pres { position: absolute; left: 0; right: 0; top: 290px; font-size: 15px; letter-spacing: .5em; color: #b7a98f; }
+  h1 { position: absolute; left: 20px; right: 20px; top: 322px; font-size: 48px; line-height: .98; font-weight: 700; text-transform: uppercase; color: #ff6a1a; text-shadow: 0 0 22px rgba(255,90,20,.65), 0 4px 0 #3b0d00; }
+  .row { position: absolute; left: 30px; right: 30px; top: 520px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .row div { font-size: 60px; } .row small { display: block; margin-top: 2px; font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5cd13c; }
+  .fx { position: absolute; left: 0; right: 0; top: 660px; font-size: 34px; font-weight: 800; } .fx em { font-style: normal; color: #5cd13c; }
+  .lg { position: absolute; left: 50%; top: 730px; width: 160px; margin-left: -80px; padding: 8px 14px; border-radius: 16px; background: #fff; }
+  .vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(0,0,0,.85) 100%); }
 </style></head><body>
 <div id="frame">
-  <img class="tlogo" src="../assets/ambs-logo.png" alt="AMBS">
-  <div class="kicker">HAPPY HALLOWEEN</div>
-  <h1>The <mark>scariest</mark> things<br>in a small business</h1>
-  <div class="pk emoji">🎃</div>
-  <div class="ls"><div>👻 Missed calls<span>FIXED</span></div><div>🧟 Typing it all twice<span>FIXED</span></div><div>💀 Unpaid invoices<span>FIXED</span></div><div>🕸️ No website<span>FIXED</span></div></div>
-  <div class="cta">Comment <span>BOO</span> 👻</div>
+  <div class="moon"></div>
+  <div class="pres serif">AMBS PRESENTS</div>
+  <h1 class="serif">The scariest things in a small business</h1>
+  <div class="row"><div class="emoji">👻<small>FIXED</small></div><div class="emoji">🧟<small>FIXED</small></div><div class="emoji">💀<small>FIXED</small></div><div class="emoji">🕸️<small>FIXED</small></div></div>
+  <div class="fx">4 scares. <em>All fixed.</em></div>
+  <img class="lg" src="../assets/ambs-logo.png" alt="AMBS">
+  <div class="vig"></div>
 </div>
 </body></html>

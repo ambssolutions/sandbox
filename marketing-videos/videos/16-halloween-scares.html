@@ -5,120 +5,173 @@
 <title>AMBS — Halloween: the scariest things in a small business (BOO)</title>
 <link rel="stylesheet" href="../engine/base.css">
 <style>
-  /* Halloween: AMBS dark ink with pumpkin orange; the fixes in AMBS website green. */
-  :root { --bg: #0d0f1a; --bg2: #171028; --accent: #ff8a1f; --mark: #ff8a1f; --muted: #b6a9cf; --good: #2E9418; }
-  #frame { background: radial-gradient(70% 35% at 80% 8%, rgba(255,138,31,.35), transparent 70%), radial-gradient(60% 40% at 0% 100%, rgba(123,77,255,.25), transparent 70%),
-    linear-gradient(180deg, #0d0f1a, #171028); }
-  #frame::before { background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1.4px); background-size: 22px 22px; }
-  .caption mark { background: var(--mark); color: #1a0d00; }
-  .caption .cyan { color: #5cd13c; }
-  .end { background: radial-gradient(80% 50% at 50% 35%, rgba(255,138,31,.22), transparent 70%), rgba(13,15,26,.97); }
-  .end .kw span { background: #ff8a1f; color: #1a0d00; box-shadow: 0 10px 0 #b35500, 0 18px 40px rgba(255,138,31,.35); }
+  /* Horror-movie style: no shared chrome (no corner logo, caption bar, progress line or end card).
+     Full-screen title cards, flicker, film grain, lightning cuts and a tombstone ending. */
+  @font-face { font-family: "Bricolage Grotesque"; src: url("../assets/bricolage-grotesque-latin.woff2") format("woff2"); font-weight: 500 800; }
+  .progress, .brand, .caption, .end { display: none !important; }
+  #frame { background: #050507; color: #f4efe6; font-family: "Bricolage Grotesque", Inter, sans-serif, var(--emoji); }
+  #frame::before { display: none; }
+  .scene { position: absolute; inset: 0; visibility: hidden; }
+  .serif { font-family: "DejaVu Serif", "Liberation Serif", serif; }
+  .grain { position: absolute; inset: -20px; z-index: 30; pointer-events: none; opacity: .13; mix-blend-mode: screen;
+    background-image: radial-gradient(rgba(255,255,255,.9) .6px, transparent 1px), radial-gradient(rgba(255,255,255,.6) .5px, transparent 1px);
+    background-size: 7px 9px, 11px 13px; }
+  .vig { position: absolute; inset: 0; z-index: 29; pointer-events: none; background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(0,0,0,.85) 100%); }
+  .flash { position: absolute; inset: 0; z-index: 40; background: #fff; opacity: 0; pointer-events: none; }
 
-  .moon { position: absolute; right: 50px; top: 210px; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff7d6, #ffd27a 60%, #e0a43a);
-    box-shadow: 0 0 60px rgba(255,210,122,.5); }
-  .bat { position: absolute; font-size: 34px; }
-  .pump { position: absolute; left: 50%; top: 360px; margin-left: -80px; font-size: 140px; line-height: 1; }
-  #hook { position: absolute; left: 26px; right: 26px; top: 560px; text-align: center; font-size: 34px; font-weight: 900; line-height: 1.12; }
-  #hook em { font-style: normal; color: #ff8a1f; }
+  /* intro */
+  #intro { background: radial-gradient(60% 35% at 50% 20%, #2a1b3d, transparent 70%), #050507; }
+  #intro .moon { position: absolute; left: 50%; top: 120px; width: 210px; height: 210px; margin-left: -105px; border-radius: 50%;
+    background: radial-gradient(circle at 38% 35%, #fff8e3, #f2d48c 55%, #c99a3b); box-shadow: 0 0 120px rgba(242,212,140,.45); }
+  #intro .tree { position: absolute; left: -10px; right: -10px; bottom: 0; height: 260px; background: #000;
+    clip-path: polygon(0 100%, 0 55%, 6% 50%, 9% 30%, 12% 52%, 20% 48%, 24% 20%, 27% 47%, 38% 52%, 44% 38%, 48% 55%, 60% 50%, 66% 26%, 70% 50%, 80% 46%, 86% 18%, 90% 47%, 100% 52%, 100% 100%); }
+  #intro .pres { position: absolute; left: 0; right: 0; top: 372px; text-align: center; font-size: 15px; letter-spacing: .5em; color: #b7a98f; }
+  #intro .tt { position: absolute; left: 20px; right: 20px; top: 408px; text-align: center; font-size: 46px; line-height: .98; font-weight: 700; letter-spacing: -.01em;
+    text-transform: uppercase; color: #ff6a1a; text-shadow: 0 0 22px rgba(255,90,20,.65), 0 4px 0 #3b0d00; }
+  #intro .sub { position: absolute; left: 0; right: 0; top: 650px; text-align: center; font-size: 20px; letter-spacing: .28em; color: #e8dcc6; text-transform: uppercase; }
+  .bat { position: absolute; font-size: 36px; }
 
-  .cnt { position: absolute; left: 26px; top: 226px; padding: 6px 12px; border-radius: 999px; background: rgba(255,138,31,.16); border: 1px solid rgba(255,138,31,.5);
-    font-size: 13px; font-weight: 900; letter-spacing: .12em; color: #ffb36b; }
-  .scare { position: absolute; left: 26px; right: 26px; top: 268px; border-radius: 24px; padding: 18px 20px 22px; background: rgba(255,138,31,.1); border: 2px solid rgba(255,138,31,.55); }
-  .scare .lab { font-size: 13px; font-weight: 900; letter-spacing: .14em; color: #ffb36b; }
-  .scare .row { margin-top: 8px; display: flex; gap: 14px; align-items: center; }
-  .scare .e { font-size: 54px; flex: none; }
-  .scare p { font-size: 28px; font-weight: 900; line-height: 1.12; }
-  .fix { position: absolute; left: 26px; right: 26px; top: 468px; border-radius: 24px; padding: 18px 20px 22px; background: #fff; color: #101321;
-    border: 3px solid #2E9418; box-shadow: 0 18px 44px rgba(46,148,24,.3); }
-  .fix .lab { font-size: 13px; font-weight: 900; letter-spacing: .14em; color: #2E9418; }
-  .fix p { margin-top: 6px; font-size: 23px; font-weight: 800; line-height: 1.25; }
-  .stamp { position: absolute; right: 16px; top: -18px; padding: 6px 14px; border: 3px solid #2E9418; color: #2E9418; background: #fff; border-radius: 10px;
-    font-size: 20px; font-weight: 900; letter-spacing: .08em; rotate: 7deg; }
+  /* scare card */
+  .sc { background: radial-gradient(70% 45% at 50% 40%, #3a0606, #0a0203 75%); }
+  .sc .num { position: absolute; left: 0; right: 0; top: 150px; text-align: center; font-size: 16px; letter-spacing: .5em; color: #ff8c6b; }
+  .sc .big { position: absolute; left: 0; right: 0; top: 200px; text-align: center; font-size: 180px; line-height: 1; opacity: .9; filter: drop-shadow(0 0 30px rgba(255,40,20,.4)); }
+  .sc h2 { position: absolute; left: 22px; right: 22px; top: 420px; text-align: center; font-size: 56px; line-height: .98; font-weight: 700; text-transform: uppercase;
+    color: #fff1e6; text-shadow: 0 0 24px rgba(255,40,20,.7), 3px 3px 0 #6d0000; }
+  .sc .drip { position: absolute; left: 50%; top: 600px; width: 300px; margin-left: -150px; height: 60px;
+    background: radial-gradient(10px 30px at 15% 0, #b30000 98%, transparent) , radial-gradient(8px 46px at 40% 0, #b30000 98%, transparent),
+                radial-gradient(9px 24px at 62% 0, #b30000 98%, transparent), radial-gradient(7px 38px at 85% 0, #b30000 98%, transparent); }
+  .sc .line { position: absolute; left: 30px; right: 30px; top: 690px; text-align: center; font-size: 22px; color: #e6c9bd; font-style: italic; }
 
-  #calm { position: absolute; left: 26px; right: 26px; top: 250px; text-align: center; }
-  #calm .g { font-size: 90px; }
-  #calm h3 { margin-top: 10px; font-size: 40px; font-weight: 900; line-height: 1.1; }
-  #calm h3 em { font-style: normal; color: #5cd13c; }
-  #calm .p { margin-top: 24px; display: inline-block; padding: 14px 26px; border-radius: 999px; background: #2E9418; color: #fff; font-size: 26px; font-weight: 900;
-    box-shadow: 0 16px 36px rgba(46,148,24,.35); }
+  /* fixed card */
+  .fx { background: radial-gradient(70% 50% at 50% 35%, #2fa31a, #0f4a07 80%); color: #fff; }
+  .fx .tick { position: absolute; left: 50%; top: 170px; width: 190px; height: 190px; margin-left: -95px; border-radius: 50%; background: #fff; color: #2E9418;
+    display: grid; place-items: center; font-size: 120px; font-weight: 800; box-shadow: 0 0 0 16px rgba(255,255,255,.18), 0 30px 60px rgba(0,0,0,.35); }
+  .fx .word { position: absolute; left: 0; right: 0; top: 390px; text-align: center; font-size: 110px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .fx p { position: absolute; left: 34px; right: 34px; top: 520px; text-align: center; font-size: 30px; font-weight: 700; line-height: 1.2; }
+  .fx .by { position: absolute; left: 0; right: 0; top: 690px; text-align: center; font-size: 15px; font-weight: 700; letter-spacing: .3em; color: #d3efb9; }
+
+  /* reveal */
+  #rev { background: radial-gradient(60% 40% at 50% 40%, #1b2a12, #050507 75%); }
+  #rev .lg { position: absolute; left: 50%; top: 220px; width: 300px; margin-left: -150px; padding: 18px 24px; border-radius: 30px; background: #fff;
+    box-shadow: 0 0 80px rgba(92,209,60,.45); }
+  #rev h3 { position: absolute; left: 22px; right: 22px; top: 400px; text-align: center; font-size: 52px; font-weight: 800; line-height: 1.02; }
+  #rev h3 em { font-style: normal; color: #5cd13c; }
+  #rev .pill { position: absolute; left: 0; right: 0; margin: 0 auto; width: fit-content; top: 560px; white-space: nowrap; padding: 14px 26px; border-radius: 999px; background: #2E9418;
+    font-size: 26px; font-weight: 800; }
+
+  /* tombstone ending */
+  #rip { background: linear-gradient(180deg, #0b0a14 0%, #1a1530 60%, #0b0a14 100%); }
+  #rip .fog { position: absolute; left: -60px; right: -60px; bottom: 120px; height: 160px; background: radial-gradient(50% 50% at 50% 50%, rgba(200,200,230,.22), transparent 70%); }
+  #rip .ground { position: absolute; left: 0; right: 0; bottom: 0; height: 170px; background: linear-gradient(180deg, #13240d, #070b05); }
+  #rip .stone { position: absolute; left: 50%; top: 150px; width: 400px; height: 560px; margin-left: -200px; border-radius: 200px 200px 14px 14px;
+    background: linear-gradient(160deg, #8b8f99, #5c606b 60%, #474a54); box-shadow: inset 0 -20px 40px rgba(0,0,0,.35), 0 30px 60px rgba(0,0,0,.6);
+    text-align: center; color: #23252c; }
+  #rip .rip { margin-top: 70px; font-size: 64px; font-weight: 700; letter-spacing: .08em; text-shadow: 0 1px 0 rgba(255,255,255,.25); }
+  #rip .who { margin-top: 2px; font-size: 30px; font-weight: 700; letter-spacing: .14em; }
+  #rip .yr { margin-top: 4px; font-size: 16px; letter-spacing: .3em; color: #2f3139; }
+  #rip .cmt { margin: 28px auto 0; width: 300px; padding: 14px 10px; border-radius: 16px; background: #ff8a1f; color: #1a0d00; font-size: 26px; font-weight: 800;
+    box-shadow: 0 6px 0 #a24c00; }
+  #rip .lg2 { margin: 24px auto 0; width: 170px; padding: 8px 14px; border-radius: 16px; background: #fff; }
+  #rip .web { margin-top: 10px; font-size: 18px; font-weight: 700; color: #1b1d23; }
+  #rip .ghost { position: absolute; font-size: 60px; }
 </style>
 </head>
 <body>
 <div id="frame">
-  <!-- 0–3.6 hook -->
-  <div class="moon" id="moon"></div>
-  <div class="bat emoji" style="left:60px;top:240px">🦇</div><div class="bat emoji" style="left:200px;top:300px">🦇</div><div class="bat emoji" style="left:330px;top:250px">🦇</div>
-  <div class="pump emoji" id="pump">🎃</div>
-  <div id="hook">The <em>scariest</em> things in a small business…</div>
-
-  <!-- 3.6–17.8 four scares -->
-  <div class="cnt" id="cnt">SCARE 1 / 4</div>
-  <div id="cards"></div>
-
-  <!-- 17.8–22.6 nothing to fear -->
-  <div id="calm"><div class="g emoji">😌</div><h3>Nothing to fear.<br><em>AMBS fixes all four.</em></h3><div class="p">Your first session is free</div></div>
+  <div class="scene" id="intro">
+    <div class="moon"></div><div class="tree"></div>
+    <div class="bat emoji" style="left:70px;top:150px">🦇</div><div class="bat emoji" style="left:400px;top:190px">🦇</div><div class="bat emoji" style="left:300px;top:110px">🦇</div>
+    <div class="pres serif">AMBS PRESENTS</div>
+    <div class="tt serif">The scariest things in a small business</div>
+    <div class="sub serif">A Halloween special</div>
+  </div>
+  <div id="scares"></div>
+  <div class="scene" id="rev"><img class="lg" src="../assets/ambs-logo.png" alt="AMBS"><h3>Nothing to fear.<br><em>AMBS fixes all four.</em></h3><div class="pill">Your first session is free</div></div>
+  <div class="scene" id="rip"><div class="fog"></div><div class="ground"></div>
+    <div class="ghost emoji" id="g1" style="left:30px;top:420px">👻</div><div class="ghost emoji" id="g2" style="left:450px;top:300px">🎃</div>
+    <div class="stone serif"><div class="rip">R.I.P.</div><div class="who">ADMIN</div><div class="yr">SCARED OFF IN 2026</div>
+      <div class="cmt">Comment BOO 👻</div><img class="lg2" src="../assets/ambs-logo.png" alt="AMBS"><div class="web">ambs.co.nz · 022 099 9578</div></div></div>
+  <div class="vig"></div><div class="grain" id="grain"></div><div class="flash" id="flash"></div>
 </div>
 
 <script src="../engine/engine.js"></script>
 <script>
-const { $, $$, vis } = E;
+const { $, $$, vis, p, ease } = E;
 const SCARES = [
-  ["👻", "Missed calls at 7pm, and the customer rings someone else", "Missed calls get a text straight away, so the customer isn’t lost."],
-  ["🧟", "Typing the same job into three different apps", "Your apps are connected, so a job is typed once and moves on its own."],
-  ["💀", "Invoices still unpaid after 60 days", "Polite reminders go out on a schedule, so you’re not the one chasing."],
-  ["🕸️", "A website nobody can find, or no website at all", "A fast website that turns visitors into calls, and it’s yours to own."],
+  ["👻", "Missed calls<br>at 7pm", "…and the customer rings someone else.", "They get a text straight away. No lost customers."],
+  ["🧟", "Typing it<br>all twice", "…the same job, in three different apps.", "Your apps are connected. Type a job once."],
+  ["💀", "Unpaid<br>invoices", "…still waiting after 60 days.", "Polite reminders chase them for you, on a schedule."],
+  ["🕸️", "No one finds<br>your website", "…or there isn’t one at all.", "A fast website that turns visitors into calls."],
 ];
-const S0 = 3.6, D = 3.55;
-SCARES.forEach(([e, s, f], i) => $("#cards").insertAdjacentHTML("beforeend",
-  `<div class="scare" data-s="${i}"><div class="lab">😱 SCARY</div><div class="row"><div class="e emoji">${e}</div><p>${s}</p></div></div>
-   <div class="fix" data-f="${i}"><div class="lab">✓ THE AMBS FIX</div><p>${f}</p><div class="stamp">FIXED</div></div>`));
-const bats = $$(".bat");
-window.COVER_AT = 6.2;
+const S0 = 3.6, D = 3.55, FIX = 1.5;
+SCARES.forEach(([e, h, l, f], i) => $("#scares").insertAdjacentHTML("beforeend",
+  `<div class="scene sc" data-s="${i}"><div class="num serif">SCARE ${i + 1} OF 4</div><div class="big emoji">${e}</div><h2 class="serif">${h}</h2><div class="drip"></div><div class="line serif">${l}</div></div>
+   <div class="scene fx" data-f="${i}"><div class="tick">✓</div><div class="word">FIXED.</div><p>${f}</p><div class="by">THE AMBS FIX</div></div>`));
+const show = (el, on) => { el.style.visibility = on ? "visible" : "hidden"; };
+window.COVER_AT = 4.6;
 
 E.setup({
   duration: 27,
   keyword: "BOO",
   voice: [
-    { a: 0.15, b: 3.5, text: "Happy Halloween! The scariest things in a small business." },
+    { a: 0.3, b: 3.5, text: "Happy Halloween! The scariest things in a small business." },
     { a: 3.7, b: 7.1, text: "Missed calls at seven p.m. Fixed: they get a text straight away." },
     { a: 7.3, b: 10.6, text: "Typing jobs three times. Fixed: apps connected." },
     { a: 10.8, b: 14.2, text: "Unpaid invoices. Fixed: reminders chase them." },
     { a: 14.4, b: 17.7, text: "No one finds your website. Fixed: one that brings calls." },
     { a: 17.9, b: 22.4, text: "Nothing to fear. A M B S fixes all four, and your first session is free." },
-    { a: 22.7, b: 26.9, text: "Want to scare off the admin? Comment, boo." },
+    { a: 22.7, b: 26.9, text: "Rest in peace, admin. Comment, boo." },
   ],
-  captions: [
-    { a: 0, b: 3.6, html: `Happy Halloween! <mark>🎃</mark>` },
-    { a: 3.6, b: 17.8, html: `4 things that <mark>scare</mark> business owners.` },
-    { a: 17.8, b: 22.6, html: `<span class="cyan">Nothing to fear.</span>` },
-  ],
-  phases: [],
-  end: { at: 22.6, title: "Scare off the admin 👻", sub: "Comment BOO and we’ll send you how to book your free session.", foot: "AI automation &amp; websites for NZ businesses" },
+  captions: [], phases: [],
+  end: { at: 99, title: "", sub: "" },
 });
 
 E.use((t) => {
-  // hook
-  vis("#moon", t, 0, 3.6, { y: 30, scale: 0.6 });
-  vis("#pump", t, 0.3, 3.6, { y: 40, scale: 0.4, dur: 0.5 });
-  bats.forEach((b, i) => { const op = vis(b, t, 0.5 + i * 0.25, 3.6, { y: 0, scale: 0.3 });
-    if (op > 0) b.style.transform += ` translate(${Math.sin(t * 3 + i) * 14}px, ${Math.cos(t * 4 + i) * 8}px)`; });
-  vis("#hook", t, 1.2, 3.6, { y: 20 });
-
+  // intro
+  const intro = $("#intro"); show(intro, t < S0);
+  if (t < S0) {
+    const fl = t > 1.0 && t < 1.5 ? (Math.sin(t * 90) > 0 ? 1 : .25) : 1;
+    vis(".moon", t, 0, null, { y: 40, dur: 1 });
+    vis("#intro .pres", t, 0.5, null, { y: 0 });
+    $("#intro .tt").style.opacity = t < 0.9 ? 0 : fl;
+    $("#intro .tt").style.transform = `scale(${1.08 - 0.08 * p(t, 0.9, 3.4, ease.out)})`;
+    vis("#intro .sub", t, 2.0, null, { y: 10 });
+    $$(".bat").forEach((b, i) => { b.style.transform = `translate(${Math.sin(t * 2 + i * 2) * 30}px, ${Math.cos(t * 3 + i) * 14}px)`; });
+  }
   // scares
-  vis("#cnt", t, S0, 17.8, { y: 0, scale: 0.8 });
-  const k = Math.min(3, Math.max(0, Math.floor((t - S0) / D)));
-  $("#cnt").textContent = `SCARE ${k + 1} / 4`;
+  let flash = 0;
   SCARES.forEach((_, i) => {
-    const s = S0 + i * D;
-    const op = vis(`[data-s="${i}"]`, t, s + 0.05, s + D, { x: -40, y: 0, outDur: 0.2 });
-    if (op > 0 && t < s + 1.2) $(`[data-s="${i}"]`).style.transform += ` translateX(${Math.sin(t * 40) * 3}px)`;
-    vis(`[data-f="${i}"]`, t, s + 1.4, s + D, { y: 40, outDur: 0.2 });
-    vis(`[data-f="${i}"] .stamp`, t, s + 2.0, null, { scale: 2.4, y: 0, dur: 0.25 });
+    const s = S0 + i * D, sc = $(`[data-s="${i}"]`), fx = $(`[data-f="${i}"]`);
+    const inScare = t >= s && t < s + FIX, inFix = t >= s + FIX && t < s + D;
+    show(sc, inScare); show(fx, inFix);
+    if (inScare) {
+      const k = t - s;
+      sc.querySelector("h2").style.transform = `scale(${1.25 - 0.25 * p(t, s, s + 0.35, ease.out)}) translate(${Math.sin(t * 55) * 2}px, ${Math.cos(t * 47) * 2}px)`;
+      sc.querySelector("h2").style.opacity = k < 0.25 && Math.sin(t * 80) < 0 ? .3 : 1;
+      sc.querySelector(".big").style.transform = `scale(${0.8 + 0.2 * p(t, s, s + 0.6)})`;
+      sc.querySelector(".drip").style.transform = `scaleY(${p(t, s + 0.3, s + 1.2)})`; sc.querySelector(".drip").style.transformOrigin = "top";
+    }
+    if (inFix) {
+      fx.querySelector(".tick").style.transform = `scale(${p(t, s + FIX, s + FIX + 0.35, ease.back)})`;
+      fx.querySelector(".word").style.transform = `scale(${1.4 - 0.4 * p(t, s + FIX + 0.1, s + FIX + 0.4, ease.out)})`;
+      vis(fx.querySelector("p"), t, s + FIX + 0.4, null, { y: 20 });
+      vis(fx.querySelector(".by"), t, s + FIX + 0.6, null, { y: 0 });
+    }
+    flash = Math.max(flash, 1 - p(t, s + FIX, s + FIX + 0.25, ease.linear) * (t >= s + FIX ? 1 : 0) - (t < s + FIX ? 1 : 0));
   });
-
-  // calm
-  vis("#calm", t, 17.9, 22.6, { y: 0, scale: 0.7, dur: 0.45 });
+  // reveal + ending
+  const rv = $("#rev"); show(rv, t >= 17.8 && t < 22.6);
+  if (t >= 17.8 && t < 22.6) { vis("#rev .lg", t, 17.9, null, { y: 0, scale: 0.6, dur: 0.5 }); vis("#rev h3", t, 18.5, null, { y: 20 }); vis("#rev .pill", t, 19.4, null, { y: 0, scale: 0.6 }); }
+  if (t >= 17.8) flash = Math.max(flash, 1 - p(t, 17.8, 18.1, ease.linear));
+  const rip = $("#rip"); show(rip, t >= 22.6);
+  if (t >= 22.6) {
+    $("#rip .stone").style.transform = `translateY(${(1 - p(t, 22.6, 23.4, ease.out)) * 500}px)`;
+    vis("#rip .cmt", t, 23.6, null, { y: 0, scale: 0.6 });
+    ["#g1", "#g2"].forEach((g, i) => { const o = vis(g, t, 23.2 + i * 0.3, null, { y: 20, scale: 0.4 }); if (o) $(g).style.transform += ` translateY(${Math.sin(t * 2.5 + i) * 12}px)`; });
+    $("#rip .fog").style.transform = `translateX(${Math.sin(t * 0.8) * 30}px)`;
+  }
+  $("#flash").style.opacity = Math.max(0, flash) * 0.9;
+  $("#grain").style.transform = `translate(${(Math.floor(t * 24) * 37) % 20}px, ${(Math.floor(t * 24) * 53) % 20}px)`;
 });
 </script>
 </body>
