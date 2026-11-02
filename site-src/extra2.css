@@ -4819,3 +4819,8 @@ html body .ad-modal-in{background:#fff;border-radius:16px;width:min(1320px,100%)
 html body .ad-frame{flex:1;min-height:0;overflow:auto;background:#e9e9e9;border-radius:10px;display:flex;justify-content:center}
 html body .ad-frame iframe{height:100%;border:0;background:#fff;max-width:100%}
 html body .ad-top h2{margin:0}
+
+html body .ad-add{border:1px dashed rgba(25,25,25,.3);border-radius:14px;padding:14px 16px;margin:12px 0;text-align:left}
+html body .ad-add textarea,html body .ad-add input[type=text],html body .ad-add select{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid rgba(25,25,25,.3);border-radius:10px;margin:6px 0;font:inherit}
+html body .ad-add .ad-pagebar select{flex:1 1 180px;width:auto}
+html body .ad-chk[hidden],html body .ad-add[hidden]{display:none}

@@ -4,7 +4,7 @@ const P = require('../_pages');
 const vm = require('vm');
 /* The website editor. Everyone signed in (owners and editors) can do everything here.
    Changes are saved to a draft (a separate copy of the website that is not public) and go live when someone presses Publish.
-   action: status | pages | page | edit | op | image | preview | history | undo | publish | discard | newpage | deletepage | details | savedetails | menu | menuop */
+   action: status | pages | page | edit | op | add | image | preview | history | undo | publish | discard | newpage | deletepage | details | savedetails | menu | menuop */
 const PAGE = /^[a-z0-9][a-z0-9-]*\.html$/;
 const PROTECTED = new Set(['admin.html', 'index.html', '404.html']);
 const titleOf = (h) => { const m = /<title>([^<]*)<\/title>/.exec(h); return m ? m[1].replace(/&amp;/g, '&').replace(/&rsquo;/g, '’') : ''; };
@@ -86,6 +86,11 @@ module.exports = async function (req, res) {
         }
       }
       await save(files, op.type.replace('-', ' ') + ' on ' + path + (others ? ' and ' + others + ' other pages' : ''));
+      return L.send(res, 200, Object.assign({ ok: true }, P.publicView(html2)));
+    }
+    if (action === 'add') {
+      const path = okPath(b.path), html2 = P.addContent(await read(path), b.add || {});
+      await save([{ path, content: html2 }], 'added ' + String((b.add || {}).kind) + ' on ' + path);
       return L.send(res, 200, Object.assign({ ok: true }, P.publicView(html2)));
     }
     if (action === 'image') {

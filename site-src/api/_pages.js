@@ -5,6 +5,7 @@ const parse5 = require('parse5');
 
 const SKIP = new Set(['script', 'style', 'svg', 'noscript', 'template', 'math']);
 const REPEATABLE_MIN = 2;
+const BLOCKS = new Set(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'blockquote', 'figcaption', 'dt', 'dd', 'div']);
 
 const attr = (n, name) => { const a = (n.attrs || []).find((x) => x.name === name); return a ? a.value : null; };
 const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -25,7 +26,7 @@ function regionOf(n) { for (let x = n; x; x = x.parentNode) { if (x.tagName === 
 
 function extract(html) {
   const doc = parse5.parse(html, { sourceCodeLocationInfo: true });
-  const fields = [], items = [], sections = [];
+  const fields = [], items = [], sections = [], blocks = [], blockOf = new Map();
   let region = 'other';
   const itemStack = [];
   const root = [...walk(doc)];
@@ -45,7 +46,7 @@ function extract(html) {
       }
     }
   }
-  if (!body) return { fields, items, sections, doc };
+  if (!body) return { fields, items, sections, blocks, doc };
 
   /* Repeatable items: a group of 2 or more siblings that look the same (cards, list entries, questions) can be moved, copied or removed. */
   const itemOf = new Map();
@@ -89,11 +90,15 @@ function extract(html) {
       if (c.nodeName === '#text') {
         if (!c.value.trim() || !c.sourceCodeLocation) continue;
         fields.push({ kind: 'text', region: reg, item, tag: n.tagName || '', label: '', value: c.value, start: c.sourceCodeLocation.startOffset, end: c.sourceCodeLocation.endOffset });
+        if (reg === 'main') {
+          let b = n; while (b && !(b.tagName && BLOCKS.has(b.tagName))) b = b.parentNode;
+          if (b && b.sourceCodeLocation && b.sourceCodeLocation.endTag && !blockOf.has(b)) { blockOf.set(b, blocks.length); blocks.push({ node: b, tag: b.tagName, label: labelOf(b), start: b.sourceCodeLocation.startOffset, end: b.sourceCodeLocation.endOffset, open: html.slice(b.sourceCodeLocation.startTag.startOffset, b.sourceCodeLocation.startTag.endOffset) }); }
+        }
       } else go(c, reg, item);
     }
   })(body, 'other', null);
   fields.forEach((f, k) => { f.k = k; });
-  return { fields, items, sections, doc };
+  return { fields, items, sections, blocks, doc };
 }
 
 function publicView(html) {
@@ -101,7 +106,8 @@ function publicView(html) {
   return {
     fields: x.fields.map((f) => ({ k: f.k, kind: f.kind, attr: f.attr || '', region: f.region, item: f.item == null ? -1 : f.item, tag: f.tag, label: f.label, value: f.value, src: f.src || '', picture: !!f.picture })),
     items: x.items.map((i, idx) => ({ i: idx, tag: i.tag, n: i.n, pos: i.pos, region: i.region, label: i.label, group: i.group })),
-    sections: x.sections.map((s) => ({ i: s.i, label: s.label, n: s.n }))
+    sections: x.sections.map((s) => ({ i: s.i, label: s.label, n: s.n })),
+    blocks: x.blocks.map((b, i) => ({ b: i, tag: b.tag, label: b.label.slice(0, 60) })).filter((b) => b.label)
   };
 }
 
@@ -155,4 +161,30 @@ function applyOp(html, op) {
   throw new Error('Unknown change.');
 }
 
-module.exports = { extract, publicView, applyChanges, applyOp, esc, escAttr };
+/* Adds new content under a piece of text: { b, kind: 'paragraph'|'heading'|'picture', text, src, alt }. It copies the look of the text next to it. */
+function addContent(html, a) {
+  const x = extract(html), blk = x.blocks[Number(a.b)];
+  if (!blk) throw new Error('That part of the page was not found. Reload it and try again.');
+  const kind = String(a.kind), text = clean(a.text).trim();
+  const sibling = (tags) => { for (const c of kids(blk.node.parentNode || blk.node)) if (tags.includes(c.tagName) && c.sourceCodeLocation && c.sourceCodeLocation.startTag) return html.slice(c.sourceCodeLocation.startTag.startOffset, c.sourceCodeLocation.startTag.endOffset); return null; };
+  const parts = (t) => t.split(/\n\s*\n/).map((q) => esc(q.trim())).filter(Boolean);
+  let add;
+  if (kind === 'picture') {
+    const src = clean(a.src).trim();
+    if (!/^(https?:\/\/|\/?[A-Za-z0-9._\/-]+)$/.test(src)) throw new Error('That picture address does not look right.');
+    add = '<img src="' + escAttr(src) + '" alt="' + escAttr(clean(a.alt).trim()) + '" loading="lazy" style="max-width:100%;height:auto;border-radius:12px;margin:12px 0">';
+  } else {
+    if (!text) throw new Error('Type the words you want to add.');
+    if (text.length > 4000) throw new Error('That is too long. Add it in smaller pieces.');
+    if (kind === 'heading') {
+      const open = /^h[1-6]$/.test(blk.tag) && blk.tag !== 'h1' ? blk.open : (sibling(['h3']) || '<h3>'), tag = (/^<(\w+)/.exec(open) || [0, 'h3'])[1];
+      add = open + esc(text.replace(/\s+/g, ' ')) + '</' + tag + '>';
+    } else if (kind === 'paragraph') {
+      const tag = blk.tag === 'li' ? 'li' : 'p', open = blk.tag === 'p' || blk.tag === 'li' ? blk.open : (sibling(['p']) || '<p>');
+      add = parts(text).map((q) => open + q + '</' + tag + '>').join('');
+    } else throw new Error('Unknown change.');
+  }
+  return html.slice(0, blk.end) + add + html.slice(blk.end);
+}
+
+module.exports = { extract, publicView, applyChanges, applyOp, addContent, esc, escAttr };
