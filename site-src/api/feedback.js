@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const L = require('./_lib');
+const S = require('./_settings');
 /* Customer feedback from the Share your experience window.
    1. The details are emailed to the MiKia inbox (through FormSubmit) with a link to approve it for the website.
    2. If the person allowed it, the feedback is kept as "pending" until it is approved by email or in /admin.
@@ -28,6 +29,7 @@ async function sendFormSubmit(fields, o) {
   if (!r.ok || j.success === false || j.success === 'false') throw new Error('mail');
 }
 module.exports = async function (req, res) {
+  await S.load();
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   if (!L.secret() || !L.storageReady()) return L.send(res, 503, { error: 'Not set up yet.' });
   let b; try { b = await L.readJson(req, 8000); } catch (e) { return L.send(res, 413, { error: 'That message is too long.' }); }

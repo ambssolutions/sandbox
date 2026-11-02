@@ -1,7 +1,8 @@
 const L = require('../_lib');
+const U = require('../_users');
 /* Admin photos. GET: the current list. POST {action:'move', id, dir:'up'|'down'} or {action:'remove', id}. Any signed-in person may do these. */
 module.exports = async function (req, res) {
-  if (!L.isAdmin(req)) return L.send(res, req.method === 'GET' ? 200 : 401, req.method === 'GET' ? { auth: false } : { error: 'Please log in.' });
+  if (!(await U.live(L.currentUser(req)))) return L.send(res, req.method === 'GET' ? 200 : 401, req.method === 'GET' ? { auth: false } : { error: 'Please log in.' });
   if (req.method === 'GET') return L.send(res, 200, { photos: (await L.currentPhotos()).map(L.publicPhoto), storage: L.storageReady() });
   if (req.method !== 'POST') { res.setHeader('Allow', 'GET, POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   if (!L.storageReady()) return L.send(res, 503, { error: 'Photo storage is not connected yet.' });

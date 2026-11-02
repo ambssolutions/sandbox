@@ -1,4 +1,5 @@
 const L = require('../_lib');
+const U = require('../_users');
 const MAX = 4 * 1024 * 1024;
 function kind(b) {
   if (b.length > 12 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return ['image/jpeg', 'jpg'];
@@ -9,7 +10,7 @@ function kind(b) {
 const clean = (v, n) => String(v || '').replace(/[\u0000-\u001F]/g, '').trim().slice(0, n);
 module.exports = async function (req, res) {
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
-  if (!L.isAdmin(req)) return L.send(res, 401, { error: 'Please log in.' });
+  if (!(await U.live(L.currentUser(req)))) return L.send(res, 401, { error: 'Please log in.' });
   if (!L.storageReady()) return L.send(res, 503, { error: 'Photo storage is not connected yet.' });
   let buf;
   try { buf = await L.readBuffer(req, MAX); } catch (e) { return L.send(res, 413, { error: 'That photo is too large. Please use one under 4 MB.' }); }

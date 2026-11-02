@@ -4826,3 +4826,4 @@ html body .ad-add .ad-pagebar select{flex:1 1 180px;width:auto}
 html body .ad-chk[hidden],html body .ad-add[hidden]{display:none}
 html body .ad-modal .ad-help{margin:0 8px;align-self:center}
 html body .ad-btns select{padding:8px 10px;border-radius:10px;border:1px solid rgba(25,25,25,.3);font:inherit}
+html body .ad-badge.off{background:#c8323c;color:#fff;border-color:#c8323c}

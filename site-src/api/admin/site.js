@@ -1,4 +1,6 @@
 const L = require('../_lib');
+const U = require('../_users');
+const S = require('../_settings');
 const G = require('../_gh');
 const P = require('../_pages');
 const vm = require('vm');
@@ -30,7 +32,8 @@ const pageUrlToPath = (u) => String(u).replace(/^\//, '').replace(/#.*$/, '') ||
 
 const EDIT_JS = "document.addEventListener('click',function(e){var a=e.target.closest('a');if(a)e.preventDefault();},true);document.querySelectorAll('[data-ek]').forEach(function(s){s.contentEditable='true';s.spellcheck=true;s.addEventListener('keydown',function(e){if(e.key==='Enter')e.preventDefault();e.stopPropagation();});s.addEventListener('keyup',function(e){e.stopPropagation();});s.addEventListener('input',function(){parent.postMessage({mk:'edit',k:Number(s.getAttribute('data-ek')),v:s.textContent},'*');});});";
 module.exports = async function (req, res) {
-  const me = L.currentUser(req);
+  await S.load();
+  const me = await U.live(L.currentUser(req));
   if (!me) return L.send(res, 401, { error: 'Please log in.' });
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   let b; try { b = await L.readJson(req, 5.5e6); } catch (e) { return L.send(res, 413, { error: 'That was too large to send.' }); }

@@ -17,6 +17,7 @@ function tab(name){
   [].forEach.call(root.querySelectorAll('[data-tab]'),function(b){b.setAttribute('aria-selected',b.getAttribute('data-tab')===name?'true':'false');});
   say('');
   if(name==='users')loadUsers();
+  if(name==='conn')cnLoad();
   if(name==='pages')edOpen();
   if(name==='details')dtLoad();
   if(name==='changes')chLoad();
@@ -25,8 +26,8 @@ $('.ad-tabs').addEventListener('click',function(e){var b=e.target.closest('[data
 function enter(user){
   me=user;loginBox.hidden=true;inviteBox.hidden=true;panel.hidden=false;
   $('#adWho').innerHTML='Signed in as <b>'+esc(user.name||user.email)+'</b> <span class="ad-badge'+(user.role==='owner'?' ok':'')+'">'+ROLENAME[user.role]+'</span>';
-  $('#adUsersTab').hidden=user.role!=='owner'&&user.role!=='manager';var og=$('#adInvRole');if(og)[].forEach.call(og.options,function(o){o.hidden=o.disabled=user.role==='manager'&&o.value!=='editor';});if(user.role==='manager')og.value='editor';
-  $('#adMasterNote').hidden=user.email!=='master';$('#adPwForm').hidden=user.email==='master';
+  $('#adConnTab').hidden=user.role!=='owner';$('#adUsersTab').hidden=user.role!=='owner'&&user.role!=='manager';var og=$('#adInvRole');if(og)[].forEach.call(og.options,function(o){o.hidden=o.disabled=user.role==='manager'&&o.value!=='editor';});if(user.role==='manager')og.value='editor';
+  $('#adMasterNote').hidden=true;$('#adPwForm').hidden=false;
   tab('photos');load();siteStatus();
 }
 /* ---- photos ---- */
@@ -97,8 +98,8 @@ function when(iso){if(!iso)return 'never';try{return new Date(iso).toLocaleDateS
 function renderUsers(users){
   $('#adUserCount').textContent=users.length+(users.length===1?' person':' people');
   uList.innerHTML=users.map(function(u){
-    return '<li class="ad-row" data-email="'+esc(u.email)+'"><div class="ad-cap"><b>'+esc(u.name||u.email)+'</b><span>'+esc(u.email)+'</span><span><span class="ad-badge'+(u.role==='owner'?' ok':'')+'">'+ROLENAME[u.role]+'</span> '+(u.pending?'<span class="ad-badge">Invitation not used yet</span>':'Last sign-in: '+esc(when(u.lastLogin)))+'</span></div>'
-    +'<div class="ad-btns"><button type="button" data-ua="mail">Email new link</button><button type="button" data-ua="reset">Copy new link</button>'+(me.role==='owner'?'<select data-ua="rolesel" aria-label="Role for '+esc(u.email)+'"><option value="editor"'+(u.role==='editor'?' selected':'')+'>Editor</option><option value="manager"'+(u.role==='manager'?' selected':'')+'>Admin (MiKia)</option><option value="owner"'+(u.role==='owner'?' selected':'')+'>Owner (AMBS)</option></select>':'')+'<button type="button" data-ua="remove" class="ad-rm"'+(u.email===me.email?' disabled':'')+'>Remove</button></div></li>';
+    return '<li class="ad-row" data-email="'+esc(u.email)+'"><div class="ad-cap"><b>'+esc(u.name||u.email)+'</b><span>'+esc(u.email)+'</span><span><span class="ad-badge'+(u.role==='owner'?' ok':'')+'">'+ROLENAME[u.role]+'</span> '+(u.disabled?'<span class="ad-badge off">Access switched off</span> ':'')+(u.pending?'<span class="ad-badge">Invitation not used yet</span>':'Last sign-in: '+esc(when(u.lastLogin)))+'</span></div>'
+    +'<div class="ad-btns"><button type="button" data-ua="mail">Email new link</button><button type="button" data-ua="reset">Copy new link</button>'+(me.role==='owner'?'<select data-ua="rolesel" aria-label="Role for '+esc(u.email)+'"><option value="editor"'+(u.role==='editor'?' selected':'')+'>Editor</option><option value="manager"'+(u.role==='manager'?' selected':'')+'>Admin (MiKia)</option><option value="owner"'+(u.role==='owner'?' selected':'')+'>Owner (AMBS)</option></select>':'')+'<button type="button" data-ua="'+(u.disabled?'on':'off')+'"'+(u.email===me.email?' disabled':'')+'>'+(u.disabled?'Switch on':'Switch off')+'</button><button type="button" data-ua="remove" class="ad-rm"'+(u.email===me.email?' disabled':'')+'>Remove</button></div></li>';
   }).join('')||'<li class="ad-empty">Nobody has been added yet. Invite the first person above.</li>';
 }
 function loadUsers(){return post('/api/admin/users',{action:'list'}).then(function(j){renderUsers(j.users);}).catch(function(er){say(er.message,true);});}
@@ -114,10 +115,23 @@ uList.addEventListener('click',function(e){
   if(act==='remove'&&!confirm('Remove '+email+'? They will no longer be able to sign in.'))return;
   b.disabled=true;say('');
   var p;
-  if(act==='reset'||act==='mail')p=post('/api/admin/users',{action:'reset',email:email,send:act==='mail'}).then(function(j){renderUsers(j.users);showLink(j.link);say(j.emailed?'New link emailed to '+email+'.':(j.emailNote||'New link created for '+email+'. Copy it and send it to them.'));});
+  if(act==='off'||act==='on')p=post('/api/admin/users',{action:'disable',email:email,off:act==='off'}).then(function(j){renderUsers(j.users);say(act==='off'?email+' can no longer sign in or edit. You can switch them back on at any time.':email+' can sign in again.');});
+  else if(act==='reset'||act==='mail')p=post('/api/admin/users',{action:'reset',email:email,send:act==='mail'}).then(function(j){renderUsers(j.users);showLink(j.link);say(j.emailed?'New link emailed to '+email+'.':(j.emailNote||'New link created for '+email+'. Copy it and send it to them.'));});
   else p=post('/api/admin/users',{action:'remove',email:email}).then(function(j){renderUsers(j.users);say('Removed.');});
   p.catch(function(er){say(er.message,true);b.disabled=false;});
 });
+/* ---- connections (owners only) ---- */
+function cnState(el,x,label){el.textContent=x.set?(x.from==='vercel'?'(set in Vercel)':'(saved'+(x.hint?', '+x.hint:'')+')'):'(not set)';}
+function cnShow(st){cnState($('#cnGhState'),st.github_token);cnState($('#cnMailState'),st.smtp_password);$('#cnGhRepo').value=st.github_repo.value||'';$('#cnMailUser').value=st.smtp_user.value||'';$('#cnGhTok').value='';$('#cnMailPw').value='';}
+function cnLoad(){return post('/api/admin/users',{action:'settings'}).then(function(j){cnShow(j.settings);}).catch(function(er){say(er.message,true);});}
+function cnSave(vals,msg){return post('/api/admin/users',{action:'savesettings',values:vals}).then(function(j){cnShow(j.settings);say(msg);}).catch(function(er){say(er.message,true);});}
+function cnTest(action){say('Testing...');return post('/api/admin/users',{action:action}).then(function(j){say(j.note,!j.ok);if(j.ok&&action==='testgithub')siteStatus();}).catch(function(er){say(er.message,true);});}
+$('#cnGh').addEventListener('submit',function(e){e.preventDefault();var f=e.target,v={github_repo:f.github_repo.value};if(f.github_token.value)v.github_token=f.github_token.value;cnSave(v,'Saved. Press Test connection to check it.');});
+$('#cnMail').addEventListener('submit',function(e){e.preventDefault();var f=e.target,v={smtp_user:f.smtp_user.value};if(f.smtp_password.value)v.smtp_password=f.smtp_password.value;cnSave(v,'Saved. Press Send a test email to check it.');});
+$('#cnGhTest').addEventListener('click',function(){cnTest('testgithub');});
+$('#cnMailTest').addEventListener('click',function(){cnTest('testmail');});
+$('#cnGhClear').addEventListener('click',function(){if(confirm('Remove the saved GitHub key? The editor will not be able to publish until a new one is saved.'))cnSave({github_token:''},'Key removed.');});
+$('#cnMailClear').addEventListener('click',function(){if(confirm('Remove the saved email password? Emails will stop sending until a new one is saved.'))cnSave({smtp_password:''},'Password removed.');});
 /* ---- my account ---- */
 $('#adPwForm').addEventListener('submit',function(e){
   e.preventDefault();var f=e.target,b=f.querySelector('button');b.disabled=true;say('');
