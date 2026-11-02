@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — your numbers every Monday (MONDAY)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* Editorial / kinetic-type style: warm paper, huge black type, one green accent. No shared chrome. */
+  @font-face { font-family: "Bricolage Grotesque"; src: url("../assets/bricolage-grotesque-latin.woff2") format("woff2"); font-weight: 500 800; }
+  @font-face { font-family: "Instrument Sans"; src: url("../assets/instrument-sans-latin.woff2") format("woff2"); font-weight: 400 700; }
+  .progress, .brand, .caption, .end { display: none !important; }
+  #frame { background: #f6f3ec; color: #111; font-family: "Instrument Sans", Inter, sans-serif, var(--emoji); }
+  #frame::before { display: none; }
+  .hd { font-family: "Bricolage Grotesque", Inter, sans-serif; font-weight: 800; letter-spacing: -.045em; }
+  .g { color: #2E9418; }
+  .rule { position: absolute; left: 30px; right: 30px; height: 3px; background: #111; transform-origin: left; }
+  .tag { position: absolute; left: 30px; font-size: 13px; font-weight: 700; letter-spacing: .22em; }
+  .num { position: absolute; right: 30px; font-size: 13px; font-weight: 700; letter-spacing: .22em; }
+
+  /* scene 1 */
+  #its { position: absolute; left: 26px; top: 170px; font-size: 92px; line-height: .9; }
+  #mon { position: absolute; left: 22px; top: 256px; font-size: 128px; line-height: .9; }
+  #clock { position: absolute; right: 34px; top: 160px; font-size: 76px; }
+  #q1 { position: absolute; left: 30px; right: 30px; top: 470px; font-size: 44px; line-height: 1.02; }
+
+  /* scene 2 */
+  .win { position: absolute; width: 300px; border-radius: 10px; background: #fff; border: 2px solid #111; box-shadow: 8px 8px 0 #111; overflow: hidden; }
+  .win .bar { height: 30px; border-bottom: 2px solid #111; display: flex; align-items: center; gap: 6px; padding: 0 10px; font-size: 13px; font-weight: 700; }
+  .win .bar i { width: 10px; height: 10px; border-radius: 50%; border: 2px solid #111; }
+  .win .b { padding: 12px; display: grid; gap: 8px; }
+  .win .b div { height: 10px; background: #e3ded2; border-radius: 3px; }
+  .win .b .lg { font-size: 13px; font-weight: 700; color: #777; height: auto; background: none; }
+  #w1 { left: 30px; top: 230px; rotate: -4deg; } #w2 { left: 200px; top: 330px; rotate: 3deg; } #w3 { left: 60px; top: 440px; rotate: -1deg; }
+  #lost { position: absolute; left: 30px; right: 30px; top: 640px; font-size: 40px; line-height: 1.02; }
+  #lost s { text-decoration-thickness: 5px; text-decoration-color: #e0402a; }
+
+  /* scene 3: phone */
+  .ph { position: absolute; left: 50%; top: 150px; width: 300px; height: 600px; margin-left: -150px; border-radius: 46px; background: #111; padding: 10px; }
+  .ph .s { position: relative; height: 100%; border-radius: 38px; overflow: hidden; background: linear-gradient(170deg, #2a3a2a, #0f1a12); color: #fff; }
+  .ph .isl { position: absolute; left: 50%; top: 10px; width: 92px; height: 26px; margin-left: -46px; border-radius: 14px; background: #000; }
+  .ph .dt { position: absolute; left: 0; right: 0; top: 54px; text-align: center; font-size: 15px; font-weight: 600; opacity: .85; }
+  .ph .tm { position: absolute; left: 0; right: 0; top: 70px; text-align: center; font-size: 78px; font-weight: 700; letter-spacing: -.03em; font-family: "Bricolage Grotesque", sans-serif; }
+  .nt { position: absolute; left: 10px; right: 10px; top: 190px; border-radius: 22px; background: rgba(255,255,255,.92); color: #111; padding: 12px 14px; }
+  .nt .h { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #666; }
+  .nt .h img { width: 22px; height: 22px; border-radius: 6px; background: #fff; object-fit: contain; }
+  .nt .h span { margin-left: auto; }
+  .nt b { display: block; margin-top: 6px; font-size: 17px; font-weight: 700; }
+  .nt .rows { margin-top: 8px; display: grid; gap: 7px; overflow: hidden; }
+  .nt .r { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 6px; border-bottom: 1px solid #e6e6e6; font-size: 14px; font-weight: 600; color: #444; }
+  .nt .r:last-child { border: 0; }
+  .nt .r em { font-style: normal; font-size: 19px; font-weight: 800; color: #111; font-family: "Bricolage Grotesque", sans-serif; }
+  .nt .r em.up { color: #2E9418; } .nt .r em.warn { color: #c2410c; }
+  .nt .eg { margin-top: 4px; text-align: right; font-size: 10px; color: #999; }
+
+  /* scene 4 */
+  #one { position: absolute; left: 26px; top: 200px; font-size: 96px; line-height: .9; }
+  #every { position: absolute; left: 26px; top: 400px; font-size: 96px; line-height: .9; }
+  #from { position: absolute; left: 30px; right: 30px; top: 610px; font-size: 24px; font-weight: 600; line-height: 1.3; color: #444; }
+
+  /* scene 5: ending */
+  #endb { position: absolute; inset: 0; background: #2E9418; color: #fff; }
+  #endb .w { position: absolute; left: 30px; right: 30px; top: 170px; font-size: 64px; line-height: .95; }
+  #endb .cm { position: absolute; left: 30px; top: 370px; font-size: 22px; font-weight: 700; letter-spacing: .2em; }
+  #endb .kw { position: absolute; left: 26px; top: 412px; font-size: 104px; line-height: 1; color: #111; background: #f6f3ec; padding: 4px 16px 10px; }
+  #endb .arr { position: absolute; left: 34px; top: 556px; font-size: 54px; }
+  #endb .bot { position: absolute; left: 30px; right: 30px; top: 640px; display: flex; align-items: center; gap: 16px; }
+  #endb .bot img { width: 150px; padding: 8px 14px; background: #fff; border-radius: 14px; }
+  #endb .bot div { font-size: 18px; font-weight: 700; line-height: 1.35; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div class="rule" id="ru1" style="top:120px"></div>
+  <div class="tag" id="tg" style="top:96px">AMBS · MONDAY EDITION</div><div class="num" id="nm" style="top:96px">01</div>
+
+  <!-- 1 -->
+  <div class="hd" id="its">IT’S</div><div class="hd" id="mon">MONDAY.</div><div class="emoji" id="clock">⏰</div>
+  <div class="hd" id="q1">Do you know last week’s <span class="g">numbers?</span></div>
+
+  <!-- 2 -->
+  <div class="win" id="w1"><div class="bar"><i></i>Accounts</div><div class="b"><div class="lg">Log in…</div><div></div><div style="width:60%"></div></div></div>
+  <div class="win" id="w2"><div class="bar"><i></i>Bookings</div><div class="b"><div class="lg">Password?</div><div></div><div style="width:70%"></div></div></div>
+  <div class="win" id="w3"><div class="bar"><i></i>Stock sheet.xlsx</div><div class="b"><div class="lg">Loading…</div><div></div><div style="width:50%"></div></div></div>
+  <div class="hd" id="lost"><s>Three apps.</s><br><s>One lost morning.</s></div>
+
+  <!-- 3 -->
+  <div class="ph" id="ph"><div class="s"><div class="isl"></div><div class="dt">Monday 2 November</div><div class="tm">8:00</div>
+    <div class="nt" id="nt"><div class="h"><img src="../assets/ambs-logo.png" alt="">YOUR WEEKLY NUMBERS<span>now</span></div><b>Last week at a glance</b>
+      <div class="rows" id="rows">
+        <div class="r">Sales <em class="up" id="v1">$8,420 ▲</em></div>
+        <div class="r">Unpaid invoices <em class="warn" id="v2">3 · $2,150</em></div>
+        <div class="r">Running low <em id="v3">2 items</em></div>
+        <div class="r">Hours worked <em id="v4">126 h</em></div>
+      </div><div class="eg">example figures</div></div></div></div>
+
+  <!-- 4 -->
+  <div class="hd" id="one">ONE<br>MESSAGE.</div><div class="hd g" id="every">EVERY<br>MONDAY.</div>
+  <div id="from">Pulled from the systems you already use. No dashboards to log into.</div>
+
+  <!-- 5 -->
+  <div id="endb"><div class="hd w">Want your numbers every Monday?</div><div class="cm">COMMENT</div><div class="hd kw">MONDAY</div><div class="arr emoji">👇</div>
+    <div class="bot"><img src="../assets/ambs-logo.png" alt="AMBS"><div>ambs.co.nz<br>First session free</div></div></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, vis, p, ease } = E;
+window.COVER_AT = 12.6;
+
+E.setup({
+  duration: 24,
+  keyword: "MONDAY",
+  voice: [
+    { a: 0.2, b: 3.4, text: "It's Monday. Do you know last week's numbers?" },
+    { a: 3.6, b: 7.8, text: "Or are you logging into three different apps to find them?" },
+    { a: 8.0, b: 15.8, text: "With A M B S, your sales, unpaid invoices, stock and hours land on your phone as one short summary, every Monday morning." },
+    { a: 16.0, b: 19.8, text: "Pulled from the systems you already use. No dashboards to log into." },
+    { a: 20.1, b: 23.8, text: "Want yours? Comment, Monday." },
+  ],
+  captions: [], phases: [],
+  end: { at: 99, title: "", sub: "" },
+});
+
+// snap: quick scale-in like kinetic type
+const snap = (s, t, a, b) => vis(s, t, a, b, { y: 0, scale: 1.6, dur: 0.22, outDur: 0.15 });
+
+E.use((t) => {
+  $("#ru1").style.transform = `scaleX(${p(t, 0, 0.6, ease.out)})`;
+  vis("#tg", t, 0.2, 20, { y: 0, outDur: 0.15 }); vis("#nm", t, 0.2, 20, { y: 0, outDur: 0.15 });
+  $("#nm").textContent = "0" + (t < 3.6 ? 1 : t < 8 ? 2 : t < 16 ? 3 : 4);
+
+  // 1
+  snap("#its", t, 0.2, 3.6); snap("#mon", t, 0.55, 3.6);
+  const c = vis("#clock", t, 0.9, 3.6, { y: 0, scale: 0.4 }); if (c) $("#clock").style.transform += ` rotate(${Math.sin(t * 40) * 12 * (t < 2.2 ? 1 : 0)}deg)`;
+  vis("#q1", t, 1.6, 3.6, { y: 30 });
+
+  // 2
+  ["#w1", "#w2", "#w3"].forEach((w, i) => vis(w, t, 3.8 + i * 0.45, 8, { y: -40, scale: 0.9, outDur: 0.15 }));
+  vis("#lost", t, 5.6, 8, { y: 20, outDur: 0.15 });
+
+  // 3
+  vis("#ph", t, 8.0, 16, { y: 300, scale: 1, dur: 0.6, ease: ease.out, outDur: 0.2 });
+  vis("#nt", t, 9.0, null, { y: -30, scale: 0.9 });
+  ["#v1", "#v2", "#v3", "#v4"].forEach((v, i) => vis(v, t, 10.2 + i * 0.9, null, { x: 20, y: 0 }));
+
+  // 4
+  snap("#one", t, 16.0, 20.1); snap("#every", t, 17.0, 20.1);
+  vis("#from", t, 18.0, 20.1, { y: 20, outDur: 0.15 });
+
+  // 5
+  const e = p(t, 20.0, 20.35, ease.out);
+  $("#endb").style.clipPath = `inset(${(1 - e) * 100}% 0 0 0)`;
+  $("#endb").style.visibility = e > 0 ? "visible" : "hidden";
+  vis("#endb .w", t, 20.3, null, { y: 20 });
+  vis("#endb .cm", t, 20.8, null, { y: 0 });
+  snap("#endb .kw", t, 21.0, null);
+  const a = vis("#endb .arr", t, 21.5, null, { y: -10 }); if (a && t > 21.9) $("#endb .arr").style.transform = `translateY(${Math.abs(Math.sin(t * 5)) * 12}px)`;
+  vis("#endb .bot", t, 21.8, null, { y: 20 });
+});
+</script>
+</body>
+</html>

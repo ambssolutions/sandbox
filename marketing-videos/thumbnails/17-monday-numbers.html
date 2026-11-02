@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Thumbnail — your numbers every Monday (editorial style)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  @font-face { font-family: "Bricolage Grotesque"; src: url("../assets/bricolage-grotesque-latin.woff2") format("woff2"); font-weight: 500 800; }
+  @font-face { font-family: "Instrument Sans"; src: url("../assets/instrument-sans-latin.woff2") format("woff2"); font-weight: 400 700; }
+  #frame { background: #f6f3ec; color: #111; font-family: "Instrument Sans", sans-serif, var(--emoji); }
+  #frame::before { display: none; }
+  .hd { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -.045em; }
+  .rule { position: absolute; left: 30px; right: 30px; top: 120px; height: 3px; background: #111; }
+  .tag { position: absolute; left: 30px; top: 96px; font-size: 13px; font-weight: 700; letter-spacing: .22em; }
+  .t1 { position: absolute; left: 26px; top: 170px; font-size: 76px; line-height: .95; white-space: nowrap; }
+  .t1 span { color: #2E9418; }
+  .card { position: absolute; left: 30px; right: 30px; top: 400px; border: 3px solid #111; box-shadow: 10px 10px 0 #111; background: #fff; padding: 16px 18px; }
+  .card .h { font-size: 13px; font-weight: 700; letter-spacing: .14em; color: #666; }
+  .card .r { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #e3ded2; font-size: 18px; font-weight: 600; }
+  .card .r:last-child { border: 0; }
+  .card .r b { font-family: "Bricolage Grotesque", sans-serif; font-size: 22px; } .up { color: #2E9418; } .wn { color: #c2410c; }
+  .eg { position: absolute; right: 30px; top: 690px; font-size: 11px; color: #888; }
+  .ft { position: absolute; left: 30px; right: 30px; top: 730px; display: flex; align-items: center; justify-content: space-between; }
+  .ft img { width: 150px; }
+  .ft div { font-size: 20px; font-weight: 800; background: #111; color: #f6f3ec; padding: 10px 16px; }
+</style></head><body>
+<div id="frame">
+  <div class="tag">AMBS · MONDAY EDITION</div><div class="rule"></div>
+  <div class="hd t1">Your numbers.<br><span>Every Monday.</span></div>
+  <div class="card"><div class="h">📲 YOUR WEEKLY NUMBERS · 8:00 AM</div>
+    <div class="r">Sales <b class="up">$8,420 ▲</b></div><div class="r">Unpaid invoices <b class="wn">3 · $2,150</b></div>
+    <div class="r">Running low <b>2 items</b></div><div class="r">Hours worked <b>126 h</b></div></div>
+  <div class="eg">example figures</div>
+  <div class="ft"><img src="../assets/ambs-logo.png" alt="AMBS"><div class="hd">Comment MONDAY 👇</div></div>
+</div>
+</body></html>
