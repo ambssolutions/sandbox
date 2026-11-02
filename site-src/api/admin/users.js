@@ -7,11 +7,19 @@ const S = require('../_settings');
 const crypto = require('crypto');
 const INVITE_DAYS = 7;
 const hashToken = (t) => L.sign('invite:' + t);
+/* Step back from "view as" to the owner's own sign-in. */
+function stepBack(req, res) {
+  const o = L.readBack(req);
+  if (!o) return L.send(res, 400, { error: 'There is nothing to go back to. Please log in again.' });
+  res.setHeader('Set-Cookie', [L.sessionCookieFor(o), L.clearBack()]);
+  return L.send(res, 200, { ok: true, user: Object.assign({}, o, { access: U.SECTIONS.slice() }) });
+}
 module.exports = async function (req, res) {
   const me = await U.live(L.currentUser(req));
   /* A person opening their invitation link sets their own password. No sign-in needed; the link itself is the proof. */
   if (req.method === 'POST' && !me) {
     let b0; try { b0 = await L.readJson(req, 4000); } catch (e) { return L.send(res, 413, { error: 'Request too large.' }); }
+    if (b0.action === 'back') return stepBack(req, res);
     if (b0.action !== 'accept') return L.send(res, 401, { error: 'Please log in.' });
     if (!L.storageReady()) return L.send(res, 503, { error: 'Storage is not connected yet.' });
     const email = U.cleanEmail(b0.email), token = String(b0.token || '');
@@ -27,12 +35,14 @@ module.exports = async function (req, res) {
     res.setHeader('Set-Cookie', L.sessionCookieFor(u));
     return L.send(res, 200, { ok: true, user: U.publicUser(u) });
   }
-  if (req.method === 'GET' || !me) return L.send(res, 200, me ? { auth: true, user: me } : { auth: false });
+  if (req.method === 'GET' || !me) return L.send(res, 200, me ? { auth: true, user: me, viewing: !!L.readBack(req) } : { auth: false });
   if (req.method !== 'POST') { res.setHeader('Allow', 'GET, POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   if (!L.storageReady()) return L.send(res, 503, { error: 'Storage is not connected yet.' });
   let b; try { b = await L.readJson(req, 4000); } catch (e) { return L.send(res, 413, { error: 'Request too large.' }); }
   const action = String(b.action || '');
   await S.load();
+  if (action === 'back') return stepBack(req, res);
+  const target = (email) => users.find((x) => x.email === email);
   if (/^(settings|savesettings|testgithub|testmail)$/.test(action)) {
     if (me.role !== 'owner') return L.send(res, 403, { error: 'Only AMBS can change connections.' });
     if (action === 'settings') return L.send(res, 200, { settings: S.summary() });
@@ -81,12 +91,18 @@ module.exports = async function (req, res) {
     await U.writeUsers(users);
     return L.send(res, 200, { ok: true });
   }
+  if (action === 'viewas') {
+    if (me.role !== 'owner' || L.readBack(req)) return L.send(res, 403, { error: 'Only AMBS can do that.' });
+    const t = target(U.cleanEmail(b.email));
+    if (!t || t.disabled) return L.send(res, 404, { error: 'That person was not found, or their access is switched off.' });
+    res.setHeader('Set-Cookie', [L.sessionCookieFor(t), L.backCookieFor(me)]);
+    return L.send(res, 200, { ok: true });
+  }
   if (me.role !== 'owner' && me.role !== 'manager') return L.send(res, 403, { error: 'You can not manage people. Ask the person who looks after the website.' });
   const mgr = me.role === 'manager';
   /* A MiKia admin (manager) can invite, reset and remove editors only. Everything else stays with AMBS. */
-  const target = (email) => users.find((x) => x.email === email);
   const editorOnly = (email) => { const t = target(email); return !t || L.ROLE(t.role) === 'editor'; };
-  if (mgr && !['invite', 'reset', 'list', 'remove', 'disable'].includes(action)) return L.send(res, 403, { error: 'Only AMBS can do that.' });
+  if (mgr && !['invite', 'reset', 'list', 'remove', 'disable', 'access'].includes(action)) return L.send(res, 403, { error: 'Only AMBS can do that.' });
   if (mgr && action !== 'list' && action !== 'invite' && !editorOnly(U.cleanEmail(b.email))) return L.send(res, 403, { error: 'Only AMBS can change that person.' });
   const view = () => users.filter((x) => !mgr || L.ROLE(x.role) === 'editor' || x.email === me.email).map(U.publicUser);
   /* Optionally emails the private link to the person. If the mailbox is not connected yet, the link is still returned so it can be copied. */
@@ -114,6 +130,7 @@ module.exports = async function (req, res) {
     if (u && u.role === 'owner' && role !== 'owner' && owners() <= 1) return L.send(res, 400, { error: 'There must be at least one owner.' });
     if (!u) { u = { email, created: new Date().toISOString() }; users.push(u); }
     u.name = name || u.name || ''; u.role = role;
+    if (role === 'editor') u.access = U.cleanAccess(b.access); else delete u.access;
     const token = crypto.randomBytes(24).toString('base64url');
     u.invite = { h: hashToken(token), exp: new Date(Date.now() + INVITE_DAYS * 864e5).toISOString() };
     await U.writeUsers(users);
@@ -127,6 +144,14 @@ module.exports = async function (req, res) {
     u.invite = { h: hashToken(token), exp: new Date(Date.now() + INVITE_DAYS * 864e5).toISOString() };
     await U.writeUsers(users);
     return L.send(res, 200, await inviteReply(email, L.origin(req) + '/admin?invite=' + token + '&email=' + encodeURIComponent(email)));
+  }
+  if (action === 'access') {
+    const u = target(U.cleanEmail(b.email));
+    if (!u) return L.send(res, 404, { error: 'That person was not found.' });
+    if (L.ROLE(u.role) !== 'editor') return L.send(res, 400, { error: 'Owners and MiKia admins can use every section.' });
+    u.access = U.cleanAccess(b.access);
+    await U.writeUsers(users);
+    return L.send(res, 200, { users: view() });
   }
   if (action === 'disable') {
     const email = U.cleanEmail(b.email), u = target(email), off = !!b.off;

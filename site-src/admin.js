@@ -15,20 +15,34 @@ function showLogin(){panel.hidden=true;inviteBox.hidden=true;loginBox.hidden=fal
 function tab(name){
   [].forEach.call(root.querySelectorAll('[data-pane]'),function(p){p.hidden=p.getAttribute('data-pane')!==name;});
   [].forEach.call(root.querySelectorAll('[data-tab]'),function(b){b.setAttribute('aria-selected',b.getAttribute('data-tab')===name?'true':'false');});
-  say('');
+  say('');sbShut();window.scrollTo(0,0);
   if(name==='users')loadUsers();
   if(name==='conn')cnLoad();
   if(name==='pages')edOpen();
   if(name==='details')dtLoad();
   if(name==='changes')chLoad();
 }
-$('.ad-tabs').addEventListener('click',function(e){var b=e.target.closest('[data-tab]');if(b)tab(b.getAttribute('data-tab'));});
+root.addEventListener('click',function(e){var b=e.target.closest('[data-tab]');if(b)tab(b.getAttribute('data-tab'));});
+function sbShut(){root.classList.remove('sb-open');}
+$('#sbOpen').addEventListener('click',function(){root.classList.toggle('sb-open');});
+$('#sbScrim').addEventListener('click',sbShut);
+var edPref='';
+root.addEventListener('click',function(e){var g=e.target.closest('[data-go]');if(!g)return;var w=g.getAttribute('data-go');
+  if(w==='onpage'||w==='form'){edPref=w==='onpage'?'page':'form';tab('pages');if(edSel.options.length&&edPath)edLoad(edPath);}
+  else if(w==='newpage'){edPref='';tab('pages');$('#edNew').click();}});
 function enter(user){
   me=user;loginBox.hidden=true;inviteBox.hidden=true;panel.hidden=false;
   $('#adWho').innerHTML='Signed in as <b>'+esc(user.name||user.email)+'</b> <span class="ad-badge'+(user.role==='owner'?' ok':'')+'">'+ROLENAME[user.role]+'</span>';
   $('#adConnTab').hidden=user.role!=='owner';$('#adUsersTab').hidden=user.role!=='owner'&&user.role!=='manager';var og=$('#adInvRole');if(og)[].forEach.call(og.options,function(o){o.hidden=o.disabled=user.role==='manager'&&o.value!=='editor';});if(user.role==='manager')og.value='editor';
   $('#adMasterNote').hidden=true;$('#adPwForm').hidden=false;
-  tab('photos');load();siteStatus();
+  var hr=new Date().getHours();$('#hmHi').textContent=(hr<12?'Good morning':hr<18?'Good afternoon':'Good evening')+(user.name&&user.email!=='master'?', '+user.name.split(' ')[0]:'');
+  $('#hmDate').textContent=new Date().toLocaleDateString('en-NZ',{weekday:'long',day:'numeric',month:'long'})+' \u00b7 everything you can change on mikia.co.nz';
+  [].forEach.call(root.querySelectorAll('[data-need]'),function(el){var n=el.getAttribute('data-need');el.hidden=!(n==='owner'?user.role==='owner':user.role==='owner'||user.role==='manager');});
+  var acc=(user.role==='owner'||user.role==='manager'||!user.access)?Object.keys(SECNAME):user.access,can=function(k){return acc.indexOf(k)>=0;};
+  Object.keys(SECNAME).forEach(function(k){var on=can(k);[].forEach.call(root.querySelectorAll('.sb [data-tab='+k+']'),function(el){el.hidden=!on;});[].forEach.call(root.querySelectorAll('.hm-t[data-tab='+k+']'),function(el){el.closest('.hm-card').hidden=!on;});[].forEach.call(root.querySelectorAll('.hm-pill[data-tab='+k+']'),function(el){el.hidden=!on;});});
+  [].forEach.call(root.querySelectorAll('.hm-pill[data-go=newpage]'),function(el){el.hidden=!can('pages');});
+  [].forEach.call(root.querySelectorAll('.hm-h'),function(h){var g=h.nextElementSibling;if(g&&g.classList.contains('hm-grid')&&!g.querySelector('.hm-card:not([hidden])')){h.hidden=true;g.hidden=true;}});
+  tab('home');if(can('photos'))load();if(can('pages')||can('details'))siteStatus();
 }
 /* ---- photos ---- */
 function render(photos,storage){
@@ -78,7 +92,7 @@ var fbList=$('#adFb');
 function renderFb(items){
   var waiting=items.filter(function(p){return p.status!=='approved';}).length;
   $('#adFbCount').textContent=items.length?items.length+(items.length===1?' item':' items'):'';
-  $('#adFbBadge').textContent=waiting?'('+waiting+')':'';
+  $('#adFbBadge').textContent=waiting?String(waiting):'';$('#hmFb').textContent=waiting?waiting+' waiting':'';
   fbList.innerHTML=items.map(function(p){var ok=p.status==='approved';
     return '<li class="ad-row ad-fb" data-id="'+esc(p.id)+'"><div class="ad-cap"><b>'+esc(p.name)+(p.project?' <span>'+esc(p.project)+'</span>':'')+'</b><p>'+esc(p.text)+'</p><span class="ad-badge'+(ok?' ok':'')+'">'+(ok?'Showing on the website':'Waiting for approval')+'</span></div>'
     +'<div class="ad-btns">'+(ok?'<button type="button" data-fa="hide">Hide</button>':'<button type="button" data-fa="approve" class="ad-ap">Approve</button>')+'<button type="button" data-fa="delete" class="ad-rm">Delete</button></div></li>';
@@ -92,22 +106,24 @@ fbList.addEventListener('click',function(e){
   post('/api/admin/feedback',{id:row.dataset.id,action:act}).then(function(j){renderFb(j.items);say(act==='approve'?'Approved. It shows on the website within a minute.':act==='hide'?'Hidden from the website.':'Deleted.');}).catch(function(er){say(er.message,true);b.disabled=false;});
 });
 /* ---- people (owners, and MiKia admins for editors) ---- */
+var SECNAME={pages:'Pages and text',photos:'Photos',details:'Contact details',feedback:'Client feedback',changes:'Changes and undo'};
 var ROLENAME={owner:'Owner (AMBS)',manager:'Admin (MiKia)',editor:'Editor (MiKia team)'};
 var uList=$('#adUsers');
 function when(iso){if(!iso)return 'never';try{return new Date(iso).toLocaleDateString('en-NZ',{day:'numeric',month:'short',year:'numeric'});}catch(e){return '';}}
 function renderUsers(users){
   $('#adUserCount').textContent=users.length+(users.length===1?' person':' people');
   uList.innerHTML=users.map(function(u){
-    return '<li class="ad-row" data-email="'+esc(u.email)+'"><div class="ad-cap"><b>'+esc(u.name||u.email)+'</b><span>'+esc(u.email)+'</span><span><span class="ad-badge'+(u.role==='owner'?' ok':'')+'">'+ROLENAME[u.role]+'</span> '+(u.disabled?'<span class="ad-badge off">Access switched off</span> ':'')+(u.pending?'<span class="ad-badge">Invitation not used yet</span>':'Last sign-in: '+esc(when(u.lastLogin)))+'</span></div>'
-    +'<div class="ad-btns"><button type="button" data-ua="mail">Email new link</button><button type="button" data-ua="reset">Copy new link</button>'+(me.role==='owner'?'<select data-ua="rolesel" aria-label="Role for '+esc(u.email)+'"><option value="editor"'+(u.role==='editor'?' selected':'')+'>Editor</option><option value="manager"'+(u.role==='manager'?' selected':'')+'>Admin (MiKia)</option><option value="owner"'+(u.role==='owner'?' selected':'')+'>Owner (AMBS)</option></select>':'')+'<button type="button" data-ua="'+(u.disabled?'on':'off')+'"'+(u.email===me.email?' disabled':'')+'>'+(u.disabled?'Switch on':'Switch off')+'</button><button type="button" data-ua="remove" class="ad-rm"'+(u.email===me.email?' disabled':'')+'>Remove</button></div></li>';
+    return '<li class="ad-row" data-email="'+esc(u.email)+'"><div class="ad-cap"><b>'+esc(u.name||u.email)+'</b><span>'+esc(u.email)+'</span><span><span class="ad-badge'+(u.role==='owner'?' ok':'')+'">'+ROLENAME[u.role]+'</span> '+(u.disabled?'<span class="ad-badge off">Access switched off</span> ':'')+(u.pending?'<span class="ad-badge">Invitation not used yet</span>':'Last sign-in: '+esc(when(u.lastLogin)))+'</span><span class="ad-accsum">'+(u.role==='editor'?'Can use: '+u.access.map(function(a){return SECNAME[a];}).join(', ')||'nothing':'Can use every section')+'</span></div>'
+    +'<div class="ad-btns">'+(u.role==='editor'?'<button type="button" data-ua="acc">Choose sections</button>':'')+(me.role==='owner'&&u.email!==me.email&&!u.pending&&!u.disabled?'<button type="button" data-ua="viewas">View as</button>':'')+'<button type="button" data-ua="mail">Email new link</button><button type="button" data-ua="reset">Copy new link</button>'+(me.role==='owner'?'<select data-ua="rolesel" aria-label="Role for '+esc(u.email)+'"><option value="editor"'+(u.role==='editor'?' selected':'')+'>Editor</option><option value="manager"'+(u.role==='manager'?' selected':'')+'>Admin (MiKia)</option><option value="owner"'+(u.role==='owner'?' selected':'')+'>Owner (AMBS)</option></select>':'')+'<button type="button" data-ua="'+(u.disabled?'on':'off')+'"'+(u.email===me.email?' disabled':'')+'>'+(u.disabled?'Switch on':'Switch off')+'</button><button type="button" data-ua="remove" class="ad-rm"'+(u.email===me.email?' disabled':'')+'>Remove</button></div>'+(u.role==='editor'?'<div class="ad-acc" hidden><p class="ad-help">Which sections can '+esc(u.name||u.email)+' use?</p>'+Object.keys(SECNAME).map(function(k){return '<label class="ad-chk"><input type="checkbox" name="acc" value="'+k+'"'+(u.access.indexOf(k)>=0?' checked':'')+'> '+SECNAME[k]+'</label>';}).join('')+'<button type="button" class="ad-ap" data-ua="accsave">Save sections</button></div>':'')+'</li>';
   }).join('')||'<li class="ad-empty">Nobody has been added yet. Invite the first person above.</li>';
 }
 function loadUsers(){return post('/api/admin/users',{action:'list'}).then(function(j){renderUsers(j.users);}).catch(function(er){say(er.message,true);});}
 function showLink(url){var b=$('#adInvLink');b.hidden=false;$('#adInvUrl').value=url;$('#adInvUrl').focus();$('#adInvUrl').select();}
 $('#adInvForm').addEventListener('submit',function(e){
   e.preventDefault();var f=e.target,b=f.querySelector('button');b.disabled=true;say('');
-  post('/api/admin/users',{action:'invite',email:f.email.value,name:f.name.value,role:f.role.value,send:f.sendmail.checked}).then(function(j){renderUsers(j.users);showLink(j.link);f.reset();f.sendmail.checked=true;say(j.emailed?'Invitation emailed. You can also copy the link below.':(j.emailNote||'Invitation created. Copy the link and send it to them.'));}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
+  post('/api/admin/users',{action:'invite',email:f.email.value,name:f.name.value,role:f.role.value,send:f.sendmail.checked,access:[].map.call(f.querySelectorAll('[name=acc]:checked'),function(c){return c.value;})}).then(function(j){renderUsers(j.users);showLink(j.link);f.reset();f.sendmail.checked=true;say(j.emailed?'Invitation emailed. You can also copy the link below.':(j.emailNote||'Invitation created. Copy the link and send it to them.'));}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
 });
+$('#adInvRole').addEventListener('change',function(){$('#adInvAcc').hidden=this.value!=='editor';});
 $('#adInvCopy').addEventListener('click',function(){var i=$('#adInvUrl');i.select();try{navigator.clipboard.writeText(i.value);say('Link copied.');}catch(e){document.execCommand('copy');say('Link copied.');}});
 uList.addEventListener('change',function(e){var sel=e.target.closest('select[data-ua=rolesel]');if(!sel)return;var row=sel.closest('.ad-row');say('');post('/api/admin/users',{action:'save',email:row.dataset.email,role:sel.value}).then(function(j){renderUsers(j.users);say('Role changed.');}).catch(function(er){say(er.message,true);loadUsers();});});
 uList.addEventListener('click',function(e){
@@ -115,7 +131,10 @@ uList.addEventListener('click',function(e){
   if(act==='remove'&&!confirm('Remove '+email+'? They will no longer be able to sign in.'))return;
   b.disabled=true;say('');
   var p;
-  if(act==='off'||act==='on')p=post('/api/admin/users',{action:'disable',email:email,off:act==='off'}).then(function(j){renderUsers(j.users);say(act==='off'?email+' can no longer sign in or edit. You can switch them back on at any time.':email+' can sign in again.');});
+  if(act==='acc'){row.querySelector('.ad-acc').hidden=!row.querySelector('.ad-acc').hidden;b.disabled=false;return;}
+  if(act==='accsave'){var sel=[].map.call(row.querySelectorAll('[name=acc]:checked'),function(c){return c.value;});p=post('/api/admin/users',{action:'access',email:email,access:sel}).then(function(j){renderUsers(j.users);say('Sections saved. They apply the next time '+email+' opens the editor.');});}
+  else if(act==='viewas'){p=post('/api/admin/users',{action:'viewas',email:email}).then(function(){location.reload();});}
+  else if(act==='off'||act==='on')p=post('/api/admin/users',{action:'disable',email:email,off:act==='off'}).then(function(j){renderUsers(j.users);say(act==='off'?email+' can no longer sign in or edit. You can switch them back on at any time.':email+' can sign in again.');});
   else if(act==='reset'||act==='mail')p=post('/api/admin/users',{action:'reset',email:email,send:act==='mail'}).then(function(j){renderUsers(j.users);showLink(j.link);say(j.emailed?'New link emailed to '+email+'.':(j.emailNote||'New link created for '+email+'. Copy it and send it to them.'));});
   else p=post('/api/admin/users',{action:'remove',email:email}).then(function(j){renderUsers(j.users);say('Removed.');});
   p.catch(function(er){say(er.message,true);b.disabled=false;});
@@ -185,9 +204,9 @@ $('#edClose').addEventListener('click',function(){modal.hidden=true;frame.srcdoc
 window.addEventListener('message',function(e){if(!onPage||e.source!==frame.contentWindow||!e.data||e.data.mk!=='edit')return;var el=edFields.querySelector('[data-k="'+e.data.k+'"]:not(li)');if(!el)return;el.value=e.data.v;edDirty();});
 function openOnPage(){edRegion='main';$('#edFind').value='';edRender();preview(edPath,true);}
 $('#edOnPage').addEventListener('click',openOnPage);
-function edWayShow(){edBody.hidden=true;$('#edWay').hidden=false;}
+function edWayShow(){edBody.hidden=true;$('#edWay').hidden=false;if(edPref==='form'){$('#edWay').hidden=true;edBody.hidden=false;}else if(edPref==='page')openOnPage();}
 $('#edWay').addEventListener('click',function(e){var b=e.target.closest('[data-way]');if(!b)return;if(b.getAttribute('data-way')==='form'){$('#edWay').hidden=true;edBody.hidden=false;}else openOnPage();});
-$('#edWayBack').addEventListener('click',function(){if(edChanges().length&&!confirm('You have changes that are not saved yet. Leave them behind?'))return;edLoad(edPath);});
+$('#edWayBack').addEventListener('click',function(){if(edChanges().length&&!confirm('You have changes that are not saved yet. Leave them behind?'))return;edPref='';edLoad(edPath);});
 $('#edModalSave').addEventListener('click',function(){if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;});
 $('#adPreviewAll').addEventListener('click',function(){preview(edPath||'index.html');});
 $('#edPreview').addEventListener('click',function(){preview(edPath);});
@@ -315,6 +334,7 @@ if(invTok&&invEmail){
     post('/api/admin/users',{action:'accept',email:invEmail,token:invTok,password:f.p1.value}).then(function(j){history.replaceState(null,'',location.pathname);f.reset();enter(j.user);say('Welcome. Your password is saved.');}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
   });
 }else{
-  api('/api/admin/users').then(function(j){if(j.auth)enter(j.user);else showLogin();}).catch(showLogin);
+  api('/api/admin/users').then(function(j){if(j.auth){enter(j.user);if(j.viewing){$('#adViewAs').hidden=false;$('#adViewAsText').textContent='You are viewing the editor as '+(j.user.name||j.user.email)+' ('+ROLENAME[j.user.role]+'). What you change is real.';}}else showLogin();}).catch(showLogin);
+  $('#adViewBack').addEventListener('click',function(){post('/api/admin/users',{action:'back'}).then(function(){location.reload();}).catch(function(er){say(er.message,true);});});
 }
 })();

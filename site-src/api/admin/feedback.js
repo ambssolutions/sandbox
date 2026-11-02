@@ -2,7 +2,9 @@ const L = require('../_lib');
 const U = require('../_users');
 /* Admin: list feedback, approve, hide or delete it. */
 module.exports = async function (req, res) {
-  if (!(await U.live(L.currentUser(req)))) return L.send(res, 401, { error: 'Please log in.' });
+  const me = await U.live(L.currentUser(req));
+  if (!me) return L.send(res, 401, { error: 'Please log in.' });
+  if (!U.can(me, 'feedback')) return L.send(res, 403, { error: 'You do not have access to this section.' });
   if (!L.storageReady()) return L.send(res, 503, { error: 'Storage is not connected yet.' });
   const view = (items) => items.slice().reverse().map((p) => ({ id: p.id, name: p.name, project: p.project, text: p.text, status: p.status, created: p.created }));
   if (req.method === 'GET') return L.send(res, 200, { items: view(await L.readFeedback()) });

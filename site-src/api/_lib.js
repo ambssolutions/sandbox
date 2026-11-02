@@ -72,7 +72,17 @@ function cookieHeader(name, value, maxAge) {
 }
 function sessionCookie() { return cookieHeader(COOKIE, makeToken(), DAYS * 86400); }
 function sessionCookieFor(u) { return cookieHeader(SESSION, makeSession(u), DAYS * 86400); }
-function clearCookie() { return [cookieHeader(COOKIE, '', 0), cookieHeader(SESSION, '', 0)]; }
+function clearCookie() { return [cookieHeader(COOKIE, '', 0), cookieHeader(SESSION, '', 0), cookieHeader(BACK, '', 0)]; }
+/* "View as": an owner can open the editor as another person. The owner's own sign-in is kept here (signed, 2 hours) so they can step back. */
+const BACK = 'mk_back';
+function backCookieFor(u) { const body = b64u(JSON.stringify({ e: u.email, n: u.name || '', r: ROLE(u.role), x: Date.now() + 2 * 3600e3 })); return cookieHeader(BACK, body + '.' + sign('back' + body), 2 * 3600); }
+function readBack(req) {
+  const t = readCookie(req, BACK), i = t.indexOf('.'); if (i <= 0) return null;
+  const body = t.slice(0, i); if (!safeEq(t.slice(i + 1), sign('back' + body))) return null;
+  try { const j = JSON.parse(Buffer.from(body, 'base64url').toString('utf8')); if (Number(j.x) > Date.now() && j.e) return { email: j.e, name: j.n || '', role: ROLE(j.r) }; } catch (e) { /* not valid */ }
+  return null;
+}
+const clearBack = () => cookieHeader(BACK, '', 0);
 
 async function readJson(req, limit) {
   const chunks = []; let n = 0;
@@ -135,4 +145,4 @@ const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': 
 function origin(req) { return 'https://' + (req.headers['x-forwarded-host'] || req.headers.host || 'www.mikia.co.nz'); }
 function publicFeedback(p) { return { id: p.id, name: p.name, project: p.project, text: p.text }; }
 
-module.exports = { ROLE, readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
+module.exports = { backCookieFor, readBack, clearBack, ROLE, readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };

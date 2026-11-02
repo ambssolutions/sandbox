@@ -10,7 +10,9 @@ function kind(b) {
 const clean = (v, n) => String(v || '').replace(/[\u0000-\u001F]/g, '').trim().slice(0, n);
 module.exports = async function (req, res) {
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
-  if (!(await U.live(L.currentUser(req)))) return L.send(res, 401, { error: 'Please log in.' });
+  const me = await U.live(L.currentUser(req));
+  if (!me) return L.send(res, 401, { error: 'Please log in.' });
+  if (!U.can(me, 'photos')) return L.send(res, 403, { error: 'You do not have access to this section.' });
   if (!L.storageReady()) return L.send(res, 503, { error: 'Photo storage is not connected yet.' });
   let buf;
   try { buf = await L.readBuffer(req, MAX); } catch (e) { return L.send(res, 413, { error: 'That photo is too large. Please use one under 4 MB.' }); }
