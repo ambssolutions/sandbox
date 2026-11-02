@@ -217,7 +217,7 @@
     clamp, lerp, ease, p, vis, type, count, path, cursor, flow, flowHTML, $, $$,
     duration: 22,
     use(fn) { renderers.push(fn); },
-    setup(cfg) { E.duration = cfg.duration; E.voice = cfg.voice ?? []; renderers.unshift(chrome(cfg)); },
+    setup(cfg) { E.duration = cfg.duration; E.voice = cfg.voice ?? []; E.narrator = cfg.narrator ?? null; renderers.unshift(chrome(cfg)); },
   };
   window.E = E;
   window.__seek = (t) => { for (const r of renderers) r(t); };

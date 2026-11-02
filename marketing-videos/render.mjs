@@ -36,10 +36,12 @@ async function render(name) {
 
   // Voice-over track (falls back to silence if the video has no voice lines).
   const lines = await page.evaluate(() => window.E.voice);
+  // narrator: VOICE env var wins, then the video's own `narrator`, then the default
+  const narrator = process.env.VOICE ?? (await page.evaluate(() => window.E.narrator)) ?? "af_heart";
   const wav = join(outDir, name + ".voice.wav");
   const audioIn = ["-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100"];
   if (lines.length) {
-    const job = JSON.stringify({ duration, lines, out: wav, voice: process.env.VOICE ?? "af_heart" });
+    const job = JSON.stringify({ duration, lines, out: wav, voice: narrator });
     const r = spawnSync("python3", [join(root, "voice.py")], { input: job, stdio: ["pipe", "inherit", "pipe"] });
     process.stderr.write(`${name} voice:\n${r.stderr}`);
     if (r.status) throw new Error(`voice.py failed for ${name}`);
