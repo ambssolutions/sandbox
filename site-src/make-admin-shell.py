@@ -30,6 +30,10 @@ if 'id="cnMaster"' not in panes:
     CN = '<form id="cnMaster"><h3 class="ad-h3">Signing in</h3><p class="ad-help">Switch this on once an owner can sign in with an email and password. Then the master password on its own no longer works at the login page. If nobody can sign in, add ADMIN_MASTER_LOGIN=on in Vercel to bring it back.</p><label class="ad-chk"><input type="checkbox" id="cnMasterOff"> Require an email and password for everyone (switch off the master password sign-in)</label><div class="ad-btns"><button class="ad-go" type="submit">Save</button></div></form>'
     assert '<form id="cnGh"' in panes
     panes = panes.replace('<form id="cnGh"', CN + '<form id="cnGh"', 1)
+# tidy the invite form into columns
+if 'ad-fld' not in panes:
+    panes = re.sub(r'(<label for="adInv(?:Email|Name|Role)">[^<]*</label>)(<input[^>]*>|<select.*?</select>)', r'<div class="ad-fld">\1\2</div>', panes, flags=re.S)
+    assert panes.count('ad-fld') == 3
 script = re.search(r'<script src="assets/admin\.js\?v=[0-9a-f]+" defer></script>', h).group(0)
 
 def ic(p): return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>' % p

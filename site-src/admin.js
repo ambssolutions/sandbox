@@ -140,7 +140,7 @@ uList.addEventListener('click',function(e){
   p.catch(function(er){say(er.message,true);b.disabled=false;});
 });
 /* ---- connections (owners only) ---- */
-function cnState(el,x,label){el.textContent=x.set?(x.from==='vercel'?'(set in Vercel)':'(saved'+(x.hint?', '+x.hint:'')+')'):'(not set)';}
+function cnState(el,x){el.className='cn-st'+(x.set?' on':'');el.textContent=x.set?(x.from==='vercel'?'Set in Vercel':'Saved'+(x.hint?' '+x.hint:'')):'Not set';}
 function cnShow(st){$('#cnMasterOff').checked=st.master_login.value==='off';cnState($('#cnGhState'),st.github_token);cnState($('#cnMailState'),st.smtp_password);$('#cnGhRepo').value=st.github_repo.value||'';$('#cnMailUser').value=st.smtp_user.value||'';$('#cnGhTok').value='';$('#cnMailPw').value='';}
 function cnLoad(){return post('/api/admin/users',{action:'settings'}).then(function(j){cnShow(j.settings);}).catch(function(er){say(er.message,true);});}
 function cnSave(vals,msg){return post('/api/admin/users',{action:'savesettings',values:vals}).then(function(j){cnShow(j.settings);say(msg);}).catch(function(er){say(er.message,true);});}
