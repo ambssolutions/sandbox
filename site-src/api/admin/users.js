@@ -1,7 +1,7 @@
 const L = require('../_lib');
 const U = require('../_users');
 /* One endpoint for people and sign-in details.
-   action: me | list (owner) | save (owner: add a person or reset their password/role) | remove (owner) | password (anyone: change their own) */
+   action: me | list | invite | reset | remove (owner; a manager only for editors) | save (owner: set a password or role) | password (anyone: change their own) */
 const crypto = require('crypto');
 const INVITE_DAYS = 7;
 const hashToken = (t) => L.sign('invite:' + t);
@@ -43,19 +43,27 @@ module.exports = async function (req, res) {
     await U.writeUsers(users);
     return L.send(res, 200, { ok: true });
   }
-  if (me.role !== 'owner') return L.send(res, 403, { error: 'Only AMBS can manage people.' });
+  if (me.role !== 'owner' && me.role !== 'manager') return L.send(res, 403, { error: 'You can not manage people. Ask the person who looks after the website.' });
+  const mgr = me.role === 'manager';
+  /* A MiKia admin (manager) can invite, reset and remove editors only. Everything else stays with AMBS. */
+  const target = (email) => users.find((x) => x.email === email);
+  const editorOnly = (email) => { const t = target(email); return !t || L.ROLE(t.role) === 'editor'; };
+  if (mgr && !['invite', 'reset', 'list', 'remove'].includes(action)) return L.send(res, 403, { error: 'Only AMBS can do that.' });
+  if (mgr && action !== 'list' && action !== 'invite' && !editorOnly(U.cleanEmail(b.email))) return L.send(res, 403, { error: 'Only AMBS can change that person.' });
+  const view = () => users.filter((x) => !mgr || L.ROLE(x.role) === 'editor' || x.email === me.email).map(U.publicUser);
   if (action === 'invite') {
-    const email = U.cleanEmail(b.email), name = L.FB_CLEAN(b.name, 80), role = b.role === 'owner' ? 'owner' : 'editor';
+    const email = U.cleanEmail(b.email), name = L.FB_CLEAN(b.name, 80), role = mgr ? 'editor' : L.ROLE(b.role);
     if (!U.EMAIL.test(email)) return L.send(res, 400, { error: 'Please enter a valid email address.' });
     let u = users.find((x) => x.email === email);
     if (u && u.hash && !u.invite) return L.send(res, 400, { error: 'That person already has a login. Use "Reset password" to give them a new link.' });
+    if (u && mgr && L.ROLE(u.role) !== 'editor') return L.send(res, 403, { error: 'Only AMBS can change that person.' });
     if (u && u.role === 'owner' && role !== 'owner' && owners() <= 1) return L.send(res, 400, { error: 'There must be at least one owner.' });
     if (!u) { u = { email, created: new Date().toISOString() }; users.push(u); }
     u.name = name || u.name || ''; u.role = role;
     const token = crypto.randomBytes(24).toString('base64url');
     u.invite = { h: hashToken(token), exp: new Date(Date.now() + INVITE_DAYS * 864e5).toISOString() };
     await U.writeUsers(users);
-    return L.send(res, 200, { users: users.map(U.publicUser), link: L.origin(req) + '/admin?invite=' + token + '&email=' + encodeURIComponent(email) });
+    return L.send(res, 200, { users: view(), link: L.origin(req) + '/admin?invite=' + token + '&email=' + encodeURIComponent(email) });
   }
   if (action === 'reset') {
     const email = U.cleanEmail(b.email);
@@ -64,13 +72,14 @@ module.exports = async function (req, res) {
     const token = crypto.randomBytes(24).toString('base64url');
     u.invite = { h: hashToken(token), exp: new Date(Date.now() + INVITE_DAYS * 864e5).toISOString() };
     await U.writeUsers(users);
-    return L.send(res, 200, { users: users.map(U.publicUser), link: L.origin(req) + '/admin?invite=' + token + '&email=' + encodeURIComponent(email) });
+    return L.send(res, 200, { users: view(), link: L.origin(req) + '/admin?invite=' + token + '&email=' + encodeURIComponent(email) });
   }
-  if (action === 'list') return L.send(res, 200, { users: users.map(U.publicUser) });
+  if (action === 'list') return L.send(res, 200, { users: view() });
   if (action === 'save') {
-    const email = U.cleanEmail(b.email), name = L.FB_CLEAN(b.name, 80), role = b.role === 'owner' ? 'owner' : 'editor';
+    const email = U.cleanEmail(b.email), name = L.FB_CLEAN(b.name, 80), role = mgr ? 'editor' : L.ROLE(b.role);
     if (!U.EMAIL.test(email)) return L.send(res, 400, { error: 'Please enter a valid email address.' });
     let u = users.find((x) => x.email === email);
+    if (u && mgr && L.ROLE(u.role) !== 'editor') return L.send(res, 403, { error: 'Only AMBS can change that person.' });
     if (u && u.role === 'owner' && role !== 'owner' && owners() <= 1) return L.send(res, 400, { error: 'There must be at least one owner.' });
     if (!u && !b.password) return L.send(res, 400, { error: 'Please set a password for the new person.' });
     if (b.password) { const pr = U.passwordProblem(b.password); if (pr) return L.send(res, 400, { error: pr }); }
@@ -78,7 +87,7 @@ module.exports = async function (req, res) {
     u.name = name || u.name || ''; u.role = role;
     if (b.password) u.hash = U.hashPassword(b.password);
     await U.writeUsers(users);
-    return L.send(res, 200, { users: users.map(U.publicUser) });
+    return L.send(res, 200, { users: view() });
   }
   if (action === 'remove') {
     const email = U.cleanEmail(b.email);
@@ -87,7 +96,7 @@ module.exports = async function (req, res) {
     if (u.role === 'owner' && owners() <= 1) return L.send(res, 400, { error: 'There must be at least one owner.' });
     if (email === me.email) return L.send(res, 400, { error: 'You cannot remove yourself while signed in.' });
     await U.writeUsers(users.filter((x) => x.email !== email));
-    return L.send(res, 200, { users: users.filter((x) => x.email !== email).map(U.publicUser) });
+    return L.send(res, 200, { users: view().filter((x) => x.email !== email) });
   }
   return L.send(res, 400, { error: 'Unknown action.' });
 };

@@ -37,12 +37,12 @@ function readCookie(req, name) {
   return m ? m.slice(1).join('=') : '';
 }
 /* Who is signed in.
-   New logins carry a signed session with the person's email and role (owner = AMBS, can manage users; editor = MiKia team).
+   New logins carry a signed session with the person's email and role (owner = AMBS, manages everyone; manager = MiKia admin, can invite and remove editors; editor = MiKia team).
    The old shared-password cookie still works and counts as an owner, so the AMBS master password is always a way in. */
 const SESSION = 'mk_session';
 function b64u(s) { return Buffer.from(s).toString('base64url'); }
 function makeSession(u) {
-  const body = b64u(JSON.stringify({ e: u.email, n: u.name || '', r: u.role === 'owner' ? 'owner' : 'editor', x: Date.now() + DAYS * 864e5 }));
+  const body = b64u(JSON.stringify({ e: u.email, n: u.name || '', r: ROLE(u.role), x: Date.now() + DAYS * 864e5 }));
   return body + '.' + sign('sess' + body);
 }
 function currentUser(req) {
@@ -53,7 +53,7 @@ function currentUser(req) {
     if (safeEq(t.slice(i + 1), sign('sess' + body))) {
       try {
         const j = JSON.parse(Buffer.from(body, 'base64url').toString('utf8'));
-        if (Number(j.x) > Date.now() && j.e) return { email: j.e, name: j.n || '', role: j.r === 'owner' ? 'owner' : 'editor' };
+        if (Number(j.x) > Date.now() && j.e) return { email: j.e, name: j.n || '', role: ROLE(j.r) };
       } catch (e) { /* fall through */ }
     }
   }
@@ -65,6 +65,7 @@ function currentUser(req) {
   return null;
 }
 function isAdmin(req) { return !!currentUser(req); }
+const ROLE = (r) => (r === 'owner' || r === 'manager' ? r : 'editor');
 function isOwner(req) { const u = currentUser(req); return !!u && u.role === 'owner'; }
 function cookieHeader(name, value, maxAge) {
   return name + '=' + value + '; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=' + maxAge;
@@ -134,4 +135,4 @@ const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': 
 function origin(req) { return 'https://' + (req.headers['x-forwarded-host'] || req.headers.host || 'www.mikia.co.nz'); }
 function publicFeedback(p) { return { id: p.id, name: p.name, project: p.project, text: p.text }; }
 
-module.exports = { readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
+module.exports = { ROLE, readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };

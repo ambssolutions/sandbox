@@ -28,6 +28,7 @@ function mirror(x, f) {
 }
 const pageUrlToPath = (u) => String(u).replace(/^\//, '').replace(/#.*$/, '') || 'index';
 
+const EDIT_JS = "document.addEventListener('click',function(e){var a=e.target.closest('a');if(a)e.preventDefault();},true);document.querySelectorAll('[data-ek]').forEach(function(s){s.contentEditable='true';s.spellcheck=true;s.addEventListener('keydown',function(e){if(e.key==='Enter')e.preventDefault();e.stopPropagation();});s.addEventListener('keyup',function(e){e.stopPropagation();});s.addEventListener('input',function(){parent.postMessage({mk:'edit',k:Number(s.getAttribute('data-ek')),v:s.textContent},'*');});});";
 module.exports = async function (req, res) {
   const me = L.currentUser(req);
   if (!me) return L.send(res, 401, { error: 'Please log in.' });
@@ -107,6 +108,11 @@ module.exports = async function (req, res) {
       const path = okPath(b.path);
       let html = await read(path);
       const origin = L.origin(req);
+      if (b.edit) { // on-page editing: every piece of page text can be clicked and typed over
+        const x = P.extract(html);
+        for (const f of x.fields.filter((q) => q.kind === 'text' && q.region === 'main' && !/^(option|textarea|button)$/.test(q.tag)).reverse()) html = html.slice(0, f.start) + '<span data-ek="' + f.k + '">' + html.slice(f.start, f.end) + '</span>' + html.slice(f.end);
+        html = html.replace(/<\/body>/i, '<style>[data-ek]{outline-offset:2px}[data-ek]:hover{outline:2px dashed #c8323c;cursor:text}[data-ek]:focus{outline:2px solid #c8323c;background:rgba(200,50,60,.06)}</style><script>' + EDIT_JS + '</script></body>');
+      }
       html = html.replace(/<head>/i, '<head><base href="' + origin + '/">');
       if (w.draft) { // pictures that only exist in the draft are placed inside the preview
         const a = await G.ahead(); const mine = new Set((a && a.files) || []);

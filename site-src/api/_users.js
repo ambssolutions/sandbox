@@ -21,7 +21,7 @@ function checkPassword(pw, stored) {
 }
 async function readUsers() { const j = await L.readStore(path()); return j && Array.isArray(j.users) ? j.users : []; }
 async function writeUsers(users) { await L.writeStore(path(), { users, updated: new Date().toISOString() }); }
-const publicUser = (u) => ({ email: u.email, name: u.name || '', role: u.role === 'owner' ? 'owner' : 'editor', created: u.created || '', lastLogin: u.lastLogin || '', pending: !u.hash || !!u.invite });
+const publicUser = (u) => ({ email: u.email, name: u.name || '', role: L.ROLE(u.role), created: u.created || '', lastLogin: u.lastLogin || '', pending: !u.hash || !!u.invite });
 const cleanEmail = (v) => L.FB_CLEAN(v, 120).toLowerCase();
 function passwordProblem(pw) {
   pw = String(pw || '');

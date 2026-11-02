@@ -4824,3 +4824,5 @@ html body .ad-add{border:1px dashed rgba(25,25,25,.3);border-radius:14px;padding
 html body .ad-add textarea,html body .ad-add input[type=text],html body .ad-add select{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid rgba(25,25,25,.3);border-radius:10px;margin:6px 0;font:inherit}
 html body .ad-add .ad-pagebar select{flex:1 1 180px;width:auto}
 html body .ad-chk[hidden],html body .ad-add[hidden]{display:none}
+html body .ad-modal .ad-help{margin:0 8px;align-self:center}
+html body .ad-btns select{padding:8px 10px;border-radius:10px;border:1px solid rgba(25,25,25,.3);font:inherit}
