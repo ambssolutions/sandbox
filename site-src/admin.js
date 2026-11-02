@@ -98,14 +98,14 @@ function renderUsers(users){
   $('#adUserCount').textContent=users.length+(users.length===1?' person':' people');
   uList.innerHTML=users.map(function(u){
     return '<li class="ad-row" data-email="'+esc(u.email)+'"><div class="ad-cap"><b>'+esc(u.name||u.email)+'</b><span>'+esc(u.email)+'</span><span><span class="ad-badge'+(u.role==='owner'?' ok':'')+'">'+ROLENAME[u.role]+'</span> '+(u.pending?'<span class="ad-badge">Invitation not used yet</span>':'Last sign-in: '+esc(when(u.lastLogin)))+'</span></div>'
-    +'<div class="ad-btns"><button type="button" data-ua="reset">New link</button>'+(me.role==='owner'?'<select data-ua="rolesel" aria-label="Role for '+esc(u.email)+'"><option value="editor"'+(u.role==='editor'?' selected':'')+'>Editor</option><option value="manager"'+(u.role==='manager'?' selected':'')+'>Admin (MiKia)</option><option value="owner"'+(u.role==='owner'?' selected':'')+'>Owner (AMBS)</option></select>':'')+'<button type="button" data-ua="remove" class="ad-rm"'+(u.email===me.email?' disabled':'')+'>Remove</button></div></li>';
+    +'<div class="ad-btns"><button type="button" data-ua="mail">Email new link</button><button type="button" data-ua="reset">Copy new link</button>'+(me.role==='owner'?'<select data-ua="rolesel" aria-label="Role for '+esc(u.email)+'"><option value="editor"'+(u.role==='editor'?' selected':'')+'>Editor</option><option value="manager"'+(u.role==='manager'?' selected':'')+'>Admin (MiKia)</option><option value="owner"'+(u.role==='owner'?' selected':'')+'>Owner (AMBS)</option></select>':'')+'<button type="button" data-ua="remove" class="ad-rm"'+(u.email===me.email?' disabled':'')+'>Remove</button></div></li>';
   }).join('')||'<li class="ad-empty">Nobody has been added yet. Invite the first person above.</li>';
 }
 function loadUsers(){return post('/api/admin/users',{action:'list'}).then(function(j){renderUsers(j.users);}).catch(function(er){say(er.message,true);});}
 function showLink(url){var b=$('#adInvLink');b.hidden=false;$('#adInvUrl').value=url;$('#adInvUrl').focus();$('#adInvUrl').select();}
 $('#adInvForm').addEventListener('submit',function(e){
   e.preventDefault();var f=e.target,b=f.querySelector('button');b.disabled=true;say('');
-  post('/api/admin/users',{action:'invite',email:f.email.value,name:f.name.value,role:f.role.value}).then(function(j){renderUsers(j.users);showLink(j.link);f.reset();say('Invitation created. Copy the link and send it to them.');}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
+  post('/api/admin/users',{action:'invite',email:f.email.value,name:f.name.value,role:f.role.value,send:f.sendmail.checked}).then(function(j){renderUsers(j.users);showLink(j.link);f.reset();f.sendmail.checked=true;say(j.emailed?'Invitation emailed. You can also copy the link below.':(j.emailNote||'Invitation created. Copy the link and send it to them.'));}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
 });
 $('#adInvCopy').addEventListener('click',function(){var i=$('#adInvUrl');i.select();try{navigator.clipboard.writeText(i.value);say('Link copied.');}catch(e){document.execCommand('copy');say('Link copied.');}});
 uList.addEventListener('change',function(e){var sel=e.target.closest('select[data-ua=rolesel]');if(!sel)return;var row=sel.closest('.ad-row');say('');post('/api/admin/users',{action:'save',email:row.dataset.email,role:sel.value}).then(function(j){renderUsers(j.users);say('Role changed.');}).catch(function(er){say(er.message,true);loadUsers();});});
@@ -114,7 +114,7 @@ uList.addEventListener('click',function(e){
   if(act==='remove'&&!confirm('Remove '+email+'? They will no longer be able to sign in.'))return;
   b.disabled=true;say('');
   var p;
-  if(act==='reset')p=post('/api/admin/users',{action:'reset',email:email}).then(function(j){renderUsers(j.users);showLink(j.link);say('New link created for '+email+'. Copy it and send it to them.');});
+  if(act==='reset'||act==='mail')p=post('/api/admin/users',{action:'reset',email:email,send:act==='mail'}).then(function(j){renderUsers(j.users);showLink(j.link);say(j.emailed?'New link emailed to '+email+'.':(j.emailNote||'New link created for '+email+'. Copy it and send it to them.'));});
   else p=post('/api/admin/users',{action:'remove',email:email}).then(function(j){renderUsers(j.users);say('Removed.');});
   p.catch(function(er){say(er.message,true);b.disabled=false;});
 });

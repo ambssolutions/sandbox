@@ -1,5 +1,6 @@
 const L = require('../_lib');
 const U = require('../_users');
+const M = require('../_mail');
 /* One endpoint for people and sign-in details.
    action: me | list | invite | reset | remove (owner; a manager only for editors) | save (owner: set a password or role) | password (anyone: change their own) */
 const crypto = require('crypto');
@@ -51,6 +52,22 @@ module.exports = async function (req, res) {
   if (mgr && !['invite', 'reset', 'list', 'remove'].includes(action)) return L.send(res, 403, { error: 'Only AMBS can do that.' });
   if (mgr && action !== 'list' && action !== 'invite' && !editorOnly(U.cleanEmail(b.email))) return L.send(res, 403, { error: 'Only AMBS can change that person.' });
   const view = () => users.filter((x) => !mgr || L.ROLE(x.role) === 'editor' || x.email === me.email).map(U.publicUser);
+  /* Optionally emails the private link to the person. If the mailbox is not connected yet, the link is still returned so it can be copied. */
+  const inviteReply = async (email, link, extra) => {
+    const out = Object.assign({ users: view(), link }, extra || {});
+    if (b.send) {
+      const u = target(email);
+      if (!M.configured()) { out.emailed = false; out.emailNote = 'Email is not connected yet, so copy the link and send it yourself.'; }
+      else {
+        const who = me.name || me.email, nm = (u && u.name) || '';
+        const text = 'Hi' + (nm ? ' ' + nm : '') + ',\n\n' + who + ' has invited you to edit the MiKia website.\n\nOpen this private link to choose your password:\n' + link + '\n\nThe link works once and expires in ' + INVITE_DAYS + ' days. After that, sign in at ' + L.origin(req) + '/admin with your email and password.\n\nMiKia Design and Construction';
+        const html = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px"><p>Hi' + (nm ? ' ' + L.esc(nm) : '') + ',</p><p>' + L.esc(who) + ' has invited you to edit the MiKia website.</p><p><a href="' + L.esc(link) + '" style="display:inline-block;background:#c8323c;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Choose your password</a></p><p>Or paste this private link into your browser:<br>' + L.esc(link) + '</p><p>The link works once and expires in ' + INVITE_DAYS + ' days. After that, sign in at ' + L.esc(L.origin(req)) + '/admin with your email and password.</p><p>MiKia Design and Construction</p></div>';
+        try { await M.send({ to: email, subject: 'Your MiKia website editor login', text, html }); out.emailed = true; }
+        catch (e) { out.emailed = false; out.emailNote = 'The email could not be sent, so copy the link and send it yourself.'; }
+      }
+    }
+    return out;
+  };
   if (action === 'invite') {
     const email = U.cleanEmail(b.email), name = L.FB_CLEAN(b.name, 80), role = mgr ? 'editor' : L.ROLE(b.role);
     if (!U.EMAIL.test(email)) return L.send(res, 400, { error: 'Please enter a valid email address.' });
@@ -63,7 +80,7 @@ module.exports = async function (req, res) {
     const token = crypto.randomBytes(24).toString('base64url');
     u.invite = { h: hashToken(token), exp: new Date(Date.now() + INVITE_DAYS * 864e5).toISOString() };
     await U.writeUsers(users);
-    return L.send(res, 200, { users: view(), link: L.origin(req) + '/admin?invite=' + token + '&email=' + encodeURIComponent(email) });
+    return L.send(res, 200, await inviteReply(email, L.origin(req) + '/admin?invite=' + token + '&email=' + encodeURIComponent(email)));
   }
   if (action === 'reset') {
     const email = U.cleanEmail(b.email);
@@ -72,7 +89,7 @@ module.exports = async function (req, res) {
     const token = crypto.randomBytes(24).toString('base64url');
     u.invite = { h: hashToken(token), exp: new Date(Date.now() + INVITE_DAYS * 864e5).toISOString() };
     await U.writeUsers(users);
-    return L.send(res, 200, { users: view(), link: L.origin(req) + '/admin?invite=' + token + '&email=' + encodeURIComponent(email) });
+    return L.send(res, 200, await inviteReply(email, L.origin(req) + '/admin?invite=' + token + '&email=' + encodeURIComponent(email)));
   }
   if (action === 'list') return L.send(res, 200, { users: view() });
   if (action === 'save') {
