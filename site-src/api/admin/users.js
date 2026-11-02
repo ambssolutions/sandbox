@@ -7,6 +7,29 @@ const S = require('../_settings');
 const crypto = require('crypto');
 const INVITE_DAYS = 7;
 const hashToken = (t) => L.sign('invite:' + t);
+/* Asks GitHub about the saved key. GitHub reports a fine-grained key's expiry date in a response header. Cached for a few minutes. */
+let keyCache = { t: 0, sig: '', v: null };
+async function keyStatus(force) {
+  const tok = process.env.GITHUB_TOKEN, repo = process.env.GITHUB_REPO || 'ambssolutions/mikia';
+  if (!tok) return { set: false };
+  const sig = tok.slice(-6) + repo;
+  if (!force && keyCache.sig === sig && Date.now() - keyCache.t < 5 * 60000) return keyCache.v;
+  let v;
+  try {
+    const r = await fetch('https://api.github.com/repos/' + repo, { headers: { Authorization: 'Bearer ' + tok, Accept: 'application/vnd.github+json', 'User-Agent': 'mikia-site-editor' } });
+    const j = await r.json().catch(() => ({}));
+    const raw = r.headers && r.headers.get && r.headers.get('github-authentication-token-expiration');
+    let expires = '', days = null;
+    if (raw) { const d = new Date(String(raw).replace(' UTC', 'Z').replace(' ', 'T')); if (!isNaN(d)) { expires = d.toISOString(); days = Math.ceil((d.getTime() - Date.now()) / 864e5); } }
+    if (r.status === 401) v = { set: true, ok: false, note: 'GitHub did not accept this key. It may be wrong or expired.', expires, days };
+    else if (r.status === 404) v = { set: true, ok: false, note: 'This key cannot see ' + repo + '. Check the repository name and that the key was given to that repository.', expires, days };
+    else if (!r.ok) v = { set: true, ok: false, note: 'GitHub said: ' + (j.message || r.status), expires, days };
+    else if (j.permissions && !j.permissions.push) v = { set: true, ok: false, note: 'The key can read ' + repo + ' but cannot change it. Give it "Contents: Read and write".', expires, days };
+    else v = { set: true, ok: true, note: 'Connected to ' + repo + '. The editor can publish.', expires, days };
+  } catch (e) { return { set: true, ok: null, note: 'Could not reach GitHub just now.' }; }
+  keyCache = { t: Date.now(), sig, v };
+  return v;
+}
 /* Step back from "view as" to the owner's own sign-in. */
 function stepBack(req, res) {
   const o = L.readBack(req);
@@ -46,7 +69,7 @@ module.exports = async function (req, res) {
   const target = (email) => users.find((x) => x.email === email);
   if (/^(settings|savesettings|testgithub|testmail)$/.test(action)) {
     if (me.role !== 'owner') return L.send(res, 403, { error: 'Only AMBS can change connections.' });
-    if (action === 'settings') return L.send(res, 200, { settings: S.summary() });
+    if (action === 'settings') return L.send(res, 200, { settings: S.summary(), key: await keyStatus(!!b.fresh) });
     if (action === 'savesettings') {
       const patch = {}; for (const k of Object.keys(S.KEYS)) if (Object.prototype.hasOwnProperty.call(b.values || {}, k)) patch[k] = b.values[k];
       if (patch.master_login === 'off') {
@@ -54,20 +77,13 @@ module.exports = async function (req, res) {
         if (!us.some((x) => x.role === 'owner' && x.hash && !x.invite && !x.disabled)) return L.send(res, 400, { error: 'Add an owner who can sign in with an email and password first, or you could be locked out.' });
       }
       await S.save(patch);
+      keyCache = { t: 0, sig: '', v: null };
       return L.send(res, 200, { settings: S.summary() });
     }
     if (action === 'testgithub') {
-      const tok = process.env.GITHUB_TOKEN, repo = process.env.GITHUB_REPO || 'ambssolutions/mikia';
-      if (!tok) return L.send(res, 200, { ok: false, note: 'No GitHub access key has been saved yet.' });
-      try {
-        const r = await fetch('https://api.github.com/repos/' + repo, { headers: { Authorization: 'Bearer ' + tok, Accept: 'application/vnd.github+json', 'User-Agent': 'mikia-site-editor' } });
-        const j = await r.json().catch(() => ({}));
-        if (r.status === 401) return L.send(res, 200, { ok: false, note: 'GitHub did not accept this key. It may be wrong or expired.' });
-        if (r.status === 404) return L.send(res, 200, { ok: false, note: 'This key cannot see ' + repo + '. Check the repository name and that the key was given to that repository.' });
-        if (!r.ok) return L.send(res, 200, { ok: false, note: 'GitHub said: ' + (j.message || r.status) });
-        if (j.permissions && !j.permissions.push) return L.send(res, 200, { ok: false, note: 'The key can read ' + repo + ' but cannot change it. Give it "Contents: Read and write".' });
-        return L.send(res, 200, { ok: true, note: 'Connected to ' + repo + '. The editor can publish.' });
-      } catch (e) { return L.send(res, 200, { ok: false, note: 'Could not reach GitHub just now. Try again in a moment.' }); }
+      const k = await keyStatus(true);
+      if (!k.set) return L.send(res, 200, { ok: false, note: 'No GitHub access key has been saved yet.' });
+      return L.send(res, 200, { ok: !!k.ok, note: k.note + (k.ok && k.days != null ? ' It expires in ' + k.days + (k.days === 1 ? ' day.' : ' days.') : ''), key: k });
     }
     if (action === 'testmail') {
       const to = U.cleanEmail(b.to) || (me.email !== 'master' ? me.email : '');

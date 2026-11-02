@@ -34,6 +34,9 @@ if 'id="cnMaster"' not in panes:
 if 'ad-fld' not in panes:
     panes = re.sub(r'(<label for="adInv(?:Email|Name|Role)">[^<]*</label>)(<input[^>]*>|<select.*?</select>)', r'<div class="ad-fld">\1\2</div>', panes, flags=re.S)
     assert panes.count('ad-fld') == 3
+if 'cnGhExp' not in panes:
+    assert '<label for="cnGhTok">' in panes
+    panes = panes.replace('<label for="cnGhTok">', '<p class="cn-exp" id="cnGhExp" hidden></p><label for="cnGhTok">', 1)
 script = re.search(r'<script src="assets/admin\.js\?v=[0-9a-f]+" defer></script>', h).group(0)
 
 def ic(p): return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>' % p
@@ -63,7 +66,7 @@ def card(tab, title, desc, extra='', need='', badge=''):
             % (' data-need="%s" hidden' % need if need else '', I[tab], tab, title, badge, desc, extra))
 chips = '<div class="hm-chips"><button type="button" data-go="onpage">&#9998; On page</button><button type="button" data-go="form">&#9776; Form</button></div>'
 home = ('<div data-pane="home"><h1 class="hm-hi" id="hmHi">Hello</h1><p class="hm-sub" id="hmDate"></p>'
- '<div class="hm-row"><button type="button" class="hm-pill" data-go="newpage">+ Add a page</button><button type="button" class="hm-pill" data-tab="photos">+ Add a photo</button></div>'
+ '<div class="hm-alert" id="hmAlert" hidden><span id="hmAlertText"></span><button type="button" data-tab="conn">Open Connections</button></div><div class="hm-row"><button type="button" class="hm-pill" data-go="newpage">+ Add a page</button><button type="button" class="hm-pill" data-tab="photos">+ Add a photo</button></div>'
  '<h3 class="hm-h">Edit your website</h3><div class="hm-grid">'
  + card('pages', 'Pages and text', 'Every word, link and picture on every page. Add paragraphs, links and buttons.', chips)
  + card('photos', 'Photos', 'The project photos shown on the website.')

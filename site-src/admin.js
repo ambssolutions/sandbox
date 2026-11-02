@@ -42,6 +42,7 @@ function enter(user){
   Object.keys(SECNAME).forEach(function(k){var on=can(k);[].forEach.call(root.querySelectorAll('.sb [data-tab='+k+']'),function(el){el.hidden=!on;});[].forEach.call(root.querySelectorAll('.hm-t[data-tab='+k+']'),function(el){el.closest('.hm-card').hidden=!on;});[].forEach.call(root.querySelectorAll('.hm-pill[data-tab='+k+']'),function(el){el.hidden=!on;});});
   [].forEach.call(root.querySelectorAll('.hm-pill[data-go=newpage]'),function(el){el.hidden=!can('pages');});
   [].forEach.call(root.querySelectorAll('.hm-h'),function(h){var g=h.nextElementSibling;if(g&&g.classList.contains('hm-grid')&&!g.querySelector('.hm-card:not([hidden])')){h.hidden=true;g.hidden=true;}});
+  if(user.role==='owner')post('/api/admin/users',{action:'settings'}).then(function(j){hmKey(j.key);}).catch(function(){});
   tab('home');if(can('photos'))load();if(can('pages')||can('details'))siteStatus();
 }
 /* ---- photos ---- */
@@ -141,10 +142,26 @@ uList.addEventListener('click',function(e){
 });
 /* ---- connections (owners only) ---- */
 function cnState(el,x){el.className='cn-st'+(x.set?' on':'');el.textContent=x.set?(x.from==='vercel'?'Set in Vercel':'Saved'+(x.hint?' '+x.hint:'')):'Not set';}
-function cnShow(st){$('#cnMasterOff').checked=st.master_login.value==='off';cnState($('#cnGhState'),st.github_token);cnState($('#cnMailState'),st.smtp_password);$('#cnGhRepo').value=st.github_repo.value||'';$('#cnMailUser').value=st.smtp_user.value||'';$('#cnGhTok').value='';$('#cnMailPw').value='';}
-function cnLoad(){return post('/api/admin/users',{action:'settings'}).then(function(j){cnShow(j.settings);}).catch(function(er){say(er.message,true);});}
-function cnSave(vals,msg){return post('/api/admin/users',{action:'savesettings',values:vals}).then(function(j){cnShow(j.settings);say(msg);}).catch(function(er){say(er.message,true);});}
-function cnTest(action){say('Testing...');return post('/api/admin/users',{action:action}).then(function(j){say(j.note,!j.ok);if(j.ok&&action==='testgithub')siteStatus();}).catch(function(er){say(er.message,true);});}
+function cnDate(iso){try{return new Date(iso).toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'});}catch(e){return '';}}
+function keyLine(k){
+  if(!k||!k.set)return{t:'',c:''};
+  if(k.ok===false)return{t:k.note+(k.days!=null&&k.days<=0?' It expired on '+cnDate(k.expires)+'.':''),c:'bad'};
+  if(k.days==null)return{t:'GitHub did not report an expiry date for this key.',c:''};
+  var w=k.days<=0?'Expired on '+cnDate(k.expires)+'.':'Expires on '+cnDate(k.expires)+' (in '+k.days+(k.days===1?' day':' days')+').';
+  return{t:w+(k.days<=30?' Make a new key soon and save it here.':''),c:k.days<=0?'bad':k.days<=30?'warn':'okk'};
+}
+function cnKey(k){var l=keyLine(k),el=$('#cnGhExp');el.hidden=!l.t;el.textContent=l.t;el.className='cn-exp '+l.c;}
+function hmKey(k){
+  var a=$('#hmAlert'),t=$('#hmAlertText');if(!a)return;var show=false,msg='';
+  if(k&&!k.set){show=true;msg='Publishing is not connected yet. Save the GitHub access key to let people publish their changes.';}
+  else if(k&&k.ok===false){show=true;msg='Publishing is not working: '+k.note;}
+  else if(k&&k.days!=null&&k.days<=30){show=true;msg=k.days<=0?'The GitHub key has expired, so publishing has stopped.':'The GitHub key expires in '+k.days+(k.days===1?' day':' days')+' ('+cnDate(k.expires)+'). Make a new key before then.';}
+  a.hidden=!show;t.textContent=msg;
+}
+function cnShow(st,key){if(key)cnKey(key);$('#cnMasterOff').checked=st.master_login.value==='off';cnState($('#cnGhState'),st.github_token);cnState($('#cnMailState'),st.smtp_password);$('#cnGhRepo').value=st.github_repo.value||'';$('#cnMailUser').value=st.smtp_user.value||'';$('#cnGhTok').value='';$('#cnMailPw').value='';}
+function cnLoad(){return post('/api/admin/users',{action:'settings',fresh:true}).then(function(j){cnShow(j.settings,j.key);hmKey(j.key);}).catch(function(er){say(er.message,true);});}
+function cnSave(vals,msg){return post('/api/admin/users',{action:'savesettings',values:vals}).then(function(j){cnShow(j.settings);say(msg);return cnLoad();}).catch(function(er){say(er.message,true);});}
+function cnTest(action){say('Testing...');return post('/api/admin/users',{action:action}).then(function(j){say(j.note,!j.ok);if(j.key){cnKey(j.key);hmKey(j.key);}if(j.ok&&action==='testgithub')siteStatus();}).catch(function(er){say(er.message,true);});}
 $('#cnGh').addEventListener('submit',function(e){e.preventDefault();var f=e.target,v={github_repo:f.github_repo.value};if(f.github_token.value)v.github_token=f.github_token.value;cnSave(v,'Saved. Press Test connection to check it.');});
 $('#cnMail').addEventListener('submit',function(e){e.preventDefault();var f=e.target,v={smtp_user:f.smtp_user.value};if(f.smtp_password.value)v.smtp_password=f.smtp_password.value;cnSave(v,'Saved. Press Send a test email to check it.');});
 $('#cnMaster').addEventListener('submit',function(e){e.preventDefault();cnSave({master_login:$('#cnMasterOff').checked?'off':''},$('#cnMasterOff').checked?'Saved. Signing in with only the master password is now switched off.':'Saved. Signing in with only the master password is allowed again.');});
