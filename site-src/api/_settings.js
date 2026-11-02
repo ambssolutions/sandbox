@@ -4,7 +4,7 @@
 const crypto = require('crypto');
 const L = require('./_lib');
 
-const KEYS = { github_token: 'GITHUB_TOKEN', github_repo: 'GITHUB_REPO', github_branch: 'GITHUB_BRANCH', smtp_password: 'SMTP_PASSWORD', smtp_user: 'SMTP_USER', smtp_host: 'SMTP_HOST' };
+const KEYS = { github_token: 'GITHUB_TOKEN', github_repo: 'GITHUB_REPO', github_branch: 'GITHUB_BRANCH', smtp_password: 'SMTP_PASSWORD', smtp_user: 'SMTP_USER', smtp_host: 'SMTP_HOST', master_login: 'MASTER_LOGIN' };
 const SECRET = new Set(['github_token', 'smtp_password']);
 const orig = {}; for (const e of Object.values(KEYS)) orig[e] = process.env[e];
 const path = () => 'admin/s-' + L.sign('settingstore').slice(0, 32) + '.json';
@@ -38,4 +38,6 @@ function summary() {
 /* The AMBS master password can be changed from the admin. Once it has been, the new one (stored only as a salted hash) is used instead of the Vercel setting. */
 const masterHash = () => cache.vals.master_hash || '';
 async function setMasterHash(h) { await load(true); const vals = Object.assign({}, cache.vals, { master_hash: h }); await L.writeStore(path(), { d: enc(vals), updated: new Date().toISOString() }); cache = { t: Date.now(), vals }; apply(); }
-module.exports = { load, save, summary, masterHash, setMasterHash, KEYS };
+/* Sign-in with just the master password (no email) can be switched off once an owner has an email login. ADMIN_MASTER_LOGIN=on in Vercel always switches it back on, in case nobody can sign in. */
+const masterAllowed = () => process.env.ADMIN_MASTER_LOGIN === 'on' || process.env.MASTER_LOGIN !== 'off';
+module.exports = { load, save, summary, masterHash, setMasterHash, masterAllowed, KEYS };

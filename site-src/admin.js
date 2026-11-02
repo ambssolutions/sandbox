@@ -10,7 +10,7 @@ function api(path,opt){
   return fetch(path,opt).then(function(r){return r.json().catch(function(){return{};}).then(function(j){if(!r.ok){var e=new Error(j.error||'Something went wrong.');e.status=r.status;throw e;}return j;});});
 }
 function post(path,obj){return api(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(obj)});}
-function showLogin(){panel.hidden=true;inviteBox.hidden=true;loginBox.hidden=false;me=null;}
+function showLogin(j){if(!j)api('/api/admin/users').then(function(x){if(x&&x.auth===false)showLogin(x);}).catch(function(){});var h=$('#adLoginHint');if(h)h.textContent=j&&j.master===false?'Sign in with your email and password.':'AMBS: leave the email empty to use the master password.';$('#adEmail').required=!!(j&&j.master===false);panel.hidden=true;inviteBox.hidden=true;loginBox.hidden=false;me=null;}
 /* ---- tabs ---- */
 function tab(name){
   [].forEach.call(root.querySelectorAll('[data-pane]'),function(p){p.hidden=p.getAttribute('data-pane')!==name;});
@@ -141,12 +141,13 @@ uList.addEventListener('click',function(e){
 });
 /* ---- connections (owners only) ---- */
 function cnState(el,x,label){el.textContent=x.set?(x.from==='vercel'?'(set in Vercel)':'(saved'+(x.hint?', '+x.hint:'')+')'):'(not set)';}
-function cnShow(st){cnState($('#cnGhState'),st.github_token);cnState($('#cnMailState'),st.smtp_password);$('#cnGhRepo').value=st.github_repo.value||'';$('#cnMailUser').value=st.smtp_user.value||'';$('#cnGhTok').value='';$('#cnMailPw').value='';}
+function cnShow(st){$('#cnMasterOff').checked=st.master_login.value==='off';cnState($('#cnGhState'),st.github_token);cnState($('#cnMailState'),st.smtp_password);$('#cnGhRepo').value=st.github_repo.value||'';$('#cnMailUser').value=st.smtp_user.value||'';$('#cnGhTok').value='';$('#cnMailPw').value='';}
 function cnLoad(){return post('/api/admin/users',{action:'settings'}).then(function(j){cnShow(j.settings);}).catch(function(er){say(er.message,true);});}
 function cnSave(vals,msg){return post('/api/admin/users',{action:'savesettings',values:vals}).then(function(j){cnShow(j.settings);say(msg);}).catch(function(er){say(er.message,true);});}
 function cnTest(action){say('Testing...');return post('/api/admin/users',{action:action}).then(function(j){say(j.note,!j.ok);if(j.ok&&action==='testgithub')siteStatus();}).catch(function(er){say(er.message,true);});}
 $('#cnGh').addEventListener('submit',function(e){e.preventDefault();var f=e.target,v={github_repo:f.github_repo.value};if(f.github_token.value)v.github_token=f.github_token.value;cnSave(v,'Saved. Press Test connection to check it.');});
 $('#cnMail').addEventListener('submit',function(e){e.preventDefault();var f=e.target,v={smtp_user:f.smtp_user.value};if(f.smtp_password.value)v.smtp_password=f.smtp_password.value;cnSave(v,'Saved. Press Send a test email to check it.');});
+$('#cnMaster').addEventListener('submit',function(e){e.preventDefault();cnSave({master_login:$('#cnMasterOff').checked?'off':''},$('#cnMasterOff').checked?'Saved. Signing in with only the master password is now switched off.':'Saved. Signing in with only the master password is allowed again.');});
 $('#cnGhTest').addEventListener('click',function(){cnTest('testgithub');});
 $('#cnMailTest').addEventListener('click',function(){cnTest('testmail');});
 $('#cnGhClear').addEventListener('click',function(){if(confirm('Remove the saved GitHub key? The editor will not be able to publish until a new one is saved.'))cnSave({github_token:''},'Key removed.');});
@@ -334,7 +335,7 @@ if(invTok&&invEmail){
     post('/api/admin/users',{action:'accept',email:invEmail,token:invTok,password:f.p1.value}).then(function(j){history.replaceState(null,'',location.pathname);f.reset();enter(j.user);say('Welcome. Your password is saved.');}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
   });
 }else{
-  api('/api/admin/users').then(function(j){if(j.auth){enter(j.user);if(j.viewing){$('#adViewAs').hidden=false;$('#adViewAsText').textContent='You are viewing the editor as '+(j.user.name||j.user.email)+' ('+ROLENAME[j.user.role]+'). What you change is real.';}}else showLogin();}).catch(showLogin);
+  api('/api/admin/users').then(function(j){if(j.auth){enter(j.user);if(j.viewing){$('#adViewAs').hidden=false;$('#adViewAsText').textContent='You are viewing the editor as '+(j.user.name||j.user.email)+' ('+ROLENAME[j.user.role]+'). What you change is real.';}}else showLogin(j);}).catch(function(){showLogin();});
   $('#adViewBack').addEventListener('click',function(){post('/api/admin/users',{action:'back'}).then(function(){location.reload();}).catch(function(er){say(er.message,true);});});
 }
 })();

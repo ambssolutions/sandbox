@@ -21,6 +21,8 @@ module.exports = async function (req, res) {
   if (!pw) return bad();
   if (!email) {
     await S.load();
+    if (!S.masterAllowed()) return L.send(res, 403, { error: 'Please sign in with your email and password.' });
+    await S.load();
     const mh = S.masterHash(), master = process.env.ADMIN_PASSWORD;
     if (mh ? !U.checkPassword(pw, mh) : (!master || !L.safeEq(pw, master))) return bad();
     delete fails[key];

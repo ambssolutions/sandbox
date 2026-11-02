@@ -35,6 +35,7 @@ module.exports = async function (req, res) {
     res.setHeader('Set-Cookie', L.sessionCookieFor(u));
     return L.send(res, 200, { ok: true, user: U.publicUser(u) });
   }
+  if (req.method === 'GET' && !me) { await S.load(); return L.send(res, 200, { auth: false, master: S.masterAllowed() }); }
   if (req.method === 'GET' || !me) return L.send(res, 200, me ? { auth: true, user: me, viewing: !!L.readBack(req) } : { auth: false });
   if (req.method !== 'POST') { res.setHeader('Allow', 'GET, POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   if (!L.storageReady()) return L.send(res, 503, { error: 'Storage is not connected yet.' });
@@ -48,6 +49,10 @@ module.exports = async function (req, res) {
     if (action === 'settings') return L.send(res, 200, { settings: S.summary() });
     if (action === 'savesettings') {
       const patch = {}; for (const k of Object.keys(S.KEYS)) if (Object.prototype.hasOwnProperty.call(b.values || {}, k)) patch[k] = b.values[k];
+      if (patch.master_login === 'off') {
+        const us = await U.readUsers();
+        if (!us.some((x) => x.role === 'owner' && x.hash && !x.invite && !x.disabled)) return L.send(res, 400, { error: 'Add an owner who can sign in with an email and password first, or you could be locked out.' });
+      }
       await S.save(patch);
       return L.send(res, 200, { settings: S.summary() });
     }
