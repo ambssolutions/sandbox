@@ -151,10 +151,21 @@ function siteStatus(){
     return j;
   }).catch(function(er){if(er.status===503){siteOn=false;secPending.hidden=false;}});
 }
+var rvModal=$('#rvModal');
+function rvClose(){rvModal.hidden=true;}
 $('#adPublish').addEventListener('click',function(e){
-  if(!confirm('Put all saved changes on the live website now?'))return;
+  var b=e.target;b.disabled=true;say('Collecting your changes...');
+  site({action:'history'}).then(function(j){
+    say('');var n=j.draft.length;
+    $('#rvText').textContent=n?'These '+(n===1?'change goes':n+' changes go')+' on the website when you press Publish. You can still undo any of them afterwards.':'These changes go on the website when you press Publish.';
+    $('#rvList').innerHTML=j.draft.map(function(c){return '<li class="ad-row"><div class="ad-cap"><b>'+esc(chMsg(c))+'</b><span>'+esc(when2(c.date))+(chWho(c)?' by '+esc(chWho(c)):'')+'</span></div></li>';}).join('')||'<li class="ad-empty">Your saved changes.</li>';
+    rvModal.hidden=false;$('#rvGo').focus();
+  }).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
+});
+$('#rvKeep').addEventListener('click',rvClose);
+$('#rvGo').addEventListener('click',function(e){
   var b=e.target;b.disabled=true;say('Publishing...');
-  site({action:'publish'}).then(function(){say('Published. The website updates in about a minute.');return siteStatus();}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;if(edPath)edLoad(edPath);});
+  site({action:'publish'}).then(function(){rvClose();say('Published. The website updates in about a minute.');return siteStatus();}).catch(function(er){rvClose();say(er.message,true);}).then(function(){b.disabled=false;if(edPath)edLoad(edPath);});
 });
 $('#adDiscard').addEventListener('click',function(e){
   if(!confirm('Throw away all changes that are not published yet? This cannot be undone.'))return;
@@ -172,8 +183,12 @@ function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelecto
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
 $('#edClose').addEventListener('click',function(){modal.hidden=true;frame.srcdoc='';onPage=false;});
 window.addEventListener('message',function(e){if(!onPage||e.source!==frame.contentWindow||!e.data||e.data.mk!=='edit')return;var el=edFields.querySelector('[data-k="'+e.data.k+'"]:not(li)');if(!el)return;el.value=e.data.v;edDirty();});
-$('#edOnPage').addEventListener('click',function(){edRegion='main';$('#edFind').value='';edRender();preview(edPath,true);});
-$('#edModalSave').addEventListener('click',function(){if(edSave.disabled){modal.hidden=true;frame.srcdoc='';onPage=false;return;}edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;});
+function openOnPage(){edRegion='main';$('#edFind').value='';edRender();preview(edPath,true);}
+$('#edOnPage').addEventListener('click',openOnPage);
+function edWayShow(){edBody.hidden=true;$('#edWay').hidden=false;}
+$('#edWay').addEventListener('click',function(e){var b=e.target.closest('[data-way]');if(!b)return;if(b.getAttribute('data-way')==='form'){$('#edWay').hidden=true;edBody.hidden=false;}else openOnPage();});
+$('#edWayBack').addEventListener('click',function(){if(edChanges().length&&!confirm('You have changes that are not saved yet. Leave them behind?'))return;edLoad(edPath);});
+$('#edModalSave').addEventListener('click',function(){if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;});
 $('#adPreviewAll').addEventListener('click',function(){preview(edPath||'index.html');});
 $('#edPreview').addEventListener('click',function(){preview(edPath);});
 /* page list */
@@ -183,13 +198,14 @@ function edOpen(){
   if(edSel.options.length)return;
   site({action:'pages'}).then(function(j){
     edSel.innerHTML=j.pages.map(function(p){return '<option value="'+esc(p.path)+'">'+esc(p.title||p.path)+' ('+esc(p.url)+')</option>';}).join('');
+    $('#edPageList').innerHTML=j.pages.filter(function(p){return p.path!=='404.html';}).map(function(p){return '<option value="'+esc(p.path)+'">'+esc(p.title||p.path)+'</option>';}).join('');
     edLoad(edSel.value);
   }).catch(function(er){say(er.message,true);});
 }
 edSel.addEventListener('change',function(){edLoad(edSel.value);});
 function edLoad(path){
   edPath=path;say('');
-  return site({action:'page',path:path}).then(function(j){edData=j;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});edBody.hidden=false;$('#edTitle').textContent=j.title||path;edRender();}).catch(function(er){say(er.message,true);});
+  return site({action:'page',path:path}).then(function(j){edData=j;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});$('#edTitle').textContent=j.title||path;$('#edWayTitle').textContent=j.title||path;edRender();edWayShow();}).catch(function(er){say(er.message,true);});
 }
 var TAGNAME={h1:'Main heading',h2:'Heading',h3:'Heading',h4:'Heading',p:'Paragraph',li:'List item',a:'Link',button:'Button',span:'Text',b:'Bold text',strong:'Bold text',em:'Emphasis',figcaption:'Caption',summary:'Question',label:'Form label',small:'Small text',div:'Text',td:'Table cell',th:'Table heading',dt:'Term',dd:'Description',blockquote:'Quote',cite:'Name',option:'Choice'};
 function regionOf(f){return f.region==='nav'||f.region==='footer'?'shared':f.region==='head'?'head':'main';}
@@ -220,16 +236,16 @@ function addFill(reg){
   var keep=sel.value;sel.innerHTML=bl.map(function(b){return '<option value="'+b.b+'">After: '+esc(b.label.slice(0,48))+'</option>';}).join('');if(keep&&sel.querySelector('option[value="'+keep+'"]'))sel.value=keep;
 }
 var addPicSrc='';
-$('#edAddType').addEventListener('change',function(){var p=this.value==='picture';$('#edAddPic').hidden=!p;$('#edAddText').hidden=p;});
+$('#edAddType').addEventListener('change',function(){var v=this.value,p=v==='picture',l=v==='link'||v==='button';$('#edAddPic').hidden=!p;$('#edAddText').hidden=p;$('#edAddHrefRow').hidden=!l;$('#edAddText').placeholder=l?'The words on the '+v:'Type the words';$('#edAddText').rows=l?1:3;});
 $('#edAddFile').addEventListener('change',function(){var f=this.files[0];if(!f)return;$('#edAddName').textContent='Uploading...';
   shrink(f).then(function(bl){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(String(r.result).split(',')[1]);};r.onerror=no;r.readAsDataURL(bl);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});}).then(function(j){addPicSrc=j.src;$('#edAddName').textContent=f.name;}).catch(function(er){addPicSrc='';$('#edAddName').textContent='';say(er.message,true);});});
 $('#edAddGo').addEventListener('click',function(){
   var kind=$('#edAddType').value,b=$('#edAddGo');
   if(edChanges().length){say('Press Save changes first, then add something new.',true);return;}
-  var add={b:Number($('#edAddAfter').value),kind:kind,text:$('#edAddText').value,src:addPicSrc,alt:$('#edAddAlt').value};
+  var add={b:Number($('#edAddAfter').value),kind:kind,text:$('#edAddText').value,src:addPicSrc,alt:$('#edAddAlt').value,href:$('#edAddHref').value};
   if(kind==='picture'&&!addPicSrc){say('Choose a picture first.',true);return;}
   b.disabled=true;
-  site({action:'add',path:edPath,add:add}).then(function(j){edData.fields=j.fields;edData.items=j.items;edData.sections=j.sections;edData.blocks=j.blocks;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});$('#edAddText').value='';$('#edAddAlt').value='';$('#edAddName').textContent='';addPicSrc='';edRender();say('Added. It is in your draft, not on the website until you press Publish.');b.disabled=false;return siteStatus();}).catch(function(er){say(er.message,true);b.disabled=false;});
+  site({action:'add',path:edPath,add:add}).then(function(j){edData.fields=j.fields;edData.items=j.items;edData.sections=j.sections;edData.blocks=j.blocks;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});$('#edAddText').value='';$('#edAddHref').value='';$('#edAddAlt').value='';$('#edAddName').textContent='';addPicSrc='';edRender();say('Added. It is in your draft, not on the website until you press Publish.');b.disabled=false;return siteStatus();}).catch(function(er){say(er.message,true);b.disabled=false;});
 });
 $('#edSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;edRegion=b.getAttribute('data-r');edRender();});
 $('#edFind').addEventListener('input',function(){edRender();});
@@ -260,7 +276,7 @@ $('#edNew').addEventListener('click',function(){
 });
 $('#edDel').addEventListener('click',function(){
   if(!confirm('Delete the page "'+edPath+'"? It stays in your draft until you publish.'))return;
-  site({action:'deletepage',path:edPath}).then(function(){edSel.innerHTML='';edBody.hidden=true;say('Page deleted in your draft.');return siteStatus();}).then(function(){edOpen();}).catch(function(er){say(er.message,true);});
+  site({action:'deletepage',path:edPath}).then(function(){edSel.innerHTML='';edBody.hidden=true;$('#edWay').hidden=true;say('Page deleted in your draft.');return siteStatus();}).then(function(){edOpen();}).catch(function(er){say(er.message,true);});
 });
 /* contact details */
 function dtLoad(){site({action:'details'}).then(function(j){var f=$('#dtForm');Object.keys(j.details).forEach(function(k){if(f.elements[k])f.elements[k].value=j.details[k];});}).catch(function(er){say(er.message,true);});}
@@ -271,7 +287,9 @@ $('#dtForm').addEventListener('submit',function(e){
 });
 /* changes and undo */
 function when2(iso){try{return new Date(iso).toLocaleString('en-NZ',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});}catch(e){return '';}}
-function chRow(c,live){return '<li class="ad-row" data-sha="'+esc(c.sha)+'"><div class="ad-cap"><b>'+esc(String(c.message).replace(/^Website editor: /,''))+'</b><span>'+esc(when2(c.date))+(c.who?' by '+esc(c.who):'')+'</span></div><div class="ad-btns"><button type="button" data-undo="1">Undo</button></div></li>';}
+function chMsg(c){return String(c.message).replace(/^Website editor: /,'').replace(/\s*\([^)]*\)$/,'');}
+function chWho(c){var m=/\(([^)]*)\)$/.exec(String(c.message));return m?m[1]:'';}
+function chRow(c,live){return '<li class="ad-row" data-sha="'+esc(c.sha)+'"><div class="ad-cap"><b>'+esc(chMsg(c))+'</b><span>'+esc(when2(c.date))+(chWho(c)?' by '+esc(chWho(c)):'')+'</span></div><div class="ad-btns"><button type="button" data-undo="1">Undo</button></div></li>';}
 function chLoad(){site({action:'history'}).then(function(j){
   $('#chDraftH').hidden=!j.draft.length;$('#chDraft').innerHTML=j.draft.map(function(c){return chRow(c);}).join('');
   $('#chLive').innerHTML=j.live.map(function(c){return chRow(c,1);}).join('')||'<li class="ad-empty">No published changes yet.</li>';

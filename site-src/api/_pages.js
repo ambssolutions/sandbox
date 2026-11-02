@@ -161,7 +161,7 @@ function applyOp(html, op) {
   throw new Error('Unknown change.');
 }
 
-/* Adds new content under a piece of text: { b, kind: 'paragraph'|'heading'|'picture', text, src, alt }. It copies the look of the text next to it. */
+/* Adds new content under a piece of text: { b, kind: 'paragraph'|'heading'|'picture'|'link'|'button', text, src, alt, href }. It copies the look of the text next to it. */
 function addContent(html, a) {
   const x = extract(html), blk = x.blocks[Number(a.b)];
   if (!blk) throw new Error('That part of the page was not found. Reload it and try again.');
@@ -169,7 +169,19 @@ function addContent(html, a) {
   const sibling = (tags) => { for (const c of kids(blk.node.parentNode || blk.node)) if (tags.includes(c.tagName) && c.sourceCodeLocation && c.sourceCodeLocation.startTag) return html.slice(c.sourceCodeLocation.startTag.startOffset, c.sourceCodeLocation.startTag.endOffset); return null; };
   const parts = (t) => t.split(/\n\s*\n/).map((q) => esc(q.trim())).filter(Boolean);
   let add;
-  if (kind === 'picture') {
+  if (kind === 'link' || kind === 'button') {
+    const href = clean(a.href).trim();
+    if (!text) throw new Error('Type the words for the ' + kind + '.');
+    if (text.length > 80) throw new Error('Use a shorter label.');
+    if (!/^(https?:|mailto:|tel:|#|\/|[A-Za-z0-9._-]+(\.html)?(#[\w-]*)?$|[A-Za-z0-9._\/-]+(\.html)?(#[\w-]*)?$)/.test(href)) throw new Error('That link address does not look right.');
+    let open = '<a href="' + escAttr(href) + '"';
+    if (kind === 'button') { // copy the look of a button already on the website
+      const m = [...walk(x.doc)].find((n) => n.tagName === 'a' && /(^|\s)btn(\s|$)/.test(attr(n, 'class') || '') && n.sourceCodeLocation && n.sourceCodeLocation.startTag && regionOf(n) === 'main');
+      open = '<a class="' + escAttr(m ? attr(m, 'class').replace(/\b(hero-all|btn-all)\b/g, '').trim() : 'btn') + '" href="' + escAttr(href) + '"';
+    }
+    if (/^https?:/.test(href)) open += ' rel="noopener"';
+    add = '<p>' + open + '>' + esc(text.replace(/\s+/g, ' ')) + '</a></p>';
+  } else if (kind === 'picture') {
     const src = clean(a.src).trim();
     if (!/^(https?:\/\/|\/?[A-Za-z0-9._\/-]+)$/.test(src)) throw new Error('That picture address does not look right.');
     add = '<img src="' + escAttr(src) + '" alt="' + escAttr(clean(a.alt).trim()) + '" loading="lazy" style="max-width:100%;height:auto;border-radius:12px;margin:12px 0">';

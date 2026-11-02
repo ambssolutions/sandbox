@@ -4827,3 +4827,12 @@ html body .ad-chk[hidden],html body .ad-add[hidden]{display:none}
 html body .ad-modal .ad-help{margin:0 8px;align-self:center}
 html body .ad-btns select{padding:8px 10px;border-radius:10px;border:1px solid rgba(25,25,25,.3);font:inherit}
 html body .ad-badge.off{background:#c8323c;color:#fff;border-color:#c8323c}
+html body .ad-ways{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+html body .ad-way{display:flex;flex-direction:column;gap:6px;text-align:left;padding:16px;border:1px solid rgba(25,25,25,.3);border-radius:14px;background:#fff;cursor:pointer;font:inherit;min-height:0}
+html body .ad-way b{font-size:17px}html body .ad-way span{font-size:14px;color:#626262;line-height:1.4}
+html body .ad-way:hover{border-color:#c8323c}
+@media(max-width:600px){html body .ad-ways{grid-template-columns:1fr}}
+html body .ad-rv ul{max-height:50vh;overflow:auto;margin:10px 0}
+html body #edWay[hidden],html body #rvModal[hidden]{display:none}
+html body .ad-modal-in.ad-rv{width:min(560px,100%);height:auto;max-height:90vh;padding:18px;text-align:left}html body .ad-rv h2{margin:0}
+html body .ad-btns button.ad-ap{color:#fff;background:#12201b;border-color:#12201b}html body .ad-btns button.ad-ap:disabled{opacity:.45}
