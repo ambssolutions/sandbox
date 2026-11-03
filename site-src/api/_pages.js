@@ -199,4 +199,36 @@ function addContent(html, a) {
   return html.slice(0, blk.end) + add + html.slice(blk.end);
 }
 
-module.exports = { extract, publicView, applyChanges, applyOp, addContent, esc, escAttr };
+/* What changed between two versions of a page, in plain words: wording, links, picture descriptions, pictures, things added or removed. */
+function diffPages(before, after) {
+  const what = (f) => (f.region === 'head' ? 'Google and sharing text' : f.kind === 'text' ? 'Wording' : f.attr === 'alt' ? 'Picture description' : f.attr === 'src' ? 'Picture' : f.attr === 'href' ? 'Link' : 'Text');
+  const toList = (h) => extract(h).fields.map((f) => ({ what: what(f), val: String(f.value).replace(/\s+/g, ' ').trim(), label: f.label || '' })).filter((x) => x.val);
+  const A = toList(before), B = toList(after), key = (x) => x.what + '\u0001' + x.val + '\u0001' + x.label;
+  const n = A.length, m = B.length;
+  if (n * m > 4e6) return [{ type: 'changed', what: 'Page', from: 'many parts', to: 'many parts' }];
+  const L = Array.from({ length: n + 1 }, () => new Uint16Array(m + 1));
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) L[i][j] = key(A[i]) === key(B[j]) ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+  const ops = []; let i = 0, j = 0;
+  while (i < n || j < m) {
+    if (i < n && j < m && key(A[i]) === key(B[j])) { ops.push({ eq: true }); i++; j++; }
+    else if (j < m && (i === n || L[i][j + 1] >= L[i + 1][j])) ops.push({ add: B[j++] });
+    else ops.push({ del: A[i++] });
+  }
+  /* Within each run of differences, a removed item and an added item of the same kind are shown as one change. */
+  const out = []; let k = 0;
+  while (k < ops.length) {
+    if (ops[k].eq) { k++; continue; }
+    const dels = [], adds = [];
+    while (k < ops.length && !ops[k].eq) { if (ops[k].del) dels.push(ops[k].del); else adds.push(ops[k].add); k++; }
+    const used = new Set(), pairs = [];
+    for (const d of dels) {
+      let a = adds.findIndex((x, ix) => !used.has(ix) && x.what === d.what && x.label === d.label);
+      if (a < 0) a = adds.findIndex((x, ix) => !used.has(ix) && x.what === d.what);
+      if (a >= 0) { used.add(a); pairs.push([d, adds[a]]); } else pairs.push([d, null]);
+    }
+    for (const [d, a] of pairs) { if (a) out.push({ type: 'changed', what: a.what, from: d.val, to: a.val }); else out.push({ type: 'removed', what: d.what, from: d.val }); }
+    adds.forEach((a, ix) => { if (!used.has(ix)) out.push({ type: 'added', what: a.what, to: a.val }); });
+  }
+  return out;
+}
+module.exports = { diffPages, extract, publicView, applyChanges, applyOp, addContent, esc, escAttr };

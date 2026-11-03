@@ -86,4 +86,20 @@ async function revertFiles(sha) {
   }
   return { files: out, message: String(c.commit.message).split('\n')[0] };
 }
-module.exports = { ready, LIVE, DRAFT, REPO, working, ensureDraft, readFile, readText, exists, listFiles, commit, publish, discard, ahead, history, revertFiles, refSha };
+/* Each file a commit touched, with its text before and after (for pages and data files). Pictures are only listed. */
+async function commitDiff(sha) {
+  const c = await gh('GET', '/commits/' + sha);
+  const parent = c.parents && c.parents[0] && c.parents[0].sha;
+  const out = [];
+  for (const f of c.files || []) {
+    const isText = /\.(html|js|txt)$/.test(f.filename);
+    const e = { path: f.filename, status: f.status, text: isText };
+    if (isText) {
+      try { e.before = f.status === 'added' || !parent ? '' : (await readFile(f.filename, parent)).buffer.toString('utf8'); } catch (er) { e.before = ''; }
+      try { e.after = f.status === 'removed' ? '' : (await readFile(f.filename, sha)).buffer.toString('utf8'); } catch (er) { e.after = ''; }
+    }
+    out.push(e);
+  }
+  return { message: String(c.commit.message).split('\n')[0], files: out };
+}
+module.exports = { commitDiff, ready, LIVE, DRAFT, REPO, working, ensureDraft, readFile, readText, exists, listFiles, commit, publish, discard, ahead, history, revertFiles, refSha };
