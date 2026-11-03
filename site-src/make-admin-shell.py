@@ -64,6 +64,10 @@ if 'cnFbTo' not in panes:
     panes = panes.replace('<div class="ad-btns"><button class="ad-go" type="submit">Save</button><button type="button" id="cnMailTest">', '<label for="cnFbTo">Send customer feedback to</label><input id="cnFbTo" name="feedback_to" type="text" placeholder="info@mikia.co.nz"><p class="ad-help">Every "Share your experience" message is emailed here with a button to approve it for the website.</p><div class="ad-btns"><button class="ad-go" type="submit">Save</button><button type="button" id="cnMailTest">', 1)
     panes = panes.replace('<button type="button" id="cnMailClear"', '<button type="button" id="cnFbTest">Send a test feedback message</button><button type="button" id="cnMailClear"', 1)
     assert 'cnFbTest' in panes
+if 'value="super"' not in panes:
+    assert '<option value="owner">Owner (AMBS)</option>' in panes
+    panes = panes.replace('<option value="owner">Owner (AMBS)</option>', '<option value="owner">Owner (AMBS)</option><option value="super">Super admin</option>', 1)
+    panes = panes.replace('Owners (AMBS) manage everyone. A MiKia admin can add and remove editors. Editors can change everything on the website but cannot add people.', 'Super admins can also see Connections and choose who else is a super admin or owner. Owners (AMBS) manage everyone else. A MiKia admin can add and remove editors. Editors can change everything they are given but cannot add people.', 1)
 script = re.search(r'<script src="assets/admin\.js\?v=[0-9a-f]+" defer></script>', h).group(0)
 
 def ic(p): return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>' % p

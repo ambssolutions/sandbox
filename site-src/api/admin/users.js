@@ -178,15 +178,16 @@ module.exports = async function (req, res) {
     return out;
   };
   if (action === 'invite') {
-    const email = U.cleanEmail(b.email), name = L.FB_CLEAN(b.name, 80), role = mgr ? 'editor' : L.ROLE(b.role);
+    const email = U.cleanEmail(b.email), name = L.FB_CLEAN(b.name, 80), wantSuper = !mgr && b.role === 'super', role = mgr ? 'editor' : wantSuper ? 'owner' : L.ROLE(b.role);
     if (!U.EMAIL.test(email)) return L.send(res, 400, { error: 'Please enter a valid email address.' });
     let u = users.find((x) => x.email === email);
+    if (!mgr && !me.super && (role === 'owner' || (u && L.ROLE(u.role) === 'owner'))) return L.send(res, 403, { error: 'Only a super admin can add or change owners and super admins.' });
     if (u && u.hash && !u.invite) return L.send(res, 400, { error: 'That person already has a login. Use "Reset password" to give them a new link.' });
     if (u && mgr && L.ROLE(u.role) !== 'editor') return L.send(res, 403, { error: 'Only AMBS can change that person.' });
     if (u && u.role === 'owner' && role !== 'owner' && owners() <= 1) return L.send(res, 400, { error: 'There must be at least one owner.' });
     if (!u) { u = { email, created: new Date().toISOString() }; users.push(u); }
     u.name = name || u.name || ''; u.role = role;
-    if (role !== 'owner') delete u.super;
+    if (wantSuper) u.super = true; else delete u.super;
     if (role === 'editor') u.access = U.cleanAccess(b.access); else delete u.access;
     const token = crypto.randomBytes(24).toString('base64url');
     u.invite = { h: hashToken(token), exp: new Date(Date.now() + INVITE_DAYS * 864e5).toISOString() };
@@ -221,16 +222,18 @@ module.exports = async function (req, res) {
   }
   if (action === 'list') return L.send(res, 200, { users: view() });
   if (action === 'save') {
-    const email = U.cleanEmail(b.email), name = L.FB_CLEAN(b.name, 80), role = mgr ? 'editor' : L.ROLE(b.role);
+    const email = U.cleanEmail(b.email), name = L.FB_CLEAN(b.name, 80), wantSuper = !mgr && b.role === 'super', role = mgr ? 'editor' : wantSuper ? 'owner' : L.ROLE(b.role);
     if (!U.EMAIL.test(email)) return L.send(res, 400, { error: 'Please enter a valid email address.' });
     let u = users.find((x) => x.email === email);
     if (u && mgr && L.ROLE(u.role) !== 'editor') return L.send(res, 403, { error: 'Only AMBS can change that person.' });
+    if (!mgr && !me.super && (role === 'owner' || (u && L.ROLE(u.role) === 'owner'))) return L.send(res, 403, { error: 'Only a super admin can add or change owners and super admins.' });
+    if (u && email === me.email && !wantSuper && u.super) return L.send(res, 400, { error: 'You cannot take super admin rights from yourself. Ask another super admin.' });
     if (u && u.role === 'owner' && role !== 'owner' && owners() <= 1) return L.send(res, 400, { error: 'There must be at least one owner.' });
     if (!u && !b.password) return L.send(res, 400, { error: 'Please set a password for the new person.' });
     if (b.password) { const pr = U.passwordProblem(b.password); if (pr) return L.send(res, 400, { error: pr }); }
     if (!u) { u = { email, created: new Date().toISOString() }; users.push(u); }
     u.name = name || u.name || ''; u.role = role;
-    if (role !== 'owner') delete u.super;
+    if (wantSuper) u.super = true; else delete u.super;
     if (b.password) u.hash = U.hashPassword(b.password);
     await U.writeUsers(users);
     return L.send(res, 200, { users: view() });
