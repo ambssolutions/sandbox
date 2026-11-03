@@ -193,7 +193,7 @@ var pbPages=false;
 function pbLoad(){
   var card=$('#pbCard');if(!card||card.hidden)return;
   if(pbPages){pbShow();return;}
-  site({action:'pages'}).then(function(j){pbPages=true;$('#pbPage').innerHTML=j.pages.filter(function(p){return p.path!=='404.html';}).map(function(p){return '<option value="'+esc(p.path)+'">'+esc(p.title||p.path)+' ('+esc(p.url)+')</option>';}).join('');pbShow();}).catch(function(er){say(er.message,true);});
+  site({action:'pages'}).then(function(j){pbPages=true;$('#pbPage').innerHTML=j.pages.filter(function(p){return p.path!=='404.html';}).map(function(p){return '<option value="'+esc(p.path)+'">'+esc(pn(p.path,p.title))+' ('+esc(p.url)+')</option>';}).join('');pbShow();}).catch(function(er){say(er.message,true);});
 }
 function pbShow(){
   var path=$('#pbPage').value,g=$('#pbGrid');if(!path)return;
@@ -316,22 +316,25 @@ $('#edNew2').addEventListener('click',function(){$('#edNew').click();});
 $('#edModalSave').addEventListener('click',function(){if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;});
 $('#adPreviewAll').addEventListener('click',function(){preview(edPath||'index.html');});
 $('#edPreview').addEventListener('click',function(){preview(edPath);});
+/* Friendly page names, the same as the website menu. New pages use their own title. */
+var PAGENAMES={'index.html':'Homepage','about.html':'About us','services.html':'Our services','projects.html':'Projects','how-we-work.html':'How we work','faq.html':'Questions','contact.html':'Contact us','blog.html':'Blog','links.html':'Links','privacy.html':'Privacy policy','404.html':'Page not found'};
+function pn(path,title){return PAGENAMES[path]||String(title||path).replace(/\s*\|\s*MiKia.*$/,'').replace(/\.html$/,'');}
 /* page list */
 var edSel=$('#edPage'),edBody=$('#edBody'),edFields=$('#edFields'),edSave=$('#edSave');
 function edOpen(){
   if(!siteOn){siteStatus();}
   if(edSel.options.length){if(edStageName==='form'&&edPath)return;edStage('pick');return;}
   site({action:'pages'}).then(function(j){
-    edSel.innerHTML=j.pages.map(function(p){return '<option value="'+esc(p.path)+'">'+esc(p.title||p.path)+' ('+esc(p.url)+')</option>';}).join('');
-    $('#edPageList').innerHTML=j.pages.filter(function(p){return p.path!=='404.html';}).map(function(p){return '<option value="'+esc(p.path)+'">'+esc(p.title||p.path)+'</option>';}).join('');
-    $('#edPageGrid').innerHTML=j.pages.map(function(p){return '<button type="button" class="ep-page" data-path="'+esc(p.path)+'"><b>'+esc(String(p.title||p.path).replace(/\s*\|\s*MiKia.*$/,''))+'</b><span>'+esc(p.url)+'</span></button>';}).join('');
+    edSel.innerHTML=j.pages.map(function(p){return '<option value="'+esc(p.path)+'">'+esc(pn(p.path,p.title))+' ('+esc(p.url)+')</option>';}).join('');
+    $('#edPageList').innerHTML=j.pages.filter(function(p){return p.path!=='404.html';}).map(function(p){return '<option value="'+esc(p.path)+'">'+esc(pn(p.path,p.title))+'</option>';}).join('');
+    $('#edPageGrid').innerHTML=j.pages.map(function(p){return '<button type="button" class="ep-page" data-path="'+esc(p.path)+'"><b>'+esc(pn(p.path,p.title))+'</b><span>'+esc(p.url)+'</span></button>';}).join('');
     edStage('pick');
   }).catch(function(er){say(er.message,true);});
 }
 edSel.addEventListener('change',function(){edLoad(edSel.value,true);});
 function edLoad(path,stay){
   edPath=path;say('');
-  return site({action:'page',path:path}).then(function(j){edData=j;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});$('#edTitle').textContent=j.title||path;$('#edWayTitle').textContent=j.title||path;edRender();if(stay)edStage('form');else edWayShow();}).catch(function(er){say(er.message,true);});
+  return site({action:'page',path:path}).then(function(j){edData=j;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});$('#edTitle').textContent=pn(path,j.title);$('#edWayTitle').textContent=pn(path,j.title);edRender();if(stay)edStage('form');else edWayShow();}).catch(function(er){say(er.message,true);});
 }
 var TAGNAME={h1:'Main heading',h2:'Heading',h3:'Heading',h4:'Heading',p:'Paragraph',li:'List item',a:'Link',button:'Button',span:'Text',b:'Bold text',strong:'Bold text',em:'Emphasis',figcaption:'Caption',summary:'Question',label:'Form label',small:'Small text',div:'Text',td:'Table cell',th:'Table heading',dt:'Term',dd:'Description',blockquote:'Quote',cite:'Name',option:'Choice'};
 function regionOf(f){return f.region==='nav'||f.region==='footer'?'shared':f.region==='head'?'head':'main';}
