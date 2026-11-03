@@ -336,6 +336,18 @@ $('[data-pane=changes]').addEventListener('click',function(e){
   if(!confirm('Undo this change? The undo goes into your draft and is not published until you press Publish.'))return;
   b.disabled=true;site({action:'undo',sha:sha}).then(function(){say('Undone in your draft.');return siteStatus();}).then(chLoad).catch(function(er){say(er.message,true);b.disabled=false;});
 });
+/* ---- show/hide password, and forgot password ---- */
+[].forEach.call(root.querySelectorAll('input[type=password]'),function(inp){
+  var w=document.createElement('span');w.className='pw-wrap';inp.parentNode.insertBefore(w,inp);w.appendChild(inp);
+  var b=document.createElement('button');b.type='button';b.className='pw-eye';b.textContent='Show';b.setAttribute('aria-label','Show password');w.appendChild(b);
+  b.addEventListener('click',function(){var show=inp.type==='password';inp.type=show?'text':'password';b.textContent=show?'Hide':'Show';b.setAttribute('aria-label',show?'Hide password':'Show password');});
+});
+$('#adForgotOpen').addEventListener('click',function(){$('#adForgot').hidden=false;$('#adForgotEmail').value=$('#adEmail').value;$('#adForgotEmail').focus();});
+$('#adForgotCancel').addEventListener('click',function(){$('#adForgot').hidden=true;});
+$('#adForgotSend').addEventListener('click',function(){
+  var b=this;b.disabled=true;say('');
+  post('/api/admin/users',{action:'forgot',email:$('#adForgotEmail').value}).then(function(j){say(j.note);if(j.sent)$('#adForgot').hidden=true;}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
+});
 /* ---- sign in, sign out, invitation ---- */
 $('#adLoginForm').addEventListener('submit',function(e){
   e.preventDefault();var f=e.target,b=f.querySelector('button');b.disabled=true;say('');
