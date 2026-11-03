@@ -16,7 +16,8 @@ async function sendSmtp(f) {
   const user = process.env.SMTP_USER || 'hello@ambs.co.nz';
   const port = Number(process.env.SMTP_PORT || 465);
   const tx = nodemailer.createTransport({ host: process.env.SMTP_HOST || 'smtp.zoho.com.au', port, secure: port === 465, auth: { user, pass: process.env.SMTP_PASSWORD }, connectionTimeout: 10000, socketTimeout: 15000 });
-  const rows = [['Name', f.name], ['Email', f.email || '(not given)'], ['Project', f.project || '(not given)'], ['OK to show on the website', f.consent ? 'Yes' : 'No'], ['Message', f.text]];
+  const when = new Date().toLocaleString('en-NZ', { timeZone: 'Pacific/Auckland', weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' (NZ time)';
+  const rows = [['Received', when], ['Name', f.name], ['Email', f.email || '(not given)'], ['Project', f.project || '(not given)'], ['OK to show on the website', f.consent ? 'Yes' : 'No'], ['Message', f.text]];
   const html = '<table cellpadding="8" style="border-collapse:collapse;font:15px system-ui,sans-serif">' + rows.map((r) => '<tr><td style="border:1px solid #ddd;background:#f6f6f6"><b>' + L.esc(r[0]) + '</b></td><td style="border:1px solid #ddd;white-space:pre-wrap">' + L.esc(r[1]) + '</td></tr>').join('') + '</table>'
     + '<p style="font:15px system-ui,sans-serif">Or open the website editor and go to <b>Client feedback</b> to approve, hide or delete it: <a href="' + L.esc(f.admin) + '">' + L.esc(f.admin) + '</a></p>'
     + (f.link ? '<p style="font:15px system-ui,sans-serif"><b>What to do with this feedback</b><br>1. Click the button below. It opens a page showing the feedback.<br>2. Press <b>Approve and show on website</b> to put it in the Testimonials section (about a minute), or <b>Delete</b> to remove it.<br>You can also approve, hide or delete it any time in the website editor, under Client feedback.</p><p><a href="' + L.esc(f.link) + '" style="display:inline-block;padding:12px 22px;background:#12201b;color:#fff;border-radius:999px;text-decoration:none;font:600 15px system-ui">Review: approve or delete</a></p>' : '<p style="color:#666;font:14px system-ui,sans-serif">The sender did not tick the box to allow this on the website, so it cannot be shown there. You can reply to them by email if they gave an address.</p>');
@@ -44,7 +45,7 @@ module.exports = async function (req, res) {
   const o = L.origin(req);
   const fields = {
     _subject: 'customer feedback', _template: 'table', _captcha: 'false',
-    Name: name, Email: email || '(not given)', Project: project || '(not given)',
+    Received: new Date().toLocaleString('en-NZ', { timeZone: 'Pacific/Auckland', weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' (NZ time)', Name: name, Email: email || '(not given)', Project: project || '(not given)',
     'OK to show on the website': consent ? 'Yes' : 'No', Message: text
   };
   if (email) fields._replyto = email;

@@ -132,12 +132,13 @@ $('#adUpForm').addEventListener('submit',function(e){
 });
 /* ---- client feedback ---- */
 var fbList=$('#adFb');
+var FBT=function(iso){if(!iso)return '';var d=new Date(iso);return isNaN(d)?'':d.toLocaleString('en-NZ',{timeZone:'Pacific/Auckland',weekday:'short',day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'});};
 function renderFb(items){
   var waiting=items.filter(function(p){return p.status==='pending';}).length;
   $('#adFbCount').textContent=items.length?items.length+(items.length===1?' item':' items'):'';
   $('#adFbBadge').textContent=waiting?String(waiting):'';$('#hmFb').textContent=waiting?waiting+' waiting':'';
   fbList.innerHTML=items.map(function(p){var ok=p.status==='approved',pv=p.status==='private';
-    return '<li class="ad-row ad-fb" data-id="'+esc(p.id)+'"><div class="ad-cap"><b>'+esc(p.name)+(p.project?' <span>'+esc(p.project)+'</span>':'')+'</b><p>'+esc(p.text)+'</p>'+(p.email?'<p class="ad-help">Reply to: '+esc(p.email)+'</p>':'')+'<span class="ad-badge'+(ok?' ok':'')+'">'+(ok?'Showing on the website':pv?'Private: not allowed on the website':'Waiting for approval')+'</span></div>'
+    return '<li class="ad-row ad-fb" data-id="'+esc(p.id)+'"><div class="ad-cap"><b>'+esc(p.name)+(p.project?' <span>'+esc(p.project)+'</span>':'')+'</b><p>'+esc(p.text)+'</p>'+(p.email?'<p class="ad-help">Reply to: '+esc(p.email)+'</p>':'')+(p.created?'<p class="ad-help">Received: '+esc(FBT(p.created))+'</p>':'')+(ok&&p.approvedAt?'<p class="ad-help">Approved: '+esc(FBT(p.approvedAt))+(p.approvedBy?' by '+esc(p.approvedBy):'')+'</p>':'')+'<span class="ad-badge'+(ok?' ok':'')+'">'+(ok?'Showing on the website':pv?'Private: not allowed on the website':'Waiting for approval')+'</span></div>'
     +'<div class="ad-btns">'+(ok?'<button type="button" data-fa="hide">Hide</button>':pv?'':'<button type="button" data-fa="approve" class="ad-ap">Approve</button>')+'<button type="button" data-fa="delete" class="ad-rm">Delete</button></div></li>';
   }).join('')||'<li class="ad-empty">No feedback yet.</li>';
 }

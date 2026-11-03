@@ -26,8 +26,8 @@ module.exports = async function (req, res) {
     if (it.status === 'private' && act !== 'delete') return page(res, 403, 'Not allowed', '<h1>Not allowed on the website</h1><p>The sender did not tick the box to allow this on the website.</p>');
     let out = items, msg;
     if (act === 'delete') { out = items.filter((x) => x.id !== id); msg = ['Deleted', 'This feedback has been deleted. It is not on the website.']; }
-    else if (act === 'hide') { it.status = 'pending'; msg = ['Hidden', 'This feedback is no longer on the website. You can approve it again with the same link.']; }
-    else { it.status = 'approved'; msg = ['Approved', 'This feedback now shows in the Testimonials section of the website (it can take about a minute).']; }
+    else if (act === 'hide') { it.status = 'pending'; delete it.approvedAt; delete it.approvedBy; msg = ['Hidden', 'This feedback is no longer on the website. You can approve it again with the same link.']; }
+    else { it.status = 'approved'; it.approvedAt = new Date().toISOString(); it.approvedBy = 'the approval link in the email'; msg = ['Approved', 'This feedback now shows in the Testimonials section of the website (it can take about a minute).']; }
     try { await L.writeFeedback(out); } catch (e) { return page(res, 502, 'Try again', '<h1>Could not save</h1><p>Please try the link again.</p>'); }
     return page(res, 200, msg[0], '<h1>' + msg[0] + '</h1><p>' + msg[1] + '</p>');
   }
