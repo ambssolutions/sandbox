@@ -91,6 +91,17 @@ if 'edPick' not in panes:
     assert c in panes
     panes = panes.replace(c, '<button type="button" id="edPickBack2">Choose another page</button>' + c, 1)
 panes = panes.replace('Click any text on the page and type.', 'Click any text on the page and type. The menu and footer are changed in the form view.', 1)
+import re as _re
+_NEW = ('<form id="cnMail" autocomplete="off"><h3 class="ad-h3">Email <small id="cnMailState"></small></h3>'
+ '<p class="ad-help">Sends login invitations, password resets and customer feedback. Paste a Zoho app password (not your normal password).</p>'
+ '<label for="cnMailPw">Email app password</label><input id="cnMailPw" name="smtp_password" type="password" autocomplete="new-password" placeholder="Paste a new password to replace it">'
+ '<label>Who gets customer feedback</label><div id="cnFbPeople" class="cn-people"></div>'
+ '<label for="cnFbTo">Other addresses (separate with commas)</label><input id="cnFbTo" name="feedback_to" type="text" placeholder="info@mikia.co.nz">'
+ '<details class="cn-more"><summary>Change the sending address</summary><label for="cnMailUser">Sending address</label><input id="cnMailUser" name="smtp_user" type="text" placeholder="hello@ambs.co.nz"></details>'
+ '<div class="ad-btns"><button class="ad-go" type="submit">Save</button><button type="button" id="cnFbTest">Send a test feedback message</button><button type="button" id="cnMailTest" hidden>Send a test email to me</button></div>'
+ '<p class="ad-help"><button type="button" id="cnMailClear" class="ad-linkbtn">Remove the saved password</button></p></form>')
+panes, _n = _re.subn(r'<form id="cnMail".*?</form>', lambda m: _NEW, panes, count=1, flags=_re.S)
+assert _n == 1
 FOR = '<div class="ad-for" id="edModalFor"><b id="edModalName"></b><span id="edModalNote"></span></div>'
 assert '<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in"><div class="ad-top">' in panes
 panes = panes.replace('<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in"><div class="ad-top">', '<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in">' + FOR + '<div class="ad-top">', 1)
