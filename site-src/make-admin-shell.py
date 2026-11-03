@@ -24,8 +24,7 @@ SEND = '<label class="ad-chk"><input type="checkbox" name="sendmail" checked> Em
 if 'adInvAcc' not in panes:
     assert SEND in panes
     panes = panes.replace(SEND, ACC + SEND, 1)
-login = login.replace('<p class="ad-help">AMBS: leave the email empty to use the master password.</p>', '<p class="ad-help" id="adLoginHint">AMBS: leave the email empty to use the master password.</p>')
-assert 'adLoginHint' in login
+login = login.replace('<p class="ad-help">AMBS: leave the email empty to use the master password.</p>', '')
 FORGOT = '<p class="ad-forgot"><button type="button" id="adForgotOpen" class="ad-linkbtn">Forgot password?</button></p><div id="adForgot" class="ad-forgotbox" hidden><label for="adForgotEmail">Your email</label><input id="adForgotEmail" type="email" autocomplete="username"><div class="ad-btns"><button type="button" id="adForgotSend" class="ad-go">Email me a reset link</button><button type="button" id="adForgotCancel">Cancel</button></div></div>'
 login = login.replace('</form></div>', '</form>' + FORGOT + '</div>', 1)
 assert 'adForgot' in login
