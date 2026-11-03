@@ -1,0 +1,173 @@
+/* The editor as a full-screen app: sidebar, top bar and a Home dashboard. Loaded after the shared admin styles. */
+html body.adm{margin:0;padding:0;background:#f4f4f5;color:#15171a;font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:15px;overflow-x:hidden}
+html body.adm h1,html body.adm h2,html body.adm h3{font-family:"IBM Plex Sans",system-ui,sans-serif;font-weight:700;letter-spacing:-.01em;color:#15171a;text-align:left}
+.adm-app{display:flex;min-height:100vh}
+.sb{width:248px;flex:0 0 248px;background:#fff;border-right:1px solid #e4e4e7;position:sticky;top:0;height:100vh;overflow-y:auto;padding:14px 12px 24px;box-sizing:border-box;z-index:60}
+.sb-brand{display:flex;align-items:center;gap:10px;padding:4px 8px 16px}.sb-brand img{height:34px;width:auto;background:#15171a;border-radius:8px;padding:5px 8px;box-sizing:content-box}.sb-brand b{font-size:15px;line-height:1.15}
+.sb-nav{display:flex;flex-direction:column;gap:2px}
+.sb-grp{margin-top:14px}.sb-grp:not(:has(button:not([hidden]))){display:none}
+html body.adm .sb-grp h2{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#52525b;margin:0 8px 4px;font-weight:700}
+html body.adm .sb button{display:flex;align-items:center;gap:12px;width:100%;min-height:42px;padding:0 10px;border:0;border-radius:10px;background:transparent;color:#27272a;font:inherit;font-weight:600;font-size:15px;text-align:left;cursor:pointer;box-shadow:none}
+html body.adm .sb button[hidden]{display:none}
+html body.adm .sb button svg{color:#c8323c;flex:0 0 20px}
+html body.adm .sb button:hover{background:#f4f4f5}
+html body.adm .sb button[aria-selected=true]{background:#fbe9ea;color:#15171a}
+html body.adm .sb small{margin-left:auto;background:#c8323c;color:#fff;border-radius:99px;padding:1px 8px;font-size:12px}html body.adm .sb small:empty{display:none}
+.adm-main{flex:1;min-width:0;display:flex;flex-direction:column}
+.tb{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:6px;height:60px;padding:0 20px;background:#fff;border-bottom:1px solid #e4e4e7;box-sizing:border-box}
+.tb-sp{flex:1}.tb #adWho{margin:0;font-size:14px;color:#52525b;display:flex;align-items:center;gap:8px}.tb #adWho b{color:#15171a}
+html body.adm .tb .tb-link{border:0;background:transparent;color:#c8323c;font:inherit;font-weight:600;font-size:14px;padding:8px 10px;cursor:pointer;text-decoration:none;border-radius:8px}
+html body.adm .tb .tb-link:hover{background:#fbe9ea}
+html body.adm .tb-menu{display:none;border:1px solid #d4d4d8;background:#fff;border-radius:10px;width:42px;height:42px;padding:0;align-items:center;justify-content:center;color:#15171a;cursor:pointer}
+.adm-body{padding:28px 32px 80px;max-width:1040px;width:100%;box-sizing:border-box}
+html body.adm .adm-body{text-align:left}
+html body.adm .adm-body .ad-card{max-width:none;margin:0 0 16px;border-radius:16px;border:1px solid #e4e4e7;box-shadow:0 1px 2px rgba(0,0,0,.04);background:#fff;text-align:left}
+html body.adm .adm-body .ad-card h2{font-size:20px;text-align:left;margin:0 0 6px}
+html body.adm .adm-body .ad-help,html body.adm .adm-body .ad-note{text-align:left}
+html body.adm .adm-body .ad-top{justify-content:space-between}
+/* signed out: just the login card */
+.adm-app:not(:has(#adPanel:not([hidden]))) .sb,.adm-app:not(:has(#adPanel:not([hidden]))) .tb,.adm-app:not(:has(#adPanel:not([hidden]))) .sb-scrim{display:none}
+.adm-app:not(:has(#adPanel:not([hidden]))) .adm-body{margin:8vh auto 0;max-width:460px}
+.adm-app:not(:has(#adPanel:not([hidden]))) #adLogin h2::before{content:"Website editor";display:block;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:#c8323c;margin-bottom:6px}
+/* home */
+html body.adm .hm-hi{font-size:34px;margin:0 0 4px}
+.hm-sub{margin:0 0 18px;color:#52525b}
+.hm-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px}
+html body.adm .hm-pill{border:1px solid #d4d4d8;background:#fff;border-radius:99px;min-height:44px;padding:0 20px;font:inherit;font-weight:700;color:#15171a;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+html body.adm .hm-pill:hover{border-color:#c8323c}
+html body.adm .hm-h{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:#52525b;margin:26px 0 10px;font-weight:700}
+.hm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.hm-card{position:relative;display:flex;gap:14px;padding:16px;background:#fff;border:1px solid #e4e4e7;border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.hm-card:hover{border-color:#c8323c}
+.hm-card[hidden],.hm-grid[hidden],html body.adm .hm-h[hidden]{display:none}
+.hm-ic{flex:0 0 40px;height:40px;border-radius:10px;background:#fbe9ea;color:#c8323c;display:flex;align-items:center;justify-content:center}
+.hm-card p{margin:2px 0 0;color:#52525b;font-size:14px;line-height:1.4}
+html body.adm .hm-t{all:unset;font-weight:700;font-size:17px;color:#15171a;cursor:pointer;display:block}
+html body.adm .hm-t::after{content:"";position:absolute;inset:0;border-radius:16px}
+html body.adm .hm-t small{background:#c8323c;color:#fff;border-radius:99px;padding:1px 8px;font-size:12px;margin-left:6px;vertical-align:2px}html body.adm .hm-t small:empty{display:none}
+.hm-chips{display:flex;gap:8px;margin-top:10px;position:relative;z-index:1}
+html body.adm .hm-chips button{border:1px solid #d4d4d8;background:#fff;border-radius:99px;min-height:34px;padding:0 14px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;color:#15171a}
+html body.adm .hm-chips button:hover{border-color:#c8323c;color:#c8323c}
+/* waiting-to-publish bar sticks under the top bar */
+html body.adm #adDraft{position:sticky;top:68px;z-index:40;border-color:#f2b4b8;background:#fff7f7}
+.sb-scrim{display:none}
+@media(max-width:900px){
+ .sb{position:fixed;left:0;top:0;bottom:0;transform:translateX(-102%);transition:transform .22s ease;box-shadow:0 0 40px rgba(0,0,0,.2)}
+ .adm-app.sb-open .sb{transform:none}.adm-app.sb-open .sb-scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:55}
+ html body.adm .tb-menu{display:flex}.tb{padding:0 12px}.tb #adWho{display:none}
+ .adm-body{padding:20px 16px 80px}.hm-grid{grid-template-columns:1fr}html body.adm .hm-hi{font-size:28px}
+ html body.adm #adDraft{top:66px}
+}
+@media(prefers-reduced-motion:reduce){.sb{transition:none}}
+html body.adm .adm-body h1,html body.adm .adm-body h2,html body.adm .adm-body h3,html body.adm .adm-body p,html body.adm .adm-body label,html body.adm .adm-body .ad-top{text-align:left!important}
+html body.adm .adm-body .ad-top h2{margin:0}
+html body.adm .tb .tb-link{white-space:nowrap}
+@media(max-width:900px){html body.adm .tb a.tb-link{display:none}}
+
+html body.adm .ad-viewas{position:sticky;top:60px;z-index:45;display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#15171a;color:#fff;border-radius:12px;padding:10px 14px;margin:0 0 14px}
+html body.adm .ad-viewas[hidden]{display:none}
+html body.adm .ad-viewas button{background:#fff;color:#15171a;border:0;border-radius:99px;min-height:34px;padding:0 14px;font:inherit;font-weight:700;cursor:pointer}
+html body.adm .ad-row{flex-wrap:wrap}html body.adm .ad-acc{flex-basis:100%;border-top:1px solid #e4e4e7;margin-top:8px;padding-top:8px}html body.adm .ad-acc[hidden]{display:none}
+html body.adm .ad-accsum{display:block;color:#52525b;font-size:13px;margin-top:2px}
+html body.adm .ad-accset{border:1px solid #e4e4e7;border-radius:12px;margin:10px 0;padding:8px 12px}html body.adm .ad-accset[hidden]{display:none}html body.adm .ad-accset legend{font-weight:700;padding:0 6px;font-size:14px}
+html body.adm .hm-grid:not(:has(.hm-card:not([hidden]))){display:none}
+
+/* people */
+html body.adm #adInvForm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px;align-items:end}
+html body.adm #adInvForm>*{margin:0}
+html body.adm #adInvForm .ad-fld{display:flex;flex-direction:column;gap:6px}
+html body.adm #adInvForm .ad-accset,html body.adm #adInvForm .ad-chk:last-of-type,html body.adm #adInvForm .ad-go{grid-column:1/-1}
+html body.adm #adInvForm .ad-go{justify-self:start}
+html body.adm .ad-accset{display:flex;flex-wrap:wrap;gap:6px 22px}html body.adm .ad-accset legend{flex:0 0 100%}
+html body.adm .ad-accset .ad-chk{margin:0}
+html body.adm #adUsers{display:flex;flex-direction:column;gap:10px;padding:0;margin:12px 0 0}
+html body.adm #adUsers .ad-row{display:grid;grid-template-columns:minmax(0,1fr);gap:10px 18px;align-items:start;padding:14px 16px;background:#fff;border:1px solid #e4e4e7;border-radius:14px}
+html body.adm #adUsers .ad-cap b{font-size:16px}
+html body.adm #adUsers .ad-cap>span{display:block;margin-top:2px}
+html body.adm .ad-btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;align-items:center}
+html body.adm .adm-body .ad-btns button,html body.adm .adm-body .ad-btns select{min-height:38px;height:auto;padding:0 14px;font-size:14px;white-space:nowrap;width:auto;border-radius:99px}
+html body.adm .adm-body .ad-btns select{padding:0 10px;border-radius:10px;max-width:170px}
+html body.adm #adUsers .ad-acc{grid-column:1/-1}
+@media(max-width:900px){
+ html body.adm #adInvForm{grid-template-columns:1fr}
+ html body.adm #adUsers .ad-row{grid-template-columns:1fr}html body.adm .ad-btns{justify-content:flex-start}
+}
+/* connections */
+html body.adm [data-pane=conn]>.ad-card{background:none;border:0;box-shadow:none;padding:0}
+html body.adm [data-pane=conn]>.ad-card>h2{font-size:22px}
+html body.adm [data-pane=conn] form{background:#fff;border:1px solid #e4e4e7;border-radius:16px;padding:18px 20px;margin:0 0 16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+html body.adm [data-pane=conn] .ad-h3{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:18px}
+html body.adm [data-pane=conn] input[type=text],html body.adm [data-pane=conn] input[type=password]{max-width:560px}
+html body.adm [data-pane=conn] .ad-btns{justify-content:flex-start;margin-top:12px}
+html body.adm .cn-st{font-size:12px;font-weight:700;padding:2px 10px;border-radius:99px;background:#eee;color:#52525b}
+html body.adm .cn-st.on{background:#e3f4ea;color:#17573a}
+html body.adm #adUsers .ad-btns{justify-content:flex-start}
+
+html body.adm .hm-alert{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:#fff7e6;border:1px solid #f0c36d;border-radius:14px;padding:12px 16px;margin:0 0 16px}
+html body.adm .hm-alert[hidden]{display:none}
+html body.adm .hm-alert button{border:1px solid #c8323c;background:#fff;color:#c8323c;border-radius:99px;min-height:36px;padding:0 14px;font:inherit;font-weight:700;cursor:pointer}
+html body.adm .cn-exp{margin:4px 0 12px;font-size:14px;color:#52525b}html body.adm .cn-exp[hidden]{display:none}
+html body.adm .cn-exp.okk{color:#17573a}html body.adm .cn-exp.warn{color:#8a5a00;font-weight:700}html body.adm .cn-exp.bad{color:#b42318;font-weight:700}
+
+/* show password, forgot password */
+html body.adm .pw-wrap{position:relative;display:block}
+html body.adm .pw-wrap input{padding-right:74px!important;width:100%;box-sizing:border-box}
+html body.adm .pw-eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#c8323c;font:inherit;font-weight:700;font-size:14px;cursor:pointer;padding:6px 8px;border-radius:8px}
+html body.adm .pw-eye:hover{background:#fbe9ea}
+html body.adm .ad-forgot{margin:14px 0 0}
+html body.adm .ad-linkbtn{border:0;background:transparent;color:#c8323c;font:inherit;font-weight:700;cursor:pointer;padding:0;text-decoration:underline}
+html body.adm .ad-forgotbox{margin-top:12px;padding-top:12px;border-top:1px solid #e4e4e7}html body.adm .ad-forgotbox[hidden]{display:none}
+html body.adm .ad-forgotbox .ad-btns{justify-content:flex-start;margin-top:10px}
+
+html body.adm .ad-what{flex-basis:100%;grid-column:1/-1;border-top:1px solid #e4e4e7;margin-top:8px;padding-top:8px;font-size:14px}html body.adm .ad-what[hidden]{display:none}
+html body.adm .ad-what h4{margin:8px 0 4px;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#52525b}
+html body.adm .ad-what ul{margin:0 0 6px;padding-left:18px}html body.adm .ad-what li{margin:3px 0;word-break:break-word}
+html body.adm .ad-what del{background:#fde8e8;color:#8a1c1c;text-decoration:line-through;padding:0 3px;border-radius:3px}
+html body.adm .ad-what ins{background:#e3f4ea;color:#17573a;text-decoration:none;padding:0 3px;border-radius:3px}
+html body.adm .ad-arrow{color:#52525b}
+html body.adm .ad-mailto{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;margin-top:8px;border:1px solid #c8323c;border-radius:99px;color:#c8323c;font-weight:700;text-decoration:none;background:#fff}
+html body.adm .ad-mailto[hidden]{display:none}
+
+html body.adm .pb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:12px}
+html body.adm .pb-item{background:#fff;border:1px solid #e4e4e7;border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:6px}
+html body.adm .pb-item img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:10px;background:#eee}
+html body.adm .pb-alt{margin:0;font-size:14px;line-height:1.3}html body.adm .pb-file{margin:0;font-size:12px;color:#52525b;word-break:break-all}
+html body.adm .ad-std{font-size:13px;color:#52525b;margin:2px 0 8px}
+html body.adm #pbCard[hidden]{display:none}
+
+/* messages under the control that was used */
+html body.adm .ad-inline{margin:10px 0 0;padding:8px 12px;border-radius:10px;background:#e3f4ea;color:#17573a;font-size:14px;font-weight:600;line-height:1.4;grid-column:1/-1;flex-basis:100%;text-align:left}
+html body.adm .ad-inline.bad{background:#fde8e8;color:#b42318}
+html body.adm .ad-msg-quiet{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+html body.adm .ad-add button.ad-ap,html body.adm .ad-acc button.ad-ap{min-height:44px;padding:0 20px;border-radius:99px;background:#12201b;color:#fff;border:0;font:inherit;font-weight:700;cursor:pointer;margin-top:8px}
+
+html body.adm .ad-dims,html body.adm .pb-dims{display:block;font-size:13px;color:#52525b;margin:2px 0 0}
+html body.adm .ad-dims.small{color:#8a5a00;font-weight:700}
+html body.adm #fmtCard{padding:12px 16px}html body.adm #fmtCard .ad-std{margin:4px 0 0}
+
+html body.adm #carouselWrap[hidden]{display:none}
+html body.adm #carHead{background:#fff7f7;border-color:#f2b4b8}
+
+html body.adm .ep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin:12px 0}
+html body.adm .ep-page{display:flex;flex-direction:column;gap:2px;text-align:left;padding:14px 16px;border:1px solid #e4e4e7;border-radius:14px;background:#fff;cursor:pointer;font:inherit;min-height:0;white-space:normal}
+html body.adm .ep-page b{font-size:16px}html body.adm .ep-page span{font-size:13px;color:#52525b;word-break:break-all}
+html body.adm .ep-page:hover{border-color:#c8323c;background:#fff7f7}
+html body.adm #edPick[hidden],html body.adm #edTop[hidden]{display:none}
+
+html body.adm #edNew[hidden],html body.adm #edNew2[hidden],html body.adm .hm-pill[hidden]{display:none}
+
+html body.adm .cn-people{display:grid;gap:6px;margin:6px 0 12px}html body.adm .cn-people small{color:#6b7570;margin-left:4px}
+
+html body .ad-for{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px;padding:9px 14px;background:#f3f0e8;border-radius:10px;text-align:left}html body .ad-for b{font-size:17px}html body .ad-for span{font-size:13.5px;color:#4a4a4a;line-height:1.4}
+html body .ad-modal-in .ad-top{flex-wrap:wrap;gap:8px}html body .ad-modal .ad-top .ad-help{flex:1 1 220px;font-size:13px;line-height:1.4;margin:0 4px}
+
+html body.adm .cn-more{margin:10px 0}html body.adm .cn-more summary{cursor:pointer;color:#6b7570;font-size:14px}
+
+html body.adm .fb-dl{display:grid;grid-template-columns:96px minmax(0,1fr);gap:6px 14px;margin:0;text-align:left}html body.adm .fb-dl dt{font-weight:600;color:#4a4a4a;font-size:14px}html body.adm .fb-dl dd{margin:0;font-size:15px;overflow-wrap:anywhere;white-space:pre-wrap}
+html body.adm .fb-dl dt,html body.adm .fb-dl dd{text-align:left!important}html body.adm .fb-dl .ad-badge{display:inline-block}
+/* On phones set to dark mode, buttons take a white text colour while their background stays white. Give them an explicit dark text colour. */
+html body.adm .ep-page,html body.adm .ep-page b,html body.adm .ad-way,html body.adm .ad-way b{color:#18181b}html body.adm .ad-way span{color:#626262}
+/* While the page opens inside the editing window (slow on phones), say so instead of showing an empty grey box. */
+html body .ad-frame{position:relative}html body .ad-frame::before{content:'Loading the page...';position:absolute;inset:0;display:grid;place-items:center;color:#626262;font-size:16px;pointer-events:none}
+html body .ad-frame iframe{position:relative}
+@media (max-width:700px){html body .ad-modal{padding:6px}html body .ad-modal-in{height:96vh;padding:8px}html body .ad-for{padding:8px 12px}html body .ad-for span{font-size:12.5px}}

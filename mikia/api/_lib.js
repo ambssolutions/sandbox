@@ -1,0 +1,137 @@
+/* Shared helpers for the media API.
+   Settings (Vercel > Project > Settings > Environment Variables):
+     ADMIN_PASSWORD         the password for /admin
+     SESSION_SECRET         optional, a long random string used to sign the login cookie (falls back to ADMIN_PASSWORD)
+     BLOB_READ_WRITE_TOKEN  added automatically when a Blob store is connected to the project */
+const crypto = require('crypto');
+const { put, del, list } = require('@vercel/blob');
+
+const MANIFEST = 'media/manifest.json';
+const COOKIE = 'mk_admin';
+const DAYS = 7;
+
+const STOCK = [
+  ['stock-res-1', 'New black-clad townhouses along a residential street', 'New townhouses'],
+  ['stock-res-2', 'Houses scattered across a bush-covered hillside suburb', 'Hillside suburbs'],
+  ['stock-res-4', 'A new modern house beside a traditional home', 'Infill housing'],
+  ['stock-com-2', 'A mixed-use building with black and white cladding and large windows', 'Mixed-use frontage'],
+  ['stock-com-3', 'A building clad in black metal and vertical timber battens', 'Timber and black cladding']
+].map(([id, alt, caption]) => ({ id, src: '/projects/' + id + '-1600.webp', alt, caption, desc: alt + '.', stock: true }));
+
+function send(res, code, obj) {
+  res.statusCode = code;
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-store');
+  res.end(JSON.stringify(obj));
+}
+
+function secret() { return process.env.SESSION_SECRET || process.env.ADMIN_PASSWORD || ''; }
+function sign(v) { return crypto.createHmac('sha256', secret()).update(v).digest('hex'); }
+function safeEq(a, b) {
+  const x = Buffer.from(String(a)), y = Buffer.from(String(b));
+  return x.length === y.length && crypto.timingSafeEqual(x, y);
+}
+function makeToken() { const exp = String(Date.now() + DAYS * 864e5); return exp + '.' + sign('mk' + exp); }
+function readCookie(req, name) {
+  const m = String(req.headers.cookie || '').split(/;\s*/).map((s) => s.split('=')).find((p) => p[0] === name);
+  return m ? m.slice(1).join('=') : '';
+}
+/* Who is signed in.
+   New logins carry a signed session with the person's email and role (owner = AMBS, can manage users; editor = MiKia team).
+   The old shared-password cookie still works and counts as an owner, so the AMBS master password is always a way in. */
+const SESSION = 'mk_session';
+function b64u(s) { return Buffer.from(s).toString('base64url'); }
+function makeSession(u) {
+  const body = b64u(JSON.stringify({ e: u.email, n: u.name || '', r: u.role === 'owner' ? 'owner' : 'editor', x: Date.now() + DAYS * 864e5 }));
+  return body + '.' + sign('sess' + body);
+}
+function currentUser(req) {
+  if (!secret()) return null;
+  const t = readCookie(req, SESSION), i = t.indexOf('.');
+  if (i > 0) {
+    const body = t.slice(0, i);
+    if (safeEq(t.slice(i + 1), sign('sess' + body))) {
+      try {
+        const j = JSON.parse(Buffer.from(body, 'base64url').toString('utf8'));
+        if (Number(j.x) > Date.now() && j.e) return { email: j.e, name: j.n || '', role: j.r === 'owner' ? 'owner' : 'editor' };
+      } catch (e) { /* fall through */ }
+    }
+  }
+  const o = readCookie(req, COOKIE), k = o.indexOf('.');
+  if (k > 0) {
+    const exp = o.slice(0, k);
+    if (Number(exp) > Date.now() && safeEq(o.slice(k + 1), sign('mk' + exp))) return { email: 'master', name: 'AMBS master login', role: 'owner' };
+  }
+  return null;
+}
+function isAdmin(req) { return !!currentUser(req); }
+function isOwner(req) { const u = currentUser(req); return !!u && u.role === 'owner'; }
+function cookieHeader(name, value, maxAge) {
+  return name + '=' + value + '; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=' + maxAge;
+}
+function sessionCookie() { return cookieHeader(COOKIE, makeToken(), DAYS * 86400); }
+function sessionCookieFor(u) { return cookieHeader(SESSION, makeSession(u), DAYS * 86400); }
+function clearCookie() { return [cookieHeader(COOKIE, '', 0), cookieHeader(SESSION, '', 0)]; }
+
+async function readJson(req, limit) {
+  const chunks = []; let n = 0;
+  for await (const c of req) { n += c.length; if (n > (limit || 20000)) throw new Error('too large'); chunks.push(c); }
+  try { return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}'); } catch (e) { return {}; }
+}
+async function readBuffer(req, limit) {
+  const chunks = []; let n = 0;
+  for await (const c of req) { n += c.length; if (n > limit) { const e = new Error('too large'); e.code = 'TOO_LARGE'; throw e; } chunks.push(c); }
+  return Buffer.concat(chunks);
+}
+
+/* Stored lists (photos, feedback, people).
+   Each save is written as a NEW file whose name carries the time, and a read takes the newest one. Files are never overwritten, so a read straight after
+   a save always sees the save (an overwritten file can be served stale from the cache for a minute). Older copies are tidied away. */
+const VER = /-(\d{13})\.json$/;
+async function readStore(base) {
+  try {
+    const l = await list({ prefix: base.replace(/\.json$/, ''), limit: 200 });
+    const all = l.blobs || [];
+    const vers = all.filter((x) => VER.test(x.pathname)).sort((a, b) => a.pathname < b.pathname ? 1 : -1);
+    const hit = vers[0] || all.find((x) => x.pathname === base);
+    if (!hit) return null;
+    const r = await fetch(hit.url);
+    if (!r.ok) return null;
+    return await r.json();
+  } catch (e) { return null; }
+}
+let lastStamp = 0;
+async function writeStore(base, obj) {
+  const stem = base.replace(/\.json$/, '');
+  lastStamp = Math.max(Date.now(), lastStamp + 1);
+  const name = stem + '-' + String(lastStamp).padStart(13, '0') + '.json';
+  await put(name, JSON.stringify(obj), { access: 'public', contentType: 'application/json', allowOverwrite: false, addRandomSuffix: false, cacheControlMaxAge: 60 });
+  try {
+    const l = await list({ prefix: stem, limit: 200 });
+    const old = (l.blobs || []).filter((x) => x.pathname !== name && (VER.test(x.pathname) ? x.pathname < name : false)).sort((a, b) => a.pathname < b.pathname ? 1 : -1).slice(3);
+    for (const o of old) { try { await del(o.url); } catch (e) { /* tidy-up only */ } }
+  } catch (e) { /* tidy-up only */ }
+}
+
+async function readManifest() { const j = await readStore(MANIFEST); return j && Array.isArray(j.photos) ? j.photos : null; }
+async function writeManifest(photos) { await writeStore(MANIFEST, { photos, updated: new Date().toISOString() }); }
+async function currentPhotos() { return (await readManifest()) || STOCK.map((p) => Object.assign({}, p)); }
+function storageReady() { return !!process.env.BLOB_READ_WRITE_TOKEN; }
+function publicPhoto(p) {
+  let desc = p.desc || '';
+  if (!desc && p.stock) { const s = STOCK.find((x) => x.id === p.id); if (s) desc = s.desc; }  // photos saved before descriptions existed
+  return { id: p.id, src: p.src, alt: p.alt, caption: p.caption, desc: desc, stock: !!p.stock };
+}
+
+/* Feedback store. The store file name is derived from the secret so the (public) blob address cannot be guessed.
+   Only name, project, text and status are kept here; email addresses go in the notification email only. */
+const FB_CLEAN = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').trim().slice(0, n);
+function fbPath() { return 'testimonials/s-' + sign('fbstore').slice(0, 32) + '.json'; }
+function approveToken(id) { return sign('approve:' + id).slice(0, 32); }
+async function readFeedback() { const j = await readStore(fbPath()); return j && Array.isArray(j.items) ? j.items : []; }
+async function writeFeedback(items) { await writeStore(fbPath(), { items, updated: new Date().toISOString() }); }
+const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function origin(req) { return 'https://' + (req.headers['x-forwarded-host'] || req.headers.host || 'www.mikia.co.nz'); }
+function publicFeedback(p) { return { id: p.id, name: p.name, project: p.project, text: p.text }; }
+
+module.exports = { readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
