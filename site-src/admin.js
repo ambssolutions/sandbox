@@ -42,7 +42,7 @@ $('#sbOpen').addEventListener('click',function(){root.classList.toggle('sb-open'
 $('#sbScrim').addEventListener('click',sbShut);
 var edPref='';
 root.addEventListener('click',function(e){var g=e.target.closest('[data-go]');if(!g)return;var w=g.getAttribute('data-go');
-  if(w==='onpage'||w==='form'){edPref=w==='onpage'?'page':'form';tab('pages');if(edSel.options.length&&edPath)edLoad(edPath);}
+  if(w==='onpage'||w==='form'){edPref=w==='onpage'?'page':'form';tab('pages');edStage('pick');}
   else if(w==='newpage'){edPref='';tab('pages');$('#edNew').click();}});
 function enter(user){
   me=user;loginBox.hidden=true;inviteBox.hidden=true;panel.hidden=false;
@@ -64,10 +64,11 @@ function enter(user){
 function render(photos,storage){
   note.hidden=!!storage;
   list.innerHTML=photos.map(function(p,i){
-    return '<li class="ad-row" data-id="'+esc(p.id)+'"><img src="'+esc(p.src)+'" alt="" width="120" height="75" loading="lazy"><div class="ad-cap"><b>'+esc(p.caption||'No address')+'</b><span>'+esc(p.desc||'')+'</span><span>'+(p.stock?'Stock photo':'Uploaded')+'</span></div>'
+    return '<li class="ad-row" data-id="'+esc(p.id)+'"><img src="'+esc(p.src)+'" alt="" width="120" height="75" loading="lazy"><div class="ad-cap"><b>'+esc(p.caption||'No address')+'</b><span>'+esc(p.desc||'')+'</span><span>'+(p.stock?'Stock photo':'Uploaded')+'</span><span class="ad-dims"></span></div>'
     +'<div class="ad-btns"><button type="button" data-act="up" aria-label="Move up"'+(i?'':' disabled')+'>&uarr;</button><button type="button" data-act="down" aria-label="Move down"'+(i<photos.length-1?'':' disabled')+'>&darr;</button><button type="button" data-act="rm" class="ad-rm">Remove</button></div></li>';
   }).join('')||'<li class="ad-empty">No photos yet. The carousel will show the stock photos until you add one.</li>';
   $('#adCount').textContent=photos.length+(photos.length===1?' photo':' photos');
+  [].forEach.call(list.querySelectorAll('.ad-row'),function(r){var im=r.querySelector('img'),o=r.querySelector('.ad-dims');if(im&&o)showDims(im,o,im.getAttribute('src'));});
 }
 function load(){
   return api('/api/admin/photos').then(function(j){if(j.auth===false){showLogin();return;}render(j.photos,j.storage);loadFb();}).catch(function(e){
@@ -97,14 +98,25 @@ function askSize(file){
   });
 }
 function sizeStop(go){if(!go)throw new Error('Picture not used. Choose another one when you are ready.');}
+/* Shows how big a picture is under it: pixels, format, and a note when it is smaller than the standard. */
+function showDims(img,out,src){
+  function set(){if(!img.naturalWidth)return;var ext=String(src||img.currentSrc||'').split('?')[0].split('.').pop().toUpperCase().replace('JPEG','JPG');var small=img.naturalWidth<1200;
+    out.textContent=img.naturalWidth+' \u00d7 '+img.naturalHeight+' px'+(ext&&ext.length<5?' \u00b7 '+ext:'')+(small?' \u00b7 small, may look blurry':'');out.className=out.className.replace(/\s*small/,'')+(small?' small':'');}
+  if(img.complete)set();else img.addEventListener('load',set);
+}
+/* Uploads can be saved as WebP, which is smaller and faster. The choice is remembered on this computer. */
+function wantWebp(){try{var v=localStorage.getItem('mk-webp');return v!=='off';}catch(e){return true;}}
+(function(){var cb=document.getElementById('adWebp');if(!cb)return;cb.checked=wantWebp();cb.addEventListener('change',function(){try{localStorage.setItem('mk-webp',cb.checked?'on':'off');}catch(e){}});})();
 function shrink(file){
   return new Promise(function(ok,no){
-    if(file.size<1.5*1048576&&/jpeg|webp/.test(file.type))return ok(file);
+    var web=wantWebp();
+    if(file.size<1.5*1048576&&(web?/webp/.test(file.type):/jpeg|webp/.test(file.type)))return ok(file);
     var url=URL.createObjectURL(file),im=new Image();
     im.onload=function(){
       var s=Math.min(1,2000/Math.max(im.naturalWidth,im.naturalHeight)),w=Math.round(im.naturalWidth*s),h=Math.round(im.naturalHeight*s),c=document.createElement('canvas');
       c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);URL.revokeObjectURL(url);
-      c.toBlob(function(bl){bl?ok(bl):no(new Error('Could not read that photo.'));},'image/jpeg',.85);
+      var asJpeg=function(){c.toBlob(function(bl){bl?ok(bl):no(new Error('Could not read that photo.'));},'image/jpeg',.85);};
+      if(web)c.toBlob(function(bl){if(bl&&bl.type==='image/webp')ok(bl);else asJpeg();},'image/webp',.85);else asJpeg();
     };
     im.onerror=function(){URL.revokeObjectURL(url);no(new Error('Please choose a JPEG, PNG or WebP photo.'));};
     im.src=url;
@@ -184,11 +196,13 @@ function pbLoad(){
   site({action:'pages'}).then(function(j){pbPages=true;$('#pbPage').innerHTML=j.pages.filter(function(p){return p.path!=='404.html';}).map(function(p){return '<option value="'+esc(p.path)+'">'+esc(p.title||p.path)+' ('+esc(p.url)+')</option>';}).join('');pbShow();}).catch(function(er){say(er.message,true);});
 }
 function pbShow(){
-  var path=$('#pbPage').value,g=$('#pbGrid');if(!path)return;g.innerHTML='<p class="ad-help">Loading...</p>';
+  var path=$('#pbPage').value,g=$('#pbGrid');if(!path)return;
+  var cw=$('#carouselWrap');if(cw)cw.hidden=path!=='index.html';g.innerHTML='<p class="ad-help">Loading...</p>';
   site({action:'page',path:path}).then(function(j){
     var pics=[];j.fields.forEach(function(f,i){if(f.picture&&f.region==='main'){var alt=j.fields[i-1]&&j.fields[i-1].attr==='alt'?j.fields[i-1].value:'';pics.push({k:f.k,src:f.value,alt:alt});}});
     g.innerHTML=pics.map(function(p){var shown=/^(https?:|data:)/.test(p.src)?p.src:'/'+p.src.replace(/^\//,'');
-      return '<div class="pb-item" data-k="'+p.k+'" data-old="'+esc(p.src)+'"><img src="'+esc(shown)+'" alt="" loading="lazy" width="240" height="150"><p class="pb-alt">'+esc(p.alt||'No description')+'</p><p class="pb-file">'+esc(p.src.split('/').pop())+'</p><label class="ad-filebtn">Change picture<input type="file" accept="image/jpeg,image/png,image/webp" hidden></label></div>';}).join('')||'<p class="ad-help">This page has no pictures you can change here.</p>';
+      return '<div class="pb-item" data-k="'+p.k+'" data-old="'+esc(p.src)+'"><img src="'+esc(shown)+'" alt="" loading="lazy" width="240" height="150"><p class="pb-alt">'+esc(p.alt||'No description')+'</p><p class="pb-file">'+esc(p.src.split('/').pop())+'</p><p class="pb-dims ad-dims"></p><label class="ad-filebtn">Change picture<input type="file" accept="image/jpeg,image/png,image/webp" hidden></label></div>';}).join('')||'<p class="ad-help">This page has no pictures you can change here.</p>';
+    [].forEach.call(g.querySelectorAll('.pb-item'),function(it){var im=it.querySelector('img'),o=it.querySelector('.pb-dims');if(im&&o)showDims(im,o,it.getAttribute('data-old'));});
   }).catch(function(er){g.innerHTML='';say(er.message,true);});
 }
 $('#pbPage').addEventListener('change',pbShow);
@@ -289,9 +303,16 @@ window.addEventListener('message',function(e){
   if(!onPage||e.source!==frame.contentWindow||!e.data||e.data.mk!=='edit')return;var el=edFields.querySelector('[data-k="'+e.data.k+'"]:not(li)');if(!el)return;el.value=e.data.v;edDirty();});
 function openOnPage(){edRegion='main';$('#edFind').value='';edRender();preview(edPath,true);}
 $('#edOnPage').addEventListener('click',openOnPage);
-function edWayShow(){edBody.hidden=true;$('#edWay').hidden=false;if(edPref==='form'){$('#edWay').hidden=true;edBody.hidden=false;}else if(edPref==='page')openOnPage();}
-$('#edWay').addEventListener('click',function(e){var b=e.target.closest('[data-way]');if(!b)return;if(b.getAttribute('data-way')==='form'){$('#edWay').hidden=true;edBody.hidden=false;}else openOnPage();});
-$('#edWayBack').addEventListener('click',function(){if(edChanges().length&&!confirm('You have changes that are not saved yet. Leave them behind?'))return;edPref='';edLoad(edPath);});
+/* Pages and text works in three steps: choose the page, choose how to edit it, then it opens. */
+var edStageName='pick';
+function edStage(s){edStageName=s;$('#edPick').hidden=s!=='pick';$('#edWay').hidden=s!=='way';$('#edTop').hidden=s!=='form';edBody.hidden=s!=='form';}
+function edWayShow(){if(edPref==='form')edStage('form');else{edStage('way');if(edPref==='page')openOnPage();}}
+function edLeave(){return !edChanges().length||confirm('You have changes that are not saved yet. Leave them behind?');}
+$('#edWay').addEventListener('click',function(e){var b=e.target.closest('[data-way]');if(!b)return;if(b.getAttribute('data-way')==='form')edStage('form');else openOnPage();});
+$('#edWayBack').addEventListener('click',function(){if(!edLeave())return;edPref='';edLoad(edPath);});
+['edPickBack','edPickBack2'].forEach(function(id){$('#'+id).addEventListener('click',function(){if(!edLeave())return;edStage('pick');});});
+$('#edPageGrid').addEventListener('click',function(e){var b=e.target.closest('[data-path]');if(!b)return;edSel.value=b.getAttribute('data-path');edLoad(b.getAttribute('data-path'));});
+$('#edNew2').addEventListener('click',function(){$('#edNew').click();});
 $('#edModalSave').addEventListener('click',function(){if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;});
 $('#adPreviewAll').addEventListener('click',function(){preview(edPath||'index.html');});
 $('#edPreview').addEventListener('click',function(){preview(edPath);});
@@ -299,17 +320,18 @@ $('#edPreview').addEventListener('click',function(){preview(edPath);});
 var edSel=$('#edPage'),edBody=$('#edBody'),edFields=$('#edFields'),edSave=$('#edSave');
 function edOpen(){
   if(!siteOn){siteStatus();}
-  if(edSel.options.length)return;
+  if(edSel.options.length){if(edStageName==='form'&&edPath)return;edStage('pick');return;}
   site({action:'pages'}).then(function(j){
     edSel.innerHTML=j.pages.map(function(p){return '<option value="'+esc(p.path)+'">'+esc(p.title||p.path)+' ('+esc(p.url)+')</option>';}).join('');
     $('#edPageList').innerHTML=j.pages.filter(function(p){return p.path!=='404.html';}).map(function(p){return '<option value="'+esc(p.path)+'">'+esc(p.title||p.path)+'</option>';}).join('');
-    edLoad(edSel.value);
+    $('#edPageGrid').innerHTML=j.pages.map(function(p){return '<button type="button" class="ep-page" data-path="'+esc(p.path)+'"><b>'+esc(String(p.title||p.path).replace(/\s*\|\s*MiKia.*$/,''))+'</b><span>'+esc(p.url)+'</span></button>';}).join('');
+    edStage('pick');
   }).catch(function(er){say(er.message,true);});
 }
-edSel.addEventListener('change',function(){edLoad(edSel.value);});
-function edLoad(path){
+edSel.addEventListener('change',function(){edLoad(edSel.value,true);});
+function edLoad(path,stay){
   edPath=path;say('');
-  return site({action:'page',path:path}).then(function(j){edData=j;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});$('#edTitle').textContent=j.title||path;$('#edWayTitle').textContent=j.title||path;edRender();edWayShow();}).catch(function(er){say(er.message,true);});
+  return site({action:'page',path:path}).then(function(j){edData=j;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});$('#edTitle').textContent=j.title||path;$('#edWayTitle').textContent=j.title||path;edRender();if(stay)edStage('form');else edWayShow();}).catch(function(er){say(er.message,true);});
 }
 var TAGNAME={h1:'Main heading',h2:'Heading',h3:'Heading',h4:'Heading',p:'Paragraph',li:'List item',a:'Link',button:'Button',span:'Text',b:'Bold text',strong:'Bold text',em:'Emphasis',figcaption:'Caption',summary:'Question',label:'Form label',small:'Small text',div:'Text',td:'Table cell',th:'Table heading',dt:'Term',dd:'Description',blockquote:'Quote',cite:'Name',option:'Choice'};
 function regionOf(f){return f.region==='nav'||f.region==='footer'?'shared':f.region==='head'?'head':'main';}
@@ -380,7 +402,7 @@ $('#edNew').addEventListener('click',function(){
 });
 $('#edDel').addEventListener('click',function(){
   if(!confirm('Delete the page "'+edPath+'"? It stays in your draft until you publish.'))return;
-  site({action:'deletepage',path:edPath}).then(function(){edSel.innerHTML='';edBody.hidden=true;$('#edWay').hidden=true;say('Page deleted in your draft.');return siteStatus();}).then(function(){edOpen();}).catch(function(er){say(er.message,true);});
+  site({action:'deletepage',path:edPath}).then(function(){edSel.innerHTML='';edStage('pick');say('Page deleted in your draft.');return siteStatus();}).then(function(){edOpen();}).catch(function(er){say(er.message,true);});
 });
 /* contact details */
 function dtLoad(){site({action:'details'}).then(function(j){var f=$('#dtForm');Object.keys(j.details).forEach(function(k){if(f.elements[k])f.elements[k].value=j.details[k];});}).catch(function(er){say(er.message,true);});}

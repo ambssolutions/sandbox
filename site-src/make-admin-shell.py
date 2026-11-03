@@ -68,6 +68,30 @@ if 'value="super"' not in panes:
     assert '<option value="owner">Owner (AMBS)</option>' in panes
     panes = panes.replace('<option value="owner">Owner (AMBS)</option>', '<option value="owner">Owner (AMBS)</option><option value="super">Super admin</option>', 1)
     panes = panes.replace('Owners (AMBS) manage everyone. A MiKia admin can add and remove editors. Editors can change everything on the website but cannot add people.', 'Super admins can also see Connections and choose who else is a super admin or owner. Owners (AMBS) manage everyone else. A MiKia admin can add and remove editors. Editors can change everything they are given but cannot add people.', 1)
+if 'adWebp' not in panes:
+    FMT = '<div class="ad-card" id="fmtCard"><label class="ad-chk"><input type="checkbox" id="adWebp" checked> Save pictures I upload as WebP (smaller and faster; recommended)</label><p class="ad-help ad-std">WebP keeps the same look at about a third of the size, so the website loads faster. Turn this off to keep JPEG. This applies to every upload in the editor and is remembered on this computer.</p></div>\n'
+    panes = panes.replace('<div data-pane="photos" hidden>\n', '<div data-pane="photos" hidden>\n' + FMT, 1)
+    assert 'adWebp' in panes
+if 'carouselWrap' not in panes:
+    a = '<div class="ad-card"><h2>Add a photo</h2>'
+    assert a in panes
+    CH = '<div id="carouselWrap"><div class="ad-card" id="carHead"><h2>Home page carousel</h2><p class="ad-help">These photos rotate in the carousel on the home page. Upload them and put them in order here. This is kept separate from the pictures on the page itself, above.</p></div>\n'
+    panes = panes.replace(a, CH + a, 1)
+    fb = panes.index('<div data-pane="feedback"')
+    close = panes.rfind('</div>', 0, fb)
+    panes = panes[:close] + '</div>' + panes[close:]
+if 'edPick' not in panes:
+    a = '<div data-pane="pages" hidden>\n<div class="ad-card"><h2>Edit a page</h2>'
+    assert a in panes
+    PICK = '<div class="ad-card" id="edPick"><h2>Which page do you want to edit?</h2><p class="ad-help">Choose a page. You will then choose how to edit it. Nothing goes on the website until you press Publish.</p><div id="edPageGrid" class="ep-grid"></div><div class="ad-btns"><button type="button" id="edNew2">+ New page</button></div></div>\n'
+    panes = panes.replace(a, '<div data-pane="pages" hidden>\n' + PICK + '<div class="ad-card" id="edTop" hidden><h2>Edit a page</h2>', 1)
+    b = '<p class="ad-help">How do you want to edit this page?</p>'
+    assert b in panes
+    panes = panes.replace(b, '<div class="ad-btns"><button type="button" id="edPickBack">&larr; Choose another page</button></div>' + b, 1)
+    c = '<button type="button" id="edDel" class="ad-rm">Delete page</button>'
+    assert c in panes
+    panes = panes.replace(c, '<button type="button" id="edPickBack2">Choose another page</button>' + c, 1)
+panes = panes.replace('Click any text on the page and type.', 'Click any text on the page and type. The menu and footer are changed in the form view.', 1)
 script = re.search(r'<script src="assets/admin\.js\?v=[0-9a-f]+" defer></script>', h).group(0)
 
 def ic(p): return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>' % p

@@ -41,8 +41,11 @@ function stepBack(req, res) {
 module.exports = async function (req, res) {
   const me = await U.live(L.currentUser(req));
   /* A person opening their invitation link sets their own password. No sign-in needed; the link itself is the proof. */
-  if (req.method === 'POST' && !me) {
-    let b0; try { b0 = await L.readJson(req, 4000); } catch (e) { return L.send(res, 413, { error: 'Request too large.' }); }
+  /* Opening an invitation or reset link works even when someone is already signed in on this computer (for example the person who made the invitation, testing it). */
+  let pre = null;
+  if (req.method === 'POST') { try { pre = await L.readJson(req, 4000); } catch (e) { return L.send(res, 413, { error: 'Request too large.' }); } }
+  if (req.method === 'POST' && (!me || pre.action === 'accept' || pre.action === 'forgot')) {
+    const b0 = pre;
     if (b0.action === 'back') return stepBack(req, res);
     if (b0.action === 'forgot') {
       /* "Forgot password": emails a private link (good for an hour) to a person who has a login. The answer is the same whether or not the address is known. */
@@ -80,14 +83,14 @@ module.exports = async function (req, res) {
     }
     u.hash = U.hashPassword(b0.password); delete u.invite; u.lastLogin = new Date().toISOString();
     await U.writeUsers(users);
-    res.setHeader('Set-Cookie', L.sessionCookieFor(u));
+    res.setHeader('Set-Cookie', [L.sessionCookieFor(u), L.clearBack()]);
     return L.send(res, 200, { ok: true, user: U.publicUser(u) });
   }
   if (req.method === 'GET' && !me) { await S.load(); return L.send(res, 200, { auth: false, master: S.masterAllowed() }); }
   if (req.method === 'GET' || !me) return L.send(res, 200, me ? { auth: true, user: me, viewing: !!L.readBack(req) } : { auth: false });
   if (req.method !== 'POST') { res.setHeader('Allow', 'GET, POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   if (!L.storageReady()) return L.send(res, 503, { error: 'Storage is not connected yet.' });
-  let b; try { b = await L.readJson(req, 4000); } catch (e) { return L.send(res, 413, { error: 'Request too large.' }); }
+  const b = pre;
   const action = String(b.action || '');
   await S.load();
   if (action === 'back') return stepBack(req, res);
