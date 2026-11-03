@@ -10,31 +10,6 @@ function page(res, code, title, body) {
     + '<style>body{margin:0;font:17px/1.5 system-ui,sans-serif;background:#f3f0e8;color:#12201b;display:grid;place-items:center;min-height:100vh;padding:20px;box-sizing:border-box}main{max-width:520px;width:100%;background:#fff;border-radius:20px;padding:26px;box-shadow:0 20px 50px -30px rgba(0,0,0,.4)}h1{font:400 26px Georgia,serif;margin:0 0 12px}blockquote{margin:14px 0;padding:0 0 0 14px;border-left:3px solid #c03434}button{min-height:48px;padding:0 26px;border:0;border-radius:999px;background:#12201b;color:#fff;font:600 16px system-ui;cursor:pointer}small{color:#5d6b64}</style></head><body><main>' + body + '</main></body></html>');
 }
 module.exports = async function (req, res) {
-  if (!L.secret() || !L.storageReady()) return page(res, 503, 'Not set up', '<h1>Not set up yet</h1><p>Photo and feedback storage is not connected to the website yet.</p>');
-  let id = '', t = '', act = 'approve';
-  if (req.method === 'POST') {
-    const raw = (await L.readBuffer(req, 4000).catch(() => Buffer.alloc(0))).toString('utf8');
-    const p = new URLSearchParams(raw); id = p.get('id') || ''; t = p.get('t') || ''; act = p.get('do') || 'approve';
-  } else if (req.method === 'GET') {
-    const u = new URL(req.url, 'https://x'); id = u.searchParams.get('id') || ''; t = u.searchParams.get('t') || '';
-  } else { res.setHeader('Allow', 'GET, POST'); return page(res, 405, 'Not allowed', '<h1>Not allowed</h1>'); }
-  if (!id || !t || !L.safeEq(t, L.approveToken(id))) return page(res, 403, 'Link not valid', '<h1>Link not valid</h1><p>This approval link is not valid. You can approve feedback in the website admin instead.</p>');
-  const items = await L.readFeedback();
-  const it = items.find((x) => x.id === id);
-  if (!it) return page(res, 404, 'Not found', '<h1>Feedback not found</h1><p>It may already have been removed.</p>');
-  if (req.method === 'POST') {
-    if (it.status === 'private' && act !== 'delete') return page(res, 403, 'Not allowed', '<h1>Not allowed on the website</h1><p>The sender did not tick the box to allow this on the website.</p>');
-    let out = items, msg;
-    if (act === 'delete') { out = items.filter((x) => x.id !== id); msg = ['Deleted', 'This feedback has been deleted. It is not on the website.']; }
-    else if (act === 'hide') { it.status = 'pending'; delete it.approvedAt; delete it.approvedBy; msg = ['Hidden', 'This feedback is no longer on the website. You can approve it again with the same link.']; }
-    else { it.status = 'approved'; it.approvedAt = new Date().toISOString(); it.approvedBy = 'the approval link in the email'; msg = ['Approved', 'This feedback now shows in the Testimonials section of the website (it can take about a minute).']; }
-    try { await L.writeFeedback(out); } catch (e) { return page(res, 502, 'Try again', '<h1>Could not save</h1><p>Please try the link again.</p>'); }
-    return page(res, 200, msg[0], '<h1>' + msg[0] + '</h1><p>' + msg[1] + '</p>');
-  }
-  if (it.status === 'private') return page(res, 200, 'Not allowed', '<h1>Not allowed on the website</h1><p>The sender did not tick the box to allow this on the website.</p>');
-  const done = it.status === 'approved';
-  return page(res, 200, 'Approve feedback', '<h1>' + (done ? 'Already approved' : 'Show this on the website?') + '</h1><blockquote>' + L.esc(it.text) + '</blockquote><p><b>' + L.esc(it.name) + '</b>' + (it.project ? '<br><small>' + L.esc(it.project) + '</small>' : '') + '</p>'
-    + (() => { const f = (d, label, st) => '<form method="post" action="/api/approve" style="display:inline-block;margin:4px 8px 4px 0"><input type="hidden" name="id" value="' + L.esc(id) + '"><input type="hidden" name="t" value="' + L.esc(t) + '"><input type="hidden" name="do" value="' + d + '"><button type="submit"' + (st ? ' style="' + st + '"' : '') + '>' + label + '</button></form>'; const ghost = 'background:#fff;color:#12201b;border:1px solid #bbb';
-      return (done ? f('hide', 'Hide from website', ghost) : f('approve', 'Approve and show on website')) + f('delete', 'Delete', ghost); })()
-    + '<p style="color:#666;font-size:14px">Approve shows it in the Testimonials section. Delete removes it for good.</p>');
+  /* The one-click approve link has been switched off. Feedback is approved, hidden or deleted in the website editor (Client feedback), which records who did it and when. */
+  return page(res, 200, 'Use the website editor', '<h1>Approve it in the website editor</h1><p>Feedback is now approved, hidden or deleted in the website editor, under Client feedback.</p><p><a href="https://mikia.co.nz/admin">Open the website editor</a></p>');
 };
