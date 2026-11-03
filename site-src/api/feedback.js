@@ -48,7 +48,7 @@ module.exports = async function (req, res) {
     'OK to show on the website': consent ? 'Yes' : 'No', Message: text
   };
   if (email) fields._replyto = email;
-  fields['Website editor (Client feedback tab)'] = o + '/admin';
+  fields['Website editor (Client feedback tab)'] = 'https://mikia.co.nz/admin';
   if (consent) fields['Approve for the website'] = o + '/api/approve?id=' + id + '&t=' + L.approveToken(id);
   /* Keep every message in the editor first (status "private" when the sender did not allow it on the website), then email it.
      If the email cannot be sent the message is not lost; it is only an error if neither worked. */
@@ -60,7 +60,7 @@ module.exports = async function (req, res) {
     saved = true;
   } catch (e) { /* try the email anyway */ }
   try {
-    if (process.env.SMTP_PASSWORD) await sendSmtp({ name, email, project, consent, text, link: fields['Approve for the website'], admin: o + '/admin' });
+    if (process.env.SMTP_PASSWORD) await sendSmtp({ name, email, project, consent, text, link: fields['Approve for the website'], admin: 'https://mikia.co.nz/admin' });
     else await sendFormSubmit(fields, o);
     mailed = true;
   } catch (e) { /* handled below */ }
