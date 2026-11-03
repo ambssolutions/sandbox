@@ -113,6 +113,9 @@ panes = panes.replace(TA, SEC_ROW + TA, 1)
 HR = '<div id="edAddHrefRow" hidden>'
 assert HR in panes
 panes = panes.replace(HR, SEC_BTN + HR, 1)
+FBH = '<p class="ad-help">New feedback arrives here and by email. Approve it to show it in the Testimonials section.</p><ul class="ad-list" id="adFb">'
+assert FBH in panes
+panes = panes.replace(FBH, '<p class="ad-help">New feedback arrives here and by email. Approve it to show it in the Testimonials section.</p><div class="ad-btns"><button type="button" id="adFbPrev">Preview the Testimonials section on the website</button></div><ul class="ad-list" id="adFb">', 1)
 FOR = '<div class="ad-for" id="edModalFor"><b id="edModalName"></b><span id="edModalNote"></span></div>'
 assert '<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in"><div class="ad-top">' in panes
 panes = panes.replace('<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in"><div class="ad-top">', '<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in">' + FOR + '<div class="ad-top">', 1)

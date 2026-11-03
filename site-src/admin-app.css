@@ -162,3 +162,6 @@ html body .ad-for{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px;
 html body .ad-modal-in .ad-top{flex-wrap:wrap;gap:8px}html body .ad-modal .ad-top .ad-help{flex:1 1 220px;font-size:13px;line-height:1.4;margin:0 4px}
 
 html body.adm .cn-more{margin:10px 0}html body.adm .cn-more summary{cursor:pointer;color:#6b7570;font-size:14px}
+
+html body.adm .fb-dl{display:grid;grid-template-columns:96px minmax(0,1fr);gap:6px 14px;margin:0;text-align:left}html body.adm .fb-dl dt{font-weight:600;color:#4a4a4a;font-size:14px}html body.adm .fb-dl dd{margin:0;font-size:15px;overflow-wrap:anywhere;white-space:pre-wrap}
+html body.adm .fb-dl dt,html body.adm .fb-dl dd{text-align:left!important}html body.adm .fb-dl .ad-badge{display:inline-block}

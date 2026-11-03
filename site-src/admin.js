@@ -133,18 +133,38 @@ $('#adUpForm').addEventListener('submit',function(e){
 /* ---- client feedback ---- */
 var fbList=$('#adFb');
 var FBT=function(iso){if(!iso)return '';var d=new Date(iso);return isNaN(d)?'':d.toLocaleString('en-NZ',{timeZone:'Pacific/Auckland',weekday:'short',day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'});};
-function renderFb(items){
+var fbItems=[];
+function FBR(l,v){return v?'<dt>'+esc(l)+'</dt><dd>'+esc(v)+'</dd>':'';}
+function renderFb(items){fbItems=items;
   var waiting=items.filter(function(p){return p.status==='pending';}).length;
   $('#adFbCount').textContent=items.length?items.length+(items.length===1?' item':' items'):'';
   $('#adFbBadge').textContent=waiting?String(waiting):'';$('#hmFb').textContent=waiting?waiting+' waiting':'';
   fbList.innerHTML=items.map(function(p){var ok=p.status==='approved',pv=p.status==='private',hd=p.status==='hidden';
-    return '<li class="ad-row ad-fb" data-id="'+esc(p.id)+'"><div class="ad-cap"><b>'+esc(p.name)+(p.project?' <span>'+esc(p.project)+'</span>':'')+'</b><p>'+esc(p.text)+'</p>'+(p.email?'<p class="ad-help">Reply to: '+esc(p.email)+'</p>':'')+(p.created?'<p class="ad-help">Received: '+esc(FBT(p.created))+'</p>':'')+((ok||hd)&&(p.approvedAt||ok)?'<p class="ad-help">Approved: '+(p.approvedAt?esc(FBT(p.approvedAt))+(p.approvedBy?' by '+esc(p.approvedBy):''):'time and person not recorded')+'</p>':'')+(hd&&p.hiddenAt?'<p class="ad-help">Hidden: '+esc(FBT(p.hiddenAt))+(p.hiddenBy?' by '+esc(p.hiddenBy):'')+'</p>':'')+'<span class="ad-badge'+(ok?' ok':'')+'">'+(ok?'Showing on the website':pv?'Private: not allowed on the website':hd?'Hidden from the website':'Waiting for approval')+'</span></div>'
-    +'<div class="ad-btns">'+(ok?'<button type="button" data-fa="hide">Hide</button>':pv?'':'<button type="button" data-fa="approve" class="ad-ap">'+(hd?'Show on website':'Approve')+'</button>')+'<button type="button" data-fa="delete" class="ad-rm">Delete</button></div></li>';
+    var appr=(ok||hd)&&(p.approvedAt||ok)?(p.approvedAt?FBT(p.approvedAt)+(p.approvedBy?' by '+p.approvedBy:''):'time and person not recorded'):'';
+    var hid=hd&&p.hiddenAt?FBT(p.hiddenAt)+(p.hiddenBy?' by '+p.hiddenBy:''):'';
+    var status=ok?'Showing on the website':pv?'Private: not allowed on the website':hd?'Hidden from the website':'Waiting for approval';
+    return '<li class="ad-row ad-fb" data-id="'+esc(p.id)+'"><div class="ad-cap"><dl class="fb-dl">'+FBR('Name',p.name)+FBR('Project',p.project)+FBR('Message',p.text)+FBR('Reply to',p.email)+FBR('Received',FBT(p.created))+FBR('Approved',appr)+FBR('Hidden',hid)+'<dt>Status</dt><dd><span class="ad-badge'+(ok?' ok':'')+'">'+esc(status)+'</span></dd></dl></div>'
+    +'<div class="ad-btns">'+(ok?'<button type="button" data-fa="hide">Hide</button>':pv?'':'<button type="button" data-fa="approve" class="ad-ap">'+(hd?'Show on website':'Approve')+'</button>')+(pv?'':'<button type="button" data-fa="preview">'+(ok?'See on page':'Preview on page')+'</button>')+'<button type="button" data-fa="delete" class="ad-rm">Delete</button></div></li>';
   }).join('')||'<li class="ad-empty">No feedback yet.</li>';
 }
+/* Preview of the Testimonials section as it looks on the homepage: the live homepage with the approved feedback (plus one chosen message) fed to it. */
+function fbPreview(extraId){
+  var items=fbItems.filter(function(p){return p.status==='approved'||p.id===extraId;}).slice().reverse().map(function(p){return {id:p.id,name:p.name,project:p.project,text:p.text};});
+  say('Preparing the preview...');
+  fetch('/',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('Could not load the homepage.');return r.text();}).then(function(h){
+    var stub='<base href="'+location.origin+'/"><script>(function(){var I='+JSON.stringify(items).replace(/</g,'\\u003c')+',f=window.fetch;window.fetch=function(u){if(String(u).indexOf("/api/testimonials")>-1)return Promise.resolve(new Response(JSON.stringify({items:I}),{status:200,headers:{"Content-Type":"application/json"}}));return f.apply(this,arguments)};addEventListener("load",function(){setTimeout(function(){var e=document.getElementById("media-testimonials");e&&e.scrollIntoView()},1800)})})()<\/script>';
+    if(modal.parentNode!==root)root.appendChild(modal);/* the preview window lives outside the Pages tab, so it can open from here */
+    onPage=false;$('#edModalSave').hidden=true;$('#edModalHint').hidden=true;
+    $('#edModalName').textContent='Preview: Testimonials on the homepage';
+    $('#edModalNote').textContent=extraId?'This shows the section as it would look if this message were approved. It is not on the website yet.':'This is how the Testimonials section looks to visitors now (approved feedback only). Nothing can be changed here.';
+    say('');frame.srcdoc=h.replace(/<head[^>]*>/i,function(m){return m+stub;});sizeFrame(Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;
+  }).catch(function(er){say(er.message,true);});
+}
 function loadFb(){return api('/api/admin/feedback').then(function(j){renderFb(j.items);}).catch(function(){});}
+$('#adFbPrev').addEventListener('click',function(){fbPreview('');});
 fbList.addEventListener('click',function(e){
   var b=e.target.closest('button');if(!b||b.disabled)return;var row=b.closest('.ad-row'),act=b.dataset.fa;
+  if(act==='preview'){fbPreview(row.dataset.id);return;}
   if(act==='delete'&&!confirm('Delete this feedback?'))return;
   b.disabled=true;say('');
   post('/api/admin/feedback',{id:row.dataset.id,action:act}).then(function(j){renderFb(j.items);say(act==='approve'?'Approved. It shows on the website within a minute.':act==='hide'?'Hidden from the website.':'Deleted.');}).catch(function(er){say(er.message,true);b.disabled=false;});
