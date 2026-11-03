@@ -61,7 +61,7 @@ if 'ad-std' not in panes:
     panes = panes.replace('Click a picture to change it. Then press Save.', 'Click a picture to change it (' + STD + ') Then press Save.', 1)
 if 'cnFbTo' not in panes:
     assert '<label for="cnMailUser">Sending address</label>' in panes
-    panes = panes.replace('<div class="ad-btns"><button class="ad-go" type="submit">Save</button><button type="button" id="cnMailTest">', '<label for="cnFbTo">Send customer feedback to</label><input id="cnFbTo" name="feedback_to" type="text" placeholder="info@mikia.co.nz"><p class="ad-help">Every "Share your experience" message is emailed here with a button to approve it for the website.</p><div class="ad-btns"><button class="ad-go" type="submit">Save</button><button type="button" id="cnMailTest">', 1)
+    panes = panes.replace('<div class="ad-btns"><button class="ad-go" type="submit">Save</button><button type="button" id="cnMailTest">', '<label>Send customer feedback to</label><p class="ad-help">Every "Share your experience" message is emailed to everyone ticked, each with a button to approve it for the website. Tick the people who should get it.</p><div id="cnFbPeople" class="cn-people"></div><label for="cnFbTo">Other addresses (optional, separate with commas)</label><input id="cnFbTo" name="feedback_to" type="text" placeholder="info@mikia.co.nz"><div class="ad-btns"><button class="ad-go" type="submit">Save</button><button type="button" id="cnMailTest">', 1)
     panes = panes.replace('<button type="button" id="cnMailClear"', '<button type="button" id="cnFbTest">Send a test feedback message</button><button type="button" id="cnMailClear"', 1)
     assert 'cnFbTest' in panes
 if 'value="super"' not in panes:

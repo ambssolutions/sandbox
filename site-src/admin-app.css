@@ -155,3 +155,5 @@ html body.adm .ep-page:hover{border-color:#c8323c;background:#fff7f7}
 html body.adm #edPick[hidden],html body.adm #edTop[hidden]{display:none}
 
 html body.adm #edNew[hidden],html body.adm #edNew2[hidden],html body.adm .hm-pill[hidden]{display:none}
+
+html body.adm .cn-people{display:grid;gap:6px;margin:6px 0 12px}html body.adm .cn-people small{color:#6b7570;margin-left:4px}

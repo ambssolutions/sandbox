@@ -5,7 +5,8 @@ const S = require('./_settings');
    1. The details are emailed to the MiKia inbox (through FormSubmit) with a link to approve it for the website.
    2. If the person allowed it, the feedback is kept as "pending" until it is approved by email or in /admin.
    Settings: FEEDBACK_TO (inbox, defaults to the test address) plus the media settings. */
-const TO = () => process.env.FEEDBACK_TO || 'hello@ambs.co.nz';
+const TOLIST = () => String(process.env.FEEDBACK_TO || 'hello@ambs.co.nz').split(/[\s,;]+/).filter(Boolean);
+const TO = () => TOLIST().join(', ');
 
 /* Email goes out through the site's own mailbox (Zoho SMTP) when SMTP_PASSWORD is set; FormSubmit is only the fallback.
    Settings: SMTP_PASSWORD (app password), SMTP_USER (default hello@ambs.co.nz), SMTP_HOST (default smtp.zoho.com.au), SMTP_PORT (default 465),
@@ -22,8 +23,8 @@ async function sendSmtp(f) {
   await tx.sendMail({ from: '"MiKia website" <' + (process.env.FEEDBACK_FROM || user) + '>', to: TO(), replyTo: f.email || undefined, subject: 'customer feedback', text: textBody, html });
 }
 async function sendFormSubmit(fields, o) {
-  const r = await fetch('https://formsubmit.co/ajax/' + TO(), {
-    method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json', Origin: o, Referer: o + '/' }, body: JSON.stringify(fields)
+  const r = await fetch('https://formsubmit.co/ajax/' + TOLIST()[0], {
+    method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json', Origin: o, Referer: o + '/' }, body: JSON.stringify(TOLIST().length > 1 ? Object.assign({ _cc: TOLIST().slice(1).join(',') }, fields) : fields)
   });
   const j = await r.json().catch(() => ({}));
   if (!r.ok || j.success === false || j.success === 'false') throw new Error('mail');

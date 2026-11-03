@@ -100,6 +100,12 @@ module.exports = async function (req, res) {
     if (action === 'settings') return L.send(res, 200, { settings: S.summary(), key: await keyStatus(!!b.fresh) });
     if (action === 'savesettings') {
       const patch = {}; for (const k of Object.keys(S.KEYS)) if (Object.prototype.hasOwnProperty.call(b.values || {}, k)) patch[k] = b.values[k];
+      if (Object.prototype.hasOwnProperty.call(patch, 'feedback_to')) {
+        const list = String(patch.feedback_to || '').split(/[\s,;]+/).map((x) => x.trim().toLowerCase()).filter(Boolean);
+        const bad = list.find((x) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x));
+        if (bad) return L.send(res, 400, { error: 'That email address does not look right: ' + bad });
+        patch.feedback_to = Array.from(new Set(list)).join(', ');
+      }
       if (patch.master_login === 'off') {
         const us = await U.readUsers();
         if (!us.some((x) => x.role === 'owner' && x.hash && !x.invite && !x.disabled)) return L.send(res, 400, { error: 'Add an owner who can sign in with an email and password first, or you could be locked out.' });
