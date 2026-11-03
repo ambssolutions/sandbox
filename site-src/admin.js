@@ -3,7 +3,20 @@ var root=document.getElementById('adminApp');if(!root)return;
 var $=function(s){return root.querySelector(s);};
 var loginBox=$('#adLogin'),inviteBox=$('#adInvite'),panel=$('#adPanel'),list=$('#adList'),msg=$('#adMsg'),note=$('#adNote');
 var me=null;
-function say(t,bad){msg.textContent=t||'';msg.className='ad-msg'+(bad?' bad':'');}
+/* Messages show right under the control the person just used (the button or field), not at the top of the page. The top line stays as a screen-reader notice, and as the place for messages that have no control to sit under. */
+var lastEl=null;
+var lastKey='';
+function noteEl(e){var t=e.target;if(!t||!t.closest||t.closest('.ad-inline'))return;lastEl=t.closest('button,a,input,select,textarea,label,form')||t;var r=lastEl.closest('[data-email],[data-id],[data-sha]');lastKey=r?(r.hasAttribute('data-email')?'[data-email="'+r.getAttribute('data-email')+'"]':r.hasAttribute('data-id')?'[data-id="'+r.getAttribute('data-id')+'"]':'[data-sha="'+r.getAttribute('data-sha')+'"]'):'';}
+['click','change','submit','focusin'].forEach(function(ev){root.addEventListener(ev,noteEl,true);});
+function clearInline(){[].forEach.call(root.querySelectorAll('.ad-inline'),function(n){n.parentNode.removeChild(n);});}
+function say(t,bad){
+  clearInline();
+  var host=null;
+  if(t&&lastEl&&!root.contains(lastEl)&&lastKey){var again=root.querySelector('.ad-row'+lastKey);if(again)host=again;}
+  if(!host&&t&&lastEl&&root.contains(lastEl)&&lastEl.offsetParent!==null)host=lastEl.closest('form,.pb-item,.ad-row,.ad-add,.ad-field,.ad-top,.hm-card,.ad-draft,.ad-card');
+  msg.textContent=t||'';msg.className='ad-msg'+(bad?' bad':'')+(host?' ad-msg-quiet':'');
+  if(host){var p=document.createElement('p');p.className='ad-inline'+(bad?' bad':'');p.textContent=t;host.appendChild(p);try{p.scrollIntoView({block:'nearest',behavior:'smooth'});}catch(e){}}
+}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function api(path,opt){
   opt=opt||{};opt.credentials='same-origin';
@@ -18,6 +31,7 @@ function tab(name){
   say('');sbShut();window.scrollTo(0,0);
   if(name==='users')loadUsers();
   if(name==='conn')cnLoad();
+  if(name==='photos')pbLoad();
   if(name==='pages')edOpen();
   if(name==='details')dtLoad();
   if(name==='changes')chLoad();
@@ -43,6 +57,7 @@ function enter(user){
   [].forEach.call(root.querySelectorAll('.hm-pill[data-go=newpage]'),function(el){el.hidden=!can('pages');});
   [].forEach.call(root.querySelectorAll('.hm-h'),function(h){var g=h.nextElementSibling;if(g&&g.classList.contains('hm-grid')&&!g.querySelector('.hm-card:not([hidden])')){h.hidden=true;g.hidden=true;}});
   if(user.super)post('/api/admin/users',{action:'settings'}).then(function(j){hmKey(j.key);}).catch(function(){});
+  var pc=$('#pbCard');if(pc)pc.hidden=!can('pages');
   tab('home');if(can('photos'))load();if(can('pages')||can('details'))siteStatus();
 }
 /* ---- photos ---- */
@@ -67,6 +82,21 @@ list.addEventListener('click',function(e){
   post('/api/admin/photos',act==='rm'?{action:'remove',id:id}:{action:'move',id:id,dir:act}).then(function(j){render(j.photos,true);say(act==='rm'?'Photo removed.':'Order updated.');}).catch(function(er){say(er.message,true);b.disabled=false;});
 });
 /* Shrink big phone photos in the browser so they upload quickly and stay under the 4 MB limit */
+/* The website's pictures are landscape, about 1600 x 1000 pixels. Smaller or oddly shaped pictures can look blurry or be cropped, so ask before using one. */
+var STD='Standard size: 1600 \u00d7 1000 pixels (landscape), JPEG or WebP. Smaller than 1200 pixels wide can look blurry. Larger pictures are shrunk automatically.';
+function askSize(file){
+  return new Promise(function(ok){
+    var url=URL.createObjectURL(file),im=new Image();
+    im.onload=function(){URL.revokeObjectURL(url);var w=im.naturalWidth,h=im.naturalHeight,ratio=w/h,msgs=[];
+      if(w<1200)msgs.push('It is only '+w+' \u00d7 '+h+' pixels, so it may look blurry on large screens.');
+      if(ratio<1.3||ratio>1.9)msgs.push('Its shape ('+w+' \u00d7 '+h+') is different from the website\'s landscape pictures, so it may be cropped or look stretched.');
+      if(!msgs.length)return ok(true);
+      ok(confirm(msgs.join('\n\n')+'\n\n'+STD+'\n\nUse this picture anyway?'));};
+    im.onerror=function(){URL.revokeObjectURL(url);ok(true);};
+    im.src=url;
+  });
+}
+function sizeStop(go){if(!go)throw new Error('Picture not used. Choose another one when you are ready.');}
 function shrink(file){
   return new Promise(function(ok,no){
     if(file.size<1.5*1048576&&/jpeg|webp/.test(file.type))return ok(file);
@@ -83,8 +113,8 @@ function shrink(file){
 $('#adUpForm').addEventListener('submit',function(e){
   e.preventDefault();var f=e.target.photo.files[0],b=e.target.querySelector('button[type=submit]');
   if(!f){say('Choose a photo first.',true);return;}
-  b.disabled=true;say('Uploading...');
-  shrink(f).then(function(bl){
+  b.disabled=true;say('Checking the picture...');
+  askSize(f).then(function(go){sizeStop(go);say('Uploading...');return shrink(f);}).then(function(bl){
     return api('/api/admin/upload',{method:'POST',headers:{'content-type':bl.type||'image/jpeg','x-caption':encodeURIComponent(e.target.caption.value.trim()),'x-desc':encodeURIComponent(e.target.desc.value.trim())},body:bl});
   }).then(function(j){e.target.reset();render(j.photos,true);say('Photo added. It shows on the website within a minute.');}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
 });
@@ -146,6 +176,29 @@ uList.addEventListener('click',function(e){
   else p=post('/api/admin/users',{action:'remove',email:email}).then(function(j){renderUsers(j.users);say('Removed.');});
   p.catch(function(er){say(er.message,true);b.disabled=false;});
 });
+/* ---- pictures by page (Photos tab) ---- */
+var pbPages=false;
+function pbLoad(){
+  var card=$('#pbCard');if(!card||card.hidden)return;
+  if(pbPages){pbShow();return;}
+  site({action:'pages'}).then(function(j){pbPages=true;$('#pbPage').innerHTML=j.pages.filter(function(p){return p.path!=='404.html';}).map(function(p){return '<option value="'+esc(p.path)+'">'+esc(p.title||p.path)+' ('+esc(p.url)+')</option>';}).join('');pbShow();}).catch(function(er){say(er.message,true);});
+}
+function pbShow(){
+  var path=$('#pbPage').value,g=$('#pbGrid');if(!path)return;g.innerHTML='<p class="ad-help">Loading...</p>';
+  site({action:'page',path:path}).then(function(j){
+    var pics=[];j.fields.forEach(function(f,i){if(f.picture&&f.region==='main'){var alt=j.fields[i-1]&&j.fields[i-1].attr==='alt'?j.fields[i-1].value:'';pics.push({k:f.k,src:f.value,alt:alt});}});
+    g.innerHTML=pics.map(function(p){var shown=/^(https?:|data:)/.test(p.src)?p.src:'/'+p.src.replace(/^\//,'');
+      return '<div class="pb-item" data-k="'+p.k+'" data-old="'+esc(p.src)+'"><img src="'+esc(shown)+'" alt="" loading="lazy" width="240" height="150"><p class="pb-alt">'+esc(p.alt||'No description')+'</p><p class="pb-file">'+esc(p.src.split('/').pop())+'</p><label class="ad-filebtn">Change picture<input type="file" accept="image/jpeg,image/png,image/webp" hidden></label></div>';}).join('')||'<p class="ad-help">This page has no pictures you can change here.</p>';
+  }).catch(function(er){g.innerHTML='';say(er.message,true);});
+}
+$('#pbPage').addEventListener('change',pbShow);
+$('#pbGrid').addEventListener('change',function(e){
+  var inp=e.target.closest('input[type=file]');if(!inp||!inp.files[0])return;var f=inp.files[0],it=inp.closest('.pb-item'),path=$('#pbPage').value;
+  say('Checking the picture...');
+  askSize(f).then(function(go){sizeStop(go);say('Uploading...');return shrink(f);}).then(function(bl){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(String(r.result).split(',')[1]);};r.onerror=no;r.readAsDataURL(bl);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});})
+  .then(function(j){return site({action:'edit',path:path,changes:[{k:Number(it.getAttribute('data-k')),old:it.getAttribute('data-old'),new:j.src}]});})
+  .then(function(){say('Picture changed in your draft. It goes on the website when you press Publish.');return siteStatus();}).then(pbShow).catch(function(er){say(er.message,true);});
+});
 /* ---- connections (owners only) ---- */
 function cnState(el,x){el.className='cn-st'+(x.set?' on':'');el.textContent=x.set?(x.from==='vercel'?'Set in Vercel':'Saved'+(x.hint?' '+x.hint:'')):'Not set';}
 function cnDate(iso){try{return new Date(iso).toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'});}catch(e){return '';}}
@@ -164,13 +217,15 @@ function hmKey(k){
   else if(k&&k.days!=null&&k.days<=30){show=true;msg=k.days<=0?'The GitHub key has expired, so publishing has stopped.':'The GitHub key expires in '+k.days+(k.days===1?' day':' days')+' ('+cnDate(k.expires)+'). Make a new key before then.';}
   a.hidden=!show;t.textContent=msg;
 }
-function cnShow(st,key){if(key)cnKey(key);$('#cnMasterOff').checked=st.master_login.value==='off';cnState($('#cnGhState'),st.github_token);cnState($('#cnMailState'),st.smtp_password);$('#cnGhRepo').value=st.github_repo.value||'';$('#cnMailUser').value=st.smtp_user.value||'';$('#cnGhTok').value='';$('#cnMailPw').value='';}
+function cnShow(st,key){if(key)cnKey(key);$('#cnMasterOff').checked=st.master_login.value==='off';cnState($('#cnGhState'),st.github_token);cnState($('#cnMailState'),st.smtp_password);$('#cnGhRepo').value=st.github_repo.value||'';$('#cnMailUser').value=st.smtp_user.value||'';$('#cnFbTo').value=st.feedback_to.value||'';$('#cnGhTok').value='';$('#cnMailPw').value='';}
 function cnLoad(){return post('/api/admin/users',{action:'settings',fresh:true}).then(function(j){cnShow(j.settings,j.key);hmKey(j.key);}).catch(function(er){say(er.message,true);});}
 function cnSave(vals,msg){return post('/api/admin/users',{action:'savesettings',values:vals}).then(function(j){cnShow(j.settings);say(msg);return cnLoad();}).catch(function(er){say(er.message,true);});}
 function cnTest(action){say('Testing...');return post('/api/admin/users',{action:action}).then(function(j){say(j.note,!j.ok);if(j.key){cnKey(j.key);hmKey(j.key);}if(j.ok&&action==='testgithub')siteStatus();}).catch(function(er){say(er.message,true);});}
 $('#cnGh').addEventListener('submit',function(e){e.preventDefault();var f=e.target,v={github_repo:f.github_repo.value};if(f.github_token.value)v.github_token=f.github_token.value;cnSave(v,'Saved. Press Test connection to check it.');});
-$('#cnMail').addEventListener('submit',function(e){e.preventDefault();var f=e.target,v={smtp_user:f.smtp_user.value};if(f.smtp_password.value)v.smtp_password=f.smtp_password.value;cnSave(v,'Saved. Press Send a test email to check it.');});
+$('#cnMail').addEventListener('submit',function(e){e.preventDefault();var f=e.target,v={smtp_user:f.smtp_user.value,feedback_to:f.feedback_to.value};if(f.smtp_password.value)v.smtp_password=f.smtp_password.value;cnSave(v,'Saved. Press Send a test email to check it.');});
 $('#cnMaster').addEventListener('submit',function(e){e.preventDefault();cnSave({master_login:$('#cnMasterOff').checked?'off':''},$('#cnMasterOff').checked?'Saved. Signing in with only the master password is now switched off.':'Saved. Signing in with only the master password is allowed again.');});
+$('#cnFbTest').addEventListener('click',function(){var b=this;b.disabled=true;say('Sending a test feedback message...');
+  fetch('/api/feedback',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name:'Test (from the editor)',message:'This is a test of the Share your experience form. You can ignore it.',consent:false})}).then(function(r){return r.json().catch(function(){return{};}).then(function(j){if(!r.ok)throw new Error(j.error||'The test did not send.');say('Test sent. Check the feedback inbox in a minute.');});}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});});
 $('#cnGhTest').addEventListener('click',function(){cnTest('testgithub');});
 $('#cnMailTest').addEventListener('click',function(){cnTest('testmail');});
 $('#cnGhClear').addEventListener('click',function(){if(confirm('Remove the saved GitHub key? The editor will not be able to publish until a new one is saved.'))cnSave({github_token:''},'Key removed.');});
@@ -225,7 +280,13 @@ function preview(path,edit){
 function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelectorAll('#edSize button'),function(b){b.setAttribute('aria-pressed',Number(b.getAttribute('data-w'))===w?'true':'false');});}
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
 $('#edClose').addEventListener('click',function(){modal.hidden=true;frame.srcdoc='';onPage=false;});
-window.addEventListener('message',function(e){if(!onPage||e.source!==frame.contentWindow||!e.data||e.data.mk!=='edit')return;var el=edFields.querySelector('[data-k="'+e.data.k+'"]:not(li)');if(!el)return;el.value=e.data.v;edDirty();});
+window.addEventListener('message',function(e){
+  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pic'){
+    var d=e.data,el0=edFields.querySelector('input[type=text][data-k="'+d.k+'"]');if(!el0)return;say('Uploading the picture...');
+    fetch(d.data).then(function(r){return r.blob();}).then(function(bl){var f=new File([bl],d.name||'photo.jpg',{type:d.type||bl.type});return askSize(f).then(function(go){sizeStop(go);return shrink(f);}).then(function(s){return new Promise(function(ok,no){var rd=new FileReader();rd.onload=function(){ok(String(rd.result).split(',')[1]);};rd.onerror=no;rd.readAsDataURL(s);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});});}).then(function(j){el0.value=j.src;edDirty();say('Picture ready. Press Save changes to use it on this page.');}).catch(function(er){say(er.message,true);});
+    return;
+  }
+  if(!onPage||e.source!==frame.contentWindow||!e.data||e.data.mk!=='edit')return;var el=edFields.querySelector('[data-k="'+e.data.k+'"]:not(li)');if(!el)return;el.value=e.data.v;edDirty();});
 function openOnPage(){edRegion='main';$('#edFind').value='';edRender();preview(edPath,true);}
 $('#edOnPage').addEventListener('click',openOnPage);
 function edWayShow(){edBody.hidden=true;$('#edWay').hidden=false;if(edPref==='form'){$('#edWay').hidden=true;edBody.hidden=false;}else if(edPref==='page')openOnPage();}
@@ -281,7 +342,7 @@ function addFill(reg){
 var addPicSrc='';
 $('#edAddType').addEventListener('change',function(){var v=this.value,p=v==='picture',l=v==='link'||v==='button';$('#edAddPic').hidden=!p;$('#edAddText').hidden=p;$('#edAddHrefRow').hidden=!l;$('#edAddText').placeholder=l?'The words on the '+v:'Type the words';$('#edAddText').rows=l?1:3;});
 $('#edAddFile').addEventListener('change',function(){var f=this.files[0];if(!f)return;$('#edAddName').textContent='Uploading...';
-  shrink(f).then(function(bl){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(String(r.result).split(',')[1]);};r.onerror=no;r.readAsDataURL(bl);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});}).then(function(j){addPicSrc=j.src;$('#edAddName').textContent=f.name;}).catch(function(er){addPicSrc='';$('#edAddName').textContent='';say(er.message,true);});});
+  askSize(f).then(function(go){sizeStop(go);return shrink(f);}).then(function(bl){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(String(r.result).split(',')[1]);};r.onerror=no;r.readAsDataURL(bl);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});}).then(function(j){addPicSrc=j.src;$('#edAddName').textContent=f.name;}).catch(function(er){addPicSrc='';$('#edAddName').textContent='';say(er.message,true);});});
 $('#edAddGo').addEventListener('click',function(){
   var kind=$('#edAddType').value,b=$('#edAddGo');
   if(edChanges().length){say('Press Save changes first, then add something new.',true);return;}
@@ -310,7 +371,7 @@ edFields.addEventListener('click',function(e){
 edFields.addEventListener('change',function(e){
   var inp=e.target.closest('input[data-pic]');if(!inp||!inp.files[0])return;
   var k=inp.getAttribute('data-pic'),f=inp.files[0];say('Uploading the picture...');
-  shrink(f).then(function(bl){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(String(r.result).split(',')[1]);};r.onerror=no;r.readAsDataURL(bl);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});}).then(function(j){var t=edFields.querySelector('input[type=text][data-k="'+k+'"]');t.value=j.src;edDirty();say('Picture uploaded. Press Save changes to use it on this page.');}).catch(function(er){say(er.message,true);});
+  askSize(f).then(function(go){sizeStop(go);return shrink(f);}).then(function(bl){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(String(r.result).split(',')[1]);};r.onerror=no;r.readAsDataURL(bl);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});}).then(function(j){var t=edFields.querySelector('input[type=text][data-k="'+k+'"]');t.value=j.src;edDirty();say('Picture uploaded. Press Save changes to use it on this page.');}).catch(function(er){say(er.message,true);});
 });
 /* new / delete page */
 $('#edNew').addEventListener('click',function(){

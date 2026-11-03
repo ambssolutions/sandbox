@@ -80,7 +80,12 @@ function extract(html) {
     if (n.tagName === 'img' && attr(n, 'alt') != null && n.sourceCodeLocation && n.sourceCodeLocation.attrs.alt) {
       const loc = n.sourceCodeLocation.attrs.alt, raw = html.slice(loc.startOffset, loc.endOffset);
       fields.push({ kind: 'attr', attr: 'alt', region: reg, item, tag: 'img', src: attr(n, 'src') || '', label: 'Picture description', value: attr(n, 'alt'), start: loc.startOffset + raw.indexOf('"') + 1, end: loc.endOffset - 1 });
-      if (attr(n, 'src') && n.sourceCodeLocation.attrs.src) { const l2 = n.sourceCodeLocation.attrs.src, r2 = html.slice(l2.startOffset, l2.endOffset); fields.push({ kind: 'attr', attr: 'src', region: reg, item, tag: 'img', label: 'Picture file', value: attr(n, 'src'), start: l2.startOffset + r2.indexOf('"') + 1, end: l2.endOffset - 1, picture: true }); }
+      if (attr(n, 'src') && n.sourceCodeLocation.attrs.src) {
+        const l2 = n.sourceCodeLocation.attrs.src, r2 = html.slice(l2.startOffset, l2.endOffset);
+        /* When the picture is replaced, its other sizes (srcset and sizes) must go too, or browsers keep showing the old one. */
+        const drop = ['srcset', 'sizes'].filter((a) => n.sourceCodeLocation.attrs[a]).map((a) => { const l3 = n.sourceCodeLocation.attrs[a]; let st = l3.startOffset; while (st > 0 && /\s/.test(html[st - 1])) st--; return { start: st, end: l3.endOffset }; });
+        fields.push({ kind: 'attr', attr: 'src', region: reg, item, tag: 'img', label: 'Picture file', value: attr(n, 'src'), start: l2.startOffset + r2.indexOf('"') + 1, end: l2.endOffset - 1, picture: true, drop, tagStart: n.sourceCodeLocation.startOffset });
+      }
     }
     if (n.tagName === 'a' && attr(n, 'href') != null && n.sourceCodeLocation && n.sourceCodeLocation.attrs.href && !/^#/.test(attr(n, 'href'))) {
       const loc = n.sourceCodeLocation.attrs.href, raw = html.slice(loc.startOffset, loc.endOffset), q = raw.indexOf('"') >= 0 ? '"' : "'";
@@ -131,6 +136,7 @@ function applyChanges(html, changes) {
       v = escAttr(v);
     } else v = escAttr(v.trim());
     reps.push({ start: f.start, end: f.end, text: v });
+    if (f.picture && f.drop) for (const d of f.drop) reps.push({ start: d.start, end: d.end, text: '' });
   }
   reps.sort((a, b) => b.start - a.start);
   let out = html;

@@ -48,6 +48,22 @@ if 'adInvMail' not in panes:
     assert '<button type="button" id="adInvCopy">Copy link</button>' in panes
     panes = panes.replace('<button type="button" id="adInvCopy">Copy link</button>', '<button type="button" id="adInvCopy">Copy link</button><a id="adInvMail" class="ad-mailto" href="#" hidden>Send from my email app</a>', 1)
 panes = panes.replace('Only AMBS can see this tab.', 'Only the super admin can see this tab.')
+panes = panes.replace('Click any text on the page and type. Then press Save.', 'Click any text on the page and type. Click a picture to change it. Then press Save.')
+STD = 'Standard size: 1600 &times; 1000 pixels (landscape), JPEG or WebP. Smaller than 1200 pixels wide can look blurry. Larger pictures are shrunk automatically.'
+if 'pbCard' not in panes:
+    PB = '<div class="ad-card" id="pbCard"><h2>Pictures on each page</h2><p class="ad-help">Choose a page to see its pictures, then press Change picture on the one you want to replace. ' + STD + '</p><div class="ad-pagebar"><select id="pbPage" aria-label="Page"></select></div><div id="pbGrid" class="pb-grid"></div></div>\n'
+    assert '<div data-pane="photos" hidden>' in panes
+    panes = panes.replace('<div data-pane="photos" hidden>', '<div data-pane="photos" hidden>\n' + PB, 1)
+if 'ad-std' not in panes:
+    assert '<label for="adFile">Photo (JPEG, PNG or WebP)</label>' in panes
+    panes = panes.replace('<label for="adFile">Photo (JPEG, PNG or WebP)</label>', '<label for="adFile">Photo (JPEG, PNG or WebP)</label><p class="ad-help ad-std">' + STD + '</p>', 1)
+    panes = panes.replace('<label class="ad-filebtn">Choose picture<input type="file" id="edAddFile"', '<p class="ad-help ad-std">' + STD + '</p><label class="ad-filebtn">Choose picture<input type="file" id="edAddFile"', 1)
+    panes = panes.replace('Click a picture to change it. Then press Save.', 'Click a picture to change it (' + STD + ') Then press Save.', 1)
+if 'cnFbTo' not in panes:
+    assert '<label for="cnMailUser">Sending address</label>' in panes
+    panes = panes.replace('<div class="ad-btns"><button class="ad-go" type="submit">Save</button><button type="button" id="cnMailTest">', '<label for="cnFbTo">Send customer feedback to</label><input id="cnFbTo" name="feedback_to" type="text" placeholder="info@mikia.co.nz"><p class="ad-help">Every "Share your experience" message is emailed here with a button to approve it for the website.</p><div class="ad-btns"><button class="ad-go" type="submit">Save</button><button type="button" id="cnMailTest">', 1)
+    panes = panes.replace('<button type="button" id="cnMailClear"', '<button type="button" id="cnFbTest">Send a test feedback message</button><button type="button" id="cnMailClear"', 1)
+    assert 'cnFbTest' in panes
 script = re.search(r'<script src="assets/admin\.js\?v=[0-9a-f]+" defer></script>', h).group(0)
 
 def ic(p): return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>' % p

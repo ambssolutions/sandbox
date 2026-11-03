@@ -4,7 +4,7 @@
 const crypto = require('crypto');
 const L = require('./_lib');
 
-const KEYS = { github_token: 'GITHUB_TOKEN', github_repo: 'GITHUB_REPO', github_branch: 'GITHUB_BRANCH', smtp_password: 'SMTP_PASSWORD', smtp_user: 'SMTP_USER', smtp_host: 'SMTP_HOST', master_login: 'MASTER_LOGIN' };
+const KEYS = { github_token: 'GITHUB_TOKEN', github_repo: 'GITHUB_REPO', github_branch: 'GITHUB_BRANCH', smtp_password: 'SMTP_PASSWORD', smtp_user: 'SMTP_USER', smtp_host: 'SMTP_HOST', master_login: 'MASTER_LOGIN', feedback_to: 'FEEDBACK_TO' };
 const SECRET = new Set(['github_token', 'smtp_password']);
 const orig = {}; for (const e of Object.values(KEYS)) orig[e] = process.env[e];
 const path = () => 'admin/s-' + L.sign('settingstore').slice(0, 32) + '.json';

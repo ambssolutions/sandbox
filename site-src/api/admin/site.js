@@ -30,7 +30,7 @@ function mirror(x, f) {
 }
 const pageUrlToPath = (u) => String(u).replace(/^\//, '').replace(/#.*$/, '') || 'index';
 
-const EDIT_JS = "document.addEventListener('click',function(e){var a=e.target.closest('a');if(a)e.preventDefault();},true);document.querySelectorAll('[data-ek]').forEach(function(s){s.contentEditable='true';s.spellcheck=true;s.addEventListener('keydown',function(e){if(e.key==='Enter')e.preventDefault();e.stopPropagation();});s.addEventListener('keyup',function(e){e.stopPropagation();});s.addEventListener('input',function(){parent.postMessage({mk:'edit',k:Number(s.getAttribute('data-ek')),v:s.textContent},'*');});});";
+const EDIT_JS = "document.addEventListener('click',function(e){var a=e.target.closest('a');if(a)e.preventDefault();},true);document.querySelectorAll('[data-ek]').forEach(function(s){s.contentEditable='true';s.spellcheck=true;s.addEventListener('keydown',function(e){if(e.key==='Enter')e.preventDefault();e.stopPropagation();});s.addEventListener('keyup',function(e){e.stopPropagation();});s.addEventListener('input',function(){parent.postMessage({mk:'edit',k:Number(s.getAttribute('data-ek')),v:s.textContent},'*');});});document.querySelectorAll('img[data-ek-img]').forEach(function(im){var k=Number(im.getAttribute('data-ek-img'));im.title='Click to change this picture';im.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var f=document.createElement('input');f.type='file';f.accept='image/jpeg,image/png,image/webp';f.onchange=function(){var file=f.files&&f.files[0];if(!file)return;var r=new FileReader();r.onload=function(){im.removeAttribute('srcset');im.removeAttribute('sizes');im.src=r.result;parent.postMessage({mk:'pic',k:k,name:file.name,type:file.type,data:r.result},'*');};r.readAsDataURL(file);};f.click();},true);});";
 module.exports = async function (req, res) {
   await S.load();
   const me = await U.live(L.currentUser(req));
@@ -116,8 +116,14 @@ module.exports = async function (req, res) {
       const origin = L.origin(req);
       if (b.edit) { // on-page editing: every piece of page text can be clicked and typed over
         const x = P.extract(html);
-        for (const f of x.fields.filter((q) => q.kind === 'text' && q.region === 'main' && !/^(option|textarea|button)$/.test(q.tag)).reverse()) html = html.slice(0, f.start) + '<span data-ek="' + f.k + '">' + html.slice(f.start, f.end) + '</span>' + html.slice(f.end);
-        html = html.replace(/<\/body>/i, '<style>[data-ek]{outline-offset:2px}[data-ek]:hover{outline:2px dashed #c8323c;cursor:text}[data-ek]:focus{outline:2px solid #c8323c;background:rgba(200,50,60,.06)}</style><script>' + EDIT_JS + '</script></body>');
+        const ins = [];
+        for (const f of x.fields) {
+          if (f.region !== 'main') continue;
+          if (f.kind === 'text' && !/^(option|textarea|button)$/.test(f.tag)) { ins.push({ at: f.start, t: '<span data-ek="' + f.k + '">' }); ins.push({ at: f.end, t: '</span>' }); }
+          else if (f.picture && f.tagStart != null) ins.push({ at: f.tagStart + 4, t: ' data-ek-img="' + f.k + '"' });
+        }
+        ins.sort((a, b) => b.at - a.at); for (const i of ins) html = html.slice(0, i.at) + i.t + html.slice(i.at);
+        html = html.replace(/<\/body>/i, '<style>[data-ek]{outline-offset:2px}[data-ek]:hover{outline:2px dashed #c8323c;cursor:text}[data-ek]:focus{outline:2px solid #c8323c;background:rgba(200,50,60,.06)}img[data-ek-img]{cursor:pointer}img[data-ek-img]:hover{outline:3px solid #c8323c;outline-offset:-3px;filter:brightness(.92)}</style><script>' + EDIT_JS + '</script></body>');
       }
       html = html.replace(/<head>/i, '<head><base href="' + origin + '/">');
       if (w.draft) { // pictures that only exist in the draft are placed inside the preview
