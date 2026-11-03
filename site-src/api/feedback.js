@@ -70,5 +70,5 @@ module.exports = async function (req, res) {
     } catch (e) { /* the message is saved; this note is only for the editor */ }
   }
   if (!saved && !mailed) return L.send(res, 502, { error: 'Could not send that just now.' });
-  return L.send(res, 200, { ok: true });
+  return L.send(res, 200, { ok: true, mailed });
 };
