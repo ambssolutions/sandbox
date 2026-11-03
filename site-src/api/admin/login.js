@@ -27,7 +27,7 @@ module.exports = async function (req, res) {
     if (mh ? !U.checkPassword(pw, mh) : (!master || !L.safeEq(pw, master))) return bad();
     delete fails[key];
     res.setHeader('Set-Cookie', L.sessionCookieFor({ email: 'master', name: 'AMBS master login', role: 'owner' }));
-    return L.send(res, 200, { ok: true, user: { email: 'master', name: 'AMBS master login', role: 'owner' } });
+    return L.send(res, 200, { ok: true, user: { email: 'master', name: 'AMBS master login', role: 'owner', super: true } });
   }
   const users = await U.readUsers();
   const u = users.find((x) => x.email === email);

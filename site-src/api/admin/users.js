@@ -93,7 +93,7 @@ module.exports = async function (req, res) {
   if (action === 'back') return stepBack(req, res);
   const target = (email) => users.find((x) => x.email === email);
   if (/^(settings|savesettings|testgithub|testmail)$/.test(action)) {
-    if (me.role !== 'owner') return L.send(res, 403, { error: 'Only AMBS can change connections.' });
+    if (!me.super) return L.send(res, 403, { error: 'Only the super admin can see or change connections.' });
     if (action === 'settings') return L.send(res, 200, { settings: S.summary(), key: await keyStatus(!!b.fresh) });
     if (action === 'savesettings') {
       const patch = {}; for (const k of Object.keys(S.KEYS)) if (Object.prototype.hasOwnProperty.call(b.values || {}, k)) patch[k] = b.values[k];
@@ -137,6 +137,16 @@ module.exports = async function (req, res) {
     await U.writeUsers(users);
     return L.send(res, 200, { ok: true });
   }
+  if (action === 'super') {
+    if (!me.super) return L.send(res, 403, { error: 'Only the super admin can do that.' });
+    const t = target(U.cleanEmail(b.email));
+    if (!t) return L.send(res, 404, { error: 'That person was not found.' });
+    if (L.ROLE(t.role) !== 'owner') return L.send(res, 400, { error: 'Only an owner (AMBS) can be a super admin.' });
+    if (b.on && (t.disabled || !t.hash)) return L.send(res, 400, { error: 'They need a working login first.' });
+    if (b.on) t.super = true; else delete t.super;
+    await U.writeUsers(users);
+    return L.send(res, 200, { users: users.map(U.publicUser) });
+  }
   if (action === 'viewas') {
     if (me.role !== 'owner' || L.readBack(req)) return L.send(res, 403, { error: 'Only AMBS can do that.' });
     const t = target(U.cleanEmail(b.email));
@@ -176,6 +186,7 @@ module.exports = async function (req, res) {
     if (u && u.role === 'owner' && role !== 'owner' && owners() <= 1) return L.send(res, 400, { error: 'There must be at least one owner.' });
     if (!u) { u = { email, created: new Date().toISOString() }; users.push(u); }
     u.name = name || u.name || ''; u.role = role;
+    if (role !== 'owner') delete u.super;
     if (role === 'editor') u.access = U.cleanAccess(b.access); else delete u.access;
     const token = crypto.randomBytes(24).toString('base64url');
     u.invite = { h: hashToken(token), exp: new Date(Date.now() + INVITE_DAYS * 864e5).toISOString() };
@@ -219,6 +230,7 @@ module.exports = async function (req, res) {
     if (b.password) { const pr = U.passwordProblem(b.password); if (pr) return L.send(res, 400, { error: pr }); }
     if (!u) { u = { email, created: new Date().toISOString() }; users.push(u); }
     u.name = name || u.name || ''; u.role = role;
+    if (role !== 'owner') delete u.super;
     if (b.password) u.hash = U.hashPassword(b.password);
     await U.writeUsers(users);
     return L.send(res, 200, { users: view() });

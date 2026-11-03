@@ -29,15 +29,15 @@ const can = (me, sec) => !!me && (me.email === 'master' || me.role === 'owner' |
 let seen = { t: 0, users: null };
 async function live(me) {
   if (!me) return null;
-  if (me.email === 'master' || !L.storageReady()) return Object.assign({}, me, { access: SECTIONS.slice() });
+  if (me.email === 'master' || !L.storageReady()) return Object.assign({}, me, { access: SECTIONS.slice(), super: me.email === 'master' });
   if (!seen.users || Date.now() - seen.t > 8000) { try { seen = { t: Date.now(), users: await readUsers() }; } catch (e) { return me; } }
   const u = seen.users.find((x) => x.email === me.email);
   if (!u || u.disabled) return null;
-  return { email: me.email, name: u.name || me.name || '', role: L.ROLE(u.role), access: accessOf(u) };
+  return { email: me.email, name: u.name || me.name || '', role: L.ROLE(u.role), access: accessOf(u), super: L.ROLE(u.role) === 'owner' && !!u.super };
 }
 async function readUsers() { const j = await L.readStore(path()); return j && Array.isArray(j.users) ? j.users : []; }
 async function writeUsers(users) { await L.writeStore(path(), { users, updated: new Date().toISOString() }); seen = { t: 0, users: null }; }
-const publicUser = (u) => ({ email: u.email, name: u.name || '', role: L.ROLE(u.role), created: u.created || '', lastLogin: u.lastLogin || '', pending: !u.hash || !!u.invite, disabled: !!u.disabled, access: accessOf(u) });
+const publicUser = (u) => ({ email: u.email, name: u.name || '', role: L.ROLE(u.role), created: u.created || '', lastLogin: u.lastLogin || '', pending: !u.hash || !!u.invite, disabled: !!u.disabled, access: accessOf(u), super: L.ROLE(u.role) === 'owner' && !!u.super });
 const cleanEmail = (v) => L.FB_CLEAN(v, 120).toLowerCase();
 function passwordProblem(pw) {
   pw = String(pw || '');

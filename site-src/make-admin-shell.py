@@ -47,6 +47,7 @@ if 'dtC1' not in panes:
 if 'adInvMail' not in panes:
     assert '<button type="button" id="adInvCopy">Copy link</button>' in panes
     panes = panes.replace('<button type="button" id="adInvCopy">Copy link</button>', '<button type="button" id="adInvCopy">Copy link</button><a id="adInvMail" class="ad-mailto" href="#" hidden>Send from my email app</a>', 1)
+panes = panes.replace('Only AMBS can see this tab.', 'Only the super admin can see this tab.')
 script = re.search(r'<script src="assets/admin\.js\?v=[0-9a-f]+" defer></script>', h).group(0)
 
 def ic(p): return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>' % p
