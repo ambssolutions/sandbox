@@ -44,6 +44,9 @@ if 'dtC1' not in panes:
     assert '<label for="dtA1">Address, first line</label>' in panes and 'name="address2" type="text">' in panes
     panes = panes.replace('<label for="dtA1">Address, first line</label>', '<label for="dtA1">Auckland office address, first line</label>', 1).replace('<label for="dtA2">Address, second line</label>', '<label for="dtA2">Auckland office address, second line</label>', 1)
     panes = panes.replace('name="address2" type="text">', 'name="address2" type="text"><label for="dtC1">Christchurch office address, first line</label><input id="dtC1" name="chcAddress1" type="text"><label for="dtC2">Christchurch office address, second line</label><input id="dtC2" name="chcAddress2" type="text">', 1)
+if 'adInvMail' not in panes:
+    assert '<button type="button" id="adInvCopy">Copy link</button>' in panes
+    panes = panes.replace('<button type="button" id="adInvCopy">Copy link</button>', '<button type="button" id="adInvCopy">Copy link</button><a id="adInvMail" class="ad-mailto" href="#" hidden>Send from my email app</a>', 1)
 script = re.search(r'<script src="assets/admin\.js\?v=[0-9a-f]+" defer></script>', h).group(0)
 
 def ic(p): return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>' % p

@@ -125,3 +125,5 @@ html body.adm .ad-what ul{margin:0 0 6px;padding-left:18px}html body.adm .ad-wha
 html body.adm .ad-what del{background:#fde8e8;color:#8a1c1c;text-decoration:line-through;padding:0 3px;border-radius:3px}
 html body.adm .ad-what ins{background:#e3f4ea;color:#17573a;text-decoration:none;padding:0 3px;border-radius:3px}
 html body.adm .ad-arrow{color:#52525b}
+html body.adm .ad-mailto{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;margin-top:8px;border:1px solid #c8323c;border-radius:99px;color:#c8323c;font-weight:700;text-decoration:none;background:#fff}
+html body.adm .ad-mailto[hidden]{display:none}

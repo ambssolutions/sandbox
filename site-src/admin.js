@@ -119,10 +119,14 @@ function renderUsers(users){
   }).join('')||'<li class="ad-empty">Nobody has been added yet. Invite the first person above.</li>';
 }
 function loadUsers(){return post('/api/admin/users',{action:'list'}).then(function(j){renderUsers(j.users);}).catch(function(er){say(er.message,true);});}
-function showLink(url){var b=$('#adInvLink');b.hidden=false;$('#adInvUrl').value=url;$('#adInvUrl').focus();$('#adInvUrl').select();}
+function showLink(url,email,name){
+  var m=$('#adInvMail');
+  if(m&&email){var body='Hi'+(name?' '+name:'')+',\n\nYou have been invited to edit the MiKia website. Open this private link to choose your password:\n'+url+'\n\nThe link works once and expires in 7 days. After that, sign in at '+location.origin+'/admin with your email and password.\n\nMiKia Design and Construction';
+    m.href='mailto:'+encodeURIComponent(email)+'?subject='+encodeURIComponent('Your MiKia website editor login')+'&body='+encodeURIComponent(body);m.hidden=false;}
+  var b=$('#adInvLink');b.hidden=false;$('#adInvUrl').value=url;$('#adInvUrl').focus();$('#adInvUrl').select();}
 $('#adInvForm').addEventListener('submit',function(e){
   e.preventDefault();var f=e.target,b=f.querySelector('button');b.disabled=true;say('');
-  post('/api/admin/users',{action:'invite',email:f.email.value,name:f.name.value,role:f.role.value,send:f.sendmail.checked,access:[].map.call(f.querySelectorAll('[name=acc]:checked'),function(c){return c.value;})}).then(function(j){renderUsers(j.users);showLink(j.link);f.reset();f.sendmail.checked=true;say(j.emailed?'Invitation emailed. You can also copy the link below.':(j.emailNote||'Invitation created. Copy the link and send it to them.'));}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
+  var em0=f.email.value,nm0=f.name.value;post('/api/admin/users',{action:'invite',email:f.email.value,name:f.name.value,role:f.role.value,send:f.sendmail.checked,access:[].map.call(f.querySelectorAll('[name=acc]:checked'),function(c){return c.value;})}).then(function(j){renderUsers(j.users);showLink(j.link,em0,nm0);f.reset();f.sendmail.checked=true;say(j.emailed?'Invitation emailed. You can also copy the link below.':(j.emailNote||'Invitation created. Copy the link and send it to them.'));}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
 });
 $('#adInvRole').addEventListener('change',function(){$('#adInvAcc').hidden=this.value!=='editor';});
 $('#adInvCopy').addEventListener('click',function(){var i=$('#adInvUrl');i.select();try{navigator.clipboard.writeText(i.value);say('Link copied.');}catch(e){document.execCommand('copy');say('Link copied.');}});
@@ -136,7 +140,7 @@ uList.addEventListener('click',function(e){
   if(act==='accsave'){var sel=[].map.call(row.querySelectorAll('[name=acc]:checked'),function(c){return c.value;});p=post('/api/admin/users',{action:'access',email:email,access:sel}).then(function(j){renderUsers(j.users);say('Sections saved. They apply the next time '+email+' opens the editor.');});}
   else if(act==='viewas'){p=post('/api/admin/users',{action:'viewas',email:email}).then(function(){location.reload();});}
   else if(act==='off'||act==='on')p=post('/api/admin/users',{action:'disable',email:email,off:act==='off'}).then(function(j){renderUsers(j.users);say(act==='off'?email+' can no longer sign in or edit. You can switch them back on at any time.':email+' can sign in again.');});
-  else if(act==='reset'||act==='mail')p=post('/api/admin/users',{action:'reset',email:email,send:act==='mail'}).then(function(j){renderUsers(j.users);showLink(j.link);say(j.emailed?'New link emailed to '+email+'.':(j.emailNote||'New link created for '+email+'. Copy it and send it to them.'));});
+  else if(act==='reset'||act==='mail')p=post('/api/admin/users',{action:'reset',email:email,send:act==='mail'}).then(function(j){renderUsers(j.users);showLink(j.link,email,(row.querySelector('.ad-cap b')||{}).textContent);say(j.emailed?'New link emailed to '+email+'.':(j.emailNote||'New link created for '+email+'. Copy it and send it to them.'));});
   else p=post('/api/admin/users',{action:'remove',email:email}).then(function(j){renderUsers(j.users);say('Removed.');});
   p.catch(function(er){say(er.message,true);b.disabled=false;});
 });
