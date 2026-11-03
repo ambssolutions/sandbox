@@ -102,6 +102,17 @@ _NEW = ('<form id="cnMail" autocomplete="off"><h3 class="ad-h3">Email <small id=
  '<p class="ad-help"><button type="button" id="cnMailClear" class="ad-linkbtn">Remove the saved password</button></p></form>')
 panes, _n = _re.subn(r'<form id="cnMail".*?</form>', lambda m: _NEW, panes, count=1, flags=_re.S)
 assert _n == 1
+SEC_OPT = '<option value="button">Button</option></select>'
+assert SEC_OPT in panes
+panes = panes.replace(SEC_OPT, '<option value="button">Button</option><option value="section">Whole section (picture, heading and words)</option></select>', 1)
+SEC_ROW = '<div id="edSecRow" hidden><input type="text" id="edSecHead" placeholder="Section heading" aria-label="Section heading" maxlength="120"><select id="edSecLayout" aria-label="Where the picture goes"><option value="left">Picture on the left</option><option value="right">Picture on the right</option><option value="top">Picture on top</option><option value="none">No picture</option></select></div>'
+SEC_BTN = '<div id="edSecBtnRow" hidden><input type="text" id="edSecBtn" placeholder="Button words (optional)" aria-label="Button words" maxlength="60"></div>'
+TA = '<textarea id="edAddText"'
+assert TA in panes
+panes = panes.replace(TA, SEC_ROW + TA, 1)
+HR = '<div id="edAddHrefRow" hidden>'
+assert HR in panes
+panes = panes.replace(HR, SEC_BTN + HR, 1)
 FOR = '<div class="ad-for" id="edModalFor"><b id="edModalName"></b><span id="edModalNote"></span></div>'
 assert '<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in"><div class="ad-top">' in panes
 panes = panes.replace('<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in"><div class="ad-top">', '<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in">' + FOR + '<div class="ad-top">', 1)

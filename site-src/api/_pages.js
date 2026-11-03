@@ -168,7 +168,36 @@ function applyOp(html, op) {
 }
 
 /* Adds new content under a piece of text: { b, kind: 'paragraph'|'heading'|'picture'|'link'|'button', text, src, alt, href }. It copies the look of the text next to it. */
+/* A whole new section: a picture, a heading and some words, laid out with the website's own look (assets/css-sections.css), placed after a chosen section. */
+function addSection(html, x, a) {
+  const head = clean(a.heading).replace(/\s+/g, ' ').trim(), text = clean(a.text).trim();
+  if (!head && !text) throw new Error('Add a heading or some words for the section.');
+  if (head.length > 120) throw new Error('Use a shorter heading.');
+  if (text.length > 4000) throw new Error('That is too long. Add it in smaller pieces.');
+  const layout = ['left', 'right', 'top', 'none'].includes(a.layout) ? a.layout : 'left', src = clean(a.src).trim();
+  if (layout !== 'none') {
+    if (!src) throw new Error('Choose a picture, or pick "No picture".');
+    if (!/^(https?:\/\/|\/?[A-Za-z0-9._\/-]+)$/.test(src)) throw new Error('That picture address does not look right.');
+  }
+  const bt = clean(a.btnText).replace(/\s+/g, ' ').trim(), href = clean(a.href).trim();
+  if (bt) {
+    if (bt.length > 60) throw new Error('Use shorter words for the button.');
+    if (!/^(https?:|mailto:|tel:|#|\/|[A-Za-z0-9._\/-]+(\.html)?(#[\w-]*)?$)/.test(href)) throw new Error('That button address does not look right.');
+  }
+  const paras = text.split(/\n\s*\n/).map((q) => esc(q.trim())).filter(Boolean).map((q) => '<p>' + q + '</p>').join('');
+  const pic = layout === 'none' ? '' : '<figure class="mk-pic"><img src="' + escAttr(src) + '" alt="' + escAttr(clean(a.alt).trim() || head) + '" width="1600" height="1000" loading="lazy"></figure>';
+  const btn = bt ? '<p><a class="btn btn-dark" href="' + escAttr(href) + '"' + (/^https?:/.test(href) ? ' rel="noopener"' : '') + '>' + esc(bt) + '</a></p>' : '';
+  const sec = '\n<section class="block mk-sec mk-' + layout + '"><div class="wrap"><div class="mk-in">' + pic + '<div class="mk-txt">' + (head ? '<h2>' + esc(head) + '</h2>' : '') + paras + btn + '</div></div></div></section>\n';
+  const s = x.sections[Number(a.sec)];
+  let at;
+  if (s) at = s.end; else { at = html.lastIndexOf('</main>'); if (at < 0) throw new Error('This page cannot take a new section.'); }
+  let out = html.slice(0, at) + sec + html.slice(at);
+  if (!/css-sections\.css/.test(out)) out = out.replace(/<\/head>/i, '<link rel="stylesheet" href="assets/css-sections.css?v=1"></head>');
+  return out;
+}
+
 function addContent(html, a) {
+  if (String(a.kind) === 'section') return addSection(html, extract(html), a);
   const x = extract(html), blk = x.blocks[Number(a.b)];
   if (!blk) throw new Error('That part of the page was not found. Reload it and try again.');
   const kind = String(a.kind), text = clean(a.text).trim();

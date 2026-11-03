@@ -376,20 +376,23 @@ function edRender(){
   $('#edEveryRow').hidden=reg!=='shared';edDirty();addFill(reg);
 }
 function addFill(reg){
-  var box=$('#edAddBox'),sel=$('#edAddAfter'),bl=edData.blocks||[];box.hidden=reg!=='main'||!bl.length;if(box.hidden)return;
-  var keep=sel.value;sel.innerHTML=bl.map(function(b){return '<option value="'+b.b+'">After: '+esc(b.label.slice(0,48))+'</option>';}).join('');if(keep&&sel.querySelector('option[value="'+keep+'"]'))sel.value=keep;
+  var box=$('#edAddBox'),sel=$('#edAddAfter'),bl=edData.blocks||[],sc=edData.sections||[],isSec=$('#edAddType').value==='section';box.hidden=reg!=='main'||!bl.length;if(box.hidden)return;
+  var keep=sel.value;sel.innerHTML=isSec?sc.map(function(s){return '<option value="'+s.i+'">After section: '+esc(String(s.label).slice(0,44))+'</option>';}).join('')+'<option value="-1">At the bottom of the page</option>':bl.map(function(b){return '<option value="'+b.b+'">After: '+esc(b.label.slice(0,48))+'</option>';}).join('');if(keep&&sel.querySelector('option[value="'+keep+'"]'))sel.value=keep;else if(isSec)sel.value=sc.length?String(sc[sc.length-1].i):'-1';
 }
 var addPicSrc='';
-$('#edAddType').addEventListener('change',function(){var v=this.value,p=v==='picture',l=v==='link'||v==='button';$('#edAddPic').hidden=!p;$('#edAddText').hidden=p;$('#edAddHrefRow').hidden=!l;$('#edAddText').placeholder=l?'The words on the '+v:'Type the words';$('#edAddText').rows=l?1:3;});
+function secPic(){var s=$('#edAddType').value==='section';$('#edAddPic').hidden=!(s?$('#edSecLayout').value!=='none':$('#edAddType').value==='picture');}
+$('#edAddType').addEventListener('change',function(){var v=this.value,p=v==='picture',l=v==='link'||v==='button',s=v==='section';$('#edSecRow').hidden=!s;$('#edSecBtnRow').hidden=!s;secPic();$('#edAddText').hidden=p;$('#edAddHrefRow').hidden=!(l||s);$('#edAddHref').placeholder=s?'Where the button goes (a page or a web address)':'Where it goes: a page or a web address';$('#edAddText').placeholder=s?'The words under the heading (leave a blank line between paragraphs)':l?'The words on the '+v:'Type the words';$('#edAddText').rows=l?1:s?5:3;addFill('main');});
+$('#edSecLayout').addEventListener('change',secPic);
 $('#edAddFile').addEventListener('change',function(){var f=this.files[0];if(!f)return;$('#edAddName').textContent='Uploading...';
   askSize(f).then(function(go){sizeStop(go);return shrink(f);}).then(function(bl){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(String(r.result).split(',')[1]);};r.onerror=no;r.readAsDataURL(bl);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});}).then(function(j){addPicSrc=j.src;$('#edAddName').textContent=f.name;}).catch(function(er){addPicSrc='';$('#edAddName').textContent='';say(er.message,true);});});
 $('#edAddGo').addEventListener('click',function(){
   var kind=$('#edAddType').value,b=$('#edAddGo');
   if(edChanges().length){say('Press Save changes first, then add something new.',true);return;}
   var add={b:Number($('#edAddAfter').value),kind:kind,text:$('#edAddText').value,src:addPicSrc,alt:$('#edAddAlt').value,href:$('#edAddHref').value};
+  if(kind==='section'){add.sec=Number($('#edAddAfter').value);add.heading=$('#edSecHead').value;add.layout=$('#edSecLayout').value;add.btnText=$('#edSecBtn').value;if(add.layout!=='none'&&!addPicSrc){say('Choose a picture, or pick No picture.',true);return;}}
   if(kind==='picture'&&!addPicSrc){say('Choose a picture first.',true);return;}
   b.disabled=true;
-  site({action:'add',path:edPath,add:add}).then(function(j){edData.fields=j.fields;edData.items=j.items;edData.sections=j.sections;edData.blocks=j.blocks;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});$('#edAddText').value='';$('#edAddHref').value='';$('#edAddAlt').value='';$('#edAddName').textContent='';addPicSrc='';edRender();say('Added. It is in your draft, not on the website until you press Publish.');b.disabled=false;return siteStatus();}).catch(function(er){say(er.message,true);b.disabled=false;});
+  site({action:'add',path:edPath,add:add}).then(function(j){edData.fields=j.fields;edData.items=j.items;edData.sections=j.sections;edData.blocks=j.blocks;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});$('#edAddText').value='';$('#edSecHead').value='';$('#edSecBtn').value='';$('#edAddHref').value='';$('#edAddAlt').value='';$('#edAddName').textContent='';addPicSrc='';edRender();say('Added. It is in your draft, not on the website until you press Publish.');b.disabled=false;return siteStatus();}).catch(function(er){say(er.message,true);b.disabled=false;});
 });
 $('#edSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;edRegion=b.getAttribute('data-r');edRender();});
 $('#edFind').addEventListener('input',function(){edRender();});
