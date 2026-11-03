@@ -18,7 +18,8 @@ async function sendSmtp(f) {
   const tx = nodemailer.createTransport({ host: process.env.SMTP_HOST || 'smtp.zoho.com.au', port, secure: port === 465, auth: { user, pass: process.env.SMTP_PASSWORD }, connectionTimeout: 10000, socketTimeout: 15000 });
   const when = new Date().toLocaleString('en-NZ', { timeZone: 'Pacific/Auckland', weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' (NZ time)';
   const rows = [['Received', when], ['Name', f.name], ['Email', f.email || '(not given)'], ['Project', f.project || '(not given)'], ['OK to show on the website', f.consent ? 'Yes' : 'No'], ['Message', f.text]];
-  const html = '<table cellpadding="8" style="border-collapse:collapse;font:15px system-ui,sans-serif">' + rows.map((r) => '<tr><td style="border:1px solid #ddd;background:#f6f6f6"><b>' + L.esc(r[0]) + '</b></td><td style="border:1px solid #ddd;white-space:pre-wrap">' + L.esc(r[1]) + '</td></tr>').join('') + '</table>';
+  if (f.consent) rows.push(['Approve or delete', f.admin]);
+  const html = '<table cellpadding="8" style="border-collapse:collapse;font:15px system-ui,sans-serif">' + rows.map((r) => '<tr><td style="border:1px solid #ddd;background:#f6f6f6"><b>' + L.esc(r[0]) + '</b></td><td style="border:1px solid #ddd;white-space:pre-wrap">' + (r[0] === 'Approve or delete' ? '<a href="' + L.esc(r[1]) + '">' + L.esc(r[1]) + '</a>' : L.esc(r[1])) + '</td></tr>').join('') + '</table>';
   const textBody = rows.map((r) => r[0] + ': ' + r[1]).join('\n');
   await tx.sendMail({ from: '"MiKia website" <' + (process.env.FEEDBACK_FROM || user) + '>', to: TO(), replyTo: f.email || undefined, subject: 'Customer feedback - ' + f.name, text: textBody, html });
 }
@@ -26,8 +27,8 @@ async function sendFormSubmit(fields, o) {
   const r = await fetch('https://formsubmit.co/ajax/' + TOLIST()[0], {
     method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json', Origin: o, Referer: o + '/' }, body: JSON.stringify(TOLIST().length > 1 ? Object.assign({ _cc: TOLIST().slice(1).join(',') }, fields) : fields)
   });
-  const j = await r.json().catch(() => ({}));
-  if (!r.ok || j.success === false || j.success === 'false') throw new Error('mail');
+  const raw = await r.text().catch(() => ''); let j = {}; try { j = JSON.parse(raw); } catch (e) { /* not JSON */ }
+  if (!r.ok || j.success === false || j.success === 'false') throw new Error('FormSubmit said ' + r.status + ': ' + String(j.message || raw).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 140));
 }
 module.exports = async function (req, res) {
   await S.load();
@@ -47,9 +48,10 @@ module.exports = async function (req, res) {
     'OK to show on the website': consent ? 'Yes' : 'No', Message: text
   };
   if (email) fields._replyto = email;
+  if (consent) fields['Approve or delete'] = 'https://www.mikia.co.nz/admin';
   /* Keep every message in the editor first (status "private" when the sender did not allow it on the website), then email it.
      If the email cannot be sent the message is not lost; it is only an error if neither worked. */
-  let saved = false, mailed = false;
+  let saved = false, mailed = false, mailErr = '';
   try {
     const items = await L.readFeedback();
     items.push({ id, name, project, email, text, status: consent ? 'pending' : 'private', created: new Date().toISOString() });
@@ -57,10 +59,16 @@ module.exports = async function (req, res) {
     saved = true;
   } catch (e) { /* try the email anyway */ }
   try {
-    if (process.env.SMTP_PASSWORD) await sendSmtp({ name, email, project, consent, text, admin: 'https://mikia.co.nz/admin' });
+    if (process.env.SMTP_PASSWORD) await sendSmtp({ name, email, project, consent, text, admin: 'https://www.mikia.co.nz/admin' });
     else await sendFormSubmit(fields, o);
     mailed = true;
-  } catch (e) { /* handled below */ }
+  } catch (e) { mailErr = String((e && e.message) || e).slice(0, 200); console.error('feedback email failed:', mailErr); }
+  if (saved) {
+    try {
+      const items = await L.readFeedback(), it = items.find((x) => x.id === id);
+      if (it) { it.mail = mailed ? 'sent' : 'not sent: ' + mailErr; await L.writeFeedback(items); }
+    } catch (e) { /* the message is saved; this note is only for the editor */ }
+  }
   if (!saved && !mailed) return L.send(res, 502, { error: 'Could not send that just now.' });
   return L.send(res, 200, { ok: true });
 };

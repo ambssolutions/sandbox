@@ -6,7 +6,7 @@ module.exports = async function (req, res) {
   if (!me) return L.send(res, 401, { error: 'Please log in.' });
   if (!U.can(me, 'feedback')) return L.send(res, 403, { error: 'You do not have access to this section.' });
   if (!L.storageReady()) return L.send(res, 503, { error: 'Storage is not connected yet.' });
-  const view = (items) => items.slice().reverse().map((p) => ({ id: p.id, name: p.name, project: p.project, email: p.email || '', text: p.text, status: p.status, created: p.created, approvedAt: p.approvedAt || '', approvedBy: p.approvedBy || '' }));
+  const view = (items) => items.slice().reverse().map((p) => ({ id: p.id, name: p.name, project: p.project, email: p.email || '', text: p.text, status: p.status, created: p.created, approvedAt: p.approvedAt || '', approvedBy: p.approvedBy || '', mail: p.mail || '' }));
   if (req.method === 'GET') return L.send(res, 200, { items: view(await L.readFeedback()) });
   if (req.method !== 'POST') { res.setHeader('Allow', 'GET, POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   let b; try { b = await L.readJson(req, 2000); } catch (e) { return L.send(res, 413, { error: 'Request too large.' }); }
