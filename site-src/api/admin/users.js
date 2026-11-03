@@ -111,7 +111,7 @@ module.exports = async function (req, res) {
       return L.send(res, 200, { ok: !!k.ok, note: k.note + (k.ok && k.days != null ? ' It expires in ' + k.days + (k.days === 1 ? ' day.' : ' days.') : ''), key: k });
     }
     if (action === 'testmail') {
-      const to = U.cleanEmail(b.to) || (me.email !== 'master' ? me.email : '');
+      const to = U.cleanEmail(b.to) || (me.email !== 'master' ? me.email : (process.env.SMTP_USER || 'hello@ambs.co.nz'));
       if (!M.configured()) return L.send(res, 200, { ok: false, note: 'No email password has been saved yet.' });
       if (!U.EMAIL.test(to)) return L.send(res, 200, { ok: false, note: 'Type the email address to send the test to.' });
       try { await M.send({ to, subject: 'MiKia website: test email', text: 'This is a test from the MiKia website admin. Email is connected.' }); return L.send(res, 200, { ok: true, note: 'Test email sent to ' + to + '.' }); }
