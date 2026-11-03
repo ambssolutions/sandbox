@@ -30,6 +30,7 @@ function mirror(x, f) {
 }
 const pageUrlToPath = (u) => String(u).replace(/^\//, '').replace(/#.*$/, '') || 'index';
 
+const NEW_PAGES = false; /* set to true to allow creating new pages */
 const EDIT_JS = "document.addEventListener('click',function(e){var a=e.target.closest('a');if(a)e.preventDefault();},true);document.querySelectorAll('[data-ek]').forEach(function(s){s.contentEditable='true';s.spellcheck=true;s.addEventListener('keydown',function(e){if(e.key==='Enter')e.preventDefault();e.stopPropagation();});s.addEventListener('keyup',function(e){e.stopPropagation();});s.addEventListener('input',function(){parent.postMessage({mk:'edit',k:Number(s.getAttribute('data-ek')),v:s.textContent},'*');});});document.querySelectorAll('img[data-ek-img]').forEach(function(im){var k=Number(im.getAttribute('data-ek-img'));im.title='Click to change this picture';im.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var f=document.createElement('input');f.type='file';f.accept='image/jpeg,image/png,image/webp';f.onchange=function(){var file=f.files&&f.files[0];if(!file)return;var r=new FileReader();r.onload=function(){im.removeAttribute('srcset');im.removeAttribute('sizes');im.src=r.result;parent.postMessage({mk:'pic',k:k,name:file.name,type:file.type,data:r.result},'*');};r.readAsDataURL(file);};f.click();},true);});";
 module.exports = async function (req, res) {
   await S.load();
@@ -174,6 +175,7 @@ module.exports = async function (req, res) {
     }
     if (action === 'publish') { if (!w.draft) return L.send(res, 400, { error: 'There are no changes waiting to publish.' }); await G.publish(); return L.send(res, 200, { ok: true }); }
     if (action === 'discard') { await G.discard(); return L.send(res, 200, { ok: true }); }
+    if (action === 'newpage' && !NEW_PAGES) return L.send(res, 403, { error: 'Creating new pages is switched off for now.' });
     if (action === 'newpage') {
       const slug = String(b.slug || '').toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40), from = okPath(b.from || 'privacy.html');
       if (!slug) return L.send(res, 400, { error: 'Please give the page an address, such as "careers".' });

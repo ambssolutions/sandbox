@@ -43,7 +43,7 @@ $('#sbScrim').addEventListener('click',sbShut);
 var edPref='';
 root.addEventListener('click',function(e){var g=e.target.closest('[data-go]');if(!g)return;var w=g.getAttribute('data-go');
   if(w==='onpage'||w==='form'){edPref=w==='onpage'?'page':'form';tab('pages');edStage('pick');}
-  else if(w==='newpage'){edPref='';tab('pages');$('#edNew').click();}});
+  else if(w==='newpage'&&NEWPAGES){edPref='';tab('pages');$('#edNew').click();}});
 function enter(user){
   me=user;loginBox.hidden=true;inviteBox.hidden=true;panel.hidden=false;
   $('#adWho').innerHTML='Signed in as <b>'+esc(user.name||user.email)+'</b> <span class="ad-badge'+(user.role==='owner'?' ok':'')+'">'+ROLENAME[user.role]+'</span>';
@@ -54,7 +54,7 @@ function enter(user){
   [].forEach.call(root.querySelectorAll('[data-need]'),function(el){var n=el.getAttribute('data-need');el.hidden=!(n==='owner'?user.super:user.role==='owner'||user.role==='manager');});
   var acc=(user.role==='owner'||user.role==='manager'||!user.access)?Object.keys(SECNAME):user.access,can=function(k){return acc.indexOf(k)>=0;};
   Object.keys(SECNAME).forEach(function(k){var on=can(k);[].forEach.call(root.querySelectorAll('.sb [data-tab='+k+']'),function(el){el.hidden=!on;});[].forEach.call(root.querySelectorAll('.hm-t[data-tab='+k+']'),function(el){el.closest('.hm-card').hidden=!on;});[].forEach.call(root.querySelectorAll('.hm-pill[data-tab='+k+']'),function(el){el.hidden=!on;});});
-  [].forEach.call(root.querySelectorAll('.hm-pill[data-go=newpage]'),function(el){el.hidden=!can('pages');});
+  [].forEach.call(root.querySelectorAll('.hm-pill[data-go=newpage]'),function(el){el.hidden=!NEWPAGES||!can('pages');});
   [].forEach.call(root.querySelectorAll('.hm-h'),function(h){var g=h.nextElementSibling;if(g&&g.classList.contains('hm-grid')&&!g.querySelector('.hm-card:not([hidden])')){h.hidden=true;g.hidden=true;}});
   if(user.super)post('/api/admin/users',{action:'settings'}).then(function(j){hmKey(j.key);}).catch(function(){});
   var pc=$('#pbCard');if(pc)pc.hidden=!can('pages');
@@ -313,9 +313,12 @@ $('#edWayBack').addEventListener('click',function(){if(!edLeave())return;edPref=
 ['edPickBack','edPickBack2'].forEach(function(id){$('#'+id).addEventListener('click',function(){if(!edLeave())return;edStage('pick');});});
 $('#edPageGrid').addEventListener('click',function(e){var b=e.target.closest('[data-path]');if(!b)return;edSel.value=b.getAttribute('data-path');edLoad(b.getAttribute('data-path'));});
 $('#edNew2').addEventListener('click',function(){$('#edNew').click();});
+[].forEach.call(root.querySelectorAll('#edNew,#edNew2,.hm-pill[data-go=newpage]'),function(el){el.hidden=!NEWPAGES;});
 $('#edModalSave').addEventListener('click',function(){if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;});
 $('#adPreviewAll').addEventListener('click',function(){preview(edPath||'index.html');});
 $('#edPreview').addEventListener('click',function(){preview(edPath);});
+/* Creating new pages is switched off for now. Set this to true to bring the buttons back (the server has a matching switch). */
+var NEWPAGES=false;
 /* Friendly page names, the same as the website menu. New pages use their own title. */
 var PAGENAMES={'index.html':'Homepage','about.html':'About us','services.html':'Our services','projects.html':'Projects','how-we-work.html':'How we work','faq.html':'Questions','contact.html':'Contact us','blog.html':'Blog','links.html':'Links','privacy.html':'Privacy policy','404.html':'Page not found'};
 function pn(path,title){return PAGENAMES[path]||String(title||path).replace(/\s*\|\s*MiKia.*$/,'').replace(/\.html$/,'');}
