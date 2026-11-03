@@ -16,7 +16,7 @@ module.exports = async function (req, res) {
     if (!it) return L.send(res, 404, { error: 'That feedback was not found.' });
     if (b.action === 'approve' && it.status === 'private') return L.send(res, 400, { error: 'The sender did not allow this on the website, so it cannot be approved.' });
     if (b.action === 'approve') { it.status = 'approved'; it.approvedAt = new Date().toISOString(); it.approvedBy = me.email === 'master' ? 'AMBS master login' : me.email; }
-    else if (b.action === 'hide') { it.status = 'pending'; delete it.approvedAt; delete it.approvedBy; }
+    else if (b.action === 'hide') { it.status = 'hidden'; delete it.approvedAt; delete it.approvedBy; }
     else if (b.action === 'delete') items = items.filter((x) => x.id !== b.id);
     else return L.send(res, 400, { error: 'Unknown action.' });
     await L.writeFeedback(items);
