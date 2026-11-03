@@ -133,12 +133,12 @@ $('#adUpForm').addEventListener('submit',function(e){
 /* ---- client feedback ---- */
 var fbList=$('#adFb');
 function renderFb(items){
-  var waiting=items.filter(function(p){return p.status!=='approved';}).length;
+  var waiting=items.filter(function(p){return p.status==='pending';}).length;
   $('#adFbCount').textContent=items.length?items.length+(items.length===1?' item':' items'):'';
   $('#adFbBadge').textContent=waiting?String(waiting):'';$('#hmFb').textContent=waiting?waiting+' waiting':'';
-  fbList.innerHTML=items.map(function(p){var ok=p.status==='approved';
-    return '<li class="ad-row ad-fb" data-id="'+esc(p.id)+'"><div class="ad-cap"><b>'+esc(p.name)+(p.project?' <span>'+esc(p.project)+'</span>':'')+'</b><p>'+esc(p.text)+'</p><span class="ad-badge'+(ok?' ok':'')+'">'+(ok?'Showing on the website':'Waiting for approval')+'</span></div>'
-    +'<div class="ad-btns">'+(ok?'<button type="button" data-fa="hide">Hide</button>':'<button type="button" data-fa="approve" class="ad-ap">Approve</button>')+'<button type="button" data-fa="delete" class="ad-rm">Delete</button></div></li>';
+  fbList.innerHTML=items.map(function(p){var ok=p.status==='approved',pv=p.status==='private';
+    return '<li class="ad-row ad-fb" data-id="'+esc(p.id)+'"><div class="ad-cap"><b>'+esc(p.name)+(p.project?' <span>'+esc(p.project)+'</span>':'')+'</b><p>'+esc(p.text)+'</p>'+(p.email?'<p class="ad-help">Reply to: '+esc(p.email)+'</p>':'')+'<span class="ad-badge'+(ok?' ok':'')+'">'+(ok?'Showing on the website':pv?'Private: not allowed on the website':'Waiting for approval')+'</span></div>'
+    +'<div class="ad-btns">'+(ok?'<button type="button" data-fa="hide">Hide</button>':pv?'':'<button type="button" data-fa="approve" class="ad-ap">Approve</button>')+'<button type="button" data-fa="delete" class="ad-rm">Delete</button></div></li>';
   }).join('')||'<li class="ad-empty">No feedback yet.</li>';
 }
 function loadFb(){return api('/api/admin/feedback').then(function(j){renderFb(j.items);}).catch(function(){});}

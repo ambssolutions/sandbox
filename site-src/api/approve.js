@@ -23,6 +23,7 @@ module.exports = async function (req, res) {
   const it = items.find((x) => x.id === id);
   if (!it) return page(res, 404, 'Not found', '<h1>Feedback not found</h1><p>It may already have been removed.</p>');
   if (req.method === 'POST') {
+    if (it.status === 'private' && act !== 'delete') return page(res, 403, 'Not allowed', '<h1>Not allowed on the website</h1><p>The sender did not tick the box to allow this on the website.</p>');
     let out = items, msg;
     if (act === 'delete') { out = items.filter((x) => x.id !== id); msg = ['Deleted', 'This feedback has been deleted. It is not on the website.']; }
     else if (act === 'hide') { it.status = 'pending'; msg = ['Hidden', 'This feedback is no longer on the website. You can approve it again with the same link.']; }
@@ -30,6 +31,7 @@ module.exports = async function (req, res) {
     try { await L.writeFeedback(out); } catch (e) { return page(res, 502, 'Try again', '<h1>Could not save</h1><p>Please try the link again.</p>'); }
     return page(res, 200, msg[0], '<h1>' + msg[0] + '</h1><p>' + msg[1] + '</p>');
   }
+  if (it.status === 'private') return page(res, 200, 'Not allowed', '<h1>Not allowed on the website</h1><p>The sender did not tick the box to allow this on the website.</p>');
   const done = it.status === 'approved';
   return page(res, 200, 'Approve feedback', '<h1>' + (done ? 'Already approved' : 'Show this on the website?') + '</h1><blockquote>' + L.esc(it.text) + '</blockquote><p><b>' + L.esc(it.name) + '</b>' + (it.project ? '<br><small>' + L.esc(it.project) + '</small>' : '') + '</p>'
     + (() => { const f = (d, label, st) => '<form method="post" action="/api/approve" style="display:inline-block;margin:4px 8px 4px 0"><input type="hidden" name="id" value="' + L.esc(id) + '"><input type="hidden" name="t" value="' + L.esc(t) + '"><input type="hidden" name="do" value="' + d + '"><button type="submit"' + (st ? ' style="' + st + '"' : '') + '>' + label + '</button></form>'; const ghost = 'background:#fff;color:#12201b;border:1px solid #bbb';
