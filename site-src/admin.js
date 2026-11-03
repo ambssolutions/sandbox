@@ -297,6 +297,9 @@ var modal=$('#edModal'),frame=$('#edFrame');
 var onPage=false;
 function preview(path,edit){
   say(edit?'Opening the page...':'Preparing the preview...');onPage=!!edit;$('#edModalSave').hidden=!edit;$('#edModalHint').hidden=!edit;
+  $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
+  $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close and choose it. The menu and footer are changed in the form view.':'This is only a preview of this page. Nothing can be changed here.';
+  $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes.';$('#edModalHint').title=STD;
   site({action:'preview',path:path,edit:!!edit}).then(function(j){say('');frame.srcdoc=j.html;sizeFrame(Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;}).catch(function(er){say(er.message,true);});
 }
 function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelectorAll('#edSize button'),function(b){b.setAttribute('aria-pressed',Number(b.getAttribute('data-w'))===w?'true':'false');});}

@@ -157,3 +157,6 @@ html body.adm #edPick[hidden],html body.adm #edTop[hidden]{display:none}
 html body.adm #edNew[hidden],html body.adm #edNew2[hidden],html body.adm .hm-pill[hidden]{display:none}
 
 html body.adm .cn-people{display:grid;gap:6px;margin:6px 0 12px}html body.adm .cn-people small{color:#6b7570;margin-left:4px}
+
+html body .ad-for{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px;padding:9px 14px;background:#f3f0e8;border-radius:10px;text-align:left}html body .ad-for b{font-size:17px}html body .ad-for span{font-size:13.5px;color:#4a4a4a;line-height:1.4}
+html body .ad-modal-in .ad-top{flex-wrap:wrap;gap:8px}html body .ad-modal .ad-top .ad-help{flex:1 1 220px;font-size:13px;line-height:1.4;margin:0 4px}

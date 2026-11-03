@@ -92,6 +92,9 @@ if 'edPick' not in panes:
     assert c in panes
     panes = panes.replace(c, '<button type="button" id="edPickBack2">Choose another page</button>' + c, 1)
 panes = panes.replace('Click any text on the page and type.', 'Click any text on the page and type. The menu and footer are changed in the form view.', 1)
+FOR = '<div class="ad-for" id="edModalFor"><b id="edModalName"></b><span id="edModalNote"></span></div>'
+assert '<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in"><div class="ad-top">' in panes
+panes = panes.replace('<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in"><div class="ad-top">', '<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in">' + FOR + '<div class="ad-top">', 1)
 script = re.search(r'<script src="assets/admin\.js\?v=[0-9a-f]+" defer></script>', h).group(0)
 
 def ic(p): return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>' % p
