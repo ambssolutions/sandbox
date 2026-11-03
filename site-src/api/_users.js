@@ -35,7 +35,14 @@ async function live(me) {
   if (!u || u.disabled) return null;
   return { email: me.email, name: u.name || me.name || '', role: L.ROLE(u.role), access: accessOf(u), super: L.ROLE(u.role) === 'owner' && !!u.super };
 }
-async function readUsers() { const j = await L.readStore(path()); return j && Array.isArray(j.users) ? j.users : []; }
+/* The AMBS address is always the owner and super admin, so the website can never be left without one. It still has to sign in with its own password. */
+const ALWAYS_SUPER = ['hello@ambs.co.nz'];
+async function readUsers() {
+  const j = await L.readStore(path());
+  const users = j && Array.isArray(j.users) ? j.users : [];
+  users.forEach((u) => { if (ALWAYS_SUPER.includes(String(u.email || '').toLowerCase())) { u.role = 'owner'; u.super = true; } });
+  return users;
+}
 async function writeUsers(users) { await L.writeStore(path(), { users, updated: new Date().toISOString() }); seen = { t: 0, users: null }; }
 const publicUser = (u) => ({ email: u.email, name: u.name || '', role: L.ROLE(u.role), created: u.created || '', lastLogin: u.lastLogin || '', pending: !u.hash || !!u.invite, disabled: !!u.disabled, access: accessOf(u), super: L.ROLE(u.role) === 'owner' && !!u.super });
 const cleanEmail = (v) => L.FB_CLEAN(v, 120).toLowerCase();
