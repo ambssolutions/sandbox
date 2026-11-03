@@ -167,3 +167,7 @@ html body.adm .fb-dl{display:grid;grid-template-columns:96px minmax(0,1fr);gap:6
 html body.adm .fb-dl dt,html body.adm .fb-dl dd{text-align:left!important}html body.adm .fb-dl .ad-badge{display:inline-block}
 /* On phones set to dark mode, buttons take a white text colour while their background stays white. Give them an explicit dark text colour. */
 html body.adm .ep-page,html body.adm .ep-page b,html body.adm .ad-way,html body.adm .ad-way b{color:#18181b}html body.adm .ad-way span{color:#626262}
+/* While the page opens inside the editing window (slow on phones), say so instead of showing an empty grey box. */
+html body .ad-frame{position:relative}html body .ad-frame::before{content:'Loading the page...';position:absolute;inset:0;display:grid;place-items:center;color:#626262;font-size:16px;pointer-events:none}
+html body .ad-frame iframe{position:relative}
+@media (max-width:700px){html body .ad-modal{padding:6px}html body .ad-modal-in{height:96vh;padding:8px}html body .ad-for{padding:8px 12px}html body .ad-for span{font-size:12.5px}}
