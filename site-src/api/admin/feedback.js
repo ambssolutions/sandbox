@@ -6,7 +6,7 @@ module.exports = async function (req, res) {
   if (!me) return L.send(res, 401, { error: 'Please log in.' });
   if (!U.can(me, 'feedback')) return L.send(res, 403, { error: 'You do not have access to this section.' });
   if (!L.storageReady()) return L.send(res, 503, { error: 'Storage is not connected yet.' });
-  const view = (items) => items.slice().reverse().map((p) => ({ id: p.id, name: p.name, project: p.project, email: p.email || '', text: p.text, status: p.status, created: p.created, approvedAt: p.approvedAt || '', approvedBy: p.approvedBy || '', mail: p.mail || '' }));
+  const view = (items) => items.slice().reverse().map((p) => ({ id: p.id, name: p.name, project: p.project, email: p.email || '', text: p.text, status: p.status, created: p.created, approvedAt: p.approvedAt || '', approvedBy: p.approvedBy || '', hiddenAt: p.hiddenAt || '', hiddenBy: p.hiddenBy || '' }));
   if (req.method === 'GET') return L.send(res, 200, { items: view(await L.readFeedback()) });
   if (req.method !== 'POST') { res.setHeader('Allow', 'GET, POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   let b; try { b = await L.readJson(req, 2000); } catch (e) { return L.send(res, 413, { error: 'Request too large.' }); }
@@ -15,8 +15,9 @@ module.exports = async function (req, res) {
     const it = items.find((x) => x.id === b.id);
     if (!it) return L.send(res, 404, { error: 'That feedback was not found.' });
     if (b.action === 'approve' && it.status === 'private') return L.send(res, 400, { error: 'The sender did not allow this on the website, so it cannot be approved.' });
-    if (b.action === 'approve') { it.status = 'approved'; it.approvedAt = new Date().toISOString(); it.approvedBy = me.email === 'master' ? 'AMBS master login' : me.email; }
-    else if (b.action === 'hide') { it.status = 'hidden'; delete it.approvedAt; delete it.approvedBy; }
+    const who = me.email === 'master' ? 'AMBS master login' : (me.name ? me.name + ' (' + me.email + ')' : me.email);
+    if (b.action === 'approve') { it.status = 'approved'; it.approvedAt = new Date().toISOString(); it.approvedBy = who; delete it.hiddenAt; delete it.hiddenBy; }
+    else if (b.action === 'hide') { it.status = 'hidden'; it.hiddenAt = new Date().toISOString(); it.hiddenBy = who; }
     else if (b.action === 'delete') items = items.filter((x) => x.id !== b.id);
     else return L.send(res, 400, { error: 'Unknown action.' });
     await L.writeFeedback(items);
