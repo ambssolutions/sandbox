@@ -165,3 +165,5 @@ html body.adm .cn-more{margin:10px 0}html body.adm .cn-more summary{cursor:point
 
 html body.adm .fb-dl{display:grid;grid-template-columns:96px minmax(0,1fr);gap:6px 14px;margin:0;text-align:left}html body.adm .fb-dl dt{font-weight:600;color:#4a4a4a;font-size:14px}html body.adm .fb-dl dd{margin:0;font-size:15px;overflow-wrap:anywhere;white-space:pre-wrap}
 html body.adm .fb-dl dt,html body.adm .fb-dl dd{text-align:left!important}html body.adm .fb-dl .ad-badge{display:inline-block}
+/* On phones set to dark mode, buttons take a white text colour while their background stays white. Give them an explicit dark text colour. */
+html body.adm .ep-page,html body.adm .ep-page b,html body.adm .ad-way,html body.adm .ad-way b{color:#18181b}html body.adm .ad-way span{color:#626262}
