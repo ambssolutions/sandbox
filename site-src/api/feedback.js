@@ -18,10 +18,9 @@ async function sendSmtp(f) {
   const tx = nodemailer.createTransport({ host: process.env.SMTP_HOST || 'smtp.zoho.com.au', port, secure: port === 465, auth: { user, pass: process.env.SMTP_PASSWORD }, connectionTimeout: 10000, socketTimeout: 15000 });
   const when = new Date().toLocaleString('en-NZ', { timeZone: 'Pacific/Auckland', weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' (NZ time)';
   const rows = [['Received', when], ['Name', f.name], ['Email', f.email || '(not given)'], ['Project', f.project || '(not given)'], ['OK to show on the website', f.consent ? 'Yes' : 'No'], ['Message', f.text]];
-  const html = '<table cellpadding="8" style="border-collapse:collapse;font:15px system-ui,sans-serif">' + rows.map((r) => '<tr><td style="border:1px solid #ddd;background:#f6f6f6"><b>' + L.esc(r[0]) + '</b></td><td style="border:1px solid #ddd;white-space:pre-wrap">' + L.esc(r[1]) + '</td></tr>').join('') + '</table>'
-    + '<p style="font:15px system-ui,sans-serif"><b>What to do with this feedback</b><br>' + (f.consent ? 'Open the website editor, go to <b>Client feedback</b>, and press <b>Approve</b> to show it in the Testimonials section (about a minute), or <b>Delete</b> to remove it.' : 'The sender did not allow this on the website, so it cannot be shown there. You can reply to them by email if they gave an address.') + '<br><a href="' + L.esc(f.admin) + '">' + L.esc(f.admin) + '</a></p>';
-  const textBody = rows.map((r) => r[0] + ': ' + r[1]).join('\n') + '\n\n' + (f.consent ? 'To show it on the website or delete it, open the website editor and go to Client feedback:' : 'The sender did not allow this on the website, so it cannot be shown there. Client feedback in the website editor:') + '\n' + f.admin;
-  await tx.sendMail({ from: '"MiKia website" <' + (process.env.FEEDBACK_FROM || user) + '>', to: TO(), replyTo: f.email || undefined, subject: 'customer feedback', text: textBody, html });
+  const html = '<table cellpadding="8" style="border-collapse:collapse;font:15px system-ui,sans-serif">' + rows.map((r) => '<tr><td style="border:1px solid #ddd;background:#f6f6f6"><b>' + L.esc(r[0]) + '</b></td><td style="border:1px solid #ddd;white-space:pre-wrap">' + L.esc(r[1]) + '</td></tr>').join('') + '</table>';
+  const textBody = rows.map((r) => r[0] + ': ' + r[1]).join('\n');
+  await tx.sendMail({ from: '"MiKia website" <' + (process.env.FEEDBACK_FROM || user) + '>', to: TO(), replyTo: f.email || undefined, subject: 'Customer feedback - ' + f.name, text: textBody, html });
 }
 async function sendFormSubmit(fields, o) {
   const r = await fetch('https://formsubmit.co/ajax/' + TOLIST()[0], {
@@ -43,12 +42,11 @@ module.exports = async function (req, res) {
   const id = 'f-' + Date.now().toString(36) + '-' + crypto.randomBytes(4).toString('hex');
   const o = L.origin(req);
   const fields = {
-    _subject: 'customer feedback', _template: 'table', _captcha: 'false',
+    _subject: 'Customer feedback - ' + name, _template: 'table', _captcha: 'false',
     Received: new Date().toLocaleString('en-NZ', { timeZone: 'Pacific/Auckland', weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' (NZ time)', Name: name, Email: email || '(not given)', Project: project || '(not given)',
     'OK to show on the website': consent ? 'Yes' : 'No', Message: text
   };
   if (email) fields._replyto = email;
-  fields['Website editor (Client feedback tab)'] = 'https://mikia.co.nz/admin';
   /* Keep every message in the editor first (status "private" when the sender did not allow it on the website), then email it.
      If the email cannot be sent the message is not lost; it is only an error if neither worked. */
   let saved = false, mailed = false;
