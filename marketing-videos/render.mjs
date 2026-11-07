@@ -8,7 +8,7 @@
 //   VOICE=am_michael node render.mjs   # pick another Kokoro voice (default af_heart)
 import { chromium } from "playwright";
 import { spawn, spawnSync } from "node:child_process";
-import { readdirSync, mkdirSync, rmSync } from "node:fs";
+import { existsSync, readdirSync, mkdirSync, rmSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -23,7 +23,9 @@ const names = readdirSync(join(root, "videos"))
   .map((f) => f.replace(/\.html$/, ""))
   .filter((n) => !wanted.length || wanted.some((w) => n.startsWith(w)));
 
-const browser = await chromium.launch();
+// use the machine's pre-installed Chromium when there is one (CHROMIUM overrides), else Playwright's own
+const exe = process.env.CHROMIUM ?? (existsSync("/opt/pw-browsers/chromium") ? "/opt/pw-browsers/chromium" : undefined);
+const browser = await chromium.launch(exe ? { executablePath: exe } : {});
 
 async function render(name) {
   const page = await browser.newPage({ viewport: { width: 540, height: 960 }, deviceScaleFactor: 2 });

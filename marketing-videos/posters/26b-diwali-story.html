@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Poster — Happy Diwali (story / status)</title>
+<link rel="stylesheet" href="../engine/base.css"><link rel="stylesheet" href="_diwali.css">
+<style>
+  .hi { position: absolute; left: 0; right: 0; top: 120px; }
+  h1 { position: absolute; left: 0; right: 0; top: 150px; font-size: 92px; }
+  .msg { position: absolute; left: 50px; right: 50px; top: 372px; font-size: 21px; }
+  .rangoli { top: 450px; width: 330px; height: 330px; margin-left: -165px; }
+  .diyas { top: 700px; gap: 36px; } .diya { font-size: 62px; } .diya.big { font-size: 92px; }
+  .sign { position: absolute; left: 0; right: 0; top: 806px; justify-content: center; }
+</style></head><body>
+<div id="frame">
+  <div class="border"></div>
+  <div class="hi serif">✦ THE FESTIVAL OF LIGHTS ✦</div>
+  <h1 class="serif">Happy<br>Diwali</h1>
+  <div class="msg serif">May the light of every diya fill your home with joy, peace and good health.</div>
+  <div class="rangoli" id="rg"></div>
+  <div class="diyas"><span class="diya emoji">🪔</span><span class="diya big emoji">🪔</span><span class="diya emoji">🪔</span></div>
+  <div class="sign"><span>With warm wishes from all of us at</span><img src="../assets/ambs-logo.png" alt="AMBS Solutions"></div>
+</div>
+<script src="_diwali.js"></script><script>rangoli(document.getElementById("rg"), 330); sparkles(document.getElementById("frame"), 60, 960);</script>
+</body></html>

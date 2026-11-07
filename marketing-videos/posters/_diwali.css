@@ -1,0 +1,20 @@
+/* Diwali greeting: deep plum night, gold, glowing diyas and a rangoli. No business content. */
+@font-face { font-family: "Bricolage Grotesque"; src: url("../assets/bricolage-grotesque-latin.woff2") format("woff2"); font-weight: 500 800; }
+#frame { color: #fff6e0; text-align: center; font-family: "Bricolage Grotesque", sans-serif, var(--emoji);
+  background: radial-gradient(60% 40% at 50% 62%, rgba(255,170,40,.35), transparent 70%), radial-gradient(80% 50% at 50% 0%, #4a1450, transparent 70%),
+              linear-gradient(180deg, #2a0b33 0%, #1a0722 55%, #12051a 100%); overflow: hidden; }
+#frame::before { display: none; }
+.serif { font-family: "DejaVu Serif", "Liberation Serif", serif; }
+.spark { position: absolute; border-radius: 50%; background: #ffe7a3; box-shadow: 0 0 8px 2px rgba(255,210,120,.8); }
+.rangoli { position: absolute; left: 50%; }
+.diyas { position: absolute; left: 0; right: 0; display: flex; justify-content: center; align-items: flex-end; gap: 18px; }
+.diya { position: relative; font-size: 54px; line-height: 1; filter: drop-shadow(0 0 18px rgba(255,170,40,.9)); }
+.diya.big { font-size: 78px; }
+.glow { position: absolute; left: 50%; bottom: 40%; width: 60px; height: 60px; margin-left: -30px; border-radius: 50%; background: radial-gradient(circle, rgba(255,200,90,.7), transparent 70%); }
+.hi { letter-spacing: .32em; font-size: 15px; color: #f5c66a; }
+h1 { font-weight: 700; line-height: .95; color: #ffd27a; text-shadow: 0 0 30px rgba(255,170,40,.55), 0 3px 0 #7a3b00; }
+.msg { color: #f7e6c4; line-height: 1.45; }
+.sign { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: #e9cfa0; }
+.sign img { height: 26px; padding: 4px 8px; background: #fff; border-radius: 8px; }
+.border { position: absolute; inset: 14px; border: 1.5px solid rgba(245,198,106,.45); border-radius: 22px; pointer-events: none; }
+.border::after { content: ""; position: absolute; inset: 6px; border: 1px solid rgba(245,198,106,.25); border-radius: 18px; }
