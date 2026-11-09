@@ -3,6 +3,7 @@ const U = require('../_users');
 /* Admin photos. GET: the current list. POST {action:'move', id, dir:'up'|'down'} or {action:'remove', id}. Any signed-in person may do these. */
 module.exports = async function (req, res) {
   const me = await U.live(L.currentUser(req));
+  L.touchSession(req, res, me);
   if (!me) return L.send(res, req.method === 'GET' ? 200 : 401, req.method === 'GET' ? { auth: false } : { error: 'Please log in.' });
   if (!U.can(me, 'photos')) return L.send(res, 403, { error: 'You do not have access to this section.' });
   if (req.method === 'GET') return L.send(res, 200, { photos: (await L.currentPhotos()).map(L.publicPhoto), storage: L.storageReady() });

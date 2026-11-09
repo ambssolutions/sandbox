@@ -41,8 +41,10 @@ function readCookie(req, name) {
    The old shared-password cookie still works and counts as an owner, so the AMBS master password is always a way in. */
 const SESSION = 'mk_session';
 function b64u(s) { return Buffer.from(s).toString('base64url'); }
+/* A sign-in lasts 10 minutes from the last time the editor was used (every request renews it), then the person has to sign in again. */
+const IDLE_MIN = 10;
 function makeSession(u) {
-  const body = b64u(JSON.stringify({ e: u.email, n: u.name || '', r: ROLE(u.role), x: Date.now() + DAYS * 864e5 }));
+  const body = b64u(JSON.stringify({ e: u.email, n: u.name || '', r: ROLE(u.role), x: Date.now() + IDLE_MIN * 60000 }));
   return body + '.' + sign('sess' + body);
 }
 function currentUser(req) {
@@ -71,7 +73,8 @@ function cookieHeader(name, value, maxAge) {
   return name + '=' + value + '; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=' + maxAge;
 }
 function sessionCookie() { return cookieHeader(COOKIE, makeToken(), DAYS * 86400); }
-function sessionCookieFor(u) { return cookieHeader(SESSION, makeSession(u), DAYS * 86400); }
+function sessionCookieFor(u) { return cookieHeader(SESSION, makeSession(u), IDLE_MIN * 60); }
+function touchSession(req, res, me) { try { if (me && readCookie(req, SESSION)) res.setHeader('Set-Cookie', sessionCookieFor({ email: me.email, name: me.name, role: me.role })); } catch (e) { /* keep going */ } }
 function clearCookie() { return [cookieHeader(COOKIE, '', 0), cookieHeader(SESSION, '', 0), cookieHeader(BACK, '', 0)]; }
 /* "View as": an owner can open the editor as another person. The owner's own sign-in is kept here (signed, 2 hours) so they can step back. */
 const BACK = 'mk_back';
@@ -145,4 +148,4 @@ const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': 
 function origin(req) { return 'https://' + (req.headers['x-forwarded-host'] || req.headers.host || 'www.mikia.co.nz'); }
 function publicFeedback(p) { return { id: p.id, name: p.name, project: p.project, text: p.text }; }
 
-module.exports = { backCookieFor, readBack, clearBack, ROLE, readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
+module.exports = { touchSession, IDLE_MIN, backCookieFor, readBack, clearBack, ROLE, readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };

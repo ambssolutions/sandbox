@@ -27,6 +27,10 @@ if 'adInvAcc' not in panes:
 login = login.replace('<p class="ad-help">AMBS: leave the email empty to use the master password.</p>', '')
 FORGOT = '<p class="ad-forgot"><button type="button" id="adForgotOpen" class="ad-linkbtn">Forgot password?</button></p><div id="adForgot" class="ad-forgotbox" hidden><label for="adForgotEmail">Your email</label><input id="adForgotEmail" type="email" autocomplete="username"><div class="ad-btns"><button type="button" id="adForgotSend" class="ad-go">Email me a reset link</button><button type="button" id="adForgotCancel">Cancel</button></div></div>'
 login = login.replace('</form></div>', '</form>' + FORGOT + '</div>', 1)
+login = login.replace('<div class="ad-card" id="adLogin">', '<p class="ad-help" id="adBoot">Checking your sign-in...</p><div class="ad-card" id="adLogin" hidden>', 1)
+login = login.replace('<h2>Log in</h2>', '<h2>Log in</h2><p class="ad-msg" id="adIdleMsg" hidden>You were signed out after 10 minutes without activity. Please sign in again.</p>', 1)
+assert 'adIdleMsg' in login
+assert 'adBoot' in login
 assert 'adForgot' in login
 if 'id="cnMaster"' not in panes:
     CN = '<form id="cnMaster"><h3 class="ad-h3">Signing in</h3><p class="ad-help">Switch this on once an owner can sign in with an email and password. Then the master password on its own no longer works at the login page. If nobody can sign in, add ADMIN_MASTER_LOGIN=on in Vercel to bring it back.</p><label class="ad-chk"><input type="checkbox" id="cnMasterOff"> Require an email and password for everyone (switch off the master password sign-in)</label><div class="ad-btns"><button class="ad-go" type="submit">Save</button></div></form>'

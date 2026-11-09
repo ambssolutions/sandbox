@@ -11,6 +11,7 @@ const clean = (v, n) => String(v || '').replace(/[\u0000-\u001F]/g, '').trim().s
 module.exports = async function (req, res) {
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   const me = await U.live(L.currentUser(req));
+  L.touchSession(req, res, me);
   if (!me) return L.send(res, 401, { error: 'Please log in.' });
   if (!U.can(me, 'photos')) return L.send(res, 403, { error: 'You do not have access to this section.' });
   if (!L.storageReady()) return L.send(res, 503, { error: 'Photo storage is not connected yet.' });

@@ -35,6 +35,7 @@ const EDIT_JS = "document.addEventListener('click',function(e){var a=e.target.cl
 module.exports = async function (req, res) {
   await S.load();
   const me = await U.live(L.currentUser(req));
+  L.touchSession(req, res, me);
   if (!me) return L.send(res, 401, { error: 'Please log in.' });
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   let b; try { b = await L.readJson(req, 5.5e6); } catch (e) { return L.send(res, 413, { error: 'That was too large to send.' }); }

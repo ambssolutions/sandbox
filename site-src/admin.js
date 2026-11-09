@@ -23,7 +23,7 @@ function api(path,opt){
   return fetch(path,opt).then(function(r){return r.json().catch(function(){return{};}).then(function(j){if(!r.ok){var e=new Error(j.error||'Something went wrong.');e.status=r.status;throw e;}return j;});});
 }
 function post(path,obj){return api(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(obj)});}
-function showLogin(j){if(!j)api('/api/admin/users').then(function(x){if(x&&x.auth===false)showLogin(x);}).catch(function(){});var h=$('#adLoginHint');if(h)h.textContent=j&&j.master===false?'Sign in with your email and password.':'AMBS: leave the email empty to use the master password.';$('#adEmail').required=!!(j&&j.master===false);panel.hidden=true;inviteBox.hidden=true;loginBox.hidden=false;me=null;}
+function showLogin(j){if(!j)api('/api/admin/users').then(function(x){if(x&&x.auth===false)showLogin(x);}).catch(function(){});var h=$('#adLoginHint');if(h)h.textContent=j&&j.master===false?'Sign in with your email and password.':'AMBS: leave the email empty to use the master password.';$('#adEmail').required=!!(j&&j.master===false);idleStop();var wasIn=false;try{wasIn=localStorage.getItem('mk-admin-in')==='1';localStorage.removeItem('mk-admin-in');}catch(e){}if(wasIn)$('#adIdleMsg').hidden=false;panel.hidden=true;inviteBox.hidden=true;$('#adBoot').hidden=true;loginBox.hidden=false;me=null;}
 /* ---- tabs ---- */
 function tab(name){
   [].forEach.call(root.querySelectorAll('[data-pane]'),function(p){p.hidden=p.getAttribute('data-pane')!==name;});
@@ -45,7 +45,7 @@ root.addEventListener('click',function(e){var g=e.target.closest('[data-go]');if
   if(w==='onpage'||w==='form'){edPref=w==='onpage'?'page':'form';tab('pages');edStage('pick');}
   else if(w==='newpage'&&NEWPAGES){edPref='';tab('pages');$('#edNew').click();}});
 function enter(user){
-  me=user;loginBox.hidden=true;inviteBox.hidden=true;panel.hidden=false;
+  me=user;idleStart();$('#adIdleMsg').hidden=true;$('#adBoot').hidden=true;loginBox.hidden=true;inviteBox.hidden=true;panel.hidden=false;
   $('#adWho').innerHTML='Signed in as <b>'+esc(user.name||user.email)+'</b> <span class="ad-badge'+(user.role==='owner'?' ok':'')+'">'+ROLENAME[user.role]+'</span>';
   $('#adConnTab').hidden=!user.super;$('#adUsersTab').hidden=user.role!=='owner'&&user.role!=='manager';var og=$('#adInvRole');if(og)[].forEach.call(og.options,function(o){o.hidden=o.disabled=(user.role==='manager'&&o.value!=='editor')||(!user.super&&(o.value==='owner'||o.value==='super'));});if(user.role==='manager')og.value='editor';
   $('#adMasterNote').hidden=true;$('#adPwForm').hidden=false;
@@ -497,10 +497,20 @@ $('#adLoginForm').addEventListener('submit',function(e){
   e.preventDefault();var f=e.target,b=f.querySelector('button');b.disabled=true;say('');
   post('/api/admin/login',{email:f.email.value.trim(),password:f.password.value}).then(function(j){f.reset();enter(j.user);}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
 });
-$('#adLogout').addEventListener('click',function(){post('/api/admin/login',{action:'logout'}).catch(function(){}).then(function(){showLogin();say('');});});
+$('#adLogout').addEventListener('click',function(){try{localStorage.removeItem('mk-admin-in');}catch(e){}post('/api/admin/login',{action:'logout'}).catch(function(){}).then(function(){showLogin();say('');});});
+/* Sign out after 10 minutes without activity (any touch, click, key or typing in the page being edited). A warning shows one minute before. */
+var IDLEMS=10*60*1000,WARNMS=9*60*1000,lastAct=Date.now(),idleT=null,idleWarn=null;
+function idleSeen(){var n=Date.now();lastAct=n;try{if(!idleSeen.w||n-idleSeen.w>5000){idleSeen.w=n;localStorage.setItem('mk-admin-last',String(n));}}catch(e){}if(idleWarn)idleWarn.hidden=true;}
+['mousemove','mousedown','keydown','touchstart','scroll','click','wheel'].forEach(function(ev){document.addEventListener(ev,idleSeen,{passive:true,capture:true});});
+window.addEventListener('message',idleSeen);
+function idleTick(){if(!me)return;var last=lastAct;try{last=Math.max(last,Number(localStorage.getItem('mk-admin-last')||0));}catch(e){}var q=Date.now()-last;
+  if(q>=IDLEMS){post('/api/admin/login',{action:'logout'}).catch(function(){}).then(function(){modal.hidden=true;frame.srcdoc='';onPage=false;showLogin();});return;}
+  if(q>=WARNMS){if(!idleWarn){idleWarn=document.createElement('div');idleWarn.className='ad-idlewarn';idleWarn.setAttribute('role','alert');idleWarn.textContent='No activity for a while. You will be signed out in about a minute. Tap or press any key to stay signed in.';root.appendChild(idleWarn);}idleWarn.hidden=false;}}
+function idleStart(){lastAct=Date.now();try{localStorage.setItem('mk-admin-in','1');localStorage.setItem('mk-admin-last',String(lastAct));}catch(e){}if(!idleT)idleT=setInterval(idleTick,15000);}
+function idleStop(){if(idleT){clearInterval(idleT);idleT=null;}if(idleWarn)idleWarn.hidden=true;}
 var qs=new URLSearchParams(location.search),invTok=qs.get('invite'),invEmail=qs.get('email');
 if(invTok&&invEmail){
-  loginBox.hidden=true;inviteBox.hidden=false;$('#adInviteWho').textContent='Setting up the login for '+invEmail+'.';
+  loginBox.hidden=true;$('#adBoot').hidden=true;inviteBox.hidden=false;$('#adInviteWho').textContent='Setting up the login for '+invEmail+'.';
   $('#adInviteForm').addEventListener('submit',function(e){
     e.preventDefault();var f=e.target,b=f.querySelector('button');
     if(f.p1.value!==f.p2.value){say('The two passwords do not match.',true);return;}

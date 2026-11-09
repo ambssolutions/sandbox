@@ -3,6 +3,7 @@ const U = require('../_users');
 /* Admin: list feedback, approve, hide or delete it. */
 module.exports = async function (req, res) {
   const me = await U.live(L.currentUser(req));
+  L.touchSession(req, res, me);
   if (!me) return L.send(res, 401, { error: 'Please log in.' });
   if (!U.can(me, 'feedback')) return L.send(res, 403, { error: 'You do not have access to this section.' });
   if (!L.storageReady()) return L.send(res, 503, { error: 'Storage is not connected yet.' });

@@ -40,6 +40,7 @@ function stepBack(req, res) {
 }
 module.exports = async function (req, res) {
   const me = await U.live(L.currentUser(req));
+  L.touchSession(req, res, me);
   /* A person opening their invitation link sets their own password. No sign-in needed; the link itself is the proof. */
   /* Opening an invitation or reset link works even when someone is already signed in on this computer (for example the person who made the invitation, testing it). */
   let pre = null;
