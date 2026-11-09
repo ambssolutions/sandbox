@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Thumbnail — chat helper in your customers' languages</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  @font-face { font-family: "Bricolage Grotesque"; src: url("../assets/bricolage-grotesque-latin.woff2") format("woff2"); font-weight: 500 800; }
+  @font-face { font-family: "Noto Sans Devanagari"; src: url("../assets/NotoSansDevanagari-Bold.ttf"); font-weight: 700; }
+  @font-face { font-family: "Noto Sans Gurmukhi"; src: url("../assets/NotoSansGurmukhi-Bold.ttf"); font-weight: 700; }
+  #frame { background: linear-gradient(170deg, #1877E0, #3a1f9e); color: #fff; text-align: center;
+    font-family: "Bricolage Grotesque", "Noto Sans Devanagari", "Noto Sans Gurmukhi", "WenQuanYi Zen Hei", sans-serif, var(--emoji); }
+  #frame::before { display: none; }
+  .clk { position: absolute; left: 0; right: 0; top: 110px; font-size: 96px; font-weight: 800; letter-spacing: -.04em; }
+  .clk small { font-size: 36px; }
+  h1 { position: absolute; left: 24px; right: 24px; top: 240px; font-size: 52px; line-height: 1.04; font-weight: 800; -webkit-text-stroke: 9px #000; paint-order: stroke fill; }
+  h1 span { color: #ffe14d; }
+  .tags { position: absolute; left: 30px; right: 30px; top: 430px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .tags div { padding: 12px 18px; border-radius: 18px; background: #fff; color: #0b1030; font-size: 28px; font-weight: 800; box-shadow: 0 8px 20px rgba(0,0,0,.25); }
+  .tags div:nth-child(odd) { rotate: -3deg; } .tags div:nth-child(even) { rotate: 3deg; background: #ffe14d; }
+  .cm { position: absolute; left: 0; right: 0; top: 640px; } .cm span { display: inline-block; padding: 10px 26px 14px; border-radius: 22px; background: #0b1030; font-size: 54px; font-weight: 800; box-shadow: 0 8px 0 #2E9418; }
+  .lg { position: absolute; left: 50%; top: 770px; width: 170px; margin-left: -85px; padding: 8px 14px; border-radius: 16px; background: #fff; }
+</style></head><body>
+<div id="frame">
+  <div class="clk">11:47<small> pm</small></div>
+  <h1>Your website answers.<br><span>In their language.</span></h1>
+  <div class="tags"><div>中文</div><div>हिन्दी</div><div>ਪੰਜਾਬੀ</div><div>Te reo Māori</div><div>English</div></div>
+  <div class="cm"><span>Comment CHAT 💬</span></div>
+  <img class="lg" src="../assets/ambs-logo.png" alt="AMBS">
+</div>
+</body></html>

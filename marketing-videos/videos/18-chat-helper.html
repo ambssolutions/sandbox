@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — a chat helper that answers in your customers' languages (CHAT)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* TikTok-native style: full-screen colour beats, big word-by-word captions with a heavy outline, pop-in bubbles.
+     No shared chrome (no corner logo, caption bar, progress line or end card). */
+  @font-face { font-family: "Bricolage Grotesque"; src: url("../assets/bricolage-grotesque-latin.woff2") format("woff2"); font-weight: 500 800; }
+  @font-face { font-family: "Noto Sans Devanagari"; src: url("../assets/NotoSansDevanagari-Bold.ttf"); font-weight: 700; }
+  @font-face { font-family: "Noto Sans Gurmukhi"; src: url("../assets/NotoSansGurmukhi-Bold.ttf"); font-weight: 700; }
+  .progress, .brand, .caption, .end { display: none !important; }
+  #frame { background: #0b1030; color: #fff; font-family: "Bricolage Grotesque", Inter, "Noto Sans Devanagari", "Noto Sans Gurmukhi", "WenQuanYi Zen Hei", sans-serif, var(--emoji); }
+  #frame::before { display: none; }
+  #bg { position: absolute; inset: 0; transition: none; }
+  .beat { position: absolute; inset: 0; display: none; }
+
+  /* karaoke caption */
+  #cap { position: absolute; left: 24px; right: 24px; top: 600px; text-align: center; font-size: 44px; line-height: 1.12; font-weight: 800; letter-spacing: -.01em; z-index: 20;
+    -webkit-text-stroke: 9px #000; paint-order: stroke fill; }
+  #cap span { display: inline-block; margin: 0 6px; }
+  #cap span.on { color: #ffe14d; transform: scale(1.08); }
+
+  /* b1 */
+  #clk { position: absolute; left: 0; right: 0; top: 200px; text-align: center; font-size: 128px; font-weight: 800; letter-spacing: -.04em; color: #fff; text-shadow: 0 0 40px rgba(120,160,255,.6); }
+  #clk small { font-size: 46px; }
+  #moon { position: absolute; left: 50%; top: 380px; margin-left: -50px; font-size: 100px; }
+
+  /* phone */
+  .ph { position: absolute; left: 50%; top: 150px; width: 280px; height: 420px; margin-left: -140px; border-radius: 40px; background: #111; padding: 9px; box-shadow: 0 30px 70px rgba(0,0,0,.5); }
+  .ph .s { position: relative; height: 100%; border-radius: 32px; background: #f2f3f7; color: #111; overflow: hidden; padding: 44px 12px 12px; }
+  .ph .s::before { content: ""; position: absolute; left: 50%; top: 10px; width: 80px; height: 22px; margin-left: -40px; border-radius: 12px; background: #000; }
+  .b { max-width: 84%; padding: 10px 14px; border-radius: 18px; font-size: 18px; font-weight: 700; line-height: 1.3; margin-top: 10px; }
+  .b.in { background: #fff; border-bottom-left-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+  .b.out { margin-left: auto; background: #2E9418; color: #fff; border-bottom-right-radius: 6px; }
+  .b small { display: block; margin-top: 3px; font-size: 11px; font-weight: 600; opacity: .7; }
+  .noreply { margin-top: 14px; text-align: center; font-size: 13px; font-weight: 700; color: #999; }
+  .web { position: absolute; left: 0; right: 0; top: 0; height: 160px; background: linear-gradient(160deg, #10331a, #2E9418); color: #fff; padding: 46px 16px 0; font-size: 20px; font-weight: 800; line-height: 1.1; }
+  .ask { position: absolute; right: 12px; bottom: 12px; padding: 9px 14px; border-radius: 999px; background: #101321; color: #fff; font-size: 14px; font-weight: 800; }
+  .chat { position: absolute; left: 10px; right: 10px; top: 150px; }
+  #bye { position: absolute; left: 50%; top: 200px; margin-left: -70px; font-size: 140px; }
+
+  /* languages */
+  .lang { position: absolute; left: 20px; right: 20px; top: 190px; }
+  .lang .tag { display: inline-block; padding: 10px 20px; border-radius: 999px; background: #ffe14d; color: #0b1030; font-size: 26px; font-weight: 800; }
+  .lang .b { font-size: 31px; max-width: 94%; margin-top: 16px; padding: 14px 18px; }
+  .lang .b.in { color: #111; }
+
+  /* b6 */
+  .chip2 { position: absolute; left: 30px; right: 30px; height: 96px; border-radius: 24px; display: flex; align-items: center; gap: 16px; padding: 0 22px; font-size: 26px; font-weight: 800; }
+  .chip2 .e { font-size: 40px; }
+
+  /* end */
+  #end { position: absolute; inset: 0; background: #ffe14d; color: #0b1030; display: none; }
+  #end .t { position: absolute; left: 24px; right: 24px; top: 150px; text-align: center; font-size: 50px; font-weight: 800; line-height: 1.02; letter-spacing: -.02em; }
+  #end .c { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 26px; font-weight: 800; letter-spacing: .2em; }
+  #end .k { position: absolute; left: 0; right: 0; margin: 0 auto; width: fit-content; top: 370px; white-space: nowrap; padding: 10px 30px 16px; border-radius: 28px; background: #0b1030; color: #fff;
+    font-size: 104px; font-weight: 800; letter-spacing: -.03em; box-shadow: 0 12px 0 #2E9418; }
+  #end .ar { position: absolute; left: 0; right: 0; top: 540px; text-align: center; font-size: 64px; }
+  #end .lg { position: absolute; left: 50%; top: 650px; width: 200px; margin-left: -100px; padding: 10px 16px; border-radius: 20px; background: #fff; }
+  #end .w { position: absolute; left: 0; right: 0; top: 740px; text-align: center; font-size: 20px; font-weight: 800; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div id="bg"></div>
+
+  <div class="beat" id="b1"><div id="clk">11:47<small> pm</small></div><div id="moon" class="emoji">🌙</div></div>
+
+  <div class="beat" id="b2"><div class="ph"><div class="s">
+    <div class="b in" id="q2">Hi! Are you open Saturday? 🙂<small>11:47 pm</small></div><div class="noreply" id="nr">No reply…</div></div></div></div>
+
+  <div class="beat" id="b3"><div id="bye" class="emoji">👋</div></div>
+
+  <div class="beat" id="b4"><div class="ph"><div class="s" style="padding:0">
+    <div class="web">Your business<br><span style="font-size:13px;font-weight:600;opacity:.85">yourbusiness.co.nz</span></div>
+    <div class="chat"><div class="b in" id="q4">Are you open Saturday?</div><div class="b out" id="a4">Yes! 9am to 2pm. Want me to book you in? 😊<small>answered instantly</small></div></div>
+    <div class="ask">💬 Ask us</div></div></div></div>
+
+  <div class="beat" id="b5"><div id="langs"></div></div>
+
+  <div class="beat" id="b6">
+    <div class="chip2" id="c1" style="top:200px;background:#fff;color:#0b1030"><span class="e emoji">📝</span>Answers from your own wording</div>
+    <div class="chip2" id="c2" style="top:316px;background:#2E9418"><span class="e emoji">🙋</span>Anything tricky comes to you</div>
+    <div class="chip2" id="c3" style="top:432px;background:#7B4DFF"><span class="e emoji">🌙</span>Any time of day</div>
+  </div>
+
+  <div id="end"><div class="t">Want one on your website?</div><div class="c">COMMENT</div><div class="k">CHAT</div><div class="ar emoji">👇</div>
+    <img class="lg" src="../assets/ambs-logo.png" alt="AMBS"><div class="w">ambs.co.nz · first session free</div></div>
+
+  <div id="cap"></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis, p, ease } = E;
+// [start, end, background, caption]  — captions match the voice-over
+const BEATS = [
+  [0, 3.2, "radial-gradient(70% 50% at 50% 30%, #1d2b6b, #070a1f 80%)", "It’s 11:47pm. A customer has a question…"],
+  [3.2, 6.6, "linear-gradient(170deg, #3b1a6b, #140829)", "But you’re asleep. No reply."],
+  [6.6, 9.8, "linear-gradient(170deg, #e0402a, #8f1611)", "So they ask the next business."],
+  [9.8, 13.8, "linear-gradient(170deg, #2E9418, #0f4a07)", "Now imagine a chat helper on your website…"],
+  [13.8, 19.6, "linear-gradient(170deg, #1877E0, #3a1f9e)", "In their own language 🌏"],
+  [19.6, 23.0, "linear-gradient(170deg, #101321, #1b2033)", "Your own wording. Anything tricky comes to you."],
+];
+// the same question and answer in four languages (opening hours are an example)
+const LANGS = [
+  ["中文", "你们周六营业吗？", "营业的！早上9点到下午2点。需要帮您预约吗？"],
+  ["हिन्दी", "क्या आप शनिवार को खुले हैं?", "हाँ! सुबह 9 बजे से दोपहर 2 बजे तक।"],
+  ["ਪੰਜਾਬੀ", "ਕੀ ਤੁਸੀਂ ਸ਼ਨੀਵਾਰ ਨੂੰ ਖੁੱਲ੍ਹੇ ਹੋ?", "ਹਾਂ ਜੀ! ਸਵੇਰੇ 9 ਤੋਂ ਦੁਪਹਿਰ 2 ਵਜੇ ਤੱਕ।"],
+  ["Te reo Māori", "Kei te tuwhera koutou ā te Rāhoroi?", "Āe! Mai i te 9 karaka i te ata ki te 2 i te ahiahi."],
+];
+const L0 = 13.9, LD = 1.42;
+LANGS.forEach(([tag, q, a], i) => $("#langs").insertAdjacentHTML("beforeend",
+  `<div class="lang" data-l="${i}"><div class="tag">${tag}</div><div class="b in">${q}</div><div class="b out">${a}</div></div>`));
+window.COVER_AT = 15.6;
+
+E.setup({
+  duration: 27,
+  keyword: "CHAT",
+  narrator: "bm_george+nz",
+  voice: [
+    { a: 0.1, b: 3.15, text: "Eleven forty seven. A customer has a question." },
+    { a: 3.3, b: 6.5, text: "But you're asleep. No reply." },
+    { a: 6.7, b: 9.7, text: "So they ask the next business." },
+    { a: 9.9, b: 13.7, text: "Now imagine a chat helper on your website that answers straight away." },
+    { a: 13.9, b: 19.4, text: "In their own language. Chinese, Hindi, Punjabi, even te reo Māori." },
+    { a: 19.6, b: 22.9, text: "Your own wording. Anything tricky comes to you." },
+    { a: 23.2, b: 26.9, text: "Want one for your website? Comment, chat." },
+  ],
+  captions: [], phases: [],
+  end: { at: 99, title: "", sub: "" },
+});
+
+let curBeat = -1;
+E.use((t) => {
+  const bi = BEATS.findIndex(([a, b]) => t >= a && t < b);
+  BEATS.forEach((_, i) => { $("#b" + (i + 1)).style.display = i === bi ? "block" : "none"; });
+  // background cut with a quick punch-in at each beat
+  if (bi >= 0) {
+    const [a, b, bg, cap] = BEATS[bi];
+    $("#bg").style.background = bg;
+    const k = p(t, a, a + 0.25, ease.out);
+    $("#b" + (bi + 1)).style.transform = `scale(${1.08 - 0.08 * k})`;
+    if (bi !== curBeat) { $("#cap").innerHTML = cap.split(" ").map((w) => `<span>${w}</span>`).join(""); curBeat = bi; }
+    // karaoke: light the words evenly across the voice line
+    const words = $$("#cap span"), v = E.voice[bi], dur = (v.b - v.a) * 0.92;
+    const n = Math.floor(((t - v.a) / dur) * words.length);
+    words.forEach((w, i) => w.classList.toggle("on", i === Math.min(n, words.length - 1) && t >= v.a));
+    $("#cap").style.opacity = 1;
+  } else { $("#cap").style.opacity = 0; }
+
+  // b1
+  vis("#clk", t, 0.1, null, { y: 0, scale: 1.4, dur: 0.3 });
+  vis("#moon", t, 0.8, null, { y: 20, scale: 0.4 });
+  // b2
+  vis("#q2", t, 3.5, null, { y: 20, scale: 0.8 });
+  vis("#nr", t, 4.8, null, { y: 0 });
+  // b3
+  if (bi === 2) $("#bye").style.transform = `rotate(${Math.sin(t * 12) * 20}deg) translateX(${p(t, 7.6, 9.6) * 160}px)`;
+  // b4
+  vis("#q4", t, 10.6, null, { y: 20, scale: 0.8 });
+  vis("#a4", t, 11.5, null, { y: 20, scale: 0.8 });
+  // b5: one language after another
+  LANGS.forEach((_, i) => {
+    const s = L0 + i * LD, el = $(`[data-l="${i}"]`);
+    el.style.display = t >= s && t < s + LD ? "block" : "none";
+    vis(el, t, s, s + LD, { y: 0, scale: 0.85, dur: 0.18, outDur: 0.12 });
+    vis(el.querySelector(".b.in"), t, s + 0.05, null, { y: 14, dur: 0.18 });
+    vis(el.querySelector(".b.out"), t, s + 0.45, null, { y: 14, dur: 0.18 });
+  });
+  // b6
+  ["#c1", "#c2", "#c3"].forEach((c, i) => vis(c, t, 19.7 + i * 0.7, null, { x: -60, y: 0, dur: 0.3 }));
+  // end
+  const e = p(t, 23.0, 23.3, ease.out);
+  $("#end").style.display = e > 0 ? "block" : "none";
+  $("#end").style.clipPath = `circle(${e * 120}% at 50% 50%)`;
+  vis("#end .t", t, 23.2, null, { y: 20 });
+  vis("#end .c", t, 23.6, null, { y: 0 });
+  vis("#end .k", t, 23.8, null, { y: 0, scale: 0.4, dur: 0.35 });
+  const ar = vis("#end .ar", t, 24.3, null, { y: -10 }); if (ar && t > 24.7) $("#end .ar").style.transform = `translateY(${Math.abs(Math.sin(t * 5)) * 14}px)`;
+  vis("#end .lg", t, 24.5, null, { y: 20 }); vis("#end .w", t, 24.7, null, { y: 10 });
+});
+</script>
+</body>
+</html>
