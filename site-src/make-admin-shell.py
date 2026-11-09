@@ -148,7 +148,7 @@ sb = ('<aside class="sb" id="sb" aria-label="Editor menu"><div class="sb-brand">
  + '<div class="sb-grp"><h2>Clients</h2>' + nav('feedback', 'Client feedback', '', ' <small id="adFbBadge"></small>') + '</div>'
  + '<div class="sb-grp"><h2>Access</h2>' + nav('users', 'People', 'adUsersTab', '', True) + nav('conn', 'Connections', 'adConnTab', '', True) + '</div>'
  + '<div class="sb-grp"><h2>History</h2>' + nav('changes', 'Changes and undo') + '</div></nav></aside><div class="sb-scrim" id="sbScrim"></div>')
-tb = ('<header class="tb"><button type="button" class="tb-menu" id="sbOpen" aria-label="Open menu" aria-controls="sb">' + I['menu'] + '</button><p id="adWho"></p><span class="tb-sp"></span>'
+tb = ('<header class="tb"><button type="button" class="tb-menu" id="sbOpen" aria-label="Open menu" aria-controls="sb">' + I['menu'] + '</button><p id="adWho"></p><span class="tb-sp"></span><span class="tb-timer" id="adTimer" role="timer" title="You are signed out automatically after 30 minutes without activity. Clicking or typing resets the timer."><b id="adTimerT">30:00</b> to auto sign-out</span>'
  '<button type="button" class="tb-link" data-tab="account">Change password</button><a class="tb-link" href="index.html" target="_blank" rel="noopener">View website</a><button type="button" class="tb-link" id="adLogout">Sign out</button></header>')
 def card(tab, title, desc, extra='', need='', badge=''):
     return ('<div class="hm-card"%s><span class="hm-ic">%s</span><div><button type="button" class="hm-t" data-tab="%s">%s%s</button><p>%s</p>%s</div></div>'

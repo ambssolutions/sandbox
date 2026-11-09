@@ -517,12 +517,15 @@ $('#adLoginForm').addEventListener('submit',function(e){
 $('#adLogout').addEventListener('click',function(){try{localStorage.removeItem('mk-admin-in');}catch(e){}post('/api/admin/login',{action:'logout'}).catch(function(){}).then(function(){showLogin();say('');});});
 /* Sign out after 30 minutes without activity (any touch, click, key or typing in the page being edited). A warning shows one minute before. */
 var IDLEMS=30*60*1000,WARNMS=29*60*1000,lastAct=Date.now(),idleT=null,idleWarn=null;
-function idleSeen(){var n=Date.now();lastAct=n;try{if(!idleSeen.w||n-idleSeen.w>5000){idleSeen.w=n;localStorage.setItem('mk-admin-last',String(n));}}catch(e){}if(idleWarn)idleWarn.hidden=true;}
+function idleSeen(){var n=Date.now();lastAct=n;if(typeof idleTimer==='function')idleTimer();try{if(!idleSeen.w||n-idleSeen.w>5000){idleSeen.w=n;localStorage.setItem('mk-admin-last',String(n));}}catch(e){}if(idleWarn)idleWarn.hidden=true;}
 ['mousemove','mousedown','keydown','touchstart','scroll','click','wheel'].forEach(function(ev){document.addEventListener(ev,idleSeen,{passive:true,capture:true});});
 window.addEventListener('message',idleSeen);
 function idleTick(){if(!me)return;var last=lastAct;try{last=Math.max(last,Number(localStorage.getItem('mk-admin-last')||0));}catch(e){}var q=Date.now()-last;
   if(q>=IDLEMS){autoSaveNow().catch(function(){}).then(function(){return post('/api/admin/login',{action:'logout'});}).catch(function(){}).then(function(){modal.hidden=true;frame.srcdoc='';onPage=false;showLogin();});return;}
   if(q>=WARNMS){autoSaveNow().catch(function(){});if(!idleWarn){idleWarn=document.createElement('div');idleWarn.className='ad-idlewarn';idleWarn.setAttribute('role','alert');idleWarn.textContent='No activity for a while. You will be signed out in about a minute. Tap or press any key to stay signed in.';root.appendChild(idleWarn);}idleWarn.hidden=false;}}
+var timerEl=document.getElementById('adTimerT'),timerBox=document.getElementById('adTimer');
+function idleTimer(){if(!timerEl||!me)return;var last=lastAct;try{last=Math.max(last,Number(localStorage.getItem('mk-admin-last')||0));}catch(e){}var left=Math.max(0,IDLEMS-(Date.now()-last)),s=Math.ceil(left/1000),t=Math.floor(s/60)+':'+('0'+(s%60)).slice(-2);if(timerEl.textContent!==t)timerEl.textContent=t;timerBox.classList.toggle('low',left<=5*60*1000);}
+setInterval(idleTimer,1000);
 function idleStart(){lastAct=Date.now();try{localStorage.setItem('mk-admin-in','1');localStorage.setItem('mk-admin-last',String(lastAct));}catch(e){}if(!idleT)idleT=setInterval(idleTick,15000);}
 function idleStop(){if(idleT){clearInterval(idleT);idleT=null;}if(idleWarn)idleWarn.hidden=true;}
 var qs=new URLSearchParams(location.search),invTok=qs.get('invite'),invEmail=qs.get('email');
