@@ -421,7 +421,24 @@ $('#edAddGo').addEventListener('click',function(){
 $('#edSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;edRegion=b.getAttribute('data-r');edRender();});
 $('#edFind').addEventListener('input',function(){edRender();});
 function edChanges(){var out=[];[].forEach.call(edFields.querySelectorAll('[data-k]'),function(el){if(el.tagName==='LI'||el.type==='file')return;var k=Number(el.getAttribute('data-k'));if(el.value!==edOrig[k])out.push({k:k,old:edOrig[k],new:el.value});});return out;}
-function edDirty(){edSave.disabled=!edChanges().length;}
+function edDirty(){var n=edChanges().length;edSave.disabled=!n;if(n)autoSaveSoon();}
+/* Anything typed is saved to the draft by itself a few seconds after typing stops (and when leaving the page or before signing out), so nothing is lost. It never goes on the website until Publish. The menu and footer (shared by every page) still need the Save button. */
+var autoT=null,autoSig='',autoBusy=false;
+function autoNote(t,bad){var n=$('#edAutoNote');if(n){n.textContent=t;n.className='ad-help'+(bad?' ad-bad':'');}}
+function autoSaveSoon(){clearTimeout(autoT);autoT=setTimeout(function(){autoSaveNow().catch(function(){});},3000);}
+function autoSaveNow(){
+  clearTimeout(autoT);
+  if(autoBusy||!me||!edPath||edRegion==='shared')return Promise.resolve();
+  var ch=edChanges();if(!ch.length)return Promise.resolve();
+  var sig=JSON.stringify(ch.map(function(c){return [c.k,c.new];}));if(sig===autoSig)return Promise.resolve();
+  autoBusy=true;autoSig=sig;autoNote('Saving to your draft...');
+  return site({action:'edit',path:edPath,changes:ch,everywhere:false}).then(function(j){
+    edData.fields=j.fields;edData.items=j.items;edData.sections=j.sections;edData.blocks=j.blocks;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});
+    autoNote('Saved to your draft automatically at '+new Date().toLocaleTimeString('en-NZ',{timeZone:'Pacific/Auckland',hour:'numeric',minute:'2-digit'})+'. Not on the website until you press Publish.');return siteStatus();
+  }).catch(function(er){autoSig='';autoNote('Could not save automatically: '+er.message+' Press Save changes to try again.',true);}).then(function(){autoBusy=false;edSave.disabled=!edChanges().length;});
+}
+document.addEventListener('visibilitychange',function(){if(document.hidden)autoSaveNow().catch(function(){});});
+window.addEventListener('pagehide',function(){try{if(!me||!edPath||edRegion==='shared')return;var ch=edChanges();if(!ch.length)return;navigator.sendBeacon('/api/admin/site',new Blob([JSON.stringify({action:'edit',path:edPath,changes:ch,everywhere:false})],{type:'application/json'}));}catch(e){}});
 edFields.addEventListener('input',edDirty);
 edSave.addEventListener('click',function(){
   var ch=edChanges();if(!ch.length)return;edSave.disabled=true;say('Saving...');
@@ -498,14 +515,14 @@ $('#adLoginForm').addEventListener('submit',function(e){
   post('/api/admin/login',{email:f.email.value.trim(),password:f.password.value}).then(function(j){f.reset();enter(j.user);}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
 });
 $('#adLogout').addEventListener('click',function(){try{localStorage.removeItem('mk-admin-in');}catch(e){}post('/api/admin/login',{action:'logout'}).catch(function(){}).then(function(){showLogin();say('');});});
-/* Sign out after 10 minutes without activity (any touch, click, key or typing in the page being edited). A warning shows one minute before. */
-var IDLEMS=10*60*1000,WARNMS=9*60*1000,lastAct=Date.now(),idleT=null,idleWarn=null;
+/* Sign out after 30 minutes without activity (any touch, click, key or typing in the page being edited). A warning shows one minute before. */
+var IDLEMS=30*60*1000,WARNMS=29*60*1000,lastAct=Date.now(),idleT=null,idleWarn=null;
 function idleSeen(){var n=Date.now();lastAct=n;try{if(!idleSeen.w||n-idleSeen.w>5000){idleSeen.w=n;localStorage.setItem('mk-admin-last',String(n));}}catch(e){}if(idleWarn)idleWarn.hidden=true;}
 ['mousemove','mousedown','keydown','touchstart','scroll','click','wheel'].forEach(function(ev){document.addEventListener(ev,idleSeen,{passive:true,capture:true});});
 window.addEventListener('message',idleSeen);
 function idleTick(){if(!me)return;var last=lastAct;try{last=Math.max(last,Number(localStorage.getItem('mk-admin-last')||0));}catch(e){}var q=Date.now()-last;
-  if(q>=IDLEMS){post('/api/admin/login',{action:'logout'}).catch(function(){}).then(function(){modal.hidden=true;frame.srcdoc='';onPage=false;showLogin();});return;}
-  if(q>=WARNMS){if(!idleWarn){idleWarn=document.createElement('div');idleWarn.className='ad-idlewarn';idleWarn.setAttribute('role','alert');idleWarn.textContent='No activity for a while. You will be signed out in about a minute. Tap or press any key to stay signed in.';root.appendChild(idleWarn);}idleWarn.hidden=false;}}
+  if(q>=IDLEMS){autoSaveNow().catch(function(){}).then(function(){return post('/api/admin/login',{action:'logout'});}).catch(function(){}).then(function(){modal.hidden=true;frame.srcdoc='';onPage=false;showLogin();});return;}
+  if(q>=WARNMS){autoSaveNow().catch(function(){});if(!idleWarn){idleWarn=document.createElement('div');idleWarn.className='ad-idlewarn';idleWarn.setAttribute('role','alert');idleWarn.textContent='No activity for a while. You will be signed out in about a minute. Tap or press any key to stay signed in.';root.appendChild(idleWarn);}idleWarn.hidden=false;}}
 function idleStart(){lastAct=Date.now();try{localStorage.setItem('mk-admin-in','1');localStorage.setItem('mk-admin-last',String(lastAct));}catch(e){}if(!idleT)idleT=setInterval(idleTick,15000);}
 function idleStop(){if(idleT){clearInterval(idleT);idleT=null;}if(idleWarn)idleWarn.hidden=true;}
 var qs=new URLSearchParams(location.search),invTok=qs.get('invite'),invEmail=qs.get('email');

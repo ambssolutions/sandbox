@@ -41,8 +41,8 @@ function readCookie(req, name) {
    The old shared-password cookie still works and counts as an owner, so the AMBS master password is always a way in. */
 const SESSION = 'mk_session';
 function b64u(s) { return Buffer.from(s).toString('base64url'); }
-/* A sign-in lasts 10 minutes from the last time the editor was used (every request renews it), then the person has to sign in again. */
-const IDLE_MIN = 10;
+/* A sign-in lasts 30 minutes from the last time the editor was used (every request renews it), then the person has to sign in again. */
+const IDLE_MIN = 30;
 function makeSession(u) {
   const body = b64u(JSON.stringify({ e: u.email, n: u.name || '', r: ROLE(u.role), x: Date.now() + IDLE_MIN * 60000 }));
   return body + '.' + sign('sess' + body);

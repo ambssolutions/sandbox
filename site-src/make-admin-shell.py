@@ -28,7 +28,7 @@ login = login.replace('<p class="ad-help">AMBS: leave the email empty to use the
 FORGOT = '<p class="ad-forgot"><button type="button" id="adForgotOpen" class="ad-linkbtn">Forgot password?</button></p><div id="adForgot" class="ad-forgotbox" hidden><label for="adForgotEmail">Your email</label><input id="adForgotEmail" type="email" autocomplete="username"><div class="ad-btns"><button type="button" id="adForgotSend" class="ad-go">Email me a reset link</button><button type="button" id="adForgotCancel">Cancel</button></div></div>'
 login = login.replace('</form></div>', '</form>' + FORGOT + '</div>', 1)
 login = login.replace('<div class="ad-card" id="adLogin">', '<p class="ad-help" id="adBoot">Checking your sign-in...</p><div class="ad-card" id="adLogin" hidden>', 1)
-login = login.replace('<h2>Log in</h2>', '<h2>Log in</h2><p class="ad-msg" id="adIdleMsg" hidden>You were signed out after 10 minutes without activity. Please sign in again.</p>', 1)
+login = login.replace('<h2>Log in</h2>', '<h2>Log in</h2><p class="ad-msg" id="adIdleMsg" hidden>You were signed out after 30 minutes without activity. Please sign in again. Anything you had typed was saved to your draft.</p>', 1)
 assert 'adIdleMsg' in login
 assert 'adBoot' in login
 assert 'adForgot' in login
@@ -120,6 +120,9 @@ panes = panes.replace(HR, SEC_BTN + HR, 1)
 FBH = '<p class="ad-help">New feedback arrives here and by email. Approve it to show it in the Testimonials section.</p><ul class="ad-list" id="adFb">'
 assert FBH in panes
 panes = panes.replace(FBH, '<p class="ad-help">New feedback arrives here and by email. Approve it to show it in the Testimonials section.</p><div class="ad-btns"><button type="button" id="adFbPrev">Preview the Testimonials section on the website</button></div><ul class="ad-list" id="adFb">', 1)
+SAVEBTN = '<button type="button" id="edSave" class="ad-ap" disabled>Save changes</button>'
+if SAVEBTN in panes:
+    panes = panes.replace(SAVEBTN, SAVEBTN + '<span class="ad-help" id="edAutoNote" role="status"></span>', 1)
 FOR = '<div class="ad-for" id="edModalFor"><b id="edModalName"></b><span id="edModalNote"></span></div>'
 assert '<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in"><div class="ad-top">' in panes
 panes = panes.replace('<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in"><div class="ad-top">', '<div id="edModal" class="ad-modal" hidden><div class="ad-modal-in">' + FOR + '<div class="ad-top">', 1)
