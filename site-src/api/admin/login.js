@@ -26,6 +26,7 @@ module.exports = async function (req, res) {
     const mh = S.masterHash(), master = process.env.ADMIN_PASSWORD;
     if (mh ? !U.checkPassword(pw, mh) : (!master || !L.safeEq(pw, master))) return bad();
     delete fails[key];
+    try { await L.writeStore(U.masterPath(), { last: new Date().toISOString() }); } catch (e) { /* only a note for the People list */ }
     res.setHeader('Set-Cookie', L.sessionCookieFor({ email: 'master', name: 'AMBS master login', role: 'owner' }));
     return L.send(res, 200, { ok: true, user: { email: 'master', name: 'AMBS master login', role: 'owner', super: true } });
   }

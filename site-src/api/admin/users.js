@@ -229,7 +229,11 @@ module.exports = async function (req, res) {
     await U.writeUsers(users);
     return L.send(res, 200, { users: view() });
   }
-  if (action === 'list') return L.send(res, 200, { users: view() });
+  if (action === 'list') {
+    let master = null;
+    if (me.role === 'owner') { try { const j = await L.readStore(U.masterPath()); master = { lastLogin: (j && j.last) || '' }; } catch (e) { master = { lastLogin: '' }; } }
+    return L.send(res, 200, { users: view(), master });
+  }
   if (action === 'save') {
     const email = U.cleanEmail(b.email), name = L.FB_CLEAN(b.name, 80), wantSuper = !mgr && b.role === 'super', role = mgr ? 'editor' : wantSuper ? 'owner' : L.ROLE(b.role);
     if (!U.EMAIL.test(email)) return L.send(res, 400, { error: 'Please enter a valid email address.' });
