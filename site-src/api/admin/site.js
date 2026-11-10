@@ -42,8 +42,8 @@ module.exports = async function (req, res) {
   const action = String(b.action || '');
   /* Which section of the editor each action belongs to. Publishing and discarding are for anyone who can change pages or contact details. */
   const SECTION = { pages: 'pages', page: 'pages', edit: 'pages', op: 'pages', add: 'pages', image: 'pages', preview: 'pages', newpage: 'pages', deletepage: 'pages', menu: 'pages', menuop: 'pages', details: 'details', savedetails: 'details', history: 'changes', undo: 'changes', changedetail: 'changes' };
-  /* Editors do not see the history list. They can still publish, discard and step back through their own unpublished changes. */
-  if (me.role === 'editor' && ['history', 'changedetail', 'undo'].includes(action)) return L.send(res, 403, { error: 'You do not have access to this section.' });
+  /* Editors see, and can undo, only the changes they made themselves. */
+  const isEd = me.role === 'editor', mine = (m) => String(m || '').endsWith('(' + who(me) + ')');
   if (action !== 'status' && !(action === 'publish' || action === 'discard' || action === 'undolast' ? U.can(me, 'pages') || U.can(me, 'details') : U.can(me, SECTION[action] || 'pages'))) return L.send(res, 403, { error: 'You do not have access to this section.' });
   if (!G.ready()) return L.send(res, action === 'status' ? 200 : 503, action === 'status' ? { ready: false } : { error: 'The website editor is not connected yet. It needs the GitHub access key to be added in Vercel.' });
   try {
@@ -141,10 +141,12 @@ module.exports = async function (req, res) {
       const live = await G.history(G.LIVE(), b.path ? okPath(b.path) : '', 30);
       let drafts = [];
       if (w.draft) { const dh = await G.history(G.DRAFT, b.path ? okPath(b.path) : '', 30); const set = new Set(live.map((c) => c.sha)); drafts = dh.filter((c) => !set.has(c.sha)); }
+      if (isEd) return L.send(res, 200, { draft: drafts.filter((c) => mine(c.message)), live: live.filter((c) => mine(c.message)) });
       return L.send(res, 200, { draft: drafts, live });
     }
     if (action === 'changedetail') {
       const d = await G.commitDiff(String(b.sha || '').replace(/[^0-9a-f]/g, ''));
+      if (isEd && !mine(d.message)) return L.send(res, 403, { error: 'You can only look at changes you made yourself.' });
       const NICE = { email: 'Email', phone: 'Phone (for tapping)', phoneDisplay: 'Phone (as shown)', address1: 'Auckland address, first line', address2: 'Auckland address, second line', linkedin: 'LinkedIn', facebook: 'Facebook', instagram: 'Instagram', nzbn: 'NZBN', companyNumber: 'Company number' };
       const lines = [], htmlDiffs = []; let pages = 0;
       for (const f of d.files) {
@@ -172,6 +174,7 @@ module.exports = async function (req, res) {
     }
     if (action === 'undo') {
       const r = await G.revertFiles(String(b.sha || ''));
+      if (isEd && !mine(r.message)) return L.send(res, 403, { error: 'You can only undo changes you made yourself.' });
       if (!r.files.length) return L.send(res, 400, { error: 'There was nothing to undo in that change.' });
       await save(r.files, 'undid "' + r.message.replace(/^Website editor: /, '').slice(0, 60) + '"');
       return L.send(res, 200, { ok: true });
@@ -183,6 +186,7 @@ module.exports = async function (req, res) {
       /* newest first; walk from the oldest so an earlier undo cancels the change it reversed */
       const stack = []; dh.filter((c) => !set.has(c.sha)).reverse().forEach((c) => { if (/^Website editor: undid /.test(c.message || '')) stack.pop(); else stack.push(c); });
       if (!stack.length) return L.send(res, 400, { error: 'There are no changes waiting to undo.' });
+      if (isEd && !mine(stack[stack.length - 1].message)) return L.send(res, 403, { error: 'The latest change was made by someone else, so only they or an owner can undo it.' });
       const r = await G.revertFiles(stack[stack.length - 1].sha);
       if (!r.files.length) return L.send(res, 400, { error: 'There was nothing to undo.' });
       await save(r.files, 'undid "' + r.message.replace(/^Website editor: /, '').slice(0, 60) + '"');
