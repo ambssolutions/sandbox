@@ -239,3 +239,48 @@ html body.adm .ad-snap select{width:200px;min-width:0;max-width:100%;flex:0 0 au
 .ad-tbl .c-what ins,.ad-tbl .c-what del{display:inline;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 
 html body .ad-framefail{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;background:#fff;color:#191919}html body .ad-framefail[hidden]{display:none}html body .ad-framefail span{color:#626262;max-width:460px}html body .ad-framefail div{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* Phones: each change is a card instead of a sideways-scrolling table; filters and the per-person table fit the screen. */
+@media(max-width:700px){
+html body .ad-tw{overflow:visible;border:0;margin:6px 0 14px}
+html body .ad-tbl:not(.ad-ppl){display:block;width:100%;min-width:0;table-layout:auto}
+html body .ad-tbl:not(.ad-ppl) thead{display:none}
+html body .ad-tbl:not(.ad-ppl) tbody{display:block;border:1px solid rgba(128,128,128,.3);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:rgba(128,128,128,.04)}
+html body .ad-tbl:not(.ad-ppl) tr{display:grid;grid-template-columns:1fr auto;grid-template-areas:"page act" "by by" "sec sec" "what what";gap:2px 10px}
+html body .ad-tbl:not(.ad-ppl) tr+tr{border-top:1px dashed rgba(128,128,128,.35);margin-top:8px;padding-top:8px}
+html body .ad-tbl:not(.ad-ppl) td{display:block;border:0!important;padding:0!important;width:auto!important;min-width:0}
+html body .ad-tbl:not(.ad-ppl) .c-page{grid-area:page;font-size:15px}
+html body .ad-tbl:not(.ad-ppl) .c-act{grid-area:act;text-align:right}
+html body .ad-tbl:not(.ad-ppl) .c-by{grid-area:by;font-size:13px;opacity:.8;margin:0 0 6px;white-space:normal}
+html body .ad-tbl:not(.ad-ppl) .c-by b,html body .ad-tbl:not(.ad-ppl) .c-by small{display:inline;font-size:13px}
+html body .ad-tbl:not(.ad-ppl) .c-by small::before{content:" · "}
+html body .ad-tbl:not(.ad-ppl) .c-sec{grid-area:sec;font-size:13.5px}
+html body .ad-tbl:not(.ad-ppl) .c-what{grid-area:what;margin-top:3px;overflow-wrap:anywhere}
+html body .ad-tbl:not(.ad-ppl) td.ad-empty{padding:16px!important;text-align:center}
+html body .ad-ppl{min-width:0;table-layout:auto}
+html body .ad-ppl th,html body .ad-ppl td{padding:8px 6px;font-size:12.5px}
+html body .ad-ppl th{font-size:10.5px;letter-spacing:.02em}
+html body .ad-ppl th:nth-child(5),html body .ad-ppl td:nth-child(5){display:none}
+html body .ad-fbar{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+html body .ad-fbar label{min-width:0}
+html body .ad-fbar select{width:100%!important;max-width:100%}
+html body .ad-fbar button{grid-column:1/-1}
+html body .ad-snap-top{flex-wrap:wrap}
+html body.adm .ad-snap select{width:100%}
+html body .ad-tiles{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+html body .ad-ppl th{overflow-wrap:normal;word-break:normal;letter-spacing:0;font-size:10px;padding:8px 4px}
+html body .ad-ppl td{overflow-wrap:normal;word-break:normal;padding:8px 4px}
+html body .ad-ppl td:first-child,html body .ad-ppl th:first-child{padding-left:10px;width:34%}
+}
+/* Phones: give the page window the room. The size switch is not needed (it already shows the phone view) and the long hints are shortened. */
+@media(max-width:700px){
+html body #edModal #edSize{display:none!important}
+html body #edModal #edModalHint{display:none!important}
+html body #edModal .ad-for span{display:none}
+html body #edModal .ad-for{padding:8px 12px}
+html body #edModal .ad-top{display:flex;flex-wrap:nowrap;gap:8px;align-items:center;justify-content:flex-end;padding:4px 0}
+html body #edModal .ad-top button{padding:9px 12px;font-size:14px;white-space:nowrap;flex:0 0 auto}
+html body #edModal .ad-top #edModalSave{margin-left:auto}
+}
