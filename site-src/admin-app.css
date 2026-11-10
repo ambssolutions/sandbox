@@ -201,3 +201,22 @@ html body .ad-idlewarn{position:fixed;left:12px;right:12px;bottom:12px;z-index:4
 .ad-tile b{font-size:26px;line-height:1.1;font-weight:700}.ad-tile span{font-size:13px;opacity:.75}
 .ad-ppl{min-width:560px}
 .ad-fbar[hidden],.ad-snap[hidden]{display:none}
+
+/* the Changes tables fit the card: fixed column shares, long text wraps */
+.ad-tw{overflow-x:auto}
+.ad-tbl{table-layout:fixed;min-width:0;width:100%}
+.ad-tbl th:nth-child(1){width:16%}.ad-tbl th:nth-child(2){width:22%}.ad-tbl th:nth-child(3){width:15%}.ad-tbl th:nth-child(5){width:84px}
+.ad-tbl td,.ad-tbl th{overflow-wrap:anywhere;word-break:normal}
+.ad-tbl .c-by{white-space:normal}
+.ad-tbl .c-act{width:84px}
+.ad-tbl .c-page b{display:block}
+.ad-ppl th:nth-child(n){width:auto}
+@media(max-width:760px){.ad-tbl{min-width:680px}.ad-ppl{min-width:520px}}
+.ad-ppl{table-layout:auto}
+
+.ad-tbl .c-act button{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid rgba(128,128,128,.45);background:#fff;color:#1c1c1e;cursor:pointer}
+.ad-tbl .c-act button:hover{border-color:#c8323c;color:#c8323c}
+.ad-snap select{width:auto;min-width:170px;flex:none}
+.ad-tbl th:nth-child(1){width:19%}.ad-tbl th:nth-child(2){width:21%}
+.ad-ppl th:nth-child(n){width:auto}
+html body.adm .ad-snap select{width:200px;min-width:0;max-width:100%;flex:0 0 auto}

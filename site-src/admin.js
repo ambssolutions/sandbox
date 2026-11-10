@@ -528,9 +528,9 @@ function entFill(tb,lines,e){
   var by='<td class="c-by" rowspan="'+n+'"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small></td>';
   var act=e.sha?'<td class="c-act" rowspan="'+n+'"><button type="button" data-undo="1">Undo</button></td>':'';
   var pg='<td class="c-page" rowspan="'+n+'">'+pageHtml(lines,e.fallback)+'</td>';
-  var rows=shown.map(function(l,i){return '<tr>'+(i?'':pg)+'<td class="c-sec">'+secHtml(l)+'</td><td class="c-what">'+lineHtml(l)+'</td>'+(i?'':by+act)+'</tr>';});
+  var rows=shown.map(function(l,i){return '<tr>'+(i?'':pg)+'<td class="c-sec">'+secHtml(l)+'</td>'+(i?'':by)+'<td class="c-what">'+lineHtml(l)+'</td>'+(i?'':act)+'</tr>';});
   if(more>0)rows.push('<tr><td class="c-sec"></td><td class="c-what"><small>and '+more+' more change'+(more===1?'':'s')+'</small></td></tr>');
-  if(!rows.length)rows.push('<tr>'+pg+'<td class="c-sec">'+esc('No visible changes')+'</td><td class="c-what"></td>'+by+act+'</tr>');
+  if(!rows.length)rows.push('<tr>'+pg+'<td class="c-sec">'+esc('No visible changes')+'</td>'+by+'<td class="c-what"></td>'+act+'</tr>');
   tb.innerHTML=rows.join('');
 }
 var entQ=[],entBusy=0,entCache={};
@@ -589,7 +589,7 @@ function snapRender(){
 $('#chSnapWhen').addEventListener('change',snapRender);
 function chLoad(){
   var a=site({action:'publishes'}).then(function(j){chAll.vers=(j.versions||[]).map(function(x){return {from:x.from,to:x.to,who:x.who,when:x.at,fallback:(x.n||0)+' change'+(x.n===1?'':'s'),pages:pagesIn((x.files||[]).join(' '))};});}).catch(function(){chAll.vers=[];});
-  var b=site({action:'history',n:100}).then(function(j){chAll.draft=j.draft.map(chEnt);chAll.live=j.live.map(chEnt);});
+  var b=site({action:'history',n:100}).then(function(j){var isEd=function(c){return /^Website editor: /.test(c.message)&&!/^Website editor: publish changes/.test(c.message);};chAll.draft=j.draft.filter(isEd).map(chEnt);chAll.live=j.live.filter(isEd).map(chEnt);});
   Promise.all([a,b]).then(function(){chFill();chRender();snapRender();}).catch(function(er){say(er.message,true);});
 }
 $('[data-pane=changes]').addEventListener('click',function(e){
