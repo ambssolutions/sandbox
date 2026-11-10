@@ -570,7 +570,7 @@ function pageHtml(lines,fallback){
   return out.slice(0,3).map(function(f){var m=/^([a-z0-9-]+)\.html$/.exec(f);return m?'<b>'+esc(pn(f))+'</b><small>mikia.co.nz'+(m[1]==='index'?'/':'/'+m[1])+'</small>':'<b>'+esc(f)+'</b>';}).join('')+(out.length>3?'<small>and '+(out.length-3)+' more</small>':'');
 }
 function entAttrs(e){return e.sha?'data-sha="'+esc(e.sha)+'"':'data-from="'+esc(e.from)+'" data-to="'+esc(e.to)+'"';}
-function chipHtml(e){return e.chip?'<span class="ad-st '+(e.chip==='d'?'ad-st-d':'ad-st-l')+'">'+(e.chip==='d'?'Not live yet':'Live')+'</span>':'';}
+function chipHtml(e){return e.chip?'<span class="ad-st '+(e.chip==='d'?'ad-st-d':'ad-st-l')+'">'+(e.chip==='d'?'Saved, not published':'Live')+'</span>':'';}
 function entSkeleton(e){
   return '<tbody class="ad-ent" '+entAttrs(e)+'><tr><td class="c-page">'+esc(e.fallback||'')+'</td><td class="c-sec ad-wait">Loading…</td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small>'+chipHtml(e)+'</td><td class="c-what"></td>'+(e.sha?'<td class="c-act"><button type="button" data-undo="1">Undo</button></td>':'')+'</tr></tbody>';
 }
@@ -629,7 +629,8 @@ function chPass(e){
 function chRender(){
   var f=$('#chFWho').value||$('#chFPage').value||$('#chFWhen').value,none=f?'No changes match these filters.':null;
   var d=chAll.draft.filter(chPass);
-  $('#chDraftH').hidden=!d.length;$('#chDraftW').hidden=!d.length;
+  var dup=!!(snapSel&&snapSel.k==='wait'&&!(me&&me.role==='editor'));
+  $('#chDraftH').hidden=!d.length||dup;$('#chDraftW').hidden=!d.length||dup;
   tblSet('chDraft',d);
   tblSet('chVers',chAll.vers.filter(chPass),none||'Nothing has been published since this list began.');
   tblSet('chLive',chAll.live.filter(chPass),none||'No published changes yet.');
@@ -647,19 +648,19 @@ function snapRender(){
   pb.forEach(function(e){var p=P(e.who);p.pub++;var d=+new Date(e.when);if(d>p.last)p.last=d;});
   var names=Object.keys(ppl).sort(function(a,b){return ppl[b].ch-ppl[a].ch||ppl[b].pub-ppl[a].pub;});
   function tile(n,l,k){return '<button type="button" class="ad-tile" data-snap="'+k+'" aria-pressed="'+(snapSel&&snapSel.k===k&&!snapSel.who?'true':'false')+'"><b>'+n+'</b><span>'+esc(l)+'</span></button>';}
-  $('#chTiles').innerHTML=tile(ch.length,ch.length===1?'change made':'changes made','changes')+tile(pb.length,pb.length===1?'publish':'publishes','pub')+tile(wait,'waiting to publish','wait')+tile(names.length,names.length===1?'person active':'people active','people')+tile(Object.keys(pages).length,Object.keys(pages).length===1?'page changed':'pages changed','changes');
+  $('#chTiles').innerHTML=tile(ch.length,ch.length===1?'change made':'changes made','changes')+tile(pb.length,pb.length===1?'publish':'publishes','pub')+tile(wait,wait===1?'change saved, not published':'changes saved, not published','wait')+tile(names.length,names.length===1?'person active':'people active','people')+tile(Object.keys(pages).length,Object.keys(pages).length===1?'page changed':'pages changed','changes');
   var tb=$('#chPeople');[].slice.call(tb.querySelectorAll('tbody')).forEach(function(x){x.remove();});
   tb.insertAdjacentHTML('beforeend','<tbody>'+(names.length?names.map(function(n){var p=ppl[n],pl=Object.keys(p.pg);return '<tr class="ad-click" tabindex="0" role="button" data-who="'+esc(p.n)+'" aria-label="Show the changes made by '+esc(p.n)+'"><td><b>'+esc(p.n)+'</b></td><td>'+p.ch+'</td><td>'+p.pub+'</td><td>'+(pl.length?esc(pl.slice(0,4).map(pageLabel).join(', '))+(pl.length>4?' and '+(pl.length-4)+' more':''):'–')+'</td><td>'+(p.last?esc(when2(new Date(p.last).toISOString())):'')+'</td></tr>';}).join(''):'<tr><td colspan="5" class="ad-empty">No changes in this period.</td></tr>')+'</tbody>');
   if(typeof snapDetail==='function')snapDetail();
 }
-var snapSel=null;
+var snapSel=null,snapInit=0;
 function snapDetail(){
   var box=$('#chSnapDetail');if(!box)return;if(!snapSel||(me&&me.role==='editor')){box.hidden=true;return;}
   var t=$('#chSnapWhen').value,per={today:'today',yesterday:'yesterday','7':'in the last 7 days'}[t]||'',ents,title,empty,hd='Changed by';
   function inP(e){return snapIn(e.when,t);}
   function chip(l,c){return l.map(function(e){return Object.assign({},e,{chip:c});});}
   function newest(a,b){return new Date(b.when)-new Date(a.when);}
-  if(snapSel.k==='wait'){ents=chip(chAll.draft,'d').sort(newest);title='Changes not live yet';empty='Nothing is waiting to be published.';}
+  if(snapSel.k==='wait'){ents=chip(chAll.draft,'d').sort(newest);title='Saved but not published yet';empty='No saved changes are waiting to be published.';}
   else if(snapSel.k==='pub'){ents=chAll.vers.filter(inP).sort(newest);title='Published '+per;empty='Nothing was published '+per+'.';hd='Published by';}
   else{
     ents=chip(chAll.draft.filter(inP),'d').concat(chip(chAll.live.filter(inP),'l')).sort(newest);
@@ -672,7 +673,7 @@ function snapDetail(){
 }
 function snapPick(sel,el){
   if(sel&&snapSel&&snapSel.k===sel.k&&(snapSel.who||'')===(sel.who||''))sel=null;
-  snapSel=sel;snapRender();
+  snapSel=sel;chRender();snapRender();
   if(sel&&el){var b=$('#chSnapDetail');setTimeout(function(){if(b.scrollIntoView)b.scrollIntoView({behavior:'smooth',block:'start'});},50);}
 }
 $('#chTiles').addEventListener('click',function(e){var b=e.target.closest('[data-snap]');if(!b)return;var k=b.getAttribute('data-snap');
@@ -680,13 +681,13 @@ $('#chTiles').addEventListener('click',function(e){var b=e.target.closest('[data
   snapPick({k:k},b);});
 $('#chPeople').addEventListener('click',function(e){var r=e.target.closest('tr[data-who]');if(r)snapPick({k:'changes',who:r.getAttribute('data-who')},r);});
 $('#chPeople').addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var r=e.target.closest('tr[data-who]');if(r){e.preventDefault();snapPick({k:'changes',who:r.getAttribute('data-who')},r);}});
-$('#chSnapDetX').addEventListener('click',function(){snapSel=null;snapRender();});
+$('#chSnapDetX').addEventListener('click',function(){snapSel=null;chRender();snapRender();});
 $('#chSnapWhen').addEventListener('change',snapRender);
 function chLoad(){
   var a=site({action:'publishes'}).then(function(j){chAll.vers=(j.versions||[]).map(function(x){return {from:x.from,to:x.to,who:x.who,when:x.at,fallback:(x.n||0)+' change'+(x.n===1?'':'s'),pages:pagesIn((x.files||[]).join(' '))};});}).catch(function(){chAll.vers=[];});
   var b=site({action:'history',n:100}).then(function(j){var isEd=function(c){return /^Website editor: /.test(c.message)&&!/^Website editor: publish changes/.test(c.message);};chAll.draft=j.draft.filter(isEd).map(chEnt);chAll.live=j.live.filter(isEd).map(chEnt);});
   var c=site({action:'activity'}).then(function(j){chAll.photo=(j.items||[]).map(photoEnt);}).catch(function(){chAll.photo=[];});
-  Promise.all([a,b,c]).then(function(){chAll.live=chAll.live.concat(chAll.photo||[]).sort(function(p,q){return new Date(q.when)-new Date(p.when);});chFill();chRender();snapRender();}).catch(function(er){say(er.message,true);});
+  Promise.all([a,b,c]).then(function(){chAll.live=chAll.live.concat(chAll.photo||[]).sort(function(p,q){return new Date(q.when)-new Date(p.when);});if(!snapInit){snapInit=1;if(chAll.draft.length&&!(me&&me.role==='editor'))snapSel={k:'wait'};}chFill();chRender();snapRender();}).catch(function(er){say(er.message,true);});
 }
 $('[data-pane=changes]').addEventListener('click',function(e){
   var b=e.target.closest('[data-undo]');if(!b||b.disabled)return;var sha=b.closest('.ad-ent').getAttribute('data-sha');
