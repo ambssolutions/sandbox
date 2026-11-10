@@ -42,7 +42,9 @@ module.exports = async function (req, res) {
   const action = String(b.action || '');
   /* Which section of the editor each action belongs to. Publishing and discarding are for anyone who can change pages or contact details. */
   const SECTION = { pages: 'pages', page: 'pages', edit: 'pages', op: 'pages', add: 'pages', image: 'pages', preview: 'pages', newpage: 'pages', deletepage: 'pages', menu: 'pages', menuop: 'pages', details: 'details', savedetails: 'details', history: 'changes', undo: 'changes', changedetail: 'changes' };
-  if (action !== 'status' && !(action === 'publish' || action === 'discard' ? U.can(me, 'pages') || U.can(me, 'details') : U.can(me, SECTION[action] || 'pages'))) return L.send(res, 403, { error: 'You do not have access to this section.' });
+  /* Editors do not see the history list. They can still publish, discard and step back through their own unpublished changes. */
+  if (me.role === 'editor' && ['history', 'changedetail', 'undo'].includes(action)) return L.send(res, 403, { error: 'You do not have access to this section.' });
+  if (action !== 'status' && !(action === 'publish' || action === 'discard' || action === 'undolast' ? U.can(me, 'pages') || U.can(me, 'details') : U.can(me, SECTION[action] || 'pages'))) return L.send(res, 403, { error: 'You do not have access to this section.' });
   if (!G.ready()) return L.send(res, action === 'status' ? 200 : 503, action === 'status' ? { ready: false } : { error: 'The website editor is not connected yet. It needs the GitHub access key to be added in Vercel.' });
   try {
     if (action === 'status') {
@@ -175,6 +177,18 @@ module.exports = async function (req, res) {
       return L.send(res, 200, { ok: true });
     }
     if (action === 'publish') { if (!w.draft) return L.send(res, 400, { error: 'There are no changes waiting to publish.' }); await G.publish(); return L.send(res, 200, { ok: true }); }
+    if (action === 'undolast') {
+      if (!w.draft) return L.send(res, 400, { error: 'There are no changes waiting to undo.' });
+      const live = await G.history(G.LIVE(), '', 30), dh = await G.history(G.DRAFT, '', 30), set = new Set(live.map((c) => c.sha));
+      /* newest first; walk from the oldest so an earlier undo cancels the change it reversed */
+      const stack = []; dh.filter((c) => !set.has(c.sha)).reverse().forEach((c) => { if (/^Website editor: undid /.test(c.message || '')) stack.pop(); else stack.push(c); });
+      if (!stack.length) return L.send(res, 400, { error: 'There are no changes waiting to undo.' });
+      const r = await G.revertFiles(stack[stack.length - 1].sha);
+      if (!r.files.length) return L.send(res, 400, { error: 'There was nothing to undo.' });
+      await save(r.files, 'undid "' + r.message.replace(/^Website editor: /, '').slice(0, 60) + '"');
+      if (stack.length === 1) await G.discard(); /* nothing left that differs from the website */
+      return L.send(res, 200, { ok: true });
+    }
     if (action === 'discard') { await G.discard(); return L.send(res, 200, { ok: true }); }
     if (action === 'newpage' && !NEW_PAGES) return L.send(res, 403, { error: 'Creating new pages is switched off for now.' });
     if (action === 'newpage') {

@@ -53,6 +53,7 @@ function enter(user){
   $('#hmDate').textContent=new Date().toLocaleDateString('en-NZ',{weekday:'long',day:'numeric',month:'long'})+' \u00b7 everything you can change on mikia.co.nz';
   [].forEach.call(root.querySelectorAll('[data-need]'),function(el){var n=el.getAttribute('data-need');el.hidden=!(n==='owner'?user.super:user.role==='owner'||user.role==='manager');});
   var acc=(user.role==='owner'||user.role==='manager'||!user.access)?Object.keys(SECNAME):user.access,can=function(k){return acc.indexOf(k)>=0;};
+  if(user.role==='editor')acc=acc.filter(function(k){return k!=='changes';});
   Object.keys(SECNAME).forEach(function(k){var on=can(k);[].forEach.call(root.querySelectorAll('.sb [data-tab='+k+']'),function(el){el.hidden=!on;});[].forEach.call(root.querySelectorAll('.hm-t[data-tab='+k+']'),function(el){el.closest('.hm-card').hidden=!on;});[].forEach.call(root.querySelectorAll('.hm-pill[data-tab='+k+']'),function(el){el.hidden=!on;});});
   [].forEach.call(root.querySelectorAll('.hm-pill[data-go=newpage]'),function(el){el.hidden=!NEWPAGES||!can('pages');});
   [].forEach.call(root.querySelectorAll('.hm-h'),function(h){var g=h.nextElementSibling;if(g&&g.classList.contains('hm-grid')&&!g.querySelector('.hm-card:not([hidden])')){h.hidden=true;g.hidden=true;}});
@@ -311,6 +312,10 @@ $('#rvKeep').addEventListener('click',rvClose);
 $('#rvGo').addEventListener('click',function(e){
   var b=e.target;b.disabled=true;say('Publishing...');
   site({action:'publish'}).then(function(){rvClose();say('Published. The website updates in about a minute.');return siteStatus();}).catch(function(er){rvClose();say(er.message,true);}).then(function(){b.disabled=false;if(edPath)edLoad(edPath);});
+});
+$('#adUndoLast').addEventListener('click',function(e){
+  var b=e.target;b.disabled=true;
+  site({action:'undolast'}).then(function(){say('The last change was undone.');return siteStatus();}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;if(edPath)edLoad(edPath);});
 });
 $('#adDiscard').addEventListener('click',function(e){
   if(!confirm('Throw away all changes that are not published yet? This cannot be undone.'))return;

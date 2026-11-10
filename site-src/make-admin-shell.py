@@ -15,6 +15,7 @@ def between(a, z, inc_z=True):
 login = between('<div class="ad-card" id="adLogin">', '</form></div>\n')
 invite = between('<div class="ad-card" id="adInvite" hidden>', '</form></div>\n')
 draft = between('<div class="ad-card ad-draft" id="adDraft" hidden>', '</div></div>\n')
+draft = draft.replace('<button type="button" id="adDiscard"', '<button type="button" id="adUndoLast">Undo last change</button><button type="button" id="adDiscard"', 1)
 setup = between('<p class="ad-note" id="adSetup" hidden>', '</p>\n')
 note = between('<p class="ad-note" id="adNote" hidden>', '</p>\n')
 start = h.index('<div data-pane="photos">'); end = h.index('</div></div></section></main>')
