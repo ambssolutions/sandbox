@@ -540,14 +540,14 @@ function whatHtml(lines){
 function crumbs(lines){var seen={},out=[];lines.forEach(function(l){var pg=l.file&&/\.html$/.test(l.file)?pn(l.file):(l.file||'');var parts=[pg];if(l.sec)parts.push(l.sec);if(l.under)parts.push(l.under);var t=parts.filter(Boolean).join(' \u203a ')+(l.el?' \u00b7 '+l.el:'');if(t&&!seen[t]){seen[t]=1;out.push(t);}});return out;}
 var sumQ=[],sumBusy=0;
 function sumRun(){while(sumBusy<2&&sumQ.length){(function(it){sumBusy++;var req=it.row.hasAttribute('data-from')?{action:'changedetail',from:it.row.getAttribute('data-from'),to:it.row.getAttribute('data-to')}:{action:'changedetail',sha:it.row.getAttribute('data-sha')};
-  site(req).then(function(j){var c=crumbs(j.lines||[]);var el=it.row.querySelector('[data-sum]');if(el&&c.length)el.textContent=c.slice(0,3).join('  |  ')+(c.length>3?'  |  +'+(c.length-3)+' more':'');}).catch(function(){}).then(function(){sumBusy--;sumRun();});})(sumQ.shift());}}
+  site(req).then(function(j){var c=crumbs(j.lines||[]);var el=it.row.querySelector('[data-sum]');if(el&&c.length)el.textContent=c.slice(0,12).join('  |  ')+(c.length>12?'  |  +'+(c.length-12)+' more':'');}).catch(function(){}).then(function(){sumBusy--;sumRun();});})(sumQ.shift());}}
 function chSums(sel){var rows=[].slice.call(document.querySelectorAll(sel+' .ad-row[data-sha],'+sel+' .ad-row[data-from]')).slice(0,12);rows.forEach(function(r){sumQ.push({row:r});});sumRun();}
 /* The Changes lists are tables: page, section, who, what changed, Undo. One block per entry, one row per change inside it. */
 function trunc(s,n){s=String(s||'');return s.length>n?s.slice(0,n-1)+'…':s;}
 function lineHtml(l){
-  if(l.type==='changed')return '<del title="'+esc(l.from)+'">'+esc(trunc(l.from,90))+'</del> <span class="ad-arrow">→</span> <ins title="'+esc(l.to)+'">'+esc(trunc(l.to,90))+'</ins>';
-  if(l.type==='added')return '<b>Added</b> <ins title="'+esc(l.to)+'">'+esc(trunc(l.to,90))+'</ins>';
-  if(l.type==='removed')return '<b>Removed</b> <del title="'+esc(l.from)+'">'+esc(trunc(l.from,90))+'</del>';
+  if(l.type==='changed')return '<del>'+esc(l.from)+'</del> <span class="ad-arrow">→</span> <ins>'+esc(l.to)+'</ins>';
+  if(l.type==='added')return '<b>Added</b> <ins>'+esc(l.to)+'</ins>';
+  if(l.type==='removed')return '<b>Removed</b> <del>'+esc(l.from)+'</del>';
   return esc(l.what||'');
 }
 function secHtml(l){
@@ -565,7 +565,7 @@ function entSkeleton(e){
   return '<tbody class="ad-ent" '+entAttrs(e)+'><tr><td class="c-page">'+esc(e.fallback||'')+'</td><td class="c-sec ad-wait">Loading…</td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small></td><td class="c-what"></td>'+(e.sha?'<td class="c-act"><button type="button" data-undo="1">Undo</button></td>':'')+'</tr></tbody>';
 }
 function entFill(tb,lines,e){
-  var shown=lines.slice(0,4),more=lines.length-shown.length,n=shown.length+(more>0?1:0)||1;
+  var shown=lines.slice(0,300),more=lines.length-shown.length,n=shown.length+(more>0?1:0)||1;
   var by='<td class="c-by" rowspan="'+n+'"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small></td>';
   var act=e.sha?'<td class="c-act" rowspan="'+n+'"><button type="button" data-undo="1">Undo</button></td>':'';
   var pg='<td class="c-page" rowspan="'+n+'">'+pageHtml(lines,e.fallback)+'</td>';

@@ -234,3 +234,6 @@ html body.adm .ad-snap select{width:200px;min-width:0;max-width:100%;flex:0 0 au
 .ad-failcard h2{margin:0 0 4px}
 .ad-failcard[hidden]{display:none}
 .ad-photoover #pbCard{display:none}
+
+.ad-tbl .c-what{overflow-wrap:anywhere;white-space:normal}
+.ad-tbl .c-what ins,.ad-tbl .c-what del{display:inline;box-decoration-break:clone;-webkit-box-decoration-break:clone}

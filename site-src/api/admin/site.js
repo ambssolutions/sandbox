@@ -197,8 +197,8 @@ module.exports = async function (req, res) {
         else if (!/content\.js$|llms\.txt$/.test(f.path)) lines.push({ file: f.path, type: 'note', what: 'File changed' });
       }
       if (htmlDiffs.length > 3) { // the same menu, footer or contact change on every page: show it once
-        for (const x of P.diffPages(htmlDiffs[0].before, htmlDiffs[0].after).slice(0, 40)) lines.push(Object.assign({ file: 'On all ' + htmlDiffs.length + ' pages' }, x));
-      } else for (const hd of htmlDiffs) for (const x of P.diffPages(hd.before, hd.after).slice(0, 40)) lines.push(Object.assign({ file: hd.path }, x));
+        for (const x of P.diffPages(htmlDiffs[0].before, htmlDiffs[0].after).slice(0, 400)) lines.push(Object.assign({ file: 'On all ' + htmlDiffs.length + ' pages' }, x));
+      } else for (const hd of htmlDiffs) for (const x of P.diffPages(hd.before, hd.after).slice(0, 400)) lines.push(Object.assign({ file: hd.path }, x));
       const known = new Set(); for (const l of lines) if (l.file === 'Contact details') { if (l.from) known.add(l.from); if (l.to) known.add(l.to); }
       const strip = (v) => String(v || '').replace(/^(mailto:|tel:)/, '');
       const shown = lines.filter((l) => l.file === 'Contact details' || !(known.has(strip(l.from)) || known.has(strip(l.to))));
