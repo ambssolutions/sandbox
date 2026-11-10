@@ -26,7 +26,7 @@ module.exports = async function (req, res) {
     const out = await L.put(name, buf, { access: 'public', contentType: k[0], addRandomSuffix: false, cacheControlMaxAge: 31536000 });
     photos.push({ id: name, src: out.url, alt: 'MiKia project photo', caption: '', desc: '', blob: true });
     await L.writeManifest(photos);
-    await L.logActivity(me, { kind: 'add', pid: name, title: 'Photo', src: out.url });
+    await L.logActivity(me, { kind: 'add', pid: name, title: 'Photo', src: out.url, pos: photos.length });
     return L.send(res, 200, { ok: true, photos: photos.map(L.publicPhoto) });
   } catch (e) {
     await L.logActivity(me, { area: 'Photos', kind: 'failed', title: 'Photo', text: 'Could not go live (adding a photo): ' + String(e.message || '').slice(0, 140) });

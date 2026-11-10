@@ -60,7 +60,7 @@ module.exports = async function (req, res) {
   }
   if (action === 'activity') {
     const all = await L.readActivity();
-    return L.send(res, 200, { items: all.filter((x) => !isEd || x.by === me.email).slice(0, 100) });
+    return L.send(res, 200, { items: all.filter((x) => !isEd || x.by === me.email).slice(0, 100).map((x) => { const y = Object.assign({}, x); if ((y.area || 'Photos') === 'Photos' && /^(add|move|remove)$/.test(y.kind) && !y.undo && (y.kind !== 'remove' || y.rec)) y.canUndo = true; delete y.rec; return y; }) });
   }
   if (!G.ready()) return L.send(res, action === 'status' ? 200 : 503, action === 'status' ? { ready: false } : { error: 'The website editor is not connected yet. It needs the GitHub access key to be added in Vercel.' });
   try {

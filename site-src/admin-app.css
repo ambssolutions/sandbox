@@ -309,3 +309,7 @@ html body .ad-captxt label{display:flex;flex-direction:column;gap:4px;font-size:
 html body .ad-captxt input{font:inherit;font-size:14px;padding:9px 11px;border-radius:10px;border:1px solid rgba(128,128,128,.45);background:#fff;color:#15171a;width:100%;box-sizing:border-box}
 @media(max-width:700px){html body .ad-captxt{grid-template-columns:1fr}}
 html body .ad-photoover .ad-row.ad-pick{box-shadow:0 0 0 2px #c8323c;transition:box-shadow .3s}
+
+/* Photo changes: a small picture of the photo */
+html body .ad-thumb{display:block;width:96px;height:60px;object-fit:cover;border-radius:8px;margin-top:6px;border:1px solid rgba(128,128,128,.3)}
+html body .ad-tbl td small{display:block}

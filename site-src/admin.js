@@ -83,18 +83,18 @@ failBox.addEventListener('click',function(e){
   (loc&&!all?Promise.resolve():site({action:'dismissfail',id:id})).then(loadFailures);
 });
 /* ---- photos ---- */
-var capData=[],capSaved=[],capT=null,capBusy=false;
+var capData=[],capSaved=[],capT=null,capBusy=false,capOK=false;
 function render(photos,storage){
   note.hidden=!!storage;
   list.innerHTML=photos.map(function(p,i){
     return '<li class="ad-row" data-id="'+esc(p.id)+'"><img src="'+esc(p.src)+'" alt="" width="120" height="75" loading="lazy"><div class="ad-cap"><b>Photo '+(i+1)+'</b><span>'+(p.stock?'Stock photo':'Uploaded')+'</span><span class="ad-dims"></span></div>'
-    +'<div class="ad-btns"><button type="button" data-act="up" aria-label="Move up"'+(i?'':' disabled')+'>&uarr;</button><button type="button" data-act="down" aria-label="Move down"'+(i<photos.length-1?'':' disabled')+'>&darr;</button><button type="button" data-act="rm" class="ad-rm">Remove</button></div>'+(phHome?'<div class="ad-captxt"><label>Heading under this photo<input type="text" maxlength="80" data-cap="t" placeholder="For example: Rural family home" value="'+esc((capData[i]||{}).t||'')+'"></label><label>Line under the heading<input type="text" maxlength="220" data-cap="d" placeholder="One short sentence about this photo" value="'+esc((capData[i]||{}).d||'')+'"></label></div>':'')+'</li>';
+    +'<div class="ad-btns"><button type="button" data-act="up" aria-label="Move up"'+(i?'':' disabled')+'>&uarr;</button><button type="button" data-act="down" aria-label="Move down"'+(i<photos.length-1?'':' disabled')+'>&darr;</button><button type="button" data-act="rm" class="ad-rm">Remove</button></div>'+(capOK?'<div class="ad-captxt"><label>Heading under this photo<input type="text" maxlength="80" data-cap="t" placeholder="For example: Rural family home" value="'+esc((capData[i]||{}).t||'')+'"></label><label>Line under the heading<input type="text" maxlength="220" data-cap="d" placeholder="One short sentence about this photo" value="'+esc((capData[i]||{}).d||'')+'"></label></div>':'')+'</li>';
   }).join('')||'<li class="ad-empty">No photos yet. The carousel will show the stock photos until you add one.</li>';
   $('#adCount').textContent=photos.length+(photos.length===1?' photo':' photos');
   [].forEach.call(list.querySelectorAll('.ad-row'),function(r){var im=r.querySelector('img'),o=r.querySelector('.ad-dims');if(im&&o)showDims(im,o,im.getAttribute('src'));});
 }
 function load(){
-  return api('/api/admin/photos').then(function(j){if(j.auth===false){showLogin();return;}render(j.photos,j.storage);loadFb();}).catch(function(e){
+  return site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();capOK=true;}).catch(function(){capOK=false;}).then(function(){var h=document.getElementById('phCapHelp');if(h)h.hidden=!capOK;return api('/api/admin/photos');}).then(function(j){if(j.auth===false){showLogin();return;}render(j.photos,j.storage);loadFb();}).catch(function(e){
     if(e.status===401)showLogin();else say(e.message,true);
   });
 }
@@ -113,7 +113,7 @@ function capFlushPage(){
   var ch=ks.map(function(k){return {i:Number(k),t:capPend[k].t,d:capPend[k].d};});capPend={};capPB=true;
   return post('/api/admin/site',{action:'captions',caps:ch}).then(function(){ch.forEach(function(c){capSaved[c.i]={t:c.t,d:c.d};});capData=capSaved.slice();if(typeof autoNote==='function')autoNote('Heading and line saved to your draft. They go on the website when you press Publish.');return siteStatus();}).catch(function(er){say('Could not save the heading or line: '+er.message,true);ch.forEach(function(c){if(!capPend[c.i])capPend[c.i]={t:c.t,d:c.d};});}).then(function(){capPB=false;});
 }
-function capNote(t,bad){var n=document.getElementById('edCapNote');if(n){n.textContent=t;n.className='ad-help'+(bad?' ad-bad':'');}}
+function capNote(t,bad){['edCapNote','phCapNote'].forEach(function(id){var n=document.getElementById(id);if(n){n.textContent=t;n.className='ad-help'+(bad?' ad-bad':'');}});}
 function capCollect(){var out=[];[].forEach.call(list.querySelectorAll('.ad-row'),function(r,i){var t=r.querySelector('[data-cap=t]'),d=r.querySelector('[data-cap=d]');if(!t||!d)return;out.push({i:i,t:t.value.trim(),d:d.value.trim()});});return out;}
 function capSaveNow(){
   clearTimeout(capT);if(capBusy)return Promise.resolve();
@@ -619,17 +619,18 @@ function tblSet(id,ents,empty){
 function pagesIn(s){var m=String(s||'').match(/\b[a-z0-9-]+\.html\b/g);return m&&m.length?m.filter(function(x,i){return m.indexOf(x)===i;}):['Other'];}
 function photoEnt(x){return {photo:1,id:x.id,who:x.who,when:x.at,pages:[x.area||'Photos'],act:x};}
 function photoLine(x){
-  if(x.kind==='add')return '<b>Added a photo</b>';
-  if(x.kind==='remove')return '<b>Removed a photo</b>';
-  if(x.kind==='move')return '<b>Moved a photo '+(x.dir==='up'?'up':'down')+'</b>';
+  if(x.kind==='add')return '<b>Added a photo</b>'+(x.pos?'<small>Now photo '+x.pos+' in the Media box</small>':'');
+  if(x.kind==='remove')return '<b>Removed a photo</b>'+(x.pos?'<small>It was photo '+x.pos+' in the Media box</small>':'');
+  if(x.kind==='move')return '<b>Moved a photo '+(x.dir==='up'?'up':'down')+'</b>'+(x.from&&x.to?'<small>From photo '+x.from+' to photo '+x.to+'</small>':'');
+  if(x.kind==='undo')return '<b>'+esc(x.text||'Undid a photo change')+'</b>';
   return esc(x.kind||'');
 }
 function photoBody(e){
   var x=e.act,area=x.area||'Photos',isP=area==='Photos';
   var pg='<b>'+esc(area)+'</b>'+(isP?'<small>Media box on the homepage</small>':'');
-  var sub=isP?({add:'New photo',remove:'Photo removed',move:'Order'}[x.kind]||''):'';
+  var sub=isP?({add:'New photo',remove:'Photo removed',move:'Order',undo:'Undo'}[x.kind]||''):'';var th=isP&&x.src?'<img class="ad-thumb" src="'+esc(x.src)+'" alt="" width="96" height="60" loading="lazy" onerror="this.style.display=\'none\'">':'';
   var what=isP?photoLine(x):esc(x.text||x.kind||'');
-  return '<tbody class="ad-ent" data-photo="'+esc(x.id)+'"><tr><td class="c-page">'+pg+'</td><td class="c-sec"><b>'+esc(trunc(x.title||area,50))+'</b>'+(sub||x.undo?'<small>'+esc(sub)+(x.undo?' (undone)':'')+'</small>':'')+'</td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small>'+chipHtml(e)+'</td><td class="c-what">'+what+'</td>'+'<td class="c-act"></td>'+'</tr></tbody>';
+  return '<tbody class="ad-ent" data-photo="'+esc(x.id)+'"><tr><td class="c-page">'+pg+'</td><td class="c-sec"><b>'+esc(trunc(x.title||area,50))+'</b>'+(sub||x.undo?'<small>'+esc(sub)+(x.undo?' (undone)':'')+'</small>':'')+th+'</td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small>'+chipHtml(e)+'</td><td class="c-what">'+what+'</td>'+(x.canUndo?'<td class="c-act"><button type="button" data-undo="1" data-photoundo="1">Undo</button></td>':'<td class="c-act"></td>')+'</tr></tbody>';
 }
 function chEnt(c){return {sha:c.sha,who:chWho(c),when:c.date,fallback:chMsg(c),pages:pagesIn(c.message)};}
 /* filters: person, page, when */
@@ -713,7 +714,9 @@ function chLoad(){
   Promise.all([a,b,c]).then(function(){chAll.live=chAll.live.concat(chAll.photo||[]).sort(function(p,q){return new Date(q.when)-new Date(p.when);});if(!snapInit){snapInit=1;if(chAll.draft.length&&!(me&&me.role==='editor'))snapSel={k:'wait'};}chFill();chRender();snapRender();}).catch(function(er){say(er.message,true);});
 }
 $('[data-pane=changes]').addEventListener('click',function(e){
-  var b=e.target.closest('[data-undo]');if(!b||b.disabled)return;var sha=b.closest('.ad-ent').getAttribute('data-sha');
+  var b=e.target.closest('[data-undo]');if(!b||b.disabled)return;
+  if(b.hasAttribute('data-photoundo')){var pid=b.closest('.ad-ent').getAttribute('data-photo');if(!confirm('Undo this photo change? It takes effect on the website straight away.'))return;b.disabled=true;post('/api/admin/photos',{action:'undo',act:pid}).then(function(){say('Undone. The Media box has been updated.');chLoad();}).catch(function(er){say(er.message,true);b.disabled=false;});return;}
+  var sha=b.closest('.ad-ent').getAttribute('data-sha');
   if(!confirm('Undo this change? The undo goes into your draft and is not published until you press Publish.'))return;
   b.disabled=true;site({action:'undo',sha:sha}).then(function(){say('Undone in your draft.');return siteStatus();}).then(chLoad).catch(function(er){say(er.message,true);b.disabled=false;});
 });
