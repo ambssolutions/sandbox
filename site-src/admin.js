@@ -554,7 +554,7 @@ function tblSet(id,ents,empty){
   var rows=[].slice.call(t.querySelectorAll('tbody.ad-ent'));rows.forEach(function(tb,i){if(!ents[i].photo)entQ.push({tb:tb,e:ents[i]});});entRun();
 }
 function pagesIn(s){var m=String(s||'').match(/\b[a-z0-9-]+\.html\b/g);return m&&m.length?m.filter(function(x,i){return m.indexOf(x)===i;}):['Other'];}
-function photoEnt(x){return {photo:1,id:x.id,who:x.who,when:x.at,pages:['Photos'],act:x};}
+function photoEnt(x){return {photo:1,id:x.id,who:x.who,when:x.at,pages:[x.area||'Photos'],act:x};}
 function photoLine(x){
   var t=esc(trunc(x.title||'(no title)',60));
   if(x.kind==='edit'){var a=x.before||{},b=x.after||{},ls=[];if((a.caption||'')!==(b.caption||''))ls.push('<div><small>Title</small> <del>'+esc(trunc(a.caption,60))+'</del> <span class="ad-arrow">\u2192</span> <ins>'+esc(trunc(b.caption,60))+'</ins></div>');if((a.desc||'')!==(b.desc||''))ls.push('<div><small>Description</small> <del>'+esc(trunc(a.desc,70))+'</del> <span class="ad-arrow">\u2192</span> <ins>'+esc(trunc(b.desc,70))+'</ins></div>');return ls.join('')||'Edited';}
@@ -564,13 +564,16 @@ function photoLine(x){
   return esc(x.kind||'');
 }
 function photoBody(e){
-  var x=e.act;
-  return '<tbody class="ad-ent" data-photo="'+esc(x.id)+'"><tr><td class="c-page"><b>Photos</b><small>Media box on the homepage</small></td><td class="c-sec"><b>'+esc(trunc(x.title||'Photo',50))+'</b><small>'+({edit:'Title and description',add:'New photo',remove:'Photo removed',move:'Order'}[x.kind]||'')+(x.undo?' (undone)':'')+'</small></td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small></td><td class="c-what">'+photoLine(x)+'</td>'+(x.kind==='edit'&&!x.undo?'<td class="c-act"><button type="button" data-undophoto="1">Undo</button></td>':'<td class="c-act"></td>')+'</tr></tbody>';
+  var x=e.act,area=x.area||'Photos',isP=area==='Photos';
+  var pg='<b>'+esc(area)+'</b>'+(isP?'<small>Media box on the homepage</small>':'');
+  var sub=isP?({edit:'Title and description',add:'New photo',remove:'Photo removed',move:'Order'}[x.kind]||''):'';
+  var what=isP?photoLine(x):esc(x.text||x.kind||'');
+  return '<tbody class="ad-ent" data-photo="'+esc(x.id)+'"><tr><td class="c-page">'+pg+'</td><td class="c-sec"><b>'+esc(trunc(x.title||area,50))+'</b>'+(sub||x.undo?'<small>'+esc(sub)+(x.undo?' (undone)':'')+'</small>':'')+'</td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small></td><td class="c-what">'+what+'</td>'+(isP&&x.kind==='edit'&&!x.undo?'<td class="c-act"><button type="button" data-undophoto="1">Undo</button></td>':'<td class="c-act"></td>')+'</tr></tbody>';
 }
 function chEnt(c){return {sha:c.sha,who:chWho(c),when:c.date,fallback:chMsg(c),pages:pagesIn(c.message)};}
 /* filters: person, page, when */
 var chAll={draft:[],live:[],vers:[]};
-function pageLabel(f){return f==='Other'?'Other (contact details, pictures...)':f==='Photos'?'Photos (Media box)':pn(f);}
+function pageLabel(f){return f==='Other'?'Other (contact details, pictures...)':f==='Photos'?'Photos (Media box)':/\.html$/.test(f)?pn(f):f;}
 function chFill(){
   var who={},pg={};['draft','live','vers'].forEach(function(k){chAll[k].forEach(function(e){if(e.who)who[e.who]=1;(e.pages||[]).forEach(function(p){pg[p]=1;});});});
   var sw=$('#chFWho'),sp=$('#chFPage'),cw=sw.value,cp=sp.value;

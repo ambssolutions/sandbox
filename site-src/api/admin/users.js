@@ -112,6 +112,8 @@ module.exports = async function (req, res) {
         if (!us.some((x) => x.role === 'owner' && x.hash && !x.invite && !x.disabled)) return L.send(res, 400, { error: 'Add an owner who can sign in with an email and password first, or you could be locked out.' });
       }
       await S.save(patch);
+      const SAID = { github_token: (v) => v ? 'Saved the GitHub key' : 'Removed the GitHub key', github_repo: (v) => v ? 'Changed the GitHub repository' : 'Cleared the GitHub repository', github_branch: (v) => v ? 'Changed the GitHub branch' : 'Cleared the GitHub branch', smtp_password: (v) => v ? 'Saved the email password' : 'Removed the email password', smtp_user: (v) => v ? 'Changed the email sender account' : 'Cleared the email sender account', smtp_host: (v) => v ? 'Changed the email server' : 'Cleared the email server', master_login: (v) => v === 'off' ? 'Switched on "Require an email and password for everyone"' : 'Switched the master-password login back on', feedback_to: (v) => v ? 'Feedback emails now go to: ' + v : 'Cleared the feedback email addresses' };
+      for (const k of Object.keys(patch)) await L.logActivity(me, { area: 'Connections', kind: 'settings', title: k === 'feedback_to' ? 'Feedback emails' : k.indexOf('github') === 0 ? 'GitHub' : k.indexOf('smtp') === 0 ? 'Email' : 'Sign-in', text: (SAID[k] || (() => 'Changed a setting'))(patch[k]) });
       keyCache = { t: 0, sig: '', v: null };
       return L.send(res, 200, { settings: S.summary() });
     }
@@ -137,6 +139,7 @@ module.exports = async function (req, res) {
       if (!(mh ? U.checkPassword(cur, mh) : (env && L.safeEq(cur, env)))) return L.send(res, 400, { error: 'Your current password is not right.' });
       const pr0 = U.passwordProblem(b.next); if (pr0) return L.send(res, 400, { error: pr0 });
       await S.setMasterHash(U.hashPassword(b.next));
+      await L.logActivity(me, { area: 'Account', kind: 'password', title: 'Master password', text: 'Changed the master password' });
       return L.send(res, 200, { ok: true });
     }
     const u = users.find((x) => x.email === me.email);
@@ -145,6 +148,7 @@ module.exports = async function (req, res) {
     const pr = U.passwordProblem(b.next); if (pr) return L.send(res, 400, { error: pr });
     u.hash = U.hashPassword(b.next);
     await U.writeUsers(users);
+    await L.logActivity(me, { area: 'Account', kind: 'password', title: me.email, text: 'Changed their own password' });
     return L.send(res, 200, { ok: true });
   }
   if (action === 'super') {
@@ -155,6 +159,7 @@ module.exports = async function (req, res) {
     if (b.on && (t.disabled || !t.hash)) return L.send(res, 400, { error: 'They need a working login first.' });
     if (b.on) t.super = true; else delete t.super;
     await U.writeUsers(users);
+    await L.logActivity(me, { area: 'People', kind: 'super', title: t.email, text: b.on ? 'Made a super admin' : 'Removed super admin rights' });
     return L.send(res, 200, { users: users.map(U.publicUser) });
   }
   if (action === 'viewas') {
@@ -202,6 +207,7 @@ module.exports = async function (req, res) {
     const token = crypto.randomBytes(24).toString('base64url');
     u.invite = { h: hashToken(token), exp: new Date(Date.now() + INVITE_DAYS * 864e5).toISOString() };
     await U.writeUsers(users);
+    await L.logActivity(me, { area: 'People', kind: 'invite', title: email, text: 'Invited as ' + (wantSuper ? 'super admin' : role === 'owner' ? 'owner' : role === 'manager' ? 'MiKia admin' : 'editor') + (role === 'editor' && u.access ? ' (sections: ' + u.access.join(', ') + ')' : '') });
     return L.send(res, 200, await inviteReply(email, L.origin(req) + '/admin?invite=' + token + '&email=' + encodeURIComponent(email)));
   }
   if (action === 'reset') {
@@ -211,6 +217,7 @@ module.exports = async function (req, res) {
     const token = crypto.randomBytes(24).toString('base64url');
     u.invite = { h: hashToken(token), exp: new Date(Date.now() + INVITE_DAYS * 864e5).toISOString() };
     await U.writeUsers(users);
+    await L.logActivity(me, { area: 'People', kind: 'reset', title: email, text: 'Sent a new password link' });
     return L.send(res, 200, await inviteReply(email, L.origin(req) + '/admin?invite=' + token + '&email=' + encodeURIComponent(email)));
   }
   if (action === 'access') {
@@ -219,6 +226,7 @@ module.exports = async function (req, res) {
     if (L.ROLE(u.role) !== 'editor') return L.send(res, 400, { error: 'Owners and MiKia admins can use every section.' });
     u.access = U.cleanAccess(b.access);
     await U.writeUsers(users);
+    await L.logActivity(me, { area: 'People', kind: 'access', title: u.email, text: 'Sections they can use: ' + (u.access.join(', ') || 'none') });
     return L.send(res, 200, { users: view() });
   }
   if (action === 'disable') {
@@ -228,6 +236,7 @@ module.exports = async function (req, res) {
     if (off && u.role === 'owner' && users.filter((x) => x.role === 'owner' && !x.disabled).length <= 1) return L.send(res, 400, { error: 'There must be at least one owner with access.' });
     if (off) u.disabled = true; else delete u.disabled;
     await U.writeUsers(users);
+    await L.logActivity(me, { area: 'People', kind: 'disable', title: email, text: off ? 'Switched their login off' : 'Switched their login back on' });
     return L.send(res, 200, { users: view() });
   }
   if (action === 'list') {
@@ -250,6 +259,7 @@ module.exports = async function (req, res) {
     if (wantSuper) u.super = true; else delete u.super;
     if (b.password) u.hash = U.hashPassword(b.password);
     await U.writeUsers(users);
+    await L.logActivity(me, { area: 'People', kind: 'save', title: email, text: 'Saved their login as ' + (wantSuper ? 'super admin' : role === 'owner' ? 'owner' : role === 'manager' ? 'MiKia admin' : 'editor') + (b.password ? ' and set a password' : '') });
     return L.send(res, 200, { users: view() });
   }
   if (action === 'remove') {
@@ -259,6 +269,7 @@ module.exports = async function (req, res) {
     if (u.role === 'owner' && owners() <= 1) return L.send(res, 400, { error: 'There must be at least one owner.' });
     if (email === me.email) return L.send(res, 400, { error: 'You cannot remove yourself while signed in.' });
     await U.writeUsers(users.filter((x) => x.email !== email));
+    await L.logActivity(me, { area: 'People', kind: 'remove', title: email, text: 'Removed this person' });
     return L.send(res, 200, { users: view().filter((x) => x.email !== email) });
   }
   return L.send(res, 400, { error: 'Unknown action.' });

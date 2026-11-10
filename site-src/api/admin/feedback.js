@@ -22,6 +22,7 @@ module.exports = async function (req, res) {
     else if (b.action === 'delete') items = items.filter((x) => x.id !== b.id);
     else return L.send(res, 400, { error: 'Unknown action.' });
     await L.writeFeedback(items);
+    await L.logActivity(me, { area: 'Client feedback', kind: b.action, title: (it.name || 'Someone') + (it.project ? ' - ' + it.project : ''), text: b.action === 'approve' ? 'Approved to show on the website' : b.action === 'hide' ? 'Hidden from the website' : 'Deleted this feedback' });
     return L.send(res, 200, { ok: true, items: view(items) });
   } catch (e) { return L.send(res, 502, { error: 'Could not save that. Please try again.' }); }
 };

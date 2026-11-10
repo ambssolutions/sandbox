@@ -226,7 +226,7 @@ module.exports = async function (req, res) {
       if (stack.length === 1) await G.discard(); /* nothing left that differs from the website */
       return L.send(res, 200, { ok: true });
     }
-    if (action === 'discard') { await G.discard(); return L.send(res, 200, { ok: true }); }
+    if (action === 'discard') { await G.discard(); await L.logActivity(me, { area: 'Website', kind: 'discard', title: 'Unpublished changes', text: 'Discarded all the changes that were waiting to be published' }); return L.send(res, 200, { ok: true }); }
     if (action === 'newpage' && !NEW_PAGES) return L.send(res, 403, { error: 'Creating new pages is switched off for now.' });
     if (action === 'newpage') {
       const slug = String(b.slug || '').toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40), from = okPath(b.from || 'privacy.html');
