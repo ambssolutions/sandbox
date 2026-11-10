@@ -272,6 +272,9 @@ module.exports = async function (req, res) {
       const n = {}; for (const k of Object.keys(cur)) n[k] = L.FB_CLEAN(b.details && b.details[k] != null ? b.details[k] : cur[k], 160);
       if (n.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(n.email)) return L.send(res, 400, { error: 'That email address does not look right.' });
       if (n.phone && !/^\+?[0-9]{6,15}$/.test(n.phone)) return L.send(res, 400, { error: 'The phone number for dialling should be digits only, like +6421573085.' });
+      /* Social links are shown on the website only as full web links, so a handle or a link without https is tidied here. */
+      if (n.instagram && !/^https?:\/\//i.test(n.instagram)) { const h = n.instagram.replace(/^@/, '').replace(/^(www\.)?instagram\.com\//i, '').replace(/[\/?#].*$/, ''); if (!/^[A-Za-z0-9._]+$/.test(h)) return L.send(res, 400, { error: 'Please paste the full Instagram link, like https://www.instagram.com/yourname' }); n.instagram = 'https://www.instagram.com/' + h + '/'; }
+      for (const k of ['facebook', 'linkedin']) if (n[k] && !/^https?:\/\//i.test(n[k])) { if (!/^(www\.)?[a-z0-9-]+\.[a-z]/i.test(n[k])) return L.send(res, 400, { error: 'Please paste the full ' + (k === 'facebook' ? 'Facebook' : 'LinkedIn') + ' link, starting with https://' }); n[k] = 'https://' + n[k]; }
       m.contact = Object.assign({}, c, { email: n.email, phone: n.phone, phoneDisplay: n.phoneDisplay, address1: n.address1, address2: n.address2 });
       m.social = Object.assign({}, s, { linkedin: n.linkedin, facebook: n.facebook, instagram: n.instagram }); m.nzbn = n.nzbn; m.companyNumber = n.companyNumber;
       const reps = [];
