@@ -284,3 +284,20 @@ html body #edModal .ad-top{display:flex;flex-wrap:nowrap;gap:8px;align-items:cen
 html body #edModal .ad-top button{padding:9px 12px;font-size:14px;white-space:nowrap;flex:0 0 auto}
 html body #edModal .ad-top #edModalSave{margin-left:auto}
 }
+
+/* Snapshot: tiles and people are clickable and open the changes behind the numbers */
+html body .ad-tile{font:inherit;color:inherit;text-align:left;background:#fff;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+html body .ad-tile:hover{border-color:#c8323c;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+html body .ad-tile:active{transform:translateY(1px)}
+html body .ad-tile[aria-pressed=true]{border-color:#c8323c;box-shadow:inset 0 0 0 1px #c8323c;background:#fff6f6}
+html body .ad-ppl tr.ad-click{cursor:pointer}html body .ad-ppl tr.ad-click:hover td{background:rgba(200,50,60,.06)}html body .ad-ppl tr.ad-click:focus-visible{outline:2px solid #c8323c;outline-offset:-2px}
+html body .ad-ppl.ad-flash{animation:adflash 1.2s ease}@keyframes adflash{0%,100%{box-shadow:none}30%{box-shadow:0 0 0 3px rgba(200,50,60,.45)}}
+html body .ad-snapdet{margin:4px 0 18px}
+html body .ad-snapdet-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 4px}
+html body .ad-snapdet-top h4{margin:0;font-size:16px;font-weight:700}
+html body .ad-snapdet-top button{font:inherit;font-size:13px;padding:6px 14px;border-radius:999px;border:1px solid rgba(128,128,128,.45);background:#fff;color:#1c1c1e;cursor:pointer}
+html body .ad-st{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.02em;padding:2px 8px;border-radius:999px;margin-left:8px;white-space:nowrap;vertical-align:1px}
+html body .ad-st-d{background:#fff0d6;color:#8a5200}
+html body .ad-st-l{background:#e3f6e8;color:#14532d}
+@media(max-width:700px){html body .ad-tbl:not(.ad-ppl) .c-by .ad-st{margin-left:6px}}
+@media(prefers-reduced-motion:reduce){html body .ad-ppl.ad-flash{animation:none}html body .ad-tile{transition:none}}

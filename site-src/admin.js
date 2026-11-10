@@ -570,12 +570,13 @@ function pageHtml(lines,fallback){
   return out.slice(0,3).map(function(f){var m=/^([a-z0-9-]+)\.html$/.exec(f);return m?'<b>'+esc(pn(f))+'</b><small>mikia.co.nz'+(m[1]==='index'?'/':'/'+m[1])+'</small>':'<b>'+esc(f)+'</b>';}).join('')+(out.length>3?'<small>and '+(out.length-3)+' more</small>':'');
 }
 function entAttrs(e){return e.sha?'data-sha="'+esc(e.sha)+'"':'data-from="'+esc(e.from)+'" data-to="'+esc(e.to)+'"';}
+function chipHtml(e){return e.chip?'<span class="ad-st '+(e.chip==='d'?'ad-st-d':'ad-st-l')+'">'+(e.chip==='d'?'Not live yet':'Live')+'</span>':'';}
 function entSkeleton(e){
-  return '<tbody class="ad-ent" '+entAttrs(e)+'><tr><td class="c-page">'+esc(e.fallback||'')+'</td><td class="c-sec ad-wait">Loading…</td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small></td><td class="c-what"></td>'+(e.sha?'<td class="c-act"><button type="button" data-undo="1">Undo</button></td>':'')+'</tr></tbody>';
+  return '<tbody class="ad-ent" '+entAttrs(e)+'><tr><td class="c-page">'+esc(e.fallback||'')+'</td><td class="c-sec ad-wait">Loading…</td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small>'+chipHtml(e)+'</td><td class="c-what"></td>'+(e.sha?'<td class="c-act"><button type="button" data-undo="1">Undo</button></td>':'')+'</tr></tbody>';
 }
 function entFill(tb,lines,e){
   var shown=lines.slice(0,300),more=lines.length-shown.length,n=shown.length+(more>0?1:0)||1;
-  var by='<td class="c-by" rowspan="'+n+'"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small></td>';
+  var by='<td class="c-by" rowspan="'+n+'"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small>'+chipHtml(e)+'</td>';
   var act=e.sha?'<td class="c-act" rowspan="'+n+'"><button type="button" data-undo="1">Undo</button></td>':'';
   var pg='<td class="c-page" rowspan="'+n+'">'+pageHtml(lines,e.fallback)+'</td>';
   var rows=shown.map(function(l,i){return '<tr>'+(i?'':pg)+'<td class="c-sec">'+secHtml(l)+'</td>'+(i?'':by)+'<td class="c-what">'+lineHtml(l)+'</td>'+(i?'':act)+'</tr>';});
@@ -605,7 +606,7 @@ function photoBody(e){
   var pg='<b>'+esc(area)+'</b>'+(isP?'<small>Media box on the homepage</small>':'');
   var sub=isP?({add:'New photo',remove:'Photo removed',move:'Order'}[x.kind]||''):'';
   var what=isP?photoLine(x):esc(x.text||x.kind||'');
-  return '<tbody class="ad-ent" data-photo="'+esc(x.id)+'"><tr><td class="c-page">'+pg+'</td><td class="c-sec"><b>'+esc(trunc(x.title||area,50))+'</b>'+(sub||x.undo?'<small>'+esc(sub)+(x.undo?' (undone)':'')+'</small>':'')+'</td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small></td><td class="c-what">'+what+'</td>'+'<td class="c-act"></td>'+'</tr></tbody>';
+  return '<tbody class="ad-ent" data-photo="'+esc(x.id)+'"><tr><td class="c-page">'+pg+'</td><td class="c-sec"><b>'+esc(trunc(x.title||area,50))+'</b>'+(sub||x.undo?'<small>'+esc(sub)+(x.undo?' (undone)':'')+'</small>':'')+'</td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small>'+chipHtml(e)+'</td><td class="c-what">'+what+'</td>'+'<td class="c-act"></td>'+'</tr></tbody>';
 }
 function chEnt(c){return {sha:c.sha,who:chWho(c),when:c.date,fallback:chMsg(c),pages:pagesIn(c.message)};}
 /* filters: person, page, when */
@@ -645,11 +646,41 @@ function snapRender(){
   ch.forEach(function(e){var p=P(e.who);p.ch++;(e.pages||[]).forEach(function(x){p.pg[x]=1;pages[x]=1;});var d=+new Date(e.when);if(d>p.last)p.last=d;});
   pb.forEach(function(e){var p=P(e.who);p.pub++;var d=+new Date(e.when);if(d>p.last)p.last=d;});
   var names=Object.keys(ppl).sort(function(a,b){return ppl[b].ch-ppl[a].ch||ppl[b].pub-ppl[a].pub;});
-  function tile(n,l){return '<div class="ad-tile"><b>'+n+'</b><span>'+esc(l)+'</span></div>';}
-  $('#chTiles').innerHTML=tile(ch.length,ch.length===1?'change made':'changes made')+tile(pb.length,pb.length===1?'publish':'publishes')+tile(wait,'waiting to publish')+tile(names.length,names.length===1?'person active':'people active')+tile(Object.keys(pages).length,Object.keys(pages).length===1?'page changed':'pages changed');
+  function tile(n,l,k){return '<button type="button" class="ad-tile" data-snap="'+k+'" aria-pressed="'+(snapSel&&snapSel.k===k&&!snapSel.who?'true':'false')+'"><b>'+n+'</b><span>'+esc(l)+'</span></button>';}
+  $('#chTiles').innerHTML=tile(ch.length,ch.length===1?'change made':'changes made','changes')+tile(pb.length,pb.length===1?'publish':'publishes','pub')+tile(wait,'waiting to publish','wait')+tile(names.length,names.length===1?'person active':'people active','people')+tile(Object.keys(pages).length,Object.keys(pages).length===1?'page changed':'pages changed','changes');
   var tb=$('#chPeople');[].slice.call(tb.querySelectorAll('tbody')).forEach(function(x){x.remove();});
-  tb.insertAdjacentHTML('beforeend','<tbody>'+(names.length?names.map(function(n){var p=ppl[n],pl=Object.keys(p.pg);return '<tr><td><b>'+esc(p.n)+'</b></td><td>'+p.ch+'</td><td>'+p.pub+'</td><td>'+(pl.length?esc(pl.slice(0,4).map(pageLabel).join(', '))+(pl.length>4?' and '+(pl.length-4)+' more':''):'–')+'</td><td>'+(p.last?esc(when2(new Date(p.last).toISOString())):'')+'</td></tr>';}).join(''):'<tr><td colspan="5" class="ad-empty">No changes in this period.</td></tr>')+'</tbody>');
+  tb.insertAdjacentHTML('beforeend','<tbody>'+(names.length?names.map(function(n){var p=ppl[n],pl=Object.keys(p.pg);return '<tr class="ad-click" tabindex="0" role="button" data-who="'+esc(p.n)+'" aria-label="Show the changes made by '+esc(p.n)+'"><td><b>'+esc(p.n)+'</b></td><td>'+p.ch+'</td><td>'+p.pub+'</td><td>'+(pl.length?esc(pl.slice(0,4).map(pageLabel).join(', '))+(pl.length>4?' and '+(pl.length-4)+' more':''):'–')+'</td><td>'+(p.last?esc(when2(new Date(p.last).toISOString())):'')+'</td></tr>';}).join(''):'<tr><td colspan="5" class="ad-empty">No changes in this period.</td></tr>')+'</tbody>');
+  if(typeof snapDetail==='function')snapDetail();
 }
+var snapSel=null;
+function snapDetail(){
+  var box=$('#chSnapDetail');if(!box)return;if(!snapSel||(me&&me.role==='editor')){box.hidden=true;return;}
+  var t=$('#chSnapWhen').value,per={today:'today',yesterday:'yesterday','7':'in the last 7 days'}[t]||'',ents,title,empty,hd='Changed by';
+  function inP(e){return snapIn(e.when,t);}
+  function chip(l,c){return l.map(function(e){return Object.assign({},e,{chip:c});});}
+  function newest(a,b){return new Date(b.when)-new Date(a.when);}
+  if(snapSel.k==='wait'){ents=chip(chAll.draft,'d').sort(newest);title='Changes not live yet';empty='Nothing is waiting to be published.';}
+  else if(snapSel.k==='pub'){ents=chAll.vers.filter(inP).sort(newest);title='Published '+per;empty='Nothing was published '+per+'.';hd='Published by';}
+  else{
+    ents=chip(chAll.draft.filter(inP),'d').concat(chip(chAll.live.filter(inP),'l')).sort(newest);
+    title='Changes made '+per;empty='No changes were made '+per+'.';
+    if(snapSel.who){ents=ents.filter(function(e){return (e.who||'Unknown')===snapSel.who;});title='Changes by '+snapSel.who+' '+per;empty=snapSel.who+' made no changes '+per+'.';}
+  }
+  $('#chSnapDetT').textContent=title+(ents.length?' ('+ents.length+')':'');
+  var th=box.querySelector('thead th:nth-child(3)');if(th)th.textContent=hd;
+  box.hidden=false;tblSet('chSnapTbl',ents,empty);
+}
+function snapPick(sel,el){
+  if(sel&&snapSel&&snapSel.k===sel.k&&(snapSel.who||'')===(sel.who||''))sel=null;
+  snapSel=sel;snapRender();
+  if(sel&&el){var b=$('#chSnapDetail');setTimeout(function(){if(b.scrollIntoView)b.scrollIntoView({behavior:'smooth',block:'start'});},50);}
+}
+$('#chTiles').addEventListener('click',function(e){var b=e.target.closest('[data-snap]');if(!b)return;var k=b.getAttribute('data-snap');
+  if(k==='people'){var pt=$('#chPeople');pt.scrollIntoView&&pt.scrollIntoView({behavior:'smooth',block:'center'});pt.classList.add('ad-flash');setTimeout(function(){pt.classList.remove('ad-flash');},1200);return;}
+  snapPick({k:k},b);});
+$('#chPeople').addEventListener('click',function(e){var r=e.target.closest('tr[data-who]');if(r)snapPick({k:'changes',who:r.getAttribute('data-who')},r);});
+$('#chPeople').addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var r=e.target.closest('tr[data-who]');if(r){e.preventDefault();snapPick({k:'changes',who:r.getAttribute('data-who')},r);}});
+$('#chSnapDetX').addEventListener('click',function(){snapSel=null;snapRender();});
 $('#chSnapWhen').addEventListener('change',snapRender);
 function chLoad(){
   var a=site({action:'publishes'}).then(function(j){chAll.vers=(j.versions||[]).map(function(x){return {from:x.from,to:x.to,who:x.who,when:x.at,fallback:(x.n||0)+' change'+(x.n===1?'':'s'),pages:pagesIn((x.files||[]).join(' '))};});}).catch(function(){chAll.vers=[];});
