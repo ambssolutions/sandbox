@@ -237,3 +237,5 @@ html body.adm .ad-snap select{width:200px;min-width:0;max-width:100%;flex:0 0 au
 
 .ad-tbl .c-what{overflow-wrap:anywhere;white-space:normal}
 .ad-tbl .c-what ins,.ad-tbl .c-what del{display:inline;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+
+html body .ad-framefail{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;background:#fff;color:#191919}html body .ad-framefail[hidden]{display:none}html body .ad-framefail span{color:#626262;max-width:460px}html body .ad-framefail div{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}

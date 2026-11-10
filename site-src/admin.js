@@ -352,12 +352,21 @@ function preview(path,edit){
   $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
   $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':'This is only a preview of this page. Nothing can be changed here.';
   $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. The text under the Media photos is edited here on the page. The photos themselves are changed with Media photos.';$('#edModalHint').title=STD;
-  site({action:'preview',path:path,edit:!!edit}).then(function(j){say('');frame.srcdoc=j.html;sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;}).catch(function(er){say(er.message,true);});
+  failBox.hidden=true;clearTimeout(waitT);frameOpened=false;
+  site({action:'preview',path:path,edit:!!edit}).then(function(j){say('');frame.srcdoc=j.html;sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;if(edit)watchFrame(path,j.html,0);}).catch(function(er){say(er.message,true);});
 }
+/* The page window must really open. If the page does not report in, try once more by itself, then say so and offer the form view instead of leaving a blank window. */
+var frameOpened=false,waitT=0,failBox=document.createElement('div');failBox.className='ad-framefail';failBox.hidden=true;
+failBox.innerHTML='<b>This page did not open in the editing window.</b><span>Your connection may be slow. Try again, or change this page in the form view instead. Nothing has been lost.</span><div><button type="button" class="ad-ap" data-f="again">Try again</button><button type="button" data-f="form">Change it in the form view</button></div>';
+frame.parentNode.appendChild(failBox);
+var failPath='',failHtml='';
+function watchFrame(path,html,n){failPath=path;failHtml=html;clearTimeout(waitT);waitT=setTimeout(function(){if(frameOpened||modal.hidden||!onPage)return;if(n<1){frame.srcdoc='';setTimeout(function(){frame.srcdoc=html;},50);watchFrame(path,html,n+1);}else{failBox.hidden=false;}},9000);}
+failBox.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-f')==='again'){failBox.hidden=true;preview(failPath,true);}else{modal.hidden=true;frame.srcdoc='';onPage=false;failBox.hidden=true;clearTimeout(waitT);failBox.hidden=true;edSel.value=failPath;edLoad(failPath);}});
 function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelectorAll('#edSize button'),function(b){b.setAttribute('aria-pressed',Number(b.getAttribute('data-w'))===w?'true':'false');});}
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
-$('#edClose').addEventListener('click',function(){if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;});
+$('#edClose').addEventListener('click',function(){if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;failBox.hidden=true;clearTimeout(waitT);});
 window.addEventListener('message',function(e){
+  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);failBox.hidden=true;return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='photos'){openPhotos();return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pic'){
     var d=e.data,el0=edFields.querySelector('input[type=text][data-k="'+d.k+'"]');if(!el0)return;say('Uploading the picture...');
@@ -396,7 +405,7 @@ $('#edWayBack').addEventListener('click',function(){if(!edLeave())return;edPref=
 $('#edPageGrid').addEventListener('click',function(e){var b=e.target.closest('[data-path]');if(!b)return;edSel.value=b.getAttribute('data-path');edLoad(b.getAttribute('data-path'));});
 $('#edNew2').addEventListener('click',function(){$('#edNew').click();});
 [].forEach.call(root.querySelectorAll('#edNew,#edNew2,.hm-pill[data-go=newpage]'),function(el){el.hidden=!NEWPAGES;});
-$('#edModalSave').addEventListener('click',function(){if(phHome)closePhotos();if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;});
+$('#edModalSave').addEventListener('click',function(){if(phHome)closePhotos();if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;failBox.hidden=true;clearTimeout(waitT);});
 $('#adPreviewAll').addEventListener('click',function(){preview(edPath||'index.html');});
 $('#edPreview').addEventListener('click',function(){preview(edPath);});
 /* Creating new pages is switched off for now. Set this to true to bring the buttons back (the server has a matching switch). */
@@ -677,7 +686,7 @@ function idleSeen(){var n=Date.now();lastAct=n;if(typeof idleTimer==='function')
 ['mousemove','mousedown','keydown','touchstart','scroll','click','wheel'].forEach(function(ev){document.addEventListener(ev,idleSeen,{passive:true,capture:true});});
 window.addEventListener('message',idleSeen);
 function idleTick(){if(!me)return;var last=lastAct;try{last=Math.max(last,Number(localStorage.getItem('mk-admin-last')||0));}catch(e){}var q=Date.now()-last;
-  if(q>=IDLEMS){autoSaveNow().catch(function(){}).then(function(){return post('/api/admin/login',{action:'logout'});}).catch(function(){}).then(function(){modal.hidden=true;frame.srcdoc='';onPage=false;showLogin();});return;}
+  if(q>=IDLEMS){autoSaveNow().catch(function(){}).then(function(){return post('/api/admin/login',{action:'logout'});}).catch(function(){}).then(function(){modal.hidden=true;frame.srcdoc='';onPage=false;failBox.hidden=true;clearTimeout(waitT);showLogin();});return;}
   if(q>=WARNMS){autoSaveNow().catch(function(){});if(!idleWarn){idleWarn=document.createElement('div');idleWarn.className='ad-idlewarn';idleWarn.setAttribute('role','alert');idleWarn.textContent='No activity for a while. You will be signed out in about a minute. Tap or press any key to stay signed in.';root.appendChild(idleWarn);}idleWarn.hidden=false;}}
 var timerEl=document.getElementById('adTimerT'),timerBox=document.getElementById('adTimer');
 function idleTimer(){if(!timerEl||!me)return;var last=lastAct;try{last=Math.max(last,Number(localStorage.getItem('mk-admin-last')||0));}catch(e){}var left=Math.max(0,IDLEMS-(Date.now()-last)),s=Math.ceil(left/1000),t=('0'+Math.floor(s/60)).slice(-2)+':'+('0'+(s%60)).slice(-2);if(timerEl.textContent!==t)timerEl.textContent=t;timerBox.classList.toggle('low',left<=5*60*1000);}
