@@ -20,6 +20,9 @@ setup = between('<p class="ad-note" id="adSetup" hidden>', '</p>\n')
 note = between('<p class="ad-note" id="adNote" hidden>', '</p>\n')
 start = h.index('<div data-pane="photos">'); end = h.index('</div></div></section></main>')
 panes = h[start:end].replace('<div data-pane="photos">', '<div data-pane="photos" hidden>', 1)
+VERS = '<h3 class="ad-h3" id="chVersH">Published versions</h3><p class="ad-help" id="chVersHelp">Each time changes are published, press What changed to see the website before and after.</p><ul class="ad-list" id="chVers"></ul><h3 class="ad-h3">Individual changes</h3><ul class="ad-list" id="chLive">'
+assert '<h3 class="ad-h3">Published</h3><ul class="ad-list" id="chLive">' in panes
+panes = panes.replace('<h3 class="ad-h3">Published</h3><ul class="ad-list" id="chLive">', VERS, 1)
 ACC = '<fieldset class="ad-accset" id="adInvAcc"><legend>Which sections can they use?</legend>' + ''.join('<label class="ad-chk"><input type="checkbox" name="acc" value="%s" checked> %s</label>' % (k, n) for k, n in [('pages', 'Pages and text'), ('photos', 'Photos'), ('details', 'Contact details'), ('feedback', 'Client feedback'), ('changes', 'Changes and undo')]) + '</fieldset>'
 SEND = '<label class="ad-chk"><input type="checkbox" name="sendmail" checked> Email the invitation to them</label>'
 if 'adInvAcc' not in panes:

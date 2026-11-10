@@ -10,6 +10,10 @@ const vm = require('vm');
 const PAGE = /^[a-z0-9][a-z0-9-]*\.html$/;
 const PROTECTED = new Set(['admin.html', 'index.html', '404.html']);
 const titleOf = (h) => { const m = /<title>([^<]*)<\/title>/.exec(h); return m ? m[1].replace(/&amp;/g, '&').replace(/&rsquo;/g, '’') : ''; };
+/* A short record of each publish, so people can see the website before and after it. */
+const PUBPATH = () => 'testimonials/p-' + L.sign('pubstore').slice(0, 32) + '.json';
+const readPubs = async () => { const j = await L.readStore(PUBPATH()); return j && Array.isArray(j.items) ? j.items : []; };
+const writePubs = (items) => L.writeStore(PUBPATH(), { items, updated: new Date().toISOString() });
 const who = (u) => (u.name || u.email) + (u.email === 'master' ? '' : '');
 const msg = (u, t) => 'Website editor: ' + t + ' (' + who(u) + ')';
 
@@ -41,7 +45,7 @@ module.exports = async function (req, res) {
   let b; try { b = await L.readJson(req, 5.5e6); } catch (e) { return L.send(res, 413, { error: 'That was too large to send.' }); }
   const action = String(b.action || '');
   /* Which section of the editor each action belongs to. Publishing and discarding are for anyone who can change pages or contact details. */
-  const SECTION = { pages: 'pages', page: 'pages', edit: 'pages', op: 'pages', add: 'pages', image: 'pages', preview: 'pages', newpage: 'pages', deletepage: 'pages', menu: 'pages', menuop: 'pages', details: 'details', savedetails: 'details', history: 'changes', undo: 'changes', changedetail: 'changes' };
+  const SECTION = { pages: 'pages', page: 'pages', edit: 'pages', op: 'pages', add: 'pages', image: 'pages', preview: 'pages', newpage: 'pages', deletepage: 'pages', menu: 'pages', menuop: 'pages', details: 'details', savedetails: 'details', history: 'changes', publishes: 'changes', undo: 'changes', changedetail: 'changes' };
   /* Editors see, and can undo, only the changes they made themselves. */
   const isEd = me.role === 'editor', mine = (m) => String(m || '').endsWith('(' + who(me) + ')');
   if (action !== 'status' && !(action === 'publish' || action === 'discard' || action === 'undolast' ? U.can(me, 'pages') || U.can(me, 'details') : U.can(me, SECTION[action] || 'pages'))) return L.send(res, 403, { error: 'You do not have access to this section.' });
@@ -54,7 +58,9 @@ module.exports = async function (req, res) {
     }
     const w = await G.working();
     const read = (path) => G.readText(path, w.branch);
-    const save = async (files, text) => { await G.ensureDraft(); return G.commit(G.DRAFT, files, msg(me, text)); };
+    /* Saving the same kind of edit again and again (autosave) is kept as one change, not dozens. */
+    const compact = async () => { try { const l = await G.draftOnly(); let n = 0; while (n < l.length && l[n].message === l[0].message) n++; if (n > 1 && /^Website editor: edited /.test(l[0].message)) await G.squashTop(n); } catch (e) { /* history just stays a little longer */ } };
+    const save = async (files, text) => { await G.ensureDraft(); const r = await G.commit(G.DRAFT, files, msg(me, text)); if (/^edited /.test(text)) await compact(); return r; };
     const okPath = (p) => { if (!PAGE.test(String(p || ''))) throw Object.assign(new Error('That page was not found.'), { status: 404 }); return String(p); };
 
     if (action === 'pages') return L.send(res, 200, { pages: await loadPages(w.branch) });
@@ -144,9 +150,21 @@ module.exports = async function (req, res) {
       if (isEd) return L.send(res, 200, { draft: drafts.filter((c) => mine(c.message)), live: live.filter((c) => mine(c.message)) });
       return L.send(res, 200, { draft: drafts, live });
     }
+    if (action === 'publishes') {
+      const all = await readPubs();
+      return L.send(res, 200, { versions: all.filter((p) => !isEd || p.by === me.email).slice(0, 30) });
+    }
     if (action === 'changedetail') {
-      const d = await G.commitDiff(String(b.sha || '').replace(/[^0-9a-f]/g, ''));
-      if (isEd && !mine(d.message)) return L.send(res, 403, { error: 'You can only look at changes you made yourself.' });
+      let d;
+      if (b.from) {
+        const from = String(b.from).replace(/[^0-9a-f]/g, ''), to = String(b.to || '').replace(/[^0-9a-f]/g, '');
+        const rec = (await readPubs()).find((p) => p.from === from && p.to === to);
+        if (!rec || (isEd && rec.by !== me.email)) return L.send(res, 403, { error: 'You can only look at changes you made yourself.' });
+        d = await G.compareDiff(from, to);
+      } else {
+        d = await G.commitDiff(String(b.sha || '').replace(/[^0-9a-f]/g, ''));
+        if (isEd && !mine(d.message)) return L.send(res, 403, { error: 'You can only look at changes you made yourself.' });
+      }
       const NICE = { email: 'Email', phone: 'Phone (for tapping)', phoneDisplay: 'Phone (as shown)', address1: 'Auckland address, first line', address2: 'Auckland address, second line', linkedin: 'LinkedIn', facebook: 'Facebook', instagram: 'Instagram', nzbn: 'NZBN', companyNumber: 'Company number' };
       const lines = [], htmlDiffs = []; let pages = 0;
       for (const f of d.files) {
@@ -179,7 +197,17 @@ module.exports = async function (req, res) {
       await save(r.files, 'undid "' + r.message.replace(/^Website editor: /, '').slice(0, 60) + '"');
       return L.send(res, 200, { ok: true });
     }
-    if (action === 'publish') { if (!w.draft) return L.send(res, 400, { error: 'There are no changes waiting to publish.' }); await G.publish(); return L.send(res, 200, { ok: true }); }
+    if (action === 'publish') {
+      if (!w.draft) return L.send(res, 400, { error: 'There are no changes waiting to publish.' });
+      await compact();
+      const before = await G.refSha(G.LIVE()), ah = await G.ahead();
+      await G.publish();
+      try {
+        const after = await G.refSha(G.LIVE());
+        if (before && after && before !== after) { const log = await readPubs(); log.unshift({ at: new Date().toISOString(), by: me.email, who: who(me), from: before, to: after, n: ah ? ah.ahead : 0, files: ah ? ah.files.slice(0, 12) : [] }); await writePubs(log.slice(0, 100)); }
+      } catch (e) { /* the website is published; the record is only a convenience */ }
+      return L.send(res, 200, { ok: true });
+    }
     if (action === 'undolast') {
       if (!w.draft) return L.send(res, 400, { error: 'There are no changes waiting to undo.' });
       const live = await G.history(G.LIVE(), '', 30), dh = await G.history(G.DRAFT, '', 30), set = new Set(live.map((c) => c.sha));

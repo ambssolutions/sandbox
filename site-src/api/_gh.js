@@ -67,6 +67,22 @@ async function publish() {
   await gh('DELETE', '/git/refs/heads/' + DRAFT);
   return await refSha(LIVE());
 }
+/* Commits on the draft that are not on the live site yet, newest first. */
+async function draftOnly() {
+  const d = await refSha(DRAFT); if (!d) return [];
+  const c = await gh('GET', '/compare/' + (await refSha(LIVE())) + '...' + d);
+  return (c.commits || []).slice().reverse().map((x) => ({ sha: x.sha, message: String((x.commit || {}).message || '').split('\n')[0], parents: (x.parents || []).map((p) => p.sha) }));
+}
+/* Fold the newest n commits on the draft into one (same files, same final text), so a run of tiny saves reads as a single change. */
+async function squashTop(n) {
+  const list = await draftOnly(); if (n < 2 || list.length < n) return false;
+  const first = list[n - 1], head = list[0];
+  if (list.slice(0, n).some((x) => x.parents.length !== 1)) return false;
+  const tree = (await gh('GET', '/git/commits/' + head.sha)).tree.sha;
+  const c = await gh('POST', '/git/commits', { message: head.message, tree, parents: first.parents });
+  await gh('PATCH', '/git/refs/heads/' + enc(DRAFT), { sha: c.sha, force: true });
+  return true;
+}
 async function discard() { if (await refSha(DRAFT)) await gh('DELETE', '/git/refs/heads/' + DRAFT); }
 async function ahead() { const d = await refSha(DRAFT); if (!d) return null; const c = await gh('GET', '/compare/' + (await refSha(LIVE())) + '...' + d); return { ahead: c.ahead_by, files: (c.files || []).map((f) => f.filename) }; }
 async function history(branch, path, n) {
@@ -87,11 +103,9 @@ async function revertFiles(sha) {
   return { files: out, message: String(c.commit.message).split('\n')[0] };
 }
 /* Each file a commit touched, with its text before and after (for pages and data files). Pictures are only listed. */
-async function commitDiff(sha) {
-  const c = await gh('GET', '/commits/' + sha);
-  const parent = c.parents && c.parents[0] && c.parents[0].sha;
+async function filesDiff(files, parent, sha) {
   const out = [];
-  for (const f of c.files || []) {
+  for (const f of files || []) {
     const isText = /\.(html|js|txt)$/.test(f.filename);
     const e = { path: f.filename, status: f.status, text: isText };
     if (isText) {
@@ -100,6 +114,16 @@ async function commitDiff(sha) {
     }
     out.push(e);
   }
-  return { message: String(c.commit.message).split('\n')[0], files: out };
+  return out;
 }
-module.exports = { commitDiff, ready, LIVE, DRAFT, REPO, working, ensureDraft, readFile, readText, exists, listFiles, commit, publish, discard, ahead, history, revertFiles, refSha };
+async function commitDiff(sha) {
+  const c = await gh('GET', '/commits/' + sha);
+  const parent = c.parents && c.parents[0] && c.parents[0].sha;
+  return { message: String(c.commit.message).split('\n')[0], files: await filesDiff(c.files, parent, sha) };
+}
+/* What a whole publish changed: the website as it was before, against the website as it is now. */
+async function compareDiff(from, to) {
+  const c = await gh('GET', '/compare/' + from + '...' + to);
+  return { message: '', files: await filesDiff(c.files, from, to) };
+}
+module.exports = { draftOnly, squashTop, compareDiff, commitDiff, ready, LIVE, DRAFT, REPO, working, ensureDraft, readFile, readText, exists, listFiles, commit, publish, discard, ahead, history, revertFiles, refSha };

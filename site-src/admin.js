@@ -291,12 +291,12 @@ function siteStatus(){
   return site({action:'status'}).then(function(j){
     siteOn=!!j.ready;secPending.hidden=siteOn;
     var d=$('#adDraft');
-    if(siteOn&&j.draft&&j.changes>0){d.hidden=false;$('#adDraftText').innerHTML='<b>'+j.changes+(j.changes===1?' change':' changes')+'</b> saved but not on the website yet ('+esc(j.files.slice(0,4).join(', '))+(j.files.length>4?' and more':'')+').';}
+    if(siteOn&&j.draft&&j.changes>0){d.hidden=false;$('#adDraftText').innerHTML='<b>'+j.changes+(j.changes===1?' change':' changes')+'</b> saved but not on the website yet ('+esc(j.files.slice(0,4).map(whereName).join(', '))+(j.files.length>4?' and more':'')+').';}
     else d.hidden=true;
     return j;
   }).catch(function(er){if(er.status===503){siteOn=false;secPending.hidden=false;}});
 }
-var rvModal=$('#rvModal');
+var rvModal=$('#rvModal');if(rvModal.parentNode!==root)root.appendChild(rvModal);/* it must open from any tab, not only the one it was written in */
 function rvClose(){rvModal.hidden=true;}
 $('#adPublish').addEventListener('click',function(e){
   var b=e.target;b.disabled=true;say('Collecting your changes...');
@@ -310,7 +310,7 @@ $('#adPublish').addEventListener('click',function(e){
 $('#rvKeep').addEventListener('click',rvClose);
 $('#rvGo').addEventListener('click',function(e){
   var b=e.target;b.disabled=true;say('Publishing...');
-  site({action:'publish'}).then(function(){rvClose();say('Published. The website updates in about a minute.');return siteStatus();}).catch(function(er){rvClose();say(er.message,true);}).then(function(){b.disabled=false;if(edPath)edLoad(edPath);});
+  site({action:'publish'}).then(function(){rvClose();say('Published. The website updates in about a minute.');var cn=document.querySelector('.sb [data-tab=changes]');if(cn&&!cn.hidden){chOpenFirst=true;tab('changes');}return siteStatus();}).catch(function(er){rvClose();say(er.message,true);}).then(function(){b.disabled=false;if(edPath)edLoad(edPath);});
 });
 $('#adUndoLast').addEventListener('click',function(e){
   var b=e.target;b.disabled=true;
@@ -479,24 +479,28 @@ $('#dtForm').addEventListener('submit',function(e){
 });
 /* changes and undo */
 function when2(iso){try{return new Date(iso).toLocaleString('en-NZ',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});}catch(e){return '';}}
-function chMsg(c){return String(c.message).replace(/^Website editor: /,'').replace(/\s*\([^)]*\)$/,'');}
+function whereName(f){var m=/^([a-z0-9-]+)\.html$/.exec(f);if(!m)return f;return pn(f)+' (mikia.co.nz'+(m[1]==='index'?'':'/'+m[1])+')';}
+function chMsg(c){return String(c.message).replace(/^Website editor: /,'').replace(/\s*\([^)]*\)$/,'').replace(/\b[a-z0-9-]+\.html\b/g,whereName);}
 function chWho(c){var m=/\(([^)]*)\)$/.exec(String(c.message));return m?m[1]:'';}
 function chRow(c,live){return '<li class="ad-row" data-sha="'+esc(c.sha)+'"><div class="ad-cap"><b>'+esc(chMsg(c))+'</b><span>'+esc(when2(c.date))+(chWho(c)?' by '+esc(chWho(c)):'')+'</span></div><div class="ad-btns"><button type="button" data-what="1">What changed</button><button type="button" data-undo="1">Undo</button></div><div class="ad-what" hidden></div></li>';}
 function whatHtml(lines){
   if(!lines.length)return '<p class="ad-help">No visible changes to show.</p>';
   var by={},order=[];lines.forEach(function(l){var k=l.file||'';if(!by[k]){by[k]=[];order.push(k);}by[k].push(l);});
-  return order.map(function(k){return (k?'<h4>'+esc(k)+'</h4>':'')+'<ul>'+by[k].map(function(l){
+  return order.map(function(k){return (k?'<h4>'+esc(whereName(k))+'</h4>':'')+'<ul>'+by[k].map(function(l){
     if(l.type==='changed')return '<li><b>'+esc(l.what)+'</b> <del>'+esc(l.from)+'</del> <span class="ad-arrow">&rarr;</span> <ins>'+esc(l.to)+'</ins></li>';
     if(l.type==='added')return '<li><b>Added '+esc(l.what.toLowerCase())+'</b> <ins>'+esc(l.to)+'</ins></li>';
     if(l.type==='removed')return '<li><b>Removed '+esc(l.what.toLowerCase())+'</b> <del>'+esc(l.from)+'</del></li>';
     return '<li>'+esc(l.what)+'</li>';}).join('')+'</ul>';}).join('');
 }
-function chLoad(){site({action:'history'}).then(function(j){
+var chOpenFirst=false;
+function verRow(v){var n=v.n||0;return '<li class="ad-row" data-from="'+esc(v.from)+'" data-to="'+esc(v.to)+'"><div class="ad-cap"><b>Published '+(n?n+(n===1?' change':' changes'):'changes')+'</b><span>'+esc(when2(v.at))+(v.who?' by '+esc(v.who):'')+(v.files&&v.files.length?' \u00b7 '+esc(v.files.slice(0,3).map(whereName).join(', '))+(v.files.length>3?' and more':''):'')+'</span></div><div class="ad-btns"><button type="button" data-what="1">What changed</button></div><div class="ad-what" hidden></div></li>';}
+function chVers(){return site({action:'publishes'}).then(function(j){var v=j.versions||[];$('#chVers').innerHTML=v.map(verRow).join('')||'<li class="ad-empty">Nothing has been published since this list began.</li>';if(chOpenFirst){chOpenFirst=false;var b=$('#chVers [data-what]');if(b)b.click();}}).catch(function(){});}
+function chLoad(){chVers();site({action:'history'}).then(function(j){
   $('#chDraftH').hidden=!j.draft.length;$('#chDraft').innerHTML=j.draft.map(function(c){return chRow(c);}).join('');
   $('#chLive').innerHTML=j.live.map(function(c){return chRow(c,1);}).join('')||'<li class="ad-empty">No published changes yet.</li>';
 }).catch(function(er){say(er.message,true);});}
 $('[data-pane=changes]').addEventListener('click',function(e){
-  var w=e.target.closest('[data-what]');if(w){var row=w.closest('.ad-row'),box=row.querySelector('.ad-what');if(!box.hidden){box.hidden=true;w.textContent='What changed';return;}w.disabled=true;w.textContent='Loading...';site({action:'changedetail',sha:row.getAttribute('data-sha')}).then(function(j){box.innerHTML=whatHtml(j.lines);box.hidden=false;w.textContent='Hide details';}).catch(function(er){say(er.message,true);w.textContent='What changed';}).then(function(){w.disabled=false;});return;}
+  var w=e.target.closest('[data-what]');if(w){var row=w.closest('.ad-row'),box=row.querySelector('.ad-what');if(!box.hidden){box.hidden=true;w.textContent='What changed';return;}w.disabled=true;w.textContent='Loading...';site(row.hasAttribute('data-from')?{action:'changedetail',from:row.getAttribute('data-from'),to:row.getAttribute('data-to')}:{action:'changedetail',sha:row.getAttribute('data-sha')}).then(function(j){box.innerHTML=whatHtml(j.lines);box.hidden=false;w.textContent='Hide details';}).catch(function(er){say(er.message,true);w.textContent='What changed';}).then(function(){w.disabled=false;});return;}
   var b=e.target.closest('[data-undo]');if(!b||b.disabled)return;var sha=b.closest('.ad-row').getAttribute('data-sha');
   if(!confirm('Undo this change? The undo goes into your draft and is not published until you press Publish.'))return;
   b.disabled=true;site({action:'undo',sha:sha}).then(function(){say('Undone in your draft.');return siteStatus();}).then(chLoad).catch(function(er){say(er.message,true);b.disabled=false;});
