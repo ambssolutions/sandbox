@@ -380,7 +380,7 @@ $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button
 $('#edClose').addEventListener('click',function(){if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;failBox.hidden=true;clearTimeout(waitT);});
 window.addEventListener('message',function(e){
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);failBox.hidden=true;return;}
-  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='photos'){openPhotos();return;}
+  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='photos'){openPhotos(typeof e.data.i==='number'?e.data.i:-1);return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pic'){
     var d=e.data,el0=edFields.querySelector('input[type=text][data-k="'+d.k+'"]');if(!el0)return;say('Uploading the picture...');
     fetch(d.data).then(function(r){return r.blob();}).then(function(bl){var f=new File([bl],d.name||'photo.jpg',{type:d.type||bl.type});return askSize(f).then(function(go){sizeStop(go);return shrink(f);}).then(function(s){return new Promise(function(ok,no){var rd=new FileReader();rd.onload=function(){ok(String(rd.result).split(',')[1]);};rd.onerror=no;rd.readAsDataURL(s);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});});}).then(function(j){el0.value=j.src;edDirty();say('Picture ready. Press Save changes to use it on this page.');}).catch(function(er){say(er.message,true);});
@@ -394,11 +394,11 @@ var phOver=document.createElement('div');phOver.className='ad-photoover';phOver.
 phOver.innerHTML='<div class="ad-top"><h2>Photos in the Media box</h2><button type="button" id="edPhotosDone" class="ad-ap">Done</button></div><p class="ad-help">Photos change on the live website straight away. Add, reorder or remove them here. The heading and line under each photo are saved to your draft and go on the website when you press Publish. They belong to the place in the carousel (1st, 2nd...), so if you reorder the photos, the words stay in their place.</p><p class="ad-help" id="edCapNote"></p><div id="edPhotosHost"></div>';
 modal.querySelector('.ad-modal-in').appendChild(phOver);
 var phHome=null,phWas=true;
-function openPhotos(){
+function openPhotos(at){
   if(!canPh){say('You do not have access to Photos.',true);return;}
   var pane=document.querySelector('[data-pane=photos]');if(!pane||phHome)return;
   phHome=document.createComment('photos');pane.parentNode.insertBefore(phHome,pane);phWas=pane.hidden;
-  $('#edPhotosHost').appendChild(pane);pane.hidden=false;phOver.hidden=false;capNote('');site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();}).catch(function(){capSaved=[];capData=[];}).then(load);
+  $('#edPhotosHost').appendChild(pane);pane.hidden=false;phOver.hidden=false;capNote('');site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();}).catch(function(){capSaved=[];capData=[];}).then(load).then(function(){if(typeof at!=='number'||at<0)return;var rows=list.querySelectorAll('.ad-row'),r=rows[at]||rows[rows.length-1];if(!r)return;r.classList.add('ad-pick');setTimeout(function(){r.classList.remove('ad-pick');},2500);if(r.scrollIntoView)r.scrollIntoView({block:'center'});var f=r.querySelector('[data-cap=t]');if(f)try{f.focus({preventScroll:true});}catch(e){f.focus();}});
 }
 function closePhotos(){
   capSaveNow().catch(function(){});
