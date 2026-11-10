@@ -83,11 +83,12 @@ failBox.addEventListener('click',function(e){
   (loc&&!all?Promise.resolve():site({action:'dismissfail',id:id})).then(loadFailures);
 });
 /* ---- photos ---- */
+var capData=[],capSaved=[],capT=null,capBusy=false;
 function render(photos,storage){
   note.hidden=!!storage;
   list.innerHTML=photos.map(function(p,i){
     return '<li class="ad-row" data-id="'+esc(p.id)+'"><img src="'+esc(p.src)+'" alt="" width="120" height="75" loading="lazy"><div class="ad-cap"><b>Photo '+(i+1)+'</b><span>'+(p.stock?'Stock photo':'Uploaded')+'</span><span class="ad-dims"></span></div>'
-    +'<div class="ad-btns"><button type="button" data-act="up" aria-label="Move up"'+(i?'':' disabled')+'>&uarr;</button><button type="button" data-act="down" aria-label="Move down"'+(i<photos.length-1?'':' disabled')+'>&darr;</button><button type="button" data-act="rm" class="ad-rm">Remove</button></div></li>';
+    +'<div class="ad-btns"><button type="button" data-act="up" aria-label="Move up"'+(i?'':' disabled')+'>&uarr;</button><button type="button" data-act="down" aria-label="Move down"'+(i<photos.length-1?'':' disabled')+'>&darr;</button><button type="button" data-act="rm" class="ad-rm">Remove</button></div>'+(phHome?'<div class="ad-captxt"><label>Heading under this photo<input type="text" maxlength="80" data-cap="t" placeholder="For example: Rural family home" value="'+esc((capData[i]||{}).t||'')+'"></label><label>Line under the heading<input type="text" maxlength="220" data-cap="d" placeholder="One short sentence about this photo" value="'+esc((capData[i]||{}).d||'')+'"></label></div>':'')+'</li>';
   }).join('')||'<li class="ad-empty">No photos yet. The carousel will show the stock photos until you add one.</li>';
   $('#adCount').textContent=photos.length+(photos.length===1?' photo':' photos');
   [].forEach.call(list.querySelectorAll('.ad-row'),function(r){var im=r.querySelector('img'),o=r.querySelector('.ad-dims');if(im&&o)showDims(im,o,im.getAttribute('src'));});
@@ -104,6 +105,18 @@ list.addEventListener('click',function(e){
   b.disabled=true;say('');
   post('/api/admin/photos',act==='rm'?{action:'remove',id:id}:{action:'move',id:id,dir:act}).then(function(j){render(j.photos,true);say(act==='rm'?'Photo removed.':'Order updated.');}).catch(function(er){say(er.message,true);b.disabled=false;});
 });
+/* The heading and line under each Media photo (page text kept by place, saved to the draft, live after Publish) */
+function capNote(t,bad){var n=document.getElementById('edCapNote');if(n){n.textContent=t;n.className='ad-help'+(bad?' ad-bad':'');}}
+function capCollect(){var out=[];[].forEach.call(list.querySelectorAll('.ad-row'),function(r,i){var t=r.querySelector('[data-cap=t]'),d=r.querySelector('[data-cap=d]');if(!t||!d)return;out.push({i:i,t:t.value.trim(),d:d.value.trim()});});return out;}
+function capSaveNow(){
+  clearTimeout(capT);if(capBusy)return Promise.resolve();
+  var cur=capCollect(),ch=cur.filter(function(c){var o=capSaved[c.i]||{t:'',d:''};return o.t!==c.t||o.d!==c.d;});
+  if(!ch.length)return Promise.resolve();
+  capBusy=true;capNote('Saving...');
+  return post('/api/admin/site',{action:'captions',caps:ch}).then(function(){ch.forEach(function(c){capSaved[c.i]={t:c.t,d:c.d};});capData=capSaved.slice();capNote('Saved to your draft. It goes on the website when you press Publish.');return siteStatus();}).catch(function(er){capNote('Could not save: '+er.message,true);}).then(function(){capBusy=false;var again=capCollect().some(function(c){var o=capSaved[c.i]||{t:'',d:''};return o.t!==c.t||o.d!==c.d;});if(again)capT=setTimeout(capSaveNow,800);});
+}
+list.addEventListener('input',function(e){if(!e.target.closest('[data-cap]'))return;capNote('Typing...');clearTimeout(capT);capT=setTimeout(capSaveNow,1500);});
+list.addEventListener('focusout',function(e){if(e.target.closest&&e.target.closest('[data-cap]'))capSaveNow();});
 /* Shrink big phone photos in the browser so they upload quickly and stay under the 4 MB limit */
 /* The website's pictures are landscape, about 1600 x 1000 pixels. Smaller or oddly shaped pictures can look blurry or be cropped, so ask before using one. */
 var STD='Standard size: 1600 \u00d7 1000 pixels (landscape), JPEG or WebP. Smaller than 1200 pixels wide can look blurry. Larger pictures are shrunk automatically.';
@@ -378,16 +391,17 @@ window.addEventListener('message',function(e){
 var canPh=false,phBtn=document.createElement('button');phBtn.type='button';phBtn.id='edPhotosBtn';phBtn.textContent='Media photos';phBtn.hidden=true;
 $('#edModalSave').parentNode.insertBefore(phBtn,$('#edModalSave'));
 var phOver=document.createElement('div');phOver.className='ad-photoover';phOver.hidden=true;
-phOver.innerHTML='<div class="ad-top"><h2>Photos in the Media box</h2><button type="button" id="edPhotosDone" class="ad-ap">Done</button></div><p class="ad-help">Photos change on the live website straight away. Add, reorder or remove them here. Text on the page is changed on the page itself.</p><div id="edPhotosHost"></div>';
+phOver.innerHTML='<div class="ad-top"><h2>Photos in the Media box</h2><button type="button" id="edPhotosDone" class="ad-ap">Done</button></div><p class="ad-help">Photos change on the live website straight away. Add, reorder or remove them here. The heading and line under each photo are saved to your draft and go on the website when you press Publish. They belong to the place in the carousel (1st, 2nd...), so if you reorder the photos, the words stay in their place.</p><p class="ad-help" id="edCapNote"></p><div id="edPhotosHost"></div>';
 modal.querySelector('.ad-modal-in').appendChild(phOver);
 var phHome=null,phWas=true;
 function openPhotos(){
   if(!canPh){say('You do not have access to Photos.',true);return;}
   var pane=document.querySelector('[data-pane=photos]');if(!pane||phHome)return;
   phHome=document.createComment('photos');pane.parentNode.insertBefore(phHome,pane);phWas=pane.hidden;
-  $('#edPhotosHost').appendChild(pane);pane.hidden=false;phOver.hidden=false;load();
+  $('#edPhotosHost').appendChild(pane);pane.hidden=false;phOver.hidden=false;capNote('');site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();}).catch(function(){capSaved=[];capData=[];}).then(load);
 }
 function closePhotos(){
+  capSaveNow().catch(function(){});
   var pane=document.querySelector('[data-pane=photos]');if(phHome&&pane){phHome.parentNode.insertBefore(pane,phHome);phHome.remove();pane.hidden=phWas;}
   phHome=null;phOver.hidden=true;
 }

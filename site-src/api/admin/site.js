@@ -45,7 +45,7 @@ module.exports = async function (req, res) {
   let b; try { b = await L.readJson(req, 5.5e6); } catch (e) { return L.send(res, 413, { error: 'That was too large to send.' }); }
   const action = String(b.action || '');
   /* Which section of the editor each action belongs to. Publishing and discarding are for anyone who can change pages or contact details. */
-  const SECTION = { failures: 'pages', dismissfail: 'pages', pages: 'pages', page: 'pages', edit: 'pages', op: 'pages', add: 'pages', image: 'pages', preview: 'pages', newpage: 'pages', deletepage: 'pages', menu: 'pages', menuop: 'pages', details: 'details', savedetails: 'details', history: 'changes', publishes: 'changes', activity: 'changes', undo: 'changes', changedetail: 'changes' };
+  const SECTION = { failures: 'pages', dismissfail: 'pages', pages: 'pages', page: 'pages', edit: 'pages', captionsget: 'photos', captions: 'photos', op: 'pages', add: 'pages', image: 'pages', preview: 'pages', newpage: 'pages', deletepage: 'pages', menu: 'pages', menuop: 'pages', details: 'details', savedetails: 'details', history: 'changes', publishes: 'changes', activity: 'changes', undo: 'changes', changedetail: 'changes' };
   /* Editors see, and can undo, only the changes they made themselves. */
   const isEd = me.role === 'editor', mine = (m) => String(m || '').endsWith('(' + who(me) + ')');
   if (action !== 'status' && !(action === 'publish' || action === 'discard' || action === 'undolast' ? U.can(me, 'pages') || U.can(me, 'details') : U.can(me, SECTION[action] || 'pages'))) return L.send(res, 403, { error: 'You do not have access to this section.' });
@@ -80,6 +80,19 @@ module.exports = async function (req, res) {
     if (action === 'page') {
       const path = okPath(b.path), html = await read(path);
       return L.send(res, 200, Object.assign({ path, title: titleOf(html) }, P.publicView(html)));
+    }
+    if (action === 'captionsget') {
+      const m = P.mediaSlides(await read('index.html'));
+      return L.send(res, 200, { slides: m ? m.slides.map((s) => ({ t: s.t, d: s.d })) : [] });
+    }
+    if (action === 'captions') {
+      const caps = (Array.isArray(b.caps) ? b.caps : []).slice(0, 60).map((c) => ({ i: Number(c.i), t: L.FB_CLEAN(c.t == null ? '' : c.t, 80), d: L.FB_CLEAN(c.d == null ? '' : c.d, 220) })).filter((c) => Number.isInteger(c.i) && c.i >= 0 && c.i < 60);
+      if (!caps.length) return L.send(res, 400, { error: 'Nothing was changed.' });
+      const html = await read('index.html'), photos = (await L.currentPhotos()).map(L.publicPhoto);
+      const out = P.setCaptions(html, caps, photos);
+      if (out === html) return L.send(res, 200, { ok: true, unchanged: true });
+      await save([{ path: 'index.html', content: out }], 'edited index.html');
+      return L.send(res, 200, { ok: true });
     }
     if (action === 'edit') {
       const path = okPath(b.path), changes = (Array.isArray(b.changes) ? b.changes : []).slice(0, 400);

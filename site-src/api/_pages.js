@@ -241,6 +241,44 @@ function addContent(html, a) {
 }
 
 /* What changed between two versions of a page, in plain words: wording, links, picture descriptions, pictures, things added or removed. */
+
+/* The heading and line under each Media photo are page text kept by position (1st place, 2nd place...). These read them and write them back. */
+function mediaSlides(html) {
+  const doc = parse5.parse(html, { sourceCodeLocationInfo: true });
+  let track = null; (function go(n) { if (track) return; if (n.tagName === 'div' && attr(n, 'id') === 'mcarTrack') { track = n; return; } for (const c of n.childNodes || []) go(c); })(doc);
+  if (!track || !track.sourceCodeLocation || !track.sourceCodeLocation.endTag) return null;
+  const text = (n) => { let s = ''; (function w(x) { for (const c of x.childNodes || []) { if (c.nodeName === '#text') s += c.value; else w(c); } })(n); return s.trim(); };
+  const slides = kids(track).filter((c) => c.tagName === 'figure' && c.sourceCodeLocation).map((f) => {
+    const cap = kids(f).find((c) => c.tagName === 'figcaption' && c.sourceCodeLocation);
+    const b = cap && kids(cap).find((c) => c.tagName === 'b'), s = cap && kids(cap).find((c) => c.tagName === 'span');
+    return { start: f.sourceCodeLocation.startOffset, end: f.sourceCodeLocation.endOffset, capStart: cap ? cap.sourceCodeLocation.startOffset : null, capEnd: cap ? cap.sourceCodeLocation.endOffset : null, t: b ? text(b) : '', d: s ? text(s) : '' };
+  });
+  return { innerStart: track.sourceCodeLocation.startTag.endOffset, innerEnd: track.sourceCodeLocation.endTag.startOffset, slides };
+}
+/* caps: [{ i, t, d }]. Slots that do not exist yet get a slide of their own (using that photo), so every photo can have its heading and line. */
+function setCaptions(html, caps, photos) {
+  const m = mediaSlides(html); if (!m) return html;
+  const by = {}; for (const c of caps) by[c.i] = c;
+  const n = Math.max(m.slides.length, ...caps.map((c) => c.i + 1));
+  const parts = [];
+  for (let i = 0; i < n; i++) {
+    const s = m.slides[i], c = by[i];
+    const t = c ? c.t : s ? s.t : '', d = c ? c.d : s ? s.d : '';
+    const cap = t || d ? '<figcaption><b>' + esc(t) + '</b><span>' + esc(d) + '</span></figcaption>' : '';
+    if (s) {
+      if (!c) { parts.push(html.slice(s.start, s.end)); continue; }
+      let fig = html.slice(s.start, s.end);
+      if (s.capStart != null) { const a = s.capStart - s.start, z = s.capEnd - s.start; fig = fig.slice(0, a) + cap + fig.slice(z); }
+      else fig = fig.replace(/<\/figure>\s*$/i, cap + '</figure>');
+      parts.push(fig);
+    } else {
+      const ph = (photos && photos[i]) || {};
+      parts.push('<figure class="mcar-s"><img src="' + escAttr(ph.src || '') + '" alt="' + escAttr(ph.alt || '') + '" width="1600" height="1000" decoding="async" loading="lazy">' + cap + '</figure>');
+    }
+  }
+  return html.slice(0, m.innerStart) + parts.join('') + html.slice(m.innerEnd);
+}
+
 function diffPages(before, after) {
   const what = (f) => (f.region === 'head' ? 'Google and sharing text' : f.kind === 'text' ? 'Wording' : f.attr === 'alt' ? 'Picture description' : f.attr === 'src' ? 'Picture' : f.attr === 'href' ? 'Link' : 'Text');
   /* Where on the page a field sits: the menu, the footer, Google text, or the section it is in (named by its heading). */
@@ -284,4 +322,4 @@ function diffPages(before, after) {
   }
   return out;
 }
-module.exports = { diffPages, extract, publicView, applyChanges, applyOp, addContent, esc, escAttr };
+module.exports = { mediaSlides, setCaptions, diffPages, extract, publicView, applyChanges, applyOp, addContent, esc, escAttr };

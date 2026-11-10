@@ -301,3 +301,10 @@ html body .ad-st-d{background:#fff0d6;color:#8a5200}
 html body .ad-st-l{background:#e3f6e8;color:#14532d}
 @media(max-width:700px){html body .ad-tbl:not(.ad-ppl) .c-by .ad-st{margin-left:6px}}
 @media(prefers-reduced-motion:reduce){html body .ad-ppl.ad-flash{animation:none}html body .ad-tile{transition:none}}
+
+/* Heading and line under each Media photo, inside the photo window */
+html body .ad-photoover .ad-row{flex-wrap:wrap}
+html body .ad-captxt{flex:1 1 100%;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+html body .ad-captxt label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600;opacity:.9}
+html body .ad-captxt input{font:inherit;font-size:14px;padding:9px 11px;border-radius:10px;border:1px solid rgba(128,128,128,.45);background:#fff;color:#15171a;width:100%;box-sizing:border-box}
+@media(max-width:700px){html body .ad-captxt{grid-template-columns:1fr}}
