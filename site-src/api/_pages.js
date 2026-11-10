@@ -280,10 +280,13 @@ function setCaptions(html, caps, photos) {
 }
 
 /* For the editing window (which cannot load the photo list itself): show a slide for every photo in the Media box, each keeping the text kept for its place. */
-function renderPhotos(html, photos) {
+function renderPhotos(html, photos, edit) {
   const m = mediaSlides(html); if (!m || !photos || !photos.length) return html;
   const parts = photos.map((ph, i) => {
-    const s = m.slides[i], cap = s && s.capStart != null ? html.slice(s.capStart, s.capEnd) : '';
+    const s = m.slides[i];
+    let cap = s && s.capStart != null ? html.slice(s.capStart, s.capEnd) : '';
+    /* A photo with no heading or line yet gets empty boxes to type into, saved by the editor itself. */
+    if (!cap && edit) cap = '<figcaption><b data-cap="t" data-i="' + i + '" data-ph="Add a heading"></b><span data-cap="d" data-i="' + i + '" data-ph="Add a line about this photo"></span></figcaption>';
     return '<figure class="mcar-s' + (i === 0 ? ' on' : '') + '"><img src="' + escAttr(ph.src || '') + '" alt="' + escAttr(ph.alt || '') + '" width="1600" height="1000" decoding="async">' + cap + '</figure>';
   });
   return html.slice(0, m.innerStart) + parts.join('') + html.slice(m.innerEnd);
