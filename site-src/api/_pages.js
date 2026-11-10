@@ -279,6 +279,16 @@ function setCaptions(html, caps, photos) {
   return html.slice(0, m.innerStart) + parts.join('') + html.slice(m.innerEnd);
 }
 
+/* For the editing window (which cannot load the photo list itself): show a slide for every photo in the Media box, each keeping the text kept for its place. */
+function renderPhotos(html, photos) {
+  const m = mediaSlides(html); if (!m || !photos || !photos.length) return html;
+  const parts = photos.map((ph, i) => {
+    const s = m.slides[i], cap = s && s.capStart != null ? html.slice(s.capStart, s.capEnd) : '';
+    return '<figure class="mcar-s' + (i === 0 ? ' on' : '') + '"><img src="' + escAttr(ph.src || '') + '" alt="' + escAttr(ph.alt || '') + '" width="1600" height="1000" decoding="async">' + cap + '</figure>';
+  });
+  return html.slice(0, m.innerStart) + parts.join('') + html.slice(m.innerEnd);
+}
+
 function diffPages(before, after) {
   const what = (f) => (f.region === 'head' ? 'Google and sharing text' : f.kind === 'text' ? 'Wording' : f.attr === 'alt' ? 'Picture description' : f.attr === 'src' ? 'Picture' : f.attr === 'href' ? 'Link' : 'Text');
   /* Where on the page a field sits: the menu, the footer, Google text, or the section it is in (named by its heading). */
@@ -322,4 +332,4 @@ function diffPages(before, after) {
   }
   return out;
 }
-module.exports = { mediaSlides, setCaptions, diffPages, extract, publicView, applyChanges, applyOp, addContent, esc, escAttr };
+module.exports = { mediaSlides, setCaptions, renderPhotos, diffPages, extract, publicView, applyChanges, applyOp, addContent, esc, escAttr };

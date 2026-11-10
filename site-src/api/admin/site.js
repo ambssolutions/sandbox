@@ -161,6 +161,7 @@ module.exports = async function (req, res) {
         ins.sort((a, b) => b.at - a.at); for (const i of ins) html = html.slice(0, i.at) + i.t + html.slice(i.at);
         html = html.replace(/<\/body>/i, '<style>nav.nav,.nav-links,.menu-btn,.qbar,footer{display:none!important}[data-ek]{outline-offset:2px}[data-ek]:hover{outline:2px dashed #c8323c;cursor:text}[data-ek]:focus{outline:2px solid #c8323c;background:rgba(200,50,60,.06)}img[data-ek-img]{cursor:pointer}img[data-ek-img]:hover{outline:3px solid #c8323c;outline-offset:-3px;filter:brightness(.92)}</style><script>' + EDIT_JS + '</script></body>');
       }
+      if (path === 'index.html') { try { html = P.renderPhotos(html, (await L.currentPhotos()).map(L.publicPhoto)); } catch (e) { /* keep the page as it is */ } }
       html = html.replace(/<head>/i, '<head><base href="' + origin + '/">');
       if (w.draft) { // pictures that only exist in the draft are placed inside the preview
         const a = await G.ahead(); const mine = new Set((a && a.files) || []);
