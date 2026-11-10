@@ -237,7 +237,14 @@ function addContent(html, a) {
 /* What changed between two versions of a page, in plain words: wording, links, picture descriptions, pictures, things added or removed. */
 function diffPages(before, after) {
   const what = (f) => (f.region === 'head' ? 'Google and sharing text' : f.kind === 'text' ? 'Wording' : f.attr === 'alt' ? 'Picture description' : f.attr === 'src' ? 'Picture' : f.attr === 'href' ? 'Link' : 'Text');
-  const toList = (h) => extract(h).fields.map((f) => ({ what: what(f), val: String(f.value).replace(/\s+/g, ' ').trim(), label: f.label || '' })).filter((x) => x.val);
+  /* Where on the page a field sits: the menu, the footer, Google text, or the section it is in (named by its heading). */
+  const EL = { h1: 'Main heading', h2: 'Heading', h3: 'Heading', h4: 'Heading', p: 'Paragraph', li: 'List item', button: 'Button', a: 'Link text', span: 'Text', b: 'Bold text', strong: 'Bold text', em: 'Text', label: 'Label', figcaption: 'Caption', blockquote: 'Quote', td: 'Table cell', th: 'Table heading' };
+  const toList = (h) => { const x = extract(h); return x.fields.map((f) => {
+    const sec = f.region === 'main' ? x.sections.find((z) => f.start >= z.start && f.start < z.end) : null;
+    const where = f.region === 'head' ? 'Google and sharing text' : f.region === 'nav' ? 'Menu' : f.region === 'footer' ? 'Footer' : sec ? 'In the "' + String(sec.label).slice(0, 60) + '" section' : '';
+    const el = f.kind === 'text' ? (EL[f.tag] || 'Wording') : f.attr === 'alt' ? 'Picture description' : f.attr === 'src' ? 'Picture' : f.attr === 'href' ? 'Link address' : '';
+    return { what: what(f), where, el, val: String(f.value).replace(/\s+/g, ' ').trim(), label: f.label || '' };
+  }).filter((y) => y.val); };
   const A = toList(before), B = toList(after), key = (x) => x.what + '\u0001' + x.val + '\u0001' + x.label;
   const n = A.length, m = B.length;
   if (n * m > 4e6) return [{ type: 'changed', what: 'Page', from: 'many parts', to: 'many parts' }];
@@ -261,8 +268,8 @@ function diffPages(before, after) {
       if (a < 0) a = adds.findIndex((x, ix) => !used.has(ix) && x.what === d.what);
       if (a >= 0) { used.add(a); pairs.push([d, adds[a]]); } else pairs.push([d, null]);
     }
-    for (const [d, a] of pairs) { if (a) out.push({ type: 'changed', what: a.what, from: d.val, to: a.val }); else out.push({ type: 'removed', what: d.what, from: d.val }); }
-    adds.forEach((a, ix) => { if (!used.has(ix)) out.push({ type: 'added', what: a.what, to: a.val }); });
+    for (const [d, a] of pairs) { if (a) out.push({ type: 'changed', what: a.what, where: a.where, el: a.el, from: d.val, to: a.val }); else out.push({ type: 'removed', what: d.what, where: d.where, el: d.el, from: d.val }); }
+    adds.forEach((a, ix) => { if (!used.has(ix)) out.push({ type: 'added', what: a.what, where: a.where, el: a.el, to: a.val }); });
   }
   return out;
 }

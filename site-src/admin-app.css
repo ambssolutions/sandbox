@@ -175,3 +175,5 @@ html body .ad-idlewarn{position:fixed;left:12px;right:12px;bottom:12px;z-index:4
 
 .tb .tb-timer{font-size:13px;color:#52525b;white-space:nowrap;margin-right:6px}.tb .tb-timer b{font-variant-numeric:tabular-nums;color:#15171a}.tb .tb-timer.low b{color:#c8323c}@media(max-width:600px){.tb .tb-timer{font-size:12px}.tb .tb-timer{font-size:0}.tb .tb-timer b{font-size:13px}}
 .tb .tb-timer b{display:inline-block;min-width:5ch;text-align:right}
+.ad-what .ad-where{display:block;font-size:12px;letter-spacing:.02em;color:#6b6b72;margin-bottom:2px}
+@media(prefers-color-scheme:dark){html:not([data-theme=light]) .ad-what .ad-where{color:#a8a8b0}}

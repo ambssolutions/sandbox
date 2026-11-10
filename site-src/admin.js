@@ -487,9 +487,11 @@ function whatHtml(lines){
   if(!lines.length)return '<p class="ad-help">No visible changes to show.</p>';
   var by={},order=[];lines.forEach(function(l){var k=l.file||'';if(!by[k]){by[k]=[];order.push(k);}by[k].push(l);});
   return order.map(function(k){return (k?'<h4>'+esc(whereName(k))+'</h4>':'')+'<ul>'+by[k].map(function(l){
-    if(l.type==='changed')return '<li><b>'+esc(l.what)+'</b> <del>'+esc(l.from)+'</del> <span class="ad-arrow">&rarr;</span> <ins>'+esc(l.to)+'</ins></li>';
-    if(l.type==='added')return '<li><b>Added '+esc(l.what.toLowerCase())+'</b> <ins>'+esc(l.to)+'</ins></li>';
-    if(l.type==='removed')return '<li><b>Removed '+esc(l.what.toLowerCase())+'</b> <del>'+esc(l.from)+'</del></li>';
+    var loc=(l.where?'<span class="ad-where">'+esc(l.where)+'</span> ':'');
+    var nm=esc(l.el||l.what);
+    if(l.type==='changed')return '<li>'+loc+'<b>'+nm+'</b> <del>'+esc(l.from)+'</del> <span class="ad-arrow">&rarr;</span> <ins>'+esc(l.to)+'</ins></li>';
+    if(l.type==='added')return '<li>'+loc+'<b>Added '+nm.toLowerCase()+'</b> <ins>'+esc(l.to)+'</ins></li>';
+    if(l.type==='removed')return '<li>'+loc+'<b>Removed '+nm.toLowerCase()+'</b> <del>'+esc(l.from)+'</del></li>';
     return '<li>'+esc(l.what)+'</li>';}).join('')+'</ul>';}).join('');
 }
 var chOpenFirst=false;
