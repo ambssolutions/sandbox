@@ -141,6 +141,16 @@ async function writeStore(base, obj) {
   } catch (e) { /* tidy-up only */ }
 }
 
+/* Changes made outside the page editor (photos) are recorded here so they show in Changes and undo. */
+const actPath = () => 'admin/a-' + sign('activitystore').slice(0, 32) + '.json';
+async function readActivity() { const j = await readStore(actPath(), 3000); return j && Array.isArray(j.items) ? j.items : []; }
+async function logActivity(me, item) {
+  try {
+    const items = await readActivity();
+    items.unshift(Object.assign({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), at: new Date().toISOString(), by: me.email, who: me.name || me.email, area: 'Photos' }, item));
+    await writeStore(actPath(), { items: items.slice(0, 300), updated: new Date().toISOString() });
+  } catch (e) { /* the change itself is already saved */ }
+}
 async function readManifest(maxAgeMs) { const j = await readStore(MANIFEST, maxAgeMs); return j && Array.isArray(j.photos) ? j.photos : null; }
 async function writeManifest(photos) { await writeStore(MANIFEST, { photos, updated: new Date().toISOString() }); }
 async function currentPhotos(maxAgeMs) { return (await readManifest(maxAgeMs)) || STOCK.map((p) => Object.assign({}, p)); }
@@ -162,4 +172,4 @@ const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': 
 function origin(req) { return 'https://' + (req.headers['x-forwarded-host'] || req.headers.host || 'www.mikia.co.nz'); }
 function publicFeedback(p) { return { id: p.id, name: p.name, project: p.project, text: p.text }; }
 
-module.exports = { storeFailing, touchSession, IDLE_MIN, backCookieFor, readBack, clearBack, ROLE, readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
+module.exports = { readActivity, logActivity, storeFailing, touchSession, IDLE_MIN, backCookieFor, readBack, clearBack, ROLE, readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };

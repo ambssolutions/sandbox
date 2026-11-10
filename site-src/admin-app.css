@@ -220,3 +220,7 @@ html body .ad-idlewarn{position:fixed;left:12px;right:12px;bottom:12px;z-index:4
 .ad-tbl th:nth-child(1){width:19%}.ad-tbl th:nth-child(2){width:21%}
 .ad-ppl th:nth-child(n){width:auto}
 html body.adm .ad-snap select{width:200px;min-width:0;max-width:100%;flex:0 0 auto}
+
+.ad-photoedit{flex:1 1 100%;display:grid;gap:10px;margin-top:10px;padding:12px;border:1px solid rgba(128,128,128,.3);border-radius:12px}
+.ad-photoedit label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
+.ad-photoedit input{font:inherit;font-size:15px;padding:9px 10px;border-radius:10px;border:1px solid rgba(128,128,128,.4);background:#fff;color:#1c1c1e}

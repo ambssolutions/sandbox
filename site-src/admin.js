@@ -65,7 +65,7 @@ function render(photos,storage){
   note.hidden=!!storage;
   list.innerHTML=photos.map(function(p,i){
     return '<li class="ad-row" data-id="'+esc(p.id)+'"><img src="'+esc(p.src)+'" alt="" width="120" height="75" loading="lazy"><div class="ad-cap"><b>'+esc(p.caption||'No address')+'</b><span>'+esc(p.desc||'')+'</span><span>'+(p.stock?'Stock photo':'Uploaded')+'</span><span class="ad-dims"></span></div>'
-    +'<div class="ad-btns"><button type="button" data-act="up" aria-label="Move up"'+(i?'':' disabled')+'>&uarr;</button><button type="button" data-act="down" aria-label="Move down"'+(i<photos.length-1?'':' disabled')+'>&darr;</button><button type="button" data-act="rm" class="ad-rm">Remove</button></div></li>';
+    +'<div class="ad-btns"><button type="button" data-act="up" aria-label="Move up"'+(i?'':' disabled')+'>&uarr;</button><button type="button" data-act="down" aria-label="Move down"'+(i<photos.length-1?'':' disabled')+'>&darr;</button><button type="button" data-act="edit">Edit text</button><button type="button" data-act="rm" class="ad-rm">Remove</button></div></li>';
   }).join('')||'<li class="ad-empty">No photos yet. The carousel will show the stock photos until you add one.</li>';
   $('#adCount').textContent=photos.length+(photos.length===1?' photo':' photos');
   [].forEach.call(list.querySelectorAll('.ad-row'),function(r){var im=r.querySelector('img'),o=r.querySelector('.ad-dims');if(im&&o)showDims(im,o,im.getAttribute('src'));});
@@ -77,7 +77,18 @@ function load(){
 }
 list.addEventListener('click',function(e){
   var b=e.target.closest('button');if(!b||b.disabled)return;
+  if(b.closest('.ad-photoedit')&&!b.dataset.pecancel)return; /* the Save button submits its form instead */
   var row=b.closest('.ad-row'),id=row.dataset.id,act=b.dataset.act;
+  if(b.dataset.pecancel){var f0=row.querySelector('.ad-photoedit');if(f0)f0.remove();return;}
+  if(act==='edit'){
+    var old=row.querySelector('.ad-photoedit');if(old){old.remove();return;}
+    var cap=row.querySelector('.ad-cap b').textContent,spans=row.querySelectorAll('.ad-cap span'),ds=spans[0]?spans[0].textContent:'';if(cap==='No address')cap='';
+    var f=document.createElement('form');f.className='ad-inline ad-photoedit';
+    f.innerHTML='<label>Title (shown under the photo)<input name="caption" maxlength="120" value="'+esc(cap)+'"></label><label>Description<input name="desc" maxlength="220" value="'+esc(ds)+'"></label><div class="ad-btns"><button type="submit" class="ad-ap">Save text</button><button type="button" data-pecancel="1">Cancel</button></div>';
+    f.addEventListener('submit',function(ev){ev.preventDefault();var sb=f.querySelector('[type=submit]');sb.disabled=true;say('');
+      post('/api/admin/photos',{action:'edit',id:id,caption:f.caption.value,desc:f.desc.value}).then(function(j){render(j.photos,true);say('Saved. The website shows the new text within a few minutes.');}).catch(function(er){say(er.message,true);sb.disabled=false;});});
+    row.appendChild(f);f.caption.focus();return;
+  }
   if(act==='rm'){if(!confirm('Remove this photo from the website?'))return;}
   b.disabled=true;say('');
   post('/api/admin/photos',act==='rm'?{action:'remove',id:id}:{action:'move',id:id,dir:act}).then(function(j){render(j.photos,true);say(act==='rm'?'Photo removed.':'Order updated.');}).catch(function(er){say(er.message,true);b.disabled=false;});
@@ -329,7 +340,7 @@ function preview(path,edit){
   say(edit?'Opening the page...':'Preparing the preview...');onPage=!!edit;$('#edModalSave').hidden=!edit;$('#edModalHint').hidden=!edit;
   $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
   $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':'This is only a preview of this page. Nothing can be changed here.';
-  $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes.';$('#edModalHint').title=STD;
+  $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. Photos in the Media box are changed under Photos.';$('#edModalHint').title=STD;
   site({action:'preview',path:path,edit:!!edit}).then(function(j){say('');frame.srcdoc=j.html;sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;}).catch(function(er){say(er.message,true);});
 }
 function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelectorAll('#edSize button'),function(b){b.setAttribute('aria-pressed',Number(b.getAttribute('data-w'))===w?'true':'false');});}
@@ -539,14 +550,27 @@ function entRun(){while(entBusy<3&&entQ.length){(function(it){var tb=it.tb,ck=tb
 function tblSet(id,ents,empty){
   var t=document.getElementById(id);[].slice.call(t.querySelectorAll('tbody')).forEach(function(b){b.remove();});
   if(!ents.length){t.insertAdjacentHTML('beforeend','<tbody><tr><td colspan="5" class="ad-empty">'+esc(empty||'Nothing yet.')+'</td></tr></tbody>');return;}
-  t.insertAdjacentHTML('beforeend',ents.map(entSkeleton).join(''));
-  [].forEach.call(t.querySelectorAll('tbody.ad-ent'),function(tb,i){entQ.push({tb:tb,e:ents[i]});});entRun();
+  t.insertAdjacentHTML('beforeend',ents.map(function(e){return e.photo?photoBody(e):entSkeleton(e);}).join(''));
+  var rows=[].slice.call(t.querySelectorAll('tbody.ad-ent'));rows.forEach(function(tb,i){if(!ents[i].photo)entQ.push({tb:tb,e:ents[i]});});entRun();
 }
 function pagesIn(s){var m=String(s||'').match(/\b[a-z0-9-]+\.html\b/g);return m&&m.length?m.filter(function(x,i){return m.indexOf(x)===i;}):['Other'];}
+function photoEnt(x){return {photo:1,id:x.id,who:x.who,when:x.at,pages:['Photos'],act:x};}
+function photoLine(x){
+  var t=esc(trunc(x.title||'(no title)',60));
+  if(x.kind==='edit'){var a=x.before||{},b=x.after||{},ls=[];if((a.caption||'')!==(b.caption||''))ls.push('<div><small>Title</small> <del>'+esc(trunc(a.caption,60))+'</del> <span class="ad-arrow">\u2192</span> <ins>'+esc(trunc(b.caption,60))+'</ins></div>');if((a.desc||'')!==(b.desc||''))ls.push('<div><small>Description</small> <del>'+esc(trunc(a.desc,70))+'</del> <span class="ad-arrow">\u2192</span> <ins>'+esc(trunc(b.desc,70))+'</ins></div>');return ls.join('')||'Edited';}
+  if(x.kind==='add')return '<b>Added photo</b> <ins>'+t+'</ins>';
+  if(x.kind==='remove')return '<b>Removed photo</b> <del>'+t+'</del>';
+  if(x.kind==='move')return '<b>Moved photo '+(x.dir==='up'?'up':'down')+'</b> '+t;
+  return esc(x.kind||'');
+}
+function photoBody(e){
+  var x=e.act;
+  return '<tbody class="ad-ent" data-photo="'+esc(x.id)+'"><tr><td class="c-page"><b>Photos</b><small>Media box on the homepage</small></td><td class="c-sec"><b>'+esc(trunc(x.title||'Photo',50))+'</b><small>'+({edit:'Title and description',add:'New photo',remove:'Photo removed',move:'Order'}[x.kind]||'')+(x.undo?' (undone)':'')+'</small></td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small></td><td class="c-what">'+photoLine(x)+'</td>'+(x.kind==='edit'&&!x.undo?'<td class="c-act"><button type="button" data-undophoto="1">Undo</button></td>':'<td class="c-act"></td>')+'</tr></tbody>';
+}
 function chEnt(c){return {sha:c.sha,who:chWho(c),when:c.date,fallback:chMsg(c),pages:pagesIn(c.message)};}
 /* filters: person, page, when */
 var chAll={draft:[],live:[],vers:[]};
-function pageLabel(f){return f==='Other'?'Other (contact details, pictures...)':pn(f);}
+function pageLabel(f){return f==='Other'?'Other (contact details, pictures...)':f==='Photos'?'Photos (Media box)':pn(f);}
 function chFill(){
   var who={},pg={};['draft','live','vers'].forEach(function(k){chAll[k].forEach(function(e){if(e.who)who[e.who]=1;(e.pages||[]).forEach(function(p){pg[p]=1;});});});
   var sw=$('#chFWho'),sp=$('#chFPage'),cw=sw.value,cp=sp.value;
@@ -590,9 +614,13 @@ $('#chSnapWhen').addEventListener('change',snapRender);
 function chLoad(){
   var a=site({action:'publishes'}).then(function(j){chAll.vers=(j.versions||[]).map(function(x){return {from:x.from,to:x.to,who:x.who,when:x.at,fallback:(x.n||0)+' change'+(x.n===1?'':'s'),pages:pagesIn((x.files||[]).join(' '))};});}).catch(function(){chAll.vers=[];});
   var b=site({action:'history',n:100}).then(function(j){var isEd=function(c){return /^Website editor: /.test(c.message)&&!/^Website editor: publish changes/.test(c.message);};chAll.draft=j.draft.filter(isEd).map(chEnt);chAll.live=j.live.filter(isEd).map(chEnt);});
-  Promise.all([a,b]).then(function(){chFill();chRender();snapRender();}).catch(function(er){say(er.message,true);});
+  var c=site({action:'activity'}).then(function(j){chAll.photo=(j.items||[]).map(photoEnt);}).catch(function(){chAll.photo=[];});
+  Promise.all([a,b,c]).then(function(){chAll.live=chAll.live.concat(chAll.photo||[]).sort(function(p,q){return new Date(q.when)-new Date(p.when);});chFill();chRender();snapRender();}).catch(function(er){say(er.message,true);});
 }
 $('[data-pane=changes]').addEventListener('click',function(e){
+  var up=e.target.closest('[data-undophoto]');
+  if(up&&!up.disabled){if(!confirm('Undo this photo text change? It goes back to the earlier title and description straight away.'))return;up.disabled=true;
+    post('/api/admin/photos',{action:'undoedit',logId:up.closest('.ad-ent').getAttribute('data-photo')}).then(function(){say('Undone. The website shows it again within a few minutes.');chLoad();}).catch(function(er){say(er.message,true);up.disabled=false;});return;}
   var b=e.target.closest('[data-undo]');if(!b||b.disabled)return;var sha=b.closest('.ad-ent').getAttribute('data-sha');
   if(!confirm('Undo this change? The undo goes into your draft and is not published until you press Publish.'))return;
   b.disabled=true;site({action:'undo',sha:sha}).then(function(){say('Undone in your draft.');return siteStatus();}).then(chLoad).catch(function(er){say(er.message,true);b.disabled=false;});

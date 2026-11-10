@@ -3,6 +3,8 @@
    Fields are numbered in the order they appear, so a change is sent as { k, old, new } and refused if the page has changed underneath it. */
 const parse5 = require('parse5');
 
+/* ids whose text the site's own scripts rewrite on every visit (slide counter, 3D status label, play button, footer year) */
+const SCRIPT_TEXT = new Set(['carCount', 'v3dLabel', 'v3dPlay', 'yr']);
 const SKIP = new Set(['script', 'style', 'svg', 'noscript', 'template', 'math']);
 const REPEATABLE_MIN = 2;
 const BLOCKS = new Set(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'blockquote', 'figcaption', 'dt', 'dd', 'div']);
@@ -73,6 +75,9 @@ function extract(html) {
 
   (function go(n, reg, item) {
     if (n.tagName && SKIP.has(n.tagName)) return;
+    if (n.tagName === 'div' && attr(n, 'id') === 'mcarTrack') return; /* shown from the Photos list on the live site */
+    /* Text the site's own scripts write after the page loads (counters, status labels, the footer year) cannot be edited here: the live site would overwrite it. */
+    if (n.tagName && SCRIPT_TEXT.has(attr(n, 'id'))) return;
     if (n.tagName === 'nav' && attr(n, 'class') === 'nav') reg = 'nav';
     if (n.tagName === 'footer') reg = 'footer';
     if (n.tagName === 'main') reg = 'main';
@@ -87,7 +92,7 @@ function extract(html) {
         fields.push({ kind: 'attr', attr: 'src', region: reg, item, tag: 'img', label: 'Picture file', value: attr(n, 'src'), start: l2.startOffset + r2.indexOf('"') + 1, end: l2.endOffset - 1, picture: true, drop, tagStart: n.sourceCodeLocation.startOffset });
       }
     }
-    if (n.tagName === 'a' && attr(n, 'href') != null && n.sourceCodeLocation && n.sourceCodeLocation.attrs.href && !/^#/.test(attr(n, 'href'))) {
+    if (n.tagName === 'a' && attr(n, 'id') !== 'lpSend' && attr(n, 'href') != null && n.sourceCodeLocation && n.sourceCodeLocation.attrs.href && !/^#/.test(attr(n, 'href'))) {
       const loc = n.sourceCodeLocation.attrs.href, raw = html.slice(loc.startOffset, loc.endOffset), q = raw.indexOf('"') >= 0 ? '"' : "'";
       fields.push({ kind: 'attr', attr: 'href', region: reg, item, tag: 'a', label: 'Link address for "' + labelOf(n).slice(0, 40) + '"', value: attr(n, 'href'), start: loc.startOffset + raw.indexOf(q) + 1, end: loc.endOffset - 1 });
     }

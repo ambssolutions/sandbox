@@ -29,6 +29,7 @@ module.exports = async function (req, res) {
     const out = await L.put(name, buf, { access: 'public', contentType: k[0], addRandomSuffix: false, cacheControlMaxAge: 31536000 });
     photos.push({ id: name, src: out.url, alt: caption || 'MiKia project photo', caption: caption, desc: desc, blob: true });
     await L.writeManifest(photos);
+    await L.logActivity(me, { kind: 'add', pid: name, title: caption, src: out.url, after: { caption: caption, desc: desc } });
     return L.send(res, 200, { ok: true, photos: photos.map(L.publicPhoto) });
   } catch (e) {
     return L.send(res, 502, { error: 'Could not save the photo. Please try again.' });
