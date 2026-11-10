@@ -247,7 +247,8 @@ function diffPages(before, after) {
     if (sec && isHead && val0) lastHead = val0.slice(0, 60);
     const where = f.region === 'head' ? 'Google and sharing text' : f.region === 'nav' ? 'Menu' : f.region === 'footer' ? 'Footer' : sec ? 'In the "' + String(sec.label).slice(0, 60) + '" section' + (under ? ', under the heading "' + under + '"' : '') : '';
     const el = f.kind === 'text' ? (EL[f.tag] || 'Wording') : f.attr === 'alt' ? 'Picture description' : f.attr === 'src' ? 'Picture' : f.attr === 'href' ? 'Link address' : '';
-    return { what: what(f), where, el, val: String(f.value).replace(/\s+/g, ' ').trim(), label: f.label || '' };
+    const secName = f.region === 'head' ? 'Google and sharing text' : f.region === 'nav' ? 'Menu' : f.region === 'footer' ? 'Footer' : sec ? String(sec.label).slice(0, 60) : '';
+    return { what: what(f), where, sec: secName, under, el, val: String(f.value).replace(/\s+/g, ' ').trim(), label: f.label || '' };
   }).filter((y) => y.val); };
   const A = toList(before), B = toList(after), key = (x) => x.what + '\u0001' + x.val + '\u0001' + x.label;
   const n = A.length, m = B.length;
@@ -272,8 +273,8 @@ function diffPages(before, after) {
       if (a < 0) a = adds.findIndex((x, ix) => !used.has(ix) && x.what === d.what);
       if (a >= 0) { used.add(a); pairs.push([d, adds[a]]); } else pairs.push([d, null]);
     }
-    for (const [d, a] of pairs) { if (a) out.push({ type: 'changed', what: a.what, where: a.where, el: a.el, from: d.val, to: a.val }); else out.push({ type: 'removed', what: d.what, where: d.where, el: d.el, from: d.val }); }
-    adds.forEach((a, ix) => { if (!used.has(ix)) out.push({ type: 'added', what: a.what, where: a.where, el: a.el, to: a.val }); });
+    for (const [d, a] of pairs) { if (a) out.push({ type: 'changed', what: a.what, where: a.where, sec: a.sec, under: a.under, el: a.el, from: d.val, to: a.val }); else out.push({ type: 'removed', what: d.what, where: d.where, sec: d.sec, under: d.under, el: d.el, from: d.val }); }
+    adds.forEach((a, ix) => { if (!used.has(ix)) out.push({ type: 'added', what: a.what, where: a.where, sec: a.sec, under: a.under, el: a.el, to: a.val }); });
   }
   return out;
 }

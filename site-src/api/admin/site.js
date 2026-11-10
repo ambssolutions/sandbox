@@ -144,9 +144,10 @@ module.exports = async function (req, res) {
       return L.send(res, 200, { html });
     }
     if (action === 'history') {
-      const live = await G.history(G.LIVE(), b.path ? okPath(b.path) : '', 30);
+      const HN = Math.max(5, Math.min(100, Number(b.n) || 30));
+      const live = await G.history(G.LIVE(), b.path ? okPath(b.path) : '', HN);
       let drafts = [];
-      if (w.draft) { const dh = await G.history(G.DRAFT, b.path ? okPath(b.path) : '', 30); const set = new Set(live.map((c) => c.sha)); drafts = dh.filter((c) => !set.has(c.sha)); }
+      if (w.draft) { const dh = await G.history(G.DRAFT, b.path ? okPath(b.path) : '', HN); const set = new Set(live.map((c) => c.sha)); drafts = dh.filter((c) => !set.has(c.sha)); }
       if (isEd) return L.send(res, 200, { draft: drafts.filter((c) => mine(c.message)), live: live.filter((c) => mine(c.message)) });
       return L.send(res, 200, { draft: drafts, live });
     }

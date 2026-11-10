@@ -23,6 +23,16 @@ panes = h[start:end].replace('<div data-pane="photos">', '<div data-pane="photos
 VERS = '<h3 class="ad-h3" id="chVersH">Published versions</h3><p class="ad-help" id="chVersHelp">Each time changes are published, press What changed to see the website before and after.</p><ul class="ad-list" id="chVers"></ul><h3 class="ad-h3">Individual changes</h3><ul class="ad-list" id="chLive">'
 assert '<h3 class="ad-h3">Published</h3><ul class="ad-list" id="chLive">' in panes
 panes = panes.replace('<h3 class="ad-h3">Published</h3><ul class="ad-list" id="chLive">', VERS, 1)
+def TBL(i, by, undo, wid=''):
+    return '<div class="ad-tw"' + (' id="%s"' % wid if wid else '') + '><table class="ad-tbl" id="%s"><thead><tr><th>Page</th><th>Section</th><th>%s</th><th>What changed</th>%s</tr></thead></table></div>' % (i, by, '<th></th>' if undo else '')
+for old, new in [('<ul class="ad-list" id="chDraft"></ul>', TBL('chDraft', 'Changed by', True, 'chDraftW')), ('<ul class="ad-list" id="chVers"></ul>', TBL('chVers', 'Published by', False)), ('<ul class="ad-list" id="chLive"></ul>', TBL('chLive', 'Changed by', True))]:
+    assert old in panes, old
+    panes = panes.replace(old, new, 1)
+FIL = '<div class="ad-fbar" id="chFilters"><label id="chFWhoL">Person <select id="chFWho"><option value="">Everyone</option></select></label><label>Page <select id="chFPage"><option value="">All pages</option></select></label><label>When <select id="chFWhen"><option value="">Any time</option><option value="today">Today</option><option value="7">Last 7 days</option></select></label><button type="button" id="chFClear">Clear filters</button></div>'
+SNAP = '<div class="ad-snap" id="chSnap"><div class="ad-snap-top"><h3 class="ad-h3">Snapshot</h3><select id="chSnapWhen" aria-label="Period"><option value="today">Today</option><option value="yesterday">Yesterday</option><option value="7">Last 7 days</option></select></div><div class="ad-tiles" id="chTiles"></div><div class="ad-tw"><table class="ad-tbl ad-ppl" id="chPeople"><thead><tr><th>Person</th><th>Changes</th><th>Published</th><th>Pages changed</th><th>Last change</th></tr></thead></table></div></div>'
+FIL = SNAP + FIL
+assert '<h3 class="ad-h3" id="chDraftH" hidden>' in panes
+panes = panes.replace('<h3 class="ad-h3" id="chDraftH" hidden>', FIL + '<h3 class="ad-h3" id="chDraftH" hidden>', 1)
 ACC = '<fieldset class="ad-accset" id="adInvAcc"><legend>Which sections can they use?</legend>' + ''.join('<label class="ad-chk"><input type="checkbox" name="acc" value="%s" checked> %s</label>' % (k, n) for k, n in [('pages', 'Pages and text'), ('photos', 'Photos'), ('details', 'Contact details'), ('feedback', 'Client feedback'), ('changes', 'Changes and undo')]) + '</fieldset>'
 SEND = '<label class="ad-chk"><input type="checkbox" name="sendmail" checked> Email the invitation to them</label>'
 if 'adInvAcc' not in panes:
