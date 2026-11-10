@@ -20,7 +20,7 @@ const STOCK = [
   ['stock-res-4', 'A new modern house beside a traditional home', 'Infill housing'],
   ['stock-com-2', 'A mixed-use building with black and white cladding and large windows', 'Mixed-use frontage'],
   ['stock-com-3', 'A building clad in black metal and vertical timber battens', 'Timber and black cladding']
-].map(([id, alt, caption]) => ({ id, src: '/projects/' + id + '-1600.webp', alt, caption, desc: alt + '.', stock: true }));
+].map(([id, alt]) => ({ id, src: '/projects/' + id + '-1600.webp', alt, caption: '', desc: '', stock: true }));
 
 function send(res, code, obj) {
   res.statusCode = code;
@@ -144,6 +144,14 @@ async function writeStore(base, obj) {
 /* Changes made outside the page editor (photos) are recorded here so they show in Changes and undo. */
 const actPath = () => 'admin/a-' + sign('activitystore').slice(0, 32) + '.json';
 async function readActivity() { const j = await readStore(actPath(), 3000); return j && Array.isArray(j.items) ? j.items : []; }
+async function markActivity(ids, patch) {
+  try {
+    const items = await readActivity(); let n = 0;
+    items.forEach((x) => { if (ids === 'all' || ids.includes(x.id)) { Object.assign(x, patch); n++; } });
+    if (n) await writeStore(actPath(), { items, updated: new Date().toISOString() });
+    return n;
+  } catch (e) { return 0; }
+}
 async function logActivity(me, item) {
   try {
     const items = await readActivity();
@@ -156,9 +164,8 @@ async function writeManifest(photos) { await writeStore(MANIFEST, { photos, upda
 async function currentPhotos(maxAgeMs) { return (await readManifest(maxAgeMs)) || STOCK.map((p) => Object.assign({}, p)); }
 function storageReady() { return !!process.env.BLOB_READ_WRITE_TOKEN; }
 function publicPhoto(p) {
-  let desc = p.desc || '';
-  if (!desc && p.stock) { const s = STOCK.find((x) => x.id === p.id); if (s) desc = s.desc; }  // photos saved before descriptions existed
-  return { id: p.id, src: p.src, alt: p.alt, caption: p.caption, desc: desc, stock: !!p.stock };
+  /* Photos are just photos: no title or write-up is published (the picture description is only read by screen readers and Google). */
+  return { id: p.id, src: p.src, alt: p.alt, caption: '', desc: '', stock: !!p.stock };
 }
 
 /* Feedback store. The store file name is derived from the secret so the (public) blob address cannot be guessed.
@@ -172,4 +179,4 @@ const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': 
 function origin(req) { return 'https://' + (req.headers['x-forwarded-host'] || req.headers.host || 'www.mikia.co.nz'); }
 function publicFeedback(p) { return { id: p.id, name: p.name, project: p.project, text: p.text }; }
 
-module.exports = { readActivity, logActivity, storeFailing, touchSession, IDLE_MIN, backCookieFor, readBack, clearBack, ROLE, readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
+module.exports = { markActivity, readActivity, logActivity, storeFailing, touchSession, IDLE_MIN, backCookieFor, readBack, clearBack, ROLE, readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };

@@ -35,7 +35,7 @@ function mirror(x, f) {
 const pageUrlToPath = (u) => String(u).replace(/^\//, '').replace(/#.*$/, '') || 'index';
 
 const NEW_PAGES = false; /* set to true to allow creating new pages */
-const EDIT_JS = "document.addEventListener('click',function(e){var a=e.target.closest('a');if(a)e.preventDefault();},true);document.querySelectorAll('[data-ek]').forEach(function(s){s.contentEditable='true';s.spellcheck=true;s.addEventListener('keydown',function(e){if(e.key==='Enter')e.preventDefault();e.stopPropagation();});s.addEventListener('keyup',function(e){e.stopPropagation();});s.addEventListener('input',function(){parent.postMessage({mk:'edit',k:Number(s.getAttribute('data-ek')),v:s.textContent},'*');});});document.querySelectorAll('img[data-ek-img]').forEach(function(im){var k=Number(im.getAttribute('data-ek-img'));im.title='Click to change this picture';im.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var f=document.createElement('input');f.type='file';f.accept='image/jpeg,image/png,image/webp';f.onchange=function(){var file=f.files&&f.files[0];if(!file)return;var r=new FileReader();r.onload=function(){im.removeAttribute('srcset');im.removeAttribute('sizes');im.src=r.result;parent.postMessage({mk:'pic',k:k,name:file.name,type:file.type,data:r.result},'*');};r.readAsDataURL(file);};f.click();},true);});";
+const EDIT_JS = "document.addEventListener('click',function(e){var a=e.target.closest('a');if(a)e.preventDefault();},true);document.querySelectorAll('[data-ek]').forEach(function(s){s.contentEditable='true';s.spellcheck=true;s.addEventListener('keydown',function(e){if(e.key==='Enter')e.preventDefault();e.stopPropagation();});s.addEventListener('keyup',function(e){e.stopPropagation();});s.addEventListener('input',function(){parent.postMessage({mk:'edit',k:Number(s.getAttribute('data-ek')),v:s.textContent},'*');});});document.querySelectorAll('img[data-ek-img]').forEach(function(im){var k=Number(im.getAttribute('data-ek-img'));im.title='Click to change this picture';im.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var f=document.createElement('input');f.type='file';f.accept='image/jpeg,image/png,image/webp';f.onchange=function(){var file=f.files&&f.files[0];if(!file)return;var r=new FileReader();r.onload=function(){im.removeAttribute('srcset');im.removeAttribute('sizes');im.src=r.result;parent.postMessage({mk:'pic',k:k,name:file.name,type:file.type,data:r.result},'*');};r.readAsDataURL(file);};f.click();},true);});var mc=document.getElementById('mediaCar');if(mc){mc.style.position='relative';var pb=document.createElement('button');pb.type='button';pb.textContent='Change photos';pb.setAttribute('style','position:absolute;top:10px;right:10px;z-index:9;background:#191919;color:#fff;border:0;border-radius:999px;padding:8px 14px;font:600 14px system-ui;cursor:pointer');pb.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();parent.postMessage({mk:'photos'},'*');});mc.appendChild(pb);mc.addEventListener('click',function(e){if(e.target.closest('.mcar-s img')){e.preventDefault();e.stopPropagation();parent.postMessage({mk:'photos'},'*');}},true);mc.querySelectorAll('.mcar-s img').forEach(function(im){im.style.cursor='pointer';im.title='Click to change the photos';});}";
 module.exports = async function (req, res) {
   await S.load();
   const me = await U.live(L.currentUser(req));
@@ -45,10 +45,19 @@ module.exports = async function (req, res) {
   let b; try { b = await L.readJson(req, 5.5e6); } catch (e) { return L.send(res, 413, { error: 'That was too large to send.' }); }
   const action = String(b.action || '');
   /* Which section of the editor each action belongs to. Publishing and discarding are for anyone who can change pages or contact details. */
-  const SECTION = { pages: 'pages', page: 'pages', edit: 'pages', op: 'pages', add: 'pages', image: 'pages', preview: 'pages', newpage: 'pages', deletepage: 'pages', menu: 'pages', menuop: 'pages', details: 'details', savedetails: 'details', history: 'changes', publishes: 'changes', activity: 'changes', undo: 'changes', changedetail: 'changes' };
+  const SECTION = { failures: 'pages', dismissfail: 'pages', pages: 'pages', page: 'pages', edit: 'pages', op: 'pages', add: 'pages', image: 'pages', preview: 'pages', newpage: 'pages', deletepage: 'pages', menu: 'pages', menuop: 'pages', details: 'details', savedetails: 'details', history: 'changes', publishes: 'changes', activity: 'changes', undo: 'changes', changedetail: 'changes' };
   /* Editors see, and can undo, only the changes they made themselves. */
   const isEd = me.role === 'editor', mine = (m) => String(m || '').endsWith('(' + who(me) + ')');
   if (action !== 'status' && !(action === 'publish' || action === 'discard' || action === 'undolast' ? U.can(me, 'pages') || U.can(me, 'details') : U.can(me, SECTION[action] || 'pages'))) return L.send(res, 403, { error: 'You do not have access to this section.' });
+  if (action === 'failures') {
+    const all = await L.readActivity();
+    return L.send(res, 200, { items: all.filter((x) => x.kind === 'failed' && !x.dismissed && (!isEd || x.by === me.email)).slice(0, 30) });
+  }
+  if (action === 'dismissfail') {
+    const all = await L.readActivity(), mineIds = all.filter((x) => x.kind === 'failed' && (!isEd || x.by === me.email)).map((x) => x.id);
+    const ids = b.id === 'all' ? mineIds : mineIds.filter((x) => x === b.id);
+    return L.send(res, 200, { ok: true, n: await L.markActivity(ids, { dismissed: true }) });
+  }
   if (action === 'activity') {
     const all = await L.readActivity();
     return L.send(res, 200, { items: all.filter((x) => !isEd || x.by === me.email).slice(0, 100) });
@@ -290,8 +299,10 @@ module.exports = async function (req, res) {
     }
     return L.send(res, 400, { error: 'Unknown action.' });
   } catch (e) {
-    if (e.status === 404) return L.send(res, 404, { error: e.message });
     const m = String(e.message || '');
+    const WHAT = { edit: 'a text change', op: 'a change to the page layout', add: 'something you added', image: 'a picture change', publish: 'publishing', discard: 'discarding changes', undo: 'an undo', undolast: 'an undo', newpage: 'a new page', deletepage: 'deleting a page', savedetails: 'a contact details change', menu: 'a menu change', menuop: 'a menu change' };
+    if (WHAT[action]) await L.logActivity(me, { area: 'Website', kind: 'failed', title: b.path ? String(b.path).slice(0, 60) : WHAT[action], text: 'Could not go live (' + WHAT[action] + '): ' + m.replace(/^That did not work: /, '').slice(0, 160) });
+    if (e.status === 404) return L.send(res, 404, { error: e.message });
     return L.send(res, 400, { error: /changed since you opened|not found|does not look right|cannot be removed|Unknown|first change|Please/.test(m) ? m : 'That did not work: ' + m.slice(0, 160) });
   }
 };

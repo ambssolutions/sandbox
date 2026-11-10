@@ -24,5 +24,5 @@ module.exports = async function (req, res) {
     await L.writeFeedback(items);
     await L.logActivity(me, { area: 'Client feedback', kind: b.action, title: (it.name || 'Someone') + (it.project ? ' - ' + it.project : ''), text: b.action === 'approve' ? 'Approved to show on the website' : b.action === 'hide' ? 'Hidden from the website' : 'Deleted this feedback' });
     return L.send(res, 200, { ok: true, items: view(items) });
-  } catch (e) { return L.send(res, 502, { error: 'Could not save that. Please try again.' }); }
+  } catch (e) { await L.logActivity(me, { area: 'Client feedback', kind: 'failed', title: 'Feedback', text: 'Could not go live (' + (b.action || 'a change') + '): ' + String(e.message || '').slice(0, 140) }); return L.send(res, 502, { error: String(e.message || '').indexOf('Storage is switched off') === 0 ? e.message : 'Could not save that. Please try again.' }); }
 };

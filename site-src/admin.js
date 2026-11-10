@@ -22,7 +22,9 @@ function api(path,opt){
   opt=opt||{};opt.credentials='same-origin';
   return fetch(path,opt).then(function(r){return r.json().catch(function(){return{};}).then(function(j){if(!r.ok){var e=new Error(j.error||'Something went wrong.');e.status=r.status;throw e;}return j;});});
 }
-function post(path,obj){return api(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(obj)});}
+function post(path,obj){return api(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(obj)}).catch(function(e){noteFail(path,obj,e);throw e;});}
+/* When storage itself is off the server cannot keep a note of the failure, so this computer keeps one until it is dismissed. */
+function noteFail(path,obj,e){try{if(!/Storage is switched off/.test(String(e&&e.message)))return;var area=/photos|upload/.test(path)?'Photos':/feedback/.test(path)?'Client feedback':/users/.test(path)?'People':'Website';var l=JSON.parse(localStorage.getItem('mk-failed')||'[]');l.unshift({id:'l'+Date.now(),at:new Date().toISOString(),area:area,title:(obj&&(obj.action||obj.path))||'change',text:'Could not go live: '+e.message,local:1});localStorage.setItem('mk-failed',JSON.stringify(l.slice(0,30)));}catch(x){}}
 function showLogin(j){if(!j)api('/api/admin/users').then(function(x){if(x&&x.auth===false)showLogin(x);}).catch(function(){});var h=$('#adLoginHint');if(h)h.textContent=j&&j.master===false?'Sign in with your email and password.':'AMBS: leave the email empty to use the master password.';$('#adEmail').required=!!(j&&j.master===false);idleStop();var wasIn=false;try{wasIn=localStorage.getItem('mk-admin-in')==='1';localStorage.removeItem('mk-admin-in');}catch(e){}if(wasIn)$('#adIdleMsg').hidden=false;panel.hidden=true;inviteBox.hidden=true;$('#adBoot').hidden=true;loginBox.hidden=false;me=null;}
 /* ---- tabs ---- */
 function tab(name){
@@ -58,14 +60,34 @@ function enter(user){
   [].forEach.call(root.querySelectorAll('.hm-h'),function(h){var g=h.nextElementSibling;if(g&&g.classList.contains('hm-grid')&&!g.querySelector('.hm-card:not([hidden])')){h.hidden=true;g.hidden=true;}});
   if(user.super)post('/api/admin/users',{action:'settings'}).then(function(j){hmKey(j.key);}).catch(function(){});
   var pc=$('#pbCard');if(pc)pc.hidden=!can('pages');
+  canPh=can('photos');
+  if(can('pages')||can('details')||can('photos'))loadFailures();
   tab('home');if(can('photos'))load();if(can('pages')||can('details'))siteStatus();
 }
+/* ---- changes that could not go live: shown on the Home page when someone signs in ---- */
+var failBox=document.createElement('div');failBox.className='ad-card ad-failcard';failBox.id='hmFail';failBox.hidden=true;
+(function(){var a=$('#hmAlert');if(a&&a.parentNode)a.parentNode.insertBefore(failBox,a.nextSibling);})();
+function loadFailures(){
+  var loc=[];try{loc=JSON.parse(localStorage.getItem('mk-failed')||'[]');}catch(e){}
+  site({action:'failures'}).then(function(j){return j.items||[];}).catch(function(){return [];}).then(function(srv){
+    var all=srv.concat(loc).sort(function(a,b){return new Date(b.at)-new Date(a.at);});
+    if(!all.length){failBox.hidden=true;return;}
+    failBox.hidden=false;
+    failBox.innerHTML='<div class="ad-top"><h2>Changes that could not go live</h2><button type="button" data-failall="1">Dismiss all</button></div><p class="ad-help">These were tried but did not reach the website. Look at each one and do it again, then dismiss it.</p><ul class="ad-list">'+all.map(function(x){return '<li class="ad-row" data-id="'+esc(x.id)+'" data-local="'+(x.local?'1':'')+'"><div class="ad-cap"><b>'+esc(x.area||'Website')+(x.title?' \u00b7 '+esc(x.title):'')+'</b><span>'+esc(when2(x.at))+(x.who?' by '+esc(x.who):'')+(x.local?' (on this computer)':'')+'</span><span>'+esc(x.text||'')+'</span></div><div class="ad-btns"><button type="button" data-faildis="1">Dismiss</button></div></li>';}).join('')+'</ul>';
+  });
+}
+failBox.addEventListener('click',function(e){
+  var all=e.target.closest('[data-failall]'),one=e.target.closest('[data-faildis]');if(!all&&!one)return;
+  var id=all?'all':one.closest('.ad-row').getAttribute('data-id'),loc=all||one.closest('.ad-row').getAttribute('data-local')==='1';
+  if(all||loc){try{var l=JSON.parse(localStorage.getItem('mk-failed')||'[]');localStorage.setItem('mk-failed',JSON.stringify(all?[]:l.filter(function(x){return x.id!==id;})));}catch(x){}}
+  (loc&&!all?Promise.resolve():site({action:'dismissfail',id:id})).then(loadFailures);
+});
 /* ---- photos ---- */
 function render(photos,storage){
   note.hidden=!!storage;
   list.innerHTML=photos.map(function(p,i){
-    return '<li class="ad-row" data-id="'+esc(p.id)+'"><img src="'+esc(p.src)+'" alt="" width="120" height="75" loading="lazy"><div class="ad-cap"><b>'+esc(p.caption||'No address')+'</b><span>'+esc(p.desc||'')+'</span><span>'+(p.stock?'Stock photo':'Uploaded')+'</span><span class="ad-dims"></span></div>'
-    +'<div class="ad-btns"><button type="button" data-act="up" aria-label="Move up"'+(i?'':' disabled')+'>&uarr;</button><button type="button" data-act="down" aria-label="Move down"'+(i<photos.length-1?'':' disabled')+'>&darr;</button><button type="button" data-act="edit">Edit text</button><button type="button" data-act="rm" class="ad-rm">Remove</button></div></li>';
+    return '<li class="ad-row" data-id="'+esc(p.id)+'"><img src="'+esc(p.src)+'" alt="" width="120" height="75" loading="lazy"><div class="ad-cap"><b>Photo '+(i+1)+'</b><span>'+(p.stock?'Stock photo':'Uploaded')+'</span><span class="ad-dims"></span></div>'
+    +'<div class="ad-btns"><button type="button" data-act="up" aria-label="Move up"'+(i?'':' disabled')+'>&uarr;</button><button type="button" data-act="down" aria-label="Move down"'+(i<photos.length-1?'':' disabled')+'>&darr;</button><button type="button" data-act="rm" class="ad-rm">Remove</button></div></li>';
   }).join('')||'<li class="ad-empty">No photos yet. The carousel will show the stock photos until you add one.</li>';
   $('#adCount').textContent=photos.length+(photos.length===1?' photo':' photos');
   [].forEach.call(list.querySelectorAll('.ad-row'),function(r){var im=r.querySelector('img'),o=r.querySelector('.ad-dims');if(im&&o)showDims(im,o,im.getAttribute('src'));});
@@ -77,18 +99,7 @@ function load(){
 }
 list.addEventListener('click',function(e){
   var b=e.target.closest('button');if(!b||b.disabled)return;
-  if(b.closest('.ad-photoedit')&&!b.dataset.pecancel)return; /* the Save button submits its form instead */
   var row=b.closest('.ad-row'),id=row.dataset.id,act=b.dataset.act;
-  if(b.dataset.pecancel){var f0=row.querySelector('.ad-photoedit');if(f0)f0.remove();return;}
-  if(act==='edit'){
-    var old=row.querySelector('.ad-photoedit');if(old){old.remove();return;}
-    var cap=row.querySelector('.ad-cap b').textContent,spans=row.querySelectorAll('.ad-cap span'),ds=spans[0]?spans[0].textContent:'';if(cap==='No address')cap='';
-    var f=document.createElement('form');f.className='ad-inline ad-photoedit';
-    f.innerHTML='<label>Title (shown under the photo)<input name="caption" maxlength="120" value="'+esc(cap)+'"></label><label>Description<input name="desc" maxlength="220" value="'+esc(ds)+'"></label><div class="ad-btns"><button type="submit" class="ad-ap">Save text</button><button type="button" data-pecancel="1">Cancel</button></div>';
-    f.addEventListener('submit',function(ev){ev.preventDefault();var sb=f.querySelector('[type=submit]');sb.disabled=true;say('');
-      post('/api/admin/photos',{action:'edit',id:id,caption:f.caption.value,desc:f.desc.value}).then(function(j){render(j.photos,true);say('Saved. The website shows the new text within a few minutes.');}).catch(function(er){say(er.message,true);sb.disabled=false;});});
-    row.appendChild(f);f.caption.focus();return;
-  }
   if(act==='rm'){if(!confirm('Remove this photo from the website?'))return;}
   b.disabled=true;say('');
   post('/api/admin/photos',act==='rm'?{action:'remove',id:id}:{action:'move',id:id,dir:act}).then(function(j){render(j.photos,true);say(act==='rm'?'Photo removed.':'Order updated.');}).catch(function(er){say(er.message,true);b.disabled=false;});
@@ -138,7 +149,7 @@ $('#adUpForm').addEventListener('submit',function(e){
   if(!f){say('Choose a photo first.',true);return;}
   b.disabled=true;say('Checking the picture...');
   askSize(f).then(function(go){sizeStop(go);say('Uploading...');return shrink(f);}).then(function(bl){
-    return api('/api/admin/upload',{method:'POST',headers:{'content-type':bl.type||'image/jpeg','x-caption':encodeURIComponent(e.target.caption.value.trim()),'x-desc':encodeURIComponent(e.target.desc.value.trim())},body:bl});
+    return api('/api/admin/upload',{method:'POST',headers:{'content-type':bl.type||'image/jpeg'},body:bl});
   }).then(function(j){e.target.reset();render(j.photos,true);say('Photo added. It shows on the website within a minute.');}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
 });
 /* ---- client feedback ---- */
@@ -165,7 +176,7 @@ function fbPreview(extraId){
   fetch('/',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('Could not load the homepage.');return r.text();}).then(function(h){
     var stub='<base href="'+location.origin+'/"><script>(function(){var I='+JSON.stringify(items).replace(/</g,'\\u003c')+',f=window.fetch;window.fetch=function(u){if(String(u).indexOf("/api/testimonials")>-1)return Promise.resolve(new Response(JSON.stringify({items:I}),{status:200,headers:{"Content-Type":"application/json"}}));return f.apply(this,arguments)};addEventListener("load",function(){setTimeout(function(){var e=document.getElementById("media-testimonials");e&&e.scrollIntoView()},1800)})})()<\/script>';
     if(modal.parentNode!==root)root.appendChild(modal);/* the preview window lives outside the Pages tab, so it can open from here */
-    onPage=false;$('#edModalSave').hidden=true;$('#edModalHint').hidden=true;
+    onPage=false;$('#edModalSave').hidden=true;$('#edModalHint').hidden=true;phBtn.hidden=true;
     $('#edModalName').textContent='Preview: Testimonials on the homepage';
     $('#edModalNote').textContent=extraId?'This shows the section as it would look if this message were approved. It is not on the website yet.':'This is how the Testimonials section looks to visitors now (approved feedback only). Nothing can be changed here.';
     say('');frame.srcdoc=h.replace(/<head[^>]*>/i,function(m){return m+stub;});sizeFrame(Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;
@@ -337,22 +348,41 @@ $('#adDiscard').addEventListener('click',function(e){
 var modal=$('#edModal'),frame=$('#edFrame');
 var onPage=false;
 function preview(path,edit){
-  say(edit?'Opening the page...':'Preparing the preview...');onPage=!!edit;$('#edModalSave').hidden=!edit;$('#edModalHint').hidden=!edit;
+  say(edit?'Opening the page...':'Preparing the preview...');onPage=!!edit;$('#edModalSave').hidden=!edit;$('#edModalHint').hidden=!edit;phBtn.hidden=!edit||!canPh;
   $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
   $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':'This is only a preview of this page. Nothing can be changed here.';
-  $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. Photos in the Media box are changed under Photos.';$('#edModalHint').title=STD;
+  $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. The photos in the Media box are changed under Photos.';$('#edModalHint').title=STD;
   site({action:'preview',path:path,edit:!!edit}).then(function(j){say('');frame.srcdoc=j.html;sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;}).catch(function(er){say(er.message,true);});
 }
 function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelectorAll('#edSize button'),function(b){b.setAttribute('aria-pressed',Number(b.getAttribute('data-w'))===w?'true':'false');});}
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
-$('#edClose').addEventListener('click',function(){modal.hidden=true;frame.srcdoc='';onPage=false;});
+$('#edClose').addEventListener('click',function(){if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;});
 window.addEventListener('message',function(e){
+  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='photos'){openPhotos();return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pic'){
     var d=e.data,el0=edFields.querySelector('input[type=text][data-k="'+d.k+'"]');if(!el0)return;say('Uploading the picture...');
     fetch(d.data).then(function(r){return r.blob();}).then(function(bl){var f=new File([bl],d.name||'photo.jpg',{type:d.type||bl.type});return askSize(f).then(function(go){sizeStop(go);return shrink(f);}).then(function(s){return new Promise(function(ok,no){var rd=new FileReader();rd.onload=function(){ok(String(rd.result).split(',')[1]);};rd.onerror=no;rd.readAsDataURL(s);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});});}).then(function(j){el0.value=j.src;edDirty();say('Picture ready. Press Save changes to use it on this page.');}).catch(function(er){say(er.message,true);});
     return;
   }
   if(!onPage||e.source!==frame.contentWindow||!e.data||e.data.mk!=='edit')return;var el=edFields.querySelector('[data-k="'+e.data.k+'"]:not(li)');if(!el)return;el.value=e.data.v;edDirty();});
+/* Change the Media box photos from the page itself: the same photo manager as the Photos section, opened over the page. */
+var canPh=false,phBtn=document.createElement('button');phBtn.type='button';phBtn.id='edPhotosBtn';phBtn.textContent='Media photos';phBtn.hidden=true;
+$('#edModalSave').parentNode.insertBefore(phBtn,$('#edModalSave'));
+var phOver=document.createElement('div');phOver.className='ad-photoover';phOver.hidden=true;
+phOver.innerHTML='<div class="ad-top"><h2>Photos in the Media box</h2><button type="button" id="edPhotosDone" class="ad-ap">Done</button></div><p class="ad-help">Photos change on the live website straight away. Add, reorder or remove them here. Text on the page is changed on the page itself.</p><div id="edPhotosHost"></div>';
+modal.querySelector('.ad-modal-in').appendChild(phOver);
+var phHome=null,phWas=true;
+function openPhotos(){
+  if(!canPh){say('You do not have access to Photos.',true);return;}
+  var pane=document.querySelector('[data-pane=photos]');if(!pane||phHome)return;
+  phHome=document.createComment('photos');pane.parentNode.insertBefore(phHome,pane);phWas=pane.hidden;
+  $('#edPhotosHost').appendChild(pane);pane.hidden=false;phOver.hidden=false;load();
+}
+function closePhotos(){
+  var pane=document.querySelector('[data-pane=photos]');if(phHome&&pane){phHome.parentNode.insertBefore(pane,phHome);phHome.remove();pane.hidden=phWas;}
+  phHome=null;phOver.hidden=true;
+}
+phBtn.addEventListener('click',openPhotos);$('#edPhotosDone').addEventListener('click',closePhotos);
 function openOnPage(){edRegion='main';$('#edFind').value='';edRender();preview(edPath,true);}
 $('#edOnPage').addEventListener('click',openOnPage);
 /* Pages and text works in three steps: choose the page, choose how to edit it, then it opens. */
@@ -366,7 +396,7 @@ $('#edWayBack').addEventListener('click',function(){if(!edLeave())return;edPref=
 $('#edPageGrid').addEventListener('click',function(e){var b=e.target.closest('[data-path]');if(!b)return;edSel.value=b.getAttribute('data-path');edLoad(b.getAttribute('data-path'));});
 $('#edNew2').addEventListener('click',function(){$('#edNew').click();});
 [].forEach.call(root.querySelectorAll('#edNew,#edNew2,.hm-pill[data-go=newpage]'),function(el){el.hidden=!NEWPAGES;});
-$('#edModalSave').addEventListener('click',function(){if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;});
+$('#edModalSave').addEventListener('click',function(){if(phHome)closePhotos();if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;});
 $('#adPreviewAll').addEventListener('click',function(){preview(edPath||'index.html');});
 $('#edPreview').addEventListener('click',function(){preview(edPath);});
 /* Creating new pages is switched off for now. Set this to true to bring the buttons back (the server has a matching switch). */
@@ -556,19 +586,17 @@ function tblSet(id,ents,empty){
 function pagesIn(s){var m=String(s||'').match(/\b[a-z0-9-]+\.html\b/g);return m&&m.length?m.filter(function(x,i){return m.indexOf(x)===i;}):['Other'];}
 function photoEnt(x){return {photo:1,id:x.id,who:x.who,when:x.at,pages:[x.area||'Photos'],act:x};}
 function photoLine(x){
-  var t=esc(trunc(x.title||'(no title)',60));
-  if(x.kind==='edit'){var a=x.before||{},b=x.after||{},ls=[];if((a.caption||'')!==(b.caption||''))ls.push('<div><small>Title</small> <del>'+esc(trunc(a.caption,60))+'</del> <span class="ad-arrow">\u2192</span> <ins>'+esc(trunc(b.caption,60))+'</ins></div>');if((a.desc||'')!==(b.desc||''))ls.push('<div><small>Description</small> <del>'+esc(trunc(a.desc,70))+'</del> <span class="ad-arrow">\u2192</span> <ins>'+esc(trunc(b.desc,70))+'</ins></div>');return ls.join('')||'Edited';}
-  if(x.kind==='add')return '<b>Added photo</b> <ins>'+t+'</ins>';
-  if(x.kind==='remove')return '<b>Removed photo</b> <del>'+t+'</del>';
-  if(x.kind==='move')return '<b>Moved photo '+(x.dir==='up'?'up':'down')+'</b> '+t;
+  if(x.kind==='add')return '<b>Added a photo</b>';
+  if(x.kind==='remove')return '<b>Removed a photo</b>';
+  if(x.kind==='move')return '<b>Moved a photo '+(x.dir==='up'?'up':'down')+'</b>';
   return esc(x.kind||'');
 }
 function photoBody(e){
   var x=e.act,area=x.area||'Photos',isP=area==='Photos';
   var pg='<b>'+esc(area)+'</b>'+(isP?'<small>Media box on the homepage</small>':'');
-  var sub=isP?({edit:'Title and description',add:'New photo',remove:'Photo removed',move:'Order'}[x.kind]||''):'';
+  var sub=isP?({add:'New photo',remove:'Photo removed',move:'Order'}[x.kind]||''):'';
   var what=isP?photoLine(x):esc(x.text||x.kind||'');
-  return '<tbody class="ad-ent" data-photo="'+esc(x.id)+'"><tr><td class="c-page">'+pg+'</td><td class="c-sec"><b>'+esc(trunc(x.title||area,50))+'</b>'+(sub||x.undo?'<small>'+esc(sub)+(x.undo?' (undone)':'')+'</small>':'')+'</td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small></td><td class="c-what">'+what+'</td>'+(isP&&x.kind==='edit'&&!x.undo?'<td class="c-act"><button type="button" data-undophoto="1">Undo</button></td>':'<td class="c-act"></td>')+'</tr></tbody>';
+  return '<tbody class="ad-ent" data-photo="'+esc(x.id)+'"><tr><td class="c-page">'+pg+'</td><td class="c-sec"><b>'+esc(trunc(x.title||area,50))+'</b>'+(sub||x.undo?'<small>'+esc(sub)+(x.undo?' (undone)':'')+'</small>':'')+'</td><td class="c-by"><b>'+esc(e.who||'')+'</b><small>'+esc(when2(e.when))+'</small></td><td class="c-what">'+what+'</td>'+'<td class="c-act"></td>'+'</tr></tbody>';
 }
 function chEnt(c){return {sha:c.sha,who:chWho(c),when:c.date,fallback:chMsg(c),pages:pagesIn(c.message)};}
 /* filters: person, page, when */
@@ -621,9 +649,6 @@ function chLoad(){
   Promise.all([a,b,c]).then(function(){chAll.live=chAll.live.concat(chAll.photo||[]).sort(function(p,q){return new Date(q.when)-new Date(p.when);});chFill();chRender();snapRender();}).catch(function(er){say(er.message,true);});
 }
 $('[data-pane=changes]').addEventListener('click',function(e){
-  var up=e.target.closest('[data-undophoto]');
-  if(up&&!up.disabled){if(!confirm('Undo this photo text change? It goes back to the earlier title and description straight away.'))return;up.disabled=true;
-    post('/api/admin/photos',{action:'undoedit',logId:up.closest('.ad-ent').getAttribute('data-photo')}).then(function(){say('Undone. The website shows it again within a few minutes.');chLoad();}).catch(function(er){say(er.message,true);up.disabled=false;});return;}
   var b=e.target.closest('[data-undo]');if(!b||b.disabled)return;var sha=b.closest('.ad-ent').getAttribute('data-sha');
   if(!confirm('Undo this change? The undo goes into your draft and is not published until you press Publish.'))return;
   b.disabled=true;site({action:'undo',sha:sha}).then(function(){say('Undone in your draft.');return siteStatus();}).then(chLoad).catch(function(er){say(er.message,true);b.disabled=false;});

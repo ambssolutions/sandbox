@@ -20,6 +20,7 @@ setup = between('<p class="ad-note" id="adSetup" hidden>', '</p>\n')
 note = between('<p class="ad-note" id="adNote" hidden>', '</p>\n')
 start = h.index('<div data-pane="photos">'); end = h.index('</div></div></section></main>')
 panes = h[start:end].replace('<div data-pane="photos">', '<div data-pane="photos" hidden>', 1)
+panes = re.sub(r'<label for="adCaption">.*?</label><input id="adCaption"[^>]*><label for="adDesc">.*?</label><input id="adDesc"[^>]*>', '', panes, count=1)
 VERS = '<h3 class="ad-h3" id="chVersH">Published versions</h3><p class="ad-help" id="chVersHelp">Each time changes are published, press What changed to see the website before and after.</p><ul class="ad-list" id="chVers"></ul><h3 class="ad-h3">Individual changes</h3><ul class="ad-list" id="chLive">'
 assert '<h3 class="ad-h3">Published</h3><ul class="ad-list" id="chLive">' in panes
 panes = panes.replace('<h3 class="ad-h3">Published</h3><ul class="ad-list" id="chLive">', VERS, 1)

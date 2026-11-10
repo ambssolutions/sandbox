@@ -19,19 +19,17 @@ module.exports = async function (req, res) {
   try { buf = await L.readBuffer(req, MAX); } catch (e) { return L.send(res, 413, { error: 'That photo is too large. Please use one under 4 MB.' }); }
   const k = kind(buf);
   if (!k) return L.send(res, 400, { error: 'Please choose a JPEG, PNG or WebP photo.' });
-  let caption = ''; try { caption = decodeURIComponent(req.headers['x-caption'] || ''); } catch (e) { caption = ''; }
-  caption = clean(caption, 120);
-  let desc = ''; try { desc = decodeURIComponent(req.headers['x-desc'] || ''); } catch (e) { desc = ''; }
-  desc = clean(desc, 220);
+  const caption = '', desc = '';
   try {
     const photos = await L.currentPhotos();
     const name = 'media/p-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7) + '.' + k[1];
     const out = await L.put(name, buf, { access: 'public', contentType: k[0], addRandomSuffix: false, cacheControlMaxAge: 31536000 });
-    photos.push({ id: name, src: out.url, alt: caption || 'MiKia project photo', caption: caption, desc: desc, blob: true });
+    photos.push({ id: name, src: out.url, alt: 'MiKia project photo', caption: '', desc: '', blob: true });
     await L.writeManifest(photos);
-    await L.logActivity(me, { kind: 'add', pid: name, title: caption, src: out.url, after: { caption: caption, desc: desc } });
+    await L.logActivity(me, { kind: 'add', pid: name, title: 'Photo', src: out.url });
     return L.send(res, 200, { ok: true, photos: photos.map(L.publicPhoto) });
   } catch (e) {
-    return L.send(res, 502, { error: 'Could not save the photo. Please try again.' });
+    await L.logActivity(me, { area: 'Photos', kind: 'failed', title: 'Photo', text: 'Could not go live (adding a photo): ' + String(e.message || '').slice(0, 140) });
+    return L.send(res, 502, { error: String(e.message || '').indexOf('Storage is switched off') === 0 ? e.message : 'Could not save the photo. Please try again.' });
   }
 };
