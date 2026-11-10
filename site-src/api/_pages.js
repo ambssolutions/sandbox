@@ -116,7 +116,7 @@ function extract(html) {
 function publicView(html) {
   const x = extract(html);
   return {
-    fields: x.fields.map((f) => ({ k: f.k, kind: f.kind, attr: f.attr || '', region: f.region, item: f.item == null ? -1 : f.item, tag: f.tag, label: f.label, value: f.value, src: f.src || '', picture: !!f.picture })),
+    fields: x.fields.map((f) => ({ k: f.k, kind: f.kind, attr: f.attr || '', region: f.region, item: f.item == null ? -1 : f.item, sec: f.region === 'main' ? x.sections.findIndex((z) => f.start >= z.start && f.start < z.end) : -1, tag: f.tag, label: f.label, value: f.value, src: f.src || '', picture: !!f.picture })),
     items: x.items.map((i, idx) => ({ i: idx, tag: i.tag, n: i.n, pos: i.pos, region: i.region, label: i.label, group: i.group })),
     sections: x.sections.map((s) => ({ i: s.i, label: s.label, n: s.n })),
     blocks: x.blocks.map((b, i) => ({ b: i, tag: b.tag, label: b.label.slice(0, 60) })).filter((b) => b.label)

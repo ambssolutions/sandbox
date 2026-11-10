@@ -321,3 +321,46 @@ html body .ad-mrow{display:grid;grid-template-columns:120px 1fr;gap:12px;align-i
 html body .ad-mrow img{width:120px;height:75px;object-fit:cover;border-radius:10px;border:1px solid rgba(128,128,128,.3)}
 html body .ad-mrow .ad-captxt{margin-top:0}
 @media(max-width:700px){html body .ad-mrow{grid-template-columns:1fr}html body .ad-mrow img{width:100%;max-width:240px;height:auto;aspect-ratio:8/5}}
+
+/* Form view: sections open on a tap, instead of one long list */
+html body .ad-accbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 10px;font-size:13.5px;color:#52525b}
+html body .ad-accbar button{font:inherit;font-size:13px;padding:6px 12px;margin-left:6px;border-radius:999px;border:1px solid rgba(128,128,128,.45);background:#fff;color:#1c1c1e;cursor:pointer}
+html body .ad-secgrp{list-style:none;margin:0 0 8px;padding:0}
+html body .ad-secgrp>details,html body .ad-mcard>details{border:1px solid rgba(128,128,128,.3);border-radius:12px;background:#fff;overflow:hidden}
+html body .ad-secgrp>details>summary,html body .ad-mcard>details>summary,html body .ad-more>details>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;cursor:pointer;list-style:none;font-size:15px}
+html body .ad-secgrp summary::-webkit-details-marker,html body .ad-mcard summary::-webkit-details-marker,html body .ad-more summary::-webkit-details-marker{display:none}
+html body .ad-secgrp>details>summary b,html body .ad-mcard>details>summary b{font-weight:600}
+html body .ad-secgrp>details>summary::after,html body .ad-mcard>details>summary::after{content:'';width:9px;height:9px;border-right:2px solid #6b6b73;border-bottom:2px solid #6b6b73;transform:rotate(45deg);margin:0 4px 3px 10px;flex:none;transition:transform .15s}
+html body .ad-secgrp>details[open]>summary::after,html body .ad-mcard>details[open]>summary::after{transform:rotate(-135deg);margin-bottom:-3px}
+html body .ad-secgrp>details>summary:hover,html body .ad-mcard>details>summary:hover{background:rgba(200,50,60,.05)}
+html body .ad-sc{margin-left:auto;font-size:12.5px;color:#6b6b73;white-space:nowrap}
+html body .ad-secgrp>details>ul{padding:2px 16px 14px;margin:0;border-top:1px solid rgba(128,128,128,.2)}
+html body .ad-more{list-style:none;margin:10px 0 0;padding:0}
+html body .ad-more>details{border:1px dashed rgba(128,128,128,.4);border-radius:10px}
+html body .ad-more>details>summary{font-size:13.5px;color:#52525b;padding:10px 12px}
+html body .ad-more>details>ul{padding:0 12px 10px;margin:0}
+html body .ad-mcard{padding:0;border:0;background:transparent;margin-bottom:8px}
+html body .ad-mcard>details>*:not(summary){margin-left:16px;margin-right:16px}
+html body .ad-mcard>details>.ad-mrow:last-child{margin-bottom:12px}
+html body .ad-mcard>details>summary+.ad-help{margin-top:6px}
+@media(prefers-reduced-motion:reduce){html body .ad-secgrp>details>summary::after,html body .ad-mcard>details>summary::after{transition:none}}
+
+/* The Add something box is folded until it is needed */
+html body .ad-add{padding:0;overflow:hidden}
+html body .ad-add>h3{margin:0;padding:13px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:15px}
+html body .ad-add>h3::after{content:'';width:9px;height:9px;border-right:2px solid #6b6b73;border-bottom:2px solid #6b6b73;transform:rotate(45deg);margin:0 4px 3px 10px;transition:transform .15s}
+html body .ad-add.ad-open>h3::after{transform:rotate(-135deg);margin-bottom:-3px}
+html body .ad-add>*:not(h3){display:none}
+html body .ad-add.ad-open>*:not(h3){display:revert;margin-left:16px;margin-right:16px}
+html body .ad-add.ad-open>*:last-child{margin-bottom:16px}
+html body .ad-add>h3:hover{background:rgba(200,50,60,.05)}
+html body .ad-more>details>summary i{font-style:normal;color:#52525b}
+html body .ad-more>details>summary{flex-wrap:wrap;justify-content:flex-start;gap:4px 6px}
+
+/* Jump to a section */
+html body .ad-accrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+html body .ad-jump{display:flex;gap:8px;margin:10px 0 2px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+html body .ad-jump button{flex:0 0 auto;font:inherit;font-size:13px;padding:7px 14px;margin:0;border-radius:999px;border:1px solid rgba(128,128,128,.45);background:#fff;color:#1c1c1e;cursor:pointer;white-space:nowrap}
+html body .ad-jump button:hover{border-color:#c8323c;color:#c8323c}
+html body .ad-jump button[aria-current=true]{border-color:#c8323c;background:#fff6f6;color:#c8323c}
+html body .ad-secgrp,html body .ad-mcard{scroll-margin-top:84px}
