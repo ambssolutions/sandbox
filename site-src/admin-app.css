@@ -364,3 +364,18 @@ html body .ad-jump button{flex:0 0 auto;font:inherit;font-size:13px;padding:7px 
 html body .ad-jump button:hover{border-color:#c8323c;color:#c8323c}
 html body .ad-jump button[aria-current=true]{border-color:#c8323c;background:#fff6f6;color:#c8323c}
 html body .ad-secgrp,html body .ad-mcard{scroll-margin-top:84px}
+
+/* One card per item (a service, a step, a question): its heading and write-up together */
+html body .ad-itemcard{list-style:none;margin:8px 0 0;padding:0}
+html body .ad-itemcard>details{border:1px solid rgba(128,128,128,.35);border-radius:12px;background:#fafafa;overflow:hidden}
+html body .ad-itemcard>details>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px 10px 14px;cursor:pointer;list-style:none}
+html body .ad-itemcard>details>summary::-webkit-details-marker{display:none}
+html body .ad-itemcard>details>summary:hover{background:rgba(200,50,60,.05)}
+html body .ad-itemcard .ad-it{display:flex;flex-direction:column;min-width:0}
+html body .ad-itemcard .ad-it b{font-weight:600;font-size:14.5px;overflow-wrap:anywhere}
+html body .ad-itemcard .ad-it small{font-size:12px;color:#6b6b73}
+html body .ad-itemcard>details>summary .ad-btns{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+html body .ad-itemcard>details>summary .ad-btns button{padding:5px 10px;font-size:12.5px}
+html body .ad-itemcard>details>ul{padding:2px 14px 12px;margin:0;border-top:1px solid rgba(128,128,128,.2);background:#fff}
+@media(max-width:700px){html body .ad-itemcard>details>summary{flex-direction:column;align-items:stretch}html body .ad-itemcard>details>summary .ad-btns{justify-content:flex-start}}
+@media(max-width:700px){html body .ad-itemcard>details:not([open])>summary .ad-btns{display:none}}
