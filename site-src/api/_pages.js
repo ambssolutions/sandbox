@@ -75,14 +75,15 @@ function extract(html) {
 
   (function go(n, reg, item) {
     if (n.tagName && SKIP.has(n.tagName)) return;
-    if (n.tagName === 'div' && attr(n, 'id') === 'mcarTrack') return; /* shown from the Photos list on the live site */
     /* Text the site's own scripts write after the page loads (counters, status labels, the footer year) cannot be edited here: the live site would overwrite it. */
     if (n.tagName && SCRIPT_TEXT.has(attr(n, 'id'))) return;
     if (n.tagName === 'nav' && attr(n, 'class') === 'nav') reg = 'nav';
     if (n.tagName === 'footer') reg = 'footer';
     if (n.tagName === 'main') reg = 'main';
     if (itemOf.has(n)) item = itemOf.get(n);
-    if (n.tagName === 'img' && attr(n, 'alt') != null && n.sourceCodeLocation && n.sourceCodeLocation.attrs.alt) {
+    /* The Media box pictures come from the Photos list on the live site, so they are not offered here; the text under them is. */
+    let inTrack = false; for (let q = n.parentNode; q; q = q.parentNode) if (q.tagName === 'div' && attr(q, 'id') === 'mcarTrack') { inTrack = true; break; }
+    if (n.tagName === 'img' && !inTrack && attr(n, 'alt') != null && n.sourceCodeLocation && n.sourceCodeLocation.attrs.alt) {
       const loc = n.sourceCodeLocation.attrs.alt, raw = html.slice(loc.startOffset, loc.endOffset);
       fields.push({ kind: 'attr', attr: 'alt', region: reg, item, tag: 'img', src: attr(n, 'src') || '', label: 'Picture description', value: attr(n, 'alt'), start: loc.startOffset + raw.indexOf('"') + 1, end: loc.endOffset - 1 });
       if (attr(n, 'src') && n.sourceCodeLocation.attrs.src) {
@@ -92,7 +93,7 @@ function extract(html) {
         fields.push({ kind: 'attr', attr: 'src', region: reg, item, tag: 'img', label: 'Picture file', value: attr(n, 'src'), start: l2.startOffset + r2.indexOf('"') + 1, end: l2.endOffset - 1, picture: true, drop, tagStart: n.sourceCodeLocation.startOffset });
       }
     }
-    if (n.tagName === 'a' && attr(n, 'id') !== 'lpSend' && attr(n, 'href') != null && n.sourceCodeLocation && n.sourceCodeLocation.attrs.href && !/^#/.test(attr(n, 'href'))) {
+    if (n.tagName === 'a' && attr(n, 'id') !== 'lpSend' && attr(n, 'id') !== 'dzSend' && attr(n, 'href') != null && n.sourceCodeLocation && n.sourceCodeLocation.attrs.href && !/^#/.test(attr(n, 'href'))) {
       const loc = n.sourceCodeLocation.attrs.href, raw = html.slice(loc.startOffset, loc.endOffset), q = raw.indexOf('"') >= 0 ? '"' : "'";
       fields.push({ kind: 'attr', attr: 'href', region: reg, item, tag: 'a', label: 'Link address for "' + labelOf(n).slice(0, 40) + '"', value: attr(n, 'href'), start: loc.startOffset + raw.indexOf(q) + 1, end: loc.endOffset - 1 });
     }
