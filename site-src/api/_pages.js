@@ -100,6 +100,7 @@ function extract(html) {
     for (const c of n.childNodes || []) {
       if (c.nodeName === '#text') {
         if (!c.value.trim() || !c.sourceCodeLocation) continue;
+        if (inTrack) continue; /* the heading and line under each Media photo are edited through the photo boxes, kept by place */
         fields.push({ kind: 'text', region: reg, item, tag: n.tagName || '', label: '', value: c.value, start: c.sourceCodeLocation.startOffset, end: c.sourceCodeLocation.endOffset });
         if (reg === 'main') {
           let b = n; while (b && !(b.tagName && BLOCKS.has(b.tagName))) b = b.parentNode;
@@ -285,8 +286,8 @@ function renderPhotos(html, photos, edit) {
   const parts = photos.map((ph, i) => {
     const s = m.slides[i];
     let cap = s && s.capStart != null ? html.slice(s.capStart, s.capEnd) : '';
-    /* A photo with no heading or line yet gets empty boxes to type into, saved by the editor itself. */
-    if (!cap && edit) cap = '<figcaption><b data-cap="t" data-i="' + i + '" data-ph="Add a heading"></b><span data-cap="d" data-i="' + i + '" data-ph="Add a line about this photo"></span></figcaption>';
+    /* In the editing window every photo gets a heading and a line box (holding its words, or empty), saved by the editor itself. */
+    if (edit) cap = '<figcaption><b data-cap="t" data-i="' + i + '" data-ph="Add a heading">' + esc(s ? s.t : '') + '</b><span data-cap="d" data-i="' + i + '" data-ph="Add a line about this photo">' + esc(s ? s.d : '') + '</span></figcaption>';
     return '<figure class="mcar-s' + (i === 0 ? ' on' : '') + '"><img src="' + escAttr(ph.src || '') + '" alt="' + escAttr(ph.alt || '') + '" width="1600" height="1000" decoding="async">' + cap + '</figure>';
   });
   return html.slice(0, m.innerStart) + parts.join('') + html.slice(m.innerEnd);
@@ -333,6 +334,19 @@ function diffPages(before, after) {
     for (const [d, a] of pairs) { if (a) out.push({ type: 'changed', what: a.what, where: a.where, sec: a.sec, under: a.under, el: a.el, from: d.val, to: a.val }); else out.push({ type: 'removed', what: d.what, where: d.where, sec: d.sec, under: d.under, el: d.el, from: d.val }); }
     adds.forEach((a, ix) => { if (!used.has(ix)) out.push({ type: 'added', what: a.what, where: a.where, sec: a.sec, under: a.under, el: a.el, to: a.val }); });
   }
+  /* The heading and line under each Media photo (kept by place). */
+  try {
+    const a = mediaSlides(before), b = mediaSlides(after);
+    if (a || b) {
+      const sa = a ? a.slides : [], sb = b ? b.slides : [], top = Math.max(sa.length, sb.length);
+      for (let q = 0; q < top; q++) for (const [f, el] of [['t', 'Heading'], ['d', 'Line']]) {
+        const x = ((sa[q] || {})[f] || '').replace(/\s+/g, ' ').trim(), y = ((sb[q] || {})[f] || '').replace(/\s+/g, ' ').trim();
+        if (x === y) continue;
+        const o = { what: 'Wording', where: 'Under photo ' + (q + 1) + ' in the Media box', sec: 'Media box', under: 'Photo ' + (q + 1), el };
+        out.push(x && y ? Object.assign({ type: 'changed', from: x, to: y }, o) : y ? Object.assign({ type: 'added', to: y }, o) : Object.assign({ type: 'removed', from: x }, o));
+      }
+    }
+  } catch (e) { /* the rest of the list is still shown */ }
   return out;
 }
 module.exports = { mediaSlides, setCaptions, renderPhotos, diffPages, extract, publicView, applyChanges, applyOp, addContent, esc, escAttr };

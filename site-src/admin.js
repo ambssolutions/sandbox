@@ -113,8 +113,9 @@ function capFlushPage(){
   var ch=ks.map(function(k){return {i:Number(k),t:capPend[k].t,d:capPend[k].d};});capPend={};capPB=true;
   return post('/api/admin/site',{action:'captions',caps:ch}).then(function(){ch.forEach(function(c){capSaved[c.i]={t:c.t,d:c.d};});capData=capSaved.slice();if(typeof autoNote==='function')autoNote('Heading and line saved to your draft. They go on the website when you press Publish.');return siteStatus();}).catch(function(er){say('Could not save the heading or line: '+er.message,true);ch.forEach(function(c){if(!capPend[c.i])capPend[c.i]={t:c.t,d:c.d};});}).then(function(){capPB=false;});
 }
-function capNote(t,bad){['edCapNote','phCapNote'].forEach(function(id){var n=document.getElementById(id);if(n){n.textContent=t;n.className='ad-help'+(bad?' ad-bad':'');}});}
-function capCollect(){var out=[];[].forEach.call(list.querySelectorAll('.ad-row'),function(r,i){var t=r.querySelector('[data-cap=t]'),d=r.querySelector('[data-cap=d]');if(!t||!d)return;out.push({i:i,t:t.value.trim(),d:d.value.trim()});});return out;}
+function capNote(t,bad){['edCapNote','phCapNote','mcNote'].forEach(function(id){var n=document.getElementById(id);if(n){n.textContent=t;n.className='ad-help'+(bad?' ad-bad':'');}});}
+var capBox=null;
+function capCollect(){var out=[];[].forEach.call((capBox||list).querySelectorAll('.ad-row,.ad-mrow'),function(r,i){var t=r.querySelector('[data-cap=t]'),d=r.querySelector('[data-cap=d]');if(!t||!d)return;out.push({i:i,t:t.value.trim(),d:d.value.trim()});});return out;}
 function capSaveNow(){
   clearTimeout(capT);if(capBusy)return Promise.resolve();
   var cur=capCollect(),ch=cur.filter(function(c){var o=capSaved[c.i]||{t:'',d:''};return o.t!==c.t||o.d!==c.d;});
@@ -122,7 +123,7 @@ function capSaveNow(){
   capBusy=true;capNote('Saving...');
   return post('/api/admin/site',{action:'captions',caps:ch}).then(function(){ch.forEach(function(c){capSaved[c.i]={t:c.t,d:c.d};});capData=capSaved.slice();capNote('Saved to your draft. It goes on the website when you press Publish.');return siteStatus();}).catch(function(er){capNote('Could not save: '+er.message,true);}).then(function(){capBusy=false;var again=capCollect().some(function(c){var o=capSaved[c.i]||{t:'',d:''};return o.t!==c.t||o.d!==c.d;});if(again)capT=setTimeout(capSaveNow,800);});
 }
-list.addEventListener('input',function(e){if(!e.target.closest('[data-cap]'))return;capNote('Typing...');clearTimeout(capT);capT=setTimeout(capSaveNow,1500);});
+list.addEventListener('input',function(e){if(!e.target.closest('[data-cap]'))return;capBox=list;capNote('Typing...');clearTimeout(capT);capT=setTimeout(capSaveNow,1500);});
 list.addEventListener('focusout',function(e){if(e.target.closest&&e.target.closest('[data-cap]'))capSaveNow();});
 /* Shrink big phone photos in the browser so they upload quickly and stay under the 4 MB limit */
 /* The website's pictures are landscape, about 1600 x 1000 pixels. Smaller or oddly shaped pictures can look blurry or be cropped, so ask before using one. */
@@ -449,8 +450,22 @@ function edOpen(){
   }).catch(function(er){say(er.message,true);});
 }
 edSel.addEventListener('change',function(){edLoad(edSel.value,true);});
+/* Form view, Homepage: a clearly labelled card with the heading and line for every Media photo. */
+var mcard=document.createElement('div');mcard.id='edMediaCap';mcard.className='ad-mcard';mcard.hidden=true;edFields.parentNode.insertBefore(mcard,edFields);
+function mediaCardSync(reg){
+  if(edPath!=='index.html'||reg!=='main'){mcard.hidden=true;return;}
+  if(mcard.getAttribute('data-loaded')==='1'){mcard.hidden=false;return;}
+  Promise.all([site({action:'captionsget'}),api('/api/admin/photos')]).then(function(rs){
+    var caps=rs[0].slides||[],photos=rs[1].photos||[];capSaved=caps.map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();
+    mcard.innerHTML='<h3 class="ad-h3">Media photos: headings and lines</h3><p class="ad-help">The heading and line under each photo in the Media box. They are saved to your draft and go on the website when you press Publish. They belong to the place in the carousel (1st, 2nd...), so if you reorder the photos, the words stay in their place.</p><p class="ad-help" id="mcNote"></p>'
+      +photos.map(function(p,i){var c=capData[i]||{};return '<div class="ad-mrow" data-i="'+i+'"><img src="'+esc(p.src)+'" alt="" width="120" height="75" loading="lazy"><div class="ad-captxt"><label>Heading under photo '+(i+1)+'<input type="text" maxlength="80" data-cap="t" placeholder="For example: Rural family home" value="'+esc(c.t||'')+'"></label><label>Line under the heading<input type="text" maxlength="220" data-cap="d" placeholder="One short sentence about this photo" value="'+esc(c.d||'')+'"></label></div></div>';}).join('');
+    mcard.setAttribute('data-loaded','1');mcard.hidden=false;
+  }).catch(function(){mcard.hidden=true;});
+}
+mcard.addEventListener('input',function(e){if(!e.target.closest('[data-cap]'))return;capBox=mcard;capNote('Typing...');clearTimeout(capT);capT=setTimeout(capSaveNow,1500);});
+mcard.addEventListener('focusout',function(e){if(e.target.closest&&e.target.closest('[data-cap]')){capBox=mcard;capSaveNow();}});
 function edLoad(path,stay){
-  edPath=path;say('');
+  edPath=path;say('');mcard.removeAttribute('data-loaded');mcard.hidden=true;
   return site({action:'page',path:path}).then(function(j){edData=j;edOrig={};j.fields.forEach(function(f){edOrig[f.k]=f.value;});$('#edTitle').textContent=pn(path,j.title);$('#edWayTitle').textContent=pn(path,j.title);edRender();if(stay)edStage('form');else edWayShow();}).catch(function(er){say(er.message,true);});
 }
 var TAGNAME={h1:'Main heading',h2:'Heading',h3:'Heading',h4:'Heading',p:'Paragraph',li:'List item',a:'Link',button:'Button',span:'Text',b:'Bold text',strong:'Bold text',em:'Emphasis',figcaption:'Caption',summary:'Question',label:'Form label',small:'Small text',div:'Text',td:'Table cell',th:'Table heading',dt:'Term',dd:'Description',blockquote:'Quote',cite:'Name',option:'Choice'};
@@ -460,7 +475,7 @@ function edRender(){
   [].forEach.call(root.querySelectorAll('#edSeg button'),function(b){b.setAttribute('aria-pressed',b.getAttribute('data-r')===reg?'true':'false');});
   if(reg==='sections'){
     html=edData.sections.map(function(s){return '<li class="ad-row" data-sec="'+s.i+'"><div class="ad-cap"><b>'+esc(s.label||('Section '+(s.i+1)))+'</b><span>Section '+(s.i+1)+' of '+s.n+'</span></div><div class="ad-btns"><button type="button" data-op="section-move" data-dir="up" aria-label="Move up"'+(s.i?'':' disabled')+'>&uarr;</button><button type="button" data-op="section-move" data-dir="down" aria-label="Move down"'+(s.i<s.n-1?'':' disabled')+'>&darr;</button><button type="button" data-op="section-copy">Copy</button><button type="button" data-op="section-delete" class="ad-rm"'+(s.n>1?'':' disabled')+'>Remove</button></div></li>';}).join('')||'<li class="ad-empty">This page has no sections that can be moved.</li>';
-    edFields.innerHTML=html;$('#edEveryRow').hidden=true;$('#edAddBox').hidden=true;edSave.disabled=true;return;
+    edFields.innerHTML=html;$('#edEveryRow').hidden=true;$('#edAddBox').hidden=true;edSave.disabled=true;mcard.hidden=true;return;
   }
   edData.fields.forEach(function(f){
     if(regionOf(f)!==reg)return;
@@ -475,7 +490,7 @@ function edRender(){
     else html+='<li class="ad-field" data-k="'+f.k+'"><label>'+esc(lab)+'</label>'+(f.value.length>70||/\n/.test(f.value)?'<textarea rows="'+Math.min(6,Math.ceil(f.value.length/70))+'" data-k="'+f.k+'">'+v+'</textarea>':'<input type="text" value="'+v+'" data-k="'+f.k+'">')+'</li>';
   });
   edFields.innerHTML=html||'<li class="ad-empty">Nothing to show here'+(q?' for "'+esc(q)+'"':'')+'.</li>';
-  $('#edEveryRow').hidden=reg!=='shared';edDirty();addFill(reg);
+  $('#edEveryRow').hidden=reg!=='shared';edDirty();addFill(reg);mediaCardSync(reg);
 }
 function addFill(reg){
   var box=$('#edAddBox'),sel=$('#edAddAfter'),bl=edData.blocks||[],sc=edData.sections||[],isSec=$('#edAddType').value==='section';box.hidden=reg!=='main'||!bl.length;if(box.hidden)return;
