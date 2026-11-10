@@ -239,9 +239,13 @@ function diffPages(before, after) {
   const what = (f) => (f.region === 'head' ? 'Google and sharing text' : f.kind === 'text' ? 'Wording' : f.attr === 'alt' ? 'Picture description' : f.attr === 'src' ? 'Picture' : f.attr === 'href' ? 'Link' : 'Text');
   /* Where on the page a field sits: the menu, the footer, Google text, or the section it is in (named by its heading). */
   const EL = { h1: 'Main heading', h2: 'Heading', h3: 'Heading', h4: 'Heading', p: 'Paragraph', li: 'List item', button: 'Button', a: 'Link text', span: 'Text', b: 'Bold text', strong: 'Bold text', em: 'Text', label: 'Label', figcaption: 'Caption', blockquote: 'Quote', td: 'Table cell', th: 'Table heading' };
-  const toList = (h) => { const x = extract(h); return x.fields.map((f) => {
+  const toList = (h) => { const x = extract(h); let lastSec = null, lastHead = ''; return x.fields.map((f) => {
     const sec = f.region === 'main' ? x.sections.find((z) => f.start >= z.start && f.start < z.end) : null;
-    const where = f.region === 'head' ? 'Google and sharing text' : f.region === 'nav' ? 'Menu' : f.region === 'footer' ? 'Footer' : sec ? 'In the "' + String(sec.label).slice(0, 60) + '" section' : '';
+    if (sec !== lastSec) { lastSec = sec; lastHead = ''; }
+    const isHead = f.kind === 'text' && /^h[1-4]$/.test(f.tag), val0 = String(f.value).replace(/\s+/g, ' ').trim();
+    const under = sec && !isHead && lastHead && lastHead !== String(sec.label) ? lastHead : '';
+    if (sec && isHead && val0) lastHead = val0.slice(0, 60);
+    const where = f.region === 'head' ? 'Google and sharing text' : f.region === 'nav' ? 'Menu' : f.region === 'footer' ? 'Footer' : sec ? 'In the "' + String(sec.label).slice(0, 60) + '" section' + (under ? ', under the heading "' + under + '"' : '') : '';
     const el = f.kind === 'text' ? (EL[f.tag] || 'Wording') : f.attr === 'alt' ? 'Picture description' : f.attr === 'src' ? 'Picture' : f.attr === 'href' ? 'Link address' : '';
     return { what: what(f), where, el, val: String(f.value).replace(/\s+/g, ' ').trim(), label: f.label || '' };
   }).filter((y) => y.val); };
