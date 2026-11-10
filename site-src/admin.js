@@ -638,7 +638,7 @@ if(invTok&&invEmail){
     post('/api/admin/users',{action:'accept',email:invEmail,token:invTok,password:f.p1.value}).then(function(j){history.replaceState(null,'',location.pathname);f.reset();enter(j.user);say('Welcome. Your password is saved.');}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
   });
 }else{
-  api('/api/admin/users').then(function(j){if(j.auth){enter(j.user);if(j.viewing){$('#adViewAs').hidden=false;$('#adViewAsText').textContent='You are viewing the editor as '+(j.user.name||j.user.email)+' ('+ROLENAME[j.user.role]+'). What you change is real.';}}else showLogin(j);}).catch(function(){showLogin();});
+  api('/api/admin/users').then(function(j){if(j.auth){enter(j.user);if(j.storageDown)say('Storage is switched off right now (its monthly limit has been used up). Photos, people and feedback cannot be saved until it is back. Ask AMBS.',true);if(j.viewing){$('#adViewAs').hidden=false;$('#adViewAsText').textContent='You are viewing the editor as '+(j.user.name||j.user.email)+' ('+ROLENAME[j.user.role]+'). What you change is real.';}}else showLogin(j);}).catch(function(){showLogin();});
   $('#adViewBack').addEventListener('click',function(){post('/api/admin/users',{action:'back'}).then(function(){location.reload();}).catch(function(er){say(er.message,true);});});
 }
 })();

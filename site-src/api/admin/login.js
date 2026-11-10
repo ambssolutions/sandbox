@@ -32,6 +32,13 @@ module.exports = async function (req, res) {
   }
   const users = await U.readUsers();
   const u = users.find((x) => x.email === email);
+  if ((!u || !u.hash) && L.storeFailing() && U.ALWAYS_SUPER.includes(email) && process.env.ADMIN_PASSWORD && L.safeEq(pw, process.env.ADMIN_PASSWORD)) {
+    /* Storage is down so the saved password cannot be checked. The AMBS address may use the AMBS master password until storage is back. */
+    delete fails[key];
+    const su = { email, name: 'AMBS', role: 'owner', super: true };
+    res.setHeader('Set-Cookie', L.sessionCookieFor(su));
+    return L.send(res, 200, { ok: true, user: Object.assign({}, su, { access: U.SECTIONS.slice() }) });
+  }
   if (!u || !u.hash || !U.checkPassword(pw, u.hash)) return bad();
   if (u.disabled) return L.send(res, 403, { error: 'This login has been switched off. Ask the person who looks after the website.' });
   delete fails[key];

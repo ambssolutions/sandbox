@@ -88,7 +88,7 @@ module.exports = async function (req, res) {
     return L.send(res, 200, { ok: true, user: U.publicUser(u) });
   }
   if (req.method === 'GET' && !me) { await S.load(); return L.send(res, 200, { auth: false, master: S.masterAllowed() }); }
-  if (req.method === 'GET' || !me) return L.send(res, 200, me ? { auth: true, user: me, viewing: !!L.readBack(req) } : { auth: false });
+  if (req.method === 'GET' || !me) return L.send(res, 200, me ? { auth: true, user: me, viewing: !!L.readBack(req), storageDown: L.storeFailing() } : { auth: false });
   if (req.method !== 'POST') { res.setHeader('Allow', 'GET, POST'); return L.send(res, 405, { error: 'Method not allowed' }); }
   if (!L.storageReady()) return L.send(res, 503, { error: 'Storage is not connected yet.' });
   const b = pre;

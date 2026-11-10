@@ -4,7 +4,11 @@
      SESSION_SECRET         optional, a long random string used to sign the login cookie (falls back to ADMIN_PASSWORD)
      BLOB_READ_WRITE_TOKEN  added automatically when a Blob store is connected to the project */
 const crypto = require('crypto');
-const { put, del, list } = require('@vercel/blob');
+let storeFailAt = 0;
+const blob = require('@vercel/blob');
+const { del, list } = blob;
+const OFF = 'Storage is switched off right now (its monthly limit has been used up), so photos, people and feedback cannot be saved until it is back. Ask AMBS.';
+const put = async (...a) => { try { return await blob.put(...a); } catch (e) { if (/40[23]|suspend|limit|quota/i.test(String(e && e.message))) { storeFailAt = Date.now(); throw new Error(OFF); } throw e; } };
 
 const MANIFEST = 'media/manifest.json';
 const COOKIE = 'mk_admin';
@@ -102,17 +106,26 @@ async function readBuffer(req, limit) {
    Each save is written as a NEW file whose name carries the time, and a read takes the newest one. Files are never overwritten, so a read straight after
    a save always sees the save (an overwritten file can be served stale from the cache for a minute). Older copies are tidied away. */
 const VER = /-(\d{13})\.json$/;
-async function readStore(base) {
+/* Storage can be slow or switched off (for instance when the monthly limit is used up). A good read is remembered for a short time, so most requests never ask storage at all,
+   and if storage then fails the last good copy is used instead of pretending nothing is there. */
+const memo = new Map();
+const storeFailing = () => Date.now() - storeFailAt < 120000;
+async function readStore(base, maxAgeMs) {
+  const m = memo.get(base), ttl = maxAgeMs == null ? 10000 : maxAgeMs;
+  if (m && Date.now() - m.t < ttl) return m.val;
+  if (storeFailing() && m) return m.val;
   try {
     const l = await list({ prefix: base.replace(/\.json$/, ''), limit: 200 });
     const all = l.blobs || [];
     const vers = all.filter((x) => VER.test(x.pathname)).sort((a, b) => a.pathname < b.pathname ? 1 : -1);
     const hit = vers[0] || all.find((x) => x.pathname === base);
-    if (!hit) return null;
+    if (!hit) { memo.set(base, { t: Date.now(), val: null }); storeFailAt = 0; return null; }
     const r = await fetch(hit.url);
-    if (!r.ok) return null;
-    return await r.json();
-  } catch (e) { return null; }
+    if (!r.ok) throw new Error('read ' + r.status);
+    const val = await r.json();
+    memo.set(base, { t: Date.now(), val }); storeFailAt = 0;
+    return val;
+  } catch (e) { storeFailAt = Date.now(); return m ? m.val : null; }
 }
 let lastStamp = 0;
 async function writeStore(base, obj) {
@@ -120,6 +133,7 @@ async function writeStore(base, obj) {
   lastStamp = Math.max(Date.now(), lastStamp + 1);
   const name = stem + '-' + String(lastStamp).padStart(13, '0') + '.json';
   await put(name, JSON.stringify(obj), { access: 'public', contentType: 'application/json', allowOverwrite: false, addRandomSuffix: false, cacheControlMaxAge: 60 });
+  memo.set(base, { t: Date.now(), val: obj });
   try {
     const l = await list({ prefix: stem, limit: 200 });
     const old = (l.blobs || []).filter((x) => x.pathname !== name && (VER.test(x.pathname) ? x.pathname < name : false)).sort((a, b) => a.pathname < b.pathname ? 1 : -1).slice(3);
@@ -127,9 +141,9 @@ async function writeStore(base, obj) {
   } catch (e) { /* tidy-up only */ }
 }
 
-async function readManifest() { const j = await readStore(MANIFEST); return j && Array.isArray(j.photos) ? j.photos : null; }
+async function readManifest(maxAgeMs) { const j = await readStore(MANIFEST, maxAgeMs); return j && Array.isArray(j.photos) ? j.photos : null; }
 async function writeManifest(photos) { await writeStore(MANIFEST, { photos, updated: new Date().toISOString() }); }
-async function currentPhotos() { return (await readManifest()) || STOCK.map((p) => Object.assign({}, p)); }
+async function currentPhotos(maxAgeMs) { return (await readManifest(maxAgeMs)) || STOCK.map((p) => Object.assign({}, p)); }
 function storageReady() { return !!process.env.BLOB_READ_WRITE_TOKEN; }
 function publicPhoto(p) {
   let desc = p.desc || '';
@@ -142,10 +156,10 @@ function publicPhoto(p) {
 const FB_CLEAN = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').trim().slice(0, n);
 function fbPath() { return 'testimonials/s-' + sign('fbstore').slice(0, 32) + '.json'; }
 function approveToken(id) { return sign('approve:' + id).slice(0, 32); }
-async function readFeedback() { const j = await readStore(fbPath()); return j && Array.isArray(j.items) ? j.items : []; }
+async function readFeedback(maxAgeMs) { const j = await readStore(fbPath(), maxAgeMs); return j && Array.isArray(j.items) ? j.items : []; }
 async function writeFeedback(items) { await writeStore(fbPath(), { items, updated: new Date().toISOString() }); }
 const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function origin(req) { return 'https://' + (req.headers['x-forwarded-host'] || req.headers.host || 'www.mikia.co.nz'); }
 function publicFeedback(p) { return { id: p.id, name: p.name, project: p.project, text: p.text }; }
 
-module.exports = { touchSession, IDLE_MIN, backCookieFor, readBack, clearBack, ROLE, readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };
+module.exports = { storeFailing, touchSession, IDLE_MIN, backCookieFor, readBack, clearBack, ROLE, readStore, writeStore, currentUser, isOwner, sessionCookieFor, sign, FB_CLEAN, approveToken, readFeedback, writeFeedback, esc, origin, publicFeedback, STOCK, send, isAdmin, sessionCookie, clearCookie, safeEq, secret, readJson, readBuffer, readManifest, writeManifest, currentPhotos, storageReady, publicPhoto, put, del };

@@ -32,6 +32,8 @@ async function live(me) {
   if (me.email === 'master' || !L.storageReady()) return Object.assign({}, me, { access: SECTIONS.slice(), super: me.email === 'master' });
   if (!seen.users || Date.now() - seen.t > 8000) { try { seen = { t: Date.now(), users: await readUsers() }; } catch (e) { return me; } }
   const u = seen.users.find((x) => x.email === me.email);
+  /* If the people list cannot be read right now (storage down), the AMBS address is still let in, so the website is never locked out. */
+  if (!u && L.storeFailing() && ALWAYS_SUPER.includes(String(me.email || '').toLowerCase())) return { email: me.email, name: me.name || 'AMBS', role: 'owner', access: SECTIONS.slice(), super: true };
   if (!u || u.disabled) return null;
   /* "Last active": noted at most once every 15 minutes while someone uses the editor, so the People list shows people who are still signed in from an earlier visit. */
   if (!u.lastSeen || Date.now() - Date.parse(u.lastSeen) > 15 * 60000) {
@@ -58,4 +60,4 @@ function passwordProblem(pw) {
 }
 
 const masterPath = () => 'admin/m-' + L.sign('masterlogin').slice(0, 32) + '.json';
-module.exports = { masterPath, SECTIONS, cleanAccess, accessOf, can, live, readUsers, writeUsers, hashPassword, checkPassword, publicUser, cleanEmail, passwordProblem, EMAIL };
+module.exports = { ALWAYS_SUPER, masterPath, SECTIONS, cleanAccess, accessOf, can, live, readUsers, writeUsers, hashPassword, checkPassword, publicUser, cleanEmail, passwordProblem, EMAIL };

@@ -16,7 +16,8 @@ let cache = { t: 0, vals: {} };
 function apply() { for (const [f, e] of Object.entries(KEYS)) { const v = cache.vals[f]; if (v) process.env[e] = v; else if (orig[e] === undefined) delete process.env[e]; else process.env[e] = orig[e]; } }
 async function load(force) {
   if (!L.storageReady() || (!force && Date.now() - cache.t < 20000)) return;
-  let vals = {}; try { const j = await L.readStore(path()); if (j && j.d) vals = dec(j.d); } catch (e) { /* keep what we have */ return; }
+  let vals = {}; try { const j = await L.readStore(path(), 20000); if (j && j.d) vals = dec(j.d); else if (L.storeFailing()) return; } catch (e) { /* keep what we have */ return; }
+  if (L.storeFailing() && cache.t) return;
   cache = { t: Date.now(), vals }; apply();
 }
 async function save(patch) {
