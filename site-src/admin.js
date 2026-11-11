@@ -748,9 +748,11 @@ function nzDay(d){return new Date(d).toLocaleDateString('en-GB',{timeZone:'Pacif
 function dayName(d){var n=new Date(),y=new Date(n.getTime()-864e5);var s=nzDay(d);if(s===nzDay(n))return 'Today';if(s===nzDay(y))return 'Yesterday';return new Date(d).toLocaleDateString('en-NZ',{timeZone:'Pacific/Auckland',weekday:'long',day:'numeric',month:'long'});}
 function timelineEnts(){
   function tag(l,c){return l.map(function(e){var x=e.photo?(e.act||{}):null,chip=c;if(x&&(x.area||'Photos')!=='Photos')chip=undefined;return Object.assign({},e,{chip:chip});});}
-  var all=tag(chAll.draft,'d').concat(tag(chAll.live,'l')).filter(chPass).sort(function(a,b){return new Date(b.when)-new Date(a.when);});
-  var out=[],cur='',head=null;
-  all.forEach(function(e){var k=nzDay(e.when);if(k!==cur){cur=k;head={dayhead:dayName(e.when),n:0};out.push(head);}head.n++;out.push(e);});
+  function newest(x,y){return new Date(y.when)-new Date(x.when);}
+  var out=[],wait=tag(chAll.draft,'d').filter(chPass).sort(newest),live=tag(chAll.live,'l').filter(chPass).sort(newest);
+  if(wait.length){out.push({dayhead:'Saved, not published',n:wait.length});wait.forEach(function(e){out.push(e);});}
+  var cur='',head=null;
+  live.forEach(function(e){var k=nzDay(e.when);if(k!==cur){cur=k;head={dayhead:'Published '+dayName(e.when).replace(/^Today$/,'today').replace(/^Yesterday$/,'yesterday'),n:0};out.push(head);}head.n++;out.push(e);});
   return out;
 }
 function chRender(){
