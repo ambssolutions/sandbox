@@ -280,9 +280,10 @@ html body #edModal #edSize{display:none!important}
 html body #edModal #edModalHint{display:none!important}
 html body #edModal .ad-for span{display:none}
 html body #edModal .ad-for{padding:8px 12px}
-html body #edModal .ad-top{display:flex;flex-wrap:nowrap;gap:8px;align-items:center;justify-content:flex-end;padding:4px 0}
-html body #edModal .ad-top button{padding:9px 12px;font-size:14px;white-space:nowrap;flex:0 0 auto}
-html body #edModal .ad-top #edModalSave{margin-left:auto}
+html body #edModal .ad-top{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 0}
+html body #edModal .ad-top button{padding:11px 8px;font-size:14px;white-space:normal;min-height:44px;width:100%;margin:0}
+html body #edModal .ad-top #edModalSave{order:-2}
+html body #edModal .ad-top #edClose{order:-1}
 }
 
 /* Snapshot: tiles and people are clickable and open the changes behind the numbers */
