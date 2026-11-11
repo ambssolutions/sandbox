@@ -24,6 +24,25 @@ function labelOf(n) {
   return t.join(' ').replace(/\s+/g, ' ').trim().slice(0, 70);
 }
 
+
+/* A name for a block of the page, so the form can say what it is: its first heading, else its id or label, else what it holds, else a short piece of its text. */
+function sectionLabel(c, i, total) {
+  const all = [...walk(c)];
+  for (const x of all) if (/^h[1-6]$/.test(x.tagName || '')) { const t = labelOf(x); if (t) return t; }
+  const nice = (v) => String(v || '').replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim().replace(/^./, (m) => m.toUpperCase());
+  if (attr(c, 'aria-label')) return nice(attr(c, 'aria-label'));
+  if (attr(c, 'id')) return nice(attr(c, 'id'));
+  if (all.filter((x) => x.tagName === 'details').length >= 3) return 'Questions and answers';
+  if (all.some((x) => x.tagName === 'form')) return 'Enquiry form';
+  { const lk = all.filter((x) => x.tagName === 'a' || x.tagName === 'button'); if (lk.length && lk.map(labelOf).join(' ').replace(/\s+/g, ' ').trim() === labelOf(c)) return 'Buttons'; }
+  let t = ''; for (const x of all) { if (x.nodeName === '#text') { const v = String(x.value).replace(/\s+/g, ' ').trim(); if (v.length >= 3) { t = v; break; } } }
+  if (!t) t = labelOf(c);
+  if (t) { if (!/[a-z]/.test(t.slice(0, 40))) t = t.charAt(0) + t.slice(1).toLowerCase(); return t.length > 44 ? t.slice(0, 44).replace(/\s+\S*$/, '') + '...' : t; }
+  return total > 1 ? 'Part ' + (i + 1) : 'Main part of the page';
+}
+
+function linkLabel(n, href) { const t = labelOf(n).slice(0, 40); if (t) return 'Link address for "' + t + '"'; return /^tel:/.test(href || '') ? 'Phone link address' : /^mailto:/.test(href || '') ? 'Email link address' : 'Link address (a button or picture)'; }
+
 function regionOf(n) { for (let x = n; x; x = x.parentNode) { if (x.tagName === 'nav' && attr(x, 'class') === 'nav') return 'nav'; if (x.tagName === 'footer') return 'footer'; if (x.tagName === 'main') return 'main'; } return 'other'; }
 
 function extract(html) {
@@ -68,9 +87,14 @@ function extract(html) {
   }
   /* Sections of the page (the big blocks inside <main>) */
   const main = root.find((n) => n.tagName === 'main');
-  if (main) kids(main).filter((c) => c.tagName === 'section' && c.sourceCodeLocation && c.sourceCodeLocation.endTag).forEach((c, i, all) => {
-    const h = [...walk(c)].find((x) => /^h[1-6]$/.test(x.tagName || ''));
-    sections.push({ i, label: h ? labelOf(h) : (attr(c, 'id') || 'Section ' + (i + 1)), start: c.sourceCodeLocation.startOffset, end: c.sourceCodeLocation.endOffset, n: all.length });
+  /* Usually the sections are the blocks directly inside <main>; on a page that wraps them (a page with tabs, for example) the outermost sections inside the wrappers are used instead. */
+  let secEls = main ? kids(main).filter((c) => c.tagName === 'section' && c.sourceCodeLocation && c.sourceCodeLocation.endTag) : [];
+  if (main && secEls.length < 2) {
+    const deep = [...walk(main)].filter((c) => c.tagName === 'section' && c.sourceCodeLocation && c.sourceCodeLocation.endTag && !(() => { for (let q = c.parentNode; q && q !== main; q = q.parentNode) if (q.tagName === 'section') return true; return false; })());
+    if (deep.length > secEls.length) secEls = deep;
+  }
+  if (main) secEls.forEach((c, i, all) => {
+    sections.push({ i, label: sectionLabel(c, i, all.length), start: c.sourceCodeLocation.startOffset, end: c.sourceCodeLocation.endOffset, n: all.length });
   });
 
   (function go(n, reg, item) {
@@ -79,6 +103,8 @@ function extract(html) {
     if (n.tagName && SCRIPT_TEXT.has(attr(n, 'id'))) return;
     /* The homepage's live service panel is rewritten from the service slides on every visit, so its words are edited in the slides themselves. */
     if (n.tagName && /(^|\s)hero-live(\s|$)/.test(attr(n, 'class') || '')) return;
+    /* The skip-to-content link is for screen readers, and the quick phone and booking buttons are set from Contact details, so neither is offered as page text. */
+    if (n.tagName && (/(^|\s)(qbar|skip)(\s|$)/.test(attr(n, 'class') || '') || attr(n, 'id') === 'qbar')) return;
     if (n.tagName === 'nav' && attr(n, 'class') === 'nav') reg = 'nav';
     if (n.tagName === 'footer') reg = 'footer';
     if (n.tagName === 'main') reg = 'main';
@@ -97,7 +123,7 @@ function extract(html) {
     }
     if (n.tagName === 'a' && attr(n, 'id') !== 'lpSend' && attr(n, 'id') !== 'dzSend' && attr(n, 'href') != null && n.sourceCodeLocation && n.sourceCodeLocation.attrs.href && !/^#/.test(attr(n, 'href'))) {
       const loc = n.sourceCodeLocation.attrs.href, raw = html.slice(loc.startOffset, loc.endOffset), q = raw.indexOf('"') >= 0 ? '"' : "'";
-      fields.push({ kind: 'attr', attr: 'href', region: reg, item, tag: 'a', label: 'Link address for "' + labelOf(n).slice(0, 40) + '"', value: attr(n, 'href'), start: loc.startOffset + raw.indexOf(q) + 1, end: loc.endOffset - 1 });
+      fields.push({ kind: 'attr', attr: 'href', region: reg, item, tag: 'a', label: linkLabel(n, attr(n, 'href')), value: attr(n, 'href'), start: loc.startOffset + raw.indexOf(q) + 1, end: loc.endOffset - 1 });
     }
     for (const c of n.childNodes || []) {
       if (c.nodeName === '#text') {
@@ -118,7 +144,7 @@ function extract(html) {
 function publicView(html) {
   const x = extract(html);
   return {
-    fields: x.fields.map((f) => ({ k: f.k, kind: f.kind, attr: f.attr || '', region: f.region, item: f.item == null ? -1 : f.item, sec: f.region === 'main' ? x.sections.findIndex((z) => f.start >= z.start && f.start < z.end) : -1, tag: f.tag, label: f.label, value: f.value, src: f.src || '', picture: !!f.picture })),
+    fields: x.fields.map((f) => ({ k: f.k, kind: f.kind, attr: f.attr || '', region: f.region, top: f.region === 'other', item: f.item == null ? -1 : f.item, sec: f.region === 'main' ? x.sections.findIndex((z) => f.start >= z.start && f.start < z.end) : -1, tag: f.tag, label: f.label, value: f.value, src: f.src || '', picture: !!f.picture })),
     items: x.items.map((i, idx) => { let par = -1, size = Infinity; x.items.forEach((o, j) => { if (j !== idx && o.tag !== 'li' && o.start <= i.start && o.end >= i.end && o.end - o.start < size && (o.end - o.start) > (i.end - i.start)) { par = j; size = o.end - o.start; } }); return { i: idx, tag: i.tag, n: i.n, pos: i.pos, region: i.region, label: i.label, group: i.group, par }; }),
     sections: x.sections.map((s) => ({ i: s.i, label: s.label, n: s.n })),
     blocks: x.blocks.map((b, i) => ({ b: i, tag: b.tag, label: b.label.slice(0, 60) })).filter((b) => b.label)

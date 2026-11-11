@@ -585,13 +585,14 @@ function edRender(){
   }
   /* Page text is grouped by the sections of the page, each opening on a tap, so there is no long scroll. Links and picture descriptions sit in a smaller fold inside each section. */
   var groups=[],cur=null,byGroup=reg==='main';
+  function grpLabel(sec,g){if(sec===-1&&g&&g.items&&g.items.length&&g.items.every(function(x){return x.tag==='span';}))return 'Tab and strip labels';return sec===-2?'Top of the page':sec>=0&&edData.sections[sec]?(edData.sections[sec].label||('Part '+(sec+1))):'Other parts of this page';}
   var gmap={};function groupFor(sec){if(!gmap[sec]){gmap[sec]={sec:sec,items:[],n:0,mn:0,last:-2};groups.push(gmap[sec]);}return gmap[sec];}
   edData.fields.forEach(function(f){
     if(regionOf(f)!==reg)return;
     if(f.attr==='src'&&!f.picture)return;
     if(q&&String(f.value).toLowerCase().indexOf(q)<0&&String(f.label).toLowerCase().indexOf(q)<0)return;
     shown++;
-    var g=byGroup?groupFor(f.sec):null,ih='',adv=byGroup&&(f.attr==='alt'||f.attr==='href'),itm=f.item>=0?edData.items[f.item]:null,ik=-1,isPt=!!(g&&itm&&itm.tag==='li'&&itm.n>=2);
+    var g=byGroup?groupFor(f.top?-2:f.sec):null,ih='',adv=byGroup&&(f.attr==='alt'||f.attr==='href'),itm=f.item>=0?edData.items[f.item]:null,ik=-1,isPt=!!(g&&itm&&itm.tag==='li'&&itm.n>=2);
     if(g&&itm&&itm.n>=2){if(itm.tag==='li'){var pi=itm.par>=0?edData.items[itm.par]:null;ik=(pi&&pi.n>=2)?itm.par:-1;}else ik=f.item;}
     if(f.item!==(g?g.last:lastItem)){if(g)g.last=f.item;else lastItem=f.item;var it=f.item>=0?edData.items[f.item]:null;
       if(it&&it.n>=2)ih='<li class="ad-itemhead" data-item="'+it.i+'"><span>'+esc(it.tag==='a'?'Menu link':it.tag==='li'?'List entry':'Card')+' '+(it.pos+1)+' of '+it.n+(it.label?': '+esc(it.label.slice(0,36)):'')+'</span><span class="ad-btns"><button type="button" data-op="item-move" data-dir="up" aria-label="Move up"'+(it.pos?'':' disabled')+'>&uarr;</button><button type="button" data-op="item-move" data-dir="down" aria-label="Move down"'+(it.pos<it.n-1?'':' disabled')+'>&darr;</button><button type="button" data-op="item-copy">Copy</button><button type="button" data-op="item-delete" class="ad-rm">Remove</button></span></li>';
@@ -638,13 +639,14 @@ function edRender(){
       flush();
       g.main=out;g.more=more;
     }
-    html=groups.map(function(g){assemble(g);var key='g'+g.sec,label=g.sec>=0&&edData.sections[g.sec]?(edData.sections[g.sec].label||('Section '+(g.sec+1))):'Other parts of this page',open=q||secOpen[key];
+    var ti=-1;groups.forEach(function(g,i){if(g.sec===-2)ti=i;});if(ti>0)groups.unshift(groups.splice(ti,1)[0]);
+    html=groups.map(function(g){assemble(g);var key='g'+g.sec,label=grpLabel(g.sec,g),open=q||secOpen[key];
       return '<li class="ad-secgrp"><details data-gk="'+key+'"'+(open?' open':'')+'><summary><b>'+esc(String(label).length>42?String(label).slice(0,42).replace(/\s+\S*$/,'')+'...':String(label))+'</b><span class="ad-sc">'+(g.n+g.mn)+(g.n+g.mn===1?' item':' items')+'</span></summary><ul class="ad-list ad-fields">'+g.main+(g.more?'<li class="ad-more"><details data-gk="m'+g.sec+'"'+(q||secOpen['m'+g.sec]?' open':'')+'><summary>Links and picture descriptions ('+g.mn+')</summary><ul class="ad-list ad-fields">'+g.more+'</ul></details></li>':'')+'</ul></details></li>';}).join('');
   }
   edFields.innerHTML=html||'<li class="ad-empty">Nothing to show here'+(q?' for "'+esc(q)+'"':'')+'.</li>';
   accBar.hidden=!(byGroup&&groups.length>1);
   if(byGroup&&groups.length>1){var nav=accBar.querySelector('.ad-jump');
-    nav.innerHTML=(mcard.getAttribute('data-loaded')==='1'||edPath==='index.html'?'<button type="button" data-jump="media">Media photos</button>':'')+groups.map(function(g,i){var lab=g.sec>=0&&edData.sections[g.sec]?(edData.sections[g.sec].label||('Section '+(g.sec+1))):'Other parts of this page',sh=String(lab).length>24?String(lab).slice(0,24).replace(/\s+\S*$/,'')+'...':String(lab);return '<button type="button" data-jump="g'+g.sec+'" title="'+esc(String(lab).slice(0,80))+'">'+esc(sh)+'</button>';}).join('');}
+    nav.innerHTML=(mcard.getAttribute('data-loaded')==='1'||edPath==='index.html'?'<button type="button" data-jump="media">Media photos</button>':'')+groups.map(function(g,i){var lab=grpLabel(g.sec,g),sh=String(lab).length>24?String(lab).slice(0,24).replace(/\s+\S*$/,'')+'...':String(lab);return '<button type="button" data-jump="g'+g.sec+'" title="'+esc(String(lab).slice(0,80))+'">'+esc(sh)+'</button>';}).join('');}
   $('#edEveryRow').hidden=reg!=='shared';edDirty();addFill(reg);mediaCardSync(reg);
 }
 function addFill(reg){
