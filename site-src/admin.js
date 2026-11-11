@@ -433,6 +433,10 @@ function edStage(s){edStageName=s;$('#edPick').hidden=s!=='pick';$('#edWay').hid
 var edPrefPath='';
 function prefetchPreview(path){if(!path||path===edPrefPath)return;edPrefPath=path;pref[path]={tick:preTick,at:Date.now(),p:site({action:'preview',path:path,edit:true}).catch(function(){return null;})};}
 function takePrefetch(path){var x=pref[path];delete pref[path];edPrefPath='';if(!x||x.tick!==preTick||Date.now()-x.at>60000)return null;return x.p.then(function(j){return j||site({action:'preview',path:path,edit:true});});}
+/* Start fetching a page while the finger or mouse is on its tile, so it is ready by the time it is chosen. */
+(function(){var g=document.getElementById('edPageGrid'),ht=0;if(!g)return;
+  function over(e){var t=e.target.closest&&e.target.closest('[data-path]');if(!t)return;var p=t.getAttribute('data-path');clearTimeout(ht);ht=setTimeout(function(){if(!/\.html$/.test(p)||(me&&me.role==='editor'&&0))return;prefetchPreview(p);},180);}
+  g.addEventListener('pointerover',over);g.addEventListener('touchstart',over,{passive:true});g.addEventListener('pointerleave',function(){clearTimeout(ht);});})();
 function edWayShow(){if(edPref==='form')edStage('form');else{edStage('way');if(edPref==='page')openOnPage();else prefetchPreview(edPath);}}
 function edLeave(){return !edChanges().length||confirm('You have changes that are not saved yet. Leave them behind?');}
 $('#edWay').addEventListener('click',function(e){var b=e.target.closest('[data-way]');if(!b)return;if(b.getAttribute('data-way')==='form')edStage('form');else openOnPage();});
