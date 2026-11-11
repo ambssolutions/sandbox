@@ -262,7 +262,12 @@ var pbPages=false;
 function pbLoad(){
   var card=$('#pbCard');if(!card||card.hidden)return;
   if(pbPages){pbShow();return;}
-  site({action:'pages'}).then(function(j){pbPages=true;$('#pbPage').innerHTML=j.pages.filter(function(p){return p.path!=='404.html';}).map(function(p){return '<option value="'+esc(p.path)+'">'+esc(pn(p.path,p.title))+' ('+esc(p.url)+')</option>';}).join('');pbShow();}).catch(function(er){say(er.message,true);});
+  site({action:'pages'}).then(function(j){pbPages=true;var ps=j.pages.filter(function(p){return p.path!=='404.html';});
+    function opts(cnt){return ps.map(function(p){var c=cnt&&cnt[p.path];return '<option value="'+esc(p.path)+'">'+esc(pn(p.path,p.title))+(c==null?'':c?' - '+c+(c===1?' picture':' pictures'):(p.path==='index.html'?' - carousel photos are below':' - no pictures'))+'</option>';}).join('');}
+    $('#pbPage').innerHTML=opts(null);pbShow();
+    /* Count each page's pictures so the list says where they are, and open on the first page that has some. */
+    Promise.all(ps.map(function(p){return site({action:'page',path:p.path}).then(function(r){return [p.path,r.fields.filter(function(f){return f.picture&&f.region==='main';}).length];}).catch(function(){return [p.path,null];});})).then(function(rs){var cnt={};rs.forEach(function(x){cnt[x[0]]=x[1];});var cur=$('#pbPage').value;$('#pbPage').innerHTML=opts(cnt);var first=ps.filter(function(p){return cnt[p.path]>0;})[0];var pick=cnt[cur]>0?cur:(first?first.path:cur);$('#pbPage').value=pick;if(pick!==cur)pbShow();});
+  }).catch(function(er){say(er.message,true);});
 }
 function pbShow(){
   var path=$('#pbPage').value,g=$('#pbGrid');if(!path)return;

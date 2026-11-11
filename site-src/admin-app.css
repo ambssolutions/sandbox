@@ -434,3 +434,7 @@ html body .ad-frameload i{width:30px;height:30px;border-radius:50%;border:3px so
 @keyframes adspin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){html body .ad-frameload i{animation-duration:3s}}
 html body .ad-timing{font-size:12px;color:#6b6b73;padding:6px 4px 0;text-align:right;min-height:18px}html body .ad-timing:empty{display:none}
+/* File buttons ("Change picture"): label centred, full-width and 44px tall, lined up along the bottom of each picture card */
+html body .ad-filebtn{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:44px;line-height:1.2;text-align:center;font-weight:600}
+html body.adm .pb-item .ad-filebtn{display:flex;width:100%;margin-top:auto}
+html body.adm .pb-item .pb-dims{margin:0}
