@@ -387,16 +387,17 @@ function timingShow(st){var el=document.getElementById('edTiming');if(!el){el=do
   if(m.total!=null)p.push('server '+m.total+' ms (page read by '+m.page+(m.photos!=null?', photos by '+m.photos:'')+(m.compare!=null?', pictures by '+m.compare:'')+')');
   if(timing.ready!=null)p.push('ready to edit '+(timing.ready/1000).toFixed(1)+' s');
   el.textContent='Opening time: '+p.join(' · ');}
-function preview(path,edit){
+var pvPath='',pvHl=false;
+function preview(path,edit,hl){pvPath=path;pvHl=!!hl&&!edit;
   say(edit?'Opening the page...':'Preparing the preview...');onPage=!!edit;$('#edModalSave').hidden=!edit;$('#edModalHint').hidden=!edit;phBtn.hidden=!edit||!canPh;
   $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
-  $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':'This is only a preview of this page. Nothing can be changed here.';
+  $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':(hl?'This is how the page will look when published. What has changed is highlighted in yellow. Nothing can be changed here.':'This is only a preview of this page. Nothing can be changed here.');
   $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. The text under the Media photos is edited here on the page. The photos themselves are changed with Media photos.';$('#edModalHint').title=STD;
   frameFail.hidden=true;frameLoad.hidden=false;clearTimeout(waitT);frameOpened=false;frameLoaded=false;var tok=++openTok;
   if(edit&&path==='index.html')site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();capPend={};}).catch(function(){});
   /* The window opens straight away and shows that the page is loading, instead of nothing happening until the page has arrived. */
   frame.srcdoc='';sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;
-  var tmq={t0:Date.now(),pre:false};var pf=edit&&takePrefetch(path);tmq.pre=!!pf;var got=pf||site({action:'preview',path:path,edit:!!edit});timing=tmq;timingShow('');
+  var tmq={t0:Date.now(),pre:false};var pf=edit&&takePrefetch(path);tmq.pre=!!pf;var got=pf||site({action:'preview',path:path,edit:!!edit,changes:!!(hl&&!edit)});timing=tmq;timingShow('');
   var slow=new Promise(function(_,no){setTimeout(function(){no(new Error('slow'));},30000);});
   Promise.race([got,slow]).then(function(j){if(tok!==openTok||modal.hidden)return;say('');tmq.got=Date.now()-tmq.t0;tmq.ms=j.ms||null;frame.srcdoc=j.html;if(edit)watchFrame(path,j.html,0,Date.now());}).catch(function(er){if(tok!==openTok)return;if(er&&er.message==='slow'){frameLoad.hidden=true;frameFail.hidden=false;failPath=path;return;}frameLoad.hidden=true;modal.hidden=true;onPage=false;say(er.message,true);});
 }
@@ -415,6 +416,8 @@ function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelecto
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
 $('#edClose').addEventListener('click',function(){capFlushPage().catch(function(){});if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);});
 window.addEventListener('message',function(e){
+  if(!onPage&&pvHl&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pvready'){var ix=draftFiles.indexOf(pvPath);frame.contentWindow.postMessage({mk:'more',more:draftFiles.length>1},'*');return;}
+  if(!onPage&&pvHl&&e.source===frame.contentWindow&&e.data&&e.data.mk==='nextpage'){var k=draftFiles.indexOf(pvPath);preview(draftFiles[(k+1)%draftFiles.length],false,true);return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;frameLoad.hidden=true;if(timing&&!timing.ready){timing.ready=Date.now()-timing.t0;timingShow('done');}return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='cap'){capFromPage(e.data.i,e.data.f,String(e.data.v||''));return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='photos'){openPhotos(typeof e.data.i==='number'?e.data.i:-1);return;}
@@ -466,7 +469,7 @@ $('#edNew2').addEventListener('click',function(){$('#edNew').click();});
 $('#edModalSave').addEventListener('click',function(){capFlushPage().catch(function(){});if(phHome)closePhotos();if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);});
 /* Preview shows a page with the saved changes: the page being edited if it has some, otherwise the first page that has. */
 var draftFiles=[];
-$('#adPreviewAll').addEventListener('click',function(){preview(draftFiles.indexOf(edPath)>-1?edPath:(draftFiles[0]||edPath||'index.html'));});
+$('#adPreviewAll').addEventListener('click',function(){preview(draftFiles.indexOf(edPath)>-1?edPath:(draftFiles[0]||edPath||'index.html'),false,true);});
 $('#edPreview').addEventListener('click',function(){preview(edPath);});
 /* Creating new pages is switched off for now. Set this to true to bring the buttons back (the server has a matching switch). */
 var NEWPAGES=false;

@@ -295,6 +295,34 @@ function renderPhotos(html, photos, edit) {
   return html.slice(0, m.innerStart) + parts.join('') + html.slice(m.innerEnd);
 }
 
+
+/* Preview of a page with its saved changes: what differs from the live page is marked so the person is taken straight to it. */
+function markChanged(before, after) {
+  const A = extract(before).fields, X = extract(after), B = X.fields;
+  const key = (f) => f.kind + '|' + (f.attr || '') + '|' + String(f.value).replace(/\s+/g, ' ').trim();
+  const n = A.length, m = B.length;
+  if (n * m > 4e6) return { html: after, n: 0, removed: 0, skipped: true };
+  const L = Array.from({ length: n + 1 }, () => new Uint16Array(m + 1));
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) L[i][j] = key(A[i]) === key(B[j]) ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+  const addIdx = []; let i = 0, j = 0, dels = 0;
+  while (i < n || j < m) {
+    if (i < n && j < m && key(A[i]) === key(B[j])) { i++; j++; }
+    else if (j < m && (i === n || L[i][j + 1] >= L[i + 1][j])) addIdx.push(j++);
+    else { dels++; i++; }
+  }
+  const ins = []; let count = 0;
+  for (const ix of addIdx) {
+    const f = B[ix];
+    if (f.region === 'head') { count++; continue; }
+    if (f.kind === 'text' && !/^(option|textarea|button)$/.test(f.tag) && String(f.value).trim()) { ins.push({ at: f.start, t: '<mark data-chg="1">' }); ins.push({ at: f.end, t: '</mark>' }); count++; }
+    else if (f.picture && f.tagStart != null) { ins.push({ at: f.tagStart + 4, t: ' data-chg="1"' }); count++; }
+    else if (f.kind === 'attr') count++;
+  }
+  ins.sort((a, c) => c.at - a.at);
+  let html = after; for (const q of ins) html = html.slice(0, q.at) + q.t + html.slice(q.at);
+  return { html, n: count, removed: Math.max(0, dels - addIdx.length), marks: ins.length / 2 };
+}
+
 function diffPages(before, after) {
   const what = (f) => (f.region === 'head' ? 'Google and sharing text' : f.kind === 'text' ? 'Wording' : f.attr === 'alt' ? 'Picture description' : f.attr === 'src' ? 'Picture' : f.attr === 'href' ? 'Link' : 'Text');
   /* Where on the page a field sits: the menu, the footer, Google text, or the section it is in (named by its heading). */
@@ -351,4 +379,4 @@ function diffPages(before, after) {
   } catch (e) { /* the rest of the list is still shown */ }
   return out;
 }
-module.exports = { mediaSlides, setCaptions, renderPhotos, diffPages, extract, publicView, applyChanges, applyOp, addContent, esc, escAttr };
+module.exports = { markChanged, mediaSlides, setCaptions, renderPhotos, diffPages, extract, publicView, applyChanges, applyOp, addContent, esc, escAttr };
