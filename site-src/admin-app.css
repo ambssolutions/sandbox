@@ -403,3 +403,21 @@ html body .ad-ppl th:nth-child(5),html body .ad-ppl td:nth-child(5){text-align:r
 /* Publish right where the unpublished changes are listed */
 html body .ad-snapdet-btns{display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 html body #chDraftPub{margin:0 0 8px}
+
+/* Changes: one timeline, grouped by day */
+html body .ad-timebar{margin:0 0 8px}
+html body .ad-timebar button{margin:0}
+html body #chTime tbody.ad-dayh{display:table-row-group}
+html body #chTime tbody.ad-dayh th{background:#f4f4f5;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#52525b;padding:9px 12px;text-align:left;border-bottom:1px solid rgba(128,128,128,.25)}
+html body #chTime tbody.ad-dayh .ad-dc{font-weight:400;letter-spacing:0;text-transform:none;margin-left:8px;color:#6b6b73}
+@media(max-width:700px){
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh{display:block;border:0;background:transparent;padding:0;margin:16px 0 8px;border-radius:0}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh tr{display:block;margin:0;padding:0;border:0}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh th{display:block;background:transparent;border:0!important;padding:0!important;font-size:13px}
+}
+html body.adm .ad-timebar button.ad-ap{min-height:44px;padding:0 20px;border-radius:99px;background:#12201b;color:#fff;border:0;font:inherit;font-weight:700;cursor:pointer;margin:6px 0 12px}
+html body.adm .ad-timebar button.ad-ap[hidden]{display:none}
+@media(max-width:700px){
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh,html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh tr,html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh th{display:block;width:100%;box-sizing:border-box;white-space:normal;writing-mode:horizontal-tb}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh th{text-transform:uppercase;letter-spacing:.05em;color:#52525b}
+}

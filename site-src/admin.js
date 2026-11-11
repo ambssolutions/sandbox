@@ -701,10 +701,10 @@ var entQ=[],entBusy=0,entCache={};
 function entRun(){while(entBusy<3&&entQ.length){(function(it){var tb=it.tb,ck=tb.getAttribute('data-sha')||tb.getAttribute('data-from')+'>'+tb.getAttribute('data-to');if(entCache[ck]){entFill(tb,entCache[ck],it.e);return;}entBusy++;var req=tb.hasAttribute('data-from')?{action:'changedetail',from:tb.getAttribute('data-from'),to:tb.getAttribute('data-to')}:{action:'changedetail',sha:tb.getAttribute('data-sha')};
   site(req).then(function(j){entCache[ck]=j.lines||[];entFill(tb,entCache[ck],it.e);}).catch(function(){var w=tb.querySelector('.ad-wait');if(w){w.textContent='';w.classList.remove('ad-wait');}}).then(function(){entBusy--;entRun();});})(entQ.shift());}}
 function tblSet(id,ents,empty){
-  var t=document.getElementById(id);[].slice.call(t.querySelectorAll('tbody')).forEach(function(b){b.remove();});
+  var t=document.getElementById(id);var real=ents.filter(function(e){return !e.dayhead;});[].slice.call(t.querySelectorAll('tbody')).forEach(function(b){b.remove();});
   if(!ents.length){t.insertAdjacentHTML('beforeend','<tbody><tr><td colspan="5" class="ad-empty">'+esc(empty||'Nothing yet.')+'</td></tr></tbody>');return;}
-  t.insertAdjacentHTML('beforeend',ents.map(function(e){return e.photo?photoBody(e):entSkeleton(e);}).join(''));
-  var rows=[].slice.call(t.querySelectorAll('tbody.ad-ent'));rows.forEach(function(tb,i){if(!ents[i].photo)entQ.push({tb:tb,e:ents[i]});});entRun();
+  t.insertAdjacentHTML('beforeend',ents.map(function(e){return e.dayhead?'<tbody class="ad-dayh"><tr><th colspan="5">'+esc(e.dayhead)+' <span class="ad-dc">'+e.n+(e.n===1?' change':' changes')+'</span></th></tr></tbody>':e.photo?photoBody(e):entSkeleton(e);}).join(''));
+  var rows=[].slice.call(t.querySelectorAll('tbody.ad-ent'));rows.forEach(function(tb,i){if(!real[i].photo)entQ.push({tb:tb,e:real[i]});});entRun();
 }
 function pagesIn(s){var m=String(s||'').match(/\b[a-z0-9-]+\.html\b/g);return m&&m.length?m.filter(function(x,i){return m.indexOf(x)===i;}):['Other'];}
 function photoEnt(x){return {photo:1,id:x.id,who:x.who,when:x.at,pages:[x.area||'Photos'],act:x};}
@@ -737,79 +737,63 @@ function chFill(){
 function chPass(e){
   var w=$('#chFWho').value,p=$('#chFPage').value,t=$('#chFWhen').value;
   if(w&&e.who!==w)return false;if(p&&(e.pages||[]).indexOf(p)<0)return false;
-  if(t){var d=new Date(e.when),n=new Date();if(isNaN(d))return false;if(t==='today'){if(d.toDateString()!==n.toDateString())return false;}else if(n-d>7*864e5)return false;}
+  if(t&&!snapIn(e.when,t))return false;
   return true;
 }
 /* Everything that went live, in one list: published sets of page changes and photo changes (which go live at once). */
 function liveEnts(){return (chAll.photo||[]).filter(function(e){var x=e.act||{};return (x.area||'Photos')==='Photos'&&/^(add|move|remove|undo)$/.test(x.kind);});}
 function pubAll(){return chAll.vers.concat(liveEnts()).sort(function(a,b){return new Date(b.when)-new Date(a.when);});}
+/* One list, newest first, grouped by day. Each change says whether it is waiting or live. */
+function nzDay(d){return new Date(d).toLocaleDateString('en-GB',{timeZone:'Pacific/Auckland',year:'numeric',month:'2-digit',day:'2-digit'});}
+function dayName(d){var n=new Date(),y=new Date(n.getTime()-864e5);var s=nzDay(d);if(s===nzDay(n))return 'Today';if(s===nzDay(y))return 'Yesterday';return new Date(d).toLocaleDateString('en-NZ',{timeZone:'Pacific/Auckland',weekday:'long',day:'numeric',month:'long'});}
+function timelineEnts(){
+  function tag(l,c){return l.map(function(e){var x=e.photo?(e.act||{}):null,chip=c;if(x&&(x.area||'Photos')!=='Photos')chip=undefined;return Object.assign({},e,{chip:chip});});}
+  var all=tag(chAll.draft,'d').concat(tag(chAll.live,'l')).filter(chPass).sort(function(a,b){return new Date(b.when)-new Date(a.when);});
+  var out=[],cur='',head=null;
+  all.forEach(function(e){var k=nzDay(e.when);if(k!==cur){cur=k;head={dayhead:dayName(e.when),n:0};out.push(head);}head.n++;out.push(e);});
+  return out;
+}
 function chRender(){
   var f=$('#chFWho').value||$('#chFPage').value||$('#chFWhen').value,none=f?'No changes match these filters.':null;
   var d=chAll.draft.filter(chPass);
-  var dup=!!(snapSel&&snapSel.k==='wait'&&!(me&&me.role==='editor'));
-  $('#chDraftH').hidden=!d.length||dup;$('#chDraftW').hidden=!d.length||dup;var dpb=$('#chDraftPub');if(dpb)dpb.hidden=!d.length||dup||!canPublish();
-  tblSet('chDraft',d);
-  tblSet('chVers',pubAll().filter(chPass),none||'Nothing has been published since this list began.');
-  tblSet('chLive',chAll.live.filter(chPass),none||'No published changes yet.');
+  ['chDraftH','chDraftW','chDraftPub','chVersH','chVersHelp','chLiveH'].forEach(function(id){var el=document.getElementById(id);if(el)el.hidden=true;});
+  [].forEach.call(document.querySelectorAll('#chVers,#chLive'),function(t){var w=t.closest('.ad-tw');if(w)w.hidden=true;});
+  var tl=timelineEnts();
+  tblSet('chTime',tl,none||'No changes yet.');
+  var tp=$('#chTimePub');if(tp)tp.hidden=!chAll.draft.length||!canPublish();
 }
-['chFWho','chFPage','chFWhen'].forEach(function(id){$('#'+id).addEventListener('change',chRender);});
-$('#chFClear').addEventListener('click',function(){$('#chFWho').value='';$('#chFPage').value='';$('#chFWhen').value='';chRender();});
+['chFWho','chFPage','chFWhen'].forEach(function(id){$('#'+id).addEventListener('change',function(){chRender();snapRender();});});
+$('#chFClear').addEventListener('click',function(){$('#chFWho').value='';$('#chFPage').value='';$('#chFWhen').value='';chRender();snapRender();});
 /* Snapshot for owners and managers: what was done in a day, and by whom. */
 function snapIn(d,t){d=new Date(d);if(isNaN(d))return false;var n=new Date();if(t==='today')return d.toDateString()===n.toDateString();if(t==='yesterday'){var y=new Date(n.getTime()-864e5);return d.toDateString()===y.toDateString();}return n-d<=7*864e5;}
 function snapRender(){
   var box=$('#chSnap');if(!box)return;if(me&&me.role==='editor'){box.hidden=true;return;}box.hidden=false;
-  var t=$('#chSnapWhen').value,ch=chAll.draft.concat(chAll.live).filter(function(e){return snapIn(e.when,t);}),pb=pubAll().filter(function(e){return snapIn(e.when,t);}),wait=chAll.draft.length;
+  var ch=chAll.draft.concat(chAll.live).filter(chPass),pb=pubAll().filter(chPass),wait=chAll.draft.filter(chPass).length;
   var ppl={},pages={};
   function P(n){n=n||'Unknown';return ppl[n]||(ppl[n]={n:n,ch:0,pub:0,pg:{},last:0});}
   ch.forEach(function(e){var p=P(e.who);p.ch++;(e.pages||[]).forEach(function(x){p.pg[x]=1;pages[x]=1;});var d=+new Date(e.when);if(d>p.last)p.last=d;});
   pb.forEach(function(e){var p=P(e.who);p.pub++;var d=+new Date(e.when);if(d>p.last)p.last=d;});
   var names=Object.keys(ppl).sort(function(a,b){return ppl[b].ch-ppl[a].ch||ppl[b].pub-ppl[a].pub;});
-  function tile(n,l,k){return '<button type="button" class="ad-tile" data-snap="'+k+'" aria-pressed="'+(snapSel&&snapSel.k===k&&!snapSel.who?'true':'false')+'"><b>'+n+'</b><span>'+esc(l)+'</span></button>';}
+  function tile(n,l,k){return '<div class="ad-tile" data-snap="'+k+'"><b>'+n+'</b><span>'+esc(l)+'</span></div>';}
   $('#chTiles').innerHTML=tile(ch.length,ch.length===1?'change made':'changes made','changes')+tile(pb.length,'published','pub')+tile(wait,'saved, not published','wait')+tile(names.length,names.length===1?'person active':'people active','people')+tile(Object.keys(pages).length,Object.keys(pages).length===1?'page changed':'pages changed','changes');
   var tb=$('#chPeople');[].slice.call(tb.querySelectorAll('tbody')).forEach(function(x){x.remove();});
-  tb.insertAdjacentHTML('beforeend','<tbody>'+(names.length?names.map(function(n){var p=ppl[n],pl=Object.keys(p.pg);return '<tr class="ad-click" tabindex="0" role="button" data-who="'+esc(p.n)+'" aria-label="Show the changes made by '+esc(p.n)+'"><td><b>'+esc(p.n)+'</b></td><td>'+p.ch+'</td><td>'+p.pub+'</td><td>'+(pl.length?esc(pl.slice(0,4).map(pageLabel).join(', '))+(pl.length>4?' and '+(pl.length-4)+' more':''):'–')+'</td><td>'+(p.last?esc(when2(new Date(p.last).toISOString())):'')+'</td></tr>';}).join(''):'<tr><td colspan="5" class="ad-empty">No changes in this period.</td></tr>')+'</tbody>');
+  tb.insertAdjacentHTML('beforeend','<tbody>'+(names.length?names.map(function(n){var p=ppl[n],pl=Object.keys(p.pg);return '<tr class="ad-click" tabindex="0" role="button" data-who="'+esc(p.n)+'" aria-label="Show only the changes made by '+esc(p.n)+'"><td><b>'+esc(p.n)+'</b></td><td>'+p.ch+'</td><td>'+p.pub+'</td><td>'+(pl.length?esc(pl.slice(0,4).map(pageLabel).join(', '))+(pl.length>4?' and '+(pl.length-4)+' more':''):'–')+'</td><td>'+(p.last?esc(when2(new Date(p.last).toISOString())):'')+'</td></tr>';}).join(''):'<tr><td colspan="5" class="ad-empty">No changes match the filters.</td></tr>')+'</tbody>');
   if(typeof snapDetail==='function')snapDetail();
 }
 var snapSel=null,snapInit=0;
 function canPublish(){return !!me&&(me.role==='owner'||me.role==='manager'||(me.access&&(me.access.indexOf('pages')>-1||me.access.indexOf('details')>-1)));}
 /* Publishing the unpublished changes can be started right where they are listed. */
 (function(){var dp=document.createElement('button');dp.type='button';dp.id='chDraftPub';dp.className='ad-ap';dp.textContent='Review and publish';dp.hidden=true;var h=$('#chDraftH');if(h)h.parentNode.insertBefore(dp,h.nextSibling);
-  dp.addEventListener('click',function(){$('#adPublish').click();});$('#chSnapPub').addEventListener('click',function(){$('#adPublish').click();});})();
-function snapDetail(){
-  var box=$('#chSnapDetail');if(!box)return;if(!snapSel||(me&&me.role==='editor')){box.hidden=true;return;}
-  var t=$('#chSnapWhen').value,per={today:'today',yesterday:'yesterday','7':'in the last 7 days'}[t]||'',ents,title,empty,hd='Changed by';
-  function inP(e){return snapIn(e.when,t);}
-  function chip(l,c){return l.map(function(e){return Object.assign({},e,{chip:c});});}
-  function newest(a,b){return new Date(b.when)-new Date(a.when);}
-  if(snapSel.k==='wait'){ents=chip(chAll.draft,'d').sort(newest);title='Saved but not published yet';empty='No saved changes are waiting to be published.';}
-  else if(snapSel.k==='pub'){ents=pubAll().filter(inP).sort(newest);title='Published '+per;empty='Nothing was published '+per+'.';hd='Published by';}
-  else{
-    ents=chip(chAll.draft.filter(inP),'d').concat(chip(chAll.live.filter(inP),'l')).sort(newest);
-    title='Changes made '+per;empty='No changes were made '+per+'.';
-    if(snapSel.who){ents=ents.filter(function(e){return (e.who||'Unknown')===snapSel.who;});title='Changes by '+snapSel.who+' '+per;empty=snapSel.who+' made no changes '+per+'.';}
-  }
-  $('#chSnapDetT').textContent=title+(ents.length?' ('+ents.length+')':'');
-  $('#chSnapPub').hidden=!(snapSel.k==='wait'&&ents.length&&canPublish());
-  var th=box.querySelector('thead th:nth-child(3)');if(th)th.textContent=hd;
-  box.hidden=false;tblSet('chSnapTbl',ents,empty);
-}
-function snapPick(sel,el){
-  if(sel&&snapSel&&snapSel.k===sel.k&&(snapSel.who||'')===(sel.who||''))sel=null;
-  snapSel=sel;chRender();snapRender();
-  if(sel&&el){var b=$('#chSnapDetail');setTimeout(function(){if(b.scrollIntoView)b.scrollIntoView({behavior:'smooth',block:'start'});},50);}
-}
-$('#chTiles').addEventListener('click',function(e){var b=e.target.closest('[data-snap]');if(!b)return;var k=b.getAttribute('data-snap');
-  if(k==='people'){var pt=$('#chPeople');pt.scrollIntoView&&pt.scrollIntoView({behavior:'smooth',block:'center'});pt.classList.add('ad-flash');setTimeout(function(){pt.classList.remove('ad-flash');},1200);return;}
-  snapPick({k:k},b);});
-$('#chPeople').addEventListener('click',function(e){var r=e.target.closest('tr[data-who]');if(r)snapPick({k:'changes',who:r.getAttribute('data-who')},r);});
-$('#chPeople').addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var r=e.target.closest('tr[data-who]');if(r){e.preventDefault();snapPick({k:'changes',who:r.getAttribute('data-who')},r);}});
-$('#chSnapDetX').addEventListener('click',function(){snapSel=null;chRender();snapRender();});
-$('#chSnapWhen').addEventListener('change',snapRender);
+  dp.addEventListener('click',function(){$('#adPublish').click();});$('#chSnapPub').addEventListener('click',function(){$('#adPublish').click();});$('#chTimePub').addEventListener('click',function(){$('#adPublish').click();});})();
+function snapDetail(){var box=$('#chSnapDetail');if(box)box.hidden=true;}
+function pickWho(n){var s=$('#chFWho');s.value=n;if(s.value!==n)return;chRender();snapRender();var t=$('#chTimeH');if(t&&t.scrollIntoView)t.scrollIntoView({behavior:'smooth',block:'start'});}
+$('#chPeople').addEventListener('click',function(e){var r=e.target.closest('tr[data-who]');if(r)pickWho(r.getAttribute('data-who'));});
+$('#chPeople').addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var r=e.target.closest('tr[data-who]');if(r){e.preventDefault();pickWho(r.getAttribute('data-who'));}});
 function chLoad(){
   var a=site({action:'publishes'}).then(function(j){chAll.vers=(j.versions||[]).map(function(x){return {from:x.from,to:x.to,who:x.who,when:x.at,fallback:(x.n||0)+' change'+(x.n===1?'':'s'),pages:pagesIn((x.files||[]).join(' '))};});}).catch(function(){chAll.vers=[];});
   var b=site({action:'history',n:100}).then(function(j){var isEd=function(c){return /^Website editor: /.test(c.message)&&!/^Website editor: publish changes/.test(c.message);};chAll.draft=j.draft.filter(isEd).map(chEnt);chAll.live=j.live.filter(isEd).map(chEnt);});
   var c=site({action:'activity'}).then(function(j){chAll.photo=(j.items||[]).map(photoEnt);}).catch(function(){chAll.photo=[];});
-  Promise.all([a,b,c]).then(function(){chAll.live=chAll.live.concat(chAll.photo||[]).sort(function(p,q){return new Date(q.when)-new Date(p.when);});if(!snapInit){snapInit=1;if(chAll.draft.length&&!(me&&me.role==='editor'))snapSel={k:'wait'};}chFill();chRender();snapRender();}).catch(function(er){say(er.message,true);});
+  Promise.all([a,b,c]).then(function(){chAll.live=chAll.live.concat(chAll.photo||[]).sort(function(p,q){return new Date(q.when)-new Date(p.when);});snapInit=1;chFill();chRender();snapRender();}).catch(function(er){say(er.message,true);});
 }
 $('[data-pane=changes]').addEventListener('click',function(e){
   var b=e.target.closest('[data-undo]');if(!b||b.disabled)return;
