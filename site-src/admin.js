@@ -343,7 +343,7 @@ function siteStatus(){
   return site({action:'status'}).then(function(j){
     siteOn=!!j.ready;secPending.hidden=siteOn;
     var d=$('#adDraft');
-    if(siteOn&&j.draft&&j.changes>0){d.hidden=false;$('#adDraftText').innerHTML='<b>'+j.changes+(j.changes===1?' change':' changes')+'</b> saved but not on the website yet ('+esc(j.files.slice(0,4).map(whereName).join(', '))+(j.files.length>4?' and more':'')+').';}
+    draftFiles=(j.files||[]).filter(function(f){return /\.html$/.test(f);});if(siteOn&&j.draft&&j.changes>0){d.hidden=false;$('#adDraftText').innerHTML='<b>'+j.changes+(j.changes===1?' change':' changes')+'</b> saved but not on the website yet ('+esc(j.files.slice(0,4).map(whereName).join(', '))+(j.files.length>4?' and more':'')+').';}
     else d.hidden=true;
     return j;
   }).catch(function(er){if(er.status===503){siteOn=false;secPending.hidden=false;}});
@@ -376,6 +376,8 @@ $('#adDiscard').addEventListener('click',function(e){
 });
 /* preview */
 var modal=$('#edModal'),frame=$('#edFrame');
+/* The editing window sits outside the Pages pane, so it still shows when it is opened from another screen (for example Preview on the Home screen). */
+if(modal.parentNode!==root)root.appendChild(modal);
 var onPage=false;
 var timing=null;
 /* A small line under the editing window says how long each step of opening the page took, so a slow page can be pinned down. */
@@ -462,7 +464,9 @@ $('#edPageGrid').addEventListener('click',function(e){var b=e.target.closest('[d
 $('#edNew2').addEventListener('click',function(){$('#edNew').click();});
 [].forEach.call(root.querySelectorAll('#edNew,#edNew2,.hm-pill[data-go=newpage]'),function(el){el.hidden=!NEWPAGES;});
 $('#edModalSave').addEventListener('click',function(){capFlushPage().catch(function(){});if(phHome)closePhotos();if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);});
-$('#adPreviewAll').addEventListener('click',function(){preview(edPath||'index.html');});
+/* Preview shows a page with the saved changes: the page being edited if it has some, otherwise the first page that has. */
+var draftFiles=[];
+$('#adPreviewAll').addEventListener('click',function(){preview(draftFiles.indexOf(edPath)>-1?edPath:(draftFiles[0]||edPath||'index.html'));});
 $('#edPreview').addEventListener('click',function(){preview(edPath);});
 /* Creating new pages is switched off for now. Set this to true to bring the buttons back (the server has a matching switch). */
 var NEWPAGES=false;
