@@ -868,6 +868,20 @@ window.addEventListener('message',idleSeen);
 function idleTick(){if(!me)return;var last=lastAct;try{last=Math.max(last,Number(localStorage.getItem('mk-admin-last')||0));}catch(e){}var q=Date.now()-last;
   if(q>=IDLEMS){autoSaveNow().catch(function(){}).then(function(){return post('/api/admin/login',{action:'logout'});}).catch(function(){}).then(function(){modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);showLogin();});return;}
   if(q>=WARNMS){autoSaveNow().catch(function(){});if(!idleWarn){idleWarn=document.createElement('div');idleWarn.className='ad-idlewarn';idleWarn.setAttribute('role','alert');idleWarn.textContent='No activity for a while. You will be signed out in about a minute. Tap or press any key to stay signed in.';root.appendChild(idleWarn);}idleWarn.hidden=false;}}
+/* A new version of the editor goes live with every push. A tab that was left open keeps running the old one, so the editor checks for a newer version now and then
+   (when the tab is opened again, and every few minutes) and offers a one-press update. Nothing is reloaded by itself, so nothing being typed is lost. */
+var myVer=(function(){var s=[].slice.call(document.scripts).map(function(x){return x.src||'';}).filter(function(x){return /assets\/admin\.js/.test(x);})[0]||'',m=/[?&]v=([0-9a-f]+)/.exec(s);return m?m[1]:'';})();
+var verBar=null,verBusy=false;
+function verShow(){if(verBar)return;verBar=document.createElement('div');verBar.className='ad-newver';verBar.setAttribute('role','status');
+  verBar.innerHTML='<span><b>A newer version of the editor is ready.</b> Save what you are doing, then update.</span><button type="button" class="ad-ap">Update now</button><button type="button" data-later="1">Later</button>';
+  document.body.appendChild(verBar);
+  verBar.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-later')){verBar.hidden=true;setTimeout(function(){if(verBar)verBar.hidden=false;},10*60*1000);return;}
+    var dirty=false;try{dirty=(typeof edChanges==='function'&&edChanges().length>0)||Object.keys(capPend||{}).length>0;}catch(x){}
+    if(dirty&&!confirm('You have changes that are not saved yet. Update anyway and leave them behind?'))return;location.reload();});}
+function verCheck(){if(verBusy||!myVer||document.visibilityState==='hidden')return;verBusy=true;
+  fetch('/admin',{cache:'no-store',credentials:'same-origin'}).then(function(r){return r.text();}).then(function(t){var m=/assets\/admin\.js\?v=([0-9a-f]+)/.exec(t);if(m&&m[1]!==myVer)verShow();}).catch(function(){}).then(function(){verBusy=false;});}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')verCheck();});
+setInterval(verCheck,5*60*1000);setTimeout(verCheck,20000);
 var timerEl=document.getElementById('adTimerT'),timerBox=document.getElementById('adTimer');
 function idleTimer(){if(!timerEl||!me)return;var last=lastAct;try{last=Math.max(last,Number(localStorage.getItem('mk-admin-last')||0));}catch(e){}var left=Math.max(0,IDLEMS-(Date.now()-last)),s=Math.ceil(left/1000),t=('0'+Math.floor(s/60)).slice(-2)+':'+('0'+(s%60)).slice(-2);if(timerEl.textContent!==t)timerEl.textContent=t;timerBox.classList.toggle('low',left<=5*60*1000);}
 setInterval(idleTimer,1000);

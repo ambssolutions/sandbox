@@ -514,3 +514,9 @@ html body.adm .pb-carslot .ad-card{box-shadow:none;border:1px solid #e4e4e7;marg
 html body.adm .pb-carslot .pb-carnote{margin:12px 2px 0;font-size:14px}
 html body.adm .pb-page[data-path="index.html"]>.pb-grid{padding-top:0;border-top:0}
 html body.adm .pb-carslot .pb-carnote,html body.adm #carHead{background:transparent;border:0;padding:0}
+
+/* New-version notice */
+html body .ad-newver{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2147483000;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;max-width:calc(100% - 24px);background:#191919;color:#fff;border-radius:18px;padding:10px 14px;box-shadow:0 8px 28px rgba(0,0,0,.35);font-size:14px;line-height:1.35}
+html body .ad-newver[hidden]{display:none}
+html body .ad-newver button{min-height:40px;border-radius:999px;border:0;padding:0 16px;font:inherit;font-weight:700;cursor:pointer;background:#fff;color:#191919}
+html body .ad-newver button.ad-ap{background:#e8434a;color:#fff}
