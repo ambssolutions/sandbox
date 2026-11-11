@@ -158,8 +158,8 @@ module.exports = async function (req, res) {
         const x = P.extract(html);
         const ins = [];
         for (const f of x.fields) {
-          /* The page's top banner (its heading and intro sentence) sits outside the main area but is page text too: it can be clicked and typed over like the rest. Its links (skip link, service tabs) are left alone. */
-          if (f.region !== 'main' && !(f.region === 'other' && /^(h1|h2|p)$/.test(f.tag))) continue;
+          /* The page's top banner (its heading and intro sentence) sits outside the main area but is page text too: it can be clicked and typed over like the rest. The links in it (such as the service tabs on the Services page) can be renamed too, but do not open when clicked. Only the skip link is left alone. */
+          if (f.region !== 'main' && !(f.region === 'other' && (/^(h1|h2|p)$/.test(f.tag) || (f.tag === 'a' && !/^Skip to content$/i.test(String(f.value).trim()))))) continue;
           if (f.kind === 'text' && !/^(option|textarea|button)$/.test(f.tag)) { ins.push({ at: f.start, t: '<span data-ek="' + f.k + '">' }); ins.push({ at: f.end, t: '</span>' }); }
           else if (f.picture && f.tagStart != null) ins.push({ at: f.tagStart + 4, t: ' data-ek-img="' + f.k + '"' });
         }
