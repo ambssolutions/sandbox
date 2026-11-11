@@ -158,12 +158,13 @@ module.exports = async function (req, res) {
         const x = P.extract(html);
         const ins = [];
         for (const f of x.fields) {
-          if (f.region !== 'main') continue;
+          /* The page's top banner (its heading and intro sentence) sits outside the main area but is page text too: it can be clicked and typed over like the rest. Its links (skip link, service tabs) are left alone. */
+          if (f.region !== 'main' && !(f.region === 'other' && /^(h1|h2|p)$/.test(f.tag))) continue;
           if (f.kind === 'text' && !/^(option|textarea|button)$/.test(f.tag)) { ins.push({ at: f.start, t: '<span data-ek="' + f.k + '">' }); ins.push({ at: f.end, t: '</span>' }); }
           else if (f.picture && f.tagStart != null) ins.push({ at: f.tagStart + 4, t: ' data-ek-img="' + f.k + '"' });
         }
         ins.sort((a, b) => b.at - a.at); for (const i of ins) html = html.slice(0, i.at) + i.t + html.slice(i.at);
-        html = html.replace(/<\/body>/i, '<style>nav.nav,.nav-links,.menu-btn,.qbar,footer{display:none!important}[data-ek]{outline-offset:2px}[data-ek]:hover{outline:2px dashed #c8323c;cursor:text}[data-ek]:focus{outline:2px solid #c8323c;background:rgba(200,50,60,.06)}img[data-ek-img]{cursor:pointer}img[data-ek-img]:hover{outline:3px solid #c8323c;outline-offset:-3px;filter:brightness(.92)}</style><script>' + EDIT_JS + '</script></body>');
+        html = html.replace(/<\/body>/i, '<style>nav.nav,.sticky-nav,.nav-links,.menu-btn,.qbar,footer{display:none!important}[data-ek]{outline-offset:2px}[data-ek]:hover{outline:2px dashed #c8323c;cursor:text}[data-ek]:focus{outline:2px solid #c8323c;background:rgba(200,50,60,.06)}img[data-ek-img]{cursor:pointer}img[data-ek-img]:hover{outline:3px solid #c8323c;outline-offset:-3px;filter:brightness(.92)}</style><script>' + EDIT_JS + '</script></body>');
       }
       if (photosP) { try { const ph = await photosP; if (ph) html = P.renderPhotos(html, ph.map(L.publicPhoto), !!b.edit); tm.photos = Date.now() - T0; } catch (e) { /* keep the page as it is */ } }
       html = html.replace(/<head>/i, '<head><base href="' + origin + '/">');
