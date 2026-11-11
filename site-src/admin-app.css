@@ -386,3 +386,16 @@ html body .ad-pbtns{display:inline-flex;gap:4px}
 html body .ad-pbtns button{font:inherit;font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid rgba(128,128,128,.4);background:#fff;color:#1c1c1e;cursor:pointer}
 html body .ad-pbtns button.ad-rm{color:#a82a2a;border-color:rgba(200,50,60,.4)}
 html body .ad-pbtns button:disabled{opacity:.4;cursor:default}
+
+/* Snapshot: tidy tiles and the per-person table on a laptop */
+html body .ad-tiles{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+html body .ad-tile{min-height:92px;justify-content:space-between;padding:12px 14px}
+html body .ad-tile b{font-size:30px}
+html body .ad-tile span{line-height:1.25}
+html body .ad-ppl{table-layout:auto;width:100%;min-width:0}
+html body .ad-ppl th{white-space:nowrap;letter-spacing:.03em;overflow-wrap:normal;word-break:normal}
+html body .ad-ppl th:nth-child(2),html body .ad-ppl td:nth-child(2),html body .ad-ppl th:nth-child(3),html body .ad-ppl td:nth-child(3){text-align:center;width:1%;padding-left:16px;padding-right:16px;white-space:nowrap}
+html body .ad-ppl td:nth-child(1){white-space:normal;width:22%}
+html body .ad-ppl th:nth-child(5),html body .ad-ppl td:nth-child(5){text-align:right;white-space:nowrap;width:1%}
+@media(max-width:1000px){html body .ad-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){html body .ad-tiles{grid-template-columns:1fr 1fr}html body .ad-tile{min-height:80px}html body .ad-ppl th:nth-child(5),html body .ad-ppl td:nth-child(5){display:none}}

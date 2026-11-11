@@ -21,12 +21,12 @@ note = between('<p class="ad-note" id="adNote" hidden>', '</p>\n')
 start = h.index('<div data-pane="photos">'); end = h.index('</div></div></section></main>')
 panes = h[start:end].replace('<div data-pane="photos">', '<div data-pane="photos" hidden>', 1)
 panes = re.sub(r'<label for="adCaption">.*?</label><input id="adCaption"[^>]*><label for="adDesc">.*?</label><input id="adDesc"[^>]*>', '', panes, count=1)
-VERS = '<h3 class="ad-h3" id="chVersH">Published versions</h3><p class="ad-help" id="chVersHelp">Each time changes are published, press What changed to see the website before and after.</p><ul class="ad-list" id="chVers"></ul><h3 class="ad-h3">Individual changes</h3><ul class="ad-list" id="chLive">'
+VERS = '<h3 class="ad-h3" id="chVersH">Published versions</h3><p class="ad-help" id="chVersHelp">Everything that went live, newest first: each time changes were published, and photo changes (which go live straight away). Press What changed to see the website before and after.</p><ul class="ad-list" id="chVers"></ul><h3 class="ad-h3">Individual changes</h3><ul class="ad-list" id="chLive">'
 assert '<h3 class="ad-h3">Published</h3><ul class="ad-list" id="chLive">' in panes
 panes = panes.replace('<h3 class="ad-h3">Published</h3><ul class="ad-list" id="chLive">', VERS, 1)
 def TBL(i, by, undo, wid=''):
     return '<div class="ad-tw"' + (' id="%s"' % wid if wid else '') + '><table class="ad-tbl" id="%s"><thead><tr><th>Page</th><th>Section</th><th>%s</th><th>What changed</th>%s</tr></thead></table></div>' % (i, by, '<th></th>' if undo else '')
-for old, new in [('<ul class="ad-list" id="chDraft"></ul>', TBL('chDraft', 'Changed by', True, 'chDraftW')), ('<ul class="ad-list" id="chVers"></ul>', TBL('chVers', 'Published by', False)), ('<ul class="ad-list" id="chLive"></ul>', TBL('chLive', 'Changed by', True))]:
+for old, new in [('<ul class="ad-list" id="chDraft"></ul>', TBL('chDraft', 'Changed by', True, 'chDraftW')), ('<ul class="ad-list" id="chVers"></ul>', TBL('chVers', 'Published by', True)), ('<ul class="ad-list" id="chLive"></ul>', TBL('chLive', 'Changed by', True))]:
     assert old in panes, old
     panes = panes.replace(old, new, 1)
 FIL = '<div class="ad-fbar" id="chFilters"><label id="chFWhoL">Person <select id="chFWho"><option value="">Everyone</option></select></label><label>Page <select id="chFPage"><option value="">All pages</option></select></label><label>When <select id="chFWhen"><option value="">Any time</option><option value="today">Today</option><option value="7">Last 7 days</option></select></label><button type="button" id="chFClear">Clear filters</button></div>'

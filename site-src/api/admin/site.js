@@ -210,8 +210,14 @@ module.exports = async function (req, res) {
         } else if (/\.(webp|jpe?g|png|svg)$/i.test(f.path)) lines.push({ file: f.path, type: 'note', what: f.status === 'added' ? 'Picture added' : f.status === 'removed' ? 'Picture removed' : 'Picture replaced' });
         else if (!/content\.js$|llms\.txt$/.test(f.path)) lines.push({ file: f.path, type: 'note', what: 'File changed' });
       }
-      if (htmlDiffs.length > 3) { // the same menu, footer or contact change on every page: show it once
-        for (const x of P.diffPages(htmlDiffs[0].before, htmlDiffs[0].after).slice(0, 400)) lines.push(Object.assign({ file: 'On all ' + htmlDiffs.length + ' pages' }, x));
+      if (htmlDiffs.length > 3) {
+        /* The same menu, footer or contact change on every page is shown once; anything else that changed on a page is shown under that page. */
+        const per = htmlDiffs.map((hd) => P.diffPages(hd.before, hd.after).slice(0, 400));
+        const key = (x) => JSON.stringify([x.type, x.what, x.where, x.sec, x.under, x.el, x.from || '', x.to || '']);
+        const common = new Set(per[0].map(key).filter((k) => per.every((l) => l.some((x) => key(x) === k))));
+        const seen = new Set();
+        for (const x of per[0]) if (common.has(key(x)) && !seen.has(key(x))) { seen.add(key(x)); lines.push(Object.assign({ file: 'On all ' + htmlDiffs.length + ' pages' }, x)); }
+        htmlDiffs.forEach((hd, i) => { const gone = new Set(); for (const x of per[i]) { const k = key(x); if (common.has(k) && !gone.has(k)) { gone.add(k); continue; } lines.push(Object.assign({ file: hd.path }, x)); } });
       } else for (const hd of htmlDiffs) for (const x of P.diffPages(hd.before, hd.after).slice(0, 400)) lines.push(Object.assign({ file: hd.path }, x));
       const known = new Set(); for (const l of lines) if (l.file === 'Contact details') { if (l.from) known.add(l.from); if (l.to) known.add(l.to); }
       const strip = (v) => String(v || '').replace(/^(mailto:|tel:)/, '');

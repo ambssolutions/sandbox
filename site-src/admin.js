@@ -740,13 +740,16 @@ function chPass(e){
   if(t){var d=new Date(e.when),n=new Date();if(isNaN(d))return false;if(t==='today'){if(d.toDateString()!==n.toDateString())return false;}else if(n-d>7*864e5)return false;}
   return true;
 }
+/* Everything that went live, in one list: published sets of page changes and photo changes (which go live at once). */
+function liveEnts(){return (chAll.photo||[]).filter(function(e){var x=e.act||{};return (x.area||'Photos')==='Photos'&&/^(add|move|remove|undo)$/.test(x.kind);});}
+function pubAll(){return chAll.vers.concat(liveEnts()).sort(function(a,b){return new Date(b.when)-new Date(a.when);});}
 function chRender(){
   var f=$('#chFWho').value||$('#chFPage').value||$('#chFWhen').value,none=f?'No changes match these filters.':null;
   var d=chAll.draft.filter(chPass);
   var dup=!!(snapSel&&snapSel.k==='wait'&&!(me&&me.role==='editor'));
   $('#chDraftH').hidden=!d.length||dup;$('#chDraftW').hidden=!d.length||dup;
   tblSet('chDraft',d);
-  tblSet('chVers',chAll.vers.filter(chPass),none||'Nothing has been published since this list began.');
+  tblSet('chVers',pubAll().filter(chPass),none||'Nothing has been published since this list began.');
   tblSet('chLive',chAll.live.filter(chPass),none||'No published changes yet.');
 }
 ['chFWho','chFPage','chFWhen'].forEach(function(id){$('#'+id).addEventListener('change',chRender);});
@@ -755,14 +758,14 @@ $('#chFClear').addEventListener('click',function(){$('#chFWho').value='';$('#chF
 function snapIn(d,t){d=new Date(d);if(isNaN(d))return false;var n=new Date();if(t==='today')return d.toDateString()===n.toDateString();if(t==='yesterday'){var y=new Date(n.getTime()-864e5);return d.toDateString()===y.toDateString();}return n-d<=7*864e5;}
 function snapRender(){
   var box=$('#chSnap');if(!box)return;if(me&&me.role==='editor'){box.hidden=true;return;}box.hidden=false;
-  var t=$('#chSnapWhen').value,ch=chAll.draft.concat(chAll.live).filter(function(e){return snapIn(e.when,t);}),pb=chAll.vers.filter(function(e){return snapIn(e.when,t);}),wait=chAll.draft.length;
+  var t=$('#chSnapWhen').value,ch=chAll.draft.concat(chAll.live).filter(function(e){return snapIn(e.when,t);}),pb=pubAll().filter(function(e){return snapIn(e.when,t);}),wait=chAll.draft.length;
   var ppl={},pages={};
   function P(n){n=n||'Unknown';return ppl[n]||(ppl[n]={n:n,ch:0,pub:0,pg:{},last:0});}
   ch.forEach(function(e){var p=P(e.who);p.ch++;(e.pages||[]).forEach(function(x){p.pg[x]=1;pages[x]=1;});var d=+new Date(e.when);if(d>p.last)p.last=d;});
   pb.forEach(function(e){var p=P(e.who);p.pub++;var d=+new Date(e.when);if(d>p.last)p.last=d;});
   var names=Object.keys(ppl).sort(function(a,b){return ppl[b].ch-ppl[a].ch||ppl[b].pub-ppl[a].pub;});
   function tile(n,l,k){return '<button type="button" class="ad-tile" data-snap="'+k+'" aria-pressed="'+(snapSel&&snapSel.k===k&&!snapSel.who?'true':'false')+'"><b>'+n+'</b><span>'+esc(l)+'</span></button>';}
-  $('#chTiles').innerHTML=tile(ch.length,ch.length===1?'change made':'changes made','changes')+tile(pb.length,pb.length===1?'publish':'publishes','pub')+tile(wait,wait===1?'change saved, not published':'changes saved, not published','wait')+tile(names.length,names.length===1?'person active':'people active','people')+tile(Object.keys(pages).length,Object.keys(pages).length===1?'page changed':'pages changed','changes');
+  $('#chTiles').innerHTML=tile(ch.length,ch.length===1?'change made':'changes made','changes')+tile(pb.length,'published','pub')+tile(wait,'saved, not published','wait')+tile(names.length,names.length===1?'person active':'people active','people')+tile(Object.keys(pages).length,Object.keys(pages).length===1?'page changed':'pages changed','changes');
   var tb=$('#chPeople');[].slice.call(tb.querySelectorAll('tbody')).forEach(function(x){x.remove();});
   tb.insertAdjacentHTML('beforeend','<tbody>'+(names.length?names.map(function(n){var p=ppl[n],pl=Object.keys(p.pg);return '<tr class="ad-click" tabindex="0" role="button" data-who="'+esc(p.n)+'" aria-label="Show the changes made by '+esc(p.n)+'"><td><b>'+esc(p.n)+'</b></td><td>'+p.ch+'</td><td>'+p.pub+'</td><td>'+(pl.length?esc(pl.slice(0,4).map(pageLabel).join(', '))+(pl.length>4?' and '+(pl.length-4)+' more':''):'–')+'</td><td>'+(p.last?esc(when2(new Date(p.last).toISOString())):'')+'</td></tr>';}).join(''):'<tr><td colspan="5" class="ad-empty">No changes in this period.</td></tr>')+'</tbody>');
   if(typeof snapDetail==='function')snapDetail();
@@ -775,7 +778,7 @@ function snapDetail(){
   function chip(l,c){return l.map(function(e){return Object.assign({},e,{chip:c});});}
   function newest(a,b){return new Date(b.when)-new Date(a.when);}
   if(snapSel.k==='wait'){ents=chip(chAll.draft,'d').sort(newest);title='Saved but not published yet';empty='No saved changes are waiting to be published.';}
-  else if(snapSel.k==='pub'){ents=chAll.vers.filter(inP).sort(newest);title='Published '+per;empty='Nothing was published '+per+'.';hd='Published by';}
+  else if(snapSel.k==='pub'){ents=pubAll().filter(inP).sort(newest);title='Published '+per;empty='Nothing was published '+per+'.';hd='Published by';}
   else{
     ents=chip(chAll.draft.filter(inP),'d').concat(chip(chAll.live.filter(inP),'l')).sort(newest);
     title='Changes made '+per;empty='No changes were made '+per+'.';
