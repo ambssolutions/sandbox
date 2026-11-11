@@ -499,3 +499,7 @@ html body #chTime tbody.ad-sect .ad-sh{display:flex;align-items:center;justify-c
 html body #chTime tbody.ad-sect .ad-sh b{flex:1 1 auto;min-width:0;line-height:1.25}
 html body #chTime tbody.ad-sect .ad-sc{flex:0 0 auto;margin:0;line-height:1.4;padding:3px 12px;white-space:nowrap}
 html body #chTime tbody.ad-sect small{display:block;margin-top:6px;line-height:1.4;white-space:normal}
+/* Saved, not published band: amber */
+html body #chTime tbody.ad-sect-wait th{background:#ffb000;color:#2b1a00}
+html body #chTime tbody.ad-sect-wait .ad-sc{background:#fff;color:#7a4a00}
+@media(max-width:700px){html body .ad-tbl:not(.ad-ppl) tbody.ad-sect-wait th{background:#ffb000!important;color:#2b1a00}}
