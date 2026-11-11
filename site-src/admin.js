@@ -385,7 +385,7 @@ var modal=$('#edModal'),frame=$('#edFrame');
 /* The editing window sits outside the Pages pane, so it still shows when it is opened from another screen (for example Preview on the Home screen). */
 if(modal.parentNode!==root)root.appendChild(modal);
 var onPage=false;
-var timing=null;
+var timing=null,loadHideT=0;
 /* A small line under the editing window says how long each step of opening the page took, so a slow page can be pinned down. */
 function timingShow(st){var el=document.getElementById('edTiming');if(!el){el=document.createElement('div');el.id='edTiming';el.className='ad-timing';var f=frame.parentNode;f.parentNode.insertBefore(el,f.nextSibling);}
   if(!timing||!st){el.textContent='';return;}
@@ -399,7 +399,7 @@ function preview(path,edit,hl){pvPath=path;pvHl=!!hl&&!edit;
   $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
   $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':(hl?'This is how the page will look when published. What has changed is highlighted in yellow. Nothing can be changed here.':'This is only a preview of this page. Nothing can be changed here.');
   $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. The text under the Media photos is edited here on the page. The photos themselves are changed with Media photos.';$('#edModalHint').title=STD;
-  frameFail.hidden=true;frameLoad.hidden=false;clearTimeout(waitT);frameOpened=false;frameLoaded=false;var tok=++openTok;
+  frameFail.hidden=true;frameLoad.hidden=false;clearTimeout(waitT);clearTimeout(loadHideT);frameOpened=false;frameLoaded=false;var tok=++openTok;
   if(edit&&path==='index.html')site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();capPend={};}).catch(function(){});
   /* The window opens straight away and shows that the page is loading, instead of nothing happening until the page has arrived. */
   frame.srcdoc='';sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;
@@ -424,7 +424,8 @@ $('#edClose').addEventListener('click',function(){capFlushPage().catch(function(
 window.addEventListener('message',function(e){
   if(!onPage&&pvHl&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pvready'){var ix=draftFiles.indexOf(pvPath);frame.contentWindow.postMessage({mk:'more',more:draftFiles.length>1},'*');return;}
   if(!onPage&&pvHl&&e.source===frame.contentWindow&&e.data&&e.data.mk==='nextpage'){var k=draftFiles.indexOf(pvPath);preview(draftFiles[(k+1)%draftFiles.length],false,true);return;}
-  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;frameLoad.hidden=true;if(timing&&!timing.ready){timing.ready=Date.now()-timing.t0;timingShow('done');}return;}
+  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;clearTimeout(loadHideT);loadHideT=setTimeout(function(){frameLoad.hidden=true;},7000);if(timing&&!timing.ready){timing.ready=Date.now()-timing.t0;timingShow('done');}return;}
+  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='loaded'){clearTimeout(loadHideT);frameLoad.hidden=true;return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='cap'){capFromPage(e.data.i,e.data.f,String(e.data.v||''));return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='photos'){openPhotos(typeof e.data.i==='number'?e.data.i:-1);return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pic'){
