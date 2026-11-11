@@ -149,9 +149,10 @@ module.exports = async function (req, res) {
     if (action === 'preview') {
       const path = okPath(b.path);
       /* The page, the photos and the draft's list of new pictures are fetched together, not one after the other. */
+      const T0 = Date.now(), tm = {};
       const photosP = path === 'index.html' ? L.currentPhotos().catch(() => null) : null;
       const aheadP = w.draft ? G.ahead().catch(() => null) : null;
-      let html = await read(path);
+      let html = await read(path); tm.page = Date.now() - T0;
       const origin = L.origin(req);
       if (b.edit) { // on-page editing: every piece of page text can be clicked and typed over
         const x = P.extract(html);
@@ -164,14 +165,15 @@ module.exports = async function (req, res) {
         ins.sort((a, b) => b.at - a.at); for (const i of ins) html = html.slice(0, i.at) + i.t + html.slice(i.at);
         html = html.replace(/<\/body>/i, '<style>nav.nav,.nav-links,.menu-btn,.qbar,footer{display:none!important}[data-ek]{outline-offset:2px}[data-ek]:hover{outline:2px dashed #c8323c;cursor:text}[data-ek]:focus{outline:2px solid #c8323c;background:rgba(200,50,60,.06)}img[data-ek-img]{cursor:pointer}img[data-ek-img]:hover{outline:3px solid #c8323c;outline-offset:-3px;filter:brightness(.92)}</style><script>' + EDIT_JS + '</script></body>');
       }
-      if (photosP) { try { const ph = await photosP; if (ph) html = P.renderPhotos(html, ph.map(L.publicPhoto), !!b.edit); } catch (e) { /* keep the page as it is */ } }
+      if (photosP) { try { const ph = await photosP; if (ph) html = P.renderPhotos(html, ph.map(L.publicPhoto), !!b.edit); tm.photos = Date.now() - T0; } catch (e) { /* keep the page as it is */ } }
       html = html.replace(/<head>/i, '<head><base href="' + origin + '/">');
       if (w.draft) { // pictures that only exist in the draft are placed inside the preview
-        const a = await aheadP; const mine = new Set((a && a.files) || []);
+        const a = await aheadP; tm.compare = Date.now() - T0; const mine = new Set((a && a.files) || []);
         const srcs = [...html.matchAll(/(src|srcset)="(projects\/up-[^"\s,]+)/g)].map((m) => m[2]).filter((s) => mine.has(s));
         const uniq = [...new Set(srcs)]; const got = await Promise.all(uniq.map((s) => G.readFile(s, w.branch))); uniq.forEach((s, ix) => { const f = got[ix]; const mt = /\.png$/.test(s) ? 'image/png' : /\.webp$/.test(s) ? 'image/webp' : 'image/jpeg'; html = html.split(s).join('data:' + mt + ';base64,' + f.buffer.toString('base64')); });
       }
-      return L.send(res, 200, { html });
+      tm.total = Date.now() - T0;
+      return L.send(res, 200, { html, ms: tm });
     }
     if (action === 'history') {
       const HN = Math.max(5, Math.min(100, Number(b.n) || 30));

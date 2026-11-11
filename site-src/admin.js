@@ -369,6 +369,14 @@ $('#adDiscard').addEventListener('click',function(e){
 /* preview */
 var modal=$('#edModal'),frame=$('#edFrame');
 var onPage=false;
+var timing=null;
+/* A small line under the editing window says how long each step of opening the page took, so a slow page can be pinned down. */
+function timingShow(st){var el=document.getElementById('edTiming');if(!el){el=document.createElement('div');el.id='edTiming';el.className='ad-timing';var f=frame.parentNode;f.parentNode.insertBefore(el,f.nextSibling);}
+  if(!timing||!st){el.textContent='';return;}
+  var m=timing.ms||{},p=[];p.push('page arrived '+(timing.got!=null?(timing.got/1000).toFixed(1)+' s':'...')+(timing.pre?' (started early)':'')+' after click');
+  if(m.total!=null)p.push('server '+m.total+' ms (page read by '+m.page+(m.photos!=null?', photos by '+m.photos:'')+(m.compare!=null?', pictures by '+m.compare:'')+')');
+  if(timing.ready!=null)p.push('ready to edit '+(timing.ready/1000).toFixed(1)+' s');
+  el.textContent='Opening time: '+p.join(' · ');}
 function preview(path,edit){
   say(edit?'Opening the page...':'Preparing the preview...');onPage=!!edit;$('#edModalSave').hidden=!edit;$('#edModalHint').hidden=!edit;phBtn.hidden=!edit||!canPh;
   $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
@@ -378,9 +386,9 @@ function preview(path,edit){
   if(edit&&path==='index.html')site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();capPend={};}).catch(function(){});
   /* The window opens straight away and shows that the page is loading, instead of nothing happening until the page has arrived. */
   frame.srcdoc='';sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;
-  var got=(edit&&takePrefetch(path))||site({action:'preview',path:path,edit:!!edit});
+  var tmq={t0:Date.now(),pre:false};var pf=edit&&takePrefetch(path);tmq.pre=!!pf;var got=pf||site({action:'preview',path:path,edit:!!edit});timing=tmq;timingShow('');
   var slow=new Promise(function(_,no){setTimeout(function(){no(new Error('slow'));},30000);});
-  Promise.race([got,slow]).then(function(j){if(tok!==openTok||modal.hidden)return;say('');frame.srcdoc=j.html;if(edit)watchFrame(path,j.html,0,Date.now());}).catch(function(er){if(tok!==openTok)return;if(er&&er.message==='slow'){frameLoad.hidden=true;frameFail.hidden=false;failPath=path;return;}frameLoad.hidden=true;modal.hidden=true;onPage=false;say(er.message,true);});
+  Promise.race([got,slow]).then(function(j){if(tok!==openTok||modal.hidden)return;say('');tmq.got=Date.now()-tmq.t0;tmq.ms=j.ms||null;frame.srcdoc=j.html;if(edit)watchFrame(path,j.html,0,Date.now());}).catch(function(er){if(tok!==openTok)return;if(er&&er.message==='slow'){frameLoad.hidden=true;frameFail.hidden=false;failPath=path;return;}frameLoad.hidden=true;modal.hidden=true;onPage=false;say(er.message,true);});
 }
 /* The page must really open. If it reports in late or not at all, try once more by itself, then say so and offer the form view instead of leaving a blank window. A page that is still loading (slow connection) is given time rather than restarted. */
 var frameOpened=false,frameLoaded=false,openTok=0,waitT=0,frameFail=document.createElement('div');frameFail.className='ad-framefail';frameFail.hidden=true;
@@ -397,7 +405,7 @@ function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelecto
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
 $('#edClose').addEventListener('click',function(){capFlushPage().catch(function(){});if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);});
 window.addEventListener('message',function(e){
-  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;frameLoad.hidden=true;return;}
+  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;frameLoad.hidden=true;if(timing&&!timing.ready){timing.ready=Date.now()-timing.t0;timingShow('done');}return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='cap'){capFromPage(e.data.i,e.data.f,String(e.data.v||''));return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='photos'){openPhotos(typeof e.data.i==='number'?e.data.i:-1);return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pic'){
