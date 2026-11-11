@@ -449,3 +449,23 @@ html body.adm .pb-page[open]>summary::after{transform:rotate(180deg)}
 html body.adm .pb-page>summary span{margin-left:auto;font-size:13px;opacity:.7}
 html body.adm .pb-page[data-none]>summary{cursor:default;opacity:.65}html body.adm .pb-page[data-none]>summary::after{content:''}
 html body.adm .pb-page>.pb-grid{padding:4px 12px 14px;border-top:1px solid #eee}
+
+/* Changes: two clearly different parts, Saved not published and Published */
+html body #chTime tbody.ad-sect{display:table-row-group}
+html body #chTime tbody.ad-sect th{padding:14px 16px;text-align:left;font-weight:400;border-top:0;border-bottom:1px solid rgba(128,128,128,.25)}
+html body #chTime tbody.ad-sect th b{font-size:19px;letter-spacing:0;text-transform:none;color:inherit}
+html body #chTime tbody.ad-sect .ad-sc{margin-left:10px;padding:2px 10px;border-radius:99px;background:rgba(255,255,255,.7);font-size:13px;font-weight:700}
+html body #chTime tbody.ad-sect small{display:block;margin-top:4px;font-size:13.5px;font-weight:400;opacity:.85}
+html body #chTime tbody.ad-sect-wait th{background:#fff1cf;color:#6a4700;box-shadow:inset 6px 0 0 #e0a100}
+html body #chTime tbody.ad-sect-pub th{background:#e3f3e8;color:#1b5a31;box-shadow:inset 6px 0 0 #2f8f4e}
+html body #chTime tbody.ad-dayh th{padding-left:16px}
+@media(max-width:700px){
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect{display:block;border:0;background:transparent;padding:0;margin:22px 0 10px;border-radius:12px;overflow:hidden}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect tr,html body .ad-tbl:not(.ad-ppl) tbody.ad-sect th{display:block;width:100%;box-sizing:border-box;white-space:normal}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect:first-of-type{margin-top:8px}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect th{border:0!important;padding:14px 16px!important}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect th b{font-size:20px}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh th{padding:0 4px!important;margin-top:8px}
+}
+html body #chTime tbody.ad-sect small,html body #chTime tbody.ad-sect .ad-sc,html body .ad-tbl tbody.ad-sect small{text-transform:none;letter-spacing:0}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect{width:100%;box-sizing:border-box}

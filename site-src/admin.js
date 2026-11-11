@@ -730,9 +730,9 @@ var entQ=[],entBusy=0,entCache={};
 function entRun(){while(entBusy<3&&entQ.length){(function(it){var tb=it.tb,ck=tb.getAttribute('data-sha')||tb.getAttribute('data-from')+'>'+tb.getAttribute('data-to');if(entCache[ck]){entFill(tb,entCache[ck],it.e);return;}entBusy++;var req=tb.hasAttribute('data-from')?{action:'changedetail',from:tb.getAttribute('data-from'),to:tb.getAttribute('data-to')}:{action:'changedetail',sha:tb.getAttribute('data-sha')};
   site(req).then(function(j){entCache[ck]=j.lines||[];entFill(tb,entCache[ck],it.e);}).catch(function(){var w=tb.querySelector('.ad-wait');if(w){w.textContent='';w.classList.remove('ad-wait');}}).then(function(){entBusy--;entRun();});})(entQ.shift());}}
 function tblSet(id,ents,empty){
-  var t=document.getElementById(id);var real=ents.filter(function(e){return !e.dayhead;});[].slice.call(t.querySelectorAll('tbody')).forEach(function(b){b.remove();});
+  var t=document.getElementById(id);var real=ents.filter(function(e){return !e.dayhead&&!e.sect;});[].slice.call(t.querySelectorAll('tbody')).forEach(function(b){b.remove();});
   if(!ents.length){t.insertAdjacentHTML('beforeend','<tbody><tr><td colspan="5" class="ad-empty">'+esc(empty||'Nothing yet.')+'</td></tr></tbody>');return;}
-  t.insertAdjacentHTML('beforeend',ents.map(function(e){return e.dayhead?'<tbody class="ad-dayh"><tr><th colspan="5">'+esc(e.dayhead)+' <span class="ad-dc">'+e.n+(e.n===1?' change':' changes')+'</span></th></tr></tbody>':e.photo?photoBody(e):entSkeleton(e);}).join(''));
+  t.insertAdjacentHTML('beforeend',ents.map(function(e){return e.sect?'<tbody class="ad-sect ad-sect-'+e.sect+'"><tr><th colspan="5"><b>'+esc(e.title)+'</b><span class="ad-sc">'+e.n+(e.n===1?' change':' changes')+'</span><small>'+esc(e.sub)+'</small></th></tr></tbody>':e.dayhead?'<tbody class="ad-dayh"><tr><th colspan="5">'+esc(e.dayhead)+' <span class="ad-dc">'+e.n+(e.n===1?' change':' changes')+'</span></th></tr></tbody>':e.photo?photoBody(e):entSkeleton(e);}).join(''));
   var rows=[].slice.call(t.querySelectorAll('tbody.ad-ent'));rows.forEach(function(tb,i){if(!real[i].photo)entQ.push({tb:tb,e:real[i]});});entRun();
 }
 function pagesIn(s){var m=String(s||'').match(/\b[a-z0-9-]+\.html\b/g);return m&&m.length?m.filter(function(x,i){return m.indexOf(x)===i;}):['Other'];}
@@ -779,9 +779,11 @@ function timelineEnts(){
   function tag(l,c){return l.map(function(e){var x=e.photo?(e.act||{}):null,chip=c;if(x&&(x.area||'Photos')!=='Photos')chip=undefined;return Object.assign({},e,{chip:chip});});}
   function newest(x,y){return new Date(y.when)-new Date(x.when);}
   var out=[],wait=tag(chAll.draft,'d').filter(chPass).sort(newest),live=tag(chAll.live,'l').filter(chPass).sort(newest);
-  if(wait.length){out.push({dayhead:'Saved, not published',n:wait.length});wait.forEach(function(e){out.push(e);});}
+  out.push({sect:'wait',title:'Saved, not published',n:wait.length,sub:wait.length?'Waiting to go on the website. Press Review and publish to put them live.':'Nothing is waiting to be published.'});
+  wait.forEach(function(e){out.push(e);});
+  out.push({sect:'pub',title:'Published',n:live.length,sub:live.length?'Already live on the website, by day.':'Nothing has been published yet.'});
   var cur='',head=null;
-  live.forEach(function(e){var k=nzDay(e.when);if(k!==cur){cur=k;head={dayhead:'Published '+dayName(e.when).replace(/^Today$/,'today').replace(/^Yesterday$/,'yesterday'),n:0};out.push(head);}head.n++;out.push(e);});
+  live.forEach(function(e){var k=nzDay(e.when);if(k!==cur){cur=k;head={dayhead:dayName(e.when),n:0};out.push(head);}head.n++;out.push(e);});
   return out;
 }
 function chRender(){
