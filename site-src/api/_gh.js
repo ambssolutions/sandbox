@@ -9,6 +9,10 @@ const LIVE = () => process.env.GITHUB_BRANCH || 'main';
 const DRAFT = 'editor-draft';
 const ready = () => !!process.env.GITHUB_TOKEN;
 
+/* Reads made one after another while a page opens would each ask GitHub again, so branch positions are remembered for two seconds and file contents by their exact version (a version never changes). Any write forgets the branch positions at once, and every write step reads the position fresh. */
+const REFS = new Map(), FILES = new Map(), CMPS = new Map();
+function remember(map, key, val, max) { map.set(key, val); if (map.size > max) map.delete(map.keys().next().value); }
+
 async function gh(method, path, body) {
   const r = await fetch('https://api.github.com/repos/' + REPO() + path, {
     method,
@@ -17,23 +21,32 @@ async function gh(method, path, body) {
   });
   let j = null; try { j = await r.json(); } catch (e) { /* empty body */ }
   if (!r.ok) { const e = new Error((j && j.message) || ('GitHub ' + r.status)); e.status = r.status; throw e; }
+  if (method !== 'GET') REFS.clear();
   return j;
 }
 const enc = (p) => p.split('/').map(encodeURIComponent).join('/');
 
-async function refSha(branch) { try { return (await gh('GET', '/git/ref/heads/' + enc(branch))).object.sha; } catch (e) { if (e.status === 404) return null; throw e; } }
+async function refSha(branch, fresh) {
+  if (!fresh) { const c = REFS.get(branch); if (c && Date.now() - c.t < 2000) return c.sha; }
+  try { const sha = (await gh('GET', '/git/ref/heads/' + enc(branch))).object.sha; REFS.set(branch, { sha, t: Date.now() }); return sha; }
+  catch (e) { if (e.status === 404) { REFS.set(branch, { sha: null, t: Date.now() }); return null; } throw e; }
+}
 /* The branch edits are read from and saved to: the draft if there is one, otherwise the live branch. */
 async function working() { const d = await refSha(DRAFT); return d ? { branch: DRAFT, sha: d, draft: true } : { branch: LIVE(), sha: await refSha(LIVE()), draft: false }; }
 async function ensureDraft() {
-  const d = await refSha(DRAFT); if (d) return d;
-  const m = await refSha(LIVE());
+  const d = await refSha(DRAFT, true); if (d) return d;
+  const m = await refSha(LIVE(), true);
   await gh('POST', '/git/refs', { ref: 'refs/heads/' + DRAFT, sha: m });
   return m;
 }
 async function readFile(path, ref) {
-  const j = await gh('GET', '/contents/' + enc(path) + '?ref=' + encodeURIComponent(ref));
+  let at = ref, key = '';
+  if (ref === DRAFT || ref === LIVE()) { const s = await refSha(ref); if (s) { at = s; key = s + ':' + path; const hit = FILES.get(key); if (hit) return { sha: hit.sha, buffer: Buffer.from(hit.buffer) }; } }
+  const j = await gh('GET', '/contents/' + enc(path) + '?ref=' + encodeURIComponent(at));
   if (Array.isArray(j)) throw new Error('That is a folder.');
-  return { sha: j.sha, buffer: Buffer.from(j.content || '', 'base64') };
+  const out = { sha: j.sha, buffer: Buffer.from(j.content || '', 'base64') };
+  if (key && out.buffer.length < 600000) remember(FILES, key, { sha: out.sha, buffer: Buffer.from(out.buffer) }, 30);
+  return out;
 }
 async function readText(path, ref) { return (await readFile(path, ref)).buffer.toString('utf8'); }
 async function exists(path, ref) { try { await readFile(path, ref); return true; } catch (e) { if (e.status === 404) return false; throw e; } }
@@ -43,7 +56,7 @@ async function listFiles(ref, dir) {
 }
 /* One commit that changes many files at once: files = [{ path, content: string|Buffer }] or [{ path, remove: true }]. */
 async function commit(branch, files, message) {
-  const head = await refSha(branch);
+  const head = await refSha(branch, true);
   const base = (await gh('GET', '/git/commits/' + head)).tree.sha;
   const tree = [];
   for (const f of files) {
@@ -58,7 +71,7 @@ async function commit(branch, files, message) {
 }
 /* Publish: move the live branch to the draft (a fast-forward when nothing else changed the live branch, otherwise a merge). */
 async function publish() {
-  const d = await refSha(DRAFT), m = await refSha(LIVE());
+  const d = await refSha(DRAFT, true), m = await refSha(LIVE(), true);
   if (!d) throw new Error('There is no draft to publish.');
   if (d === m) { await gh('DELETE', '/git/refs/heads/' + DRAFT); return m; }
   const cmp = await gh('GET', '/compare/' + m + '...' + d);
@@ -69,7 +82,7 @@ async function publish() {
 }
 /* Commits on the draft that are not on the live site yet, newest first. */
 async function draftOnly() {
-  const d = await refSha(DRAFT); if (!d) return [];
+  const d = await refSha(DRAFT, true); if (!d) return [];
   const c = await gh('GET', '/compare/' + (await refSha(LIVE())) + '...' + d);
   return (c.commits || []).slice().reverse().map((x) => ({ sha: x.sha, message: String((x.commit || {}).message || '').split('\n')[0], parents: (x.parents || []).map((p) => p.sha) }));
 }
@@ -83,8 +96,14 @@ async function squashTop(n) {
   await gh('PATCH', '/git/refs/heads/' + enc(DRAFT), { sha: c.sha, force: true });
   return true;
 }
-async function discard() { if (await refSha(DRAFT)) await gh('DELETE', '/git/refs/heads/' + DRAFT); }
-async function ahead() { const d = await refSha(DRAFT); if (!d) return null; const c = await gh('GET', '/compare/' + (await refSha(LIVE())) + '...' + d); return { ahead: c.ahead_by, files: (c.files || []).map((f) => f.filename) }; }
+async function discard() { if (await refSha(DRAFT, true)) await gh('DELETE', '/git/refs/heads/' + DRAFT); }
+async function ahead() {
+  const d = await refSha(DRAFT); if (!d) return null;
+  const m = await refSha(LIVE()), key = m + '...' + d;
+  let r = CMPS.get(key);
+  if (!r) { const c = await gh('GET', '/compare/' + key); r = { ahead: c.ahead_by, files: (c.files || []).map((f) => f.filename) }; remember(CMPS, key, r, 20); }
+  return { ahead: r.ahead, files: r.files.slice() };
+}
 async function history(branch, path, n) {
   const j = await gh('GET', '/commits?sha=' + encodeURIComponent(branch) + (path ? '&path=' + encodeURIComponent(path) : '') + '&per_page=' + (n || 30));
   return j.map((c) => ({ sha: c.sha, message: String(c.commit.message).split('\n')[0], who: (c.commit.author && c.commit.author.name) || '', date: c.commit.author && c.commit.author.date }));

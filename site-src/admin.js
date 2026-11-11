@@ -22,7 +22,8 @@ function api(path,opt){
   opt=opt||{};opt.credentials='same-origin';
   return fetch(path,opt).then(function(r){return r.json().catch(function(){return{};}).then(function(j){if(!r.ok){var e=new Error(j.error||'Something went wrong.');e.status=r.status;throw e;}return j;});});
 }
-function post(path,obj){return api(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(obj)}).catch(function(e){noteFail(path,obj,e);throw e;});}
+var preTick=0,pref={};
+function post(path,obj){if(obj&&/^(edit|op|add|image|captions|undo|undolast|discard|publish|savedetails|newpage|deletepage|menu|menuop|move|remove)$/.test(obj.action||''))preTick++;return api(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(obj)}).catch(function(e){noteFail(path,obj,e);throw e;});}
 /* When storage itself is off the server cannot keep a note of the failure, so this computer keeps one until it is dismissed. */
 function noteFail(path,obj,e){try{if(!/Storage is switched off/.test(String(e&&e.message)))return;var area=/photos|upload/.test(path)?'Photos':/feedback/.test(path)?'Client feedback':/users/.test(path)?'People':'Website';var l=JSON.parse(localStorage.getItem('mk-failed')||'[]');l.unshift({id:'l'+Date.now(),at:new Date().toISOString(),area:area,title:(obj&&(obj.action||obj.path))||'change',text:'Could not go live: '+e.message,local:1});localStorage.setItem('mk-failed',JSON.stringify(l.slice(0,30)));}catch(x){}}
 function showLogin(j){if(!j)api('/api/admin/users').then(function(x){if(x&&x.auth===false)showLogin(x);}).catch(function(){});var h=$('#adLoginHint');if(h)h.textContent=j&&j.master===false?'Sign in with your email and password.':'AMBS: leave the email empty to use the master password.';$('#adEmail').required=!!(j&&j.master===false);idleStop();var wasIn=false;try{wasIn=localStorage.getItem('mk-admin-in')==='1';localStorage.removeItem('mk-admin-in');}catch(e){}if(wasIn)$('#adIdleMsg').hidden=false;panel.hidden=true;inviteBox.hidden=true;$('#adBoot').hidden=true;loginBox.hidden=false;me=null;}
@@ -373,22 +374,28 @@ function preview(path,edit){
   $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
   $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':'This is only a preview of this page. Nothing can be changed here.';
   $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. The text under the Media photos is edited here on the page. The photos themselves are changed with Media photos.';$('#edModalHint').title=STD;
-  failBox.hidden=true;clearTimeout(waitT);frameOpened=false;
+  frameFail.hidden=true;clearTimeout(waitT);frameOpened=false;frameLoaded=false;var tok=++openTok;
   if(edit&&path==='index.html')site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();capPend={};}).catch(function(){});
-  site({action:'preview',path:path,edit:!!edit}).then(function(j){say('');frame.srcdoc=j.html;sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;if(edit)watchFrame(path,j.html,0);}).catch(function(er){say(er.message,true);});
+  /* The window opens straight away and shows that the page is loading, instead of nothing happening until the page has arrived. */
+  frame.srcdoc='';sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;
+  var got=(edit&&takePrefetch(path))||site({action:'preview',path:path,edit:!!edit});
+  got.then(function(j){if(tok!==openTok||modal.hidden)return;say('');frame.srcdoc=j.html;if(edit)watchFrame(path,j.html,0,Date.now());}).catch(function(er){if(tok===openTok){modal.hidden=true;onPage=false;say(er.message,true);}});
 }
-/* The page window must really open. If the page does not report in, try once more by itself, then say so and offer the form view instead of leaving a blank window. */
-var frameOpened=false,waitT=0,failBox=document.createElement('div');failBox.className='ad-framefail';failBox.hidden=true;
-failBox.innerHTML='<b>This page did not open in the editing window.</b><span>Your connection may be slow. Try again, or change this page in the form view instead. Nothing has been lost.</span><div><button type="button" class="ad-ap" data-f="again">Try again</button><button type="button" data-f="form">Change it in the form view</button></div>';
-frame.parentNode.appendChild(failBox);
+/* The page must really open. If it reports in late or not at all, try once more by itself, then say so and offer the form view instead of leaving a blank window. A page that is still loading (slow connection) is given time rather than restarted. */
+var frameOpened=false,frameLoaded=false,openTok=0,waitT=0,frameFail=document.createElement('div');frameFail.className='ad-framefail';frameFail.hidden=true;
+frameFail.innerHTML='<b>This page did not open in the editing window.</b><span>Your connection may be slow. Try again, or change this page in the form view instead. Nothing has been lost.</span><div><button type="button" class="ad-ap" data-f="again">Try again</button><button type="button" data-f="form">Change it in the form view</button></div>';
+frame.parentNode.appendChild(frameFail);
+frame.addEventListener('load',function(){if(frame.srcdoc)frameLoaded=true;});
 var failPath='',failHtml='';
-function watchFrame(path,html,n){failPath=path;failHtml=html;clearTimeout(waitT);waitT=setTimeout(function(){if(frameOpened||modal.hidden||!onPage)return;if(n<1){frame.srcdoc='';setTimeout(function(){frame.srcdoc=html;},50);watchFrame(path,html,n+1);}else{failBox.hidden=false;}},9000);}
-failBox.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-f')==='again'){failBox.hidden=true;preview(failPath,true);}else{modal.hidden=true;frame.srcdoc='';onPage=false;failBox.hidden=true;clearTimeout(waitT);failBox.hidden=true;edSel.value=failPath;edLoad(failPath);}});
+function watchFrame(path,html,n,t0){failPath=path;failHtml=html;clearTimeout(waitT);waitT=setTimeout(function(){if(frameOpened||modal.hidden||!onPage)return;
+  if(!frameLoaded&&Date.now()-t0<40000){watchFrame(path,html,n,t0);return;}
+  if(n<1){frameLoaded=false;frame.srcdoc='';setTimeout(function(){frame.srcdoc=html;},50);watchFrame(path,html,n+1,Date.now());}else{frameFail.hidden=false;}},9000);}
+frameFail.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-f')==='again'){frameFail.hidden=true;preview(failPath,true);}else{modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;clearTimeout(waitT);frameFail.hidden=true;edSel.value=failPath;edLoad(failPath);}});
 function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelectorAll('#edSize button'),function(b){b.setAttribute('aria-pressed',Number(b.getAttribute('data-w'))===w?'true':'false');});}
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
-$('#edClose').addEventListener('click',function(){capFlushPage().catch(function(){});if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;failBox.hidden=true;clearTimeout(waitT);});
+$('#edClose').addEventListener('click',function(){capFlushPage().catch(function(){});if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;clearTimeout(waitT);});
 window.addEventListener('message',function(e){
-  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);failBox.hidden=true;return;}
+  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='cap'){capFromPage(e.data.i,e.data.f,String(e.data.v||''));return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='photos'){openPhotos(typeof e.data.i==='number'?e.data.i:-1);return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pic'){
@@ -421,7 +428,10 @@ $('#edOnPage').addEventListener('click',openOnPage);
 /* Pages and text works in three steps: choose the page, choose how to edit it, then it opens. */
 var edStageName='pick';
 function edStage(s){edStageName=s;$('#edPick').hidden=s!=='pick';$('#edWay').hidden=s!=='way';$('#edTop').hidden=s!=='form';edBody.hidden=s!=='form';}
-function edWayShow(){if(edPref==='form')edStage('form');else{edStage('way');if(edPref==='page')openOnPage();}}
+var edPrefPath='';
+function prefetchPreview(path){if(!path||path===edPrefPath)return;edPrefPath=path;pref[path]={tick:preTick,at:Date.now(),p:site({action:'preview',path:path,edit:true}).catch(function(){return null;})};}
+function takePrefetch(path){var x=pref[path];delete pref[path];edPrefPath='';if(!x||x.tick!==preTick||Date.now()-x.at>60000)return null;return x.p.then(function(j){return j||site({action:'preview',path:path,edit:true});});}
+function edWayShow(){if(edPref==='form')edStage('form');else{edStage('way');if(edPref==='page')openOnPage();else prefetchPreview(edPath);}}
 function edLeave(){return !edChanges().length||confirm('You have changes that are not saved yet. Leave them behind?');}
 $('#edWay').addEventListener('click',function(e){var b=e.target.closest('[data-way]');if(!b)return;if(b.getAttribute('data-way')==='form')edStage('form');else openOnPage();});
 $('#edWayBack').addEventListener('click',function(){if(!edLeave())return;edPref='';edLoad(edPath);});
@@ -429,7 +439,7 @@ $('#edWayBack').addEventListener('click',function(){if(!edLeave())return;edPref=
 $('#edPageGrid').addEventListener('click',function(e){var b=e.target.closest('[data-path]');if(!b)return;edSel.value=b.getAttribute('data-path');edLoad(b.getAttribute('data-path'));});
 $('#edNew2').addEventListener('click',function(){$('#edNew').click();});
 [].forEach.call(root.querySelectorAll('#edNew,#edNew2,.hm-pill[data-go=newpage]'),function(el){el.hidden=!NEWPAGES;});
-$('#edModalSave').addEventListener('click',function(){capFlushPage().catch(function(){});if(phHome)closePhotos();if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;failBox.hidden=true;clearTimeout(waitT);});
+$('#edModalSave').addEventListener('click',function(){capFlushPage().catch(function(){});if(phHome)closePhotos();if(!edSave.disabled)edSave.click();modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;clearTimeout(waitT);});
 $('#adPreviewAll').addEventListener('click',function(){preview(edPath||'index.html');});
 $('#edPreview').addEventListener('click',function(){preview(edPath);});
 /* Creating new pages is switched off for now. Set this to true to bring the buttons back (the server has a matching switch). */
@@ -821,7 +831,7 @@ function idleSeen(){var n=Date.now();lastAct=n;if(typeof idleTimer==='function')
 ['mousemove','mousedown','keydown','touchstart','scroll','click','wheel'].forEach(function(ev){document.addEventListener(ev,idleSeen,{passive:true,capture:true});});
 window.addEventListener('message',idleSeen);
 function idleTick(){if(!me)return;var last=lastAct;try{last=Math.max(last,Number(localStorage.getItem('mk-admin-last')||0));}catch(e){}var q=Date.now()-last;
-  if(q>=IDLEMS){autoSaveNow().catch(function(){}).then(function(){return post('/api/admin/login',{action:'logout'});}).catch(function(){}).then(function(){modal.hidden=true;frame.srcdoc='';onPage=false;failBox.hidden=true;clearTimeout(waitT);showLogin();});return;}
+  if(q>=IDLEMS){autoSaveNow().catch(function(){}).then(function(){return post('/api/admin/login',{action:'logout'});}).catch(function(){}).then(function(){modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;clearTimeout(waitT);showLogin();});return;}
   if(q>=WARNMS){autoSaveNow().catch(function(){});if(!idleWarn){idleWarn=document.createElement('div');idleWarn.className='ad-idlewarn';idleWarn.setAttribute('role','alert');idleWarn.textContent='No activity for a while. You will be signed out in about a minute. Tap or press any key to stay signed in.';root.appendChild(idleWarn);}idleWarn.hidden=false;}}
 var timerEl=document.getElementById('adTimerT'),timerBox=document.getElementById('adTimer');
 function idleTimer(){if(!timerEl||!me)return;var last=lastAct;try{last=Math.max(last,Number(localStorage.getItem('mk-admin-last')||0));}catch(e){}var left=Math.max(0,IDLEMS-(Date.now()-last)),s=Math.ceil(left/1000),t=('0'+Math.floor(s/60)).slice(-2)+':'+('0'+(s%60)).slice(-2);if(timerEl.textContent!==t)timerEl.textContent=t;timerBox.classList.toggle('low',left<=5*60*1000);}
