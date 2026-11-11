@@ -421,3 +421,8 @@ html body.adm .ad-timebar button.ad-ap[hidden]{display:none}
 html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh,html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh tr,html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh th{display:block;width:100%;box-sizing:border-box;white-space:normal;writing-mode:horizontal-tb}
 html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh th{text-transform:uppercase;letter-spacing:.05em;color:#52525b}
 }
+html body .ad-fbar{grid-template-columns:repeat(3,minmax(0,1fr)) auto;align-items:end;gap:12px 14px}
+html body .ad-fbar button{grid-column:auto;white-space:nowrap;min-height:40px;margin:0}
+html body .ad-fbar select{width:100%!important;box-sizing:border-box}
+@media(max-width:700px){html body .ad-fbar{grid-template-columns:1fr 1fr}html body .ad-fbar button{grid-column:1/-1}}
+html body .ad-tbl td.c-by{padding-right:18px}
