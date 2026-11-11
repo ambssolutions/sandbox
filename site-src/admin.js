@@ -391,30 +391,47 @@ function timingShow(st){var el=document.getElementById('edTiming');if(!el){el=do
   if(!timing||!st){el.textContent='';return;}
   var m=timing.ms||{},p=[];p.push('page arrived '+(timing.got!=null?(timing.got/1000).toFixed(1)+' s':'...')+(timing.pre?' (started early)':'')+' after click');
   if(m.total!=null)p.push('server '+m.total+' ms (page read by '+m.page+(m.photos!=null?', photos by '+m.photos:'')+(m.compare!=null?', pictures by '+m.compare:'')+')');
-  if(timing.ready!=null)p.push('ready to edit '+(timing.ready/1000).toFixed(1)+' s');
+  if(timing.ready!=null)p.push('ready to edit '+(timing.ready/1000).toFixed(1)+' s');if(timing.shown)p.push('page content: '+timing.shown);
   el.textContent='Opening time: '+p.join(' · ');}
 var pvPath='',pvHl=false;
 /* Simple view: the page is shown without the site's own scripts and animations. It is switched on by itself (and remembered on this computer) if the normal view ever turns out blank, and can be switched on or off by hand. */
-var simple=false,pvSafe=false,pvEdit=false;try{simple=localStorage.getItem('mk-simple')==='1';}catch(e){}
+var simple=false,pvSafe=false,pvEdit=false,pop=null,popT=0,pvHtml='';
+function fromFrame(w){return w===frame.contentWindow||(pop&&!pop.closed&&w===pop);}try{simple=localStorage.getItem('mk-simple')==='1';}catch(e){}
 function simpleSave(){try{localStorage.setItem('mk-simple',simple?'1':'0');}catch(e){}var bt=document.getElementById('edSimple');if(bt)bt.textContent=simple?'Normal view':'Simple view';}
+/* The page can also be opened in a browser window of its own (a normal page, not a frame), which works even where the frame inside the editor will not show. Changes made there are sent back here, and Save changes works as usual. */
+var framePop=document.createElement('div');framePop.className='ad-framefail ad-framepop';framePop.hidden=true;
+framePop.innerHTML='<b data-pt="1">This page is open in its own window.</b><span>Make your changes there, then come back here and press Save changes.</span><div><button type="button" class="ad-ap" data-p="front">Show that window</button><button type="button" data-p="here">Show the page here again</button></div>';
+frame.parentNode.appendChild(framePop);
+function popOpen(){if(!pvPath)return;try{if(pop&&!pop.closed)pop.close();}catch(e){}
+  /* The window is opened at once (browsers only allow that on a click), then given the page in simple form: without the website's own scripts, so nothing rewrites the text being edited. */
+  pop=window.open('','mk-edit-window','width=1280,height=860');
+  if(!pop){say('Your browser blocked the new window. Allow pop-ups for this site and try again.',true);return;}
+  try{pop.document.write('<!doctype html><title>Opening...</title><body style="font:16px system-ui;padding:40px">Opening the page...</body>');}catch(e){}
+  frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);frame.srcdoc='';framePop.hidden=false;framePop.querySelector('[data-pt]').textContent='This page is open in its own window.';
+  site({action:'preview',path:pvPath,edit:pvEdit,changes:!!pvHl,safe:true}).then(function(j){var u=URL.createObjectURL(new Blob([j.html],{type:'text/html'}));if(pop&&!pop.closed)pop.location.href=u;}).catch(function(er){say(er.message,true);try{pop.close();}catch(x){}framePop.hidden=true;frameFail.hidden=false;});
+  clearInterval(popT);popT=setInterval(function(){if(!pop||pop.closed){clearInterval(popT);framePop.querySelector('[data-pt]').textContent='That window was closed.';}},1000);}
+/* When the editing window is closed or saved, the separate window goes with it. */
+if(window.MutationObserver)new MutationObserver(function(){if(modal.hidden){clearInterval(popT);try{if(pop&&!pop.closed)pop.close();}catch(e){}framePop.hidden=true;}}).observe(modal,{attributes:true,attributeFilter:['hidden']});
+framePop.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var k=b.getAttribute('data-p');if(k==='front'){if(pop&&!pop.closed)pop.focus();else popOpen();}else{try{if(pop&&!pop.closed)pop.close();}catch(x){}framePop.hidden=true;preview(pvPath,pvEdit,pvHl,pvSafe);}});
 function frameBad(){clearTimeout(waitT);if(!pvSafe){simple=true;simpleSave();preview(pvPath,pvEdit,pvHl,true);return;}frameLoad.hidden=true;frameFail.hidden=false;failPath=pvPath;}
+
 function preview(path,edit,hl,safe){pvPath=path;pvEdit=!!edit;pvHl=!!hl&&!edit;pvSafe=safe===undefined?simple:!!safe;
   say(edit?'Opening the page...':'Preparing the preview...');onPage=!!edit;$('#edModalSave').hidden=!edit;$('#edModalHint').hidden=!edit;phBtn.hidden=!edit||!canPh;
   $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
   $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':(hl?'This is how the page will look when published. What has changed is highlighted in yellow. Nothing can be changed here.':'This is only a preview of this page. Nothing can be changed here.');
   if(pvSafe)$('#edModalNote').textContent+=' Simple view: the page is shown without the website\'s animations and scripts.';
   $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. The text under the Media photos is edited here on the page. The photos themselves are changed with Media photos.';$('#edModalHint').title=STD;
-  frameFail.hidden=true;frameLoad.hidden=false;clearTimeout(waitT);clearTimeout(loadHideT);frameOpened=false;frameLoaded=false;var tok=++openTok;
+  framePop.hidden=true;frameFail.hidden=true;frameLoad.hidden=false;clearTimeout(waitT);clearTimeout(loadHideT);frameOpened=false;frameLoaded=false;var tok=++openTok;
   if(edit&&path==='index.html')site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();capPend={};}).catch(function(){});
   /* The window opens straight away and shows that the page is loading, instead of nothing happening until the page has arrived. */
   frame.srcdoc='';sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;
   var tmq={t0:Date.now(),pre:false};var pf=edit&&!pvSafe&&takePrefetch(path);tmq.pre=!!pf;var got=pf||site({action:'preview',path:path,edit:!!edit,changes:!!(hl&&!edit),safe:pvSafe});timing=tmq;timingShow('');
   var slow=new Promise(function(_,no){setTimeout(function(){no(new Error('slow'));},30000);});
-  Promise.race([got,slow]).then(function(j){if(tok!==openTok||modal.hidden)return;say('');tmq.got=Date.now()-tmq.t0;tmq.ms=j.ms||null;frame.srcdoc=j.html;watchFrame(path,j.html,0,Date.now());}).catch(function(er){if(tok!==openTok)return;if(er&&er.message==='slow'){frameLoad.hidden=true;frameFail.hidden=false;failPath=path;return;}frameLoad.hidden=true;modal.hidden=true;onPage=false;say(er.message,true);});
+  Promise.race([got,slow]).then(function(j){if(tok!==openTok||modal.hidden)return;say('');tmq.got=Date.now()-tmq.t0;tmq.ms=j.ms||null;pvHtml=j.html;frame.srcdoc=j.html;watchFrame(path,j.html,0,Date.now());}).catch(function(er){if(tok!==openTok)return;if(er&&er.message==='slow'){frameLoad.hidden=true;frameFail.hidden=false;failPath=path;return;}frameLoad.hidden=true;modal.hidden=true;onPage=false;say(er.message,true);});
 }
 /* The page must really open. If it reports in late or not at all, try once more by itself, then say so and offer the form view instead of leaving a blank window. A page that is still loading (slow connection) is given time rather than restarted. */
 var frameOpened=false,frameLoaded=false,openTok=0,waitT=0,frameFail=document.createElement('div');frameFail.className='ad-framefail';frameFail.hidden=true;
-frameFail.innerHTML='<b>This page did not open in the editing window.</b><span>Even the simple view did not show. Your connection may be slow or a browser extension may be blocking the window. Try again, or change this page in the form view instead. Nothing has been lost.</span><div><button type="button" class="ad-ap" data-f="again">Try again</button><button type="button" data-f="form">Change it in the form view</button></div>';
+frameFail.innerHTML='<b>This page did not open in the editing window.</b><span>Even the simple view did not show. Your connection may be slow or a browser extension may be blocking the window. Try again, or change this page in the form view instead. Nothing has been lost.</span><div><button type="button" class="ad-ap" data-f="again">Try again</button><button type="button" data-f="pop">Open it in its own window</button><button type="button" data-f="form">Change it in the form view</button></div>';
 frame.parentNode.appendChild(frameFail);
 var frameLoad=document.createElement('div');frameLoad.className='ad-frameload';frameLoad.setAttribute('role','status');frameLoad.hidden=true;frameLoad.innerHTML='<i></i><b>Opening the page...</b><span>This can take a few seconds.</span>';frame.parentNode.appendChild(frameLoad);
 frame.addEventListener('load',function(){if(frame.srcdoc){frameLoaded=true;if(!onPage)frameLoad.hidden=true;}});
@@ -422,27 +439,28 @@ var failPath='',failHtml='';
 function watchFrame(path,html,n,t0){failPath=path;failHtml=html;clearTimeout(waitT);waitT=setTimeout(function(){if(frameOpened||modal.hidden)return;
   if(!frameLoaded&&Date.now()-t0<40000){watchFrame(path,html,n,t0);return;}
   if(n<1){frameLoaded=false;frame.srcdoc='';setTimeout(function(){frame.srcdoc=html;},50);watchFrame(path,html,n+1,Date.now());}else{frameBad();}},9000);}
-(function(){var sb=document.createElement('button');sb.type='button';sb.id='edSimple';sb.title='If the page ever looks blank or wrong, switch to the simple view';sb.textContent=simple?'Normal view':'Simple view';var cl=$('#edClose');cl.parentNode.insertBefore(sb,cl);
+(function(){var sb=document.createElement('button');sb.type='button';sb.id='edSimple';sb.title='If the page ever looks blank or wrong, switch to the simple view';sb.textContent=simple?'Normal view':'Simple view';var cl=$('#edClose');cl.parentNode.insertBefore(sb,cl);var pb=document.createElement('button');pb.type='button';pb.id='edPop';pb.textContent='Own window';pb.title='Open this page in a browser window of its own';cl.parentNode.insertBefore(pb,cl);pb.addEventListener('click',popOpen);
   sb.addEventListener('click',function(){if(pvEdit&&typeof edChanges==='function'&&edChanges().length&&!confirm('Changing the view reloads the page. Save your changes first, or they will be left behind. Change the view anyway?'))return;simple=!simple;simpleSave();preview(pvPath,pvEdit,pvHl,simple);});})();
-frameFail.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-f')==='again'){frameFail.hidden=true;preview(failPath,pvEdit,pvHl,pvSafe);}else{modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);frameFail.hidden=true;edSel.value=failPath;edLoad(failPath);}});
+frameFail.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-f')==='pop'){popOpen();return;}if(b.getAttribute('data-f')==='again'){frameFail.hidden=true;preview(failPath,pvEdit,pvHl,pvSafe);}else{modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);frameFail.hidden=true;edSel.value=failPath;edLoad(failPath);}});
 function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelectorAll('#edSize button'),function(b){b.setAttribute('aria-pressed',Number(b.getAttribute('data-w'))===w?'true':'false');});}
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
-$('#edClose').addEventListener('click',function(){capFlushPage().catch(function(){});if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);});
+$('#edClose').addEventListener('click',function(){try{if(pop&&!pop.closed)pop.close();}catch(e){}framePop.hidden=true;capFlushPage().catch(function(){});if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);});
 window.addEventListener('message',function(e){
-  if(e.source===frame.contentWindow&&e.data&&e.data.mk==='blank'){frameBad();return;}
-  if(e.source===frame.contentWindow&&e.data&&e.data.mk==='shown'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;frameLoad.hidden=true;return;}
-  if(!onPage&&pvHl&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pvready'){frameOpened=true;clearTimeout(waitT);var ix=draftFiles.indexOf(pvPath);frame.contentWindow.postMessage({mk:'more',more:draftFiles.length>1},'*');return;}
-  if(!onPage&&pvHl&&e.source===frame.contentWindow&&e.data&&e.data.mk==='nextpage'){var k=draftFiles.indexOf(pvPath);preview(draftFiles[(k+1)%draftFiles.length],false,true);return;}
-  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;clearTimeout(loadHideT);loadHideT=setTimeout(function(){frameLoad.hidden=true;},7000);if(timing&&!timing.ready){timing.ready=Date.now()-timing.t0;timingShow('done');}return;}
-  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='loaded'){clearTimeout(loadHideT);frameLoad.hidden=true;return;}
-  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='cap'){capFromPage(e.data.i,e.data.f,String(e.data.v||''));return;}
-  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='photos'){openPhotos(typeof e.data.i==='number'?e.data.i:-1);return;}
-  if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pic'){
+  if(pop&&e.source===pop&&e.data&&/^(blank|shown|ready|loaded|pvready)$/.test(e.data.mk))return;
+  if(fromFrame(e.source)&&e.data&&e.data.mk==='blank'){frameBad();return;}
+  if(fromFrame(e.source)&&e.data&&e.data.mk==='shown'){if(timing&&e.data.t!=null){timing.shown=e.data.t+' characters, '+e.data.w+'x'+e.data.h;timingShow('done');}frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;frameLoad.hidden=true;return;}
+  if(!onPage&&pvHl&&fromFrame(e.source)&&e.data&&e.data.mk==='pvready'){frameOpened=true;clearTimeout(waitT);var ix=draftFiles.indexOf(pvPath);frame.contentWindow.postMessage({mk:'more',more:draftFiles.length>1},'*');return;}
+  if(!onPage&&pvHl&&fromFrame(e.source)&&e.data&&e.data.mk==='nextpage'){var k=draftFiles.indexOf(pvPath);preview(draftFiles[(k+1)%draftFiles.length],false,true);return;}
+  if(onPage&&fromFrame(e.source)&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;clearTimeout(loadHideT);loadHideT=setTimeout(function(){frameLoad.hidden=true;},7000);if(timing&&!timing.ready){timing.ready=Date.now()-timing.t0;timingShow('done');}return;}
+  if(onPage&&fromFrame(e.source)&&e.data&&e.data.mk==='loaded'){clearTimeout(loadHideT);frameLoad.hidden=true;return;}
+  if(onPage&&fromFrame(e.source)&&e.data&&e.data.mk==='cap'){capFromPage(e.data.i,e.data.f,String(e.data.v||''));return;}
+  if(onPage&&fromFrame(e.source)&&e.data&&e.data.mk==='photos'){openPhotos(typeof e.data.i==='number'?e.data.i:-1);return;}
+  if(onPage&&fromFrame(e.source)&&e.data&&e.data.mk==='pic'){
     var d=e.data,el0=edFields.querySelector('input[type=text][data-k="'+d.k+'"]');if(!el0)return;say('Uploading the picture...');
     fetch(d.data).then(function(r){return r.blob();}).then(function(bl){var f=new File([bl],d.name||'photo.jpg',{type:d.type||bl.type});return askSize(f).then(function(go){sizeStop(go);return shrink(f);}).then(function(s){return new Promise(function(ok,no){var rd=new FileReader();rd.onload=function(){ok(String(rd.result).split(',')[1]);};rd.onerror=no;rd.readAsDataURL(s);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});});}).then(function(j){el0.value=j.src;edDirty();say('Picture ready. Press Save changes to use it on this page.');}).catch(function(er){say(er.message,true);});
     return;
   }
-  if(!onPage||e.source!==frame.contentWindow||!e.data||e.data.mk!=='edit')return;var el=edFields.querySelector('[data-k="'+e.data.k+'"]:not(li)');if(!el)return;el.value=e.data.v;edDirty();});
+  if(!onPage||!fromFrame(e.source)||!e.data||e.data.mk!=='edit')return;var el=edFields.querySelector('[data-k="'+e.data.k+'"]:not(li)');if(!el)return;el.value=e.data.v;edDirty();});
 /* Change the Media box photos from the page itself: the same photo manager as the Photos section, opened over the page. */
 var canPh=false,phBtn=document.createElement('button');phBtn.type='button';phBtn.id='edPhotosBtn';phBtn.textContent='Media photos';phBtn.hidden=true;
 $('#edModalSave').parentNode.insertBefore(phBtn,$('#edModalSave'));
