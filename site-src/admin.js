@@ -32,6 +32,7 @@ function tab(name){
   [].forEach.call(root.querySelectorAll('[data-pane]'),function(p){p.hidden=p.getAttribute('data-pane')!==name;});
   [].forEach.call(root.querySelectorAll('[data-tab]'),function(b){b.setAttribute('aria-selected',b.getAttribute('data-tab')===name?'true':'false');});
   say('');sbShut();window.scrollTo(0,0);
+  if(name==='home')dgLoad();
   if(name==='users')loadUsers();
   if(name==='conn')cnLoad();
   if(name==='photos')pbLoad();
@@ -395,6 +396,13 @@ function timingShow(st){var el=document.getElementById('edTiming');if(!el){el=do
   el.textContent='Opening time: '+p.join(' · ');}
 var pvPath='',pvHl=false;
 /* Simple view: the page is shown without the site's own scripts and animations. It is switched on by itself (and remembered on this computer) if the normal view ever turns out blank, and can be switched on or off by hand. */
+/* ---- editor problem log: the editor reports by itself when a page did not show properly, so problems that happen "from time to time" can be traced ---- */
+var dgSent={},lastShown=null;
+function dgCtx(kind,extra){var n=navigator,c=n.connection||{},fr=document.getElementById('edFrame'),r=fr?fr.getBoundingClientRect():{width:0,height:0};
+  var o={kind:kind,page:pvPath,mode:pvEdit?'edit':'preview',view:pvSafe?'simple':'normal',ver:myVer,ua:n.userAgent,platform:(n.userAgentData&&n.userAgentData.platform)||n.platform||'',lang:n.language,screen:screen.width+'x'+screen.height,viewport:innerWidth+'x'+innerHeight,frame:Math.round(r.width)+'x'+Math.round(r.height),dpr:String(window.devicePixelRatio||1),net:(c.effectiveType||'')+(c.downlink?' '+c.downlink+'Mbps':''),visible:document.visibilityState,t:{got:timing&&timing.got,ready:timing&&timing.ready,server:timing&&timing.ms&&timing.ms.total},shown:lastShown};
+  for(var k in extra)o[k]=extra[k];return o;}
+function diag(kind,extra){var key=kind+'|'+pvPath;if(dgSent[key]&&Date.now()-dgSent[key]<60000)return;dgSent[key]=Date.now();
+  try{fetch('/api/admin/diag',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(dgCtx(kind,extra||{})),keepalive:true,credentials:'same-origin'}).catch(function(){});}catch(e){}}
 var simple=false,pvSafe=false,pvEdit=false,pop=null,popT=0,pvHtml='';
 function fromFrame(w){return w===frame.contentWindow||(pop&&!pop.closed&&w===pop);}try{simple=localStorage.getItem('mk-simple')==='1';}catch(e){}
 function simpleSave(){try{localStorage.setItem('mk-simple',simple?'1':'0');}catch(e){}var bt=document.getElementById('edSimple');if(bt)bt.textContent=simple?'Normal view':'Simple view';}
@@ -402,10 +410,10 @@ function simpleSave(){try{localStorage.setItem('mk-simple',simple?'1':'0');}catc
 var framePop=document.createElement('div');framePop.className='ad-framefail ad-framepop';framePop.hidden=true;
 framePop.innerHTML='<b data-pt="1">This page is open in its own window.</b><span>Make your changes there, then come back here and press Save changes.</span><div><button type="button" class="ad-ap" data-p="front">Show that window</button><button type="button" data-p="here">Show the page here again</button></div>';
 frame.parentNode.appendChild(framePop);
-function popOpen(){if(!pvPath)return;try{if(pop&&!pop.closed)pop.close();}catch(e){}
+function popOpen(){if(!pvPath)return;diag('manual-own-window',{note:'own window'});try{if(pop&&!pop.closed)pop.close();}catch(e){}
   /* The window is opened at once (browsers only allow that on a click), then given the page in simple form: without the website's own scripts, so nothing rewrites the text being edited. */
   pop=window.open('','mk-edit-window','width=1280,height=860');
-  if(!pop){say('Your browser blocked the new window. Allow pop-ups for this site and try again.',true);return;}
+  if(!pop){diag('popup-blocked');say('Your browser blocked the new window. Allow pop-ups for this site and try again.',true);return;}
   try{pop.document.write('<!doctype html><title>Opening...</title><body style="font:16px system-ui;padding:40px">Opening the page...</body>');}catch(e){}
   frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);frame.srcdoc='';framePop.hidden=false;framePop.querySelector('[data-pt]').textContent='This page is open in its own window.';
   site({action:'preview',path:pvPath,edit:pvEdit,changes:!!pvHl,safe:true}).then(function(j){var u=URL.createObjectURL(new Blob([j.html],{type:'text/html'}));if(pop&&!pop.closed)pop.location.href=u;}).catch(function(er){say(er.message,true);try{pop.close();}catch(x){}framePop.hidden=true;frameFail.hidden=false;});
@@ -413,7 +421,7 @@ function popOpen(){if(!pvPath)return;try{if(pop&&!pop.closed)pop.close();}catch(
 /* When the editing window is closed or saved, the separate window goes with it. */
 if(window.MutationObserver)new MutationObserver(function(){if(modal.hidden){clearInterval(popT);try{if(pop&&!pop.closed)pop.close();}catch(e){}framePop.hidden=true;}}).observe(modal,{attributes:true,attributeFilter:['hidden']});
 framePop.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var k=b.getAttribute('data-p');if(k==='front'){if(pop&&!pop.closed)pop.focus();else popOpen();}else{try{if(pop&&!pop.closed)pop.close();}catch(x){}framePop.hidden=true;preview(pvPath,pvEdit,pvHl,pvSafe);}});
-function frameBad(){clearTimeout(waitT);if(!pvSafe){simple=true;simpleSave();preview(pvPath,pvEdit,pvHl,true);return;}frameLoad.hidden=true;frameFail.hidden=false;failPath=pvPath;}
+function frameBad(){clearTimeout(waitT);diag(pvSafe?'simple-failed':'auto-simple');if(!pvSafe){simple=true;simpleSave();preview(pvPath,pvEdit,pvHl,true);return;}frameLoad.hidden=true;frameFail.hidden=false;failPath=pvPath;}
 
 function preview(path,edit,hl,safe){pvPath=path;pvEdit=!!edit;pvHl=!!hl&&!edit;pvSafe=safe===undefined?simple:!!safe;
   say(edit?'Opening the page...':'Preparing the preview...');onPage=!!edit;$('#edModalSave').hidden=!edit;$('#edModalHint').hidden=!edit;phBtn.hidden=!edit||!canPh;
@@ -421,13 +429,13 @@ function preview(path,edit,hl,safe){pvPath=path;pvEdit=!!edit;pvHl=!!hl&&!edit;p
   $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':(hl?'This is how the page will look when published. What has changed is highlighted in yellow. Nothing can be changed here.':'This is only a preview of this page. Nothing can be changed here.');
   if(pvSafe)$('#edModalNote').textContent+=' Simple view: the page is shown without the website\'s animations and scripts.';
   $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. The text under the Media photos is edited here on the page. The photos themselves are changed with Media photos.';$('#edModalHint').title=STD;
-  framePop.hidden=true;frameFail.hidden=true;frameLoad.hidden=false;clearTimeout(waitT);clearTimeout(loadHideT);frameOpened=false;frameLoaded=false;var tok=++openTok;
+  framePop.hidden=true;frameFail.hidden=true;frameLoad.hidden=false;clearTimeout(waitT);clearTimeout(loadHideT);frameOpened=false;frameLoaded=false;lastShown=null;var tok=++openTok;
   if(edit&&path==='index.html')site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();capPend={};}).catch(function(){});
   /* The window opens straight away and shows that the page is loading, instead of nothing happening until the page has arrived. */
   frame.srcdoc='';sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;
   var tmq={t0:Date.now(),pre:false};var pf=edit&&!pvSafe&&takePrefetch(path);tmq.pre=!!pf;var got=pf||site({action:'preview',path:path,edit:!!edit,changes:!!(hl&&!edit),safe:pvSafe});timing=tmq;timingShow('');
   var slow=new Promise(function(_,no){setTimeout(function(){no(new Error('slow'));},30000);});
-  Promise.race([got,slow]).then(function(j){if(tok!==openTok||modal.hidden)return;say('');tmq.got=Date.now()-tmq.t0;tmq.ms=j.ms||null;pvHtml=j.html;frame.srcdoc=j.html;watchFrame(path,j.html,0,Date.now());}).catch(function(er){if(tok!==openTok)return;if(er&&er.message==='slow'){frameLoad.hidden=true;frameFail.hidden=false;failPath=path;return;}frameLoad.hidden=true;modal.hidden=true;onPage=false;say(er.message,true);});
+  Promise.race([got,slow]).then(function(j){if(tok!==openTok||modal.hidden)return;say('');tmq.got=Date.now()-tmq.t0;tmq.ms=j.ms||null;pvHtml=j.html;frame.srcdoc=j.html;watchFrame(path,j.html,0,Date.now());}).catch(function(er){if(tok!==openTok)return;if(er&&er.message==='slow'){diag('slow');frameLoad.hidden=true;frameFail.hidden=false;failPath=path;return;}diag('preview-error',{note:er&&er.message});frameLoad.hidden=true;modal.hidden=true;onPage=false;say(er.message,true);});
 }
 /* The page must really open. If it reports in late or not at all, try once more by itself, then say so and offer the form view instead of leaving a blank window. A page that is still loading (slow connection) is given time rather than restarted. */
 var frameOpened=false,frameLoaded=false,openTok=0,waitT=0,frameFail=document.createElement('div');frameFail.className='ad-framefail';frameFail.hidden=true;
@@ -438,17 +446,17 @@ frame.addEventListener('load',function(){if(frame.srcdoc){frameLoaded=true;if(!o
 var failPath='',failHtml='';
 function watchFrame(path,html,n,t0){failPath=path;failHtml=html;clearTimeout(waitT);waitT=setTimeout(function(){if(frameOpened||modal.hidden)return;
   if(!frameLoaded&&Date.now()-t0<40000){watchFrame(path,html,n,t0);return;}
-  if(n<1){frameLoaded=false;frame.srcdoc='';setTimeout(function(){frame.srcdoc=html;},50);watchFrame(path,html,n+1,Date.now());}else{frameBad();}},9000);}
+  if(n<1){frameLoaded=false;frame.srcdoc='';setTimeout(function(){frame.srcdoc=html;},50);watchFrame(path,html,n+1,Date.now());}else{diag('watchdog');frameBad();}},9000);}
 (function(){var sb=document.createElement('button');sb.type='button';sb.id='edSimple';sb.title='If the page ever looks blank or wrong, switch to the simple view';sb.textContent=simple?'Normal view':'Simple view';var cl=$('#edClose');cl.parentNode.insertBefore(sb,cl);var pb=document.createElement('button');pb.type='button';pb.id='edPop';pb.textContent='Own window';pb.title='Open this page in a browser window of its own';cl.parentNode.insertBefore(pb,cl);pb.addEventListener('click',popOpen);
-  sb.addEventListener('click',function(){if(pvEdit&&typeof edChanges==='function'&&edChanges().length&&!confirm('Changing the view reloads the page. Save your changes first, or they will be left behind. Change the view anyway?'))return;simple=!simple;simpleSave();preview(pvPath,pvEdit,pvHl,simple);});})();
+  sb.addEventListener('click',function(){if(pvEdit&&typeof edChanges==='function'&&edChanges().length&&!confirm('Changing the view reloads the page. Save your changes first, or they will be left behind. Change the view anyway?'))return;simple=!simple;simpleSave();if(simple)diag('manual-simple',{note:'switched to simple view by hand'});preview(pvPath,pvEdit,pvHl,simple);});})();
 frameFail.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-f')==='pop'){popOpen();return;}if(b.getAttribute('data-f')==='again'){frameFail.hidden=true;preview(failPath,pvEdit,pvHl,pvSafe);}else{modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);frameFail.hidden=true;edSel.value=failPath;edLoad(failPath);}});
 function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelectorAll('#edSize button'),function(b){b.setAttribute('aria-pressed',Number(b.getAttribute('data-w'))===w?'true':'false');});}
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
 $('#edClose').addEventListener('click',function(){try{if(pop&&!pop.closed)pop.close();}catch(e){}framePop.hidden=true;capFlushPage().catch(function(){});if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);});
 window.addEventListener('message',function(e){
   if(pop&&e.source===pop&&e.data&&/^(blank|shown|ready|loaded|pvready)$/.test(e.data.mk))return;
-  if(fromFrame(e.source)&&e.data&&e.data.mk==='blank'){frameBad();return;}
-  if(fromFrame(e.source)&&e.data&&e.data.mk==='shown'){if(timing&&e.data.t!=null){timing.shown=e.data.t+' characters, '+e.data.w+'x'+e.data.h;timingShow('done');}frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;frameLoad.hidden=true;return;}
+  if(fromFrame(e.source)&&e.data&&e.data.mk==='blank'){diag('blank',{shown:{t:e.data.t,w:e.data.w,h:e.data.h,d:e.data.d},errors:e.data.e});frameBad();return;}
+  if(fromFrame(e.source)&&e.data&&e.data.mk==='shown'){lastShown={t:e.data.t,w:e.data.w,h:e.data.h,d:e.data.d};if(timing&&e.data.t!=null){timing.shown=e.data.t+' characters, '+e.data.w+'x'+e.data.h;timingShow('done');}frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;frameLoad.hidden=true;return;}
   if(!onPage&&pvHl&&fromFrame(e.source)&&e.data&&e.data.mk==='pvready'){frameOpened=true;clearTimeout(waitT);var ix=draftFiles.indexOf(pvPath);frame.contentWindow.postMessage({mk:'more',more:draftFiles.length>1},'*');return;}
   if(!onPage&&pvHl&&fromFrame(e.source)&&e.data&&e.data.mk==='nextpage'){var k=draftFiles.indexOf(pvPath);preview(draftFiles[(k+1)%draftFiles.length],false,true);return;}
   if(onPage&&fromFrame(e.source)&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;clearTimeout(loadHideT);loadHideT=setTimeout(function(){frameLoad.hidden=true;},7000);if(timing&&!timing.ready){timing.ready=Date.now()-timing.t0;timingShow('done');}return;}
@@ -926,5 +934,24 @@ if(invTok&&invEmail){
 }else{
   api('/api/admin/users').then(function(j){if(j.auth){enter(j.user);if(j.storageDown)say('Storage is switched off right now (its monthly limit has been used up). Photos, people and feedback cannot be saved until it is back. Ask AMBS.',true);if(j.viewing){$('#adViewAs').hidden=false;$('#adViewAsText').textContent='You are viewing the editor as '+(j.user.name||j.user.email)+' ('+ROLENAME[j.user.role]+'). What you change is real.';}}else showLogin(j);}).catch(function(){showLogin();});
   $('#adViewBack').addEventListener('click',function(){post('/api/admin/users',{action:'back'}).then(function(){location.reload();}).catch(function(er){say(er.message,true);});});
+}
+
+/* ---- editor problem log on the Home screen (owners and managers) ---- */
+var DG_WHAT={'blank':'The page looked blank in the editing window','auto-simple':'The editor switched to Simple view by itself','simple-failed':'Even Simple view did not show','watchdog':'The page did not report in after 9 seconds','slow':'The page took over 30 seconds to arrive','manual-simple':'Someone switched to Simple view by hand (the page may have looked wrong)','manual-own-window':'Someone opened the page in its own window by hand (the page may have looked wrong)','popup-blocked':'The browser blocked the separate window','preview-error':'The page could not be fetched','frame-error':'The editing window reported an error'};
+function dgBrowser(ua){ua=String(ua||'');var b=/Edg\/([\d.]+)/.exec(ua)?'Edge '+/Edg\/(\d+)/.exec(ua)[1]:/OPR\//.test(ua)?'Opera':/Firefox\/(\d+)/.exec(ua)?'Firefox '+/Firefox\/(\d+)/.exec(ua)[1]:/Chrome\/(\d+)/.exec(ua)?'Chrome '+/Chrome\/(\d+)/.exec(ua)[1]:/Version\/(\d+).*Safari/.exec(ua)?'Safari '+/Version\/(\d+)/.exec(ua)[1]:'Browser';
+  var o=/Windows NT 1[01]/.test(ua)?'Windows':/Windows/.test(ua)?'Windows':/Android/.test(ua)?'Android':/iPhone|iPad/.test(ua)?'iOS':/Mac OS X/.test(ua)?'Mac':/Linux/.test(ua)?'Linux':'';return b+(o?' on '+o:'');}
+function dgLine(x){var p=[];p.push(new Date(x.at).toLocaleString('en-NZ',{timeZone:'Pacific/Auckland',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}));p.push(x.who);p.push(DG_WHAT[x.kind]||x.kind);p.push('page '+x.page+' ('+x.mode+', '+x.view+' view)');p.push(dgBrowser(x.ua));p.push('screen '+x.screen+', window '+x.viewport+', frame '+x.frame+', scale '+x.dpr);if(x.net)p.push('connection '+x.net);if(x.t&&(x.t.got!=null||x.t.ready!=null))p.push('timing: arrived '+(x.t.got!=null?x.t.got+' ms':'-')+', ready '+(x.t.ready!=null?x.t.ready+' ms':'-')+(x.t.server!=null?', server '+x.t.server+' ms':''));if(x.shown)p.push('page content: '+x.shown.text+' characters '+(x.shown.w||'')+'x'+(x.shown.h||'')+' '+(x.shown.d||''));if(x.errors&&x.errors.length)p.push('errors: '+x.errors.join(' | '));if(x.note)p.push(x.note);p.push('editor '+x.ver);p.push(x.ua);return p.join(' - ');}
+function dgLoad(){
+  if(!me||me.role==='editor')return;var pane=root.querySelector('[data-pane=home]');if(!pane)return;
+  var card=document.getElementById('dgCard');if(!card){card=document.createElement('div');card.className='ad-card dg-card';card.id='dgCard';card.hidden=true;pane.appendChild(card);
+    card.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+      if(b.getAttribute('data-dg')==='copy'){var t=(card._items||[]).map(dgLine).join('\n\n');try{navigator.clipboard.writeText(t).then(function(){say('Copied. You can paste it into an email or message.');},function(){window.prompt('Copy this:',t);});}catch(x){window.prompt('Copy this:',t);}}
+      if(b.getAttribute('data-dg')==='clear'&&confirm('Clear the editor problem log?'))api('/api/admin/diag',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'clear'})}).then(dgLoad).catch(function(er){say(er.message,true);});});}
+  api('/api/admin/diag').then(function(j){var it=j.items||[];card._items=it;
+    if(!it.length){card.hidden=false;card.innerHTML='<h2>Editor problems</h2><p class="ad-help">Nothing has been reported. If the editing window or the preview ever does not show a page properly, it is logged here automatically, with the browser, screen and what happened.</p>';return;}
+    card.hidden=false;
+    card.innerHTML='<h2>Editor problems <span class="dg-n">'+it.length+'</span></h2><p class="ad-help">The editor logs this by itself when a page does not show properly in the editing window or the preview. Copy the log and send it to AMBS.</p><div class="ad-btns"><button type="button" data-dg="copy">Copy the log</button><button type="button" data-dg="clear">Clear</button></div><ul class="dg-list">'
+    +it.slice(0,30).map(function(x){return '<li><b>'+esc(DG_WHAT[x.kind]||x.kind)+'</b><span>'+esc(new Date(x.at).toLocaleString('en-NZ',{timeZone:'Pacific/Auckland',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}))+' &middot; '+esc(x.who)+' &middot; '+esc(x.page)+' &middot; '+esc(dgBrowser(x.ua))+'</span><details><summary>Details</summary><small>'+esc(dgLine(x))+'</small></details></li>';}).join('')+'</ul>';
+  }).catch(function(){card.hidden=true;});
 }
 })();
