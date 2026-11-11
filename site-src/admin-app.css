@@ -537,3 +537,4 @@ html body .ad-tips summary{cursor:pointer;font-weight:700}
 html body .ad-tips ul{margin:10px 0 2px 18px;padding:0;line-height:1.55;font-size:14px}
 html body .ad-tip{font-size:13px;color:#7a4a00;background:#fff4dc;border-radius:10px;padding:8px 12px;margin:0 0 8px}
 html body .ad-tip[hidden]{display:none}
+html body .ad-linkbtn{background:none!important;border:0!important;text-decoration:underline;font-size:13px;opacity:.8;min-height:32px!important}

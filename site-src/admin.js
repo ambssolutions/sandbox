@@ -390,6 +390,7 @@ var timing=null,loadHideT=0;
 /* A gentle hint when the window is small or zoomed, since the page is laid out for a normal laptop screen. */
 function edTipShow(){var el=document.getElementById('edTip');if(!el){el=document.createElement('div');el.id='edTip';el.className='ad-tip';var fr=document.getElementById('edFrame');fr.parentNode.parentNode.insertBefore(el,fr.parentNode);}
   var w=innerWidth,z=outerWidth&&innerWidth?outerWidth/innerWidth:1,m=[];
+  if(pvSafe)m.push('This page is shown in a simplified way because the full page would not display here. If it still looks wrong, press Edit in a form.');
   if(w<1100&&w>=700)m.push('This window is '+w+' pixels wide. For the best editing view use a wider window (1280 pixels or more).');
   if(z>1.15||z<0.85)m.push('The browser looks zoomed ('+Math.round(100*z)+'%). For the best editing view set the zoom to 100% (Ctrl and 0).');
   el.textContent=m.join(' ');el.hidden=!m.length;}
@@ -410,8 +411,8 @@ function dgCtx(kind,extra){var n=navigator,c=n.connection||{},fr=document.getEle
 function diag(kind,extra){var key=kind+'|'+pvPath;if(dgSent[key]&&Date.now()-dgSent[key]<60000)return;dgSent[key]=Date.now();
   try{fetch('/api/admin/diag',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(dgCtx(kind,extra||{})),keepalive:true,credentials:'same-origin'}).catch(function(){});}catch(e){}}
 var simple=false,pvSafe=false,pvEdit=false,pop=null,popT=0,pvHtml='';
-function fromFrame(w){return w===frame.contentWindow||(pop&&!pop.closed&&w===pop);}try{simple=localStorage.getItem('mk-simple')==='1';}catch(e){}
-function simpleSave(){try{localStorage.setItem('mk-simple',simple?'1':'0');}catch(e){}var bt=document.getElementById('edSimple');if(bt)bt.textContent=simple?'Normal view':'Simple view';}
+function fromFrame(w){return w===frame.contentWindow||(pop&&!pop.closed&&w===pop);}try{var sts=Number(localStorage.getItem('mk-simple')||0);simple=sts>1&&Date.now()-sts<864e5;}catch(e){}
+function simpleSave(){try{localStorage.setItem('mk-simple',simple?String(Date.now()):'0');}catch(e){}}
 /* The page can also be opened in a browser window of its own (a normal page, not a frame), which works even where the frame inside the editor will not show. Changes made there are sent back here, and Save changes works as usual. */
 var framePop=document.createElement('div');framePop.className='ad-framefail ad-framepop';framePop.hidden=true;
 framePop.innerHTML='<b data-pt="1">This page is open in its own window.</b><span>Make your changes there, then come back here and press Save changes.</span><div><button type="button" class="ad-ap" data-p="front">Show that window</button><button type="button" data-p="here">Show the page here again</button><button type="button" data-p="form">Edit in a form instead</button></div>';
@@ -439,7 +440,6 @@ function preview(path,edit,hl,safe){pvPath=path;pvEdit=!!edit;pvHl=!!hl&&!edit;p
   $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':(hl?'This is how the page will look when published. What has changed is highlighted in yellow. Nothing can be changed here.':'This is only a preview of this page. Nothing can be changed here.');
   var efb=document.getElementById('edToForm');if(efb)efb.hidden=!edit;
   edTipShow();
-  if(pvSafe)$('#edModalNote').textContent+=' Simple view: the page is shown without the website\'s animations and scripts.';
   $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. The text under the Media photos is edited here on the page. The photos themselves are changed with Media photos.';$('#edModalHint').title=STD;
   framePop.hidden=true;frameFail.hidden=true;frameLoad.hidden=false;clearTimeout(waitT);clearTimeout(loadHideT);frameOpened=false;frameLoaded=false;lastShown=null;var tok=++openTok;
   if(edit&&path==='index.html')site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();capPend={};}).catch(function(){});
@@ -451,7 +451,7 @@ function preview(path,edit,hl,safe){pvPath=path;pvEdit=!!edit;pvHl=!!hl&&!edit;p
 }
 /* The page must really open. If it reports in late or not at all, try once more by itself, then say so and offer the form view instead of leaving a blank window. A page that is still loading (slow connection) is given time rather than restarted. */
 var frameOpened=false,frameLoaded=false,openTok=0,waitT=0,frameFail=document.createElement('div');frameFail.className='ad-framefail';frameFail.hidden=true;
-frameFail.innerHTML='<b>This page did not open in the editing window.</b><span>Even the simple view did not show. Your connection may be slow or a browser extension may be blocking the window. Try again, or change this page in the form view instead. Nothing has been lost.</span><div><button type="button" class="ad-ap" data-f="again">Try again</button><button type="button" data-f="pop">Open it in its own window</button><button type="button" data-f="form">Change it in the form view</button></div>';
+frameFail.innerHTML='<b>This page did not open in the editing window.</b><span>Your connection may be slow, or a browser extension may be blocking the window. The form always works, and nothing has been lost.</span><div><button type="button" class="ad-ap" data-f="form">Edit in a form</button><button type="button" data-f="again">Try again</button><button type="button" class="ad-linkbtn" data-f="pop">Open it in its own window</button></div>';
 frame.parentNode.appendChild(frameFail);
 var frameLoad=document.createElement('div');frameLoad.className='ad-frameload';frameLoad.setAttribute('role','status');frameLoad.hidden=true;frameLoad.innerHTML='<i></i><b>Opening the page...</b><span>This can take a few seconds.</span>';frame.parentNode.appendChild(frameLoad);
 frame.addEventListener('load',function(){if(frame.srcdoc){frameLoaded=true;if(!onPage)frameLoad.hidden=true;}});
@@ -459,8 +459,7 @@ var failPath='',failHtml='';
 function watchFrame(path,html,n,t0){failPath=path;failHtml=html;clearTimeout(waitT);waitT=setTimeout(function(){if(frameOpened||modal.hidden)return;
   if(!frameLoaded&&Date.now()-t0<40000){watchFrame(path,html,n,t0);return;}
   if(n<1){frameLoaded=false;frame.srcdoc='';setTimeout(function(){frame.srcdoc=html;},50);watchFrame(path,html,n+1,Date.now());}else{diag('watchdog');frameBad();}},9000);}
-(function(){var sb=document.createElement('button');sb.type='button';sb.id='edSimple';sb.title='If the page ever looks blank or wrong, switch to the simple view';sb.textContent=simple?'Normal view':'Simple view';var cl=$('#edClose');cl.parentNode.insertBefore(sb,cl);var pb=document.createElement('button');pb.type='button';pb.id='edPop';pb.textContent='Own window';pb.title='Open this page in a browser window of its own';cl.parentNode.insertBefore(pb,cl);pb.addEventListener('click',popOpen);var fb=document.createElement('button');fb.type='button';fb.id='edToForm';fb.textContent='Edit in a form';fb.title='Edit this page in a form instead (always works)';cl.parentNode.insertBefore(fb,cl);fb.addEventListener('click',toForm);
-  sb.addEventListener('click',function(){if(pvEdit&&typeof edChanges==='function'&&edChanges().length&&!confirm('Changing the view reloads the page. Save your changes first, or they will be left behind. Change the view anyway?'))return;simple=!simple;simpleSave();if(simple)diag('manual-simple',{note:'switched to simple view by hand'});preview(pvPath,pvEdit,pvHl,simple);});})();
+(function(){var cl=$('#edClose');var fb=document.createElement('button');fb.type='button';fb.id='edToForm';fb.textContent='Edit in a form';fb.title='Edit this page in a form instead (always works)';cl.parentNode.insertBefore(fb,cl);fb.addEventListener('click',toForm);})();
 frameFail.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-f')==='pop'){popOpen();return;}if(b.getAttribute('data-f')==='again'){frameFail.hidden=true;preview(failPath,pvEdit,pvHl,pvSafe);}else{toForm();}});
 function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelectorAll('#edSize button'),function(b){b.setAttribute('aria-pressed',Number(b.getAttribute('data-w'))===w?'true':'false');});}
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
