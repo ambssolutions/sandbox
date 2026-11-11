@@ -394,35 +394,44 @@ function timingShow(st){var el=document.getElementById('edTiming');if(!el){el=do
   if(timing.ready!=null)p.push('ready to edit '+(timing.ready/1000).toFixed(1)+' s');
   el.textContent='Opening time: '+p.join(' · ');}
 var pvPath='',pvHl=false;
-function preview(path,edit,hl){pvPath=path;pvHl=!!hl&&!edit;
+/* Simple view: the page is shown without the site's own scripts and animations. It is switched on by itself (and remembered on this computer) if the normal view ever turns out blank, and can be switched on or off by hand. */
+var simple=false,pvSafe=false,pvEdit=false;try{simple=localStorage.getItem('mk-simple')==='1';}catch(e){}
+function simpleSave(){try{localStorage.setItem('mk-simple',simple?'1':'0');}catch(e){}var bt=document.getElementById('edSimple');if(bt)bt.textContent=simple?'Normal view':'Simple view';}
+function frameBad(){clearTimeout(waitT);if(!pvSafe){simple=true;simpleSave();preview(pvPath,pvEdit,pvHl,true);return;}frameLoad.hidden=true;frameFail.hidden=false;failPath=pvPath;}
+function preview(path,edit,hl,safe){pvPath=path;pvEdit=!!edit;pvHl=!!hl&&!edit;pvSafe=safe===undefined?simple:!!safe;
   say(edit?'Opening the page...':'Preparing the preview...');onPage=!!edit;$('#edModalSave').hidden=!edit;$('#edModalHint').hidden=!edit;phBtn.hidden=!edit||!canPh;
   $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
   $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':(hl?'This is how the page will look when published. What has changed is highlighted in yellow. Nothing can be changed here.':'This is only a preview of this page. Nothing can be changed here.');
+  if(pvSafe)$('#edModalNote').textContent+=' Simple view: the page is shown without the website\'s animations and scripts.';
   $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. The text under the Media photos is edited here on the page. The photos themselves are changed with Media photos.';$('#edModalHint').title=STD;
   frameFail.hidden=true;frameLoad.hidden=false;clearTimeout(waitT);clearTimeout(loadHideT);frameOpened=false;frameLoaded=false;var tok=++openTok;
   if(edit&&path==='index.html')site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();capPend={};}).catch(function(){});
   /* The window opens straight away and shows that the page is loading, instead of nothing happening until the page has arrived. */
   frame.srcdoc='';sizeFrame(window.innerWidth<700?390:Number($('#edSize .on,#edSize [aria-pressed=true]').getAttribute('data-w')));modal.hidden=false;
-  var tmq={t0:Date.now(),pre:false};var pf=edit&&takePrefetch(path);tmq.pre=!!pf;var got=pf||site({action:'preview',path:path,edit:!!edit,changes:!!(hl&&!edit)});timing=tmq;timingShow('');
+  var tmq={t0:Date.now(),pre:false};var pf=edit&&!pvSafe&&takePrefetch(path);tmq.pre=!!pf;var got=pf||site({action:'preview',path:path,edit:!!edit,changes:!!(hl&&!edit),safe:pvSafe});timing=tmq;timingShow('');
   var slow=new Promise(function(_,no){setTimeout(function(){no(new Error('slow'));},30000);});
-  Promise.race([got,slow]).then(function(j){if(tok!==openTok||modal.hidden)return;say('');tmq.got=Date.now()-tmq.t0;tmq.ms=j.ms||null;frame.srcdoc=j.html;if(edit)watchFrame(path,j.html,0,Date.now());}).catch(function(er){if(tok!==openTok)return;if(er&&er.message==='slow'){frameLoad.hidden=true;frameFail.hidden=false;failPath=path;return;}frameLoad.hidden=true;modal.hidden=true;onPage=false;say(er.message,true);});
+  Promise.race([got,slow]).then(function(j){if(tok!==openTok||modal.hidden)return;say('');tmq.got=Date.now()-tmq.t0;tmq.ms=j.ms||null;frame.srcdoc=j.html;watchFrame(path,j.html,0,Date.now());}).catch(function(er){if(tok!==openTok)return;if(er&&er.message==='slow'){frameLoad.hidden=true;frameFail.hidden=false;failPath=path;return;}frameLoad.hidden=true;modal.hidden=true;onPage=false;say(er.message,true);});
 }
 /* The page must really open. If it reports in late or not at all, try once more by itself, then say so and offer the form view instead of leaving a blank window. A page that is still loading (slow connection) is given time rather than restarted. */
 var frameOpened=false,frameLoaded=false,openTok=0,waitT=0,frameFail=document.createElement('div');frameFail.className='ad-framefail';frameFail.hidden=true;
-frameFail.innerHTML='<b>This page did not open in the editing window.</b><span>Your connection may be slow. Try again, or change this page in the form view instead. Nothing has been lost.</span><div><button type="button" class="ad-ap" data-f="again">Try again</button><button type="button" data-f="form">Change it in the form view</button></div>';
+frameFail.innerHTML='<b>This page did not open in the editing window.</b><span>Even the simple view did not show. Your connection may be slow or a browser extension may be blocking the window. Try again, or change this page in the form view instead. Nothing has been lost.</span><div><button type="button" class="ad-ap" data-f="again">Try again</button><button type="button" data-f="form">Change it in the form view</button></div>';
 frame.parentNode.appendChild(frameFail);
 var frameLoad=document.createElement('div');frameLoad.className='ad-frameload';frameLoad.setAttribute('role','status');frameLoad.hidden=true;frameLoad.innerHTML='<i></i><b>Opening the page...</b><span>This can take a few seconds.</span>';frame.parentNode.appendChild(frameLoad);
 frame.addEventListener('load',function(){if(frame.srcdoc){frameLoaded=true;if(!onPage)frameLoad.hidden=true;}});
 var failPath='',failHtml='';
-function watchFrame(path,html,n,t0){failPath=path;failHtml=html;clearTimeout(waitT);waitT=setTimeout(function(){if(frameOpened||modal.hidden||!onPage)return;
+function watchFrame(path,html,n,t0){failPath=path;failHtml=html;clearTimeout(waitT);waitT=setTimeout(function(){if(frameOpened||modal.hidden)return;
   if(!frameLoaded&&Date.now()-t0<40000){watchFrame(path,html,n,t0);return;}
-  if(n<1){frameLoaded=false;frame.srcdoc='';setTimeout(function(){frame.srcdoc=html;},50);watchFrame(path,html,n+1,Date.now());}else{frameLoad.hidden=true;frameFail.hidden=false;}},9000);}
-frameFail.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-f')==='again'){frameFail.hidden=true;preview(failPath,true);}else{modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);frameFail.hidden=true;edSel.value=failPath;edLoad(failPath);}});
+  if(n<1){frameLoaded=false;frame.srcdoc='';setTimeout(function(){frame.srcdoc=html;},50);watchFrame(path,html,n+1,Date.now());}else{frameBad();}},9000);}
+(function(){var sb=document.createElement('button');sb.type='button';sb.id='edSimple';sb.title='If the page ever looks blank or wrong, switch to the simple view';sb.textContent=simple?'Normal view':'Simple view';var cl=$('#edClose');cl.parentNode.insertBefore(sb,cl);
+  sb.addEventListener('click',function(){if(pvEdit&&typeof edChanges==='function'&&edChanges().length&&!confirm('Changing the view reloads the page. Save your changes first, or they will be left behind. Change the view anyway?'))return;simple=!simple;simpleSave();preview(pvPath,pvEdit,pvHl,simple);});})();
+frameFail.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-f')==='again'){frameFail.hidden=true;preview(failPath,pvEdit,pvHl,pvSafe);}else{modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);frameFail.hidden=true;edSel.value=failPath;edLoad(failPath);}});
 function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelectorAll('#edSize button'),function(b){b.setAttribute('aria-pressed',Number(b.getAttribute('data-w'))===w?'true':'false');});}
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
 $('#edClose').addEventListener('click',function(){capFlushPage().catch(function(){});if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);});
 window.addEventListener('message',function(e){
-  if(!onPage&&pvHl&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pvready'){var ix=draftFiles.indexOf(pvPath);frame.contentWindow.postMessage({mk:'more',more:draftFiles.length>1},'*');return;}
+  if(e.source===frame.contentWindow&&e.data&&e.data.mk==='blank'){frameBad();return;}
+  if(e.source===frame.contentWindow&&e.data&&e.data.mk==='shown'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;frameLoad.hidden=true;return;}
+  if(!onPage&&pvHl&&e.source===frame.contentWindow&&e.data&&e.data.mk==='pvready'){frameOpened=true;clearTimeout(waitT);var ix=draftFiles.indexOf(pvPath);frame.contentWindow.postMessage({mk:'more',more:draftFiles.length>1},'*');return;}
   if(!onPage&&pvHl&&e.source===frame.contentWindow&&e.data&&e.data.mk==='nextpage'){var k=draftFiles.indexOf(pvPath);preview(draftFiles[(k+1)%draftFiles.length],false,true);return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='ready'){frameOpened=true;clearTimeout(waitT);frameFail.hidden=true;clearTimeout(loadHideT);loadHideT=setTimeout(function(){frameLoad.hidden=true;},7000);if(timing&&!timing.ready){timing.ready=Date.now()-timing.t0;timingShow('done');}return;}
   if(onPage&&e.source===frame.contentWindow&&e.data&&e.data.mk==='loaded'){clearTimeout(loadHideT);frameLoad.hidden=true;return;}
@@ -459,7 +468,7 @@ $('#edOnPage').addEventListener('click',openOnPage);
 var edStageName='pick';
 function edStage(s){edStageName=s;$('#edPick').hidden=s!=='pick';$('#edWay').hidden=s!=='way';$('#edTop').hidden=s!=='form';edBody.hidden=s!=='form';}
 var edPrefPath='';
-function prefetchPreview(path){if(!path||path===edPrefPath)return;edPrefPath=path;pref[path]={tick:preTick,at:Date.now(),p:site({action:'preview',path:path,edit:true}).catch(function(){return null;})};}
+function prefetchPreview(path){if(!path||path===edPrefPath||simple)return;edPrefPath=path;pref[path]={tick:preTick,at:Date.now(),p:site({action:'preview',path:path,edit:true}).catch(function(){return null;})};}
 function takePrefetch(path){var x=pref[path];delete pref[path];edPrefPath='';if(!x||x.tick!==preTick||Date.now()-x.at>60000)return null;return x.p.then(function(j){return j||site({action:'preview',path:path,edit:true});});}
 /* Start fetching a page while the finger or mouse is on its tile, so it is ready by the time it is chosen. */
 (function(){var g=document.getElementById('edPageGrid'),ht=0;if(!g)return;
