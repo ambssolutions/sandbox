@@ -77,6 +77,8 @@ function extract(html) {
     if (n.tagName && SKIP.has(n.tagName)) return;
     /* Text the site's own scripts write after the page loads (counters, status labels, the footer year) cannot be edited here: the live site would overwrite it. */
     if (n.tagName && SCRIPT_TEXT.has(attr(n, 'id'))) return;
+    /* The homepage's live service panel is rewritten from the service slides on every visit, so its words are edited in the slides themselves. */
+    if (n.tagName && /(^|\s)hero-live(\s|$)/.test(attr(n, 'class') || '')) return;
     if (n.tagName === 'nav' && attr(n, 'class') === 'nav') reg = 'nav';
     if (n.tagName === 'footer') reg = 'footer';
     if (n.tagName === 'main') reg = 'main';
@@ -117,7 +119,7 @@ function publicView(html) {
   const x = extract(html);
   return {
     fields: x.fields.map((f) => ({ k: f.k, kind: f.kind, attr: f.attr || '', region: f.region, item: f.item == null ? -1 : f.item, sec: f.region === 'main' ? x.sections.findIndex((z) => f.start >= z.start && f.start < z.end) : -1, tag: f.tag, label: f.label, value: f.value, src: f.src || '', picture: !!f.picture })),
-    items: x.items.map((i, idx) => ({ i: idx, tag: i.tag, n: i.n, pos: i.pos, region: i.region, label: i.label, group: i.group })),
+    items: x.items.map((i, idx) => { let par = -1, size = Infinity; x.items.forEach((o, j) => { if (j !== idx && o.tag !== 'li' && o.start <= i.start && o.end >= i.end && o.end - o.start < size && (o.end - o.start) > (i.end - i.start)) { par = j; size = o.end - o.start; } }); return { i: idx, tag: i.tag, n: i.n, pos: i.pos, region: i.region, label: i.label, group: i.group, par }; }),
     sections: x.sections.map((s) => ({ i: s.i, label: s.label, n: s.n })),
     blocks: x.blocks.map((b, i) => ({ b: i, tag: b.tag, label: b.label.slice(0, 60) })).filter((b) => b.label)
   };

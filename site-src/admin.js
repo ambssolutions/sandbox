@@ -508,14 +508,16 @@ function edRender(){
     if(f.attr==='src'&&!f.picture)return;
     if(q&&String(f.value).toLowerCase().indexOf(q)<0&&String(f.label).toLowerCase().indexOf(q)<0)return;
     shown++;
-    var g=byGroup?groupFor(f.sec):null,ih='',adv=byGroup&&(f.attr==='alt'||f.attr==='href'),itm=f.item>=0?edData.items[f.item]:null,ik=(g&&itm&&itm.n>=2)?f.item:-1;
+    var g=byGroup?groupFor(f.sec):null,ih='',adv=byGroup&&(f.attr==='alt'||f.attr==='href'),itm=f.item>=0?edData.items[f.item]:null,ik=-1,isPt=!!(g&&itm&&itm.tag==='li'&&itm.n>=2);
+    if(g&&itm&&itm.n>=2){if(itm.tag==='li'){var pi=itm.par>=0?edData.items[itm.par]:null;ik=(pi&&pi.n>=2)?itm.par:-1;}else ik=f.item;}
     if(f.item!==(g?g.last:lastItem)){if(g)g.last=f.item;else lastItem=f.item;var it=f.item>=0?edData.items[f.item]:null;
       if(it&&it.n>=2)ih='<li class="ad-itemhead" data-item="'+it.i+'"><span>'+esc(it.tag==='a'?'Menu link':it.tag==='li'?'List entry':'Card')+' '+(it.pos+1)+' of '+it.n+(it.label?': '+esc(it.label.slice(0,36)):'')+'</span><span class="ad-btns"><button type="button" data-op="item-move" data-dir="up" aria-label="Move up"'+(it.pos?'':' disabled')+'>&uarr;</button><button type="button" data-op="item-move" data-dir="down" aria-label="Move down"'+(it.pos<it.n-1?'':' disabled')+'>&darr;</button><button type="button" data-op="item-copy">Copy</button><button type="button" data-op="item-delete" class="ad-rm">Remove</button></span></li>';
     }
     var v=esc(f.value),lab=f.label||(f.kind==='text'?((byGroup&&NICE[f.tag])||TAGNAME[f.tag]||'Text'):''),fh;
+    if(isPt&&f.kind==='text'&&!f.picture)lab='Point '+(itm.pos+1)+' of '+itm.n;
     if(f.picture)fh='<li class="ad-field ad-pic" data-k="'+f.k+'"><label>Picture</label><div class="ad-picrow"><img src="'+esc(/^(https?:|data:)/.test(f.value)?f.value:'/'+f.value.replace(/^\//,''))+'" alt="" width="120" height="75"><input type="text" value="'+v+'" data-k="'+f.k+'" aria-label="Picture file"><label class="ad-filebtn">Replace picture<input type="file" accept="image/jpeg,image/png,image/webp" data-pic="'+f.k+'" hidden></label></div></li>';
-    else fh='<li class="ad-field" data-k="'+f.k+'"><label>'+esc(lab)+'</label>'+(f.value.length>70||/\n/.test(f.value)?'<textarea rows="'+Math.min(6,Math.ceil(f.value.length/70))+'" data-k="'+f.k+'">'+v+'</textarea>':'<input type="text" value="'+v+'" data-k="'+f.k+'">')+'</li>';
-    if(g){g.items.push({ik:ik,itm:itm,ih:ih,fh:fh,adv:adv,w:f.kind==='text'&&!f.picture&&!/\s/.test(String(f.value).trim())&&String(f.value).trim().length<=18,v:String(f.value).trim()});if(adv)g.mn++;else g.n++;}else html+=ih+fh;
+    else fh='<li class="ad-field'+(isPt&&f.kind==='text'?' ad-point':'')+'" data-k="'+f.k+'"'+(isPt&&f.kind==='text'?' data-item="'+itm.i+'"':'')+'><label>'+esc(lab)+(isPt&&f.kind==='text'?'<span class="ad-btns ad-pbtns"><button type="button" data-op="item-move" data-dir="up" aria-label="Move this point up"'+(itm.pos?'':' disabled')+'>&uarr;</button><button type="button" data-op="item-move" data-dir="down" aria-label="Move this point down"'+(itm.pos<itm.n-1?'':' disabled')+'>&darr;</button><button type="button" data-op="item-copy">Copy</button><button type="button" data-op="item-delete" class="ad-rm">Remove</button></span>':'')+'</label>'+(f.value.length>70||/\n/.test(f.value)?'<textarea rows="'+Math.min(6,Math.ceil(f.value.length/70))+'" data-k="'+f.k+'">'+v+'</textarea>':'<input type="text" value="'+v+'" data-k="'+f.k+'">')+'</li>';
+    if(g){g.items.push({ik:ik,itm:itm,tag:f.tag,ih:ih,fh:fh,adv:adv,w:f.kind==='text'&&!f.picture&&!/\s/.test(String(f.value).trim())&&String(f.value).trim().length<=18,v:String(f.value).trim()});if(adv)g.mn++;else g.n++;}else html+=ih+fh;
   });
   if(byGroup&&groups.length){
     groups.sort(function(a,b){return (a.sec<0?1e9:a.sec)-(b.sec<0?1e9:b.sec);});
@@ -540,8 +542,9 @@ function edRender(){
       while(i<its.length){
         var it=its[i];
         if(it.ik>=0){flush();var j3=i;while(j3<its.length&&its[j3].ik===it.ik)j3++;
-          var card=its.slice(i,j3),t=it.itm,r2=runList(card,g.sec+'c'+it.ik),title='',cnt=0;
-          card.forEach(function(c){if(!c.adv){cnt++;if(!title&&c.v&&!/^(Link|Picture)/.test(c.v))title=c.v;}});
+          var card=its.slice(i,j3),t=edData.items[it.ik],r2=runList(card,g.sec+'c'+it.ik),title='',cnt=0;
+          card.forEach(function(c){if(!c.adv){cnt++;if(!title&&c.v&&/^h[1-4]$/.test(c.tag||'')&&c.itm&&c.itm.tag!=='li')title=c.v;}});
+          if(!title)card.forEach(function(c){if(!title&&!c.adv&&c.v&&!/^(Link|Picture)/.test(c.v)&&!/^SERVICE \d+ OF \d+$/i.test(c.v)&&(!c.itm||c.itm.tag!=='li'))title=c.v;});
           title=title||t.label||(itemTypeName(t)+' '+(t.pos+1));
           var key='i'+it.ik,btns='<span class="ad-btns"><button type="button" data-op="item-move" data-dir="up" aria-label="Move up"'+(t.pos?'':' disabled')+'>&uarr;</button><button type="button" data-op="item-move" data-dir="down" aria-label="Move down"'+(t.pos<t.n-1?'':' disabled')+'>&darr;</button><button type="button" data-op="item-copy">Copy</button><button type="button" data-op="item-delete" class="ad-rm">Remove</button></span>';
           out+='<li class="ad-itemcard"><details data-gk="'+key+'" data-item="'+t.i+'"'+(q||secOpen[key]?' open':'')+'><summary><span class="ad-it"><b>'+esc(title.length>46?title.slice(0,46).replace(/\s+\S*$/,'')+'...':title)+'</b><small>'+itemTypeName(t)+' '+(t.pos+1)+' of '+t.n+'</small></span>'+btns+'</summary><ul class="ad-list ad-fields">'+r2.main+(r2.more?'<li class="ad-more"><details data-gk="m'+key+'"'+(q||secOpen['m'+key]?' open':'')+'><summary>Links and picture descriptions</summary><ul class="ad-list ad-fields">'+r2.more+'</ul></details></li>':'')+'</ul></details></li>';

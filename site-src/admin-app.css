@@ -379,3 +379,10 @@ html body .ad-itemcard>details>summary .ad-btns button{padding:5px 10px;font-siz
 html body .ad-itemcard>details>ul{padding:2px 14px 12px;margin:0;border-top:1px solid rgba(128,128,128,.2);background:#fff}
 @media(max-width:700px){html body .ad-itemcard>details>summary{flex-direction:column;align-items:stretch}html body .ad-itemcard>details>summary .ad-btns{justify-content:flex-start}}
 @media(max-width:700px){html body .ad-itemcard>details:not([open])>summary .ad-btns{display:none}}
+
+/* List entries (bullet points) are plain boxes with small controls, inside their card */
+html body .ad-point>label{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+html body .ad-pbtns{display:inline-flex;gap:4px}
+html body .ad-pbtns button{font:inherit;font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid rgba(128,128,128,.4);background:#fff;color:#1c1c1e;cursor:pointer}
+html body .ad-pbtns button.ad-rm{color:#a82a2a;border-color:rgba(200,50,60,.4)}
+html body .ad-pbtns button:disabled{opacity:.4;cursor:default}
