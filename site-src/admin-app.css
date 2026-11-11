@@ -399,3 +399,7 @@ html body .ad-ppl td:nth-child(1){white-space:normal;width:22%}
 html body .ad-ppl th:nth-child(5),html body .ad-ppl td:nth-child(5){text-align:right;white-space:nowrap;width:1%}
 @media(max-width:1000px){html body .ad-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:700px){html body .ad-tiles{grid-template-columns:1fr 1fr}html body .ad-tile{min-height:80px}html body .ad-ppl th:nth-child(5),html body .ad-ppl td:nth-child(5){display:none}}
+
+/* Publish right where the unpublished changes are listed */
+html body .ad-snapdet-btns{display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+html body #chDraftPub{margin:0 0 8px}

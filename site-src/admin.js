@@ -747,7 +747,7 @@ function chRender(){
   var f=$('#chFWho').value||$('#chFPage').value||$('#chFWhen').value,none=f?'No changes match these filters.':null;
   var d=chAll.draft.filter(chPass);
   var dup=!!(snapSel&&snapSel.k==='wait'&&!(me&&me.role==='editor'));
-  $('#chDraftH').hidden=!d.length||dup;$('#chDraftW').hidden=!d.length||dup;
+  $('#chDraftH').hidden=!d.length||dup;$('#chDraftW').hidden=!d.length||dup;var dpb=$('#chDraftPub');if(dpb)dpb.hidden=!d.length||dup||!canPublish();
   tblSet('chDraft',d);
   tblSet('chVers',pubAll().filter(chPass),none||'Nothing has been published since this list began.');
   tblSet('chLive',chAll.live.filter(chPass),none||'No published changes yet.');
@@ -771,6 +771,10 @@ function snapRender(){
   if(typeof snapDetail==='function')snapDetail();
 }
 var snapSel=null,snapInit=0;
+function canPublish(){return !!me&&(me.role==='owner'||me.role==='manager'||(me.access&&(me.access.indexOf('pages')>-1||me.access.indexOf('details')>-1)));}
+/* Publishing the unpublished changes can be started right where they are listed. */
+(function(){var dp=document.createElement('button');dp.type='button';dp.id='chDraftPub';dp.className='ad-ap';dp.textContent='Review and publish';dp.hidden=true;var h=$('#chDraftH');if(h)h.parentNode.insertBefore(dp,h.nextSibling);
+  dp.addEventListener('click',function(){$('#adPublish').click();});$('#chSnapPub').addEventListener('click',function(){$('#adPublish').click();});})();
 function snapDetail(){
   var box=$('#chSnapDetail');if(!box)return;if(!snapSel||(me&&me.role==='editor')){box.hidden=true;return;}
   var t=$('#chSnapWhen').value,per={today:'today',yesterday:'yesterday','7':'in the last 7 days'}[t]||'',ents,title,empty,hd='Changed by';
@@ -785,6 +789,7 @@ function snapDetail(){
     if(snapSel.who){ents=ents.filter(function(e){return (e.who||'Unknown')===snapSel.who;});title='Changes by '+snapSel.who+' '+per;empty=snapSel.who+' made no changes '+per+'.';}
   }
   $('#chSnapDetT').textContent=title+(ents.length?' ('+ents.length+')':'');
+  $('#chSnapPub').hidden=!(snapSel.k==='wait'&&ents.length&&canPublish());
   var th=box.querySelector('thead th:nth-child(3)');if(th)th.textContent=hd;
   box.hidden=false;tblSet('chSnapTbl',ents,empty);
 }

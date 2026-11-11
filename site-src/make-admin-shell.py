@@ -30,7 +30,7 @@ for old, new in [('<ul class="ad-list" id="chDraft"></ul>', TBL('chDraft', 'Chan
     assert old in panes, old
     panes = panes.replace(old, new, 1)
 FIL = '<div class="ad-fbar" id="chFilters"><label id="chFWhoL">Person <select id="chFWho"><option value="">Everyone</option></select></label><label>Page <select id="chFPage"><option value="">All pages</option></select></label><label>When <select id="chFWhen"><option value="">Any time</option><option value="today">Today</option><option value="7">Last 7 days</option></select></label><button type="button" id="chFClear">Clear filters</button></div>'
-SNAPDET = '<div class="ad-snapdet" id="chSnapDetail" hidden><div class="ad-snapdet-top"><h4 id="chSnapDetT"></h4><button type="button" id="chSnapDetX">Hide</button></div>' + TBL('chSnapTbl', 'Changed by', True) + '</div>'
+SNAPDET = '<div class="ad-snapdet" id="chSnapDetail" hidden><div class="ad-snapdet-top"><h4 id="chSnapDetT"></h4><span class="ad-snapdet-btns"><button type="button" id="chSnapPub" class="ad-ap" hidden>Review and publish</button><button type="button" id="chSnapDetX">Hide</button></span></div>' + TBL('chSnapTbl', 'Changed by', True) + '</div>'
 SNAP = '<div class="ad-snap" id="chSnap"><div class="ad-snap-top"><h3 class="ad-h3">Snapshot</h3><select id="chSnapWhen" aria-label="Period"><option value="today">Today</option><option value="yesterday">Yesterday</option><option value="7">Last 7 days</option></select></div><div class="ad-tiles" id="chTiles"></div><div class="ad-tw"><table class="ad-tbl ad-ppl" id="chPeople"><thead><tr><th>Person</th><th>Changes</th><th>Published</th><th>Pages changed</th><th>Last change</th></tr></thead></table></div>' + SNAPDET + '</div>'
 FIL = SNAP + FIL
 assert '<ul class="ad-list" id="adList"></ul>' in panes
