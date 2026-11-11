@@ -503,3 +503,7 @@ html body #chTime tbody.ad-sect small{display:block;margin-top:6px;line-height:1
 html body #chTime tbody.ad-sect-wait th{background:#ffb000;color:#2b1a00}
 html body #chTime tbody.ad-sect-wait .ad-sc{background:#fff;color:#7a4a00}
 @media(max-width:700px){html body .ad-tbl:not(.ad-ppl) tbody.ad-sect-wait th{background:#ffb000!important;color:#2b1a00}}
+/* Saved, not published band: light orange */
+html body #chTime tbody.ad-sect-wait th{background:#ffb65c;color:#2e1800}
+html body #chTime tbody.ad-sect-wait .ad-sc{background:#fff;color:#8a4300}
+@media(max-width:700px){html body .ad-tbl:not(.ad-ppl) tbody.ad-sect-wait th{background:#ffb65c!important;color:#2e1800}}
