@@ -426,3 +426,10 @@ html body .ad-fbar button{grid-column:auto;white-space:nowrap;min-height:40px;ma
 html body .ad-fbar select{width:100%!important;box-sizing:border-box}
 @media(max-width:700px){html body .ad-fbar{grid-template-columns:1fr 1fr}html body .ad-fbar button{grid-column:1/-1}}
 html body .ad-tbl td.c-by{padding-right:18px}
+
+html body .ad-frameload{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;background:#fff;color:#191919;font-size:15px}
+html body .ad-frameload[hidden]{display:none}
+html body .ad-frameload b{font-size:17px}html body .ad-frameload span{opacity:.7}
+html body .ad-frameload i{width:30px;height:30px;border-radius:50%;border:3px solid #ddd;border-top-color:#c0292d;animation:adspin .8s linear infinite}
+@keyframes adspin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){html body .ad-frameload i{animation-duration:3s}}
