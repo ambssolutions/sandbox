@@ -437,10 +437,10 @@ function frameBad(){clearTimeout(waitT);diag(pvSafe?'simple-failed':'auto-simple
 function preview(path,edit,hl,safe){pvPath=path;pvEdit=!!edit;pvHl=!!hl&&!edit;pvSafe=safe===undefined?simple:!!safe;
   say(edit?'Opening the page...':'Preparing the preview...');onPage=!!edit;$('#edModalSave').hidden=!edit;$('#edModalHint').hidden=!edit;phBtn.hidden=!edit||!canPh;
   $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
-  $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':(hl?'This is how the page will look when published. What has changed is highlighted in yellow. Nothing can be changed here.':'This is only a preview of this page. Nothing can be changed here.');
+  $('#edModalNote').textContent=edit?'':(hl?'This is how the page will look when published. What has changed is highlighted in yellow. Nothing can be changed here.':'This is only a preview of this page. Nothing can be changed here.');
   var efb=document.getElementById('edToForm');if(efb)efb.hidden=!edit;
   edTipShow();
-  $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. The text under the Media photos is edited here on the page. The photos themselves are changed with Media photos.';$('#edModalHint').title=STD;
+  $('#edModalHint').textContent='Click any text and type, or click a picture. Then press Save changes.';$('#edModalHint').title=STD;
   framePop.hidden=true;frameFail.hidden=true;frameLoad.hidden=false;clearTimeout(waitT);clearTimeout(loadHideT);frameOpened=false;frameLoaded=false;lastShown=null;var tok=++openTok;
   if(edit&&path==='index.html')site({action:'captionsget'}).then(function(r){capSaved=(r.slides||[]).map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();capPend={};}).catch(function(){});
   /* The window opens straight away and shows that the page is loading, instead of nothing happening until the page has arrived. */
