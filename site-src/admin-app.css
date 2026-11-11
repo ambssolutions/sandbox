@@ -493,3 +493,9 @@ html body #chTime tbody.ad-sect-pub th{background:#1f8a4c}
 html body #chTime tbody.ad-sect,html body #chTime tbody.ad-dayh{display:block;width:100%;box-sizing:border-box}
 html body #chTime tbody.ad-sect tr,html body #chTime tbody.ad-dayh tr,html body #chTime tbody.ad-sect th,html body #chTime tbody.ad-dayh th{display:block;width:100%;box-sizing:border-box}
 }
+
+/* Band layout: title on the left, count on the right, one line of explanation underneath (same for both bands) */
+html body #chTime tbody.ad-sect .ad-sh{display:flex;align-items:center;justify-content:space-between;gap:12px}
+html body #chTime tbody.ad-sect .ad-sh b{flex:1 1 auto;min-width:0;line-height:1.25}
+html body #chTime tbody.ad-sect .ad-sc{flex:0 0 auto;margin:0;line-height:1.4;padding:3px 12px;white-space:nowrap}
+html body #chTime tbody.ad-sect small{display:block;margin-top:6px;line-height:1.4;white-space:normal}

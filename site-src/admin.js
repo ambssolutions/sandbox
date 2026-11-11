@@ -732,7 +732,7 @@ function entRun(){while(entBusy<3&&entQ.length){(function(it){var tb=it.tb,ck=tb
 function tblSet(id,ents,empty){
   var t=document.getElementById(id);var real=ents.filter(function(e){return !e.dayhead&&!e.sect;});[].slice.call(t.querySelectorAll('tbody')).forEach(function(b){b.remove();});
   if(!ents.length){t.insertAdjacentHTML('beforeend','<tbody><tr><td colspan="5" class="ad-empty">'+esc(empty||'Nothing yet.')+'</td></tr></tbody>');return;}
-  t.insertAdjacentHTML('beforeend',ents.map(function(e){return e.sect?'<tbody class="ad-sect ad-sect-'+e.sect+'"><tr><th colspan="5"><b>'+esc(e.title)+'</b><span class="ad-sc">'+e.n+(e.n===1?' change':' changes')+'</span><small>'+esc(e.sub)+'</small></th></tr></tbody>':e.dayhead?'<tbody class="ad-dayh"><tr><th colspan="5">'+esc(e.dayhead)+' <span class="ad-dc">'+e.n+(e.n===1?' change':' changes')+'</span></th></tr></tbody>':e.photo?photoBody(e):entSkeleton(e);}).join(''));
+  t.insertAdjacentHTML('beforeend',ents.map(function(e){return e.sect?'<tbody class="ad-sect ad-sect-'+e.sect+'"><tr><th colspan="5"><span class="ad-sh"><b>'+esc(e.title)+'</b><span class="ad-sc">'+e.n+(e.n===1?' change':' changes')+'</span></span><small>'+esc(e.sub)+'</small></th></tr></tbody>':e.dayhead?'<tbody class="ad-dayh"><tr><th colspan="5">'+esc(e.dayhead)+' <span class="ad-dc">'+e.n+(e.n===1?' change':' changes')+'</span></th></tr></tbody>':e.photo?photoBody(e):entSkeleton(e);}).join(''));
   var rows=[].slice.call(t.querySelectorAll('tbody.ad-ent'));rows.forEach(function(tb,i){if(!real[i].photo)entQ.push({tb:tb,e:real[i]});});entRun();
 }
 function pagesIn(s){var m=String(s||'').match(/\b[a-z0-9-]+\.html\b/g);return m&&m.length?m.filter(function(x,i){return m.indexOf(x)===i;}):['Other'];}
