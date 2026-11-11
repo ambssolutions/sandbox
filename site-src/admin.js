@@ -270,14 +270,20 @@ var pbPagesList=[];
 function pbPics(f){var pics=[];f.forEach(function(x,i){if(x.picture&&x.region==='main'){var alt=f[i-1]&&f[i-1].attr==='alt'?f[i-1].value:'';pics.push({k:x.k,src:x.value,alt:alt});}});return pics;}
 function pbCard1(p){var shown=/^(https?:|data:)/.test(p.src)?p.src:'/'+p.src.replace(/^\//,'');
   return '<div class="pb-item" data-k="'+p.k+'" data-old="'+esc(p.src)+'"><img src="'+esc(shown)+'" alt="" loading="lazy" width="240" height="150"><p class="pb-alt">'+esc(p.alt||'No description')+'</p><p class="pb-file">'+esc(p.src.split('/').pop())+'</p><p class="pb-dims ad-dims"></p><label class="ad-filebtn">Change picture<input type="file" accept="image/jpeg,image/png,image/webp" hidden></label></div>';}
+/* The Homepage line says how many carousel photos there are, and keeps up as they are added or removed. */
+function pbCarCount(){var c=$('#adCount'),s=document.querySelector('.pb-page[data-path="index.html"]>summary span');if(!c||!s)return;var t=c.textContent.trim();if(!t)return;var pics=(document.querySelectorAll('.pb-page[data-path="index.html"]>.pb-grid .pb-item').length);s.textContent='carousel '+t+(pics?' and '+pics+(pics===1?' picture':' pictures'):'');}
+(function(){var c=$('#adCount');if(c&&window.MutationObserver)new MutationObserver(function(){pbCarCount();}).observe(c,{childList:true,characterData:true,subtree:true});})();
 function pbRefresh(first){
   var g=$('#pbGrid');
   Promise.all(pbPagesList.map(function(p){return site({action:'page',path:p.path}).then(function(r){return {p:p,pics:pbPics(r.fields)};}).catch(function(){return {p:p,pics:[]};});})).then(function(rs){
-    var firstWith=rs.filter(function(x){return x.pics.length&&x.p.path!=='index.html';})[0];
-    if(first&&firstWith&&!Object.keys(pbOpen).length)pbOpen[firstWith.p.path]=1;
-    g.innerHTML=rs.map(function(x){var path=x.p.path,n=x.pics.length,name=pn(path,x.p.title);
-      var sub=n?n+(n===1?' picture':' pictures'):(path==='index.html'?'carousel photos are below':'no pictures');
-      return '<details class="pb-page" data-path="'+esc(path)+'"'+(pbOpen[path]&&n?' open':'')+(n?'':' data-none="1"')+'><summary><b>'+esc(name)+'</b><span>'+esc(sub)+'</span></summary>'+(n?'<div class="pb-grid">'+x.pics.map(pbCard1).join('')+'</div>':'')+'</details>';}).join('');
+    if(first&&!Object.keys(pbOpen).length)pbOpen['index.html']=1;
+    /* The homepage's carousel belongs to the Homepage entry: park it, redraw the list, then place it inside Homepage. */
+    var cw=$('#carouselWrap'),cardEl=$('#pbCard');if(cw&&cardEl&&cw.parentNode!==cardEl.parentNode)cardEl.parentNode.insertBefore(cw,cardEl.nextSibling);
+    g.innerHTML=rs.map(function(x){var path=x.p.path,n=x.pics.length,name=pn(path,x.p.title),home=path==='index.html'&&!!cw;
+      var sub=home?'carousel photos'+(n?' and '+n+(n===1?' picture':' pictures'):''):(n?n+(n===1?' picture':' pictures'):'no pictures');
+      var has=n||home;
+      return '<details class="pb-page" data-path="'+esc(path)+'"'+(pbOpen[path]&&has?' open':'')+(has?'':' data-none="1"')+'><summary><b>'+esc(name)+'</b><span>'+esc(sub)+'</span></summary>'+(home?'<div class="pb-carslot"></div>':'')+(n?'<div class="pb-grid">'+x.pics.map(pbCard1).join('')+'</div>':'')+'</details>';}).join('');
+    var slot=g.querySelector('.pb-carslot');if(slot&&cw){slot.appendChild(cw);cw.hidden=false;pbCarCount();}
     [].forEach.call(g.querySelectorAll('.pb-item'),function(it){var im=it.querySelector('img'),o=it.querySelector('.pb-dims');if(im&&o)showDims(im,o,it.getAttribute('data-old'));});
   }).catch(function(er){g.innerHTML='';say(er.message,true);});
 }

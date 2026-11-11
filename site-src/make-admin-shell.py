@@ -97,7 +97,7 @@ if 'adWebp' not in panes:
 if 'carouselWrap' not in panes:
     a = '<div class="ad-card"><h2>Add a photo</h2>'
     assert a in panes
-    CH = '<div id="carouselWrap"><div class="ad-card" id="carHead"><h2>Home page carousel</h2><p class="ad-help">These photos rotate in the carousel on the home page. Upload them and put them in order here. This is kept separate from the pictures on the page itself, above.</p></div>\n'
+    CH = '<div id="carouselWrap"><div class="ad-help pb-carnote" id="carHead">These photos rotate in the carousel at the top of the homepage. Adding, removing and reordering photos goes on the website straight away. The heading and line under each photo are saved to your draft until you press Publish.</div>\n'
     panes = panes.replace(a, CH + a, 1)
     fb = panes.index('<div data-pane="feedback"')
     close = panes.rfind('</div>', 0, fb)
