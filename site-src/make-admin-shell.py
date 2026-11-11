@@ -102,6 +102,11 @@ if 'carouselWrap' not in panes:
     fb = panes.index('<div data-pane="feedback"')
     close = panes.rfind('</div>', 0, fb)
     panes = panes[:close] + '</div>' + panes[close:]
+TIPS = '<details class="ad-tips" id="edTips"><summary>Tips for the best editing view</summary><ul><li><b>Use a laptop or desktop</b> with the browser window at least <b>1280 pixels wide</b> (a maximised window on a normal laptop screen).</li><li>Keep the browser zoom at <b>100%</b> (press Ctrl and 0). Anything between <b>90% and 110%</b> is fine; Windows display scaling of 100% to 125% is fine.</li><li>Use the latest <b>Chrome</b> or <b>Edge</b>, and allow pop-ups for mikia.co.nz if you want to use the Own window button.</li><li>If a page looks wrong or empty in <b>Edit on the page</b>, press <b>Simple view</b> or <b>Own window</b> in the editing window, or choose <b>Edit in a form</b>. The form always works.</li></ul></details>'
+if 'edTips' not in panes:
+    t = 'Best for adding, moving and removing things.</span></button></div>'
+    assert t in panes
+    panes = panes.replace(t, t + TIPS, 1)
 if 'edPick' not in panes:
     a = '<div data-pane="pages" hidden>\n<div class="ad-card"><h2>Edit a page</h2>'
     assert a in panes

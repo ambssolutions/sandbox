@@ -32,7 +32,7 @@ module.exports = async function (req, res) {
     by: me.email, who: me.name || me.email,
     page: str(b.page, 60), mode: str(b.mode, 12), view: str(b.view, 12), ver: str(b.ver, 16),
     ua: str(b.ua, 260), platform: str(b.platform, 40), lang: str(b.lang, 20),
-    screen: str(b.screen, 30), viewport: str(b.viewport, 30), frame: str(b.frame, 30), dpr: str(b.dpr, 8),
+    screen: str(b.screen, 30), viewport: str(b.viewport, 60), frame: str(b.frame, 30), dpr: str(b.dpr, 8),
     net: str(b.net, 40), visible: str(b.visible, 12),
     t: { got: num(b.t && b.t.got), ready: num(b.t && b.t.ready), server: num(b.t && b.t.server) },
     shown: b.shown && typeof b.shown === 'object' ? { text: num(b.shown.t), w: num(b.shown.w), h: num(b.shown.h), d: str(b.shown.d, 160) } : null,

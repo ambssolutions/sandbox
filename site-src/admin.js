@@ -387,6 +387,12 @@ var modal=$('#edModal'),frame=$('#edFrame');
 if(modal.parentNode!==root)root.appendChild(modal);
 var onPage=false;
 var timing=null,loadHideT=0;
+/* A gentle hint when the window is small or zoomed, since the page is laid out for a normal laptop screen. */
+function edTipShow(){var el=document.getElementById('edTip');if(!el){el=document.createElement('div');el.id='edTip';el.className='ad-tip';var fr=document.getElementById('edFrame');fr.parentNode.parentNode.insertBefore(el,fr.parentNode);}
+  var w=innerWidth,z=outerWidth&&innerWidth?outerWidth/innerWidth:1,m=[];
+  if(w<1100&&w>=700)m.push('This window is '+w+' pixels wide. For the best editing view use a wider window (1280 pixels or more).');
+  if(z>1.15||z<0.85)m.push('The browser looks zoomed ('+Math.round(100*z)+'%). For the best editing view set the zoom to 100% (Ctrl and 0).');
+  el.textContent=m.join(' ');el.hidden=!m.length;}
 /* A small line under the editing window says how long each step of opening the page took, so a slow page can be pinned down. */
 function timingShow(st){var el=document.getElementById('edTiming');if(!el){el=document.createElement('div');el.id='edTiming';el.className='ad-timing';var f=frame.parentNode;f.parentNode.insertBefore(el,f.nextSibling);}
   if(!timing||!st){el.textContent='';return;}
@@ -399,7 +405,7 @@ var pvPath='',pvHl=false;
 /* ---- editor problem log: the editor reports by itself when a page did not show properly, so problems that happen "from time to time" can be traced ---- */
 var dgSent={},lastShown=null;
 function dgCtx(kind,extra){var n=navigator,c=n.connection||{},fr=document.getElementById('edFrame'),r=fr?fr.getBoundingClientRect():{width:0,height:0};
-  var o={kind:kind,page:pvPath,mode:pvEdit?'edit':'preview',view:pvSafe?'simple':'normal',ver:myVer,ua:n.userAgent,platform:(n.userAgentData&&n.userAgentData.platform)||n.platform||'',lang:n.language,screen:screen.width+'x'+screen.height,viewport:innerWidth+'x'+innerHeight,frame:Math.round(r.width)+'x'+Math.round(r.height),dpr:String(window.devicePixelRatio||1),net:(c.effectiveType||'')+(c.downlink?' '+c.downlink+'Mbps':''),visible:document.visibilityState,t:{got:timing&&timing.got,ready:timing&&timing.ready,server:timing&&timing.ms&&timing.ms.total},shown:lastShown};
+  var o={kind:kind,page:pvPath,mode:pvEdit?'edit':'preview',view:pvSafe?'simple':'normal',ver:myVer,ua:n.userAgent,platform:(n.userAgentData&&n.userAgentData.platform)||n.platform||'',lang:n.language,screen:screen.width+'x'+screen.height,viewport:innerWidth+'x'+innerHeight+' (outer '+outerWidth+'x'+outerHeight+')',frame:Math.round(r.width)+'x'+Math.round(r.height),dpr:String(window.devicePixelRatio||1),net:(c.effectiveType||'')+(c.downlink?' '+c.downlink+'Mbps':''),visible:document.visibilityState,t:{got:timing&&timing.got,ready:timing&&timing.ready,server:timing&&timing.ms&&timing.ms.total},shown:lastShown};
   for(var k in extra)o[k]=extra[k];return o;}
 function diag(kind,extra){var key=kind+'|'+pvPath;if(dgSent[key]&&Date.now()-dgSent[key]<60000)return;dgSent[key]=Date.now();
   try{fetch('/api/admin/diag',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(dgCtx(kind,extra||{})),keepalive:true,credentials:'same-origin'}).catch(function(){});}catch(e){}}
@@ -408,7 +414,7 @@ function fromFrame(w){return w===frame.contentWindow||(pop&&!pop.closed&&w===pop
 function simpleSave(){try{localStorage.setItem('mk-simple',simple?'1':'0');}catch(e){}var bt=document.getElementById('edSimple');if(bt)bt.textContent=simple?'Normal view':'Simple view';}
 /* The page can also be opened in a browser window of its own (a normal page, not a frame), which works even where the frame inside the editor will not show. Changes made there are sent back here, and Save changes works as usual. */
 var framePop=document.createElement('div');framePop.className='ad-framefail ad-framepop';framePop.hidden=true;
-framePop.innerHTML='<b data-pt="1">This page is open in its own window.</b><span>Make your changes there, then come back here and press Save changes.</span><div><button type="button" class="ad-ap" data-p="front">Show that window</button><button type="button" data-p="here">Show the page here again</button></div>';
+framePop.innerHTML='<b data-pt="1">This page is open in its own window.</b><span>Make your changes there, then come back here and press Save changes.</span><div><button type="button" class="ad-ap" data-p="front">Show that window</button><button type="button" data-p="here">Show the page here again</button><button type="button" data-p="form">Edit in a form instead</button></div>';
 frame.parentNode.appendChild(framePop);
 function popOpen(){if(!pvPath)return;diag('manual-own-window',{note:'own window'});try{if(pop&&!pop.closed)pop.close();}catch(e){}
   /* The window is opened at once (browsers only allow that on a click), then given the page in simple form: without the website's own scripts, so nothing rewrites the text being edited. */
@@ -420,13 +426,19 @@ function popOpen(){if(!pvPath)return;diag('manual-own-window',{note:'own window'
   clearInterval(popT);popT=setInterval(function(){if(!pop||pop.closed){clearInterval(popT);framePop.querySelector('[data-pt]').textContent='That window was closed.';}},1000);}
 /* When the editing window is closed or saved, the separate window goes with it. */
 if(window.MutationObserver)new MutationObserver(function(){if(modal.hidden){clearInterval(popT);try{if(pop&&!pop.closed)pop.close();}catch(e){}framePop.hidden=true;}}).observe(modal,{attributes:true,attributeFilter:['hidden']});
-framePop.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var k=b.getAttribute('data-p');if(k==='front'){if(pop&&!pop.closed)pop.focus();else popOpen();}else{try{if(pop&&!pop.closed)pop.close();}catch(x){}framePop.hidden=true;preview(pvPath,pvEdit,pvHl,pvSafe);}});
+framePop.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var k=b.getAttribute('data-p');if(k==='form'){toForm();return;}if(k==='front'){if(pop&&!pop.closed)pop.focus();else popOpen();}else{try{if(pop&&!pop.closed)pop.close();}catch(x){}framePop.hidden=true;preview(pvPath,pvEdit,pvHl,pvSafe);}});
+/* Editing in a form always works, however the page behaves on this computer (animations, scripts, browser settings). */
+function toForm(){if(typeof edChanges==='function'&&edChanges().length&&!confirm('You have changes that are not saved yet. Open the form anyway and leave them behind?'))return;
+  clearInterval(popT);try{if(pop&&!pop.closed)pop.close();}catch(e){}clearTimeout(waitT);clearTimeout(loadHideT);modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;framePop.hidden=true;
+  edSel.value=pvPath;edLoad(pvPath,true);}
 function frameBad(){clearTimeout(waitT);diag(pvSafe?'simple-failed':'auto-simple');if(!pvSafe){simple=true;simpleSave();preview(pvPath,pvEdit,pvHl,true);return;}frameLoad.hidden=true;frameFail.hidden=false;failPath=pvPath;}
 
 function preview(path,edit,hl,safe){pvPath=path;pvEdit=!!edit;pvHl=!!hl&&!edit;pvSafe=safe===undefined?simple:!!safe;
   say(edit?'Opening the page...':'Preparing the preview...');onPage=!!edit;$('#edModalSave').hidden=!edit;$('#edModalHint').hidden=!edit;phBtn.hidden=!edit||!canPh;
   $('#edModalName').textContent=(edit?'Editing: ':'Preview: ')+pn(path,path);
   $('#edModalNote').textContent=edit?'Only this page can be edited here. To edit another page, press Close. The menu and footer are changed in the form view.':(hl?'This is how the page will look when published. What has changed is highlighted in yellow. Nothing can be changed here.':'This is only a preview of this page. Nothing can be changed here.');
+  var efb=document.getElementById('edToForm');if(efb)efb.hidden=!edit;
+  edTipShow();
   if(pvSafe)$('#edModalNote').textContent+=' Simple view: the page is shown without the website\'s animations and scripts.';
   $('#edModalHint').textContent='Click any text and type, or click a picture to change it. Then press Save changes. The text under the Media photos is edited here on the page. The photos themselves are changed with Media photos.';$('#edModalHint').title=STD;
   framePop.hidden=true;frameFail.hidden=true;frameLoad.hidden=false;clearTimeout(waitT);clearTimeout(loadHideT);frameOpened=false;frameLoaded=false;lastShown=null;var tok=++openTok;
@@ -447,9 +459,9 @@ var failPath='',failHtml='';
 function watchFrame(path,html,n,t0){failPath=path;failHtml=html;clearTimeout(waitT);waitT=setTimeout(function(){if(frameOpened||modal.hidden)return;
   if(!frameLoaded&&Date.now()-t0<40000){watchFrame(path,html,n,t0);return;}
   if(n<1){frameLoaded=false;frame.srcdoc='';setTimeout(function(){frame.srcdoc=html;},50);watchFrame(path,html,n+1,Date.now());}else{diag('watchdog');frameBad();}},9000);}
-(function(){var sb=document.createElement('button');sb.type='button';sb.id='edSimple';sb.title='If the page ever looks blank or wrong, switch to the simple view';sb.textContent=simple?'Normal view':'Simple view';var cl=$('#edClose');cl.parentNode.insertBefore(sb,cl);var pb=document.createElement('button');pb.type='button';pb.id='edPop';pb.textContent='Own window';pb.title='Open this page in a browser window of its own';cl.parentNode.insertBefore(pb,cl);pb.addEventListener('click',popOpen);
+(function(){var sb=document.createElement('button');sb.type='button';sb.id='edSimple';sb.title='If the page ever looks blank or wrong, switch to the simple view';sb.textContent=simple?'Normal view':'Simple view';var cl=$('#edClose');cl.parentNode.insertBefore(sb,cl);var pb=document.createElement('button');pb.type='button';pb.id='edPop';pb.textContent='Own window';pb.title='Open this page in a browser window of its own';cl.parentNode.insertBefore(pb,cl);pb.addEventListener('click',popOpen);var fb=document.createElement('button');fb.type='button';fb.id='edToForm';fb.textContent='Edit in a form';fb.title='Edit this page in a form instead (always works)';cl.parentNode.insertBefore(fb,cl);fb.addEventListener('click',toForm);
   sb.addEventListener('click',function(){if(pvEdit&&typeof edChanges==='function'&&edChanges().length&&!confirm('Changing the view reloads the page. Save your changes first, or they will be left behind. Change the view anyway?'))return;simple=!simple;simpleSave();if(simple)diag('manual-simple',{note:'switched to simple view by hand'});preview(pvPath,pvEdit,pvHl,simple);});})();
-frameFail.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-f')==='pop'){popOpen();return;}if(b.getAttribute('data-f')==='again'){frameFail.hidden=true;preview(failPath,pvEdit,pvHl,pvSafe);}else{modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);frameFail.hidden=true;edSel.value=failPath;edLoad(failPath);}});
+frameFail.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.getAttribute('data-f')==='pop'){popOpen();return;}if(b.getAttribute('data-f')==='again'){frameFail.hidden=true;preview(failPath,pvEdit,pvHl,pvSafe);}else{toForm();}});
 function sizeFrame(w){frame.style.width=w+'px';[].forEach.call(root.querySelectorAll('#edSize button'),function(b){b.setAttribute('aria-pressed',Number(b.getAttribute('data-w'))===w?'true':'false');});}
 $('#edSize').addEventListener('click',function(e){var b=e.target.closest('button');if(b)sizeFrame(Number(b.getAttribute('data-w')));});
 $('#edClose').addEventListener('click',function(){try{if(pop&&!pop.closed)pop.close();}catch(e){}framePop.hidden=true;capFlushPage().catch(function(){});if(phHome)closePhotos();modal.hidden=true;frame.srcdoc='';onPage=false;frameFail.hidden=true;frameLoad.hidden=true;clearTimeout(waitT);});
