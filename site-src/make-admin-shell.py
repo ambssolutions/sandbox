@@ -73,7 +73,7 @@ panes = panes.replace('Only AMBS can see this tab.', 'Only the super admin can s
 panes = panes.replace('Click any text on the page and type. Then press Save.', 'Click any text on the page and type. Click a picture to change it. Then press Save.')
 STD = 'Standard size: 1600 &times; 1000 pixels (landscape), JPEG or WebP. Smaller than 1200 pixels wide can look blurry. Larger pictures are shrunk automatically.'
 if 'pbCard' not in panes:
-    PB = '<div class="ad-card" id="pbCard"><h2>Pictures on each page</h2><p class="ad-help">Choose a page to see its pictures, then press Change picture on the one you want to replace. ' + STD + '</p><div class="ad-pagebar"><select id="pbPage" aria-label="Page"></select></div><div id="pbGrid" class="pb-grid"></div></div>\n'
+    PB = '<div class="ad-card" id="pbCard"><h2>Pictures on each page</h2><p class="ad-help">Every page is listed by its name. Open a page to see its pictures, then press Change picture on the one you want to replace. ' + STD + '</p><div id="pbGrid" class="pb-pages"></div></div>\n'
     assert '<div data-pane="photos" hidden>' in panes
     panes = panes.replace('<div data-pane="photos" hidden>', '<div data-pane="photos" hidden>\n' + PB, 1)
 if 'ad-std' not in panes:

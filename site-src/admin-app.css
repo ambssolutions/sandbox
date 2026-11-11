@@ -438,3 +438,14 @@ html body .ad-timing{font-size:12px;color:#6b6b73;padding:6px 4px 0;text-align:r
 html body .ad-filebtn{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:44px;line-height:1.2;text-align:center;font-weight:600}
 html body.adm .pb-item .ad-filebtn{display:flex;width:100%;margin-top:auto}
 html body.adm .pb-item .pb-dims{margin:0}
+
+/* Pictures on each page: one fold per page name */
+html body.adm .pb-pages{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+html body.adm .pb-page{border:1px solid #e4e4e7;border-radius:14px;background:#fff;overflow:hidden}
+html body.adm .pb-page>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:52px;padding:0 16px;cursor:pointer;list-style:none;font-size:16px}
+html body.adm .pb-page>summary::-webkit-details-marker{display:none}
+html body.adm .pb-page>summary::after{content:'\25BE';margin-left:8px;opacity:.6}
+html body.adm .pb-page[open]>summary::after{transform:rotate(180deg)}
+html body.adm .pb-page>summary span{margin-left:auto;font-size:13px;opacity:.7}
+html body.adm .pb-page[data-none]>summary{cursor:default;opacity:.65}html body.adm .pb-page[data-none]>summary::after{content:''}
+html body.adm .pb-page>.pb-grid{padding:4px 12px 14px;border-top:1px solid #eee}

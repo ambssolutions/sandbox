@@ -258,34 +258,37 @@ uList.addEventListener('click',function(e){
   p.catch(function(er){say(er.message,true);b.disabled=false;});
 });
 /* ---- pictures by page (Photos tab) ---- */
-var pbPages=false;
+var pbDone=false,pbOpen={};
+/* Every page is listed by its name, with how many pictures it has; the pictures of a page open under its name. */
 function pbLoad(){
   var card=$('#pbCard');if(!card||card.hidden)return;
-  if(pbPages){pbShow();return;}
-  site({action:'pages'}).then(function(j){pbPages=true;var ps=j.pages.filter(function(p){return p.path!=='404.html';});
-    function opts(cnt){return ps.map(function(p){var c=cnt&&cnt[p.path];return '<option value="'+esc(p.path)+'">'+esc(pn(p.path,p.title))+(c==null?'':c?' - '+c+(c===1?' picture':' pictures'):(p.path==='index.html'?' - carousel photos are below':' - no pictures'))+'</option>';}).join('');}
-    $('#pbPage').innerHTML=opts(null);pbShow();
-    /* Count each page's pictures so the list says where they are, and open on the first page that has some. */
-    Promise.all(ps.map(function(p){return site({action:'page',path:p.path}).then(function(r){return [p.path,r.fields.filter(function(f){return f.picture&&f.region==='main';}).length];}).catch(function(){return [p.path,null];});})).then(function(rs){var cnt={};rs.forEach(function(x){cnt[x[0]]=x[1];});var cur=$('#pbPage').value;$('#pbPage').innerHTML=opts(cnt);var first=ps.filter(function(p){return cnt[p.path]>0;})[0];var pick=cnt[cur]>0?cur:(first?first.path:cur);$('#pbPage').value=pick;if(pick!==cur)pbShow();});
-  }).catch(function(er){say(er.message,true);});
+  if(pbDone){pbRefresh();return;}
+  var g=$('#pbGrid');g.innerHTML='<p class="ad-help">Loading...</p>';
+  site({action:'pages'}).then(function(j){pbDone=true;pbPagesList=j.pages.filter(function(p){return p.path!=='404.html';});pbRefresh(true);}).catch(function(er){say(er.message,true);});
 }
-function pbShow(){
-  var path=$('#pbPage').value,g=$('#pbGrid');if(!path)return;
-  var cw=$('#carouselWrap');if(cw)cw.hidden=path!=='index.html';g.innerHTML='<p class="ad-help">Loading...</p>';
-  site({action:'page',path:path}).then(function(j){
-    var pics=[];j.fields.forEach(function(f,i){if(f.picture&&f.region==='main'){var alt=j.fields[i-1]&&j.fields[i-1].attr==='alt'?j.fields[i-1].value:'';pics.push({k:f.k,src:f.value,alt:alt});}});
-    g.innerHTML=pics.map(function(p){var shown=/^(https?:|data:)/.test(p.src)?p.src:'/'+p.src.replace(/^\//,'');
-      return '<div class="pb-item" data-k="'+p.k+'" data-old="'+esc(p.src)+'"><img src="'+esc(shown)+'" alt="" loading="lazy" width="240" height="150"><p class="pb-alt">'+esc(p.alt||'No description')+'</p><p class="pb-file">'+esc(p.src.split('/').pop())+'</p><p class="pb-dims ad-dims"></p><label class="ad-filebtn">Change picture<input type="file" accept="image/jpeg,image/png,image/webp" hidden></label></div>';}).join('')||'<p class="ad-help">This page has no pictures you can change here.</p>';
+var pbPagesList=[];
+function pbPics(f){var pics=[];f.forEach(function(x,i){if(x.picture&&x.region==='main'){var alt=f[i-1]&&f[i-1].attr==='alt'?f[i-1].value:'';pics.push({k:x.k,src:x.value,alt:alt});}});return pics;}
+function pbCard1(p){var shown=/^(https?:|data:)/.test(p.src)?p.src:'/'+p.src.replace(/^\//,'');
+  return '<div class="pb-item" data-k="'+p.k+'" data-old="'+esc(p.src)+'"><img src="'+esc(shown)+'" alt="" loading="lazy" width="240" height="150"><p class="pb-alt">'+esc(p.alt||'No description')+'</p><p class="pb-file">'+esc(p.src.split('/').pop())+'</p><p class="pb-dims ad-dims"></p><label class="ad-filebtn">Change picture<input type="file" accept="image/jpeg,image/png,image/webp" hidden></label></div>';}
+function pbRefresh(first){
+  var g=$('#pbGrid');
+  Promise.all(pbPagesList.map(function(p){return site({action:'page',path:p.path}).then(function(r){return {p:p,pics:pbPics(r.fields)};}).catch(function(){return {p:p,pics:[]};});})).then(function(rs){
+    var firstWith=rs.filter(function(x){return x.pics.length&&x.p.path!=='index.html';})[0];
+    if(first&&firstWith&&!Object.keys(pbOpen).length)pbOpen[firstWith.p.path]=1;
+    g.innerHTML=rs.map(function(x){var path=x.p.path,n=x.pics.length,name=pn(path,x.p.title);
+      var sub=n?n+(n===1?' picture':' pictures'):(path==='index.html'?'carousel photos are below':'no pictures');
+      return '<details class="pb-page" data-path="'+esc(path)+'"'+(pbOpen[path]&&n?' open':'')+(n?'':' data-none="1"')+'><summary><b>'+esc(name)+'</b><span>'+esc(sub)+'</span></summary>'+(n?'<div class="pb-grid">'+x.pics.map(pbCard1).join('')+'</div>':'')+'</details>';}).join('');
     [].forEach.call(g.querySelectorAll('.pb-item'),function(it){var im=it.querySelector('img'),o=it.querySelector('.pb-dims');if(im&&o)showDims(im,o,it.getAttribute('data-old'));});
   }).catch(function(er){g.innerHTML='';say(er.message,true);});
 }
-$('#pbPage').addEventListener('change',pbShow);
+$('#pbGrid').addEventListener('toggle',function(e){var d=e.target;if(d&&d.classList&&d.classList.contains('pb-page')){if(d.open)pbOpen[d.getAttribute('data-path')]=1;else delete pbOpen[d.getAttribute('data-path')];}},true);
+$('#pbGrid').addEventListener('click',function(e){var s=e.target.closest('summary');if(s&&s.parentNode.getAttribute('data-none'))e.preventDefault();});
 $('#pbGrid').addEventListener('change',function(e){
-  var inp=e.target.closest('input[type=file]');if(!inp||!inp.files[0])return;var f=inp.files[0],it=inp.closest('.pb-item'),path=$('#pbPage').value;
+  var inp=e.target.closest('input[type=file]');if(!inp||!inp.files[0])return;var f=inp.files[0],it=inp.closest('.pb-item'),path=inp.closest('.pb-page').getAttribute('data-path');
   say('Checking the picture...');
   askSize(f).then(function(go){sizeStop(go);say('Uploading...');return shrink(f);}).then(function(bl){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(String(r.result).split(',')[1]);};r.onerror=no;r.readAsDataURL(bl);});}).then(function(b64){return site({action:'image',name:f.name,data:b64});})
   .then(function(j){return site({action:'edit',path:path,changes:[{k:Number(it.getAttribute('data-k')),old:it.getAttribute('data-old'),new:j.src}]});})
-  .then(function(){say('Picture changed in your draft. It goes on the website when you press Publish.');return siteStatus();}).then(pbShow).catch(function(er){say(er.message,true);});
+  .then(function(){say('Picture changed in your draft. It goes on the website when you press Publish.');return siteStatus();}).then(function(){pbRefresh();}).catch(function(er){say(er.message,true);});
 });
 /* ---- connections (owners only) ---- */
 function cnState(el,x){el.className='cn-st'+(x.set?' on':'');el.textContent=x.set?(x.from==='vercel'?'Set in Vercel':'Saved'+(x.hint?' '+x.hint:'')):'Not set';}
