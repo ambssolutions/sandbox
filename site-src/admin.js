@@ -495,7 +495,7 @@ window.addEventListener('message',function(e){
 var canPh=false,phBtn=document.createElement('button');phBtn.type='button';phBtn.id='edPhotosBtn';phBtn.textContent='Media photos';phBtn.hidden=true;
 $('#edModalSave').parentNode.insertBefore(phBtn,$('#edModalSave'));
 var phOver=document.createElement('div');phOver.className='ad-photoover';phOver.hidden=true;
-phOver.innerHTML='<div class="ad-top"><h2>Photos in the Media box</h2><button type="button" id="edPhotosDone" class="ad-ap">Done</button></div><p class="ad-help">Photos change on the live website straight away. Add, reorder or remove them here. The heading and line under each photo are saved to your draft and go on the website when you press Publish. They belong to the place in the carousel (1st, 2nd...), so if you reorder the photos, the words stay in their place.</p><p class="ad-help" id="edCapNote"></p><div id="edPhotosHost"></div>';
+phOver.innerHTML='<div class="ad-top"><h2>Photos in the Media box</h2><button type="button" id="edPhotosDone" class="ad-ap">Done</button></div><p class="ad-help">Photos change on the live website straight away. Add, reorder or remove them here. The heading and line under each photo are saved to your draft and go on the website when you press Publish. They stay with their photo when photos are moved, removed or added.</p><p class="ad-help" id="edCapNote"></p><div id="edPhotosHost"></div>';
 modal.querySelector('.ad-modal-in').appendChild(phOver);
 var phHome=null,phWas=true;
 function openPhotos(at){
@@ -560,7 +560,7 @@ function mediaCardSync(reg){
   if(mcard.getAttribute('data-loaded')==='1'){mcard.hidden=false;return;}
   Promise.all([site({action:'captionsget'}),api('/api/admin/photos')]).then(function(rs){
     var caps=rs[0].slides||[],photos=rs[1].photos||[];capSaved=caps.map(function(s){return {t:s.t||'',d:s.d||''};});capData=capSaved.slice();
-    mcard.innerHTML='<details data-gk="media"'+(secOpen.media?' open':'')+'><summary><b>Media photos: headings and lines</b><span class="ad-sc">'+photos.length+(photos.length===1?' photo':' photos')+'</span></summary><p class="ad-help">The heading and line under each photo in the Media box. They are saved to your draft and go on the website when you press Publish. They belong to the place in the carousel (1st, 2nd...), so if you reorder the photos, the words stay in their place.</p><p class="ad-help" id="mcNote"></p>'
+    mcard.innerHTML='<details data-gk="media"'+(secOpen.media?' open':'')+'><summary><b>Media photos: headings and lines</b><span class="ad-sc">'+photos.length+(photos.length===1?' photo':' photos')+'</span></summary><p class="ad-help">The heading and line under each photo in the Media box. They are saved to your draft and go on the website when you press Publish. They stay with their photo when photos are moved, removed or added.</p><p class="ad-help" id="mcNote"></p>'
       +photos.map(function(p,i){var c=capData[i]||{};return '<div class="ad-mrow" data-i="'+i+'"><img src="'+esc(p.src)+'" alt="" width="120" height="75" loading="lazy"><div class="ad-captxt"><label>Heading under photo '+(i+1)+'<input type="text" maxlength="80" data-cap="t" placeholder="For example: Rural family home" value="'+esc(c.t||'')+'"></label><label>Line under the heading<input type="text" maxlength="220" data-cap="d" placeholder="One short sentence about this photo" value="'+esc(c.d||'')+'"></label></div></div>';}).join('')+'</details>';
     mcard.setAttribute('data-loaded','1');mcard.hidden=false;
   }).catch(function(){mcard.hidden=true;});
