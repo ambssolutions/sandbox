@@ -85,13 +85,24 @@ failBox.addEventListener('click',function(e){
   (loc&&!all?Promise.resolve():site({action:'dismissfail',id:id})).then(loadFailures);
 });
 /* ---- photos ---- */
-var capData=[],capSaved=[],capT=null,capBusy=false,capOK=false;
+var capData=[],capSaved=[],capT=null,capBusy=false,capOK=false;var lastIds=[];
+/* The heading and line under each photo are kept by place in the carousel (1st, 2nd...). When photos are moved, removed or added, the words must travel with their photo, so the captions are re-placed to match, and any place left empty is cleared so old words never turn up under a new photo. */
+function capFollow(oldIds,newPhotos){
+  if(!capOK)return Promise.resolve();
+  var blank={t:'',d:''},m={};oldIds.forEach(function(id,i){m[id]=capSaved[i]||blank;});
+  var n=Math.max(oldIds.length,newPhotos.length,capSaved.length),ch=[];
+  for(var i=0;i<n;i++){var want=i<newPhotos.length?(m[newPhotos[i].id]||blank):blank,cur=capSaved[i]||blank;if(want.t!==cur.t||want.d!==cur.d)ch.push({i:i,t:want.t,d:want.d});}
+  if(!ch.length)return Promise.resolve();
+  return post('/api/admin/site',{action:'captions',caps:ch}).then(function(){ch.forEach(function(c){capSaved[c.i]={t:c.t,d:c.d};});capData=capSaved.slice();}).catch(function(er){say('Could not move the headings with the photos: '+er.message,true);});
+}
+
 function render(photos,storage){
   note.hidden=!!storage;
   list.innerHTML=photos.map(function(p,i){
     return '<li class="ad-row" data-id="'+esc(p.id)+'"><img src="'+esc(p.src)+'" alt="" width="120" height="75" loading="lazy"><div class="ad-cap"><b>Photo '+(i+1)+'</b><span>'+(p.stock?'Stock photo':'Uploaded')+'</span><span class="ad-dims"></span></div>'
     +'<div class="ad-btns"><button type="button" data-act="up" aria-label="Move up"'+(i?'':' disabled')+'>&uarr;</button><button type="button" data-act="down" aria-label="Move down"'+(i<photos.length-1?'':' disabled')+'>&darr;</button><button type="button" data-act="rm" class="ad-rm">Remove</button></div>'+(capOK?'<div class="ad-captxt"><label>Heading under this photo<input type="text" maxlength="80" data-cap="t" placeholder="For example: Rural family home" value="'+esc((capData[i]||{}).t||'')+'"></label><label>Line under the heading<input type="text" maxlength="220" data-cap="d" placeholder="One short sentence about this photo" value="'+esc((capData[i]||{}).d||'')+'"></label></div>':'')+'</li>';
   }).join('')||'<li class="ad-empty">No photos yet. The carousel will show the stock photos until you add one.</li>';
+  lastIds=photos.map(function(p){return p.id;});
   $('#adCount').textContent=photos.length+(photos.length===1?' photo':' photos');
   [].forEach.call(list.querySelectorAll('.ad-row'),function(r){var im=r.querySelector('img'),o=r.querySelector('.ad-dims');if(im&&o)showDims(im,o,im.getAttribute('src'));});
 }
@@ -104,8 +115,8 @@ list.addEventListener('click',function(e){
   var b=e.target.closest('button');if(!b||b.disabled)return;
   var row=b.closest('.ad-row'),id=row.dataset.id,act=b.dataset.act;
   if(act==='rm'){if(!confirm('Remove this photo from the website?'))return;}
-  b.disabled=true;say('');
-  post('/api/admin/photos',act==='rm'?{action:'remove',id:id}:{action:'move',id:id,dir:act}).then(function(j){render(j.photos,true);say(act==='rm'?'Photo removed.':'Order updated.');}).catch(function(er){say(er.message,true);b.disabled=false;});
+  b.disabled=true;say('');var oldIds=lastIds.slice();
+  capSaveNow().then(function(){return post('/api/admin/photos',act==='rm'?{action:'remove',id:id}:{action:'move',id:id,dir:act});}).then(function(j){return capFollow(oldIds,j.photos).then(function(){render(j.photos,true);say(act==='rm'?'Photo removed.':'Order updated.');});}).catch(function(er){say(er.message,true);b.disabled=false;});
 });
 /* The heading and line under each Media photo (page text kept by place, saved to the draft, live after Publish) */
 var capPend={},capPT=null,capPB=false;
@@ -170,10 +181,10 @@ function shrink(file){
 $('#adUpForm').addEventListener('submit',function(e){
   e.preventDefault();var f=e.target.photo.files[0],b=e.target.querySelector('button[type=submit]');
   if(!f){say('Choose a photo first.',true);return;}
-  b.disabled=true;say('Checking the picture...');
-  askSize(f).then(function(go){sizeStop(go);say('Uploading...');return shrink(f);}).then(function(bl){
+  b.disabled=true;say('Checking the picture...');var oldIds=lastIds.slice();
+  askSize(f).then(function(go){sizeStop(go);say('Uploading...');return capSaveNow();}).then(function(){return shrink(f);}).then(function(bl){
     return api('/api/admin/upload',{method:'POST',headers:{'content-type':bl.type||'image/jpeg'},body:bl});
-  }).then(function(j){e.target.reset();render(j.photos,true);say('Photo added. It shows on the website within a minute.');}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
+  }).then(function(j){e.target.reset();return capFollow(oldIds,j.photos).then(function(){render(j.photos,true);say('Photo added. It shows on the website within a minute.');});}).catch(function(er){say(er.message,true);}).then(function(){b.disabled=false;});
 });
 /* ---- client feedback ---- */
 var fbList=$('#adFb');
