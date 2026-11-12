@@ -1,0 +1,541 @@
+/* The editor as a full-screen app: sidebar, top bar and a Home dashboard. Loaded after the shared admin styles. */
+html body.adm{margin:0;padding:0;background:#f4f4f5;color:#15171a;font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:15px;overflow-x:hidden}
+html body.adm h1,html body.adm h2,html body.adm h3{font-family:"IBM Plex Sans",system-ui,sans-serif;font-weight:700;letter-spacing:-.01em;color:#15171a;text-align:left}
+.adm-app{display:flex;min-height:100vh}
+.sb{width:248px;flex:0 0 248px;background:#fff;border-right:1px solid #e4e4e7;position:sticky;top:0;height:100vh;overflow-y:auto;padding:14px 12px 24px;box-sizing:border-box;z-index:60}
+.sb-brand{display:flex;align-items:center;gap:10px;padding:4px 8px 16px}.sb-brand img{height:34px;width:auto;background:#15171a;border-radius:8px;padding:5px 8px;box-sizing:content-box}.sb-brand b{font-size:15px;line-height:1.15}
+.sb-nav{display:flex;flex-direction:column;gap:2px}
+.sb-grp{margin-top:14px}.sb-grp:not(:has(button:not([hidden]))){display:none}
+html body.adm .sb-grp h2{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#52525b;margin:0 8px 4px;font-weight:700}
+html body.adm .sb button{display:flex;align-items:center;gap:12px;width:100%;min-height:42px;padding:0 10px;border:0;border-radius:10px;background:transparent;color:#27272a;font:inherit;font-weight:600;font-size:15px;text-align:left;cursor:pointer;box-shadow:none}
+html body.adm .sb button[hidden]{display:none}
+html body.adm .sb button svg{color:#c8323c;flex:0 0 20px}
+html body.adm .sb button:hover{background:#f4f4f5}
+html body.adm .sb button[aria-selected=true]{background:#fbe9ea;color:#15171a}
+html body.adm .sb small{margin-left:auto;background:#c8323c;color:#fff;border-radius:99px;padding:1px 8px;font-size:12px}html body.adm .sb small:empty{display:none}
+.adm-main{flex:1;min-width:0;display:flex;flex-direction:column}
+.tb{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:6px;height:60px;padding:0 20px;background:#fff;border-bottom:1px solid #e4e4e7;box-sizing:border-box}
+.tb-sp{flex:1}.tb #adWho{margin:0;font-size:14px;color:#52525b;display:flex;align-items:center;gap:8px}.tb #adWho b{color:#15171a}
+html body.adm .tb .tb-link{border:0;background:transparent;color:#c8323c;font:inherit;font-weight:600;font-size:14px;padding:8px 10px;cursor:pointer;text-decoration:none;border-radius:8px}
+html body.adm .tb .tb-link:hover{background:#fbe9ea}
+html body.adm .tb-menu{display:none;border:1px solid #d4d4d8;background:#fff;border-radius:10px;width:42px;height:42px;padding:0;align-items:center;justify-content:center;color:#15171a;cursor:pointer}
+.adm-body{padding:28px 32px 80px;max-width:1040px;width:100%;box-sizing:border-box}
+html body.adm .adm-body{text-align:left}
+html body.adm .adm-body .ad-card{max-width:none;margin:0 0 16px;border-radius:16px;border:1px solid #e4e4e7;box-shadow:0 1px 2px rgba(0,0,0,.04);background:#fff;text-align:left}
+html body.adm .adm-body .ad-card h2{font-size:20px;text-align:left;margin:0 0 6px}
+html body.adm .adm-body .ad-help,html body.adm .adm-body .ad-note{text-align:left}
+html body.adm .adm-body .ad-top{justify-content:space-between}
+/* signed out: just the login card */
+.adm-app:not(:has(#adPanel:not([hidden]))) .sb,.adm-app:not(:has(#adPanel:not([hidden]))) .tb,.adm-app:not(:has(#adPanel:not([hidden]))) .sb-scrim{display:none}
+.adm-app:not(:has(#adPanel:not([hidden]))) .adm-body{margin:8vh auto 0;max-width:460px}
+.adm-app:not(:has(#adPanel:not([hidden]))) #adLogin h2::before{content:"Website editor";display:block;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:#c8323c;margin-bottom:6px}
+/* home */
+html body.adm .hm-hi{font-size:34px;margin:0 0 4px}
+.hm-sub{margin:0 0 18px;color:#52525b}
+.hm-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px}
+html body.adm .hm-pill{border:1px solid #d4d4d8;background:#fff;border-radius:99px;min-height:44px;padding:0 20px;font:inherit;font-weight:700;color:#15171a;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+html body.adm .hm-pill:hover{border-color:#c8323c}
+html body.adm .hm-h{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:#52525b;margin:26px 0 10px;font-weight:700}
+.hm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.hm-card{position:relative;display:flex;gap:14px;padding:16px;background:#fff;border:1px solid #e4e4e7;border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.hm-card:hover{border-color:#c8323c}
+.hm-card[hidden],.hm-grid[hidden],html body.adm .hm-h[hidden]{display:none}
+.hm-ic{flex:0 0 40px;height:40px;border-radius:10px;background:#fbe9ea;color:#c8323c;display:flex;align-items:center;justify-content:center}
+.hm-card p{margin:2px 0 0;color:#52525b;font-size:14px;line-height:1.4}
+html body.adm .hm-t{all:unset;font-weight:700;font-size:17px;color:#15171a;cursor:pointer;display:block}
+html body.adm .hm-t::after{content:"";position:absolute;inset:0;border-radius:16px}
+html body.adm .hm-t small{background:#c8323c;color:#fff;border-radius:99px;padding:1px 8px;font-size:12px;margin-left:6px;vertical-align:2px}html body.adm .hm-t small:empty{display:none}
+.hm-chips{display:flex;gap:8px;margin-top:10px;position:relative;z-index:1}
+html body.adm .hm-chips button{border:1px solid #d4d4d8;background:#fff;border-radius:99px;min-height:34px;padding:0 14px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;color:#15171a}
+html body.adm .hm-chips button:hover{border-color:#c8323c;color:#c8323c}
+/* waiting-to-publish bar sticks under the top bar */
+html body.adm #adDraft{position:sticky;top:68px;z-index:40;border-color:#f2b4b8;background:#fff7f7}
+.sb-scrim{display:none}
+@media(max-width:900px){
+ .sb{position:fixed;left:0;top:0;bottom:0;transform:translateX(-102%);transition:transform .22s ease;box-shadow:0 0 40px rgba(0,0,0,.2)}
+ .adm-app.sb-open .sb{transform:none}.adm-app.sb-open .sb-scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:55}
+ html body.adm .tb-menu{display:flex}.tb{padding:0 12px}.tb #adWho{display:none}
+ .adm-body{padding:20px 16px 80px}.hm-grid{grid-template-columns:1fr}html body.adm .hm-hi{font-size:28px}
+ html body.adm #adDraft{top:66px}
+}
+@media(prefers-reduced-motion:reduce){.sb{transition:none}}
+html body.adm .adm-body h1,html body.adm .adm-body h2,html body.adm .adm-body h3,html body.adm .adm-body p,html body.adm .adm-body label,html body.adm .adm-body .ad-top{text-align:left!important}
+html body.adm .adm-body .ad-top h2{margin:0}
+html body.adm .tb .tb-link{white-space:nowrap}
+@media(max-width:900px){html body.adm .tb a.tb-link{display:none}}
+
+html body.adm .ad-viewas{position:sticky;top:60px;z-index:45;display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#15171a;color:#fff;border-radius:12px;padding:10px 14px;margin:0 0 14px}
+html body.adm .ad-viewas[hidden]{display:none}
+html body.adm .ad-viewas button{background:#fff;color:#15171a;border:0;border-radius:99px;min-height:34px;padding:0 14px;font:inherit;font-weight:700;cursor:pointer}
+html body.adm .ad-row{flex-wrap:wrap}html body.adm .ad-acc{flex-basis:100%;border-top:1px solid #e4e4e7;margin-top:8px;padding-top:8px}html body.adm .ad-acc[hidden]{display:none}
+html body.adm .ad-accsum{display:block;color:#52525b;font-size:13px;margin-top:2px}
+html body.adm .ad-accset{border:1px solid #e4e4e7;border-radius:12px;margin:10px 0;padding:8px 12px}html body.adm .ad-accset[hidden]{display:none}html body.adm .ad-accset legend{font-weight:700;padding:0 6px;font-size:14px}
+html body.adm .hm-grid:not(:has(.hm-card:not([hidden]))){display:none}
+
+/* people */
+html body.adm #adInvForm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px;align-items:end}
+html body.adm #adInvForm>*{margin:0}
+html body.adm #adInvForm .ad-fld{display:flex;flex-direction:column;gap:6px}
+html body.adm #adInvForm .ad-accset,html body.adm #adInvForm .ad-chk:last-of-type,html body.adm #adInvForm .ad-go{grid-column:1/-1}
+html body.adm #adInvForm .ad-go{justify-self:start}
+html body.adm .ad-accset{display:flex;flex-wrap:wrap;gap:6px 22px}html body.adm .ad-accset legend{flex:0 0 100%}
+html body.adm .ad-accset .ad-chk{margin:0}
+html body.adm #adUsers{display:flex;flex-direction:column;gap:10px;padding:0;margin:12px 0 0}
+html body.adm #adUsers .ad-row{display:grid;grid-template-columns:minmax(0,1fr);gap:10px 18px;align-items:start;padding:14px 16px;background:#fff;border:1px solid #e4e4e7;border-radius:14px}
+html body.adm #adUsers .ad-cap b{font-size:16px}
+html body.adm #adUsers .ad-cap>span{display:block;margin-top:2px}
+html body.adm .ad-btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;align-items:center}
+html body.adm .adm-body .ad-btns button,html body.adm .adm-body .ad-btns select{min-height:38px;height:auto;padding:0 14px;font-size:14px;white-space:nowrap;width:auto;border-radius:99px}
+html body.adm .adm-body .ad-btns select{padding:0 10px;border-radius:10px;max-width:170px}
+html body.adm #adUsers .ad-acc{grid-column:1/-1}
+@media(max-width:900px){
+ html body.adm #adInvForm{grid-template-columns:1fr}
+ html body.adm #adUsers .ad-row{grid-template-columns:1fr}html body.adm .ad-btns{justify-content:flex-start}
+}
+/* connections */
+html body.adm [data-pane=conn]>.ad-card{background:none;border:0;box-shadow:none;padding:0}
+html body.adm [data-pane=conn]>.ad-card>h2{font-size:22px}
+html body.adm [data-pane=conn] form{background:#fff;border:1px solid #e4e4e7;border-radius:16px;padding:18px 20px;margin:0 0 16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+html body.adm [data-pane=conn] .ad-h3{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:18px}
+html body.adm [data-pane=conn] input[type=text],html body.adm [data-pane=conn] input[type=password]{max-width:560px}
+html body.adm [data-pane=conn] .ad-btns{justify-content:flex-start;margin-top:12px}
+html body.adm .cn-st{font-size:12px;font-weight:700;padding:2px 10px;border-radius:99px;background:#eee;color:#52525b}
+html body.adm .cn-st.on{background:#e3f4ea;color:#17573a}
+html body.adm #adUsers .ad-btns{justify-content:flex-start}
+
+html body.adm .hm-alert{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:#fff7e6;border:1px solid #f0c36d;border-radius:14px;padding:12px 16px;margin:0 0 16px}
+html body.adm .hm-alert[hidden]{display:none}
+html body.adm .hm-alert button{border:1px solid #c8323c;background:#fff;color:#c8323c;border-radius:99px;min-height:36px;padding:0 14px;font:inherit;font-weight:700;cursor:pointer}
+html body.adm .cn-exp{margin:4px 0 12px;font-size:14px;color:#52525b}html body.adm .cn-exp[hidden]{display:none}
+html body.adm .cn-exp.okk{color:#17573a}html body.adm .cn-exp.warn{color:#8a5a00;font-weight:700}html body.adm .cn-exp.bad{color:#b42318;font-weight:700}
+
+/* show password, forgot password */
+html body.adm .pw-wrap{position:relative;display:block}
+html body.adm .pw-wrap input{padding-right:74px!important;width:100%;box-sizing:border-box}
+html body.adm .pw-eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#c8323c;font:inherit;font-weight:700;font-size:14px;cursor:pointer;padding:6px 8px;border-radius:8px}
+html body.adm .pw-eye:hover{background:#fbe9ea}
+html body.adm .ad-forgot{margin:14px 0 0}
+html body.adm .ad-linkbtn{border:0;background:transparent;color:#c8323c;font:inherit;font-weight:700;cursor:pointer;padding:0;text-decoration:underline}
+html body.adm .ad-forgotbox{margin-top:12px;padding-top:12px;border-top:1px solid #e4e4e7}html body.adm .ad-forgotbox[hidden]{display:none}
+html body.adm .ad-forgotbox .ad-btns{justify-content:flex-start;margin-top:10px}
+
+html body.adm .ad-what{flex-basis:100%;grid-column:1/-1;border-top:1px solid #e4e4e7;margin-top:8px;padding-top:8px;font-size:14px}html body.adm .ad-what[hidden]{display:none}
+html body.adm .ad-what h4{margin:8px 0 4px;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#52525b}
+html body.adm .ad-what ul{margin:0 0 6px;padding-left:18px}html body.adm .ad-what li{margin:3px 0;word-break:break-word}
+html body.adm .ad-what del{background:#fde8e8;color:#8a1c1c;text-decoration:line-through;padding:0 3px;border-radius:3px}
+html body.adm .ad-what ins{background:#e3f4ea;color:#17573a;text-decoration:none;padding:0 3px;border-radius:3px}
+html body.adm .ad-arrow{color:#52525b}
+html body.adm .ad-mailto{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;margin-top:8px;border:1px solid #c8323c;border-radius:99px;color:#c8323c;font-weight:700;text-decoration:none;background:#fff}
+html body.adm .ad-mailto[hidden]{display:none}
+
+html body.adm .pb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:12px}
+html body.adm .pb-item{background:#fff;border:1px solid #e4e4e7;border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:6px}
+html body.adm .pb-item img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:10px;background:#eee}
+html body.adm .pb-alt{margin:0;font-size:14px;line-height:1.3}html body.adm .pb-file{margin:0;font-size:12px;color:#52525b;word-break:break-all}
+html body.adm .ad-std{font-size:13px;color:#52525b;margin:2px 0 8px}
+html body.adm #pbCard[hidden]{display:none}
+
+/* messages under the control that was used */
+html body.adm .ad-inline{margin:10px 0 0;padding:8px 12px;border-radius:10px;background:#e3f4ea;color:#17573a;font-size:14px;font-weight:600;line-height:1.4;grid-column:1/-1;flex-basis:100%;text-align:left}
+html body.adm .ad-inline.bad{background:#fde8e8;color:#b42318}
+html body.adm .ad-msg-quiet{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+html body.adm .ad-add button.ad-ap,html body.adm .ad-acc button.ad-ap{min-height:44px;padding:0 20px;border-radius:99px;background:#12201b;color:#fff;border:0;font:inherit;font-weight:700;cursor:pointer;margin-top:8px}
+
+html body.adm .ad-dims,html body.adm .pb-dims{display:block;font-size:13px;color:#52525b;margin:2px 0 0}
+html body.adm .ad-dims.small{color:#8a5a00;font-weight:700}
+html body.adm #fmtCard{padding:12px 16px}html body.adm #fmtCard .ad-std{margin:4px 0 0}
+
+html body.adm #carouselWrap[hidden]{display:none}
+html body.adm #carHead{background:#fff7f7;border-color:#f2b4b8}
+
+html body.adm .ep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin:12px 0}
+html body.adm .ep-page{display:flex;flex-direction:column;gap:2px;text-align:left;padding:14px 16px;border:1px solid #e4e4e7;border-radius:14px;background:#fff;cursor:pointer;font:inherit;min-height:0;white-space:normal}
+html body.adm .ep-page b{font-size:16px}html body.adm .ep-page span{font-size:13px;color:#52525b;word-break:break-all}
+html body.adm .ep-page:hover{border-color:#c8323c;background:#fff7f7}
+html body.adm #edPick[hidden],html body.adm #edTop[hidden]{display:none}
+
+html body.adm #edNew[hidden],html body.adm #edNew2[hidden],html body.adm .hm-pill[hidden]{display:none}
+
+html body.adm .cn-people{display:grid;gap:6px;margin:6px 0 12px}html body.adm .cn-people small{color:#6b7570;margin-left:4px}
+
+html body .ad-for{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px;padding:9px 14px;background:#f3f0e8;border-radius:10px;text-align:left}html body .ad-for b{font-size:17px}html body .ad-for span{font-size:13.5px;color:#4a4a4a;line-height:1.4}
+html body .ad-modal-in .ad-top{flex-wrap:wrap;gap:8px}html body .ad-modal .ad-top .ad-help{flex:1 1 220px;font-size:13px;line-height:1.4;margin:0 4px}
+
+html body.adm .cn-more{margin:10px 0}html body.adm .cn-more summary{cursor:pointer;color:#6b7570;font-size:14px}
+
+html body.adm .fb-dl{display:grid;grid-template-columns:96px minmax(0,1fr);gap:6px 14px;margin:0;text-align:left}html body.adm .fb-dl dt{font-weight:600;color:#4a4a4a;font-size:14px}html body.adm .fb-dl dd{margin:0;font-size:15px;overflow-wrap:anywhere;white-space:pre-wrap}
+html body.adm .fb-dl dt,html body.adm .fb-dl dd{text-align:left!important}html body.adm .fb-dl .ad-badge{display:inline-block}
+/* On phones set to dark mode, buttons take a white text colour while their background stays white. Give them an explicit dark text colour. */
+html body.adm .ep-page,html body.adm .ep-page b,html body.adm .ad-way,html body.adm .ad-way b{color:#18181b}html body.adm .ad-way span{color:#626262}
+/* While the page opens inside the editing window (slow on phones), say so instead of showing an empty grey box. */
+html body .ad-frame{position:relative}html body .ad-frame::before{content:'Loading the page...';position:absolute;inset:0;display:grid;place-items:center;color:#626262;font-size:16px;pointer-events:none}
+html body .ad-frame iframe{position:relative}
+@media (max-width:700px){html body .ad-modal{padding:6px}html body .ad-modal-in{height:96vh;padding:8px}html body .ad-for{padding:8px 12px}html body .ad-for span{font-size:12.5px}}
+html body .ad-idlewarn{position:fixed;left:12px;right:12px;bottom:12px;z-index:400;background:#191919;color:#fff;border-radius:14px;padding:12px 16px;text-align:center;font-size:15px;box-shadow:0 12px 30px -10px #0008}html body .ad-idlewarn[hidden]{display:none}
+
+.tb .tb-timer{font-size:13px;color:#52525b;white-space:nowrap;margin-right:6px}.tb .tb-timer b{font-variant-numeric:tabular-nums;color:#15171a}.tb .tb-timer.low b{color:#c8323c}@media(max-width:600px){.tb .tb-timer{font-size:12px}.tb .tb-timer{font-size:0}.tb .tb-timer b{font-size:13px}}
+.tb .tb-timer b{display:inline-block;min-width:5ch;text-align:right}
+.ad-what .ad-where{display:block;font-size:12px;letter-spacing:.02em;color:#6b6b72;margin-bottom:2px}
+@media(prefers-color-scheme:dark){html:not([data-theme=light]) .ad-what .ad-where{color:#a8a8b0}}
+.ad-cap .ad-sum{display:block;margin-top:3px;font-weight:600;font-size:13px;line-height:1.4}.ad-cap .ad-sum:empty{display:none}
+
+.ad-tw{overflow-x:auto;margin:6px 0 18px;border:1px solid rgba(128,128,128,.3);border-radius:12px}
+.ad-tbl{width:100%;border-collapse:collapse;font-size:14px;line-height:1.4;min-width:720px}
+.ad-tbl th{text-align:left;font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;opacity:.7;padding:10px 12px;border-bottom:1px solid rgba(128,128,128,.3)}
+.ad-tbl td{padding:9px 12px;vertical-align:top;border-top:1px solid rgba(128,128,128,.18)}
+.ad-tbl tbody.ad-ent tr:first-child td{border-top:1px solid rgba(128,128,128,.3)}
+.ad-tbl td small{display:block;opacity:.7;font-size:12px;margin-top:1px}
+.ad-tbl td b{font-weight:600}
+.ad-tbl .c-act{text-align:right;white-space:nowrap;width:1%}
+.ad-tbl .c-by{white-space:nowrap}
+.ad-tbl ins{background:#e3f6e8;color:#14532d;text-decoration:none;padding:0 3px;border-radius:3px}
+.ad-tbl del{background:#fde8ea;color:#7f1d1d;padding:0 3px;border-radius:3px}
+.ad-tbl .ad-arrow{opacity:.6}
+.ad-tbl .ad-wait{opacity:.6;font-style:italic}
+.ad-tbl .ad-empty{text-align:center;opacity:.7;padding:18px}
+.ad-fbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;margin:10px 0 6px}.ad-fbar label{display:flex;flex-direction:column;gap:3px;font-size:12px;font-weight:600;letter-spacing:.03em;opacity:.85}.ad-fbar select{font:inherit;font-size:14px;padding:8px 10px;border-radius:10px;border:1px solid rgba(128,128,128,.4);min-width:150px;background:#fff;color:#1c1c1e}.ad-fbar button{font:inherit;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid rgba(128,128,128,.4);background:#fff;color:#1c1c1e;cursor:pointer}
+
+.ad-snap{margin:6px 0 18px}.ad-snap-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.ad-snap select{font:inherit;font-size:14px;padding:8px 10px;border-radius:10px;border:1px solid rgba(128,128,128,.4);background:#fff;color:#1c1c1e}
+.ad-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:8px 0 12px}
+.ad-tile{border:1px solid rgba(128,128,128,.3);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.ad-tile b{font-size:26px;line-height:1.1;font-weight:700}.ad-tile span{font-size:13px;opacity:.75}
+.ad-ppl{min-width:560px}
+.ad-fbar[hidden],.ad-snap[hidden]{display:none}
+
+/* the Changes tables fit the card: fixed column shares, long text wraps */
+.ad-tw{overflow-x:auto}
+.ad-tbl{table-layout:fixed;min-width:0;width:100%}
+.ad-tbl th:nth-child(1){width:16%}.ad-tbl th:nth-child(2){width:22%}.ad-tbl th:nth-child(3){width:15%}.ad-tbl th:nth-child(5){width:84px}
+.ad-tbl td,.ad-tbl th{overflow-wrap:anywhere;word-break:normal}
+.ad-tbl .c-by{white-space:normal}
+.ad-tbl .c-act{width:84px}
+.ad-tbl .c-page b{display:block}
+.ad-ppl th:nth-child(n){width:auto}
+@media(max-width:760px){.ad-tbl{min-width:680px}.ad-ppl{min-width:520px}}
+.ad-ppl{table-layout:auto}
+
+.ad-tbl .c-act button{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid rgba(128,128,128,.45);background:#fff;color:#1c1c1e;cursor:pointer}
+.ad-tbl .c-act button:hover{border-color:#c8323c;color:#c8323c}
+.ad-snap select{width:auto;min-width:170px;flex:none}
+.ad-tbl th:nth-child(1){width:19%}.ad-tbl th:nth-child(2){width:21%}
+.ad-ppl th:nth-child(n){width:auto}
+html body.adm .ad-snap select{width:200px;min-width:0;max-width:100%;flex:0 0 auto}
+
+.ad-photoedit{flex:1 1 100%;display:grid;gap:10px;margin-top:10px;padding:12px;border:1px solid rgba(128,128,128,.3);border-radius:12px}
+.ad-photoedit label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
+.ad-photoedit input{font:inherit;font-size:15px;padding:9px 10px;border-radius:10px;border:1px solid rgba(128,128,128,.4);background:#fff;color:#1c1c1e}
+
+.ad-modal-in{position:relative}
+.ad-photoover{position:absolute;inset:0;z-index:20;overflow:auto;padding:18px 20px;background:#fff;color:#1c1c1e;border-radius:inherit}
+.ad-photoover[hidden]{display:none}
+.ad-photoover [data-pane=photos]{display:block}
+
+.ad-failcard{border:1px solid #e8a3a8;background:#fff6f6}
+.ad-failcard h2{margin:0 0 4px}
+.ad-failcard[hidden]{display:none}
+.ad-photoover #pbCard{display:none}
+
+.ad-tbl .c-what{overflow-wrap:anywhere;white-space:normal}
+.ad-tbl .c-what ins,.ad-tbl .c-what del{display:inline;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+
+html body .ad-framefail{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;background:#fff;color:#191919}html body .ad-framefail[hidden]{display:none}html body .ad-framefail span{color:#626262;max-width:460px}html body .ad-framefail div{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* Phones: each change is a card instead of a sideways-scrolling table; filters and the per-person table fit the screen. */
+@media(max-width:700px){
+html body .ad-tw{overflow:visible;border:0;margin:6px 0 14px}
+html body .ad-tbl:not(.ad-ppl){display:block;width:100%;min-width:0;table-layout:auto}
+html body .ad-tbl:not(.ad-ppl) thead{display:none}
+html body .ad-tbl:not(.ad-ppl) tbody{display:block;border:1px solid rgba(128,128,128,.3);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:rgba(128,128,128,.04)}
+html body .ad-tbl:not(.ad-ppl) tr{display:grid;grid-template-columns:1fr auto;grid-template-areas:"page act" "by by" "sec sec" "what what";gap:2px 10px}
+html body .ad-tbl:not(.ad-ppl) tr+tr{border-top:1px dashed rgba(128,128,128,.35);margin-top:8px;padding-top:8px}
+html body .ad-tbl:not(.ad-ppl) td{display:block;border:0!important;padding:0!important;width:auto!important;min-width:0}
+html body .ad-tbl:not(.ad-ppl) .c-page{grid-area:page;font-size:15px}
+html body .ad-tbl:not(.ad-ppl) .c-act{grid-area:act;text-align:right}
+html body .ad-tbl:not(.ad-ppl) .c-by{grid-area:by;font-size:13px;opacity:.8;margin:0 0 6px;white-space:normal}
+html body .ad-tbl:not(.ad-ppl) .c-by b,html body .ad-tbl:not(.ad-ppl) .c-by small{display:inline;font-size:13px}
+html body .ad-tbl:not(.ad-ppl) .c-by small::before{content:" · "}
+html body .ad-tbl:not(.ad-ppl) .c-sec{grid-area:sec;font-size:13.5px}
+html body .ad-tbl:not(.ad-ppl) .c-what{grid-area:what;margin-top:3px;overflow-wrap:anywhere}
+html body .ad-tbl:not(.ad-ppl) td.ad-empty{padding:16px!important;text-align:center}
+html body .ad-ppl{min-width:0;table-layout:auto}
+html body .ad-ppl th,html body .ad-ppl td{padding:8px 6px;font-size:12.5px}
+html body .ad-ppl th{font-size:10.5px;letter-spacing:.02em}
+html body .ad-ppl th:nth-child(5),html body .ad-ppl td:nth-child(5){display:none}
+html body .ad-fbar{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+html body .ad-fbar label{min-width:0}
+html body .ad-fbar select{width:100%!important;max-width:100%}
+html body .ad-fbar button{grid-column:1/-1}
+html body .ad-snap-top{flex-wrap:wrap}
+html body.adm .ad-snap select{width:100%}
+html body .ad-tiles{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+html body .ad-ppl th{overflow-wrap:normal;word-break:normal;letter-spacing:0;font-size:10px;padding:8px 4px}
+html body .ad-ppl td{overflow-wrap:normal;word-break:normal;padding:8px 4px}
+html body .ad-ppl td:first-child,html body .ad-ppl th:first-child{padding-left:10px;width:34%}
+}
+/* Phones: give the page window the room. The size switch is not needed (it already shows the phone view) and the long hints are shortened. */
+@media(max-width:700px){
+html body #edModal #edSize{display:none!important}
+html body #edModal #edModalHint{display:none!important}
+html body #edModal .ad-for span{display:none}
+html body #edModal .ad-for{padding:8px 12px}
+html body #edModal .ad-top{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 0}
+html body #edModal .ad-top button{padding:11px 8px;font-size:14px;white-space:normal;min-height:44px;width:100%;margin:0}
+html body #edModal .ad-top #edModalSave{order:-2}
+html body #edModal .ad-top #edClose{order:-1}
+}
+
+/* Snapshot: tiles and people are clickable and open the changes behind the numbers */
+html body .ad-tile{font:inherit;color:inherit;text-align:left;background:#fff;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+html body .ad-tile:hover{border-color:#c8323c;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+html body .ad-tile:active{transform:translateY(1px)}
+html body .ad-tile[aria-pressed=true]{border-color:#c8323c;box-shadow:inset 0 0 0 1px #c8323c;background:#fff6f6}
+html body .ad-ppl tr.ad-click{cursor:pointer}html body .ad-ppl tr.ad-click:hover td{background:rgba(200,50,60,.06)}html body .ad-ppl tr.ad-click:focus-visible{outline:2px solid #c8323c;outline-offset:-2px}
+html body .ad-ppl.ad-flash{animation:adflash 1.2s ease}@keyframes adflash{0%,100%{box-shadow:none}30%{box-shadow:0 0 0 3px rgba(200,50,60,.45)}}
+html body .ad-snapdet{margin:4px 0 18px}
+html body .ad-snapdet-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 4px}
+html body .ad-snapdet-top h4{margin:0;font-size:16px;font-weight:700}
+html body .ad-snapdet-top button{font:inherit;font-size:13px;padding:6px 14px;border-radius:999px;border:1px solid rgba(128,128,128,.45);background:#fff;color:#1c1c1e;cursor:pointer}
+html body .ad-st{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.02em;padding:2px 8px;border-radius:999px;margin-left:8px;white-space:nowrap;vertical-align:1px}
+html body .ad-st-d{background:#fff0d6;color:#8a5200}
+html body .ad-st-l{background:#e3f6e8;color:#14532d}
+@media(max-width:700px){html body .ad-tbl:not(.ad-ppl) .c-by .ad-st{margin-left:6px}}
+@media(prefers-reduced-motion:reduce){html body .ad-ppl.ad-flash{animation:none}html body .ad-tile{transition:none}}
+
+/* Heading and line under each Media photo, inside the photo window */
+html body .ad-photoover .ad-row{flex-wrap:wrap}
+html body .ad-captxt{flex:1 1 100%;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+html body .ad-captxt label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600;opacity:.9}
+html body .ad-captxt input{font:inherit;font-size:14px;padding:9px 11px;border-radius:10px;border:1px solid rgba(128,128,128,.45);background:#fff;color:#15171a;width:100%;box-sizing:border-box}
+@media(max-width:700px){html body .ad-captxt{grid-template-columns:1fr}}
+html body .ad-photoover .ad-row.ad-pick{box-shadow:0 0 0 2px #c8323c;transition:box-shadow .3s}
+
+/* Photo changes: a small picture of the photo */
+html body .ad-thumb{display:block;width:96px;height:60px;object-fit:cover;border-radius:8px;margin-top:6px;border:1px solid rgba(128,128,128,.3)}
+html body .ad-tbl td small{display:block}
+
+/* Form view: the Media photos card */
+html body .ad-mcard{border:1px solid rgba(128,128,128,.3);border-radius:14px;padding:14px 16px;margin:0 0 16px;background:#fff}
+html body .ad-mcard .ad-h3{margin:0 0 4px}
+html body .ad-mrow{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:start;padding:10px 0;border-top:1px solid rgba(128,128,128,.2)}
+html body .ad-mrow img{width:120px;height:75px;object-fit:cover;border-radius:10px;border:1px solid rgba(128,128,128,.3)}
+html body .ad-mrow .ad-captxt{margin-top:0}
+@media(max-width:700px){html body .ad-mrow{grid-template-columns:1fr}html body .ad-mrow img{width:100%;max-width:240px;height:auto;aspect-ratio:8/5}}
+
+/* Form view: sections open on a tap, instead of one long list */
+html body .ad-accbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 10px;font-size:13.5px;color:#52525b}
+html body .ad-accbar button{font:inherit;font-size:13px;padding:6px 12px;margin-left:6px;border-radius:999px;border:1px solid rgba(128,128,128,.45);background:#fff;color:#1c1c1e;cursor:pointer}
+html body .ad-secgrp{list-style:none;margin:0 0 8px;padding:0}
+html body .ad-secgrp>details,html body .ad-mcard>details{border:1px solid rgba(128,128,128,.3);border-radius:12px;background:#fff;overflow:hidden}
+html body .ad-secgrp>details>summary,html body .ad-mcard>details>summary,html body .ad-more>details>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;cursor:pointer;list-style:none;font-size:15px}
+html body .ad-secgrp summary::-webkit-details-marker,html body .ad-mcard summary::-webkit-details-marker,html body .ad-more summary::-webkit-details-marker{display:none}
+html body .ad-secgrp>details>summary b,html body .ad-mcard>details>summary b{font-weight:600}
+html body .ad-secgrp>details>summary::after,html body .ad-mcard>details>summary::after{content:'';width:9px;height:9px;border-right:2px solid #6b6b73;border-bottom:2px solid #6b6b73;transform:rotate(45deg);margin:0 4px 3px 10px;flex:none;transition:transform .15s}
+html body .ad-secgrp>details[open]>summary::after,html body .ad-mcard>details[open]>summary::after{transform:rotate(-135deg);margin-bottom:-3px}
+html body .ad-secgrp>details>summary:hover,html body .ad-mcard>details>summary:hover{background:rgba(200,50,60,.05)}
+html body .ad-sc{margin-left:auto;font-size:12.5px;color:#6b6b73;white-space:nowrap}
+html body .ad-secgrp>details>ul{padding:2px 16px 14px;margin:0;border-top:1px solid rgba(128,128,128,.2)}
+html body .ad-more{list-style:none;margin:10px 0 0;padding:0}
+html body .ad-more>details{border:1px dashed rgba(128,128,128,.4);border-radius:10px}
+html body .ad-more>details>summary{font-size:13.5px;color:#52525b;padding:10px 12px}
+html body .ad-more>details>ul{padding:0 12px 10px;margin:0}
+html body .ad-mcard{padding:0;border:0;background:transparent;margin-bottom:8px}
+html body .ad-mcard>details>*:not(summary){margin-left:16px;margin-right:16px}
+html body .ad-mcard>details>.ad-mrow:last-child{margin-bottom:12px}
+html body .ad-mcard>details>summary+.ad-help{margin-top:6px}
+@media(prefers-reduced-motion:reduce){html body .ad-secgrp>details>summary::after,html body .ad-mcard>details>summary::after{transition:none}}
+
+/* The Add something box is folded until it is needed */
+html body .ad-add{padding:0;overflow:hidden}
+html body .ad-add>h3{margin:0;padding:13px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:15px}
+html body .ad-add>h3::after{content:'';width:9px;height:9px;border-right:2px solid #6b6b73;border-bottom:2px solid #6b6b73;transform:rotate(45deg);margin:0 4px 3px 10px;transition:transform .15s}
+html body .ad-add.ad-open>h3::after{transform:rotate(-135deg);margin-bottom:-3px}
+html body .ad-add>*:not(h3){display:none}
+html body .ad-add.ad-open>*:not(h3){display:revert;margin-left:16px;margin-right:16px}
+html body .ad-add.ad-open>*:last-child{margin-bottom:16px}
+html body .ad-add>h3:hover{background:rgba(200,50,60,.05)}
+html body .ad-more>details>summary i{font-style:normal;color:#52525b}
+html body .ad-more>details>summary{flex-wrap:wrap;justify-content:flex-start;gap:4px 6px}
+
+/* Jump to a section */
+html body .ad-accrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+html body .ad-jump{display:flex;gap:8px;margin:10px 0 2px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+html body .ad-jump button{flex:0 0 auto;font:inherit;font-size:13px;padding:7px 14px;margin:0;border-radius:999px;border:1px solid rgba(128,128,128,.45);background:#fff;color:#1c1c1e;cursor:pointer;white-space:nowrap}
+html body .ad-jump button:hover{border-color:#c8323c;color:#c8323c}
+html body .ad-jump button[aria-current=true]{border-color:#c8323c;background:#fff6f6;color:#c8323c}
+html body .ad-secgrp,html body .ad-mcard{scroll-margin-top:84px}
+
+/* One card per item (a service, a step, a question): its heading and write-up together */
+html body .ad-itemcard{list-style:none;margin:8px 0 0;padding:0}
+html body .ad-itemcard>details{border:1px solid rgba(128,128,128,.35);border-radius:12px;background:#fafafa;overflow:hidden}
+html body .ad-itemcard>details>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px 10px 14px;cursor:pointer;list-style:none}
+html body .ad-itemcard>details>summary::-webkit-details-marker{display:none}
+html body .ad-itemcard>details>summary:hover{background:rgba(200,50,60,.05)}
+html body .ad-itemcard .ad-it{display:flex;flex-direction:column;min-width:0}
+html body .ad-itemcard .ad-it b{font-weight:600;font-size:14.5px;overflow-wrap:anywhere}
+html body .ad-itemcard .ad-it small{font-size:12px;color:#6b6b73}
+html body .ad-itemcard>details>summary .ad-btns{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+html body .ad-itemcard>details>summary .ad-btns button{padding:5px 10px;font-size:12.5px}
+html body .ad-itemcard>details>ul{padding:2px 14px 12px;margin:0;border-top:1px solid rgba(128,128,128,.2);background:#fff}
+@media(max-width:700px){html body .ad-itemcard>details>summary{flex-direction:column;align-items:stretch}html body .ad-itemcard>details>summary .ad-btns{justify-content:flex-start}}
+@media(max-width:700px){html body .ad-itemcard>details:not([open])>summary .ad-btns{display:none}}
+
+/* List entries (bullet points) are plain boxes with small controls, inside their card */
+html body .ad-point>label{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+html body .ad-pbtns{display:inline-flex;gap:4px}
+html body .ad-pbtns button{font:inherit;font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid rgba(128,128,128,.4);background:#fff;color:#1c1c1e;cursor:pointer}
+html body .ad-pbtns button.ad-rm{color:#a82a2a;border-color:rgba(200,50,60,.4)}
+html body .ad-pbtns button:disabled{opacity:.4;cursor:default}
+
+/* Snapshot: tidy tiles and the per-person table on a laptop */
+html body .ad-tiles{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+html body .ad-tile{min-height:92px;justify-content:space-between;padding:12px 14px}
+html body .ad-tile b{font-size:30px}
+html body .ad-tile span{line-height:1.25}
+html body .ad-ppl{table-layout:auto;width:100%;min-width:0}
+html body .ad-ppl th{white-space:nowrap;letter-spacing:.03em;overflow-wrap:normal;word-break:normal}
+html body .ad-ppl th:nth-child(2),html body .ad-ppl td:nth-child(2),html body .ad-ppl th:nth-child(3),html body .ad-ppl td:nth-child(3){text-align:center;width:1%;padding-left:16px;padding-right:16px;white-space:nowrap}
+html body .ad-ppl td:nth-child(1){white-space:normal;width:22%}
+html body .ad-ppl th:nth-child(5),html body .ad-ppl td:nth-child(5){text-align:right;white-space:nowrap;width:1%}
+@media(max-width:1000px){html body .ad-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){html body .ad-tiles{grid-template-columns:1fr 1fr}html body .ad-tile{min-height:80px}html body .ad-ppl th:nth-child(5),html body .ad-ppl td:nth-child(5){display:none}}
+
+/* Publish right where the unpublished changes are listed */
+html body .ad-snapdet-btns{display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+html body #chDraftPub{margin:0 0 8px}
+
+/* Changes: one timeline, grouped by day */
+html body .ad-timebar{margin:0 0 8px}
+html body .ad-timebar button{margin:0}
+html body #chTime tbody.ad-dayh{display:table-row-group}
+html body #chTime tbody.ad-dayh th{background:#f4f4f5;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#52525b;padding:9px 12px;text-align:left;border-bottom:1px solid rgba(128,128,128,.25)}
+html body #chTime tbody.ad-dayh .ad-dc{font-weight:400;letter-spacing:0;text-transform:none;margin-left:8px;color:#6b6b73}
+@media(max-width:700px){
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh{display:block;border:0;background:transparent;padding:0;margin:16px 0 8px;border-radius:0}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh tr{display:block;margin:0;padding:0;border:0}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh th{display:block;background:transparent;border:0!important;padding:0!important;font-size:13px}
+}
+html body.adm .ad-timebar button.ad-ap{min-height:44px;padding:0 20px;border-radius:99px;background:#12201b;color:#fff;border:0;font:inherit;font-weight:700;cursor:pointer;margin:6px 0 12px}
+html body.adm .ad-timebar button.ad-ap[hidden]{display:none}
+@media(max-width:700px){
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh,html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh tr,html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh th{display:block;width:100%;box-sizing:border-box;white-space:normal;writing-mode:horizontal-tb}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh th{text-transform:uppercase;letter-spacing:.05em;color:#52525b}
+}
+html body .ad-fbar{grid-template-columns:repeat(3,minmax(0,1fr)) auto;align-items:end;gap:12px 14px}
+html body .ad-fbar button{grid-column:auto;white-space:nowrap;min-height:40px;margin:0}
+html body .ad-fbar select{width:100%!important;box-sizing:border-box}
+@media(max-width:700px){html body .ad-fbar{grid-template-columns:1fr 1fr}html body .ad-fbar button{grid-column:1/-1}}
+html body .ad-tbl td.c-by{padding-right:18px}
+
+html body .ad-frameload{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;background:#fff;color:#191919;font-size:15px}
+html body .ad-frameload[hidden]{display:none}
+html body .ad-frameload b{font-size:17px}html body .ad-frameload span{opacity:.7}
+html body .ad-frameload i{width:30px;height:30px;border-radius:50%;border:3px solid #ddd;border-top-color:#c0292d;animation:adspin .8s linear infinite}
+@keyframes adspin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){html body .ad-frameload i{animation-duration:3s}}
+html body .ad-timing{font-size:12px;color:#6b6b73;padding:6px 4px 0;text-align:right;min-height:18px}html body .ad-timing:empty{display:none}
+/* File buttons ("Change picture"): label centred, full-width and 44px tall, lined up along the bottom of each picture card */
+html body .ad-filebtn{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:44px;line-height:1.2;text-align:center;font-weight:600}
+html body.adm .pb-item .ad-filebtn{display:flex;width:100%;margin-top:auto}
+html body.adm .pb-item .pb-dims{margin:0}
+
+/* Pictures on each page: one fold per page name */
+html body.adm .pb-pages{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+html body.adm .pb-page{border:1px solid #e4e4e7;border-radius:14px;background:#fff;overflow:hidden}
+html body.adm .pb-page>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:52px;padding:0 16px;cursor:pointer;list-style:none;font-size:16px}
+html body.adm .pb-page>summary::-webkit-details-marker{display:none}
+html body.adm .pb-page>summary::after{content:'\25BE';margin-left:8px;opacity:.6}
+html body.adm .pb-page[open]>summary::after{transform:rotate(180deg)}
+html body.adm .pb-page>summary span{margin-left:auto;font-size:13px;opacity:.7}
+html body.adm .pb-page[data-none]>summary{cursor:default;opacity:.65}html body.adm .pb-page[data-none]>summary::after{content:''}
+html body.adm .pb-page>.pb-grid{padding:4px 12px 14px;border-top:1px solid #eee}
+
+/* Changes: two clearly different parts, Saved not published and Published */
+html body #chTime tbody.ad-sect{display:table-row-group}
+html body #chTime tbody.ad-sect th{padding:14px 16px;text-align:left;font-weight:400;border-top:0;border-bottom:1px solid rgba(128,128,128,.25)}
+html body #chTime tbody.ad-sect th b{font-size:19px;letter-spacing:0;text-transform:none;color:inherit}
+html body #chTime tbody.ad-sect .ad-sc{margin-left:10px;padding:2px 10px;border-radius:99px;background:rgba(255,255,255,.7);font-size:13px;font-weight:700}
+html body #chTime tbody.ad-sect small{display:block;margin-top:4px;font-size:13.5px;font-weight:400;opacity:.85}
+html body #chTime tbody.ad-sect-wait th{background:#fff1cf;color:#6a4700;box-shadow:inset 6px 0 0 #e0a100}
+html body #chTime tbody.ad-sect-pub th{background:#e3f3e8;color:#1b5a31;box-shadow:inset 6px 0 0 #2f8f4e}
+html body #chTime tbody.ad-dayh th{padding-left:16px}
+@media(max-width:700px){
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect{display:block;border:0;background:transparent;padding:0;margin:22px 0 10px;border-radius:12px;overflow:hidden}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect tr,html body .ad-tbl:not(.ad-ppl) tbody.ad-sect th{display:block;width:100%;box-sizing:border-box;white-space:normal}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect:first-of-type{margin-top:8px}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect th{border:0!important;padding:14px 16px!important}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect th b{font-size:20px}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh th{padding:0 4px!important;margin-top:8px}
+}
+html body #chTime tbody.ad-sect small,html body #chTime tbody.ad-sect .ad-sc,html body .ad-tbl tbody.ad-sect small{text-transform:none;letter-spacing:0}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect{width:100%;box-sizing:border-box}
+/* Changes headings: a clean yellow band for Saved, not published and a green band for Published */
+html body #chTime tbody.ad-sect-wait th{background:#ffd93d;color:#2b2200;box-shadow:none}
+html body #chTime tbody.ad-sect-pub th{background:#2e9e5b;color:#fff;box-shadow:none}
+html body #chTime tbody.ad-sect-wait .ad-sc{background:#fff;color:#2b2200}
+html body #chTime tbody.ad-sect-pub .ad-sc{background:#fff;color:#1b6b3a}
+html body #chTime tbody.ad-sect th b{font-size:18px;font-weight:700}
+html body #chTime tbody.ad-sect small{opacity:.9;font-size:13px}
+html body #chTime tbody.ad-sect th{border-radius:0}
+html body #chTime tbody.ad-dayh th{background:#f4f4f5;color:#3f3f46}
+@media(max-width:700px){
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect-wait th{background:#ffd93d!important;color:#2b2200}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect-pub th{background:#2e9e5b!important;color:#fff}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect{border-radius:14px}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-sect th b{font-size:18px}
+html body .ad-tbl:not(.ad-ppl) tbody.ad-dayh th{background:transparent!important;color:#52525b}
+}
+html body .ad-tbl tbody.ad-sect th{opacity:1}
+html body #chTime tbody.ad-sect-wait th{background:#ffd21f}
+html body #chTime tbody.ad-sect-pub th{background:#1f8a4c}
+@media(max-width:700px){html body .ad-tbl:not(.ad-ppl) tbody.ad-sect-wait th{background:#ffd21f!important}html body .ad-tbl:not(.ad-ppl) tbody.ad-sect-pub th{background:#1f8a4c!important}}
+@media(max-width:700px){
+html body #chTime tbody.ad-sect,html body #chTime tbody.ad-dayh{display:block;width:100%;box-sizing:border-box}
+html body #chTime tbody.ad-sect tr,html body #chTime tbody.ad-dayh tr,html body #chTime tbody.ad-sect th,html body #chTime tbody.ad-dayh th{display:block;width:100%;box-sizing:border-box}
+}
+
+/* Band layout: title on the left, count on the right, one line of explanation underneath (same for both bands) */
+html body #chTime tbody.ad-sect .ad-sh{display:flex;align-items:center;justify-content:space-between;gap:12px}
+html body #chTime tbody.ad-sect .ad-sh b{flex:1 1 auto;min-width:0;line-height:1.25}
+html body #chTime tbody.ad-sect .ad-sc{flex:0 0 auto;margin:0;line-height:1.4;padding:3px 12px;white-space:nowrap}
+html body #chTime tbody.ad-sect small{display:block;margin-top:6px;line-height:1.4;white-space:normal}
+/* Saved, not published band: amber */
+html body #chTime tbody.ad-sect-wait th{background:#ffb000;color:#2b1a00}
+html body #chTime tbody.ad-sect-wait .ad-sc{background:#fff;color:#7a4a00}
+@media(max-width:700px){html body .ad-tbl:not(.ad-ppl) tbody.ad-sect-wait th{background:#ffb000!important;color:#2b1a00}}
+/* Saved, not published band: light orange */
+html body #chTime tbody.ad-sect-wait th{background:#ffb65c;color:#2e1800}
+html body #chTime tbody.ad-sect-wait .ad-sc{background:#fff;color:#8a4300}
+@media(max-width:700px){html body .ad-tbl:not(.ad-ppl) tbody.ad-sect-wait th{background:#ffb65c!important;color:#2e1800}}
+
+/* The homepage carousel sits inside the Homepage entry of Pictures on each page */
+html body.adm .pb-carslot{padding:4px 12px 14px;border-top:1px solid #eee}
+html body.adm .pb-carslot .ad-card{box-shadow:none;border:1px solid #e4e4e7;margin:12px 0 0;border-radius:14px}
+html body.adm .pb-carslot .pb-carnote{margin:12px 2px 0;font-size:14px}
+html body.adm .pb-page[data-path="index.html"]>.pb-grid{padding-top:0;border-top:0}
+html body.adm .pb-carslot .pb-carnote,html body.adm #carHead{background:transparent;border:0;padding:0}
+
+/* New-version notice */
+html body .ad-newver{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2147483000;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;max-width:calc(100% - 24px);background:#191919;color:#fff;border-radius:18px;padding:10px 14px;box-shadow:0 8px 28px rgba(0,0,0,.35);font-size:14px;line-height:1.35}
+html body .ad-newver[hidden]{display:none}
+html body .ad-newver button{min-height:40px;border-radius:999px;border:0;padding:0 16px;font:inherit;font-weight:700;cursor:pointer;background:#fff;color:#191919}
+html body .ad-newver button.ad-ap{background:#e8434a;color:#fff}
+
+/* Editor problem log (Home screen) */
+html body .dg-card h2{display:flex;align-items:center;gap:10px}
+html body .dg-n{font-size:13px;font-weight:700;background:#fde8e8;color:#9b1c1c;border-radius:99px;padding:2px 10px}
+html body .dg-list{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+html body .dg-list li{border:1px solid #e4e4e7;border-radius:12px;padding:10px 12px;background:#fff}
+html body .dg-list li>b{display:block;font-size:15px}
+html body .dg-list li>span{display:block;font-size:13px;opacity:.75;margin-top:2px}
+html body .dg-list details{margin-top:6px}html body .dg-list summary{cursor:pointer;font-size:13px;font-weight:600}
+html body .dg-list small{display:block;margin-top:6px;font-size:12px;line-height:1.5;word-break:break-word;opacity:.85}
+
+/* Tips and the form shortcut */
+html body .ad-tips{margin-top:14px;border:1px solid #e4e4e7;border-radius:12px;padding:10px 14px;background:#fff}
+html body .ad-tips summary{cursor:pointer;font-weight:700}
+html body .ad-tips ul{margin:10px 0 2px 18px;padding:0;line-height:1.55;font-size:14px}
+html body .ad-tip{font-size:13px;color:#7a4a00;background:#fff4dc;border-radius:10px;padding:8px 12px;margin:0 0 8px}
+html body .ad-tip[hidden]{display:none}
+html body .ad-linkbtn{background:none!important;border:0!important;text-decoration:underline;font-size:13px;opacity:.8;min-height:32px!important}
