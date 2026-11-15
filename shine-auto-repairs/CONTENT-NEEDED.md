@@ -13,6 +13,6 @@
 | What "Quality work guaranteed" covers (period or kilometres), if they want it spelled out | Under the services list |
 | 2 Google reviews to quote, with permission (reviewers mention honest pricing and no upselling) | `assets/content.js` testimonials |
 | ABN | Footer |
-| Photos of the workshop, the team (Balli) and the sign out front | Hero or a new section |
+| Real photos of the workshop, the team (Balli) and the sign out front, to replace the AI illustrations | Hero, services showcase (`assets/img/`), then remove the "AI illustration" labels |
 | Domain name | canonical, og:url, sitemap.xml, robots.txt |
 | Re-check the fees each 1 July (NSW updates them yearly) | Fees panel, FAQ, JSON-LD |

@@ -61,8 +61,12 @@
     var slides = $$(".slide", show), bars = $$(".bar", show), count = show.querySelector(".count"), tog = show.querySelector(".tog"), stage = show.querySelector(".stage");
     var cur = 0, userPaused = reduce;
     function pad(i) { return (i < 9 ? "0" : "") + (i + 1); }
+    function load(k) {
+      var im = slides[(k + slides.length) % slides.length].querySelector("img[data-src]");
+      if (im) { im.srcset = im.dataset.srcset; im.src = im.dataset.src; im.removeAttribute("data-src"); }
+    }
     function go(i) {
-      cur = (i + slides.length) % slides.length;
+      cur = (i + slides.length) % slides.length; load(cur); load(cur + 1);
       slides.forEach(function (s, k) { s.classList.toggle("on", k === cur); s.setAttribute("aria-hidden", String(k !== cur)); s.inert = k !== cur; });
       bars.forEach(function (b, k) {
         b.setAttribute("aria-current", String(k === cur)); b.classList.toggle("done", k < cur);
@@ -123,6 +127,21 @@
       item.classList.toggle("open", o); b.setAttribute("aria-expanded", String(o));
     });
   });
+
+  // a light that follows the pointer across metal plates (laptops only, never on touch or reduced motion)
+  if (!reduce && matchMedia("(pointer: fine)").matches) {
+    var pending = null;
+    document.addEventListener("pointermove", function (e) {
+      var el = e.target.closest && e.target.closest(".lit"); if (!el) return;
+      pending = [el, e.clientX, e.clientY];
+      if (pending.raf) return;
+      requestAnimationFrame(function () {
+        var p = pending; if (!p) return; pending = null;
+        var r = p[0].getBoundingClientRect();
+        p[0].style.setProperty("--mx", (p[1] - r.left) + "px"); p[0].style.setProperty("--my", (p[2] - r.top) + "px");
+      });
+    }, { passive: true });
+  }
 
   // map loads only when asked
   var mb = document.getElementById("map-btn");

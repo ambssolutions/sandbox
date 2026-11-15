@@ -22,7 +22,8 @@ Built by AMBS Solutions. Follow the **ambs-website-design** skill (and **website
 - Footer credit: "Proudly designed by AMBS Solutions".
 
 ## This site
-- Design idea: "the inspection bay". Night charcoal and paper, the business card's orange (#f39a36) and red car (#d9342b). Square corners, hairlines, no pills or shadows. Signature: the car draws itself and an inspection light sweeps across it in the hero. Details in BRIEF.md.
+- Design idea: "pressed metal". Embossed orange keys, brushed-steel plates with rivets, stamped numbers, keys that press in. The client asked for embossed, high-detail and unique. Signature: the 3D "Walk around a pink slip" bay. Details in BRIEF.md.
+- Photos are AI illustrations, labelled on the page. Swap for real photos when supplied.
 - NSW fees and rules are sourced from nsw.gov.au and dated. Re-check every 1 July.
 - Stack: static HTML, CSS and JS, no build step. Preview with `python3 -m http.server` in this folder.
 - Content lives in: `assets/content.js` (business facts, hours, reviews). Hours also appear in `index.html` (JSON-LD, the week strip, the hours table and the FAQ): change all together.

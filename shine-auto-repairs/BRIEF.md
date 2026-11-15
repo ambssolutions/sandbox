@@ -34,5 +34,12 @@ Locals in Liverpool, Warwick Farm and nearby suburbs, mostly on phones, who need
 - Live open or closed status, one phone number per action, no stock photos, no doorway pages.
 
 ## Design
-"The inspection bay." Night charcoal with paper-white sections, the card's orange and red, square corners and hairlines. Archivo (condensed) for headings, IBM Plex Sans for text, both self-hosted.
-Signature motion: the red car draws itself in the hero and an inspection light sweeps across it, lighting up the pink slip check points. Then a story-bar services showcase with seven animated scenes, sticky stacked job cards, the slip helper, slow folds in the FAQ and the live week strip.
+"Pressed metal." Every surface is embossed or stamped like a compliance plate: raised orange keys (the card's orange), brushed-steel plates with rivets, stamped numbers, and keys that press in when chosen. Night-shift charcoal and light steel. Archivo (condensed) and IBM Plex Sans, both self-hosted.
+Signature pieces:
+- Hero: a photoreal AI illustration of a night workshop, a chrome headline with a raking light sweep, and the week as embossed keys with today pressed in.
+- "Walk around a pink slip": a real-time 3D car (three.js, self-hosted, loaded only near the section) with tappable check points and an inspection light gate.
+- A light that follows the pointer across metal plates (laptops only).
+- Services showcase with story bars and an AI photo per service, the slip helper as pressable keys, sticky stacked steel plates, FAQ rows that press in as they open.
+
+## Images
+All photos are AI-generated illustrations (Figma image generation, 15 November 2026), labelled "AI illustration" on each image and in the footer. Replace with real workshop photos when the client supplies them. Source file: Figma "Shine Auto Repairs – website imagery".
