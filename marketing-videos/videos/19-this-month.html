@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — what Manjinder built this month (BUILD)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* Portfolio reel: dark gallery wall, real site screenshots scrolling inside phones, annotation labels.
+     No shared chrome. Screenshots are real pages from the projects' own code. */
+  @font-face { font-family: "Bricolage Grotesque"; src: url("../assets/bricolage-grotesque-latin.woff2") format("woff2"); font-weight: 500 800; }
+  @font-face { font-family: "Instrument Sans"; src: url("../assets/instrument-sans-latin.woff2") format("woff2"); font-weight: 400 700; }
+  @font-face { font-family: "Noto Sans Devanagari"; src: url("../assets/NotoSansDevanagari-Bold.ttf"); font-weight: 700; }
+  @font-face { font-family: "Noto Sans Gurmukhi"; src: url("../assets/NotoSansGurmukhi-Bold.ttf"); font-weight: 700; }
+  .progress, .brand, .caption, .end { display: none !important; }
+  #frame { color: #f3efe6; font-family: "Instrument Sans", Inter, "Noto Sans Devanagari", "Noto Sans Gurmukhi", sans-serif, var(--emoji);
+    background: radial-gradient(55% 40% at 50% 38%, #3a3328, transparent 75%), #121110; }
+  #frame::before { display: none; }
+  .hd { font-family: "Bricolage Grotesque", Inter, sans-serif; font-weight: 800; letter-spacing: -.03em; }
+  .sc { position: absolute; inset: 0; display: none; }
+
+  .ph { position: absolute; width: 250px; height: 520px; border-radius: 40px; background: #050505; padding: 9px; box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1.5px #3a3a3a; }
+  .ph .s { position: relative; width: 100%; height: 100%; border-radius: 32px; overflow: hidden; background: #fff; }
+  .ph .s img { position: absolute; left: 0; top: 0; width: 100%; }
+  .ph .s::after { content: ""; position: absolute; left: 50%; top: 8px; width: 74px; height: 20px; margin-left: -37px; border-radius: 12px; background: #000; }
+
+  .kick { position: absolute; left: 26px; top: 92px; font-size: 13px; font-weight: 700; letter-spacing: .22em; color: #e8b86a; }
+  .name { position: absolute; left: 26px; right: 26px; top: 114px; font-size: 36px; line-height: 1.02; }
+  .name small { display: block; margin-top: 6px; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 16px; letter-spacing: 0; color: #c9bfae; }
+  .lbl { position: absolute; display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 14px; background: #f3efe6; color: #121110; font-size: 16px; font-weight: 700;
+    box-shadow: 0 14px 30px rgba(0,0,0,.45); white-space: nowrap; }
+  .lbl .e { font-size: 20px; }
+  .lbl::before { content: ""; position: absolute; width: 26px; height: 2px; background: #e8b86a; top: 50%; }
+  .lbl.r::before { left: -26px; } .lbl.l::before { right: -26px; }
+
+  /* intro */
+  #intro .t { position: absolute; left: 26px; right: 26px; top: 120px; font-size: 54px; line-height: .98; }
+  #intro .t em { font-style: normal; color: #e8b86a; }
+  #intro .by { position: absolute; left: 26px; top: 300px; font-size: 18px; font-weight: 600; color: #c9bfae; }
+
+  /* referral */
+  #ref { background: #e8b86a; color: #121110; }
+  #ref .t { position: absolute; left: 26px; right: 26px; top: 120px; font-size: 22px; font-weight: 700; letter-spacing: .2em; }
+  .card { position: absolute; left: 26px; right: 26px; border-radius: 26px; background: #121110; color: #f3efe6; padding: 22px 24px; }
+  .card .p { font-size: 92px; line-height: .9; color: #e8b86a; }
+  .card b { display: block; margin-top: 8px; font-size: 24px; } .card span { display: block; margin-top: 4px; font-size: 16px; color: #c9bfae; font-weight: 600; }
+  #r1 { top: 170px; } #r2 { top: 400px; }
+
+  /* end */
+  #fin { background: #121110; }
+  #fin .q { position: absolute; left: 26px; right: 26px; top: 150px; text-align: center; font-size: 46px; line-height: 1.02; }
+  #fin .c { position: absolute; left: 0; right: 0; top: 300px; text-align: center; font-size: 22px; font-weight: 700; letter-spacing: .22em; color: #e8b86a; }
+  #fin .k { position: absolute; left: 0; right: 0; margin: 0 auto; width: fit-content; top: 336px; padding: 10px 30px 16px; border-radius: 24px; background: #e8b86a; color: #121110; font-size: 96px; box-shadow: 0 10px 0 #a47a33; }
+  #fin .ar { position: absolute; left: 0; right: 0; top: 500px; text-align: center; font-size: 60px; }
+  #fin .lg { position: absolute; left: 50%; top: 610px; width: 200px; margin-left: -100px; padding: 10px 16px; border-radius: 20px; background: #fff; }
+  #fin .w { position: absolute; left: 0; right: 0; top: 700px; text-align: center; font-size: 18px; font-weight: 700; color: #c9bfae; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div class="sc" id="intro">
+    <div class="hd t">What we built<br>this <em>month</em> 🛠️</div>
+    <div class="by">by Manjinder at AMBS Solutions</div>
+    <div class="ph" id="i1" style="left:16px;top:360px;rotate:-10deg"><div class="s"><img src="img/work-mikia.jpg" alt=""></div></div>
+    <div class="ph" id="i3" style="left:274px;top:360px;rotate:10deg"><div class="s"><img src="img/work-heat.jpg" alt=""></div></div>
+    <div class="ph" id="i2" style="left:145px;top:330px"><div class="s"><img src="img/work-dental.jpg" alt=""></div></div>
+  </div>
+
+  <div class="sc" id="s1">
+    <div class="kick">PROJECT 01</div><div class="hd name">MiKia<small>Land development consultancy · Auckland</small></div>
+    <div class="ph" id="p1" style="left:20px;top:210px"><div class="s"><img id="m1" src="img/work-mikia.jpg" alt=""></div></div>
+    <div class="lbl r" id="l1a" style="left:300px;top:270px"><span class="e emoji">🏗️</span>3D build<br>timeline</div>
+    <div class="lbl r" id="l1b" style="left:300px;top:390px"><span class="e emoji">✏️</span>Design your<br>own house</div>
+    <div class="lbl r" id="l1c" style="left:300px;top:510px"><span class="e emoji">📸</span>Photos &amp;<br>reviews admin</div>
+  </div>
+
+  <div class="sc" id="s2">
+    <div class="kick">PROJECT 02</div><div class="hd name">Chandigarh Dental<small>Multispeciality dental clinic · Punjab</small></div>
+    <div class="ph" id="p2" style="left:270px;top:210px"><div class="s"><img id="m2" src="img/work-dental.jpg" alt=""></div></div>
+    <div class="lbl l" id="l2a" style="right:300px;top:250px"><span class="e emoji">🟢</span>Live open /<br>closed status</div>
+    <div class="lbl l" id="l2b" style="right:300px;top:360px"><span class="e emoji">🗣️</span>EN · हिं · ਪੰ</div>
+    <div class="lbl l" id="l2c" style="right:300px;top:450px"><span class="e emoji">💬</span>WhatsApp<br>booking</div>
+    <div class="lbl l" id="l2d" style="right:300px;top:560px"><span class="e emoji">🦷</span>Find-your-<br>tooth chart</div>
+  </div>
+
+  <div class="sc" id="s3">
+    <div class="kick">FOR NEW CLIENTS</div><div class="hd name">Pick your favourite design<small>5 to 12 working homepage concepts per business</small></div>
+    <div class="ph" id="c1" style="left:14px;top:250px;rotate:-5deg"><div class="s"><img id="cm1" src="img/work-heat.jpg" alt=""></div></div>
+    <div class="ph" id="c2" style="left:276px;top:250px;rotate:5deg"><div class="s"><img id="cm2" src="img/work-tax.jpg" alt=""></div></div>
+    <div class="lbl" id="c3" style="left:50%;top:640px;transform:translateX(-50%)"><span class="e emoji">❤️</span>Heat pumps: 5 · Tax advisers: 12 · Wardrobes: 6</div>
+  </div>
+
+  <div class="sc" id="s4">
+    <div class="kick">ON AMBS.CO.NZ</div><div class="hd name">Our own site got an upgrade<small>ambs.co.nz</small></div>
+    <div class="ph" id="p4" style="left:20px;top:210px"><div class="s"><img id="m4" src="img/work-ambs.jpg" alt=""></div></div>
+    <div class="lbl r" id="l4a" style="left:300px;top:290px"><span class="e emoji">⚡</span>Faster pages</div>
+    <div class="lbl r" id="l4b" style="left:300px;top:390px"><span class="e emoji">🌦️</span>Live-weather<br>homepage</div>
+    <div class="lbl r" id="l4c" style="left:300px;top:510px"><span class="e emoji">🔎</span>Bing told about<br>every update</div>
+  </div>
+
+  <div class="sc" id="ref"><div class="t">A LITTLE REMINDER</div>
+    <div class="card" id="r1"><div class="hd p">10%</div><b>Refer a business</b><span>You get 10% when they come on board</span></div>
+    <div class="card" id="r2"><div class="hd p">10%</div><b>Bring your own business</b><span>10% off your project</span></div>
+  </div>
+
+  <div class="sc" id="fin"><div class="hd q">Want something like this?</div><div class="c">COMMENT</div><div class="hd k">BUILD</div><div class="ar emoji">👇</div>
+    <img class="lg" src="../assets/ambs-logo.png" alt="AMBS"><div class="w">ambs.co.nz · 022 099 9578</div></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, $$, vis, p, ease } = E;
+const SC = [["#intro", 0, 3.4], ["#s1", 3.4, 10.2], ["#s2", 10.2, 16.6], ["#s3", 16.6, 20.6], ["#s4", 20.6, 23.4], ["#ref", 23.4, 28.2], ["#fin", 28.2, 31.6]];
+// scroll a screenshot inside its phone between two times (fraction of the image's scrollable height)
+const scroll = (img, t, a, b, to = 1) => { const el = $(img); const H = el.offsetHeight - el.parentElement.offsetHeight; el.style.transform = `translateY(${-H * to * p(t, a, b, ease.inOut)}px)`; };
+window.COVER_AT = 6.0;
+
+E.setup({
+  duration: 31.5,
+  keyword: "BUILD",
+  narrator: "bm_george+nz",
+  voice: [
+    { a: 0.2, b: 3.3, text: "Here's what Manjinder built this month." },
+    { a: 3.5, b: 10.0, text: "Mi Kia, an Auckland land developer. A 3D build timeline, and a design your own house tool." },
+    { a: 10.3, b: 16.4, text: "A dental clinic. Live open or closed status, three languages, and WhatsApp booking." },
+    { a: 16.7, b: 20.4, text: "New clients pick from up to twelve homepage designs." },
+    { a: 20.7, b: 23.2, text: "And our own site? Faster, with live weather." },
+    { a: 23.5, b: 28.0, text: "Refer a business and get ten percent. Bring your own, and get ten percent off." },
+    { a: 28.4, b: 31.1, text: "Want yours? Comment, build." },
+  ],
+  captions: [], phases: [],
+  end: { at: 99, title: "", sub: "" },
+});
+
+E.use((t) => {
+  SC.forEach(([s, a, b]) => { $(s).style.display = t >= a && t < b ? "block" : "none"; });
+  // intro
+  vis("#intro .t", t, 0.1, null, { y: 20 }); vis("#intro .by", t, 0.8, null, { y: 10 });
+  ["#i1", "#i3", "#i2"].forEach((s, i) => vis(s, t, 0.4 + i * 0.25, null, { y: 160, dur: 0.5, ease: ease.out }));
+  // project 1
+  vis("#s1 .kick", t, 3.5, null, { y: 0 }); vis("#s1 .name", t, 3.6, null, { y: 16 });
+  vis("#p1", t, 3.6, null, { x: -80, y: 0, dur: 0.45, ease: ease.out }); scroll("#m1", t, 4.2, 9.8, 0.85);
+  ["#l1a", "#l1b", "#l1c"].forEach((s, i) => vis(s, t, 5.0 + i * 1.3, null, { x: 30, y: 0 }));
+  // project 2
+  vis("#s2 .kick", t, 10.3, null, { y: 0 }); vis("#s2 .name", t, 10.4, null, { y: 16 });
+  vis("#p2", t, 10.4, null, { x: 80, y: 0, dur: 0.45, ease: ease.out }); scroll("#m2", t, 11.0, 16.3, 0.8);
+  ["#l2a", "#l2b", "#l2c", "#l2d"].forEach((s, i) => vis(s, t, 11.4 + i * 1.1, null, { x: -30, y: 0 }));
+  // concepts
+  vis("#s3 .kick", t, 16.7, null, { y: 0 }); vis("#s3 .name", t, 16.8, null, { y: 16 });
+  vis("#c1", t, 16.9, null, { y: 120, dur: 0.45, ease: ease.out }); vis("#c2", t, 17.1, null, { y: 120, dur: 0.45, ease: ease.out });
+  scroll("#cm1", t, 17.3, 20.4, 0.6); scroll("#cm2", t, 17.3, 20.4, 0.5);
+  const c3 = $("#c3"); vis(c3, t, 18.2, null, { y: 14 }); c3.style.transform += " translateX(-50%)";
+  // own site
+  vis("#s4 .kick", t, 20.7, null, { y: 0 }); vis("#s4 .name", t, 20.8, null, { y: 16 });
+  vis("#p4", t, 20.8, null, { x: -80, y: 0, dur: 0.4, ease: ease.out }); scroll("#m4", t, 21.2, 23.3, 0.35);
+  ["#l4a", "#l4b", "#l4c"].forEach((s, i) => vis(s, t, 21.2 + i * 0.55, null, { x: 30, y: 0 }));
+  // referral
+  vis("#ref .t", t, 23.5, null, { y: 0 });
+  vis("#r1", t, 23.7, null, { y: 0, scale: 0.6, dur: 0.35 }); vis("#r2", t, 25.6, null, { y: 0, scale: 0.6, dur: 0.35 });
+  // end
+  vis("#fin .q", t, 28.3, null, { y: 20 }); vis("#fin .c", t, 28.6, null, { y: 0 }); vis("#fin .k", t, 28.8, null, { y: 0, scale: 0.4, dur: 0.35 });
+  const ar = vis("#fin .ar", t, 29.2, null, { y: -10 }); if (ar && t > 29.6) $("#fin .ar").style.transform = `translateY(${Math.abs(Math.sin(t * 5)) * 12}px)`;
+  vis("#fin .lg", t, 29.4, null, { y: 20 }); vis("#fin .w", t, 29.6, null, { y: 10 });
+});
+</script>
+</body>
+</html>
