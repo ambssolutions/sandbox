@@ -220,7 +220,13 @@
     setup(cfg) { E.duration = cfg.duration; E.voice = cfg.voice ?? []; E.narrator = cfg.narrator ?? null; renderers.unshift(chrome(cfg)); },
   };
   window.E = E;
-  window.__seek = (t) => { for (const r of renderers) r(t); };
+  window.__seek = (t) => Promise.all(renderers.map((r) => r(t)));
+  /* clip(video, t): show a <video> at time t and wait until that frame is ready (for real screen recordings) */
+  window.E.clip = (v, t) => {
+    t = Math.max(0, Math.min(t, (v.duration || 1e9) - 0.04));
+    if (Math.abs(v.currentTime - t) < 0.001 && v.readyState >= 2) return Promise.resolve();
+    return new Promise((res) => { const done = () => { v.removeEventListener("seeked", done); res(); }; v.addEventListener("seeked", done); v.currentTime = t; setTimeout(done, 3000); });
+  };
 
   function fit() {
     const f = $("#frame");

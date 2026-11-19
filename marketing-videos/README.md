@@ -23,6 +23,7 @@ Nobody appears on camera. Each one is an animated screen recording of a real kin
 | 17 | `out/17-monday-numbers.mp4` | Your numbers every Monday: sales, unpaid invoices, stock and hours as one summary on your phone. Editorial kinetic-type style (paper, huge black type, green), own layout, no shared chrome (24 s) | **MONDAY** |
 | 18 | `out/18-chat-helper.mp4` | A chat helper on your website (new service page): 11:47pm question → no reply → next business; a chat helper answers instantly, in Chinese, Hindi, Punjabi or te reo Māori, from your own wording. TikTok-style captions, NZ-accent narrator (27 s) | **CHAT** |
 | 19 | `out/19-this-month.mp4` | What Manjinder built this month: MiKia (land development, Auckland), Chandigarh Dental (live open status, 3 languages, WhatsApp booking), homepage concepts for new clients, our own site upgrades; 10% referral reminder. Portfolio-reel style with real site screenshots (31.5 s) | **BUILD** |
+| 20 | `out/20-shine-auto.mp4` | New build: Shine Auto Repairs (mechanic, Warwick Farm, Sydney). Real screen recordings of the site playing in a phone: roller-door homepage, dash warning-light helper, 3D pink slip bay, Ask Shine chat; 10% referral reminder. Workshop job-card style (34.1 s) | **MINE** |
 | 5 | `out/05-help-reporting.mp4` | Monday copy-paste reporting → live dashboard and an auto-emailed weekly report | **HELP** |
 
 Each video also has a `-cover.jpg` frame grab in `out/`. Videos 2 and 3 also have a designed thumbnail (`out/02-crm-leads-thumbnail.jpg`, `out/03-website-bookings-thumbnail.jpg`) with a bold headline and a before/after visual. Its sources are in `thumbnails/`, and `node thumbnails/render.mjs` re-renders it. Upload it as the custom cover when you post.
@@ -106,3 +107,7 @@ node render.mjs 03               # render just one
 - **Brand colours:** change the CSS variables at the top of `engine/base.css`. Every video picks them up. For the light website-green look (matches ambs.co.nz), add `<link rel="stylesheet" href="../engine/theme-website.css">` after `base.css` in a video, as `videos/08-automation-myths.html` does. `engine/theme-tomato.css` is a bold red & cream alternative (used by video 12).
 - **New video:** copy the closest one in `videos/`, change the scene, then run `node render.mjs <name>`.
 - Font: Inter (SIL Open Font License), bundled in `assets/`. Voice: Kokoro-82M (Apache-2.0).
+
+### Screen-recording clips
+
+A scene can play a real recording: put a `<video src="img/clip.webm" muted preload="auto">` in the page and, in `E.use`, call `return E.clip(video, seconds)`. `__seek` waits for every renderer's promise, so each frame shows the exact video frame. See `videos/20-shine-auto.html`.

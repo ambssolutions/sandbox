@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — new build: Shine Auto Repairs (MINE)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* Workshop job card: concrete, hazard stripes, motorsport italics, mono job-sheet labels.
+     The phone plays real screen recordings of the Shine Auto site (shineauto.vercel.app preview). No shared chrome. */
+  .progress, .brand, .caption, .end { display: none !important; }
+  #frame { color: #f4f1ea; font-family: Inter, sans-serif, var(--emoji);
+    background: radial-gradient(70% 45% at 50% 45%, #3b3d42, transparent 80%), repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 2px, transparent 2px 5px), #1d1e21; }
+  #frame::before { display: none; }
+  .mono { font-family: "JetBrains Mono", "DejaVu Sans Mono", monospace; }
+  .it { font-weight: 900; font-style: italic; letter-spacing: -.02em; text-transform: uppercase; }
+  .haz { position: absolute; left: 0; right: 0; height: 14px; background: repeating-linear-gradient(-45deg, #f5a524 0 14px, #17181a 14px 28px); }
+  .sc { position: absolute; inset: 0; display: none; }
+
+  /* top job bar */
+  #bar { position: absolute; left: 22px; right: 22px; top: 70px; display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; letter-spacing: .14em; color: #f5a524; }
+  #bar b { color: #f4f1ea; }
+
+  /* the phone */
+  #ph { position: absolute; left: 50%; top: 168px; width: 284px; height: 600px; margin-left: -142px; border-radius: 42px; background: #0a0a0a; padding: 8px;
+    box-shadow: 0 40px 80px rgba(0,0,0,.65), 0 0 0 2px #45474c; }
+  #ph .s { position: relative; width: 100%; height: 100%; border-radius: 35px; overflow: hidden; background: #111; }
+  #ph video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; display: none; }
+
+  /* headline above phone */
+  .hl { position: absolute; left: 22px; right: 22px; top: 96px; text-align: center; font-size: 30px; line-height: 1; }
+  .hl em { font-style: italic; color: #f5a524; }
+
+  /* job-sheet ticks under the phone */
+  #sheet { position: absolute; left: 22px; right: 22px; top: 786px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  #sheet div { border: 2px dashed #5b5d63; border-radius: 10px; padding: 7px 4px 6px; text-align: center; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; color: #8c8e94; }
+  #sheet div i { display: block; font-style: normal; font-size: 17px; line-height: 1; margin-bottom: 3px; color: #5b5d63; }
+  #sheet div.on { border: 2px solid #f5a524; background: rgba(245,165,36,.12); color: #f4f1ea; }
+  #sheet div.on i { color: #f5a524; }
+
+  /* stamp */
+  .stamp { position: absolute; padding: 6px 12px; border: 4px solid #e2462f; border-radius: 8px; color: #e2462f; font-size: 22px; transform: rotate(-12deg); background: rgba(29,30,33,.85); }
+
+  /* intro: roller door */
+  #intro .door { position: absolute; left: 0; right: 0; top: 0; height: 100%; background: repeating-linear-gradient(180deg, #5a5d63 0 18px, #3d3f44 18px 22px, #6b6e74 22px 24px); box-shadow: 0 20px 40px rgba(0,0,0,.6); z-index: 3; }
+  #intro .door::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 14px; background: repeating-linear-gradient(-45deg, #f5a524 0 14px, #17181a 14px 28px); }
+  #intro .k { position: absolute; left: 0; right: 0; top: 300px; text-align: center; font-size: 14px; letter-spacing: .3em; color: #f5a524; }
+  #intro .t { position: absolute; left: 0; right: 0; top: 332px; text-align: center; font-size: 66px; line-height: .92; }
+  #intro .t em { font-style: italic; color: #f5a524; }
+  #intro .w { position: absolute; left: 0; right: 0; top: 560px; text-align: center; font-size: 15px; font-weight: 600; color: #c8c5bd; }
+  #intro .w b { color: #f4f1ea; }
+
+  /* referral */
+  #ref .t { position: absolute; left: 0; right: 0; top: 150px; text-align: center; font-size: 15px; letter-spacing: .26em; color: #f5a524; }
+  .tk { position: absolute; left: 40px; right: 40px; height: 230px; border-radius: 18px; background: #f4f1ea; color: #1d1e21; padding: 24px 26px; box-shadow: 0 24px 50px rgba(0,0,0,.55); }
+  .tk::before, .tk::after { content: ""; position: absolute; top: 50%; width: 30px; height: 30px; margin-top: -15px; border-radius: 50%; background: #2a2b2f; }
+  .tk::before { left: -15px; } .tk::after { right: -15px; }
+  .tk .n { font-size: 84px; line-height: .9; color: #e86a10; }
+  .tk b { display: block; margin-top: 10px; font-size: 26px; font-weight: 900; letter-spacing: -.02em; }
+  .tk span { display: block; margin-top: 6px; font-size: 17px; font-weight: 600; color: #55575c; }
+  .tk .no { position: absolute; right: 24px; top: 24px; font-size: 11px; font-weight: 700; letter-spacing: .14em; color: #8c8e94; }
+  #r1 { top: 196px; } #r2 { top: 456px; }
+
+  /* end */
+  #fin .q { position: absolute; left: 0; right: 0; top: 190px; text-align: center; font-size: 46px; line-height: .96; }
+  #fin .q em { font-style: italic; color: #f5a524; }
+  #fin .c { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 15px; letter-spacing: .3em; color: #c8c5bd; }
+  #fin .kw { position: absolute; left: 0; right: 0; top: 362px; margin: 0 auto; width: fit-content; padding: 10px 30px 12px; border-radius: 14px; background: #f5a524; color: #17181a; font-size: 78px; line-height: 1; }
+  #fin .ar { position: absolute; left: 0; right: 0; top: 478px; text-align: center; font-size: 44px; }
+  #fin .lg { position: absolute; left: 0; right: 0; top: 580px; margin: 0 auto; height: 60px; background: #f4f1ea; padding: 10px 18px; border-radius: 16px; }
+  #fin .w { position: absolute; left: 0; right: 0; top: 664px; text-align: center; font-size: 19px; font-weight: 700; }
+  #fin .w span { color: #f5a524; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div class="haz" style="top:0"></div><div class="haz" style="bottom:0"></div>
+
+  <div class="sc" id="intro">
+    <div class="k mono">NEW BUILD · JOB #20</div>
+    <div class="t it">Shine<br><em>Auto</em><br>Repairs</div>
+    <div class="w">A mechanic in <b>Warwick Farm, Sydney</b><br>Built by Manjinder at AMBS</div>
+    <div class="door"></div>
+  </div>
+
+  <div class="sc" id="work">
+    <div id="bar" class="mono"><span>JOB #20 · <b>SHINE AUTO</b></span><span>WARWICK FARM NSW</span></div>
+    <div class="hl it" id="h1">The homepage<br><em>opens like a garage</em></div>
+    <div class="hl it" id="h2">Warning light?<br><em>Tap it. Get an answer.</em></div>
+    <div class="hl it" id="h3">A 3D pink slip<br><em>bay, nine checks</em></div>
+    <div class="hl it" id="h4">A helper that asks<br><em>what your car's doing</em></div>
+    <div id="ph"><div class="s">
+      <video id="vHero" src="img/shine-chat.webm" muted preload="auto" playsinline></video>
+      <video id="vLights" src="img/shine-lights.webm" muted preload="auto" playsinline></video>
+      <video id="vBay" src="img/shine-bay.webm" muted preload="auto" playsinline></video>
+      <video id="vChat" src="img/shine-chat.webm" muted preload="auto" playsinline></video>
+    </div></div>
+    <div id="sheet" class="mono">
+      <div id="k1"><i>✓</i>ROLLER DOOR</div><div id="k2"><i>✓</i>DASH LIGHTS</div><div id="k3"><i>✓</i>PINK SLIP 3D</div><div id="k4"><i>✓</i>ASK SHINE</div>
+    </div>
+    <div class="stamp it" id="st" style="left:300px;top:690px">DONE ✓</div>
+  </div>
+
+  <div class="sc" id="ref"><div class="t mono">WHILE YOU'RE HERE</div>
+    <div class="tk" id="r1"><div class="no mono">TICKET 01</div><div class="n it">10%</div><b>Refer a business</b><span>You get 10% when they come on board</span></div>
+    <div class="tk" id="r2"><div class="no mono">TICKET 02</div><div class="n it">10%</div><b>Bring your own business</b><span>10% off your project</span></div>
+  </div>
+
+  <div class="sc" id="fin">
+    <div class="q it">Want one<br><em>like this?</em></div>
+    <div class="c mono">COMMENT</div>
+    <div class="kw it">MINE</div>
+    <div class="ar emoji">👇</div>
+    <img class="lg" src="../assets/ambs-logo.png" alt="AMBS">
+    <div class="w">ambs.co.nz <span>·</span> 022 099 9578</div>
+  </div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, vis, p, ease } = E;
+// [scene, from, to]
+const SC = [["#intro", 0, 3.7], ["#work", 3.7, 25.8], ["#ref", 25.8, 30.4], ["#fin", 30.4, 34.1]];
+// [video, headline, tick, from, to, clip start]
+const CL = [["#vHero", "#h1", "#k1", 3.7, 9.4, 0.0], ["#vLights", "#h2", "#k2", 9.4, 15.3, 0.1], ["#vBay", "#h3", "#k3", 15.3, 22.1, 0.0], ["#vChat", "#h4", "#k4", 22.1, 25.8, 5.75]];
+window.COVER_AT = 12.5;
+
+E.setup({
+  duration: 34.1,
+  keyword: "MINE",
+  narrator: "bm_george+nz",
+  voice: [
+    { a: 0.3, b: 3.5, text: "New build. Shine Auto Repairs, a mechanic in Sydney." },
+    { a: 3.9, b: 9.2, text: "The homepage opens like a roller door, with their Google rating up front." },
+    { a: 9.6, b: 15.1, text: "Warning light on your dash? Tap it, and it tells you if it's safe to keep driving." },
+    { a: 15.5, b: 21.9, text: "There's a 3D pink slip bay that walks you through all nine checks." },
+    { a: 22.3, b: 25.6, text: "And a helper that asks what your car is doing." },
+    { a: 26.0, b: 30.2, text: "Refer a business and get ten percent. Bring your own, and get ten percent off." },
+    { a: 30.6, b: 33.8, text: "Want one like this? Comment, mine." },
+  ],
+  captions: [], phases: [],
+  end: { at: 99, title: "", sub: "" },
+});
+
+E.use((t) => {
+  SC.forEach(([s, a, b]) => { $(s).style.display = t >= a && t < b ? "block" : "none"; });
+  // intro: door rolls up, title punches in
+  $("#intro .door").style.transform = `translateY(${-100 * p(t, 0.25, 1.1, ease.inOut)}%)`;
+  vis("#intro .k", t, 0.9, null, { y: 10 }); vis("#intro .t", t, 1.0, null, { y: 0, scale: 1.25, dur: 0.35 }); vis("#intro .w", t, 1.6, null, { y: 12 });
+  // work: phone, headlines, ticks
+  vis("#bar", t, 3.7, null, { y: -10 }); vis("#ph", t, 3.7, null, { y: 200, dur: 0.5, ease: ease.out }); vis("#sheet", t, 4.0, null, { y: 20 });
+  const waits = [];
+  CL.forEach(([v, h, k, a, b, c0]) => {
+    const el = $(v), on = t >= a && t < b;
+    el.style.display = on ? "block" : "none";
+    if (on) waits.push(E.clip(el, c0 + (t - a)));
+    vis(h, t, a + 0.05, b, { y: 14, dur: 0.3 });
+    $(k).classList.toggle("on", t >= b - 0.6);
+  });
+  const st = vis("#st", t, 24.9, null, { y: 0, scale: 2.2, dur: 0.22 }); if (st) $("#st").style.transform += " rotate(-12deg)";
+  // referral tickets
+  vis("#ref .t", t, 25.9, null, { y: 0 });
+  vis("#r1", t, 26.0, null, { x: -300, y: 0, dur: 0.4, ease: ease.out }); vis("#r2", t, 28.1, null, { x: 300, y: 0, dur: 0.4, ease: ease.out });
+  // end
+  vis("#fin .q", t, 30.5, null, { y: 20 }); vis("#fin .c", t, 30.8, null, { y: 0 }); vis("#fin .kw", t, 31.0, null, { y: 0, scale: 0.4, dur: 0.3 });
+  if (vis("#fin .ar", t, 31.4, null, { y: -10 }) && t > 31.8) $("#fin .ar").style.transform = `translateY(${Math.abs(Math.sin(t * 5)) * 12}px)`;
+  vis("#fin .lg", t, 31.6, null, { y: 20 }); vis("#fin .w", t, 31.8, null, { y: 10 });
+  return Promise.all(waits);
+});
+</script>
+</body>
+</html>

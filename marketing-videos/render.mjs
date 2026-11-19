@@ -32,6 +32,9 @@ async function render(name) {
   await page.addInitScript(() => { window.__RENDER = true; });
   await page.goto(pathToFileURL(resolve(root, "videos", name + ".html")).href);
   await page.waitForFunction(() => window.__ready === true);
+  // screen-recording clips: wait until every <video> can be seeked
+  await page.evaluate(() => Promise.all([...document.querySelectorAll("video")].map((v) =>
+    v.readyState >= 1 ? 0 : new Promise((r) => v.addEventListener("loadedmetadata", r, { once: true })))));
   const duration = await page.evaluate(() => window.E.duration);
   const frames = Math.round(duration * FPS);
   const meta = await page.evaluate(() => window.COVER_AT ?? 1.5);
