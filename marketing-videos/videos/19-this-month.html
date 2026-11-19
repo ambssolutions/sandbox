@@ -2,7 +2,7 @@
 <html lang="en-NZ">
 <head>
 <meta charset="utf-8">
-<title>AMBS — what Manjinder built this month (BUILD)</title>
+<title>AMBS — what we built this month (BUILD)</title>
 <link rel="stylesheet" href="../engine/base.css">
 <style>
   /* Portfolio reel: dark gallery wall, real site screenshots scrolling inside phones, annotation labels.
@@ -59,9 +59,9 @@
 <div id="frame">
   <div class="sc" id="intro">
     <div class="hd t">What we built<br>this <em>month</em> 🛠️</div>
-    <div class="by">by Manjinder at AMBS Solutions</div>
+    <div class="by">by AMBS Solutions · Auckland</div>
     <div class="ph" id="i1" style="left:16px;top:360px;rotate:-10deg"><div class="s"><img src="img/work-mikia.jpg" alt=""></div></div>
-    <div class="ph" id="i3" style="left:274px;top:360px;rotate:10deg"><div class="s"><img src="img/work-heat.jpg" alt=""></div></div>
+    <div class="ph" id="i3" style="left:274px;top:360px;rotate:10deg"><div class="s"><img src="img/work-delta.jpg" alt=""></div></div>
     <div class="ph" id="i2" style="left:145px;top:330px"><div class="s"><img src="img/work-dental.jpg" alt=""></div></div>
   </div>
 
@@ -83,18 +83,12 @@
   </div>
 
   <div class="sc" id="s3">
-    <div class="kick">FOR NEW CLIENTS</div><div class="hd name">Pick your favourite design<small>5 to 12 working homepage concepts per business</small></div>
-    <div class="ph" id="c1" style="left:14px;top:250px;rotate:-5deg"><div class="s"><img id="cm1" src="img/work-heat.jpg" alt=""></div></div>
-    <div class="ph" id="c2" style="left:276px;top:250px;rotate:5deg"><div class="s"><img id="cm2" src="img/work-tax.jpg" alt=""></div></div>
-    <div class="lbl" id="c3" style="left:50%;top:640px;transform:translateX(-50%)"><span class="e emoji">❤️</span>Heat pumps: 5 · Tax advisers: 12 · Wardrobes: 6</div>
-  </div>
-
-  <div class="sc" id="s4">
-    <div class="kick">ON AMBS.CO.NZ</div><div class="hd name">Our own site got an upgrade<small>ambs.co.nz</small></div>
-    <div class="ph" id="p4" style="left:20px;top:210px"><div class="s"><img id="m4" src="img/work-ambs.jpg" alt=""></div></div>
-    <div class="lbl r" id="l4a" style="left:300px;top:290px"><span class="e emoji">⚡</span>Faster pages</div>
-    <div class="lbl r" id="l4b" style="left:300px;top:390px"><span class="e emoji">🌦️</span>Live-weather<br>homepage</div>
-    <div class="lbl r" id="l4c" style="left:300px;top:510px"><span class="e emoji">🔎</span>Bing told about<br>every update</div>
+    <div class="kick">PROJECT 03</div><div class="hd name">Delta Air Solutions<small>Heat pumps &amp; air con · Hamilton, Waikato</small></div>
+    <div class="ph" id="p3" style="left:20px;top:210px"><div class="s"><img id="m3" src="img/work-delta.jpg" alt=""></div></div>
+    <div class="lbl r" id="l3a" style="left:300px;top:250px"><span class="e emoji">🧮</span>Heat pump<br>size calculator</div>
+    <div class="lbl r" id="l3b" style="left:300px;top:360px"><span class="e emoji">⭐</span>Live Google<br>reviews</div>
+    <div class="lbl r" id="l3c" style="left:300px;top:470px"><span class="e emoji">✍️</span>Edit-it-yourself<br>admin</div>
+    <div class="lbl r" id="l3d" style="left:300px;top:580px"><span class="e emoji">📲</span>Installs like<br>an app</div>
   </div>
 
   <div class="sc" id="ref"><div class="t">A LITTLE REMINDER</div>
@@ -109,7 +103,7 @@
 <script src="../engine/engine.js"></script>
 <script>
 const { $, $$, vis, p, ease } = E;
-const SC = [["#intro", 0, 3.4], ["#s1", 3.4, 10.2], ["#s2", 10.2, 16.6], ["#s3", 16.6, 20.6], ["#s4", 20.6, 23.4], ["#ref", 23.4, 28.2], ["#fin", 28.2, 31.6]];
+const SC = [["#intro", 0, 3.4], ["#s1", 3.4, 10.2], ["#s2", 10.2, 16.6], ["#s3", 16.6, 23.4], ["#ref", 23.4, 28.2], ["#fin", 28.2, 31.6]];
 // scroll a screenshot inside its phone between two times (fraction of the image's scrollable height)
 const scroll = (img, t, a, b, to = 1) => { const el = $(img); const H = el.offsetHeight - el.parentElement.offsetHeight; el.style.transform = `translateY(${-H * to * p(t, a, b, ease.inOut)}px)`; };
 window.COVER_AT = 6.0;
@@ -119,11 +113,10 @@ E.setup({
   keyword: "BUILD",
   narrator: "bm_george+nz",
   voice: [
-    { a: 0.2, b: 3.3, text: "Here's what Manjinder built this month." },
-    { a: 3.5, b: 10.0, text: "Mi Kia, an Auckland land developer. A 3D build timeline, and a design your own house tool." },
+    { a: 0.2, b: 3.3, text: "Here's what we built this month." },
+    { a: 3.5, b: 10.0, text: "Mi Kia, an Auckland land developer. A 3D build timeline, and a design your house tool." },
     { a: 10.3, b: 16.4, text: "A dental clinic. Live open or closed status, three languages, and WhatsApp booking." },
-    { a: 16.7, b: 20.4, text: "New clients pick from up to twelve homepage designs." },
-    { a: 20.7, b: 23.2, text: "And our own site? Faster, with live weather." },
+    { a: 16.7, b: 23.2, text: "Delta Air, heat pumps in Hamilton. A sizing calculator, live reviews, and an admin they edit." },
     { a: 23.5, b: 28.0, text: "Refer a business and get ten percent. Bring your own, and get ten percent off." },
     { a: 28.4, b: 31.1, text: "Want yours? Comment, build." },
   ],
@@ -144,15 +137,10 @@ E.use((t) => {
   vis("#s2 .kick", t, 10.3, null, { y: 0 }); vis("#s2 .name", t, 10.4, null, { y: 16 });
   vis("#p2", t, 10.4, null, { x: 80, y: 0, dur: 0.45, ease: ease.out }); scroll("#m2", t, 11.0, 16.3, 0.8);
   ["#l2a", "#l2b", "#l2c", "#l2d"].forEach((s, i) => vis(s, t, 11.4 + i * 1.1, null, { x: -30, y: 0 }));
-  // concepts
+  // Delta Air
   vis("#s3 .kick", t, 16.7, null, { y: 0 }); vis("#s3 .name", t, 16.8, null, { y: 16 });
-  vis("#c1", t, 16.9, null, { y: 120, dur: 0.45, ease: ease.out }); vis("#c2", t, 17.1, null, { y: 120, dur: 0.45, ease: ease.out });
-  scroll("#cm1", t, 17.3, 20.4, 0.6); scroll("#cm2", t, 17.3, 20.4, 0.5);
-  const c3 = $("#c3"); vis(c3, t, 18.2, null, { y: 14 }); c3.style.transform += " translateX(-50%)";
-  // own site
-  vis("#s4 .kick", t, 20.7, null, { y: 0 }); vis("#s4 .name", t, 20.8, null, { y: 16 });
-  vis("#p4", t, 20.8, null, { x: -80, y: 0, dur: 0.4, ease: ease.out }); scroll("#m4", t, 21.2, 23.3, 0.35);
-  ["#l4a", "#l4b", "#l4c"].forEach((s, i) => vis(s, t, 21.2 + i * 0.55, null, { x: 30, y: 0 }));
+  vis("#p3", t, 16.8, null, { x: -80, y: 0, dur: 0.45, ease: ease.out }); scroll("#m3", t, 17.4, 23.2, 0.85);
+  ["#l3a", "#l3b", "#l3c", "#l3d"].forEach((s, i) => vis(s, t, 17.6 + i * 1.2, null, { x: 30, y: 0 }));
   // referral
   vis("#ref .t", t, 23.5, null, { y: 0 });
   vis("#r1", t, 23.7, null, { y: 0, scale: 0.6, dur: 0.35 }); vis("#r2", t, 25.6, null, { y: 0, scale: 0.6, dur: 0.35 });
