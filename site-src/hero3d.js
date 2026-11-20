@@ -1,0 +1,134 @@
+(function(){
+  var host=document.getElementById('hero3d');if(!host)return;
+  var hero=document.getElementById('top');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var lis=[].slice.call(document.querySelectorAll('#pathCard .path li')),card=document.getElementById('pathCard'),
+      bar=document.getElementById('pbar'),pct=document.getElementById('ppct'),status=document.getElementById('pstatus'),stage=document.getElementById('pstage'),
+      anch=[].slice.call(document.querySelectorAll('.hero-anchors span'));
+  var lite=false,api=null,doneN=0,shown=0,NAMES=['01 · SITE SURVEY','02 · PLAN & CONSENT','03 · ENGINEERING & BUILD','04 · DELIVERY & HANDOVER'];
+  function setStatic(){
+    lis.forEach(function(l){l.classList.add('done');});bar.style.transform='scaleX(1)';pct.textContent='100%';card.classList.add('complete');status.textContent='COMPLETE';stage.textContent='COMPLETE';var mt0=document.getElementById('pminiT'),mb0=document.getElementById('pminiB');if(mt0)mt0.textContent='Complete';if(mb0)mb0.style.transform='scaleX(1)';
+  }
+  var lastP=-1,lastSt=-1,lastDone=null;
+  /* both progress bars glide toward the model's progress every frame, so they stay smooth even when updates arrive in bursts */
+  var tgt=0,gcur=0,raf=0,mbEl=document.getElementById('pminiB');
+  function paintBars(v){var t='scaleX('+v.toFixed(4)+')';bar.style.transform=t;if(mbEl)mbEl.style.transform=t;}
+  function loop(){raf=0;var d=tgt-gcur;if(Math.abs(d)<.0004||reduce||d<0){gcur=tgt;paintBars(gcur);return;}gcur+=d*.18;paintBars(gcur);raf=requestAnimationFrame(loop);}
+  function glide(v){tgt=v;if(!raf)raf=requestAnimationFrame(loop);}
+  function upd(b){
+    var q=Math.round(b/16*2000)/20,stq=Math.min(3,Math.floor(b/4)),dq=b>=15.98;
+    if(q===lastP&&stq===lastSt&&dq===lastDone)return;lastP=q;lastSt=stq;lastDone=dq;
+    var st=Math.min(3,Math.floor(b/4)),p=Math.round(Math.min(1,b/16)*100);
+    glide(Math.min(1,b/16));pct.textContent=p+'%';
+    var n=Math.min(4,Math.floor(b/4));
+    lis.forEach(function(l,i){
+      var done=b>=(i+1)*4-.01,active=!done&&i===st;
+      l.classList.toggle('active',active);
+      if(done&&!l.classList.contains('done')){l.classList.add('done','flowing');setTimeout(function(){l.classList.remove('flowing');},900);}
+      if(!done)l.classList.remove('done');
+    });
+    var complete=b>=15.98;card.classList.toggle('complete',complete);status.textContent=complete?'COMPLETE':'IN PROGRESS';
+    var fxs=window.__fx;if(fxs)fxs.swap(stage,complete?'COMPLETE':NAMES[st]);else stage.textContent=complete?'COMPLETE':NAMES[st];
+    var mt=document.getElementById('pminiT'),mb=document.getElementById('pminiB');if(mt){var mtx=complete?'Complete':['01 · Site survey','02 · Plan and consent','03 · Engineering and build','04 · Delivery and handover'][st];if(window.__fx)window.__fx.swap(mt,mtx);else mt.textContent=mtx;}
+  }
+  var blockers=[].slice.call(document.querySelectorAll('.hero-copy,#pathCard,.nav'));
+  var rsC=null,topC=0,lastPos=0;function invalidate(){rsC=null;}
+  addEventListener('resize',invalidate);addEventListener('scroll',invalidate,{passive:true});
+  function pos(pts){
+    var nw=performance.now();if(nw-lastPos<66)return;lastPos=nw;if(!anch.length||anch[0].offsetParent===null)return;
+    if(!rsC){rsC=blockers.map(function(e){return e.getBoundingClientRect();});topC=document.getElementById('top').getBoundingClientRect().top;}
+    var rs=rsC,top=topC;
+    anch.forEach(function(el,i){var p=pts[i];if(!p)return;
+      var x=p.x,y=p.y+top,hide=!p.v||!(api&&api.progress>15.5);
+      for(var k=0;k<rs.length&&!hide;k++){var r=rs[k];if(x>r.left-120&&x<r.right+10&&y>r.top-24&&y<r.bottom+24)hide=true;}
+      el.style.transform='translate('+p.x.toFixed(0)+'px,'+p.y.toFixed(0)+'px)';el.classList.toggle('on',!hide);});
+  }
+  function init(){
+    try{api=window.House3D&&window.House3D.createHouseScene(host,{hero:true,loop:true,design:{shape:'twostorey',roof:'skillion',cladding:'boardbatten',accent:'cedar',wall:'#2f3a3d',roofColor:'#1f2428',joinery:'#161e1b',door:'timber',windows:'floor',garage:true,chimney:false,solar:true,deck:true,balcony:true,driveway:true,fence:'none'},onProgress:upd,onAnchors:pos});}catch(e){api=null;}
+    if(!api)return;
+    var lastB=-1,still=0;setInterval(function(){if(!api||document.hidden)return;var b=api.progress;if(Math.abs(b-lastB)<.001&&!api.playing){still++;if(still>=2){api.resume&&api.resume();still=0;}}else still=0;lastB=b;},2500);
+    host.addEventListener('h3d-lite',function(){lite=true;host.classList.add('away');setStatic();});
+    host.classList.add('ready');document.getElementById('top').classList.add('live');
+    lis.forEach(function(l,i){l.style.cursor='pointer';l.addEventListener('click',function(){api.goStage(i);clearTimeout(l.__r);l.__r=setTimeout(function(){api.resume&&api.resume();},3500);});});
+  }
+  function load(){
+    if(window.House3D){init();return;}
+    var s=document.createElement('script');s.src='assets/house3d.js';s.onload=init;document.head.appendChild(s);
+  }
+
+  /* rotating headline: words and background change together, smoothly */
+  var sps=[].slice.call(document.querySelectorAll('.swap .sp')),bgs=[].slice.call(document.querySelectorAll('.hero-bgimg img.bg'));
+  var cur=0,timer=null,paused=false,started=false;
+  var bgT=0;
+  function setBg(key){
+    var nx=bgs.filter(function(im){return im.dataset.bg===key;})[0],pv=bgs.filter(function(im){return im.classList.contains('on');})[0];
+    if(nx&&nx!==pv){
+      bgs.forEach(function(im){im.classList.remove('prev');});
+      if(pv){pv.classList.remove('on');pv.classList.add('prev');}
+      nx.classList.add('on');
+      clearTimeout(bgT);bgT=setTimeout(function(){bgs.forEach(function(im){im.classList.remove('prev');});},2300);
+    }
+    [].forEach.call(document.querySelectorAll('.hero-tints .ht'),function(t){t.classList.toggle('on',t.dataset.bg===key);});
+    var live=key==='live';host.classList.toggle('away',lite||!live);
+  }
+  var busy=false;
+  function go(n){
+    var prev=sps[cur],next=sps[n];if(prev===next||busy)return;busy=true;
+    /* make sure the next photo is decoded first, so the crossfade never pops */
+    var im=bgs.filter(function(x){return x.dataset.bg===next.dataset.bg;})[0],ready=(im&&im.decode&&im.src)?im.decode().catch(function(){}):Promise.resolve();
+    Promise.race([ready,new Promise(function(r){setTimeout(r,700);})]).then(function(){
+      prev.classList.remove('on');prev.classList.add('out');
+      setTimeout(function(){prev.classList.remove('out');busy=false;},900);
+      next.classList.add('on');cur=n;
+      var rb=hero.querySelector('.btn-run');if(rb){rb.classList.remove('sweep');void rb.offsetWidth;rb.classList.add('sweep');}
+      if(next.dataset.c)hero.style.setProperty('--ph',next.dataset.c);
+      setBg(next.dataset.bg);
+    });
+  }
+  function step(){if(paused||document.hidden)return;go((cur+1)%sps.length);}
+  function startRot(){
+    if(started||sps.length<2)return;started=true;
+    /* the next photo loads straight away, the rest a moment later */
+    var alts=bgs.filter(function(im){return im.dataset.src&&!im.src;});
+    if(alts[0])alts[0].src=alts[0].dataset.src;
+    setTimeout(function(){alts.forEach(function(im){if(!im.src)im.src=im.dataset.src;});},700);
+    /* first change soon after the page opens, then a steady rhythm */
+    setTimeout(function(){step();timer=setInterval(step,3400);},3200);
+  }
+  if(sps.length){
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){paused=!es[0].isIntersecting;},{threshold:.2}).observe(hero);
+    var reduceR=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(!reduceR){
+      startRot();
+    }
+  }
+  var weak=(navigator.deviceMemory&&navigator.deviceMemory<=2)||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=2)||matchMedia('(max-width:900px)').matches||matchMedia('(pointer:coarse)').matches;
+  function runLite(){
+    var b=0,hold=0,vis=true,t=0;
+    function step(){
+      if(document.hidden||!vis)return;
+      if(hold>0){hold--;return;}
+      b=Math.min(16,b+.12);upd(b);
+      if(b>=16){hold=26;setTimeout(function(){b=0;lastP=-1;upd(0);},2300);}
+    }
+    upd(0);
+    function start(){if(!t)t=setInterval(step,100);}
+    function stop(){clearInterval(t);t=0;}
+    var top=document.getElementById('top');
+    if(top&&'IntersectionObserver' in window)new IntersectionObserver(function(es){vis=es[0].isIntersecting;},{threshold:.05}).observe(top);
+    start();
+  }
+  if(reduce){setStatic();return;}
+  if(weak){lite=true;runLite();return;}
+  var c=navigator.connection;if(c&&(c.saveData||/2g/.test(c.effectiveType||''))){setStatic();return;}
+  var kick=function(){setTimeout(function(){('requestIdleCallback' in window)?requestIdleCallback(load,{timeout:2000}):load();},2400);};
+  if(document.readyState==='complete')kick();else window.addEventListener('load',kick);
+})();
+
+(function(){var a=document.getElementById('heroBuild');if(!a)return;
+  a.addEventListener('click',function(e){var s=document.getElementById('build3d');if(!s)return;e.preventDefault();
+    if(window.__h3dStart)window.__h3dStart();
+    var top=s.getBoundingClientRect().top+scrollY-8;
+    window.scrollTo({top:top,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    setTimeout(function(){var d=document.getElementById('design');if(d&&d.scrollIntoView&&matchMedia('(min-width:1101px)').matches){}},0);});
+})();
