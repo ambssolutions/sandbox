@@ -8,6 +8,7 @@
 //   VOICE=am_michael node render.mjs   # pick another Kokoro voice (default af_heart)
 import { chromium } from "playwright";
 import { spawn, spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { existsSync, readdirSync, mkdirSync, rmSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -51,6 +52,9 @@ async function render(name) {
     process.stderr.write(`${name} voice:\n${r.stderr}`);
     if (r.status) throw new Error(`voice.py failed for ${name}`);
     audioIn.splice(0, audioIn.length, "-i", wav);
+    // hand the voice loudness to the page (talking presenters read window.__VOICE_ENV)
+    const env = JSON.parse(readFileSync(wav + ".env.json", "utf8"));
+    await page.evaluate((e) => { window.__VOICE_ENV = e; }, env);
   }
 
   const out = join(outDir, name + ".mp4");
@@ -77,7 +81,7 @@ async function render(name) {
   await page.evaluate((t) => window.__seek(t), meta);
   await frame.screenshot({ path: join(outDir, name + "-cover.jpg"), type: "jpeg", quality: 92 });
   await page.close();
-  rmSync(wav, { force: true });
+  rmSync(wav, { force: true }); rmSync(wav + ".env.json", { force: true });
   console.log(`✓ ${name}.mp4  (${duration}s, ${frames} frames)`);
 }
 

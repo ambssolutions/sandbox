@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — Hannah &amp; Priya introduce AMBS (HELLO)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* Presenter show: two animated presenters (engine/presenter.js) talk to camera in a bright studio,
+     with service cards popping up beside them. AMBS blue → purple. No shared chrome. */
+  .progress, .brand, .caption, .end { display: none !important; }
+  #frame { font-family: Inter, sans-serif, var(--emoji); color: #10173a; overflow: hidden; background: #eef1fb; }
+  #frame::before { display: none; }
+  .bg { position: absolute; inset: 0; transition: none; }
+  .bg.h { background: radial-gradient(60% 40% at 50% 70%, #ffffff, transparent 70%), linear-gradient(170deg, #dfe7ff, #c9d6ff 60%, #b8c7ff); }
+  .bg.p { background: radial-gradient(60% 40% at 50% 70%, #ffffff, transparent 70%), linear-gradient(170deg, #ece2ff, #dccbff 60%, #cdb6ff); }
+  .bokeh { position: absolute; border-radius: 50%; filter: blur(14px); opacity: .55; }
+  .desk { position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: linear-gradient(180deg, #2152e0, #1a3fb0); z-index: 3; }
+  .desk::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: linear-gradient(90deg, #2152e0, #7c3aed); }
+  .desk .lg { position: absolute; left: 22px; top: 30px; height: 46px; background: #fff; padding: 7px 12px; border-radius: 12px; }
+  .desk .web { position: absolute; right: 22px; top: 40px; color: #fff; font-weight: 800; font-size: 19px; }
+
+  .who { position: absolute; bottom: 70px; width: 440px; height: 550px; left: 50%; margin-left: -220px; z-index: 2; }
+  .tag { position: absolute; left: 22px; bottom: 132px; z-index: 4; padding: 8px 14px; border-radius: 12px; background: #fff; box-shadow: 0 10px 24px rgba(16,23,58,.2); font-size: 16px; font-weight: 800; }
+  .tag span { display: block; font-size: 12px; font-weight: 700; color: #5b6390; letter-spacing: .04em; }
+
+  .kick { position: absolute; left: 0; right: 0; top: 78px; text-align: center; font-size: 13px; font-weight: 800; letter-spacing: .22em; color: #2152e0; z-index: 4; }
+  .sub { position: absolute; left: 24px; right: 24px; top: 104px; text-align: center; font-size: 30px; font-weight: 900; line-height: 1.12; letter-spacing: -.02em; z-index: 4; }
+  .sub em { font-style: normal; background: linear-gradient(90deg, #2152e0, #7c3aed); -webkit-background-clip: text; color: transparent; }
+
+  .card { position: absolute; z-index: 4; width: 170px; padding: 12px 14px; border-radius: 18px; background: #fff; box-shadow: 0 16px 34px rgba(16,23,58,.22); font-size: 15px; font-weight: 800; line-height: 1.2; }
+  .card i { display: block; font-style: normal; font-size: 28px; margin-bottom: 4px; }
+  .card span { display: block; margin-top: 3px; font-size: 12.5px; font-weight: 600; color: #5b6390; }
+  .card.r { right: 18px; } .card.l { left: 18px; }
+
+  .tk { position: absolute; z-index: 4; left: 24px; right: 24px; padding: 14px 18px; border-radius: 18px; background: #10173a; color: #fff; display: flex; align-items: center; gap: 16px; box-shadow: 0 16px 34px rgba(16,23,58,.3); }
+  .tk b { font-size: 46px; font-weight: 900; line-height: 1; background: linear-gradient(90deg, #7fa2ff, #c4a1ff); -webkit-background-clip: text; color: transparent; }
+  .tk div { font-size: 18px; font-weight: 800; } .tk div span { display: block; font-size: 14px; font-weight: 600; color: #b9c1e8; }
+
+  /* both presenters at the end */
+  .duo { position: absolute; bottom: 70px; width: 330px; height: 412px; z-index: 2; }
+  #fin .q { position: absolute; left: 0; right: 0; top: 96px; text-align: center; font-size: 34px; font-weight: 900; z-index: 4; letter-spacing: -.02em; }
+  #fin .kw { position: absolute; left: 0; right: 0; top: 150px; margin: 0 auto; width: fit-content; z-index: 4; padding: 8px 26px 10px; border-radius: 16px; background: linear-gradient(90deg, #2152e0, #7c3aed); color: #fff; font-size: 62px; font-weight: 900; }
+  #fin .ph { position: absolute; left: 0; right: 0; top: 262px; margin: 0 auto; width: fit-content; z-index: 4; padding: 12px 22px; border-radius: 999px; background: #fff; box-shadow: 0 12px 28px rgba(16,23,58,.2); font-size: 22px; font-weight: 900; color: #10173a; }
+  .sc { position: absolute; inset: 0; display: none; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div class="bg h" id="bgH"></div><div class="bg p" id="bgP"></div>
+  <div class="bokeh" style="left:30px;top:300px;width:90px;height:90px;background:#ffffff"></div>
+  <div class="bokeh" style="left:420px;top:230px;width:120px;height:120px;background:#a9bcff"></div>
+  <div class="bokeh" style="left:380px;top:520px;width:70px;height:70px;background:#ffffff"></div>
+
+  <!-- solo shots -->
+  <div class="sc" id="soloH"><div class="who" id="H"></div><div class="tag">Hannah<span>AMBS PRESENTER</span></div></div>
+  <div class="sc" id="soloP"><div class="who" id="P"></div><div class="tag">Priya<span>AMBS PRESENTER</span></div></div>
+
+  <!-- overlays per beat -->
+  <div class="sc" id="b1"><div class="kick">AMBS SOLUTIONS · AUCKLAND</div><div class="sub">Kia ora! 👋<br>Meet <em>AMBS Solutions</em></div></div>
+  <div class="sc" id="b2"><div class="kick">WHAT WE DO</div><div class="sub">More customers<br><em>from online</em></div></div>
+  <div class="sc" id="b3"><div class="kick">01 · WEBSITES</div><div class="sub">Fast, phone-friendly<br><em>websites</em></div>
+    <div class="card l" id="c31" style="top:330px"><i class="emoji">⚡</i>Loads fast<span>No waiting on phones</span></div>
+    <div class="card r" id="c32" style="top:420px"><i class="emoji">📞</i>Turns visits<br>into calls<span>Clear call buttons</span></div></div>
+  <div class="sc" id="b4"><div class="kick">02 · PORTALS &amp; AI</div><div class="sub">Portals and<br><em>AI helpers</em></div>
+    <div class="card r" id="c41" style="top:320px"><i class="emoji">🔐</i>Staff &amp; client<br>portals<span>One login, everything in one place</span></div>
+    <div class="card l" id="c42" style="top:430px"><i class="emoji">🤖</i>AI chat helper<span>Answers customers any time</span></div></div>
+  <div class="sc" id="b5"><div class="kick">A LITTLE BONUS</div><div class="sub">Get <em>10%</em></div>
+    <div class="tk" id="t1" style="top:186px"><b>10%</b><div>Refer a business<span>You get 10% when they come on board</span></div></div>
+    <div class="tk" id="t2" style="top:286px"><b>10%</b><div>Bring your own business<span>10% off your project</span></div></div></div>
+
+  <!-- both together -->
+  <div class="sc" id="fin">
+    <div class="duo" id="H2" style="left:-34px"></div><div class="duo" id="P2" style="right:-34px"></div>
+    <div class="q">Say hi! Comment</div><div class="kw">HELLO</div><div class="ph">📞 022 099 9578</div>
+  </div>
+
+  <div class="desk"><img class="lg" src="../assets/ambs-logo.png" alt="AMBS"><div class="web">ambs.co.nz</div></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script src="../engine/presenter.js"></script>
+<script>
+const { $, vis, p, ease } = E;
+const HV = "bf_emma+nz", PV = "hf_alpha";
+const h = Presenter.make("hannah"), pr = Presenter.make("priya"), h2 = Presenter.make("hannah", "2"), pr2 = Presenter.make("priya", "2");
+$("#H").innerHTML = h.svg; $("#P").innerHTML = pr.svg; $("#H2").innerHTML = h2.svg; $("#P2").innerHTML = pr2.svg;
+// [solo shot, beat overlay, from, to]
+const BEATS = [["#soloH", "#b1", 0, 4.4], ["#soloP", "#b2", 4.4, 9.0], ["#soloH", "#b3", 9.0, 14.4], ["#soloP", "#b4", 14.4, 20.2], ["#soloH", "#b5", 20.2, 25.6]];
+const FIN = 25.6;
+window.COVER_AT = 11.5;
+
+E.setup({
+  duration: 30.5,
+  keyword: "HELLO",
+  narrator: HV,
+  voice: [
+    { a: 0.3, b: 4.2, voice: HV, text: "Kia ora! I'm Hannah, and this is AMBS Solutions." },
+    { a: 4.6, b: 8.8, voice: PV, text: "And I'm Priya. We help businesses win more customers online." },
+    { a: 9.2, b: 14.2, voice: HV, text: "We build fast websites that look great on phones, and turn visitors into calls." },
+    { a: 14.6, b: 20.0, voice: PV, text: "Portals for your staff and clients, and AI helpers that answer customers any time." },
+    { a: 20.4, b: 25.4, voice: HV, text: "Refer a business and get ten percent. Bring your own, and get ten percent off." },
+    { a: 25.8, b: 28.4, voice: PV, text: "Want to chat? Comment hello." },
+    { a: 28.5, b: 30.3, voice: HV, text: "We'll see you soon!" },
+  ],
+  captions: [], phases: [],
+  end: { at: 99, title: "", sub: "" },
+});
+
+E.use((t) => {
+  const beat = BEATS.find(([, , a, b]) => t >= a && t < b);
+  ["#soloH", "#soloP", "#b1", "#b2", "#b3", "#b4", "#b5"].forEach((s) => ($(s).style.display = "none"));
+  $("#fin").style.display = t >= FIN ? "block" : "none";
+  if (beat) { $(beat[0]).style.display = "block"; $(beat[1]).style.display = "block"; }
+  const pri = beat ? beat[0] === "#soloP" : false;
+  $("#bgP").style.opacity = pri ? 1 : 0;
+
+  // presenters (a little push-in on each cut, like a second camera)
+  BEATS.forEach(([s, , a]) => { if (beat && beat[2] === a) { const z = 1 + 0.05 * p(t, a, a + 4, ease.out); $(s + " .who").style.transform = `scale(${z})`; $(s + " .who").style.transformOrigin = "50% 90%"; } });
+  h.update($("#H"), t); pr.update($("#P"), t); h2.update($("#H2"), t); pr2.update($("#P2"), t);
+
+  // overlays
+  BEATS.forEach(([, o, a]) => { vis(o + " .kick", t, a + 0.1, null, { y: 8 }); vis(o + " .sub", t, a + 0.15, null, { y: 16, dur: 0.35 }); });
+  vis("#c31", t, 10.4, null, { x: -40, y: 0 }); vis("#c32", t, 12.0, null, { x: 40, y: 0 });
+  vis("#c41", t, 15.0, null, { x: 40, y: 0 }); vis("#c42", t, 17.4, null, { x: -40, y: 0 });
+  vis("#t1", t, 20.6, null, { y: 0, scale: 0.7, dur: 0.3 }); vis("#t2", t, 22.6, null, { y: 0, scale: 0.7, dur: 0.3 });
+  vis("#fin .q", t, FIN + 0.1, null, { y: 12 }); vis("#fin .kw", t, FIN + 0.3, null, { y: 0, scale: 0.5, dur: 0.3 }); vis("#fin .ph", t, FIN + 0.6, null, { y: 10 });
+  vis("#H2", t, FIN, null, { x: -120, y: 0, dur: 0.45, ease: ease.out }); vis("#P2", t, FIN, null, { x: 120, y: 0, dur: 0.45, ease: ease.out });
+});
+</script>
+</body>
+</html>

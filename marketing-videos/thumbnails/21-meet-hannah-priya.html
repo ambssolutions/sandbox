@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en-NZ"><head><meta charset="utf-8"><title>Thumbnail — meet Hannah and Priya</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  #frame { font-family: Inter, sans-serif, var(--emoji); color: #10173a; overflow: hidden;
+    background: radial-gradient(60% 40% at 50% 70%, #fff, transparent 70%), linear-gradient(170deg, #dfe7ff, #d6cbff 60%, #c4b4ff); }
+  #frame::before { display: none; }
+  .k { position: absolute; left: 0; right: 0; top: 84px; text-align: center; font-size: 15px; font-weight: 800; letter-spacing: .22em; color: #2152e0; }
+  h1 { position: absolute; left: 20px; right: 20px; top: 110px; margin: 0; text-align: center; font-size: 52px; line-height: 1.02; font-weight: 900; letter-spacing: -.03em; }
+  h1 em { font-style: normal; background: linear-gradient(90deg, #2152e0, #7c3aed); -webkit-background-clip: text; color: transparent; }
+  .chips { position: absolute; left: 0; right: 0; top: 248px; display: flex; justify-content: center; gap: 8px; }
+  .chips span { padding: 8px 14px; border-radius: 999px; background: #fff; font-size: 16px; font-weight: 800; box-shadow: 0 8px 20px rgba(16,23,58,.15); }
+  .duo { position: absolute; bottom: 110px; width: 340px; height: 425px; }
+  .desk { position: absolute; left: 0; right: 0; bottom: 0; height: 130px; background: linear-gradient(180deg, #2152e0, #1a3fb0); }
+  .desk::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: linear-gradient(90deg, #2152e0, #7c3aed); }
+  .lg { position: absolute; left: 22px; top: 34px; height: 50px; background: #fff; padding: 7px 12px; border-radius: 12px; }
+  .cta { position: absolute; right: 22px; top: 40px; color: #fff; font-size: 22px; font-weight: 900; }
+  .cta b { background: #fff; color: #2152e0; padding: 3px 10px; border-radius: 8px; }
+</style></head><body>
+<div id="frame">
+  <div class="k">AMBS SOLUTIONS · AUCKLAND</div>
+  <h1>Meet <em>Hannah</em><br>&amp; <em>Priya</em> 👋</h1>
+  <div class="chips"><span>🌐 Websites</span><span>🔐 Portals</span><span>🤖 AI</span></div>
+  <div class="duo" id="a" style="left:-34px"></div><div class="duo" id="b" style="right:-34px"></div>
+  <div class="desk"><img class="lg" src="../assets/ambs-logo.png" alt="AMBS"><div class="cta">Comment <b>HELLO</b></div></div>
+</div>
+<script>window.E = { voice: [] };</script>
+<script src="../engine/presenter.js"></script>
+<script>a.innerHTML = Presenter.make("hannah").svg; b.innerHTML = Presenter.make("priya", "b").svg;</script>
+</body></html>

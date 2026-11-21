@@ -24,6 +24,7 @@ Nobody appears on camera. Each one is an animated screen recording of a real kin
 | 18 | `out/18-chat-helper.mp4` | A chat helper on your website (new service page): 11:47pm question → no reply → next business; a chat helper answers instantly, in Chinese, Hindi, Punjabi or te reo Māori, from your own wording. TikTok-style captions, NZ-accent narrator (27 s) | **CHAT** |
 | 19 | `out/19-this-month.mp4` | What we built this month: MiKia (land development, Auckland), Chandigarh Dental (live open status, 3 languages, WhatsApp booking), Delta Air Solutions (heat pump sizing calculator, live Google reviews, self-edit admin); 10% referral reminder. Portfolio-reel style with real site screenshots (31.5 s) | **BUILD** |
 | 20 | `out/20-shine-auto.mp4` | New build: Shine Auto Repairs (mechanic, Warwick Farm, Sydney). Real screen recordings of the site playing in a phone: roller-door homepage, dash warning-light helper, 3D pink slip bay, Ask Shine chat; 10% referral reminder. Workshop job-card style (34.1 s) | **MINE** |
+| 21 | `out/21-meet-hannah-priya.mp4` | Meet Hannah & Priya: two animated AMBS presenters (a Kiwi woman and an Indian woman) introduce AMBS: websites, portals, AI helpers; 10% referral reminder. Mouths move with the real voice track (30.5 s) | **HELLO** |
 | 5 | `out/05-help-reporting.mp4` | Monday copy-paste reporting → live dashboard and an auto-emailed weekly report | **HELP** |
 
 Each video also has a `-cover.jpg` frame grab in `out/`. Videos 2 and 3 also have a designed thumbnail (`out/02-crm-leads-thumbnail.jpg`, `out/03-website-bookings-thumbnail.jpg`) with a bold headline and a before/after visual. Its sources are in `thumbnails/`, and `node thumbnails/render.mjs` re-renders it. Upload it as the custom cover when you post.
@@ -111,3 +112,10 @@ node render.mjs 03               # render just one
 ### Screen-recording clips
 
 A scene can play a real recording: put a `<video src="img/clip.webm" muted preload="auto">` in the page and, in `E.use`, call `return E.clip(video, seconds)`. `__seek` waits for every renderer's promise, so each frame shows the exact video frame. See `videos/20-shine-auto.html`.
+
+### Presenters (Hannah and Priya)
+
+`engine/presenter.js` draws two illustrated presenters: Hannah (Kiwi, voice `bf_emma+nz`) and Priya (Indian, voice `hf_alpha`).
+Give a voice line its own `voice` to choose who says it. `render.mjs` passes the voice loudness per frame to the page
+(`window.__VOICE_ENV`), so each presenter's mouth moves with her own lines. Use `Presenter.make(name, key)` with a
+different `key` for each extra copy on the same page. See `videos/21-meet-hannah-priya.html`.

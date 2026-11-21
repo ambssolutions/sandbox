@@ -71,11 +71,11 @@ def main():
     for ln in job["lines"]:
         slot = ln["b"] - ln["a"]
         speed = BASE_SPEED
-        audio, _ = speak(k, ln["text"], job.get("voice", "af_heart"), speed)
+        audio, _ = speak(k, ln["text"], ln.get("voice") or job.get("voice", "af_heart"), speed)
         audio = trim(audio)
         if len(audio) / SR > slot:
             speed = min(MAX_SPEED, speed * (len(audio) / SR) / slot * 1.03)
-            audio, _ = speak(k, ln["text"], job.get("voice", "af_heart"), speed)
+            audio, _ = speak(k, ln["text"], ln.get("voice") or job.get("voice", "af_heart"), speed)
             audio = trim(audio)
         dur = len(audio) / SR
         flag = "  ⚠ overruns slot" if dur > slot + 0.05 else ""
@@ -84,6 +84,11 @@ def main():
         end = min(start + len(audio), len(track))
         track[start:end] += audio[: end - start]
     sf.write(job["out"], track, SR)
+    # loudness per video frame (30 fps, 0..1), so on-screen presenters can move their mouths with the voice
+    hop = SR // 30
+    rms = [float(np.sqrt(np.mean(track[i:i + hop] ** 2))) for i in range(0, len(track), hop)]
+    peak = max(max(rms), 1e-6)
+    json.dump([round(min(1.0, r / peak * 1.6), 3) for r in rms], open(job["out"] + ".env.json", "w"))
 
 
 if __name__ == "__main__":
