@@ -26,6 +26,7 @@ Nobody appears on camera. Each one is an animated screen recording of a real kin
 | 20 | `out/20-shine-auto.mp4` | New build: Shine Auto Repairs (mechanic, Warwick Farm, Sydney). Real screen recordings of the site playing in a phone: roller-door homepage, dash warning-light helper, 3D pink slip bay, Ask Shine chat; 10% referral reminder. Workshop job-card style (34.1 s) | **MINE** |
 | 21 | `out/21-meet-hannah-priya.mp4` | Meet Hannah & Priya: two animated AMBS presenters (a Kiwi woman and an Indian woman) introduce AMBS: websites, portals, AI helpers; 10% referral reminder. Mouths move with the real voice track (30.5 s) | **HELLO** |
 | 22 | `out/22-priya-hannah-host.mp4` | Priya & Hannah present AMBS: realistic AI presenter photos (fictional, made in Weave) as host cards with a live sound wave; websites, portals, AI helpers, 10% referral, phone number (20.6 s) | **HELLO** |
+| 23 | `out/23-priya-hannah-talk.mp4` | Priya & Hannah talk to camera, full screen: AI presenter photos (fictional) with mouths moved by tools/lipsync.py in time with their voices; karaoke captions, services, 10% referral, phone (22.6 s) | **HELLO** |
 | 5 | `out/05-help-reporting.mp4` | Monday copy-paste reporting → live dashboard and an auto-emailed weekly report | **HELP** |
 
 Each video also has a `-cover.jpg` frame grab in `out/`. Videos 2 and 3 also have a designed thumbnail (`out/02-crm-leads-thumbnail.jpg`, `out/03-website-bookings-thumbnail.jpg`) with a bold headline and a before/after visual. Its sources are in `thumbnails/`, and `node thumbnails/render.mjs` re-renders it. Upload it as the custom cover when you post.
@@ -120,3 +121,11 @@ A scene can play a real recording: put a `<video src="img/clip.webm" muted prelo
 Give a voice line its own `voice` to choose who says it. `render.mjs` passes the voice loudness per frame to the page
 (`window.__VOICE_ENV`), so each presenter's mouth moves with her own lines. Use `Presenter.make(name, key)` with a
 different `key` for each extra copy on the same page. See `videos/21-meet-hannah-priya.html`.
+
+### Talking photo presenters
+
+`tools/lipsync.py` makes a still presenter photo talk: it drops the jaw and parts the lips in time with the voice.
+1. Write the video's voice lines (each with its `voice`) to a JSON file and run them through `voice.py` once; it writes `<wav>.env.json` (loudness per frame).
+2. `python3 tools/lipsync.py videos/img/presenters/priya.jpg videos/img/presenters/landmarks.json <wav>.env.json lines.json hf_alpha out.webm <seconds>` (add `--teeth --gain 1.45` for Hannah).
+3. Play the clip in the page with `E.clip`. Keep the page's voice lines identical so the render's voice matches.
+Face points come from `tools/landmarks.py` (MediaPipe Face Landmarker; needs `pip install mediapipe opencv-python-headless`, `apt-get install libegl1`, and the `face_landmarker.task` model).
