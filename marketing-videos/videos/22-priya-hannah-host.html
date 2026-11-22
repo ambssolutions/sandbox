@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<title>AMBS — Priya &amp; Hannah present AMBS (HELLO)</title>
+<link rel="stylesheet" href="../engine/base.css">
+<style>
+  /* Host card: realistic AI presenter photos (fictional people, made in Weave) shown as the voices of the video,
+     like a podcast host card with a live sound wave. They don't lip-sync, so the photo is a card, not full-screen. */
+  .progress, .brand, .caption, .end { display: none !important; }
+  #frame { font-family: Inter, sans-serif, var(--emoji); color: #fff; overflow: hidden; background: #0c1230; }
+  #frame::before { display: none; }
+  .glow { position: absolute; inset: 0; background: radial-gradient(60% 35% at 50% 32%, rgba(124,58,237,.55), transparent 70%), radial-gradient(50% 30% at 20% 80%, rgba(33,82,224,.45), transparent 70%); }
+
+  .card { position: absolute; left: 50%; top: 96px; width: 330px; height: 430px; margin-left: -165px; border-radius: 30px; overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0,0,0,.55), 0 0 0 3px rgba(255,255,255,.12); }
+  .card img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; }
+  .card .shade { position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: linear-gradient(transparent, rgba(8,10,30,.85)); }
+  .card .nm { position: absolute; left: 18px; bottom: 16px; font-size: 22px; font-weight: 900; }
+  .card .nm span { display: block; font-size: 12px; font-weight: 700; letter-spacing: .14em; color: #c9d2ff; }
+  .wave { position: absolute; right: 18px; bottom: 22px; display: flex; gap: 4px; align-items: center; height: 34px; }
+  .wave i { width: 5px; border-radius: 3px; background: #fff; }
+
+  .line { position: absolute; left: 26px; right: 26px; top: 556px; text-align: center; font-size: 30px; font-weight: 900; line-height: 1.12; letter-spacing: -.02em; }
+  .line em { font-style: normal; background: linear-gradient(90deg, #7fa2ff, #c4a1ff); -webkit-background-clip: text; color: transparent; }
+  .chips { position: absolute; left: 0; right: 0; top: 650px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; padding: 0 20px; }
+  .chips span { padding: 9px 14px; border-radius: 999px; background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.25); font-size: 16px; font-weight: 800; }
+  .tk { position: absolute; left: 28px; right: 28px; padding: 12px 16px; border-radius: 16px; background: #fff; color: #10173a; display: flex; align-items: center; gap: 14px; }
+  .tk b { font-size: 38px; font-weight: 900; background: linear-gradient(90deg, #2152e0, #7c3aed); -webkit-background-clip: text; color: transparent; }
+  .tk div { font-size: 17px; font-weight: 800; } .tk div span { display: block; font-size: 13px; font-weight: 600; color: #5b6390; }
+  .kw { position: absolute; left: 0; right: 0; top: 650px; margin: 0 auto; width: fit-content; padding: 8px 24px 10px; border-radius: 16px; background: linear-gradient(90deg, #2152e0, #7c3aed); font-size: 52px; font-weight: 900; }
+  .ph { position: absolute; left: 0; right: 0; top: 742px; margin: 0 auto; width: fit-content; padding: 10px 20px; border-radius: 999px; background: #fff; color: #10173a; font-size: 21px; font-weight: 900; }
+
+  .desk { position: absolute; left: 0; right: 0; bottom: 0; height: 104px; background: linear-gradient(180deg, #2152e0, #1a3fb0); }
+  .desk::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px; background: linear-gradient(90deg, #2152e0, #7c3aed); }
+  .desk .lg { position: absolute; left: 22px; top: 26px; height: 44px; background: #fff; padding: 6px 12px; border-radius: 12px; }
+  .desk .web { position: absolute; right: 22px; top: 36px; font-weight: 800; font-size: 19px; }
+  .sc { position: absolute; inset: 0; display: none; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div class="glow"></div>
+  <div class="card" id="cP"><img src="img/presenters/priya.jpg" alt=""><div class="shade"></div><div class="nm">Priya<span>AMBS PRESENTER</span></div><div class="wave" id="wP"></div></div>
+  <div class="card" id="cH"><img src="img/presenters/hannah.jpg" alt=""><div class="shade"></div><div class="nm">Hannah<span>AMBS PRESENTER</span></div><div class="wave" id="wH"></div></div>
+
+  <div class="sc" id="b1"><div class="line">Kia ora! Meet<br><em>AMBS Solutions</em> 👋</div></div>
+  <div class="sc" id="b2"><div class="line">More customers<br><em>from online</em></div>
+    <div class="chips"><span id="ch1">🌐 Fast websites</span><span id="ch2">🔐 Portals</span><span id="ch3">🤖 AI helpers</span></div></div>
+  <div class="sc" id="b3">
+    <div class="tk" id="t1" style="top:560px"><b>10%</b><div>Refer a business<span>You get 10% when they come on board</span></div></div>
+    <div class="tk" id="t2" style="top:660px"><b>10%</b><div>Bring your own business<span>10% off your project</span></div></div></div>
+  <div class="sc" id="b4"><div class="line">Say hi! Comment</div><div class="kw">HELLO</div><div class="ph">📞 022 099 9578</div></div>
+
+  <div class="desk"><img class="lg" src="../assets/ambs-logo.png" alt="AMBS"><div class="web">ambs.co.nz</div></div>
+</div>
+
+<script src="../engine/engine.js"></script>
+<script>
+const { $, vis, p, ease } = E;
+const PV = "hf_alpha", HV = "bf_emma+nz";
+["#wP", "#wH"].forEach((s) => { $(s).innerHTML = "<i></i>".repeat(7); });
+const BEATS = [["#b1", 0, 4.4], ["#b2", 4.4, 10.0], ["#b3", 10.0, 15.2], ["#b4", 15.2, 20.6]];
+window.COVER_AT = 6.5;
+
+E.setup({
+  duration: 20.6,
+  keyword: "HELLO",
+  narrator: PV,
+  voice: [
+    { a: 0.3, b: 4.2, voice: PV, text: "Kia ora, I'm Priya. Let me tell you about AMBS Solutions." },
+    { a: 4.6, b: 9.8, voice: PV, text: "They build fast websites, portals, and AI helpers for Kiwi businesses." },
+    { a: 10.2, b: 15.0, voice: HV, text: "I'm Hannah. Refer a business and get ten percent. Bring your own, and get ten percent off." },
+    { a: 15.4, b: 20.3, voice: HV, text: "Call oh two two, oh nine nine, nine five seven eight. Or comment hello." },
+  ],
+  captions: [], phases: [],
+  end: { at: 99, title: "", sub: "" },
+});
+
+// who is speaking, and how loud (the real voice track when rendering)
+const talk = (v, t) => {
+  if (!E.voice.find((l) => l.voice === v && t >= l.a && t < l.b)) return 0;
+  const env = window.__VOICE_ENV; return env ? env[Math.round(t * 30)] ?? 0 : 0.6 + 0.4 * Math.sin(t * 19);
+};
+E.use((t) => {
+  BEATS.forEach(([s, a, b]) => ($(s).style.display = t >= a && t < b ? "block" : "none"));
+  // Priya until 10 s, then Hannah: crossfade, with a slow push-in on each
+  const toH = p(t, 9.9, 10.4, ease.inOut);
+  $("#cP").style.opacity = 1 - toH; $("#cH").style.opacity = toH;
+  $("#cP img").style.transform = `scale(${1.02 + 0.08 * p(t, 0, 10, ease.out)})`;
+  $("#cH img").style.transform = `scale(${1.02 + 0.08 * p(t, 10, 20.6, ease.out)})`;
+  vis("#cP", t, 0, null, { y: 30, dur: 0.5 }); if (t > 0.5) $("#cP").style.transform = "";
+  // sound waves follow the voice
+  [["#wP", PV], ["#wH", HV]].forEach(([s, v]) => {
+    const o = talk(v, t);
+    $(s).querySelectorAll("i").forEach((el, i) => { const k = 0.35 + 0.65 * Math.abs(Math.sin(t * 11 + i * 1.7)); el.style.height = `${6 + o * 28 * k}px`; });
+  });
+  BEATS.forEach(([s, a]) => vis(s + " .line", t, a + 0.1, null, { y: 14, dur: 0.35 }));
+  ["#ch1", "#ch2", "#ch3"].forEach((s, i) => vis(s, t, 5.6 + i * 1.0, null, { y: 10, scale: 0.8 }));
+  vis("#t1", t, 11.4, null, { x: -60, y: 0 }); vis("#t2", t, 13.2, null, { x: 60, y: 0 });
+  vis("#b4 .kw", t, 15.5, null, { y: 0, scale: 0.5, dur: 0.3 }); vis("#b4 .ph", t, 16.0, null, { y: 10 });
+});
+</script>
+</body>
+</html>
